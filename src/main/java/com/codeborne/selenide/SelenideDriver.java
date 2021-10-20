@@ -15,6 +15,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.support.events.WebDriverEventListener;
+import org.openqa.selenium.support.events.WebDriverListener;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -45,11 +46,11 @@ public class SelenideDriver {
   private final Driver driver;
 
   public SelenideDriver(Config config) {
-    this(config, emptyList());
+    this(config, emptyList(), emptyList());
   }
 
-  public SelenideDriver(Config config, List<WebDriverEventListener> listeners) {
-    this(config, new LazyDriver(config, null, listeners));
+  public SelenideDriver(Config config, List<WebDriverEventListener> eventListeners, List<WebDriverListener> listeners) {
+    this(config, new LazyDriver(config, null, eventListeners, listeners));
   }
 
   public SelenideDriver(Config config, Driver driver) {

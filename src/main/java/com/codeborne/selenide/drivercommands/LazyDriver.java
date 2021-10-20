@@ -9,6 +9,7 @@ import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
+import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,26 +36,32 @@ public class LazyDriver implements Driver {
   private final CloseDriverCommand closeDriverCommand;
   private final CreateDriverCommand createDriverCommand;
   private final Proxy userProvidedProxy;
-  private final List<WebDriverEventListener> listeners = new ArrayList<>();
+  private final List<WebDriverEventListener> eventListeners;
+  private final List<WebDriverListener> listeners;
   private final Browser browser;
 
   private boolean closed;
   private WebDriver webDriver;
-  @Nullable private SelenideProxyServer selenideProxyServer;
-  @Nullable private DownloadsFolder browserDownloadsFolder;
+  @Nullable
+  private SelenideProxyServer selenideProxyServer;
+  @Nullable
+  private DownloadsFolder browserDownloadsFolder;
 
-  public LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
-    this(config, userProvidedProxy, listeners, new WebDriverFactory(), new BrowserHealthChecker(),
+  public LazyDriver(Config config, @Nullable Proxy userProvidedProxy,
+                    List<WebDriverEventListener> eventListeners, List<WebDriverListener> listeners) {
+    this(config, userProvidedProxy, eventListeners, listeners, new WebDriverFactory(), new BrowserHealthChecker(),
       new CreateDriverCommand(), new CloseDriverCommand());
   }
 
-  LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverEventListener> listeners,
+  LazyDriver(Config config, @Nullable Proxy userProvidedProxy,
+             List<WebDriverEventListener> eventListeners, List<WebDriverListener> listeners,
              WebDriverFactory factory, BrowserHealthChecker browserHealthChecker,
              CreateDriverCommand createDriverCommand, CloseDriverCommand closeDriverCommand) {
     this.config = config;
     this.browser = new Browser(config.browser(), config.headless());
     this.userProvidedProxy = userProvidedProxy;
-    this.listeners.addAll(listeners);
+    this.eventListeners = new ArrayList<>(eventListeners);
+    this.listeners = new ArrayList<>(listeners);
     this.factory = factory;
     this.browserHealthChecker = browserHealthChecker;
     this.closeDriverCommand = closeDriverCommand;
@@ -121,7 +128,7 @@ public class LazyDriver implements Driver {
   }
 
   void createDriver() {
-    CreateDriverCommand.Result result = createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
+    CreateDriverCommand.Result result = createDriverCommand.createDriver(config, factory, userProvidedProxy, eventListeners, listeners);
     this.webDriver = result.webDriver;
     this.selenideProxyServer = result.selenideProxyServer;
     this.browserDownloadsFolder = result.browserDownloadsFolder;

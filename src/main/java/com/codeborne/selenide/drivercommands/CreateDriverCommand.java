@@ -9,8 +9,10 @@ import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.ShutdownHooks;
+import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
+import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +43,8 @@ public class CreateDriverCommand {
   public Result createDriver(Config config,
                              WebDriverFactory factory,
                              @Nullable Proxy userProvidedProxy,
-                             List<WebDriverEventListener> listeners) {
+                             List<WebDriverEventListener> eventListeners,
+                             List<WebDriverListener> listeners) {
     if (!config.reopenBrowserOnFail()) {
       throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
         ", and cannot create a new webdriver because reopenBrowserOnFail=false");
@@ -72,7 +75,7 @@ public class CreateDriverCommand {
     log.info("Create webdriver in current thread {}: {} -> {}",
       currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
 
-    WebDriver webDriver = addListeners(webdriver, listeners);
+    WebDriver webDriver = addListeners(webdriver, eventListeners, listeners);
     ShutdownHooks.add(
       new Thread(new SelenideDriverFinalCleanupThread(config, webDriver, selenideProxyServer))
     );
@@ -85,24 +88,46 @@ public class CreateDriverCommand {
   }
 
   @Nonnull
-  private WebDriver addListeners(WebDriver webdriver, List<WebDriverEventListener> listeners) {
-    if (listeners.isEmpty()) {
+  private WebDriver addListeners(WebDriver webdriver,
+                                 List<WebDriverEventListener> eventListeners,
+                                 List<WebDriverListener> listeners) {
+    return addWebDriverListeners(
+      addEventListeners(webdriver, eventListeners),
+      listeners
+    );
+  }
+
+  @Nonnull
+  private WebDriver addEventListeners(WebDriver webdriver, List<WebDriverEventListener> eventListeners) {
+    if (eventListeners.isEmpty()) {
       return webdriver;
     }
-
     EventFiringWebDriver wrapper = new EventFiringWebDriver(webdriver);
-    for (WebDriverEventListener listener : listeners) {
+    for (WebDriverEventListener listener : eventListeners) {
       log.info("Add listener to webdriver: {}", listener);
       wrapper.register(listener);
     }
     return wrapper;
   }
 
+  @Nonnull
+  private WebDriver addWebDriverListeners(WebDriver webdriver, List<WebDriverListener> listeners) {
+    if (listeners.isEmpty()) {
+      return webdriver;
+    }
+
+    log.info("Add listeners to webdriver: {}", listeners);
+    EventFiringDecorator wrapper = new EventFiringDecorator(listeners.toArray(new WebDriverListener[]{}));
+    return wrapper.decorate(webdriver);
+  }
+
   @ParametersAreNonnullByDefault
   public static class Result {
     public final WebDriver webDriver;
-    @Nullable public final SelenideProxyServer selenideProxyServer;
-    @Nullable public final DownloadsFolder browserDownloadsFolder;
+    @Nullable
+    public final SelenideProxyServer selenideProxyServer;
+    @Nullable
+    public final DownloadsFolder browserDownloadsFolder;
 
     public Result(WebDriver webDriver,
                   @Nullable SelenideProxyServer selenideProxyServer,
