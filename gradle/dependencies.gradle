@@ -61,8 +61,7 @@ allprojects {
 
 subprojects {
   dependencies {
-    implementation project(':')
-    testImplementation project(':')
+    api project(':')
     testImplementation project(':').sourceSets.test.output
   }
 }

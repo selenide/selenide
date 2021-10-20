@@ -1,6 +1,11 @@
+ext {
+  artifactId = 'selenide'
+}
+
 dependencies {
-  compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+  api("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
+
+apply from: rootProject.file('gradle/publish-module.gradle')

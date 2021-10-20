@@ -1,4 +1,10 @@
-dependencies {
-  implementation project(':statics')
-  compileOnly("junit:junit:4.13.2")
+ext {
+  artifactId = 'selenide-junit4'
 }
+
+dependencies {
+  api project(":statics")
+  api "junit:junit:4.13.2"
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')

@@ -10,4 +10,8 @@ allprojects {
   compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 
   sourceCompatibility = '1.8'
+
+  tasks.withType(Javadoc) {
+    failOnError = false
+  }
 }
