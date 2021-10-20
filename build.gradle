@@ -1,5 +1,4 @@
 plugins {
-  id 'java-library'
   id 'idea'
   id 'jacoco'
   id 'checkstyle'
@@ -9,17 +8,20 @@ plugins {
 
 allprojects {
   apply plugin: 'java'
+  apply plugin: 'java-library'
+  group = 'com.codeborne'
+  version = '6.0.0-SNAPSHOT'
 }
 
-group = 'com.codeborne'
-archivesBaseName = 'selenide'
-version = '6.0.0-SNAPSHOT'
+ext {
+  artifactId = 'selenide-core'
+}
 
 apply from: 'gradle/compilation.gradle'
 apply from: 'gradle/dependencies.gradle'
 apply from: 'gradle/code-analysis.gradle'
 apply from: 'gradle/coverage.gradle'
 apply from: 'gradle/tests.gradle'
-apply from: 'gradle/deploy.gradle'
+apply from: 'gradle/publish-module.gradle'
 
-defaultTasks 'check', 'buildAll'
+defaultTasks 'check', 'publishToMavenLocal'

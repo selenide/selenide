@@ -1,0 +1,12 @@
+ext {
+  artifactId = 'selenide-proxy'
+}
+
+dependencies {
+  api project(":statics")
+  api("com.browserup:browserup-proxy-core:${browserupProxyVersion}") {exclude group: 'io.netty'}
+  implementation("xyz.rogfam:littleproxy:${littleProxyVersion}")
+  implementation("io.netty:netty-all:$nettyVersion") {because 'used by browserup-proxy'}
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')

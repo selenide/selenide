@@ -2,6 +2,7 @@
 
 ## 6.0.0 (planned to 25.10.2021)
 * upgrade to Selenium 4.0.0
+* #1593 Publish Selenide as separate artifacts: selenide.jar, selenide-proxy.jar, selenide-testng.jar etc.
 * #1581 report exact actual value at the moment of failure
 * Remove lots of deprecated methods  --  thanks @BorisOsipov for PR https://github.com/selenide/selenide/pull/1607/files
 * Remove support for "legacy_firefox" (upto ESR 52)
