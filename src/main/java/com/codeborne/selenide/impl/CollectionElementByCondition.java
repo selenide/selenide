@@ -47,7 +47,7 @@ public class CollectionElementByCondition extends WebElementSource {
     List<WebElement> list = collection.getElements();
 
     for (WebElement element : list) {
-      if (condition.check(driver(), element).verdict == ACCEPT) {
+      if (condition.check(driver(), element).verdict() == ACCEPT) {
         return element;
       }
     }

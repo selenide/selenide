@@ -31,8 +31,8 @@ public class ErrorMessages {
   static String actualValue(Condition condition, Driver driver,
                             @Nullable WebElement element,
                             @Nullable CheckResult lastCheckResult) {
-    if (lastCheckResult != null && lastCheckResult.actualValue != null) {
-      return String.format("%nActual value: %s", lastCheckResult.actualValue);
+    if (lastCheckResult != null && lastCheckResult.actualValue() != null) {
+      return String.format("%nActual value: %s", lastCheckResult.actualValue());
     }
 
     // Deprecated branch for custom condition (not migrated to CheckResult):

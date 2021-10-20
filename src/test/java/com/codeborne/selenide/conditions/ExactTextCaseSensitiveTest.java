@@ -34,21 +34,21 @@ class ExactTextCaseSensitiveTest {
 
   @Test
   void shouldMatchExpectedTextWithSameCase() {
-    assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
     verify(element).getText();
   }
 
   @Test
   void shouldNotMatchExpectedTextWithDifferentCase() {
     ExactTextCaseSensitive condition = new ExactTextCaseSensitive("john Malkovich");
-    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
     verify(element).getText();
   }
 
   @Test
   void shouldNotMatchDifferentExpectedText() {
     ExactTextCaseSensitive condition = new ExactTextCaseSensitive("John");
-    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
     verify(element).getText();
   }
 
@@ -62,8 +62,8 @@ class ExactTextCaseSensitiveTest {
     ExactTextCaseSensitive condition = new ExactTextCaseSensitive("Two");
     CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(checkResult.verdict).isEqualTo(REJECT);
-    assertThat(checkResult.actualValue).isEqualTo("text=\"John Malkovich\"");
+    assertThat(checkResult.verdict()).isEqualTo(REJECT);
+    assertThat(checkResult.actualValue()).isEqualTo("text=\"John Malkovich\"");
     verify(element).getText();
   }
 }

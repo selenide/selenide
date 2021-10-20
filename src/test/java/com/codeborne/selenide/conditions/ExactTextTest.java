@@ -29,7 +29,7 @@ class ExactTextTest {
   void shouldMatchExpectedTextWithSameCase() {
     when(element.getText()).thenReturn("John Malkovich");
 
-    assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
     verify(element).getText();
   }
 
@@ -37,7 +37,7 @@ class ExactTextTest {
   void shouldMatchExpectedTextWithDifferentCase() {
     when(element.getText()).thenReturn("john Malkovich");
 
-    assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
     verify(element).getText();
   }
 
@@ -45,7 +45,7 @@ class ExactTextTest {
   void shouldNotMatchExpectedPartOfActualText() {
     when(element.getText()).thenReturn("test John Malkovich test");
 
-    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
     verify(element).getText();
   }
 
@@ -53,7 +53,7 @@ class ExactTextTest {
   void shouldNotMatchActualPartOfExpectedText() {
     when(element.getText()).thenReturn("John");
 
-    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
     verify(element).getText();
   }
 
@@ -68,8 +68,8 @@ class ExactTextTest {
 
     CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(checkResult.verdict).isEqualTo(REJECT);
-    assertThat(checkResult.actualValue).isEqualTo("text=\"John\"");
+    assertThat(checkResult.verdict()).isEqualTo(REJECT);
+    assertThat(checkResult.actualValue()).isEqualTo("text=\"John\"");
     verify(element).getText();
   }
 }

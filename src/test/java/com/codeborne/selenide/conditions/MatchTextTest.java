@@ -19,31 +19,31 @@ final class MatchTextTest {
   @Test
   void shouldMatchWholeString() {
     assertThat(new MatchText("Chuck Norris' gmail account is gmail@chuck.norris")
-      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict)
+      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict())
       .isEqualTo(ACCEPT);
 
     assertThat(new MatchText("Chuck Norris.* gmail\\s+account is gmail@chuck.norris")
-      .check(driver, element("Chuck Norris' gmail    account is gmail@chuck.norris")).verdict)
+      .check(driver, element("Chuck Norris' gmail    account is gmail@chuck.norris")).verdict())
       .isEqualTo(ACCEPT);
   }
 
   @Test
   void shouldMatchSubstring() {
     assertThat(new MatchText("Chuck")
-      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict)
+      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict())
       .isEqualTo(ACCEPT);
     assertThat(new MatchText("Chuck\\s*Norris")
-      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict)
+      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict())
       .isEqualTo(ACCEPT);
     assertThat(new MatchText("gmail account")
-      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict)
+      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict())
       .isEqualTo(ACCEPT);
   }
 
   @Test
   void shouldNotMatch() {
     MatchText condition = new MatchText("selenide");
-    assertThat(condition.check(driver, element("selenite")).verdict).isEqualTo(REJECT);
+    assertThat(condition.check(driver, element("selenite")).verdict()).isEqualTo(REJECT);
   }
 
   @Test
@@ -58,7 +58,7 @@ final class MatchTextTest {
 
     CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(checkResult.actualValue).isEqualTo("text=\"Chuck Norris' gmail account\"");
+    assertThat(checkResult.actualValue()).isEqualTo("text=\"Chuck Norris' gmail account\"");
     verify(element).getText();
     verifyNoMoreInteractions(driver, element);
   }

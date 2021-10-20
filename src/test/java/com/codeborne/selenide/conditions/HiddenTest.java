@@ -30,12 +30,12 @@ final class HiddenTest {
   @Test
   void satisfied_if_element_is_not_visible() {
     when(element.isDisplayed()).thenReturn(false);
-    assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
   void not_satisfied_if_element_is_visible() {
     when(element.isDisplayed()).thenReturn(true);
-    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
   }
 }

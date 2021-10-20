@@ -24,7 +24,7 @@ public class Matches implements Command<Boolean> {
     Condition condition = firstOf(args);
     WebElement element = getElementOrNull(locator);
     if (element != null) {
-      return condition.check(locator.driver(), element).verdict == ACCEPT;
+      return condition.check(locator.driver(), element).verdict() == ACCEPT;
     }
 
     return condition.missingElementSatisfiesCondition();

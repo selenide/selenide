@@ -30,23 +30,23 @@ final class VisibleTest {
   @Test
   void satisfied_if_element_is_visible() {
     when(element.isDisplayed()).thenReturn(true);
-    assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
   void not_satisfied_if_element_is_invisible() {
     when(element.isDisplayed()).thenReturn(false);
-    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
   }
 
   @Test
   void actualValue_invisible() {
-    assertThat(condition.check(driver, element).actualValue).isEqualTo("hidden");
+    assertThat(condition.check(driver, element).actualValue()).isEqualTo("hidden");
   }
 
   @Test
   void actualValue_visible() {
     when(element.isDisplayed()).thenReturn(true);
-    assertThat(condition.check(driver, element).actualValue).isEqualTo("visible");
+    assertThat(condition.check(driver, element).actualValue()).isEqualTo("visible");
   }
 }

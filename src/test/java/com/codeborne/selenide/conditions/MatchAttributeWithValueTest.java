@@ -22,13 +22,13 @@ final class MatchAttributeWithValueTest {
 
   @Test
   void check() {
-    assertThat(new MatchAttributeWithValue("data-id", "act.*").check(driver, element).verdict).isEqualTo(ACCEPT);
-    assertThat(new MatchAttributeWithValue("data-id", "exp.*").check(driver, element).verdict).isEqualTo(REJECT);
+    assertThat(new MatchAttributeWithValue("data-id", "act.*").check(driver, element).verdict()).isEqualTo(ACCEPT);
+    assertThat(new MatchAttributeWithValue("data-id", "exp.*").check(driver, element).verdict()).isEqualTo(REJECT);
   }
 
   @Test
   void actualValue() {
-    assertThat(new MatchAttributeWithValue("data-id", "expected").check(driver, element).actualValue).isEqualTo("data-id~/actual/");
+    assertThat(new MatchAttributeWithValue("data-id", "expected").check(driver, element).actualValue()).isEqualTo("data-id~/actual/");
   }
 
   @Test
