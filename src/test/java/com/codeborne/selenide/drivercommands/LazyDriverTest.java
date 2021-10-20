@@ -36,7 +36,8 @@ final class LazyDriverTest {
     when(config.downloadsFolder()).thenReturn("build/down");
     when(config.reopenBrowserOnFail()).thenReturn(true);
     when(config.proxyEnabled()).thenReturn(true);
-    driver = new LazyDriver(config, null, emptyList(), factory, browserHealthChecker, createDriverCommand, closeDriverCommand);
+    driver = new LazyDriver(config, null, emptyList(), emptyList(),
+      factory, browserHealthChecker, createDriverCommand, closeDriverCommand);
   }
 
   @BeforeEach
@@ -107,7 +108,7 @@ final class LazyDriverTest {
     when(config.holdBrowserOpen()).thenReturn(false);
     when(config.proxyEnabled()).thenReturn(true);
 
-    driver = new LazyDriver(config, mockProxy("selenide:0"), emptyList(),
+    driver = new LazyDriver(config, mockProxy("selenide:0"), emptyList(), emptyList(),
       factory, browserHealthChecker, createDriverCommand, closeDriverCommand);
     givenOpenedBrowser();
 

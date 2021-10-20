@@ -6,6 +6,7 @@
 * Remove lots of deprecated methods  --  thanks @BorisOsipov for PR https://github.com/selenide/selenide/pull/1607/files
 * Remove support for "legacy_firefox" (upto ESR 52)
 * Make Selenide.sleep(N) guarantee the sleep duration
+* #1615 Added method for adding WebDriverListeners (as a replacement for deprecated WebDriverEventListeners)
 
 ## 5.25.0 (released 28.09.2021)
 * #969 Add support for OpenTest4j  --  see PR #1545

@@ -11,6 +11,7 @@ import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
+import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +35,8 @@ import static java.lang.Thread.currentThread;
 public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private static final Logger log = LoggerFactory.getLogger(WebDriverThreadLocalContainer.class);
 
-  private final List<WebDriverEventListener> listeners = new ArrayList<>();
+  private final List<WebDriverEventListener> eventListeners = new ArrayList<>();
+  private final List<WebDriverListener> listeners = new ArrayList<>();
   final Collection<Thread> allWebDriverThreads = new ConcurrentLinkedQueue<>();
   final Map<Long, WebDriver> threadWebDriver = new ConcurrentHashMap<>(4);
   private final Map<Long, SelenideProxyServer> threadProxyServer = new ConcurrentHashMap<>(4);
@@ -51,6 +53,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Override
   public void addListener(WebDriverEventListener listener) {
+    eventListeners.add(listener);
+  }
+
+  @Override
+  public void addListener(WebDriverListener listener) {
     listeners.add(listener);
   }
 
@@ -150,7 +157,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @CheckReturnValue
   @Nonnull
   private WebDriver createDriver() {
-    CreateDriverCommand.Result result = createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
+    CreateDriverCommand.Result result = createDriverCommand.createDriver(config, factory, userProvidedProxy, eventListeners, listeners);
     long threadId = currentThread().getId();
     threadWebDriver.put(threadId, result.webDriver);
     if (result.selenideProxyServer != null) {

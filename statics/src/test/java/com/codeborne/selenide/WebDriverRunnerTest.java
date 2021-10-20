@@ -9,7 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.events.WebDriverEventListener;
+import org.openqa.selenium.support.events.WebDriverListener;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -25,7 +25,6 @@ import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -76,11 +75,11 @@ final class WebDriverRunnerTest {
 
   @Test
   void userCanAddWebDriverListeners() {
-    WebDriverEventListener listener = mock(WebDriverEventListener.class);
+    WebDriverListener listener = mock(WebDriverListener.class);
     WebDriverRunner.addListener(listener);
     Configuration.browser = CustomWebDriverProvider.class.getName();
     open(url);
-    verify(listener).beforeNavigateTo(eq(url.toString()), any(WebDriver.class));
+    verify(listener).beforeAnyNavigationCall(any(Navigation.class), any(), any());
   }
 
   private static class CustomWebDriverProvider implements WebDriverProvider {
