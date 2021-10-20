@@ -1,13 +1,14 @@
 package com.codeborne.selenide.drivercommands;
 
+import com.codeborne.selenide.BrowserDownloadsFolder;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
-import com.codeborne.selenide.BrowserDownloadsFolder;
 import com.codeborne.selenide.impl.FileNamer;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.internal.ShutdownHooks;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.slf4j.Logger;
@@ -58,7 +59,7 @@ public class CreateDriverCommand {
       }
       catch (NoClassDefFoundError e) {
         throw new IllegalStateException("Cannot initialize proxy. " +
-          "Probably you should add BrowserUpProxy dependency to your project " + 
+          "Probably you should add BrowserUpProxy dependency to your project " +
           "- see https://search.maven.org/search?q=a:browserup-proxy-core", e);
       }
     }
@@ -72,7 +73,7 @@ public class CreateDriverCommand {
       currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
 
     WebDriver webDriver = addListeners(webdriver, listeners);
-    Runtime.getRuntime().addShutdownHook(
+    ShutdownHooks.add(
       new Thread(new SelenideDriverFinalCleanupThread(config, webDriver, selenideProxyServer))
     );
     if (browserDownloadsFolder != null) {
