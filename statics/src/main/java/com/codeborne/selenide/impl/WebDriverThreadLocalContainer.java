@@ -62,6 +62,16 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   @Override
+  public void removeListener(WebDriverEventListener listener) {
+    eventListeners.remove(listener);
+  }
+
+  @Override
+  public void removeListener(WebDriverListener listener) {
+    listeners.remove(listener);
+  }
+
+  @Override
   public void setWebDriver(WebDriver webDriver) {
     setWebDriver(webDriver, null);
   }

@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
@@ -15,25 +16,33 @@ import java.util.List;
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WebDriverEventListenerTest extends IntegrationTest {
+public class WebDriverListenerTest extends IntegrationTest {
+  private final DeprecatedListener deprecatedListener = new DeprecatedListener();
+  private final Selenium4Listener listener = new Selenium4Listener();
+
   @BeforeEach
   void openTestPage() {
     Selenide.closeWebDriver();
   }
 
+  @AfterEach
+  void tearDown() {
+    WebDriverRunner.removeListener(listener);
+    WebDriverRunner.removeListener(deprecatedListener);
+  }
+
   @Test
   void canAddEventListener() {
-    DeprecatedListener listener = new DeprecatedListener();
-    WebDriverRunner.addListener(listener);
+    WebDriverRunner.addListener(deprecatedListener);
 
     open("/page_with_selects_without_jquery.html");
     open("/page_with_frames.html");
 
-    assertThat(listener.befores).containsExactly(
+    assertThat(deprecatedListener.befores).containsExactly(
       getBaseUrl() + "/page_with_selects_without_jquery.html",
       getBaseUrl() + "/page_with_frames.html"
     );
-    assertThat(listener.afters).containsExactly(
+    assertThat(deprecatedListener.afters).containsExactly(
       getBaseUrl() + "/page_with_selects_without_jquery.html",
       getBaseUrl() + "/page_with_frames.html"
     );
@@ -41,7 +50,6 @@ public class WebDriverEventListenerTest extends IntegrationTest {
 
   @Test
   void canAddListener() {
-    Selenium4Listener listener = new Selenium4Listener();
     WebDriverRunner.addListener(listener);
 
     open("/page_with_selects_without_jquery.html");
@@ -59,17 +67,14 @@ public class WebDriverEventListenerTest extends IntegrationTest {
 
   @Test
   void canAddBothNewAndOldListeners() {
-    Selenium4Listener newListener = new Selenium4Listener();
-    WebDriverRunner.addListener(newListener);
-    DeprecatedListener oldListener = new DeprecatedListener();
-    WebDriverRunner.addListener(oldListener);
-
+    WebDriverRunner.addListener(listener);
+    WebDriverRunner.addListener(deprecatedListener);
     open("/page_with_frames.html");
 
-    assertThat(oldListener.befores).containsExactly(getBaseUrl() + "/page_with_frames.html");
-    assertThat(oldListener.afters).containsExactly(getBaseUrl() + "/page_with_frames.html");
-    assertThat(newListener.befores).containsExactly(getBaseUrl() + "/page_with_frames.html");
-    assertThat(newListener.afters).containsExactly(getBaseUrl() + "/page_with_frames.html");
+    assertThat(deprecatedListener.befores).containsExactly(getBaseUrl() + "/page_with_frames.html");
+    assertThat(deprecatedListener.afters).containsExactly(getBaseUrl() + "/page_with_frames.html");
+    assertThat(listener.befores).containsExactly(getBaseUrl() + "/page_with_frames.html");
+    assertThat(listener.afters).containsExactly(getBaseUrl() + "/page_with_frames.html");
   }
 
   public static class Selenium4Listener implements WebDriverListener {
