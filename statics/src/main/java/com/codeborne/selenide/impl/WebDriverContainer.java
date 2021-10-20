@@ -16,6 +16,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public interface WebDriverContainer {
   void addListener(WebDriverEventListener listener);
   void addListener(WebDriverListener listener);
+  void removeListener(WebDriverEventListener listener);
+  void removeListener(WebDriverListener listener);
   void setWebDriver(WebDriver webDriver);
   void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy);
   void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder);

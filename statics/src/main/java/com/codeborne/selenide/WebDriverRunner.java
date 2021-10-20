@@ -34,6 +34,14 @@ public class WebDriverRunner {
   }
 
   /**
+   * @deprecated Use {@link #removeListener(WebDriverListener)} instead
+   */
+  @Deprecated
+  public static void removeListener(WebDriverEventListener listener) {
+    webdriverContainer.removeListener(listener);
+  }
+
+  /**
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
    *
    * @param listener your listener of webdriver events
@@ -41,6 +49,13 @@ public class WebDriverRunner {
    */
   public static void addListener(WebDriverListener listener) {
     webdriverContainer.addListener(listener);
+  }
+
+  /**
+   * @since 6.0.0
+   */
+  public static void removeListener(WebDriverListener listener) {
+    webdriverContainer.removeListener(listener);
   }
 
   /**
