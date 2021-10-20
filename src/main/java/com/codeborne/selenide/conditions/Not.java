@@ -24,7 +24,7 @@ public class Not extends Condition {
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     CheckResult check = condition.check(driver, element);
-    return new CheckResult(check.verdict == ACCEPT ? REJECT : ACCEPT, check.actualValue, check.timestamp);
+    return new CheckResult(check.verdict() == ACCEPT ? REJECT : ACCEPT, check.actualValue(), check.timestamp());
   }
 
   @Override

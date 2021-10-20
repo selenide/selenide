@@ -19,29 +19,30 @@ final class HrefTest {
 
   @Test
   void hrefContainingFullUrl() {
-    assertThat(new Href("http://google.ek").check(driver, link("http://google.ek/")).verdict).isEqualTo(ACCEPT);
-    assertThat(new Href("http://google.ek/").check(driver, link("http://google.ek/")).verdict).isEqualTo(ACCEPT);
+    assertThat(new Href("http://google.ek").check(driver, link("http://google.ek/")).verdict()).isEqualTo(ACCEPT);
+    assertThat(new Href("http://google.ek/").check(driver, link("http://google.ek/")).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
   void hrefContainingRelativeUrlToFile() {
-    assertThat(new Href("cv.yml").check(driver, link("https://cv.ee/cv.yml")).verdict).isEqualTo(ACCEPT);
-    assertThat(new Href("/people/cv.yml").check(driver, link("https://cv.ee/people/cv.yml")).verdict).isEqualTo(ACCEPT);
+    assertThat(new Href("cv.yml").check(driver, link("https://cv.ee/cv.yml")).verdict()).isEqualTo(ACCEPT);
+    assertThat(new Href("/people/cv.yml").check(driver, link("https://cv.ee/people/cv.yml")).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
   void hrefContainingCyrillicSymbols() {
-    assertThat(new Href("/файл/cv.yml").check(driver, link("https://cv.ee/%D1%84%D0%B0%D0%B9%D0%BB/cv.yml")).verdict).isEqualTo(ACCEPT);
+    Href condition = new Href("/файл/cv.yml");
+    assertThat(condition.check(driver, link("https://cv.ee/%D1%84%D0%B0%D0%B9%D0%BB/cv.yml")).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
   void hrefContainingAnchor() {
-    assertThat(new Href("#").check(driver, link("https://cv.ee/people/jaan?source=23213#")).verdict).isEqualTo(ACCEPT);
+    assertThat(new Href("#").check(driver, link("https://cv.ee/people/jaan?source=23213#")).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
   void hrefContainingEncodedSpace() {
-    assertThat(new Href("some%20file.pdf").check(driver, link("https://dropbox.com/some%20file.pdf")).verdict).isEqualTo(ACCEPT);
+    assertThat(new Href("some%20file.pdf").check(driver, link("https://dropbox.com/some%20file.pdf")).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test

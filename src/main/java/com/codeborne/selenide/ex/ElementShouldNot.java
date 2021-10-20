@@ -27,7 +27,7 @@ public class ElementShouldNot extends UIAssertionError {
         actualValue(expectedCondition, driver, element, lastCheckResult)
       ),
       expectedCondition,
-      lastCheckResult == null ? null : lastCheckResult.actualValue,
+      lastCheckResult == null ? null : lastCheckResult.actualValue(),
       lastError);
   }
 }

@@ -29,7 +29,7 @@ public class FilteringCollection implements CollectionSource {
   @Nonnull
   public List<WebElement> getElements() {
     return originalCollection.getElements().stream()
-      .filter(webElement -> filter.check(originalCollection.driver(), webElement).verdict == ACCEPT)
+      .filter(webElement -> filter.check(originalCollection.driver(), webElement).verdict() == ACCEPT)
       .collect(toList());
   }
 
@@ -38,7 +38,7 @@ public class FilteringCollection implements CollectionSource {
   @Nonnull
   public WebElement getElement(int index) {
     return originalCollection.getElements().stream()
-      .filter(webElement -> filter.check(originalCollection.driver(), webElement).verdict == ACCEPT)
+      .filter(webElement -> filter.check(originalCollection.driver(), webElement).verdict() == ACCEPT)
       .skip(index)
       .findFirst()
       .orElseThrow(() -> new IndexOutOfBoundsException("Index: " + index));

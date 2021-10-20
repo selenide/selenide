@@ -53,28 +53,28 @@ final class AndTest {
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(true)
-      )).check(driver, element).verdict
+      )).check(driver, element).verdict()
     ).isEqualTo(ACCEPT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(false)
-      )).check(driver, element).verdict
+      )).check(driver, element).verdict()
     ).isEqualTo(REJECT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(true)
-      )).check(driver, element).verdict
+      )).check(driver, element).verdict()
     ).isEqualTo(REJECT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(false)
-      )).check(driver, element).verdict
+      )).check(driver, element).verdict()
     ).isEqualTo(REJECT);
   }
 
@@ -84,28 +84,28 @@ final class AndTest {
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(true)
-      )).negate().check(driver, element).verdict
+      )).negate().check(driver, element).verdict()
     ).isEqualTo(REJECT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(false)
-      )).negate().check(driver, element).verdict
+      )).negate().check(driver, element).verdict()
     ).isEqualTo(ACCEPT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(true)
-      )).negate().check(driver, element).verdict
+      )).negate().check(driver, element).verdict()
     ).isEqualTo(ACCEPT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(false)
-      )).negate().check(driver, element).verdict
+      )).negate().check(driver, element).verdict()
     ).isEqualTo(ACCEPT);
   }
 

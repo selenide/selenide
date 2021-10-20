@@ -22,44 +22,44 @@ final class TextCaseSensitiveTest {
 
   @Test
   void shouldMatchExpectedTextWithSameCase() {
-    assertThat(new CaseSensitiveText("One").check(driver, elementShort).verdict).isEqualTo(ACCEPT);
+    assertThat(new CaseSensitiveText("One").check(driver, elementShort).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
   void shouldNotMatchExpectedTextWithDifferentCase() {
-    assertThat(new CaseSensitiveText("one").check(driver, elementShort).verdict).isEqualTo(REJECT);
+    assertThat(new CaseSensitiveText("one").check(driver, elementShort).verdict()).isEqualTo(REJECT);
   }
 
   @Test
   void shouldNotMatchDifferentExpectedText() {
-    assertThat(new CaseSensitiveText("Two").check(driver, elementShort).verdict).isEqualTo(REJECT);
+    assertThat(new CaseSensitiveText("Two").check(driver, elementShort).verdict()).isEqualTo(REJECT);
   }
 
   @Test
   void shouldMatchExpectedTextWithinOtherText() {
-    assertThat(new CaseSensitiveText("One").check(driver, elementLong).verdict).isEqualTo(ACCEPT);
+    assertThat(new CaseSensitiveText("One").check(driver, elementLong).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
   void shouldMatchExpectedTextInSelectedOptions() {
-    assertThat(new CaseSensitiveText("One").check(driver, singleSelectElement).verdict).isEqualTo(ACCEPT);
+    assertThat(new CaseSensitiveText("One").check(driver, singleSelectElement).verdict()).isEqualTo(ACCEPT);
 
-    assertThat(new CaseSensitiveText("Two").check(driver, multiSelectElement).verdict).isEqualTo(ACCEPT);
-    assertThat(new CaseSensitiveText("OneTwo").check(driver, multiSelectElement).verdict).isEqualTo(ACCEPT);
+    assertThat(new CaseSensitiveText("Two").check(driver, multiSelectElement).verdict()).isEqualTo(ACCEPT);
+    assertThat(new CaseSensitiveText("OneTwo").check(driver, multiSelectElement).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
   void shouldNotMatchExpectedTextWithDifferentCaseInSelectedOptions() {
-    assertThat(new CaseSensitiveText("one").check(driver, singleSelectElement).verdict).isEqualTo(REJECT);
+    assertThat(new CaseSensitiveText("one").check(driver, singleSelectElement).verdict()).isEqualTo(REJECT);
 
-    assertThat(new CaseSensitiveText("one").check(driver, multiSelectElement).verdict).isEqualTo(REJECT);
-    assertThat(new CaseSensitiveText("oneTwo").check(driver, multiSelectElement).verdict).isEqualTo(REJECT);
+    assertThat(new CaseSensitiveText("one").check(driver, multiSelectElement).verdict()).isEqualTo(REJECT);
+    assertThat(new CaseSensitiveText("oneTwo").check(driver, multiSelectElement).verdict()).isEqualTo(REJECT);
   }
 
   @Test
   void shouldNotMatchExpectedTextInNonSelectedOptions() {
-    assertThat(new CaseSensitiveText("Two").check(driver, singleSelectElement).verdict).isEqualTo(REJECT);
-    assertThat(new CaseSensitiveText("Three").check(driver, singleSelectElement).verdict).isEqualTo(REJECT);
+    assertThat(new CaseSensitiveText("Two").check(driver, singleSelectElement).verdict()).isEqualTo(REJECT);
+    assertThat(new CaseSensitiveText("Three").check(driver, singleSelectElement).verdict()).isEqualTo(REJECT);
   }
 
   @Test

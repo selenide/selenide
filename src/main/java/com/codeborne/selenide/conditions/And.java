@@ -51,7 +51,7 @@ public class And extends Condition {
 
     for (Condition c : conditions) {
       CheckResult checkResult = c.check(driver, element);
-      if (checkResult.verdict != ACCEPT) {
+      if (checkResult.verdict() != ACCEPT) {
         return checkResult;
       }
       else {
@@ -59,7 +59,7 @@ public class And extends Condition {
       }
     }
 
-    String actualValues = results.stream().map(check -> String.valueOf(check.actualValue)).collect(joining(", "));
+    String actualValues = results.stream().map(check -> String.valueOf(check.actualValue())).collect(joining(", "));
     return new CheckResult(ACCEPT, actualValues);
   }
 

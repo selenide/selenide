@@ -22,14 +22,14 @@ final class TextTest {
 
   @Test
   void apply_for_textInput() {
-    assertThat(new Text("Hello World").check(driver, mockElement("Hello World")).verdict).isEqualTo(ACCEPT);
-    assertThat(new Text("Hello World").check(driver, mockElement("Hello")).verdict).isEqualTo(REJECT);
+    assertThat(new Text("Hello World").check(driver, mockElement("Hello World")).verdict()).isEqualTo(ACCEPT);
+    assertThat(new Text("Hello World").check(driver, mockElement("Hello")).verdict()).isEqualTo(REJECT);
   }
 
   @Test
   void apply_matchTextPartially() {
-    assertThat(new Text("Hello").check(driver, mockElement("Hello World")).verdict).isEqualTo(ACCEPT);
-    assertThat(new Text("World").check(driver, mockElement("Hello World")).verdict).isEqualTo(ACCEPT);
+    assertThat(new Text("Hello").check(driver, mockElement("Hello World")).verdict()).isEqualTo(ACCEPT);
+    assertThat(new Text("World").check(driver, mockElement("Hello World")).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
@@ -38,8 +38,14 @@ final class TextTest {
     SelenideElement selectWithoutSpace = mockSelect(option("Hello", true), option("World", true));
     SelenideElement selectWithSpace = mockSelect(option("Hello", true), option(" World", true));
 
-    assertThat(condition.check(driver, selectWithoutSpace)).isEqualTo(new CheckResult(REJECT, "text=\"HelloWorld\""));
-    assertThat(condition.check(driver, selectWithSpace)).isEqualTo(new CheckResult(ACCEPT, "text=\"Hello World\""));
+    assertThat(condition.check(driver, selectWithoutSpace))
+      .usingRecursiveComparison()
+      .ignoringFields("timestamp")
+      .isEqualTo(new CheckResult(REJECT, "text=\"HelloWorld\""));
+    assertThat(condition.check(driver, selectWithSpace))
+      .usingRecursiveComparison()
+      .ignoringFields("timestamp")
+      .isEqualTo(new CheckResult(ACCEPT, "text=\"Hello World\""));
   }
 
   @Test
@@ -55,7 +61,7 @@ final class TextTest {
   @Test
   void apply_for_textInput_caseInsensitive() {
     WebElement element = mockElement("John Malkovich The First");
-    assertThat(new Text("john malkovich").check(driver, element).verdict).isEqualTo(ACCEPT);
+    assertThat(new Text("john malkovich").check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
@@ -65,17 +71,17 @@ final class TextTest {
       option(" Malkovich", true),
       option(" The First", true)
     );
-    assertThat(new Text("john malkovich").check(driver, element).verdict).isEqualTo(ACCEPT);
+    assertThat(new Text("john malkovich").check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
   void apply_for_textInput_ignoresWhitespaces() {
     assertThat(new Text("john the malkovich")
-      .check(driver, mockElement("John  the\n Malkovich")).verdict)
+      .check(driver, mockElement("John  the\n Malkovich")).verdict())
       .isEqualTo(ACCEPT);
 
     assertThat(new Text("This is nonbreakable space")
-      .check(driver, mockElement("This is nonbreakable\u00a0space")).verdict)
+      .check(driver, mockElement("This is nonbreakable\u00a0space")).verdict())
       .isEqualTo(ACCEPT);
   }
 
@@ -85,7 +91,7 @@ final class TextTest {
     WebElement element = mockElement("Hello World");
     CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(checkResult.actualValue).isEqualTo("text=\"Hello World\"");
+    assertThat(checkResult.actualValue()).isEqualTo("text=\"Hello World\"");
     verify(element).getTagName();
     verify(element).getText();
     verifyNoMoreInteractions(driver, element);
@@ -97,7 +103,7 @@ final class TextTest {
     WebElement element = mockSelect(option("Hello", true), option(" World", true));
     CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(checkResult.actualValue).isEqualTo("text=\"Hello World\"");
+    assertThat(checkResult.actualValue()).isEqualTo("text=\"Hello World\"");
     // One time in Text condition, second in selenium Select
     verify(element, times(2)).getTagName();
   }
