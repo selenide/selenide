@@ -49,6 +49,17 @@ public class SelenideDriver {
     this(config, emptyList(), emptyList());
   }
 
+  /**
+   * @deprecated Class {@link WebDriverEventListener} is deprecated since Selenium 4.0.0
+   */
+  @Deprecated
+  public SelenideDriver(Config config, List<WebDriverEventListener> eventListeners) {
+    this(config, eventListeners, emptyList());
+  }
+
+  /**
+   * @since 6.0.0
+   */
   public SelenideDriver(Config config, List<WebDriverEventListener> eventListeners, List<WebDriverListener> listeners) {
     this(config, new LazyDriver(config, null, eventListeners, listeners));
   }
