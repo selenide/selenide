@@ -66,10 +66,14 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Check if a collection matches given condition(s).
+   *
    * <p> For example: </p>
-   * <pre code='java'>
+   *
+   * <pre>
+   * {@code
    * $$(".text_list").should(containExactTextsCaseSensitive("text1", "text2"));
    * $$(".cat_list").should(allMatch("value==cat", el -> el.getAttribute("value").equals("cat")));
+   * }
    * </pre>
    */
   @Nonnull

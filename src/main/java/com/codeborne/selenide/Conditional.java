@@ -15,10 +15,10 @@ import java.time.Duration;
  *
  * <p>
  * To use it just implement for appropriate type,
- * e.g. 'YourType implements Conditional<YourType>'
+ * e.g. `YourType implements Conditional<YourType>`
  * </p>
  *
- * @link com.codeborne.selenide.impl.Waiter
+ * {@link com.codeborne.selenide.impl.Waiter}
  * @since 5.23.0
  */
 @ParametersAreNonnullByDefault

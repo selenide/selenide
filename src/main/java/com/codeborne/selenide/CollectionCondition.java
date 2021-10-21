@@ -176,15 +176,20 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    * Check that the given collection contains all elements with given texts.
    * <p> NB! This condition is case-sensitive and checks for exact matches! </p>
    * Examples:
-   * <pre code='java'>
+   * <pre>
+   * {@code
    * // collection 1: [Tom, Dick, Harry]
    * $$("li.odd").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // success
+   *
    * // collection 2: [Tom, John, Dick, Harry]
    * $$("li.even").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // success
+   *
    * // collection 3: [John, Dick, Tom, Paul]
    * $$("li.first").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // fail ("Harry" is missing)
+   *
    * // collection 4: [Tom, Dick, hArRy]
    * $$("li.last").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // fail ("Harry" is missing)
+   * }
    * </pre>
    *
    * @param expectedTexts the expected texts that the collection should contain
@@ -197,16 +202,24 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   /**
    * Check that the given collection contains all elements with given texts.
    * <p> NB! This condition is case-sensitive and checks for exact matches! </p>
+   *
    * Examples:
-   * <pre code='java'>
+   *
+   * <pre>
+   * {@code
    * // collection 1: [Tom, Dick, Harry]
    * $$("li.odd").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // success
+   *
    * // collection 2: [Tom, John, Dick, Harry]
    * $$("li.even").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // success
+   *
    * // collection 3: [John, Dick, Tom, Paul]
    * $$("li.first").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // fail ("Harry" is missing)
+   *
    * // collection 4: [Tom, Dick, hArRy]
    * $$("li.last").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // fail ("Harry" is missing)
+   *
+   * }
    * </pre>
    *
    * @param expectedTexts the expected texts that the collection should contain
