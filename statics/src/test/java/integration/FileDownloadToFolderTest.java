@@ -53,7 +53,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   @Test
   void downloadsFileWithAlert() throws IOException {
     File downloadedFile = $(byText("Download me with alert")).download(
-      using(FOLDER).withAction(
+      using(FOLDER).withFilter(withExtension("txt")).withAction(
         clickAndConfirm("Are you sure to download it?")
       )
     );
@@ -100,14 +100,6 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
       .isInstanceOf(FileNotFoundException.class)
       .hasMessage("Failed to download file {by text: Download me} in 80 ms. with extension \"pdf\"");
-  }
-
-  @Test
-  public void download_withCustomTimeout() throws FileNotFoundException {
-    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000);
-
-    assertThat(downloadedFile.getName())
-      .isEqualTo("hello_world.txt");
   }
 
   @Test
