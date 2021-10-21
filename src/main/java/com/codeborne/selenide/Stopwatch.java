@@ -31,4 +31,18 @@ public class Stopwatch {
       throw new RuntimeException(e);
     }
   }
+
+  /**
+   * Sleep at least given number of milliseconds.
+   * Default {@link Thread#sleep(long)} doesn't guarantee the sleep duration, it can awake earlier.
+   *
+   * @param milliseconds the number of milliseconds to sleep
+   */
+  public static void sleepAtLeast(long milliseconds) {
+    Stopwatch stopwatch = new Stopwatch(milliseconds);
+    do {
+      stopwatch.sleep(milliseconds);
+    }
+    while (!stopwatch.isTimeoutReached());
+  }
 }
