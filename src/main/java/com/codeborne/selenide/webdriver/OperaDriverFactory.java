@@ -60,6 +60,7 @@ public class OperaDriverFactory extends AbstractDriverFactory {
       log.info("Using browser binary: {}", config.browserBinary());
       operaOptions.setBinary(config.browserBinary());
     }
+    operaOptions.addArguments("--ignore-certificate-errors");
     operaOptions.merge(createCommonCapabilities(config, browser, proxy));
     return operaOptions;
   }
