@@ -8,7 +8,6 @@ import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebElement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -66,18 +65,5 @@ final class IsDisplayedCommandTest {
     assertThatThrownBy(() -> command.execute(proxy, locator, null))
       .isInstanceOf(InvalidSelectorException.class)
       .hasMessageStartingWith("wrong xpath");
-  }
-
-  /**
-   * Workaround for https://github.com/SeleniumHQ/selenium/issues/9266
-   * Can be removed after upgrading to Selenium 4.
-   */
-  @Test
-  void ignoresNPE_from_isDisplayed() {
-    RemoteWebElement webElement = mock(RemoteWebElement.class);
-    when(webElement.isDisplayed()).thenThrow(new NullPointerException());
-    when(locator.getWebElement()).thenReturn(webElement);
-
-    assertThat(command.execute(proxy, locator, null)).isFalse();
   }
 }
