@@ -24,20 +24,12 @@ class BrowserResizer {
   }
 
   void adjustBrowserSize(Config config, WebDriver driver) {
-    if (config.browserSize() != null && !config.startMaximized()) {
+    if (config.browserSize() != null) {
       log.info("Set browser size to {}", config.browserSize());
       String[] dimension = config.browserSize().split("x");
       int width = Integer.parseInt(dimension[0]);
       int height = Integer.parseInt(dimension[1]);
       driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height));
-    }
-    else if (config.startMaximized()) {
-      try {
-        driver.manage().window().maximize();
-      }
-      catch (Exception cannotMaximize) {
-        log.warn("Cannot maximize {}: {}", driver.getClass().getSimpleName(), cannotMaximize);
-      }
     }
   }
 }

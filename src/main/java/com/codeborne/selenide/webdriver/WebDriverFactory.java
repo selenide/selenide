@@ -61,7 +61,6 @@ public class WebDriverFactory {
     log.debug("browser.version={}", config.browserVersion());
     log.debug("remote={}", config.remote());
     log.debug("browserSize={}", config.browserSize());
-    log.debug("startMaximized={}", config.startMaximized());
     if (browserDownloadsFolder != null) {
       log.debug("downloadsFolder={}", browserDownloadsFolder.getAbsolutePath());
     }

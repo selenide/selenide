@@ -35,21 +35,7 @@ public class SetValue implements Command<SelenideElement> {
     WebElement element = locator.findAndAssertElementIsInteractable();
     Driver driver = locator.driver();
 
-    if (!driver.config().versatileSetValue()) {
-      setValueForTextInput(driver, element, text);
-      return proxy;
-    }
-
-    String tagName = element.getTagName();
-    if ("select".equalsIgnoreCase(tagName)) {
-      selectOptionByValue.execute(proxy, locator, args);
-    }
-    else if ("input".equalsIgnoreCase(tagName) && "radio".equals(element.getAttribute("type"))) {
-      selectRadio.execute(proxy, locator, args);
-    }
-    else {
-      setValueForTextInput(driver, element, text);
-    }
+    setValueForTextInput(driver, element, text);
     return proxy;
   }
 

@@ -19,7 +19,6 @@ import static com.codeborne.selenide.Configuration.clickViaJs;
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.fastSetValue;
 import static com.codeborne.selenide.Configuration.timeout;
-import static com.codeborne.selenide.Configuration.versatileSetValue;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
@@ -64,7 +63,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
     Configuration.reportsFolder = System.getProperty("selenide.reportsFolder", "build/reports/tests");
     fastSetValue = false;
-    versatileSetValue = false;
     browserSize = System.getProperty("selenide.browserSize", "1200x960");
     Configuration.assertionMode = STRICT;
     Configuration.proxyPort = 0;

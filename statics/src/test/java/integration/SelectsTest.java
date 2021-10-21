@@ -58,18 +58,6 @@ final class SelectsTest extends IntegrationTest {
   }
 
   @Test
-  void userCanSelectValueUsingSetValue() {
-    Configuration.versatileSetValue = true;
-    SelenideElement select = $(byName("domain"));
-    select.setValue("myrambler.ru");
-
-    assertThat(select.getSelectedValue())
-      .isEqualTo("myrambler.ru");
-    assertThat(select.getSelectedText())
-      .isEqualTo("@myrambler.ru");
-  }
-
-  @Test
   void userCanSelectOptionByIndex() {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
 
@@ -104,19 +92,6 @@ final class SelectsTest extends IntegrationTest {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith(
         String.format("Element not found {By.xpath: //select[@name='domain']/option[index:999]}%nExpected: exist"));
-  }
-
-  @Test
-  void valMethodSelectsOptionInCaseOfSelectBox() {
-    Configuration.versatileSetValue = true;
-    SelenideElement select = $(By.xpath("//select[@name='domain']"));
-    select.val("myrambler.ru");
-
-    select.getSelectedOption().shouldBe(selected);
-    assertThat(select.getSelectedValue())
-      .isEqualTo("myrambler.ru");
-    assertThat(select.getSelectedText())
-      .isEqualTo("@myrambler.ru");
   }
 
   @Test

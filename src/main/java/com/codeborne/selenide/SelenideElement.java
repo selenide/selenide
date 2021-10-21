@@ -29,8 +29,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * <b>Implementation details:</b>
    *
-   * <p>If Configuration.versatileSetValue is true, can work as 'selectOptionByValue', 'selectRadio'</p>
-   *
    * <p>If Configuration.fastSetValue is true, sets value by javascript instead of using Selenium built-in "sendKey" function
    * and trigger "focus", "keydown", "keypress", "input", "keyup", "change" events.
    *

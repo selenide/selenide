@@ -16,7 +16,6 @@ public class SelenideConfig implements Config {
   private String browserSize = System.getProperty("selenide.browserSize", "1366x768");
   private String browserVersion = System.getProperty("selenide.browserVersion");
   private String browserPosition = System.getProperty("selenide.browserPosition");
-  private boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.startMaximized", "false"));
   private boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
   private boolean webdriverLogsEnabled = Boolean.parseBoolean(System.getProperty("selenide.webdriverLogsEnabled", "false"));
   private String browserBinary = System.getProperty("selenide.browserBinary", "");
@@ -37,7 +36,6 @@ public class SelenideConfig implements Config {
   private String downloadsFolder = System.getProperty("selenide.downloadsFolder", "build/downloads");
   private String reportsUrl = new CiReportUrl().getReportsUrl(System.getProperty("selenide.reportsUrl"));
   private boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
-  private boolean versatileSetValue = Boolean.parseBoolean(System.getProperty("selenide.versatileSetValue", "false"));
   private SelectorMode selectorMode = SelectorMode.valueOf(System.getProperty("selenide.selectorMode", CSS.name()));
   private AssertionMode assertionMode = AssertionMode.valueOf(System.getProperty("selenide.assertionMode", STRICT.name()));
   private FileDownloadMode fileDownload = FileDownloadMode.valueOf(System.getProperty("selenide.fileDownload", HTTPGET.name()));
@@ -166,16 +164,6 @@ public class SelenideConfig implements Config {
   }
 
   @Override
-  public boolean versatileSetValue() {
-    return versatileSetValue;
-  }
-
-  public SelenideConfig versatileSetValue(boolean versatileSetValue) {
-    this.versatileSetValue = versatileSetValue;
-    return this;
-  }
-
-  @Override
   public SelectorMode selectorMode() {
     return selectorMode;
   }
@@ -292,16 +280,6 @@ public class SelenideConfig implements Config {
 
   public SelenideConfig browserPosition(String browserPosition) {
     this.browserPosition = browserPosition;
-    return this;
-  }
-
-  @Override
-  public boolean startMaximized() {
-    return startMaximized;
-  }
-
-  public SelenideConfig startMaximized(boolean startMaximized) {
-    this.startMaximized = startMaximized;
     return this;
   }
 
