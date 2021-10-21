@@ -37,13 +37,6 @@ final class RadioTest extends IntegrationTest {
   }
 
   @Test
-  void userCanSelectRadioButtonUsingSetValue() {
-    Configuration.versatileSetValue = true;
-    $(byName("me")).setValue("margarita");
-    getSelectedRadio(By.name("me")).shouldHave(exactValue("margarita"));
-  }
-
-  @Test
   void selenideElement_selectRadio() {
     $(By.name("me")).selectRadio("margarita");
     getSelectedRadio(By.name("me")).shouldHave(exactValue("margarita"));

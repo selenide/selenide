@@ -24,7 +24,6 @@ final class SetValueCommandTest {
 
   @BeforeEach
   void setup() {
-    System.setProperty("selenide.versatileSetValue", "true");
     when(locator.findAndAssertElementIsInteractable()).thenReturn(mockedFoundElement);
     when(locator.driver()).thenReturn(new DriverStub());
   }
@@ -33,34 +32,7 @@ final class SetValueCommandTest {
   void noMoreInteractions() {
     verify(locator).driver();
     verify(locator).findAndAssertElementIsInteractable();
-    verify(mockedFoundElement).getTagName();
     verifyNoMoreInteractions(proxy, locator, selectOptionByValue, selectRadio, mockedFoundElement);
-  }
-
-  @Test
-  void selectOptionByValue_inCaseOfSelectElement() {
-    System.setProperty("selenide.versatileSetValue", "true");
-    when(mockedFoundElement.getTagName()).thenReturn("select");
-    WebElement returnedElement = command.execute(proxy, locator, new Object[]{"new value"});
-    assertThat(returnedElement).isEqualTo(proxy);
-    verify(selectOptionByValue).execute(proxy, locator, new Object[]{"new value"});
-  }
-
-  @Test
-  void selectInputByValue_inCaseOfRadioElement() {
-    when(mockedFoundElement.getTagName()).thenReturn("input");
-    when(mockedFoundElement.getAttribute("type")).thenReturn("radio");
-    WebElement returnedElement = command.execute(proxy, locator, new Object[]{"new radio value"});
-    assertThat(returnedElement).isEqualTo(proxy);
-    verify(selectRadio).execute(proxy, locator, new Object[]{"new radio value"});
-    verify(mockedFoundElement).getAttribute("type");
-  }
-
-  @Test
-  void clearsTheInputIfArgsTextIsNull() {
-    WebElement returnedElement = command.execute(proxy, locator, new Object[]{null});
-    assertThat(returnedElement).isEqualTo(proxy);
-    verify(mockedFoundElement).clear();
   }
 
   @Test
@@ -78,8 +50,4 @@ final class SetValueCommandTest {
     verify(mockedFoundElement).sendKeys("Stalker");
   }
 
-  @AfterEach
-  void tearDown() {
-    System.clearProperty("selenide.versatileSetValue");
-  }
 }

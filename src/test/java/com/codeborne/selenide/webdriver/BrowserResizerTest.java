@@ -17,30 +17,12 @@ final class BrowserResizerTest {
   private final SelenideConfig config = new SelenideConfig();
 
   @Test
-  void doesChangeWindowSize_ifStartMaximizedIsFalse() {
-    config.startMaximized(false);
-
-    factory.adjustBrowserSize(config, webdriver);
-
-    verify(webdriver.manage().window()).setSize(new Dimension(1366, 768));
-  }
-
-  @Test
   void canConfigureBrowserWindowSize() {
     config.browserSize("1600x800");
 
     factory.adjustBrowserSize(config, webdriver);
 
     verify(webdriver.manage().window()).setSize(new Dimension(1600, 800));
-  }
-
-  @Test
-  void canMaximizeBrowserWindow() {
-    config.startMaximized(true);
-
-    factory.adjustBrowserSize(config, webdriver);
-
-    verify(webdriver.manage().window()).maximize();
   }
 
   @Test

@@ -27,7 +27,6 @@ final class WebDriverThreadLocalContainerTest {
     Configuration.holdBrowserOpen = false;
     Configuration.reopenBrowserOnFail = true;
     Configuration.browserSize = null;
-    Configuration.startMaximized = false;
     Configuration.browser = DummyProvider.class.getName();
   }
 

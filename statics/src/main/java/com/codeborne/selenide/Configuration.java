@@ -118,14 +118,6 @@ public class Configuration {
   public static String browserPosition = defaults.browserPosition();
 
   /**
-   * The browser window is maximized when started.
-   * Can be configured either programmatically or by system property "-Dselenide.startMaximized=true".
-   * <br>
-   * Default value: false
-   */
-  public static boolean startMaximized = defaults.startMaximized();
-
-  /**
    * Browser capabilities.
    * Warning: this capabilities will override capabilities were set by system properties.
    * <br>
@@ -230,21 +222,6 @@ public class Configuration {
    * Default value: false
    */
   public static boolean fastSetValue = defaults.fastSetValue();
-
-  /**
-   * If set to true, 'setValue' and 'val' methods of SelenideElement can work as 'selectOptionByValue', 'selectRadio'
-   * depending on the real control type, defined by element's tag.
-   * <br>
-   * Will decrease performance of setValue, make it slower, but will also make tests implementation more "business oriented".
-   * With this property being set to true, tests may no longer be dependent on actual control implementation in html and
-   * be more abstract.
-   * <br>
-   * https://github.com/selenide/selenide/issues/508
-   * Can be configured either programmatically or by system property "-Dselenide.versatileSetValue=true".
-   * <br>
-   * Default value: false
-   */
-  public static boolean versatileSetValue = defaults.versatileSetValue();
 
   /**
    * <p>Choose how Selenide should retrieve web elements: using default CSS or Sizzle (CSS3).</p>

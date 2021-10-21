@@ -77,11 +77,6 @@ class StaticConfig implements Config {
   }
 
   @Override
-  public boolean versatileSetValue() {
-    return Configuration.versatileSetValue;
-  }
-
-  @Override
   public SelectorMode selectorMode() {
     return Configuration.selectorMode;
   }
@@ -139,11 +134,6 @@ class StaticConfig implements Config {
   @Override
   public String browserPosition() {
     return Configuration.browserPosition;
-  }
-
-  @Override
-  public boolean startMaximized() {
-    return Configuration.startMaximized;
   }
 
   @Override

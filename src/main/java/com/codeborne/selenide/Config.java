@@ -9,7 +9,6 @@ public interface Config {
   String browserSize();
   String browserVersion();
   String browserPosition();
-  boolean startMaximized();
   boolean driverManagerEnabled();
   boolean webdriverLogsEnabled();
   String browserBinary();
@@ -29,7 +28,6 @@ public interface Config {
   String downloadsFolder();
   String reportsUrl();
   boolean fastSetValue();
-  boolean versatileSetValue();
   SelectorMode selectorMode();
   AssertionMode assertionMode();
   FileDownloadMode fileDownload();
