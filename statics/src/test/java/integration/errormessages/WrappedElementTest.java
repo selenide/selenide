@@ -32,7 +32,7 @@ final class WrappedElementTest extends IntegrationTest {
       $(pageObject.header).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith(String.format("Element should have text 'expected text' {<h2 id>}%n" +
+      .hasMessageStartingWith(String.format("Element should have text \"expected text\" {<h2 id>}%n" +
         "Element: '<h2>Dropdown list</h2>'"));
   }
 

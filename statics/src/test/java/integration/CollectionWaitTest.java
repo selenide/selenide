@@ -119,7 +119,7 @@ final class CollectionWaitTest extends IntegrationTest {
       $$("h1").findBy(cssClass("active")).findAll("h2").shouldHave(texts("nothing else matters"))
     )
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {h1.findBy(css class 'active')");
+      .hasMessageContaining("Element not found {h1.findBy(css class \"active\")");
     assertTestTookMoreThan(2000, MILLISECONDS);
   }
 

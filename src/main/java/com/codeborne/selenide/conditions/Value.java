@@ -22,12 +22,13 @@ public class Value extends Condition {
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String value = getValueAttribute(element);
-    return new CheckResult(Html.text.contains(value, expectedValue), value);
+    String actualValue = String.format("%s=\"%s\"", getName(), value);
+    return new CheckResult(Html.text.contains(value, expectedValue), actualValue);
   }
 
   @Override
   public String toString() {
-    return getName() + " '" + expectedValue + "'";
+    return String.format("%s=\"%s\"", getName(), expectedValue);
   }
 
   private String getValueAttribute(WebElement element) {

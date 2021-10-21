@@ -36,7 +36,7 @@ final class SelectRadioCommandTest {
     assertThatThrownBy(() -> command.execute(proxy, locator, new Object[]{"ElementValue"}))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {null}")
-      .hasMessageContaining("Expected: value 'ElementValue'");
+      .hasMessageContaining("Expected: value=\"ElementValue\"");
   }
 
   @Test

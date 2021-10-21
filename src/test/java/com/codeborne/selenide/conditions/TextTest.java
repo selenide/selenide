@@ -44,12 +44,12 @@ final class TextTest {
 
   @Test
   void to_string() {
-    assertThat(new Text("Hello World")).hasToString("text 'Hello World'");
+    assertThat(new Text("Hello World")).hasToString("text \"Hello World\"");
   }
 
   @Test
   void negate_to_string() {
-    assertThat(new Text("Hello World").negate()).hasToString("not text 'Hello World'");
+    assertThat(new Text("Hello World").negate()).hasToString("not text \"Hello World\"");
   }
 
   @Test

@@ -24,7 +24,19 @@ final class ImageTest extends ITest {
   @Test
   void isImageConditionFailsForNonImages() {
     assertThatThrownBy(() -> $("h1").shouldBe(image))
-      .isInstanceOf(ElementShould.class);
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be image {h1}")
+      .hasMessageContaining("Element: '<h1>Images</h1>'")
+      .hasMessageContaining("Actual value: false");
+  }
+
+  @Test
+  void errorMessage() {
+    assertThatThrownBy(() -> $("#invalid-image img").shouldBe(image))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be image {#invalid-image img}")
+      .hasMessageContaining("Element: '<img alt=\"missing-logo\" src=\"/files/selenide-unexisting-logo.png\"></img>'")
+      .hasMessageContaining("Actual value: false");
   }
 
   @Test

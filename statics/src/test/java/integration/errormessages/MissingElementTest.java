@@ -63,7 +63,7 @@ final class MissingElementTest extends IntegrationTest {
       String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/elementNotFound";
       assertThat(expected)
         .hasMessageMatching(String.format("Element not found \\{h9}%n" +
-          "Expected: text 'expected text'%n" +
+          "Expected: text \"expected text\"%n" +
           "Screenshot: " + path + png() + "%n" +
           "Page source: " + path + html() + "%n" +
           "Timeout: 15 ms.%n" +
@@ -79,9 +79,9 @@ final class MissingElementTest extends IntegrationTest {
       $("h2").shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching(String.format("Element should have text 'expected text' \\{h2}%n" +
+      .hasMessageMatching(String.format("Element should have text \"expected text\" \\{h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
-        "Actual value: Dropdown list%n" +
+        "Actual value: text=\"Dropdown list\"%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
         "Timeout: 15 ms."));
@@ -109,9 +109,9 @@ final class MissingElementTest extends IntegrationTest {
       $(element(By.tagName("h2"))).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching(String.format("Element should have text 'expected text' \\{By.tagName: h2}%n" +
+      .hasMessageMatching(String.format("Element should have text \"expected text\" \\{By.tagName: h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
-        "Actual value: Dropdown list%n" +
+        "Actual value: text=\"Dropdown list\"%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
         "Timeout: 15 ms."));
@@ -127,7 +127,7 @@ final class MissingElementTest extends IntegrationTest {
       .hasMessageMatching(String.format(
         "Element should be visible or transparent: visible or have css value opacity=0 \\{#theHiddenElement}%n" +
           "Element: '<div id=\"theHiddenElement\" displayed:false></div>'%n" +
-          "Actual value: visible:false, opacity=1%n" +
+          "Actual value: hidden, opacity=1%n" +
           "Screenshot: " + path + png() + "%n" +
           "Page source: " + path + html() + "%n" +
           "Timeout: 15 ms."));
@@ -140,9 +140,9 @@ final class MissingElementTest extends IntegrationTest {
       $(pageObject.header1).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching(String.format("Element should have text 'expected text' \\{By.tagName: h2}%n" +
+      .hasMessageMatching(String.format("Element should have text \"expected text\" \\{By.tagName: h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
-        "Actual value: Dropdown list%n" +
+        "Actual value: text=\"Dropdown list\"%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
         "Timeout: 15 ms."));
@@ -155,9 +155,9 @@ final class MissingElementTest extends IntegrationTest {
       $(pageObject.header2).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching(String.format("Element should have text 'expected text' \\{By.tagName: h2}%n" +
+      .hasMessageMatching(String.format("Element should have text \"expected text\" \\{By.tagName: h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
-        "Actual value: Dropdown list%n" +
+        "Actual value: text=\"Dropdown list\"%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
         "Timeout: 15 ms."));

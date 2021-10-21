@@ -12,7 +12,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class IsImageLoaded extends Condition {
 
   public IsImageLoaded() {
-    super("is image");
+    super("image");
   }
 
   @Nonnull

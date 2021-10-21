@@ -213,7 +213,7 @@ final class CollectionMethodsTest extends ITest {
       .filterBy(and("condition name", text("Chack"), text("Baskerville")));
 
     assertThatThrownBy(() -> filteredRows.shouldHave(size(0)))
-      .hasMessageContaining("collection: #multirowTable tr.filter(condition name: text 'Chack' and text 'Baskerville'");
+      .hasMessageContaining("collection: #multirowTable tr.filter(condition name: text \"Chack\" and text \"Baskerville\"");
   }
 
   @Test
@@ -222,7 +222,7 @@ final class CollectionMethodsTest extends ITest {
       .findAll("valid-selector")
       .shouldHave(texts("foo bar")))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {#multirowTable.findBy(text 'INVALID-TEXT')}");
+      .hasMessageContaining("Element not found {#multirowTable.findBy(text \"INVALID-TEXT\")}");
   }
 
   @Test
@@ -622,6 +622,6 @@ final class CollectionMethodsTest extends ITest {
       .hasToString(".active:first(42) []");
 
     assertThat($$(".parent").first(2).filterBy(cssClass("child")))
-      .hasToString(".parent:first(2).filter(css class 'child') []");
+      .hasToString(".parent:first(2).filter(css class \"child\") []");
   }
 }

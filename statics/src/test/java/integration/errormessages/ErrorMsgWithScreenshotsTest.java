@@ -1,18 +1,12 @@
 package integration.errormessages;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import integration.IntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
-
-import javax.annotation.Nonnull;
-import java.io.File;
 
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
@@ -57,7 +51,7 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
         .shouldBe(visible)
     )
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {#nonexisting-form/by text: mymail@gmail.com.findBy(css class 'trash')}")
+      .hasMessageContaining("Element not found {#nonexisting-form/by text: mymail@gmail.com.findBy(css class \"trash\")}")
       .getCause()
       .isInstanceOf(NoSuchElementException.class)
       .hasMessageContainingAll("Unable to locate element", "#nonexisting-form");
@@ -112,7 +106,7 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
     }
     catch (ElementNotFound e) {
       assertThat(e)
-        .hasMessageContaining("Element not found {#multirowTable/tbody tr.findBy(text 'Norris')/.second_row}");
+        .hasMessageContaining("Element not found {#multirowTable/tbody tr.findBy(text \"Norris\")/.second_row}");
     }
   }
 

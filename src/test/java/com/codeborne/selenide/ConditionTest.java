@@ -62,7 +62,7 @@ final class ConditionTest {
   @Test
   void valueToString() {
     assertThat(Condition.value("John Malkovich"))
-      .hasToString("value 'John Malkovich'");
+      .hasToString("value=\"John Malkovich\"");
   }
 
   @Test
@@ -175,7 +175,7 @@ final class ConditionTest {
 
   @Test
   void elementHasClassToString() {
-    assertThat(cssClass("Foo")).hasToString("css class 'Foo'");
+    assertThat(cssClass("Foo")).hasToString("css class \"Foo\"");
   }
 
   @Test
@@ -270,9 +270,9 @@ final class ConditionTest {
   void elementAndConditionToString() {
     WebElement element = mockElement(false, "text");
     Condition condition = and("selected with text", be(selected), have(text("text")));
-    assertThat(condition).hasToString("selected with text: be selected and have text 'text'");
+    assertThat(condition).hasToString("selected with text: be selected and have text \"text\"");
     assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
-    assertThat(condition).hasToString("selected with text: be selected and have text 'text'");
+    assertThat(condition).hasToString("selected with text: be selected and have text \"text\"");
   }
 
   @Test
@@ -295,7 +295,7 @@ final class ConditionTest {
   void elementOrConditionToString() {
     WebElement element = mockElement(false, "text");
     Condition condition = or("selected with text", be(selected), have(text("text")));
-    assertThat(condition).hasToString("selected with text: be selected or have text 'text'");
+    assertThat(condition).hasToString("selected with text: be selected or have text \"text\"");
     assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
   }
 

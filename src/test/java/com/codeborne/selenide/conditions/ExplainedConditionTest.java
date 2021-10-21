@@ -54,7 +54,7 @@ final class ExplainedConditionTest {
 
   @Test
   void toString_haveText() {
-    assertThat(text.toString()).isEqualTo("text 'blah' (because I typed it)");
-    assertThat(text.negate().toString()).isEqualTo("not text 'blah' (because I typed it)");
+    assertThat(text.toString()).isEqualTo("text \"blah\" (because I typed it)");
+    assertThat(text.negate().toString()).isEqualTo("not text \"blah\" (because I typed it)");
   }
 }

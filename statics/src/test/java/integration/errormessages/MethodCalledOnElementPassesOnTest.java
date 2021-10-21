@@ -104,7 +104,7 @@ final class MethodCalledOnElementPassesOnTest extends IntegrationTest {
     SelenideElement element = $$("ul li").findBy(cssClass("nonexistent"));
 
     assertThat(element.toString())
-      .startsWith("Element not found {ul li.findBy(css class 'nonexistent')}");
+      .startsWith("Element not found {ul li.findBy(css class \"nonexistent\")}");
   }
 
   @Test

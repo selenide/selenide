@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.InvalidStateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,13 +54,31 @@ final class CheckboxTest extends ITest {
   }
 
   @Test
+  void actual_value_selected() {
+    assertThatThrownBy(() -> $(By.name("rememberMe")).shouldBe(selected))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be selected {By.name: rememberMe}")
+      .hasMessageContaining("Element: '<input name=\"rememberMe\" type=\"checkbox\" value=\"on\"></input>'")
+      .hasMessageContaining("Actual value: not selected");
+  }
+
+  @Test
+  void actual_value_checked() {
+    assertThatThrownBy(() -> $(By.name("rememberMe")).shouldBe(checked))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be checked {By.name: rememberMe}")
+      .hasMessageContaining("Element: '<input name=\"rememberMe\" type=\"checkbox\" value=\"on\"></input>'")
+      .hasMessageContaining("Actual value: unchecked");
+  }
+
+  @Test
   void userCannotSetSelectOnTextInput() {
     assertThatThrownBy(() -> $("#username").setSelected(false))
       .isInstanceOf(InvalidStateException.class);
   }
 
   @Test
-  void userCannotSetSelectOnArbitryElement() {
+  void userCannotSetSelectOnArbitraryElement() {
     assertThatThrownBy(() -> $("#username-mirror").setSelected(false))
       .isInstanceOf(InvalidStateException.class);
   }

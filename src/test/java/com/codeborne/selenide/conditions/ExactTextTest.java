@@ -59,7 +59,7 @@ class ExactTextTest {
 
   @Test
   void shouldHaveCorrectToString() {
-    assertThat(condition).hasToString("exact text 'John Malkovich'");
+    assertThat(condition).hasToString("exact text \"John Malkovich\"");
   }
 
   @Test
