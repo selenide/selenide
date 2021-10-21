@@ -59,7 +59,7 @@ public class Or extends Condition {
     }
 
     String actualValues = results.stream().map(check -> String.valueOf(check.actualValue)).collect(joining(", "));
-    return new CheckResult(REJECT, actualValues); // TODO Does it look nice in the error message?
+    return new CheckResult(REJECT, actualValues);
   }
 
   @Override

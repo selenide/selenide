@@ -27,7 +27,7 @@ public abstract class TextCondition extends Condition {
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String elementText = getText(driver, element);
-    return new CheckResult(match(elementText, expectedText), elementText);
+    return new CheckResult(match(elementText, expectedText), String.format("text=\"%s\"", elementText));
   }
 
   @Override

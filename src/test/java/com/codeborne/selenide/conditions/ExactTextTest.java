@@ -69,7 +69,7 @@ class ExactTextTest {
     CheckResult checkResult = condition.check(driver, element);
 
     assertThat(checkResult.verdict).isEqualTo(REJECT);
-    assertThat(checkResult.actualValue).isEqualTo("John");
+    assertThat(checkResult.actualValue).isEqualTo("text=\"John\"");
     verify(element).getText();
   }
 }

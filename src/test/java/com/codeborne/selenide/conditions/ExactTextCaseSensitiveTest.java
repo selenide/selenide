@@ -63,7 +63,7 @@ class ExactTextCaseSensitiveTest {
     CheckResult checkResult = condition.check(driver, element);
 
     assertThat(checkResult.verdict).isEqualTo(REJECT);
-    assertThat(checkResult.actualValue).isEqualTo("John Malkovich");
+    assertThat(checkResult.actualValue).isEqualTo("text=\"John Malkovich\"");
     verify(element).getText();
   }
 }

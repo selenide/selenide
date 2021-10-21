@@ -287,7 +287,7 @@ final class ConditionTest {
   void elementOrConditionActualValue() {
     WebElement element = mockElement(false, "some text");
     Condition condition = or("selected with text", be(selected), have(text("some text")));
-    assertThat(condition.check(driver, element).actualValue).isEqualTo("some text");
+    assertThat(condition.check(driver, element).actualValue).isEqualTo("text=\"some text\"");
     assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
   }
 

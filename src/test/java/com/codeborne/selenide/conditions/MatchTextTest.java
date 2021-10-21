@@ -58,7 +58,7 @@ final class MatchTextTest {
 
     CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(checkResult.actualValue).isEqualTo("Chuck Norris' gmail account");
+    assertThat(checkResult.actualValue).isEqualTo("text=\"Chuck Norris' gmail account\"");
     verify(element).getText();
     verifyNoMoreInteractions(driver, element);
   }
