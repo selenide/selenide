@@ -54,7 +54,7 @@ class ExactTextCaseSensitiveTest {
 
   @Test
   void shouldHaveCorrectToString() {
-    assertThat(condition).hasToString("exact text case sensitive 'John Malkovich'");
+    assertThat(condition).hasToString("exact text case sensitive \"John Malkovich\"");
   }
 
   @Test

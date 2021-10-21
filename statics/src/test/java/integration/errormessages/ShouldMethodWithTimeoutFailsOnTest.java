@@ -40,7 +40,7 @@ final class ShouldMethodWithTimeoutFailsOnTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     }
     catch (ElementShould expected) {
-      assertThat(expected).hasMessageStartingWith("Element should have text 'Müller' {.detective}");
+      assertThat(expected).hasMessageStartingWith("Element should have text \"Müller\" {.detective}");
       assertThat(expected).hasMessageContaining("Timeout: 43 ms.");
     }
   }
@@ -70,7 +70,7 @@ final class ShouldMethodWithTimeoutFailsOnTest extends IntegrationTest {
     }
     catch (ElementShouldNot expected) {
       assertThat(expected).hasMessageStartingWith("Element should not be visible {.detective}");
-      assertThat(expected).hasMessageContaining("Actual value: visible:true");
+      assertThat(expected).hasMessageContaining("Actual value: visible");
       assertThat(expected).hasMessageContaining("Timeout: 46 ms.");
     }
   }
@@ -84,7 +84,7 @@ final class ShouldMethodWithTimeoutFailsOnTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     }
     catch (ElementShouldNot expected) {
-      assertThat(expected).hasMessageStartingWith("Element should not have text 'Miller' {.detective}");
+      assertThat(expected).hasMessageStartingWith("Element should not have text \"Miller\" {.detective}");
       assertThat(expected).hasMessageContaining("Timeout: 20 ms.");
     }
   }

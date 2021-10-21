@@ -48,7 +48,7 @@ final class MatchTextTest {
 
   @Test
   void shouldHaveCorrectToString() {
-    assertThat(new MatchText("Chuck Norris")).hasToString("match text 'Chuck Norris'");
+    assertThat(new MatchText("Chuck Norris")).hasToString("match text \"Chuck Norris\"");
   }
 
   @Test

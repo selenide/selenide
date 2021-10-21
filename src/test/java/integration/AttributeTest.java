@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementShould;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byTitle;
 import static com.codeborne.selenide.Selectors.byValue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public final class AttributeTest extends ITest {
   @BeforeEach
@@ -38,6 +40,17 @@ public final class AttributeTest extends ITest {
     $("#domain-container").shouldHave(attributeMatching("class", "contain.*"));
     $("#domain-container").shouldNotHave(attributeMatching("class", ".*another.*"));
     $("#domain-container").shouldNotHave(attributeMatching("foo", ".*contain.*"));
+  }
+
+  @Test
+  void actual_value_attributeMatching() {
+    assertThatThrownBy(() -> {
+      $("#multirowTable").shouldHave(attributeMatching("class", ".*single_row_table.*"));
+    })
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have match attribute class~/.*single_row_table.*/ {#multirowTable}")
+      .hasMessageContaining("Element: '<table ")
+      .hasMessageContaining("Actual value: class~/table multirow_table/");
   }
 
   @Test

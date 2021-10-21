@@ -32,6 +32,6 @@ public abstract class TextCondition extends Condition {
 
   @Override
   public final String toString() {
-    return String.format("%s '%s'", getName(), expectedText);
+    return String.format("%s \"%s\"", getName(), expectedText);
   }
 }

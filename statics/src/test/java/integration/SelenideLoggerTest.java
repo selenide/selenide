@@ -53,7 +53,7 @@ final class SelenideLoggerTest extends IntegrationTest {
       .isInstanceOf(ElementShould.class);
 
     assertThat(collector.events()).hasSize(1);
-    assertThat(collector.events().get(0)).hasToString("$(\"h1\") should have(exact text 'A wrong header')");
+    assertThat(collector.events().get(0)).hasToString("$(\"h1\") should have(exact text \"A wrong header\")");
   }
 
   @Test

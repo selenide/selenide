@@ -1,23 +1,32 @@
 package integration;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
+import com.codeborne.selenide.ex.ElementShouldNot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.and;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.checked;
 import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.cssValue;
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.focused;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.href;
 import static com.codeborne.selenide.Condition.match;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.or;
+import static com.codeborne.selenide.Condition.ownText;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -55,8 +64,8 @@ final class ConditionsTest extends ITest {
       have(attribute("foo", "bar")),
       have(href("https://nope.ee"))
     ))).isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be satisfied: be hidden or not visible or have css class 'list'" +
-        " or have text 'nope' or be disabled or not enabled or have attribute foo=\"bar\"" +
+      .hasMessageStartingWith("Element should be satisfied: be hidden or not visible or have css class \"list\"" +
+        " or have text \"nope\" or be disabled or not enabled or have attribute foo=\"bar\"" +
         " or have attribute href=\"https://nope.ee\" {#multirowTable}")
       .hasMessageContaining("Actual value: visible, visible, class=\"table multirow_table\", text=\"Chack Norris\n" +
         "Chack L'a Baskerville\", enabled, enabled, foo=\"\", href=\"\"");
@@ -74,8 +83,8 @@ final class ConditionsTest extends ITest {
       have(attribute("class", "table multirow_table")),
       have(href("https://nope.lt"))
     ))).isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be satisfied: be visible and not hidden and have css class 'multirow_table'" +
-        " and have text 'Baskerville' and be enabled and not disabled and have attribute class=\"table multirow_table\"" +
+      .hasMessageStartingWith("Element should be satisfied: be visible and not hidden and have css class \"multirow_table\"" +
+        " and have text \"Baskerville\" and be enabled and not disabled and have attribute class=\"table multirow_table\"" +
         " and have attribute href=\"https://nope.lt\" {#multirowTable}")
       .hasMessageContaining("Actual value: href=\"\"");
   }
@@ -86,7 +95,7 @@ final class ConditionsTest extends ITest {
       $("#multirowTable").shouldBe(or("non-active", be(disabled), have(cssClass("inactive"))))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be non-active: be disabled or have css class 'inactive' {#multirowTable}")
+      .hasMessageStartingWith("Element should be non-active: be disabled or have css class \"inactive\" {#multirowTable}")
       .hasMessageContaining("Actual value: enabled, class=\"table multirow_table\"");
   }
 
@@ -130,8 +139,8 @@ final class ConditionsTest extends ITest {
     assertThatThrownBy(() ->
       $("#multirowTable").should(match("tag=input", el -> el.getTagName().equals("input1")))
     )
-      .hasMessageStartingWith(
-        "Element should match 'tag=input' predicate. {#multirowTable}");
+      .hasMessageStartingWith("Element should match 'tag=input' predicate. {#multirowTable}")
+      .hasMessageNotContaining("Actual value");
   }
 
   @Test
@@ -141,5 +150,151 @@ final class ConditionsTest extends ITest {
     )
       .hasMessageStartingWith(
         "Element should not match 'border=1' predicate. {#multirowTable}");
+  }
+
+  @Test
+  void actual_value_focused() {
+    assertThatThrownBy(() -> $("#multirowTable").shouldBe(focused))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be focused {#multirowTable}")
+      .hasMessageContaining("Actual value: Focused element: <body id>, current element: <table id=\"multirowTable\">");
+  }
+
+  @Test
+  void actual_value_attribute() {
+    assertThatThrownBy(() -> $("#multirowTable").shouldHave(attribute("data-test-id")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have attribute data-test-id {#multirowTable}")
+      .hasMessageContaining("Actual value: data-test-id");
+  }
+
+  @Test
+  void actual_value_attribute_with_value() {
+    assertThatThrownBy(() -> $("#multirowTable").shouldHave(attribute("class", "foo")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have attribute class=\"foo\" {#multirowTable}")
+      .hasMessageContaining("Actual value: class=\"table multirow_table\"");
+  }
+
+  @Test
+  void actual_value_href() {
+    assertThatThrownBy(() -> $("#ajax-button").shouldHave(href("take-me-to-church.html")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have attribute href=\"take-me-to-church.html\" {#ajax-button}")
+      .hasMessageContaining("Actual value: href=\"" + getBaseUrl() + "/long_ajax_request.html\"");
+  }
+
+  @Test
+  void actual_value_cssClass() {
+    assertThatThrownBy(() -> $("#multirowTable").shouldHave(cssClass("single_row_table")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have css class \"single_row_table\" {#multirowTable}")
+      .hasMessageContaining("Actual value: class=\"table multirow_table\"");
+  }
+
+  @Test
+  void actual_value_visible() {
+    assertThatThrownBy(() -> $("#theHiddenElement").shouldBe(visible))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be visible {#theHiddenElement}")
+      .hasMessageContaining("Actual value: hidden");
+  }
+
+  @Test
+  void actual_value_hidden() {
+    assertThatThrownBy(() -> $("h1").shouldBe(hidden))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be hidden {h1}")
+      .hasMessageContaining("Actual value: visible");
+  }
+
+  @Test
+  void actual_value_enabled() {
+    assertThatThrownBy(() -> $("#logout").shouldBe(enabled))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be enabled {#logout}")
+      .hasMessageContaining("Actual value: disabled");
+  }
+
+  @Test
+  void actual_value_disabled() {
+    assertThatThrownBy(() -> $("#login").shouldBe(disabled))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be disabled {#login}")
+      .hasMessageContaining("Actual value: enabled");
+  }
+
+  @Test
+  void actual_value_checked() {
+    assertThatThrownBy(() -> $("[name=rememberMe]").shouldBe(checked))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be checked {[name=rememberMe]}")
+      .hasMessageContaining("Actual value: unchecked");
+  }
+
+  @Test
+  void actual_value_text() {
+    assertThatThrownBy(() -> $("h1").shouldHave(text("Page with dropdowns")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have text \"Page with dropdowns\" {h1}")
+      .hasMessageContaining("Actual value: text=\"Page with selects\"");
+  }
+
+  @Test
+  void actual_value_exactText() {
+    assertThatThrownBy(() -> $("h1").shouldHave(exactText("Page with dropdowns")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have exact text \"Page with dropdowns\" {h1}")
+      .hasMessageContaining("Actual value: text=\"Page with selects\"");
+  }
+
+  @Test
+  void actual_value_be() {
+    assertThatThrownBy(() -> $("h1").should(be(disabled)))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be disabled {h1}")
+      .hasMessageContaining("Actual value: enabled");
+  }
+
+  @Test
+  void actual_value_have() {
+    assertThatThrownBy(() -> $("h1").should(have(ownText("Page with dropdowns"))))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have own text \"Page with dropdowns\" {h1}")
+      .hasMessageContaining("Actual value: text=\"Page with selects\"");
+  }
+
+  @Test
+  void actual_value_cssValue() {
+    assertThatThrownBy(() -> $("#theHiddenElement").shouldHave(cssValue("display", "block")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have css value display=block {#theHiddenElement}")
+      .hasMessageContaining("Actual value: display=none");
+  }
+
+  @Test
+  void actual_value_value() {
+    assertThatThrownBy(() -> $("#age").shouldHave(value("21")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have value=\"21\" {#age}")
+      .hasMessageContaining("Actual value: value=\"18\"");
+  }
+
+  @Test
+  void actual_value_exist() {
+    assertThatThrownBy(() -> $("#age").shouldNot(exist))
+      .isInstanceOf(ElementShouldNot.class)
+      .hasMessageStartingWith("Element should not exist {#age}")
+      .hasMessageContaining("Element: '<input id=\"age\"")
+      .hasMessageContaining("Actual value: exists");
+  }
+
+  @Test
+  void actual_value_not_exist() {
+    assertThatThrownBy(() -> $("#missing").should(exist))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {#missing}")
+      .hasMessageContaining("Expected: exist")
+      .hasMessageNotContaining("Actual value");
   }
 }

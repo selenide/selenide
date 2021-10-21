@@ -116,7 +116,8 @@ final class NotExistingElementTest extends ITest {
     assertThatThrownBy(() ->
       $("#not_exist").shouldNotHave(text("Remove me"))
     ).isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {#not_exist}");
+      .hasMessageStartingWith("Element not found {#not_exist}")
+      .hasMessageContaining("Expected: not text \"Remove me\"");
   }
 
   @Test
@@ -125,7 +126,7 @@ final class NotExistingElementTest extends ITest {
       $("#not_exist").shouldNotHave(text("Remove me").because("it was removed in last release"))
     ).isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {#not_exist}")
-      .hasMessageContaining("because it was removed in last release");
+      .hasMessageContaining("Expected: not text \"Remove me\" (because it was removed in last release)");
   }
 
   @Test

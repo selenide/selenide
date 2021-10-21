@@ -39,7 +39,7 @@ final class WaitMethodFailsOnTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     }
     catch (ElementShould expected) {
-      assertThat(expected).hasMessageStartingWith("Element should have text 'Müller' {.detective}");
+      assertThat(expected).hasMessageStartingWith("Element should have text \"Müller\" {.detective}");
     }
   }
 
@@ -67,7 +67,7 @@ final class WaitMethodFailsOnTest extends IntegrationTest {
     }
     catch (ElementShouldNot expected) {
       assertThat(expected).hasMessageStartingWith("Element should not visible {.detective}"); // ugly text
-      assertThat(expected).hasMessageContaining("Actual value: visible:true");
+      assertThat(expected).hasMessageContaining("Actual value: visible");
     }
   }
 
@@ -80,7 +80,7 @@ final class WaitMethodFailsOnTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     }
     catch (ElementShouldNot expected) {
-      assertThat(expected).hasMessageStartingWith("Element should not have text 'Miller' {.detective}");
+      assertThat(expected).hasMessageStartingWith("Element should not have text \"Miller\" {.detective}");
     }
   }
 }

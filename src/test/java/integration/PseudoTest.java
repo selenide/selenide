@@ -1,10 +1,12 @@
 package integration;
 
+import com.codeborne.selenide.ex.ElementShould;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.pseudo;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class PseudoTest extends ITest {
 
@@ -31,5 +33,15 @@ final class PseudoTest extends ITest {
     assertThat($("p").pseudo(":after", null)).isEqualTo("");
     assertThat($("abbr").pseudo(":before")).isEqualTo("\"beforeContent\"");
     assertThat($("p").pseudo(":after")).isEqualTo("none");
+  }
+
+  @Test
+  void actualValue() {
+    assertThatThrownBy(() ->
+      $("abbr").shouldHave(pseudo(":before", "content", "\"nope\"")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have pseudo-element :before {content: \"nope\";} {abbr}")
+      .hasMessageContaining("Element: '<abbr title=\"World Wide Web\">WWW</abbr>'")
+      .hasMessageContaining("Actual value: :before {content: \"beforeContent\";}");
   }
 }

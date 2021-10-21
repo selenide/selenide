@@ -22,7 +22,7 @@ public class CustomMatch extends Condition {
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     boolean matched = predicate.test(element);
-    return new CheckResult(matched, matched);
+    return new CheckResult(matched, null);
   }
 
 

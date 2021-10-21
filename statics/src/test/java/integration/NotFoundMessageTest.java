@@ -22,7 +22,7 @@ final class NotFoundMessageTest extends IntegrationTest {
     assertThatThrownBy(
       () -> $$("#task-list>li").findBy(exactText("a")).doubleClick())
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {#task-list>li.findBy(exact text 'a')}");
+      .hasMessageStartingWith("Element not found {#task-list>li.findBy(exact text \"a\")}");
   }
 
   @Test
