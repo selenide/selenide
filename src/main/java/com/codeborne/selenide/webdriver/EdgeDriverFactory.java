@@ -17,17 +17,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 
 @ParametersAreNonnullByDefault
-public class EdgeDriverFactory extends AbstractDriverFactory {
+public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(EdgeDriverFactory.class);
   private static final int FIRST_VERSION_BASED_ON_CHROMIUM = 75;
   private static String browserVersion = null;
-  private final CdpClient cdpClient = new CdpClient();
 
   @Override
   public void setupWebdriverBinary() {
@@ -44,11 +42,7 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     EdgeOptions options = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     EdgeDriverService driverService = createDriverService(config);
-    EdgeDriver driver = new EdgeDriver(driverService, options);
-    if (isChromiumBased() && browserDownloadsFolder != null) {
-      cdpClient.setDownloadsFolder(driverService, driver, browserDownloadsFolder);
-    }
-    return driver;
+    return new EdgeDriver(driverService, options);
   }
 
   private EdgeDriverService createDriverService(Config config) {
@@ -66,6 +60,8 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
     }
 
     EdgeOptions options = new EdgeOptions().merge(capabilities);
+    options.setHeadless(config.headless());
+
     if (!config.browserBinary().isEmpty()) {
       log.info("Using browser binary: {}", config.browserBinary());
       log.warn("Changing browser binary not supported in Edge, setting will be ignored.");
@@ -73,6 +69,7 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
 
     if (isChromiumBased()) {
       options.addArguments(createEdgeArguments(config));
+      options.setExperimentalOption("prefs", prefs(browserDownloadsFolder, System.getProperty("edgeoptions.prefs", "")));
     }
     return options;
   }
@@ -80,18 +77,8 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   @CheckReturnValue
   @Nonnull
   protected List<String> createEdgeArguments(Config config) {
-    List<String> arguments = new ArrayList<>();
-    if (config.headless()) {
-      arguments.add("--headless");
-      arguments.add("--disable-gpu");
-    }
-
-    arguments.add("--proxy-bypass-list=<-loopback>");
-    arguments.add("--disable-dev-shm-usage");
-    arguments.add("--no-sandbox");
-    return arguments;
+    return createChromiumArguments(config, System.getProperty("edgeoptions.args"));
   }
-
 
   @CheckReturnValue
   private boolean isChromiumBased() {

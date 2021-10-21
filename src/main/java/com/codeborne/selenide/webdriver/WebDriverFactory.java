@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,6 @@ import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static com.codeborne.selenide.Browsers.OPERA;
 import static com.codeborne.selenide.Browsers.SAFARI;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 @ParametersAreNonnullByDefault
 public class WebDriverFactory {
@@ -81,7 +81,7 @@ public class WebDriverFactory {
 
   private void setLoadTimeout(Config config, WebDriver webdriver) {
     try {
-      webdriver.manage().timeouts().pageLoadTimeout(config.pageLoadTimeout(), MILLISECONDS);
+      webdriver.manage().timeouts().pageLoadTimeout(Duration.ofMillis(config.pageLoadTimeout()));
     }
     catch (UnsupportedCommandException e) {
       log.info("Failed to set page load timeout to {} ms: {}", config.pageLoadTimeout(), e.toString());
@@ -134,7 +134,7 @@ public class WebDriverFactory {
     if (webdriver instanceof HasCapabilities) {
       Capabilities capabilities = ((HasCapabilities) webdriver).getCapabilities();
       log.info("BrowserName={} Version={} Platform={}",
-        capabilities.getBrowserName(), capabilities.getVersion(), capabilities.getPlatform());
+        capabilities.getBrowserName(), capabilities.getBrowserVersion(), capabilities.getPlatformName());
     } else {
       log.info("BrowserName={}", webdriver.getClass().getName());
     }

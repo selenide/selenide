@@ -31,7 +31,7 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     InternetExplorerOptions options = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     return new InternetExplorerDriver(options);
   }
