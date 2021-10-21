@@ -24,7 +24,7 @@ public class SafariDriverFactory extends AbstractDriverFactory {
   @Nonnull
   @CheckReturnValue
   @Override
-  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     SafariDriverService driverService = createDriverService(config);
     SafariOptions capabilities = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     return new SafariDriver(driverService, capabilities);

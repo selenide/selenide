@@ -26,14 +26,14 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     return createInstanceOf(config.browser(), config, browser, proxy, browserDownloadsFolder);
   }
 
   @CheckReturnValue
   @Nonnull
   private WebDriver createInstanceOf(String className, Config config, Browser browser,
-                                     @Nullable Proxy proxy, File browserDownloadsFolder) {
+                                     @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     Class<?> clazz = classOf(config.browser());
 
     if (WebDriverProvider.class.isAssignableFrom(clazz)) {

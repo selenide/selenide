@@ -2,12 +2,14 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
-import com.google.common.collect.ImmutableMap;
-import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.edge.EdgeOptions;
 
-import static java.util.Arrays.asList;
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class EdgeDriverFactoryTest {
@@ -18,25 +20,52 @@ class EdgeDriverFactoryTest {
   void headless() {
     SelenideConfig config = new SelenideConfig().headless(true);
 
-    EdgeOptions edgeOptions = factory.createCapabilities(config, browser, null, null);
+    EdgeOptions edgeOptions = factory.createCapabilities(config, browser, null, new File("/tmp/downloads-folder-12345"));
+    Map<String, Object> options = edgeOptions(edgeOptions);
 
-    assertThat(edgeOptions.asMap().get("ms:edgeOptions")).isEqualTo(
-      ImmutableMap.of(
-      "args", asList("--headless", "--disable-gpu", "--proxy-bypass-list=<-loopback>", "--disable-dev-shm-usage", "--no-sandbox"),
-      "extensions", Collections.emptyList()
-    ));
+    List<String> args = args(options);
+    assertThat(args).contains("--headless", "--proxy-bypass-list=<-loopback>", "--disable-background-networking", "--disable-sync");
+    assertThat(options.get("extensions")).isEqualTo(emptyList());
+
+    Map<String, Object> prefs = prefs(options);
+    assertThat(prefs).hasSize(5);
+    assertThat(prefs.get("credentials_enable_service")).isEqualTo(false);
+    assertThat(prefs.get("plugins.always_open_pdf_externally")).isEqualTo(true);
+    assertThat(prefs.get("profile.default_content_setting_values.automatic_downloads")).isEqualTo(1);
+    assertThat(prefs.get("safebrowsing.enabled")).isEqualTo(true);
+    assertThat((String) prefs.get("download.default_directory")).endsWith("downloads-folder-12345");
   }
 
   @Test
   void non_headless() {
     SelenideConfig config = new SelenideConfig().headless(false);
 
-    EdgeOptions edgeOptions = factory.createCapabilities(config, browser, null, null);
+    EdgeOptions edgeOptions = factory.createCapabilities(config, browser, null, new File("/tmp/downloads-folder-456789"));
 
-    assertThat(edgeOptions.asMap().get("ms:edgeOptions")).isEqualTo(
-      ImmutableMap.of(
-      "args", asList("--proxy-bypass-list=<-loopback>", "--disable-dev-shm-usage", "--no-sandbox"),
-      "extensions", Collections.emptyList()
-    ));
+    Map<String, Object> options = edgeOptions(edgeOptions);
+    assertThat(args(options)).containsExactly("--proxy-bypass-list=<-loopback>", "--disable-dev-shm-usage", "--no-sandbox");
+
+    Map<String, Object> prefs = prefs(options);
+    assertThat(prefs).hasSize(5);
+    assertThat(prefs.get("credentials_enable_service")).isEqualTo(false);
+    assertThat(prefs.get("plugins.always_open_pdf_externally")).isEqualTo(true);
+    assertThat(prefs.get("profile.default_content_setting_values.automatic_downloads")).isEqualTo(1);
+    assertThat(prefs.get("safebrowsing.enabled")).isEqualTo(true);
+    assertThat((String) prefs.get("download.default_directory")).endsWith("downloads-folder-456789");
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> edgeOptions(EdgeOptions edgeOptions) {
+    return (Map<String, Object>) edgeOptions.asMap().get("ms:edgeOptions");
+  }
+
+  @SuppressWarnings("unchecked")
+  private List<String> args(Map<String, Object> options) {
+    return (List<String>) options.get("args");
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> prefs(Map<String, Object> options) {
+    return (Map<String, Object>) options.get("prefs");
   }
 }

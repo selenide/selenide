@@ -21,5 +21,5 @@ public interface DriverFactory {
 
   @CheckReturnValue
   @Nonnull
-  WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder);
+  WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder);
 }

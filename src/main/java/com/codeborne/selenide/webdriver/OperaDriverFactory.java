@@ -33,7 +33,7 @@ public class OperaDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     OperaDriverService driverService = createDriverService(config);
     OperaOptions capabilities = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     OperaDriver driver = new OperaDriver(driverService, capabilities);
