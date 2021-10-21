@@ -251,16 +251,12 @@ public class Selenide {
    *
    * Implementation detail: method {@link java.lang.Thread#sleep(long)} is not guaranteed to
    * sleep exactly given number of milliseconds, it can awake earlier. That's why we need to use a
-   * loop ti guarantee the sleep duration.
+   * loop to guarantee the sleep duration.
    *
    * @param milliseconds Time to sleep in milliseconds
    */
   public static void sleep(long milliseconds) {
-    Stopwatch stopwatch = new Stopwatch(milliseconds);
-    do {
-      stopwatch.sleep(milliseconds);
-    }
-    while (!stopwatch.isTimeoutReached());
+    Stopwatch.sleepAtLeast(milliseconds);
   }
 
   /**

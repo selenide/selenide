@@ -2,6 +2,7 @@ package com.codeborne.selenide.logevents;
 
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.Stopwatch.sleepAtLeast;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,10 +15,10 @@ final class SelenideLogTest {
   }
 
   @Test
-  void measuresDurationOfEveryStep() throws InterruptedException {
+  void measuresDurationOfEveryStep() {
     SelenideLog step = new SelenideLog("By.name: domain", "exists()");
 
-    Thread.sleep(15);
+    sleepAtLeast(15);
     step.setStatus(PASS);
 
     assertThat(step.getStatus()).isEqualTo(PASS);
