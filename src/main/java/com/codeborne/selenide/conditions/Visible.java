@@ -19,7 +19,7 @@ public class Visible extends Condition {
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     boolean displayed = element.isDisplayed();
-    return new CheckResult(displayed, String.format("visible:%s", displayed));
+    return new CheckResult(displayed, displayed ? "visible" : "hidden");
   }
 
   @Override

@@ -41,12 +41,12 @@ final class VisibleTest {
 
   @Test
   void actualValue_invisible() {
-    assertThat(condition.check(driver, element).actualValue).isEqualTo("visible:false");
+    assertThat(condition.check(driver, element).actualValue).isEqualTo("hidden");
   }
 
   @Test
   void actualValue_visible() {
     when(element.isDisplayed()).thenReturn(true);
-    assertThat(condition.check(driver, element).actualValue).isEqualTo("visible:true");
+    assertThat(condition.check(driver, element).actualValue).isEqualTo("visible");
   }
 }

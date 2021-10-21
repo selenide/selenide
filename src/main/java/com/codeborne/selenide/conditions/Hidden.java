@@ -22,7 +22,7 @@ public class Hidden extends Condition {
   public CheckResult check(Driver driver, WebElement element) {
     try {
       boolean hidden = !element.isDisplayed();
-      return new CheckResult(hidden, String.format("hidden:%s", hidden));
+      return new CheckResult(hidden, hidden ? "hidden" : "visible");
     }
     catch (StaleElementReferenceException elementHasDisappeared) {
       return new CheckResult(ACCEPT, "hidden:true");

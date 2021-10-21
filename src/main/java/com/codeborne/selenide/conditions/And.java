@@ -60,7 +60,7 @@ public class And extends Condition {
     }
 
     String actualValues = results.stream().map(check -> String.valueOf(check.actualValue)).collect(joining(", "));
-    return new CheckResult(ACCEPT, actualValues); // TODO Does it look nice in the error message?
+    return new CheckResult(ACCEPT, actualValues);
   }
 
   @Nonnull

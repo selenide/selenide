@@ -38,8 +38,8 @@ final class TextTest {
     SelenideElement selectWithoutSpace = mockSelect(option("Hello", true), option("World", true));
     SelenideElement selectWithSpace = mockSelect(option("Hello", true), option(" World", true));
 
-    assertThat(condition.check(driver, selectWithoutSpace)).isEqualTo(new CheckResult(REJECT, "HelloWorld"));
-    assertThat(condition.check(driver, selectWithSpace)).isEqualTo(new CheckResult(ACCEPT, "Hello World"));
+    assertThat(condition.check(driver, selectWithoutSpace)).isEqualTo(new CheckResult(REJECT, "text=\"HelloWorld\""));
+    assertThat(condition.check(driver, selectWithSpace)).isEqualTo(new CheckResult(ACCEPT, "text=\"Hello World\""));
   }
 
   @Test
@@ -85,7 +85,7 @@ final class TextTest {
     WebElement element = mockElement("Hello World");
     CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(checkResult.actualValue).isEqualTo("Hello World");
+    assertThat(checkResult.actualValue).isEqualTo("text=\"Hello World\"");
     verify(element).getTagName();
     verify(element).getText();
     verifyNoMoreInteractions(driver, element);
@@ -97,7 +97,7 @@ final class TextTest {
     WebElement element = mockSelect(option("Hello", true), option(" World", true));
     CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(checkResult.actualValue).isEqualTo("Hello World");
+    assertThat(checkResult.actualValue).isEqualTo("text=\"Hello World\"");
     // One time in Text condition, second in selenium Select
     verify(element, times(2)).getTagName();
   }

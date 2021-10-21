@@ -72,7 +72,7 @@ class CaseSensitiveTextTest {
     when(element.getText()).thenReturn("John");
     CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(checkResult.actualValue).isEqualTo("John");
+    assertThat(checkResult.actualValue).isEqualTo("text=\"John\"");
     verify(element).getTagName();
     verify(element).getText();
   }

@@ -22,7 +22,7 @@ public class CssClass extends Condition {
   public CheckResult check(Driver driver, WebElement element) {
     String actualCssClasses = element.getAttribute("class");
     boolean hasClass = actualCssClasses != null && contains(actualCssClasses.split(" "), expectedCssClass);
-    return new CheckResult(hasClass, actualCssClasses);
+    return new CheckResult(hasClass, String.format("class=\"%s\"", actualCssClasses));
   }
 
   @Override

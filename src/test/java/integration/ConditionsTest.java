@@ -10,9 +10,12 @@ import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.disabled;
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.href;
 import static com.codeborne.selenide.Condition.match;
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.or;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -41,12 +44,50 @@ final class ConditionsTest extends ITest {
   }
 
   @Test
+  void actualValueOfOr() {
+    assertThatThrownBy(() -> $("#multirowTable").shouldBe(or("satisfied",
+      be(hidden),
+      not(visible),
+      have(cssClass("list")),
+      have(text("nope")),
+      be(disabled),
+      not(enabled),
+      have(attribute("foo", "bar")),
+      have(href("https://nope.ee"))
+    ))).isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be satisfied: be hidden or not visible or have css class 'list'" +
+        " or have text 'nope' or be disabled or not enabled or have attribute foo=\"bar\"" +
+        " or have attribute href=\"https://nope.ee\" {#multirowTable}")
+      .hasMessageContaining("Actual value: visible, visible, class=\"table multirow_table\", text=\"Chack Norris\n" +
+        "Chack L'a Baskerville\", enabled, enabled, foo=\"\", href=\"\"");
+  }
+
+  @Test
+  void actualValueOfAnd() {
+    assertThatThrownBy(() -> $("#multirowTable").shouldBe(and("satisfied",
+      be(visible),
+      not(hidden),
+      have(cssClass("multirow_table")),
+      have(text("Baskerville")),
+      be(enabled),
+      not(disabled),
+      have(attribute("class", "table multirow_table")),
+      have(href("https://nope.lt"))
+    ))).isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be satisfied: be visible and not hidden and have css class 'multirow_table'" +
+        " and have text 'Baskerville' and be enabled and not disabled and have attribute class=\"table multirow_table\"" +
+        " and have attribute href=\"https://nope.lt\" {#multirowTable}")
+      .hasMessageContaining("Actual value: href=\"\"");
+  }
+
+  @Test
   void orShouldReportAllConditions() {
     assertThatThrownBy(() ->
       $("#multirowTable").shouldBe(or("non-active", be(disabled), have(cssClass("inactive"))))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be non-active: be disabled or have css class 'inactive' {#multirowTable}");
+      .hasMessageStartingWith("Element should be non-active: be disabled or have css class 'inactive' {#multirowTable}")
+      .hasMessageContaining("Actual value: enabled, class=\"table multirow_table\"");
   }
 
   @Test
@@ -63,7 +104,7 @@ final class ConditionsTest extends ITest {
   @Test
   void notShouldCheckConditions() {
     $("#multirowTable").should(be(visible));
-    $("#multirowTable").should(Condition.not(be(hidden)));
+    $("#multirowTable").should(not(be(hidden)));
   }
 
   @Test

@@ -25,7 +25,7 @@ public class Href extends AttributeWithValue {
     boolean matches = fullUrl.endsWith(expectedAttributeValue) ||
       fullUrl.endsWith(expectedAttributeValue + "/") ||
       href.endsWith(expectedAttributeValue);
-    return new CheckResult(matches, href);
+    return new CheckResult(matches, String.format("href=\"%s\"", href));
   }
 
   String decode(String url) {
