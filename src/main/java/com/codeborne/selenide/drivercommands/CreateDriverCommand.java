@@ -4,7 +4,10 @@ import com.codeborne.selenide.BrowserDownloadsFolder;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.impl.FileNamer;
+import com.codeborne.selenide.impl.Plugins;
+import com.codeborne.selenide.proxy.SelenideProxyServerFactory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import com.codeborne.selenide.proxy.SelenideProxyServerFactory.ProxyPair;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -55,10 +58,11 @@ public class CreateDriverCommand {
     Proxy browserProxy = userProvidedProxy;
 
     if (config.proxyEnabled()) {
+      SelenideProxyServerFactory proxyFactory = Plugins.inject(SelenideProxyServerFactory.class);
       try {
-        selenideProxyServer = new SelenideProxyServer(config, userProvidedProxy);
-        selenideProxyServer.start();
-        browserProxy = selenideProxyServer.createSeleniumProxy();
+        ProxyPair pair = proxyFactory.createProxies(config, userProvidedProxy);
+        selenideProxyServer = pair.selenideProxyServer;
+        browserProxy = pair.seleniumProxy;
       }
       catch (NoClassDefFoundError e) {
         throw new IllegalStateException("Cannot initialize proxy. " +
