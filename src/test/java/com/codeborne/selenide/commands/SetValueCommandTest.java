@@ -17,9 +17,7 @@ import static org.mockito.Mockito.when;
 final class SetValueCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final SelectOptionByValue selectOptionByValue = mock(SelectOptionByValue.class);
-  private final SelectRadio selectRadio = mock(SelectRadio.class);
-  private final SetValue command = new SetValue(selectOptionByValue, selectRadio);
+  private final SetValue command = new SetValue();
   private final WebElement mockedFoundElement = mock(WebElement.class);
 
   @BeforeEach
@@ -32,7 +30,7 @@ final class SetValueCommandTest {
   void noMoreInteractions() {
     verify(locator).driver();
     verify(locator).findAndAssertElementIsInteractable();
-    verifyNoMoreInteractions(proxy, locator, selectOptionByValue, selectRadio, mockedFoundElement);
+    verifyNoMoreInteractions(proxy, locator, mockedFoundElement);
   }
 
   @Test

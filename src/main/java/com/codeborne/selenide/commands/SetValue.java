@@ -16,18 +16,6 @@ import static com.codeborne.selenide.impl.Events.events;
 
 @ParametersAreNonnullByDefault
 public class SetValue implements Command<SelenideElement> {
-  private final SelectOptionByValue selectOptionByValue;
-  private final SelectRadio selectRadio;
-
-  public SetValue() {
-    this(new SelectOptionByValue(), new SelectRadio());
-  }
-
-  SetValue(SelectOptionByValue selectOptionByValue, SelectRadio selectRadio) {
-    this.selectOptionByValue = selectOptionByValue;
-    this.selectRadio = selectRadio;
-  }
-
   @Override
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
@@ -39,7 +27,7 @@ public class SetValue implements Command<SelenideElement> {
     return proxy;
   }
 
-  private void setValueForTextInput(Driver driver, WebElement element, String text) {
+  private void setValueForTextInput(Driver driver, WebElement element, @Nullable String text) {
     if (text == null || text.isEmpty()) {
       element.clear();
     }

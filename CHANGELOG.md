@@ -6,6 +6,8 @@
 * #1581 report exact actual value at the moment of failure
 * Remove lots of deprecated methods  --  thanks @BorisOsipov for PR https://github.com/selenide/selenide/pull/1607/files
 * Remove support for "legacy_firefox" (upto ESR 52)
+* #1619 remove setting "startMaximized" - use "browserSize" instead
+* #1619 remove setting "versatileSetValue" - use "selectOptionByValue" or "selectRadio" instead
 * Make Selenide.sleep(N) guarantee the sleep duration
 * #1615 Added method for adding WebDriverListeners (as a replacement for deprecated WebDriverEventListeners)
 
