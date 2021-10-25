@@ -36,7 +36,7 @@ final class ModalTest {
     config.reportsFolder("build/reports/tests/ModalTest");
     when(webDriver.getPageSource()).thenReturn("<html/>");
     when(webDriver.getScreenshotAs(BYTES)).thenReturn(resourceToByteArray("/screenshot.png"));
-    reportsBaseUri = new File(System.getProperty("user.dir"), config.reportsFolder()).toURI();
+    reportsBaseUri = new File(System.getProperty("user.dir"), config.reportsFolder()).getAbsoluteFile().toURI();
   }
 
   @Test
@@ -136,7 +136,7 @@ final class ModalTest {
 
   private String convertFilePath(String path) {
     try {
-      return new File(path).toURI().toURL().toExternalForm();
+      return new File(path).getAbsoluteFile().toURI().toURL().toExternalForm();
     } catch (MalformedURLException e) {
       return "file://" + path;
     }

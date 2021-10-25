@@ -40,7 +40,7 @@ final class DownloadFileTest {
   private final SelenideElement seLink = mock(SelenideElement.class);
   private final WebElementSource linkWithHref = mock(WebElementSource.class);
   private final WebElement link = mock(WebElement.class);
-  private final File file = new File("some-file.yxy");
+  private final File file = new File("some-file.yxy").getAbsoluteFile();
 
   @BeforeEach
   void setUp() {

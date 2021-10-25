@@ -33,8 +33,8 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ChromeProfileByFactoryTest extends IntegrationTest {
   private static final Logger logger = LoggerFactory.getLogger(ChromeProfileByFactoryTest.class);
-  private static final File downloadsFolder = new File(Configuration.downloadsFolder);
-  private static final File chromedriverLog = new File(downloadsFolder, "chromedriver." + nanoTime()).getAbsoluteFile();
+  private static final File downloadsFolder = new File(Configuration.downloadsFolder).getAbsoluteFile();
+  private static final File chromedriverLog = new File(downloadsFolder, "chromedriver." + nanoTime());
 
   @BeforeEach
   void setUp() throws IOException {

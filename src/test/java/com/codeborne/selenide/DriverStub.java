@@ -11,6 +11,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static java.util.UUID.randomUUID;
+
 /**
  * A dummy `Driver` implementation used in tests.
  */
@@ -20,23 +22,35 @@ public class DriverStub implements Driver {
   private final Browser browser;
   private final WebDriver webDriver;
   private final SelenideProxyServer proxy;
-  private final DownloadsFolder browserDownloadsFolder = new SharedDownloadsFolder("build/downloads/45");
+  private final DownloadsFolder browserDownloadsFolder;
 
   public DriverStub() {
     this("zopera");
   }
 
   public DriverStub(String browser) {
-    this(new SelenideConfig(), new Browser(browser, false), new DummyWebDriver(), null);
+    this(browser, new SharedDownloadsFolder("build/downloads/" + randomUUID()));
+  }
+
+  public DriverStub(String browser, DownloadsFolder downloadsFolder) {
+    this(new SelenideConfig(), new Browser(browser, false), new DummyWebDriver(), null, downloadsFolder);
   }
 
   public DriverStub(Config config, Browser browser,
                     WebDriver webDriver,
                     @Nullable SelenideProxyServer proxy) {
+    this(config, browser, webDriver, proxy, new SharedDownloadsFolder("build/downloads/" + randomUUID()));
+  }
+
+  public DriverStub(Config config, Browser browser,
+                    WebDriver webDriver,
+                    @Nullable SelenideProxyServer proxy,
+                    DownloadsFolder downloadsFolder) {
     this.config = config;
     this.browser = browser;
     this.webDriver = webDriver;
     this.proxy = proxy;
+    this.browserDownloadsFolder = downloadsFolder;
   }
 
   @Override
@@ -124,13 +138,15 @@ public class DriverStub implements Driver {
 
   @Override
   @CheckReturnValue
-  @Nonnull  public SelenideTargetLocator switchTo() {
+  @Nonnull
+  public SelenideTargetLocator switchTo() {
     return new SelenideTargetLocator(this);
   }
 
   @Override
   @CheckReturnValue
-  @Nonnull  public Actions actions() {
+  @Nonnull
+  public Actions actions() {
     return new Actions(getWebDriver());
   }
 }

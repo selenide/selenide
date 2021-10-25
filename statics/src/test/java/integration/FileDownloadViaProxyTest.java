@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class FileDownloadViaProxyTest extends IntegrationTest {
-  private final File folder = new File(Configuration.downloadsFolder);
+  private final File folder = new File(Configuration.downloadsFolder).getAbsoluteFile();
 
   @BeforeEach
   void setUp() {

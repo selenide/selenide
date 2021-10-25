@@ -86,6 +86,6 @@ final class ReportForChainedElementsTest extends BaseIntegrationTest {
 
   @Nonnull
   private File screenshotsFolder() {
-    return new File(driver.config().reportsFolder());
+    return new File(driver.config().reportsFolder()).getAbsoluteFile();
   }
 }

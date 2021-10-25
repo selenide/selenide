@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class FileDownloadToFolderTest extends IntegrationTest {
-  private final File folder = new File(downloadsFolder);
+  private final File folder = new File(downloadsFolder).getAbsoluteFile();
 
   @BeforeEach
   void setUp() {

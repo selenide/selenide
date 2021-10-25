@@ -14,7 +14,7 @@ public abstract class DownloadsFolder {
   protected final File folder;
 
   protected DownloadsFolder(File folder) {
-    this.folder = folder;
+    this.folder = folder.getAbsoluteFile();
   }
 
   @CheckReturnValue
@@ -40,6 +40,6 @@ public abstract class DownloadsFolder {
 
   @Override
   public String toString() {
-    return folder.getAbsolutePath();
+    return folder.getPath();
   }
 }

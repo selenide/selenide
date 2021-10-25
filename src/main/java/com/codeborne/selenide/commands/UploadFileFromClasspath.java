@@ -56,7 +56,7 @@ public class UploadFileFromClasspath implements Command<File> {
 
   private File saveAsTemporaryFile(URL classpathResource) throws IOException {
     Path directory = Files.createTempDirectory("selenide-upload-");
-    File fileToUpload = new File(directory.toFile(), getName(classpathResource.getFile()));
+    File fileToUpload = new File(directory.toFile().getAbsoluteFile(), getName(classpathResource.getFile()));
     copyURLToFile(classpathResource, fileToUpload);
     return fileToUpload;
   }
