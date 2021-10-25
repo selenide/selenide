@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
+import static com.codeborne.selenide.TestResources.toFile;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchExcludeSwitches;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
@@ -30,7 +31,7 @@ final class ChromeDriverFactoryTest {
 
   private final Proxy proxy = mock(Proxy.class);
   private final SelenideConfig config = new SelenideConfig().downloadsFolder("build/should-not-be-used");
-  private final File browserDownloadsFolder = new File(DOWNLOADS_FOLDER);
+  private final File browserDownloadsFolder = new File(DOWNLOADS_FOLDER).getAbsoluteFile();
   private final Browser browser = new Browser(config.browser(), config.headless());
   private final ChromeDriverFactory factory = new ChromeDriverFactory();
 
@@ -65,7 +66,7 @@ final class ChromeDriverFactoryTest {
   @Test
   void shouldNotExcludeExtensionsSwitch_ifChromeIsOpenedWithExtensions() {
     ChromeOptions options = new ChromeOptions();
-    options.addExtensions(new File("build.gradle"), new File("settings.gradle"));
+    options.addExtensions(toFile("firebug-1.11.4.xpi"), toFile("firepath-0.9.7-fx.xpi"));
     config.browserCapabilities(new DesiredCapabilities(options));
 
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);

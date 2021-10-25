@@ -18,8 +18,8 @@ import java.net.URL;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.TestResources.toURL;
 import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
-import static java.lang.Thread.currentThread;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.verify;
 final class WebDriverRunnerTest {
   private static WebDriver driver;
 
-  private final URL url = currentThread().getContextClassLoader().getResource("start_page.html");
+  private final URL url = toURL("start_page.html");
 
   @BeforeEach
   void resetWebDriverContainer() {

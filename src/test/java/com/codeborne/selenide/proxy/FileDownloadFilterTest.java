@@ -40,7 +40,8 @@ final class FileDownloadFilterTest {
 
     when(contents.getContentType()).thenReturn("app/json");
     when(contents.getTextContents()).thenReturn("my-text");
-    deleteDirectory(new File("build/downloads/random-text"));
+    File directory = new File("build/downloads/random-text").getAbsoluteFile();
+    deleteDirectory(directory);
   }
 
   private HttpHeaders mockHeaders() {
@@ -100,7 +101,7 @@ final class FileDownloadFilterTest {
     File file = filter.downloads().files().get(0).getFile();
     File expectedFile = new File("build/downloads/random-text/report.pdf");
     assertThat(file.getName()).isEqualTo("report.pdf");
-    assertThat(file.getPath()).endsWith(expectedFile.getPath());
+    assertThat(file.getPath()).endsWith(expectedFile.getAbsolutePath());
     assertThat(readFileToByteArray(file)).isEqualTo(new byte[]{1, 2, 3, 4, 5});
   }
 

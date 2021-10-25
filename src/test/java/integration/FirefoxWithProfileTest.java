@@ -12,10 +12,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
-import java.io.File;
-
 import static com.codeborne.selenide.Condition.visible;
-import static java.lang.Thread.currentThread;
+import static com.codeborne.selenide.TestResources.toFile;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 final class FirefoxWithProfileTest extends BaseIntegrationTest {
@@ -54,8 +52,8 @@ final class FirefoxWithProfileTest extends BaseIntegrationTest {
 
   private FirefoxProfile createFirefoxProfileWithExtensions() {
     FirefoxProfile profile = new FirefoxProfile();
-    profile.addExtension(new File(currentThread().getContextClassLoader().getResource("firebug-1.11.4.xpi").getPath()));
-    profile.addExtension(new File(currentThread().getContextClassLoader().getResource("firepath-0.9.7-fx.xpi").getPath()));
+    profile.addExtension(toFile("firebug-1.11.4.xpi"));
+    profile.addExtension(toFile("firepath-0.9.7-fx.xpi"));
     profile.setPreference("extensions.firebug.showFirstRunPage", false);
     profile.setPreference("extensions.firebug.allPagesActivation", "on");
     profile.setPreference("intl.accept_languages", "no,en-us,en");

@@ -84,6 +84,7 @@ public abstract class BaseHandler extends HttpServlet {
     }
   }
 
+  @SuppressWarnings("SuspiciousDateFormat")
   private void logRequest(HttpServletRequest request, int httpStatus, long startTime) {
     String time = new SimpleDateFormat("hh:MM:ss:SSS").format(new Date());
     log.info("{} {} -> {} {} ms",

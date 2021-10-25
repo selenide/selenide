@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 final class FileDownloadViaHttpGetTest extends IntegrationTest {
   private static final String LISTENER = "SelenideLoggerTest";
   private final EventsCollector collector = new EventsCollector();
-  private final File folder = new File(Configuration.downloadsFolder);
+  private final File folder = new File(Configuration.downloadsFolder).getAbsoluteFile();
 
   @BeforeEach
   void setUp() {

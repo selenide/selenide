@@ -18,7 +18,7 @@ import static org.mockito.Mockito.mock;
 
 final class OperaDriverFactoryTest {
   private final Proxy proxy = mock(Proxy.class);
-  private final File browserDownloadsFolder = new File("build/downlao");
+  private final File browserDownloadsFolder = new File("build/downlao").getAbsoluteFile();
   private final SelenideConfig config = new SelenideConfig().headless(false);
   private final Browser browser = new Browser(config.browser(), config.headless());
   private final OperaDriverFactory factory = new OperaDriverFactory();
