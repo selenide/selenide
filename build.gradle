@@ -7,14 +7,13 @@ plugins {
 }
 
 allprojects {
-  apply plugin: 'java'
-  apply plugin: 'java-library'
   group = 'com.codeborne'
-  version = '6.0.0'
+  version = '6.0.1-SNAPSHOT'
 }
 
-ext {
-  artifactId = 'selenide-core'
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'java-library'
 }
 
 apply from: 'gradle/compilation.gradle'
@@ -22,6 +21,5 @@ apply from: 'gradle/dependencies.gradle'
 apply from: 'gradle/code-analysis.gradle'
 apply from: 'gradle/coverage.gradle'
 apply from: 'gradle/tests.gradle'
-apply from: 'gradle/publish-module.gradle'
 
 defaultTasks 'check', 'publishToMavenLocal'

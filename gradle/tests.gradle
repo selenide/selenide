@@ -1,4 +1,4 @@
-allprojects {
+subprojects {
   test {
     include 'com/codeborne/selenide/**/*'
   }

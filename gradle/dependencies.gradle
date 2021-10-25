@@ -1,9 +1,3 @@
-allprojects {
-  repositories {
-    mavenCentral()
-  }
-}
-
 ext {
   seleniumVersion = '4.0.0'
   junitVersion = '5.8.1'
@@ -16,32 +10,11 @@ ext {
   commonsFileuploadVersion = '1.4'
 }
 
-dependencies {
-  api('org.opentest4j:opentest4j:1.2.0')
-
-  api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
-    exclude group: 'net.bytebuddy'
-  }
-  api('io.github.bonigarcia:webdrivermanager:5.0.3') {
-    exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
-    exclude group: 'com.github.docker-java'
-    exclude group: 'org.rauschig'
-  }
-  implementation('commons-lang:commons-lang:2.6') {because 'used by webdrivermanager'}
-  implementation('org.apache.commons:commons-compress:1.21') {because 'used by webdrivermanager'}
-
-  implementation('org.apache.httpcomponents.client5:httpclient5:5.1') {
-    exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
+subprojects {
+  repositories {
+    mavenCentral()
   }
 
-  compileOnly("com.browserup:browserup-proxy-core:$browserupProxyVersion")
-  compileOnly("xyz.rogfam:littleproxy:$littleProxyVersion")
-
-  compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-}
-
-allprojects {
   dependencies {
     implementation("com.google.guava:guava:31.0.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
@@ -56,12 +29,5 @@ allprojects {
     testImplementation("org.assertj:assertj-core:$assertjVersion")
     implementation('org.slf4j:slf4j-api:1.7.32')
     testRuntimeOnly('org.slf4j:slf4j-simple:1.7.32')
-  }
-}
-
-subprojects {
-  dependencies {
-    api project(':')
-    testImplementation project(':').sourceSets.test.output
   }
 }
