@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.0.0 (planned to 25.10.2021)
+## 6.0.0 (released 25.10.2021)
 * upgrade to Selenium 4.0.0
 * #1593 Publish Selenide as separate artifacts: selenide.jar, selenide-proxy.jar, selenide-testng.jar etc.
 * #1581 report exact actual value at the moment of failure
