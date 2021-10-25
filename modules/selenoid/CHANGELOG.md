@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0 (released 25.10.2021)
+* upgrade to Selenide 6.0.0
+* upgrade to Selenium webdriver 4.0.0
+
 ## 1.2.0 (released 28.09.2021)
 * upgrade to Selenide 5.25.0
 
