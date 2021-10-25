@@ -1,0 +1,41 @@
+ext {
+  artifactId = 'selenide-core'
+}
+
+sourceSets {
+  main {
+    java {srcDir rootProject.file('src/main/java')}
+    resources {srcDirs rootProject.file('src/main/resources')}
+  }
+  test {
+    java {srcDir rootProject.file('src/test/java')}
+    resources {srcDir rootProject.file('src/test/resources')}
+  }
+}
+
+dependencies {
+  api('org.opentest4j:opentest4j:1.2.0')
+
+  api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
+    exclude group: 'net.bytebuddy'
+  }
+  api('io.github.bonigarcia:webdrivermanager:5.0.3') {
+    exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
+    exclude group: 'com.github.docker-java'
+    exclude group: 'org.rauschig'
+  }
+  implementation('commons-lang:commons-lang:2.6') {because 'used by webdrivermanager'}
+  implementation('org.apache.commons:commons-compress:1.21') {because 'used by webdrivermanager'}
+
+  implementation('org.apache.httpcomponents.client5:httpclient5:5.1') {
+    exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
+  }
+
+  compileOnly("com.browserup:browserup-proxy-core:$browserupProxyVersion")
+  compileOnly("xyz.rogfam:littleproxy:$littleProxyVersion")
+
+  compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')

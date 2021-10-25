@@ -38,6 +38,7 @@ publishing {
         name = archivesBaseName
         description = 'Selenide = concise API for Selenium WebDriver'
         url = 'https://selenide.org'
+        inceptionYear = '2011'
         licenses {
           license {
             name = 'MIT'

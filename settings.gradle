@@ -1,4 +1,5 @@
 rootProject.name = 'selenide'
+include ':modules:core'
 include ':statics'
 include ':modules:proxy'
 include ':modules:grid'
