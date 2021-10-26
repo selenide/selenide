@@ -27,7 +27,7 @@ dependencies {
   implementation('commons-lang:commons-lang:2.6') {because 'used by webdrivermanager'}
   implementation('org.apache.commons:commons-compress:1.21') {because 'used by webdrivermanager'}
 
-  implementation('org.apache.httpcomponents.client5:httpclient5:5.1') {
+  implementation('org.apache.httpcomponents.client5:httpclient5:5.1.1') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
   }
 
