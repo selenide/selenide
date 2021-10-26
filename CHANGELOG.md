@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.0.2 (released 26.10.2021)
+* #1623 remove occasional JUnit dependency from published selenide artifact
+
 ## 6.0.1 (released 25.10.2021)
 * upgrade to Selenium 4.0.0
 * #1593 Publish Selenide as separate artifacts: selenide.jar, selenide-proxy.jar, selenide-testng.jar etc.

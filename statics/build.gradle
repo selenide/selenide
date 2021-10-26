@@ -5,7 +5,7 @@ ext {
 dependencies {
   api project(':modules:core')
   testImplementation project(':modules:core').sourceSets.test.output
-  api("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+  compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
