@@ -4,7 +4,10 @@ ext {
 
 dependencies {
   api project(":statics")
-  api("com.browserup:browserup-proxy-core:${browserupProxyVersion}") {exclude group: 'io.netty'}
+  api("com.browserup:browserup-proxy-core:${browserupProxyVersion}") {
+    exclude group: 'io.netty'
+    exclude group: 'org.seleniumhq.selenium'
+  }
   implementation("xyz.rogfam:littleproxy:${littleProxyVersion}")
   implementation("io.netty:netty-all:$nettyVersion") {because 'used by browserup-proxy'}
 }

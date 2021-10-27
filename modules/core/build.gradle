@@ -16,9 +16,6 @@ sourceSets {
 dependencies {
   api('org.opentest4j:opentest4j:1.2.0')
 
-  api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
-    exclude group: 'net.bytebuddy'
-  }
   api('io.github.bonigarcia:webdrivermanager:5.0.3') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
     exclude group: 'com.github.docker-java'
