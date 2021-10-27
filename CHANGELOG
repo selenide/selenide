@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.7.2 (released 28.10.2021)
+* upgrade to Appium 7.6.0
+
 === 1.7.1 (released 05.10.2021)
 * #57 remove attribute `contentSize` from error message
 
