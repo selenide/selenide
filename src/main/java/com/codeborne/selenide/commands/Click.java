@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
 
 import static com.codeborne.selenide.commands.Util.firstOf;
 
@@ -30,34 +31,18 @@ public class Click implements Command<Void> {
       ClickOptions clickOptions = firstOf(args);
       click(driver, webElement, clickOptions);
     }
-    else if (args.length == 2) {
-      Integer offsetX = firstOf(args);
-      Integer offsetY = (Integer) args[1];
-      click(driver, webElement, offsetX, offsetY);
+    else {
+      throw new IllegalArgumentException("Unsupported click arguments: " + Arrays.toString(args));
     }
     return null;
   }
 
   protected void click(Driver driver, WebElement element) {
     if (driver.config().clickViaJs()) {
-      click(driver, element, 0, 0);
+      clickViaJS(driver, element, 0, 0);
     }
     else {
       element.click();
-    }
-  }
-
-  // should be removed after deleting SelenideElement.click(int offsetX, int offsetY);
-  protected void click(Driver driver, WebElement element, int offsetX, int offsetY) {
-    if (driver.config().clickViaJs()) {
-      clickViaJS(driver, element, offsetX, offsetY);
-    }
-    else {
-      driver.actions()
-        .moveToElement(element, offsetX, offsetY)
-        .click()
-        .build()
-        .perform();
     }
   }
 
