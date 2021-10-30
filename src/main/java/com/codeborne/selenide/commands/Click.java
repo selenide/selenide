@@ -8,6 +8,8 @@ import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
@@ -21,15 +23,14 @@ public class Click implements Command<Void> {
   @Override
   @Nullable
   public Void execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    Driver driver = locator.driver();
-    WebElement webElement = locator.findAndAssertElementIsInteractable();
+    WebElement webElement = findElement(locator);
 
     if (args == null || args.length == 0) {
-      click(driver, webElement);
+      click(locator.driver(), webElement);
     }
     else if (args.length == 1) {
       ClickOptions clickOptions = firstOf(args);
-      click(driver, webElement, clickOptions);
+      click(locator.driver(), webElement, clickOptions);
     }
     else {
       throw new IllegalArgumentException("Unsupported click arguments: " + Arrays.toString(args));
@@ -37,16 +38,22 @@ public class Click implements Command<Void> {
     return null;
   }
 
+  @Nonnull
+  @CheckReturnValue
+  protected WebElement findElement(WebElementSource locator) {
+    return locator.findAndAssertElementIsInteractable();
+  }
+
   protected void click(Driver driver, WebElement element) {
     if (driver.config().clickViaJs()) {
       clickViaJS(driver, element, 0, 0);
     }
     else {
-      element.click();
+      defaultClick(element);
     }
   }
 
-  private void click(Driver driver, WebElement webElement, ClickOptions clickOptions) {
+  protected void click(Driver driver, WebElement webElement, ClickOptions clickOptions) {
     switch (clickOptions.clickOption()) {
       case DEFAULT: {
         defaultClick(driver, webElement, clickOptions.offsetX(), clickOptions.offsetY());
@@ -62,14 +69,18 @@ public class Click implements Command<Void> {
     }
   }
 
-  private void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY) {
+  protected void defaultClick(WebElement element) {
+    element.click();
+  }
+
+  protected void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY) {
     driver.actions()
       .moveToElement(element, offsetX, offsetY)
       .click()
       .perform();
   }
 
-  private void clickViaJS(Driver driver, WebElement element, int offsetX, int offsetY) {
+  protected void clickViaJS(Driver driver, WebElement element, int offsetX, int offsetY) {
     jsSource.execute(driver, element, offsetX, offsetY);
   }
 }
