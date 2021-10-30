@@ -1,5 +1,5 @@
 dependencies {
-  api('com.codeborne:selenide:5.25.0')
+  api('com.codeborne:selenide:5.25.1')
   api('io.appium:java-client:7.6.0')
   implementation("commons-io:commons-io:2.11.0")
   testImplementation('org.junit.jupiter:junit-jupiter:5.8.1')
