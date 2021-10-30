@@ -1,10 +1,10 @@
 apply plugin: 'java-library'
 
-defaultTasks 'check', 'test', 'install'
+defaultTasks 'check', 'test', 'publishToMavenLocal'
 
 group = 'com.codeborne'
 description = 'Selenide adaptor for Appium framework'
-version = '1.7.2-SNAPSHOT'
+version = '1.7.2'
 
 tasks.withType(Test) {
   useJUnitPlatform()
