@@ -1,0 +1,11 @@
+task javadocForSite(type: Javadoc) {
+  source = subprojects.sourceSets.main.allJava
+  destinationDir = file("${project.buildDir}/javadoc-for-site")
+  classpath = project(":modules:core").sourceSets.main.compileClasspath
+  classpath += project(":statics").sourceSets.main.compileClasspath
+  classpath += project(":modules:proxy").sourceSets.main.compileClasspath
+  classpath += project(":modules:grid").sourceSets.main.compileClasspath
+  classpath += project(":modules:junit4").sourceSets.main.compileClasspath
+  classpath += project(":modules:testng").sourceSets.main.compileClasspath
+  failOnError = false
+}
