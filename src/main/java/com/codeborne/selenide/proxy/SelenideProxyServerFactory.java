@@ -11,35 +11,26 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * <p>
- * Interface for using custom Selenide Proxy Factory in your tests
+ * Interface for creating custom SelenideProxyServer in your tests
  * </p>
  */
 @ParametersAreNonnullByDefault
 public interface SelenideProxyServerFactory {
 
   /**
-   * Create a pair of {@link SelenideProxyServer} and {@link Proxy}.
+   * Creates a {@link SelenideProxyServer}
    * Allows user to change settings of BrowserUpProxy before the proxy is started.
    * Allows user to change settings of Selenium proxy.
-   * <b>Must call SelenideProxyServer.start() to start proxy server.<b>
+   * <b>Must call {@link SelenideProxyServer#start()} to start proxy server.<b>
+   * <b>Must call {@link SelenideProxyServer#createSeleniumProxy()} to create Selenium proxy server instance.<b>
    * For implementation example see {@link DefaultSelenideProxyServerFactory}
    *
    * @param config - selenide config
    * @param userProvidedProxy - additional proxy provided from user
-   * @return new {@link ProxyPair} instance
+   * @return new {@link SelenideProxyServer} instance
    */
   @Nonnull
   @CheckReturnValue
-  ProxyPair createProxies(Config config, @Nullable Proxy userProvidedProxy);
+  SelenideProxyServer create(Config config, @Nullable Proxy userProvidedProxy);
 
-  @ParametersAreNonnullByDefault
-  class ProxyPair {
-    public final SelenideProxyServer selenideProxyServer;
-    public final Proxy seleniumProxy;
-
-    public ProxyPair(SelenideProxyServer selenideProxyServer, Proxy seleniumProxy) {
-      this.selenideProxyServer = selenideProxyServer;
-      this.seleniumProxy = seleniumProxy;
-    }
-  }
 }

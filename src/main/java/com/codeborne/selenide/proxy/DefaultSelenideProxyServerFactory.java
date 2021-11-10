@@ -12,10 +12,10 @@ public class DefaultSelenideProxyServerFactory implements SelenideProxyServerFac
 
   @Nonnull
   @Override
-  public ProxyPair createProxies(Config config, @Nullable Proxy userProvidedProxy) {
+  public SelenideProxyServer create(Config config, @Nullable Proxy userProvidedProxy) {
     SelenideProxyServer selenideProxyServer = new SelenideProxyServer(config, userProvidedProxy);
     selenideProxyServer.start();
-    Proxy seleniumProxy = selenideProxyServer.createSeleniumProxy();
-    return new ProxyPair(selenideProxyServer, seleniumProxy);
+    selenideProxyServer.createSeleniumProxy();
+    return selenideProxyServer;
   }
 }
