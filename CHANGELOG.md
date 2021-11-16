@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.1.0 (planned to 2x.11.2021)
+* #1561 Make it easy to configure proxy before it's started  --  thanks Boris Osipov for PR #1620
+
 ## 6.0.3 (released 27.10.2021)
 * Add workaround for Maven users to avoid occasional using Selenium 3 transitive dependencies 
 
