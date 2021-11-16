@@ -2,6 +2,7 @@ package com.codeborne.selenide.proxy;
 
 import com.browserup.bup.BrowserUpProxyServer;
 import com.codeborne.selenide.Config;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 
@@ -19,7 +20,12 @@ import static org.mockito.Mockito.when;
 final class SelenideProxyServerTest {
   private final BrowserUpProxyServer bmp = mock(BrowserUpProxyServer.class);
   private final Config config = mock(Config.class);
-  private final SelenideProxyServer proxyServer = new SelenideProxyServer(config, null, new InetAddressResolverStub(), bmp);
+  private SelenideProxyServer proxyServer;
+
+  @BeforeEach
+  void setUp() {
+    proxyServer = new SelenideProxyServer(config, null, new InetAddressResolverStub(), bmp);
+  }
 
   @Test
   void canInterceptResponses() {
@@ -78,8 +84,11 @@ final class SelenideProxyServerTest {
   @Test
   void createSeleniumProxy() {
     when(bmp.getPort()).thenReturn(8888);
+    proxyServer.start();
+    proxyServer.createSeleniumProxy();
 
-    assertThat(proxyServer.createSeleniumProxy().getHttpProxy()).endsWith(":8888");
+    assertThat(proxyServer.getSeleniumProxy()).isNotNull();
+    assertThat(proxyServer.getSeleniumProxy().getHttpProxy()).endsWith(":8888");
   }
 
   @Test

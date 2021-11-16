@@ -31,6 +31,8 @@ public class SelenideProxyServer {
   private final InetAddressResolver inetAddressResolver;
   @Nullable
   private final Proxy outsideProxy;
+  @Nullable
+  private Proxy seleniumProxy;
   private final BrowserUpProxy proxy;
   private final Map<String, RequestFilter> requestFilters = new HashMap<>();
   private final Map<String, ResponseFilter> responseFilters = new HashMap<>();
@@ -53,6 +55,15 @@ public class SelenideProxyServer {
     this.outsideProxy = outsideProxy;
     this.inetAddressResolver = inetAddressResolver;
     this.proxy = proxy;
+  }
+
+  /**
+   * Returns a "selenium" proxy that can be used by webdriver.
+   * Available after SelenideProxyServer.start() and SelenideProxyServer.createSeleniumProxy() call.
+   */
+  @Nullable
+  public Proxy getSeleniumProxy() {
+    return seleniumProxy;
   }
 
   /**
@@ -129,9 +140,10 @@ public class SelenideProxyServer {
   @CheckReturnValue
   @Nonnull
   public Proxy createSeleniumProxy() {
-    return isEmpty(config.proxyHost())
-      ? ClientUtil.createSeleniumProxy(proxy)
-      : ClientUtil.createSeleniumProxy(proxy, inetAddressResolver.getInetAddressByName(config.proxyHost()));
+    seleniumProxy = isEmpty(config.proxyHost())
+      ? ClientUtil.createSeleniumProxy(this.proxy)
+      : ClientUtil.createSeleniumProxy(this.proxy, inetAddressResolver.getInetAddressByName(config.proxyHost()));
+    return seleniumProxy;
   }
 
   /**

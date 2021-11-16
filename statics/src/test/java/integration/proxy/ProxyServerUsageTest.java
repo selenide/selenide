@@ -19,7 +19,6 @@ final class ProxyServerUsageTest extends IntegrationTest {
   private final List<String> responses = new ArrayList<>();
 
   @BeforeEach
-  @AfterEach
   void setUp() {
     useProxy(true);
   }
