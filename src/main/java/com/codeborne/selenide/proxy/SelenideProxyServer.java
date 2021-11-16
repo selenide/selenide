@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Selenide own proxy server to intercept server responses
- *
+ * <p>
  * It holds map of request and response filters by name.
  */
 @ParametersAreNonnullByDefault
@@ -62,13 +62,16 @@ public class SelenideProxyServer {
    * Available after SelenideProxyServer.start() and SelenideProxyServer.createSeleniumProxy() call.
    */
   @Nullable
-  public Proxy getSeleniumProxy() {
+  public synchronized Proxy getSeleniumProxy() {
+    if (seleniumProxy == null) {
+      seleniumProxy = createSeleniumProxy();
+    }
     return seleniumProxy;
   }
 
   /**
    * Start the server
-   *
+   * <p>
    * It automatically adds one response filter "download" that can intercept downloaded files.
    */
   public void start() {
@@ -98,7 +101,7 @@ public class SelenideProxyServer {
   /**
    * Add a custom request filter which allows to track/modify all requests from browser to server
    *
-   * @param name unique name of filter
+   * @param name          unique name of filter
    * @param requestFilter the filter
    */
   public void addRequestFilter(String name, RequestFilter requestFilter) {
@@ -116,7 +119,7 @@ public class SelenideProxyServer {
   /**
    * Add a custom response filter which allows to track/modify all server responses to browser
    *
-   * @param name unique name of filter
+   * @param name           unique name of filter
    * @param responseFilter the filter
    */
   public void addResponseFilter(String name, ResponseFilter responseFilter) {
@@ -139,11 +142,10 @@ public class SelenideProxyServer {
    */
   @CheckReturnValue
   @Nonnull
-  public Proxy createSeleniumProxy() {
-    seleniumProxy = isEmpty(config.proxyHost())
+  private Proxy createSeleniumProxy() {
+    return isEmpty(config.proxyHost())
       ? ClientUtil.createSeleniumProxy(this.proxy)
       : ClientUtil.createSeleniumProxy(this.proxy, inetAddressResolver.getInetAddressByName(config.proxyHost()));
-    return seleniumProxy;
   }
 
   /**
@@ -189,7 +191,7 @@ public class SelenideProxyServer {
 
   /**
    * Get response filter by name
-   *
+   * <p>
    * By default, the only one filter "download" is available.
    */
   @SuppressWarnings("unchecked")

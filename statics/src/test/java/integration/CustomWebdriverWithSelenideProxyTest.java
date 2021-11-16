@@ -60,7 +60,7 @@ final class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
 
     ChromeOptions options = new ChromeOptions();
     if (isHeadless()) options.setHeadless(true);
-    options.setProxy(proxy.createSeleniumProxy());
+    options.setProxy(proxy.getSeleniumProxy());
     addSslErrorIgnoreCapabilities(options);
     options.addArguments("--proxy-bypass-list=<-loopback>");
     return new ChromeDriver(options);
@@ -71,7 +71,7 @@ final class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
 
     FirefoxOptions options = new FirefoxOptions();
     if (isHeadless()) options.setHeadless(true);
-    options.setProxy(proxy.createSeleniumProxy());
+    options.setProxy(proxy.getSeleniumProxy());
     options.addPreference("network.proxy.no_proxies_on", "");
     options.addPreference("network.proxy.allow_hijacking_localhost", true);
     return new FirefoxDriver(options);
