@@ -6,7 +6,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.Arguments;
 import com.codeborne.selenide.impl.ElementFinder;
-import com.codeborne.selenide.impl.FileContent;
+import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
 import com.codeborne.selenide.impl.WebElementWrapper;
 import org.openqa.selenium.By;
@@ -22,7 +22,7 @@ import static com.codeborne.selenide.DragAndDropOptions.usingJavaScript;
 
 @ParametersAreNonnullByDefault
 public class DragAndDropTo implements Command<SelenideElement> {
-  private static final FileContent js = new FileContent("drag_and_drop_script.js");
+  private static final JavaScript js = new JavaScript("drag_and_drop_script.js");
 
   @Override
   @Nonnull
@@ -73,6 +73,6 @@ public class DragAndDropTo implements Command<SelenideElement> {
   }
 
   private void dragAndDropUsingJavaScript(Driver driver, WebElement from, WebElement to) {
-    driver.executeJavaScript(js.content() + "; dragAndDrop(arguments[0], arguments[1])", from, to);
+    js.execute(driver, from, to);
   }
 }

@@ -4,7 +4,7 @@ import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.impl.FileContent;
+import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
@@ -15,7 +15,7 @@ import static com.codeborne.selenide.commands.Util.firstOf;
 
 @ParametersAreNonnullByDefault
 public class Click implements Command<Void> {
-  private final FileContent jsSource = new FileContent("click.js");
+  private final JavaScript jsSource = new JavaScript("click.js");
 
   @Override
   @Nullable
@@ -85,6 +85,6 @@ public class Click implements Command<Void> {
   }
 
   private void clickViaJS(Driver driver, WebElement element, int offsetX, int offsetY) {
-    driver.executeJavaScript(jsSource.content(), element, offsetX, offsetY);
+    jsSource.execute(driver, element, offsetX, offsetY);
   }
 }

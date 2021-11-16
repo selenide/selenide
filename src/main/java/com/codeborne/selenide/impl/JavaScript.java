@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Driver;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -22,6 +23,11 @@ public class JavaScript {
   public <T> T execute(SearchContext context, Object... arguments) {
     String js = "return " + jsSource.content();
     return (T) jsExecutor(context).executeScript(js, arguments);
+  }
+
+  @Nonnull
+  public <T> T execute(Driver driver, Object... arguments) {
+    return execute(driver.getWebDriver(), arguments);
   }
 
   private JavascriptExecutor jsExecutor(SearchContext context) {
