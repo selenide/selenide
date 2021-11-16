@@ -62,7 +62,7 @@ final class LazyDriverTest {
     driver.createDriver();
 
     assertThat(driver.getProxy()).isNotNull();
-    verify(factory).createWebDriver(config, driver.getProxy().createSeleniumProxy(),
+    verify(factory).createWebDriver(config, driver.getProxy().getSeleniumProxy(),
       new File("build/down/123_456_78").getAbsoluteFile());
   }
 

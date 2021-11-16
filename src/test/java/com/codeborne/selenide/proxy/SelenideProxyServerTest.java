@@ -82,20 +82,19 @@ final class SelenideProxyServerTest {
   }
 
   @Test
-  void createSeleniumProxy() {
+  void createsSeleniumProxy() {
     when(bmp.getPort()).thenReturn(8888);
     proxyServer.start();
-    proxyServer.createSeleniumProxy();
 
     assertThat(proxyServer.getSeleniumProxy()).isNotNull();
     assertThat(proxyServer.getSeleniumProxy().getHttpProxy()).endsWith(":8888");
   }
 
   @Test
-  void createSeleniumProxy_withConfiguredHostname() {
+  void createsSeleniumProxy_withConfiguredHostname() {
     when(config.proxyHost()).thenReturn("my.megahost");
     when(bmp.getPort()).thenReturn(9999);
-    assertThat(proxyServer.createSeleniumProxy().getHttpProxy()).isEqualTo("my.megahost:9999");
+    assertThat(proxyServer.getSeleniumProxy().getHttpProxy()).isEqualTo("my.megahost:9999");
   }
 
   @Test
