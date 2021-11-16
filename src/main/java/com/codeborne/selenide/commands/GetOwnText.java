@@ -3,6 +3,7 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
@@ -13,6 +14,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class GetOwnText implements Command<String> {
+  private static final JavaScript js = new JavaScript("get-own-text.js");
+
   @Override
   @CheckReturnValue
   @Nonnull
@@ -22,10 +25,6 @@ public class GetOwnText implements Command<String> {
 
   @Nonnull
   public static String getOwnText(Driver driver, WebElement element) {
-    return driver.executeJavaScript("return Array.prototype.filter.call(arguments[0].childNodes, function (element) {\n" +
-      "  return element.nodeType === Node.TEXT_NODE;\n" +
-      "}).map(function (element) {\n" +
-      "  return element.textContent;\n" +
-      "}).join(\"\\n\");", element);
+    return js.execute(driver, element);
   }
 }

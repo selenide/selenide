@@ -22,6 +22,7 @@ import java.util.function.Supplier;
 public class Describe {
   private static final Logger log = LoggerFactory.getLogger(Describe.class);
 
+  private final JavaScript js = new JavaScript("get-element-attributes.js");
   private final Driver driver;
   private final WebElement element;
   private final StringBuilder sb = new StringBuilder();
@@ -51,25 +52,8 @@ public class Describe {
   }
 
   private Describe appendAllAttributes() {
-    Map<String, String> map = driver.executeJavaScript(
-        "var s = {};" +
-            "var attrs = arguments[0].attributes;" +
-            "for (var i = 0; i < attrs.length; i++) {" +
-            "   var a = attrs[i]; " +
-            "   if (a.name != 'style') {" +
-            "     s[a.name] = a.value;" +
-            "   }" +
-            "}" +
-            "return s;", element);
-
-    SortedMap<String, String> sortedByName = new TreeMap<>();
-    if (map != null) {
-      sortedByName.putAll(map);
-    }
-    sortedByName.put("value", element.getAttribute("value"));
-    if (!sortedByName.containsKey("type")) {
-      sortedByName.put("type", element.getAttribute("type"));
-    }
+    Map<String, String> map = js.execute(driver, element);
+    SortedMap<String, String> sortedByName = new TreeMap<>(map);
 
     for (Map.Entry<String, String> entry : sortedByName.entrySet()) {
       attr(entry.getKey(), entry.getValue());
@@ -79,8 +63,8 @@ public class Describe {
 
   private Describe appendPredefinedAttributes() {
     return attr("class").attr("disabled").attr("readonly").attr("href").attr("id").attr("name")
-        .attr("onclick").attr("onchange").attr("placeholder")
-        .attr("type").attr("value");
+      .attr("onclick").attr("onchange").attr("placeholder")
+      .attr("type").attr("value");
   }
 
   private boolean supportsJavascriptAttributes() {
@@ -108,7 +92,8 @@ public class Describe {
     if (attributeValue != null) {
       if (attributeValue.length() > 0) {
         sb.append(' ').append(attributeName).append("=\"").append(attributeValue).append('"');
-      } else {
+      }
+      else {
         sb.append(' ').append(attributeName);
       }
     }
@@ -137,7 +122,8 @@ public class Describe {
       if (element.isSelected()) {
         sb.append(' ').append("selected:true");
       }
-    } catch (UnsupportedOperationException | WebDriverException ignore) {
+    }
+    catch (UnsupportedOperationException | WebDriverException ignore) {
     }
     return this;
   }

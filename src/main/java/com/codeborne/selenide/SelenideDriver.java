@@ -5,6 +5,7 @@ import com.codeborne.selenide.drivercommands.Navigator;
 import com.codeborne.selenide.drivercommands.WebDriverWrapper;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
+import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.PageObjectFactory;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -39,6 +40,7 @@ import static java.util.Collections.emptyList;
  */
 @ParametersAreNonnullByDefault
 public class SelenideDriver {
+  private final JavaScript zoomJs = new JavaScript("zoom.js");
   private static final Navigator navigator = new Navigator();
   private static final ScreenShotLaboratory screenshots = ScreenShotLaboratory.getInstance();
 
@@ -235,11 +237,7 @@ public class SelenideDriver {
   }
 
   public void zoom(double factor) {
-    executeJavaScript(
-      "document.body.style.transform = 'scale(' + arguments[0] + ')';" +
-        "document.body.style.transformOrigin = '0 0';",
-      factor
-    );
+    zoomJs.execute(driver(), factor);
   }
 
   @Nullable

@@ -4,6 +4,7 @@ import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.InvalidStateException;
+import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
@@ -16,6 +17,8 @@ import static com.codeborne.selenide.impl.Events.events;
 
 @ParametersAreNonnullByDefault
 public class SetValue implements Command<SelenideElement> {
+  private final JavaScript js = new JavaScript("set-value.js");
+
   @Override
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
@@ -45,18 +48,6 @@ public class SetValue implements Command<SelenideElement> {
   }
 
   private String setValueByJs(Driver driver, WebElement element, String text) {
-    return driver.executeJavaScript(
-        "return (function(webelement, text) {" +
-            "if (webelement.getAttribute('readonly') != undefined) return 'Cannot change value of readonly element';" +
-            "if (webelement.getAttribute('disabled') != undefined) return 'Cannot change value of disabled element';" +
-            "webelement.focus();" +
-            "var maxlength = webelement.getAttribute('maxlength') == null ? -1 : parseInt(webelement.getAttribute('maxlength'));" +
-            "webelement.value = " +
-            "maxlength == -1 ? text " +
-            ": text.length <= maxlength ? text " +
-            ": text.substring(0, maxlength);" +
-            "return null;" +
-            "})(arguments[0], arguments[1]);",
-        element, text);
+    return js.execute(driver, element, text);
   }
 }
