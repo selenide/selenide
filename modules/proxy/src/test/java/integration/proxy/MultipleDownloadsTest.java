@@ -1,8 +1,7 @@
 package integration.proxy;
 
 import com.codeborne.selenide.impl.FileContent;
-import integration.IntegrationTest;
-import org.junit.jupiter.api.BeforeEach;
+import integration.ProxyIntegrationTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -15,12 +14,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MultipleDownloadsTest extends IntegrationTest {
-  @BeforeEach
-  void setUp() {
-    useProxy(true);
-  }
-
+public class MultipleDownloadsTest extends ProxyIntegrationTest {
   @Test
   void downloadMultipleFiles() throws FileNotFoundException {
     open("/downloadMultipleFiles.html");

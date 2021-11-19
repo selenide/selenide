@@ -5,7 +5,7 @@ import com.browserup.bup.BrowserUpProxyServer;
 import com.browserup.bup.client.ClientUtil;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import integration.IntegrationTest;
+import integration.ProxyIntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * <p>
  * This test verifies that both these proxies work well together.
  */
-final class ChainedProxyTest extends IntegrationTest {
+final class ChainedProxyTest extends ProxyIntegrationTest {
   private BrowserUpProxy chainedProxy;
   private final List<String> visitedUrls = new ArrayList<>();
 

@@ -37,8 +37,9 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
 
   @BeforeEach
   @AfterEach
-  final void setUpEach() {
+  void setUpEach() {
     resetSettings();
+    turnProxy(false);
   }
 
   @BeforeEach
@@ -56,7 +57,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     }
   }
 
-  private static void resetSettings() {
+  protected static void resetSettings() {
     timeout = 1;
     Configuration.browser = System.getProperty("selenide.browser", CHROME);
     Configuration.baseUrl = getBaseUrl();
@@ -67,7 +68,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.assertionMode = STRICT;
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
-    useProxy(false);
     Configuration.fileDownload = HTTPGET;
   }
 
@@ -86,12 +86,18 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
    * When toggling (on <-> off) happens, browser is closed
    * @param proxyEnabled true - turn on, false - turn off
    */
-  protected static void useProxy(boolean proxyEnabled) {
+  protected static void turnProxy(boolean proxyEnabled) {
     if (Configuration.proxyEnabled != proxyEnabled) {
       Selenide.closeWebDriver();
     }
     Configuration.proxyEnabled = proxyEnabled;
     Configuration.fileDownload = proxyEnabled ? PROXY : HTTPGET;
+  }
+
+  protected static void useProxy(boolean proxyEnabled) {
+    if (Configuration.proxyEnabled != proxyEnabled) {
+      throw new IllegalStateException("Expected proxy mode: " + proxyEnabled + ", actual: " + Configuration.proxyEnabled);
+    }
   }
 
   protected void givenHtml(String... html) {

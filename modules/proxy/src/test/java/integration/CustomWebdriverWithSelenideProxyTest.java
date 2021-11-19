@@ -23,7 +23,7 @@ import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-final class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
+final class CustomWebdriverWithSelenideProxyTest extends ProxyIntegrationTest {
 
   @BeforeEach
   void setUp() {
@@ -33,8 +33,6 @@ final class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
 
   @Test
   public void userCanUserCustomWebdriverWithSelenideProxy() {
-    useProxy(true);
-
     SelenideProxyServer proxy = new SelenideProxyServer(new SelenideConfig(), null);
     proxy.start();
     try {

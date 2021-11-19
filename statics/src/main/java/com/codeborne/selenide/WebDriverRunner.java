@@ -115,7 +115,7 @@ public class WebDriverRunner {
   /**
    * Sets Selenium Proxy instance
    */
-  public static void setProxy(Proxy webProxy) {
+  public static void setProxy(@Nullable Proxy webProxy) {
     webdriverContainer.setProxy(webProxy);
   }
 

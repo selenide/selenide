@@ -10,6 +10,12 @@ dependencies {
   }
   implementation("xyz.rogfam:littleproxy:${littleProxyVersion}")
   implementation("io.netty:netty-all:$nettyVersion") {because 'used by browserup-proxy'}
+
+  testImplementation project(':statics')
+  testImplementation project(':statics').sourceSets.test.output
+  testImplementation project(':modules:core').sourceSets.test.output
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')
