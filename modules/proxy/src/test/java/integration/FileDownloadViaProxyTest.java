@@ -27,12 +27,11 @@ import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-final class FileDownloadViaProxyTest extends IntegrationTest {
+final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
   private final File folder = new File(Configuration.downloadsFolder).getAbsoluteFile();
 
   @BeforeEach
   void setUp() {
-    useProxy(true);
     openFile("page_with_uploads.html");
     timeout = 1000;
   }

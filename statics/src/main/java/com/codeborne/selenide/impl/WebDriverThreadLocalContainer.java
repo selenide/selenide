@@ -115,7 +115,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   @Override
-  public void setProxy(Proxy userProvidedProxy) {
+  public void setProxy(@Nullable Proxy userProvidedProxy) {
     this.userProvidedProxy = userProvidedProxy;
   }
 

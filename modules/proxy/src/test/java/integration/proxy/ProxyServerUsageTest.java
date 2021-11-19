@@ -2,9 +2,7 @@ package integration.proxy;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import integration.IntegrationTest;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import integration.ProxyIntegrationTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,14 +12,9 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static org.assertj.core.api.Assertions.assertThat;
 
-final class ProxyServerUsageTest extends IntegrationTest {
+final class ProxyServerUsageTest extends ProxyIntegrationTest {
   private final List<String> requests = new ArrayList<>();
   private final List<String> responses = new ArrayList<>();
-
-  @BeforeEach
-  void setUp() {
-    useProxy(true);
-  }
 
   @Test
   void canAddInterceptorsToProxyServer() {

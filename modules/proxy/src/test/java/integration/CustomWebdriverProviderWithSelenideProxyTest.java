@@ -28,7 +28,7 @@ import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-final class CustomWebdriverProviderWithSelenideProxyTest extends IntegrationTest {
+final class CustomWebdriverProviderWithSelenideProxyTest extends ProxyIntegrationTest {
   @BeforeEach
   void setUp() {
     assumeThat(isChrome() || isFirefox()).isTrue();
@@ -42,7 +42,6 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends IntegrationTest
 
   @Test
   public void userCanUserCustomWebdriverWithSelenideProxy() {
-    useProxy(true);
     Configuration.browser = MyWebDriverProvider.class.getName();
 
     open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
