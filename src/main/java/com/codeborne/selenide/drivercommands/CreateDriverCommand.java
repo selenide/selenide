@@ -5,12 +5,13 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.impl.FileNamer;
 import com.codeborne.selenide.impl.Plugins;
-import com.codeborne.selenide.proxy.SelenideProxyServerFactory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import com.codeborne.selenide.proxy.SelenideProxyServerFactory;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.ShutdownHooks;
+import org.openqa.selenium.net.HostIdentifier;
 import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -52,8 +53,10 @@ public class CreateDriverCommand {
         ", and cannot create a new webdriver because reopenBrowserOnFail=false");
     }
 
-    SelenideProxyServer selenideProxyServer = null;
+    log.debug("Creating webdriver in thread {} (ip: {}, host: {})...",
+      currentThread().getId(), HostIdentifier.getHostName(), HostIdentifier.getHostAddress());
 
+    SelenideProxyServer selenideProxyServer = null;
     Proxy browserProxy = userProvidedProxy;
 
     if (config.proxyEnabled()) {
@@ -74,7 +77,7 @@ public class CreateDriverCommand {
 
     WebDriver webdriver = factory.createWebDriver(config, browserProxy, browserDownloadsFolder);
 
-    log.info("Create webdriver in current thread {}: {} -> {}",
+    log.info("Created webdriver in thread {}: {} -> {}",
       currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
 
     WebDriver webDriver = addListeners(webdriver, eventListeners, listeners);
