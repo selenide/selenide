@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.CiReportUrl;
-import com.codeborne.selenide.impl.PropertiesUtils;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -11,7 +10,8 @@ import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.SelectorMode.CSS;
 
 public class SelenideConfig implements Config {
-  
+  private final PropertiesReader properties = new PropertiesReader("selenide.properties");
+
   private String browser = getProperty("selenide.browser", CHROME);
   private boolean headless = Boolean.parseBoolean(getProperty("selenide.headless", "false"));
   private String remote = getProperty("selenide.remote", null);
@@ -346,7 +346,6 @@ public class SelenideConfig implements Config {
   }
 
   private String getProperty(String key, String defaultValue) {
-    return PropertiesUtils.loadSelenideProperties().getProperty(key, defaultValue);
+    return properties.getProperty(key, defaultValue);
   }
-
 }
