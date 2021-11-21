@@ -340,7 +340,7 @@ public class SelenideConfig implements Config {
     return browserCapabilities;
   }
 
-  public SelenideConfig browserCapabilities(DesiredCapabilities browserCapabilities) {
+  public SelenideConfig browserCapabilities(MutableCapabilities browserCapabilities) {
     this.browserCapabilities = browserCapabilities;
     return this;
   }
