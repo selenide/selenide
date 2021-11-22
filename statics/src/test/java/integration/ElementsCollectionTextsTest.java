@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.ex.TextsMismatch;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

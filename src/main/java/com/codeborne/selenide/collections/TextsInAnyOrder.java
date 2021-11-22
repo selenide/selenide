@@ -1,14 +1,12 @@
 package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.impl.Html;
-
 import org.openqa.selenium.WebElement;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ParametersAreNonnullByDefault
 public class TextsInAnyOrder extends ExactTexts {

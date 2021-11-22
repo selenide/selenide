@@ -2,7 +2,6 @@ package com.codeborne.selenide.proxy;
 
 import com.codeborne.selenide.Config;
 import org.openqa.selenium.Proxy;
-import org.openqa.selenium.WebDriver;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;

@@ -3,8 +3,8 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.TimeoutException;
-import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.files.DownloadedFile;
+import com.codeborne.selenide.files.FileFilter;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -131,13 +131,13 @@ public class DownloadFileWithHttpRequest {
 
   protected void configureHttpGet(HttpGet httpGet, long timeout) {
     httpGet.setConfig(RequestConfig.custom()
-        .setConnectTimeout(timeout, MILLISECONDS)
-        .setConnectionRequestTimeout(timeout, MILLISECONDS)
-        .setResponseTimeout(timeout, MILLISECONDS)
-        .setRedirectsEnabled(true)
-        .setCircularRedirectsAllowed(true)
-        .setMaxRedirects(20)
-        .build()
+      .setConnectTimeout(timeout, MILLISECONDS)
+      .setConnectionRequestTimeout(timeout, MILLISECONDS)
+      .setResponseTimeout(timeout, MILLISECONDS)
+      .setRedirectsEnabled(true)
+      .setCircularRedirectsAllowed(true)
+      .setMaxRedirects(20)
+      .build()
     );
   }
 
@@ -156,9 +156,9 @@ public class DownloadFileWithHttpRequest {
   }
 
   /**
-   configure HttpClient to ignore self-signed certs
-   as described here: http://literatejava.com/networks/ignore-ssl-certificate-errors-apache-httpclient-4-4/
-  */
+   * configure HttpClient to ignore self-signed certs
+   * as described here: http://literatejava.com/networks/ignore-ssl-certificate-errors-apache-httpclient-4-4/
+   */
   @CheckReturnValue
   @Nonnull
   protected CloseableHttpClient createTrustingHttpClient() throws IOException {
@@ -170,9 +170,9 @@ public class DownloadFileWithHttpRequest {
 
       SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
       Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
-          .register("http", PlainConnectionSocketFactory.getSocketFactory())
-          .register("https", sslSocketFactory)
-          .build();
+        .register("http", PlainConnectionSocketFactory.getSocketFactory())
+        .register("https", sslSocketFactory)
+        .build();
 
       PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
       builder.setConnectionManager(connMgr);

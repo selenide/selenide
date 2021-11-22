@@ -2,7 +2,7 @@ package integration;
 
 import org.assertj.core.util.Sets;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Set;
 

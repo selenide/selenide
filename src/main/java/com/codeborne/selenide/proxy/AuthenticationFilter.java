@@ -1,13 +1,13 @@
 package com.codeborne.selenide.proxy;
 
+import com.browserup.bup.filters.RequestFilter;
+import com.browserup.bup.util.HttpMessageContents;
+import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Credentials;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
-import com.browserup.bup.filters.RequestFilter;
-import com.browserup.bup.util.HttpMessageContents;
-import com.browserup.bup.util.HttpMessageInfo;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;

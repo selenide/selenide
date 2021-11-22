@@ -19,6 +19,8 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.mock;
 
 final class AndTest {
+  private final Driver driver = mock(Driver.class);
+  private final WebElement element = mock(WebElement.class);
 
   @Test
   void ctorOfEmptyConditionsListThrowsException() {
@@ -51,28 +53,28 @@ final class AndTest {
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(true)
-      )).check(mock(Driver.class), mock(WebElement.class)).verdict
+      )).check(driver, element).verdict
     ).isEqualTo(ACCEPT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(false)
-      )).check(mock(Driver.class), mock(WebElement.class)).verdict
+      )).check(driver, element).verdict
     ).isEqualTo(REJECT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(true)
-      )).check(mock(Driver.class), mock(WebElement.class)).verdict
+      )).check(driver, element).verdict
     ).isEqualTo(REJECT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(false)
-      )).check(mock(Driver.class), mock(WebElement.class)).verdict
+      )).check(driver, element).verdict
     ).isEqualTo(REJECT);
   }
 
@@ -82,28 +84,28 @@ final class AndTest {
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(true)
-      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict
+      )).negate().check(driver, element).verdict
     ).isEqualTo(REJECT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(false)
-      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict
+      )).negate().check(driver, element).verdict
     ).isEqualTo(ACCEPT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(true)
-      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict
+      )).negate().check(driver, element).verdict
     ).isEqualTo(ACCEPT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(false)
-      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict
+      )).negate().check(driver, element).verdict
     ).isEqualTo(ACCEPT);
   }
 
