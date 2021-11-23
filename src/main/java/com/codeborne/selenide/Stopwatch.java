@@ -1,44 +1,32 @@
 package com.codeborne.selenide;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.lang.System.nanoTime;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 @ParametersAreNonnullByDefault
 public class Stopwatch {
-  private final Logger log;
   private final long startTimeNano;
   private final long timeoutNano;
 
   public Stopwatch(long timeoutMs) {
-    this(timeoutMs, LoggerFactory.getLogger(Stopwatch.class));
+    this(timeoutMs, nanoTime());
   }
 
-  Stopwatch(long timeoutMs, Logger log) {
-    startTimeNano = nanoTime();
+  Stopwatch(long timeoutMs, long startTimeNano) {
+    this.startTimeNano = startTimeNano;
     timeoutNano = MILLISECONDS.toNanos(timeoutMs);
-    this.log = log;
   }
 
   @CheckReturnValue
   public boolean isTimeoutReached() {
-    long now = nanoTime();
-    long elapsed = now - startTimeNano;
-    boolean reached = elapsed > timeoutNano;
-    if (log.isDebugEnabled()) {
-      log.debug("started: {}, now: {}, elapsed: {} ({} ms), timeout: {} ms -> timeout reached: {}",
-        startTimeNano, now, elapsed,
-        NANOSECONDS.toMillis(elapsed),
-        NANOSECONDS.toMillis(timeoutNano),
-        reached);
-    }
-    return reached;
+    return isTimeoutReached(nanoTime());
+  }
+
+  boolean isTimeoutReached(long now) {
+    return now - startTimeNano > timeoutNano;
   }
 
   public void sleep(long milliseconds) {
