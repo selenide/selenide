@@ -1,7 +1,12 @@
 # Changelog
 
-## 6.1.0 (planned to 2x.11.2021)
+## 6.1.0 (released 23.11.2021)
+* #1601 add selenide.properties support  --  thanks to Petro Ovcharenko for PR #1601 and #1495
 * #1561 Make it easy to configure proxy before it's started  --  thanks Boris Osipov for PR #1620
+* add workaround for NoClassDefFoundError in WebDriverException, see commit https://github.com/selenide/selenide/commit/2eff0307e3a
+* #1637 now method SelenideConfig.browserCapabilities() accepts MutableCapabilities instead of DesiredCapabilities
+* #1638 upgrade to Selenium 4.1.0  --  thanks to Boris Osipov for PR #1638
+* #1640 remove method $.shadowRoot()  --  see PR #1641
 
 ## 6.0.3 (released 27.10.2021)
 * Add workaround for Maven users to avoid occasional using Selenium 3 transitive dependencies 
