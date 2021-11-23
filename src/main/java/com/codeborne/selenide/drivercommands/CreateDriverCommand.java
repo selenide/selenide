@@ -10,7 +10,6 @@ import com.codeborne.selenide.proxy.SelenideProxyServerFactory;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.internal.ShutdownHooks;
 import org.openqa.selenium.net.HostIdentifier;
 import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
@@ -81,7 +80,7 @@ public class CreateDriverCommand {
       currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
 
     WebDriver webDriver = addListeners(webdriver, eventListeners, listeners);
-    ShutdownHooks.add(
+    Runtime.getRuntime().addShutdownHook(
       new Thread(new SelenideDriverFinalCleanupThread(config, webDriver, selenideProxyServer))
     );
     if (browserDownloadsFolder != null) {
