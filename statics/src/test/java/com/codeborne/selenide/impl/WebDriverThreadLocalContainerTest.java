@@ -6,8 +6,8 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -110,7 +110,7 @@ final class WebDriverThreadLocalContainerTest {
     @Override
     @CheckReturnValue
     @Nonnull
-    public WebDriver createDriver(@Nonnull DesiredCapabilities desiredCapabilities) {
+    public WebDriver createDriver(@Nonnull Capabilities desiredCapabilities) {
       WebDriver webdriver = mock(WebDriver.class);
       WebDriver.Options options = mock(WebDriver.Options.class);
       when(webdriver.manage()).thenReturn(options);

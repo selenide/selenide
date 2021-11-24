@@ -7,10 +7,10 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -50,7 +50,7 @@ final class CustomWebDriverProviderTest extends IntegrationTest {
     @Override
     @CheckReturnValue
     @Nonnull
-    public WebDriver createDriver(@Nonnull DesiredCapabilities desiredCapabilities) {
+    public WebDriver createDriver(@Nonnull Capabilities capabilities) {
       WebDriverManager.chromedriver().setup();
       ChromeOptions options = new ChromeOptions();
       if (browser().isHeadless()) options.setHeadless(true);
