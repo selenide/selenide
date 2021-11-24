@@ -2,6 +2,7 @@ package com.codeborne.selenide.appium.commands;
 
 import com.codeborne.selenide.commands.Click;
 import com.codeborne.selenide.impl.WebElementSource;
+import io.appium.java_client.MobileDriver;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -14,6 +15,11 @@ public class AppiumClick extends Click {
   @Nonnull
   @CheckReturnValue
   protected WebElement findElement(WebElementSource locator) {
-    return locator.getWebElement();
+    if (locator.driver().getWebDriver() instanceof MobileDriver) {
+      return locator.getWebElement();
+    }
+    else {
+      return super.findElement(locator);
+    }
   }
 }

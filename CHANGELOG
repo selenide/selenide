@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.7.3 (released 23.11.2021)
+* #60 make $.dragAndDrop() and $.click() work in both mobile and web
+
 === 1.7.2 (released 28.10.2021)
 * upgrade to Appium 7.6.0
 * #58 fix "UnsupportedCommandException: Unhandled endpoint: /css/opacity"
