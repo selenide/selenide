@@ -1,8 +1,8 @@
 buildscript {
   ext.versions = [
-      selenide: '6.0.1',
+      selenide: '6.1.1',
       browserupproxy: '2.1.2',
-      netty: '4.1.69.Final',
+      netty: '4.1.70.Final',
       junit: '5.8.1',
       assertj: '3.21.0',
       slf4j: '1.7.32'
@@ -11,7 +11,7 @@ buildscript {
 
 dependencies {
   api("com.codeborne:selenide:${versions.selenide}")
-  implementation('org.apache.httpcomponents.client5:httpclient5:5.1') {
+  implementation('org.apache.httpcomponents.client5:httpclient5:5.1.2') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
   }
   implementation("commons-io:commons-io:2.11.0")
