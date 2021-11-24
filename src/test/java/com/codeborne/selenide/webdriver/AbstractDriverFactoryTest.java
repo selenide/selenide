@@ -1,8 +1,14 @@
 package com.codeborne.selenide.webdriver;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
+import java.util.Map;
+
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.spy;
 
 final class AbstractDriverFactoryTest {
@@ -33,5 +39,40 @@ final class AbstractDriverFactoryTest {
     assertThat(factory.convertStringToNearestObjectType("Hottabych 2 false"))
       .as("any other value")
       .isEqualTo("Hottabych 2 false");
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  void merge() {
+    ChromeOptions base = new ChromeOptions();
+    base.addArguments("--start-maximized");
+    base.setBinary("chrome.exe");
+    base.setCapability("hello", "World");
+    base.setCapability("goodbye", "World");
+
+    ChromeOptions extra = new ChromeOptions();
+    extra.addArguments("--start-incognito");
+    extra.setBinary("chrome.dll");
+    extra.setCapability("hello", "God");
+
+    ChromeOptions options = factory.merge(base, extra);
+    assertThat(options.getBrowserName()).isEqualTo("chrome");
+    assertThat(options.getCapability("goodbye")).isEqualTo("World");
+    assertThat(options.getCapability("hello")).as("extra options should override base options").isEqualTo("God");
+
+    Map<String, Object> opts = (Map<String, Object>) options.getCapability("goog:chromeOptions");
+    assertThat(opts).as("extra capabilities should override base capabilities").containsEntry("binary", "chrome.dll");
+    assertThat(opts).as("base and extra arguments should be merged together")
+      .containsEntry("args", asList("--start-maximized", "--start-incognito"));
+  }
+
+  @Test
+  void cannotMergeDifferentBrowsers() {
+    ChromeOptions base = new ChromeOptions();
+    FirefoxOptions extra = new FirefoxOptions();
+
+    assertThatThrownBy(() -> factory.merge(base, extra))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Conflicting browser name: 'chrome' vs. 'firefox'");
   }
 }

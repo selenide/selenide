@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.impl.FileNamer;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.service.DriverService;
@@ -59,7 +60,6 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     return createCommonCapabilities(new MutableCapabilities(), config, browser, proxy);
   }
 
-  @SuppressWarnings("unchecked")
   @CheckReturnValue
   @Nonnull
   protected <T extends MutableCapabilities> T createCommonCapabilities(T capabilities, Config config, Browser browser, @Nullable Proxy proxy) {
@@ -80,7 +80,27 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     capabilities.setCapability(SUPPORTS_ALERTS, true);
 
     transferCapabilitiesFromSystemProperties(capabilities);
-    return (T) capabilities.merge(config.browserCapabilities());
+
+    return merge(capabilities, config.browserCapabilities());
+  }
+
+  @SuppressWarnings("unchecked")
+  @CheckReturnValue
+  @Nonnull
+  protected <T extends MutableCapabilities> T merge(T capabilities, MutableCapabilities additionalCapabilities) {
+    verifyItsSameBrowser(capabilities, additionalCapabilities);
+    return (T) capabilities.merge(additionalCapabilities);
+  }
+
+  private void verifyItsSameBrowser(Capabilities base, Capabilities extra) {
+    if (areDifferent(base.getBrowserName(), extra.getBrowserName())) {
+      throw new IllegalArgumentException(String.format("Conflicting browser name: '%s' vs. '%s'",
+        base.getBrowserName(), extra.getBrowserName()));
+    }
+  }
+
+  private boolean areDifferent(String text1, String text2) {
+    return !text1.isEmpty() && !text2.isEmpty() && !text1.equals(text2);
   }
 
   protected void transferCapabilitiesFromSystemProperties(MutableCapabilities currentBrowserCapabilities) {
