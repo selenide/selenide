@@ -22,7 +22,7 @@ final class SelenideLogTest {
     step.setStatus(PASS);
 
     assertThat(step.getStatus()).isEqualTo(PASS);
-    assertThat(step.getDuration()).isBetween(15L, 100L);
+    assertThat(step.getDuration()).isBetween(15L, 999L);
   }
 
   @Test
