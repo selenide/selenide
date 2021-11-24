@@ -4,9 +4,9 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -42,7 +42,7 @@ final class CustomWebdriverProviderWithRemoteBrowser extends AbstractGridTest {
     @Override
     @CheckReturnValue
     @Nonnull
-    public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
+    public WebDriver createDriver(@Nonnull Capabilities desiredCapabilities) {
       ChromeOptions options = new ChromeOptions();
       options.setHeadless(Configuration.headless);
       addSslErrorIgnoreCapabilities(options);

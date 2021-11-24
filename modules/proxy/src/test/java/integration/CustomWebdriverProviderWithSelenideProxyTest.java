@@ -8,12 +8,12 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -53,13 +53,13 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends ProxyIntegratio
     @Override
     @CheckReturnValue
     @Nonnull
-    public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
+    public WebDriver createDriver(@Nonnull Capabilities desiredCapabilities) {
       if (browser().isChrome()) return chrome(desiredCapabilities);
       if (browser().isFirefox()) return firefox(desiredCapabilities);
       throw new IllegalStateException("Unsupported browser: " + browser().name);
     }
 
-    private ChromeDriver chrome(DesiredCapabilities desiredCapabilities) {
+    private ChromeDriver chrome(@Nonnull Capabilities desiredCapabilities) {
       WebDriverManager.chromedriver().setup();
 
       ChromeOptions options = new ChromeOptions();
@@ -68,7 +68,7 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends ProxyIntegratio
       return new ChromeDriver(options.merge(desiredCapabilities));
     }
 
-    private FirefoxDriver firefox(DesiredCapabilities desiredCapabilities) {
+    private FirefoxDriver firefox(@Nonnull Capabilities desiredCapabilities) {
       WebDriverManager.firefoxdriver().setup();
 
       FirefoxOptions options = new FirefoxOptions();

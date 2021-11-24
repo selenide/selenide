@@ -1,7 +1,7 @@
 package com.codeborne.selenide;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -36,5 +36,5 @@ public interface WebDriverProvider {
    */
   @CheckReturnValue
   @Nonnull
-  WebDriver createDriver(DesiredCapabilities desiredCapabilities);
+  WebDriver createDriver(@Nonnull Capabilities desiredCapabilities);
 }

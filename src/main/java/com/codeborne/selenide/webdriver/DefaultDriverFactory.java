@@ -7,7 +7,6 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -38,7 +37,7 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
 
     if (WebDriverProvider.class.isAssignableFrom(clazz)) {
       Capabilities capabilities = createCapabilities(config, browser, proxy, browserDownloadsFolder);
-      return createInstanceOf(WebDriverProvider.class, clazz).createDriver(new DesiredCapabilities(capabilities));
+      return createInstanceOf(WebDriverProvider.class, clazz).createDriver(capabilities);
     }
     else if (DriverFactory.class.isAssignableFrom(clazz)) {
       DriverFactory factory = createInstanceOf(DriverFactory.class, clazz);

@@ -121,7 +121,7 @@ public class Configuration {
    * Browser capabilities.
    * Warning: this capabilities will override capabilities were set by system properties.
    * <br>
-   * Default value: DesiredCapabilities::new
+   * Default value: new MutableCapabilities()
    */
   public static MutableCapabilities browserCapabilities = defaults.browserCapabilities();
 
