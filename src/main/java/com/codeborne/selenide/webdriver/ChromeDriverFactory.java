@@ -53,7 +53,7 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
   @Nonnull
   public MutableCapabilities createCapabilities(Config config, Browser browser,
                                                 @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
-    Capabilities commonCapabilities = createCommonCapabilities(config, browser, proxy);
+    ChromeOptions commonCapabilities = createCommonCapabilities(new ChromeOptions(), config, browser, proxy);
 
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());

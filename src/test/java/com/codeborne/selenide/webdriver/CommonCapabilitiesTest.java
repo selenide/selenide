@@ -9,7 +9,8 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.ie.InternetExplorerOptions;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -44,7 +45,7 @@ final class CommonCapabilitiesTest {
   void transferCapabilitiesFromConfigurationInternetExplorer() {
     SelenideConfig config = new SelenideConfig();
     config.browser(INTERNET_EXPLORER);
-    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
+    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(new InternetExplorerOptions(), config, browser(config), proxy);
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isFalse();
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_SSL_CERTS))).isTrue();
   }
@@ -53,7 +54,7 @@ final class CommonCapabilitiesTest {
   void transferCapabilitiesFromConfigurationIE() {
     SelenideConfig config = new SelenideConfig();
     config.browser(IE);
-    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
+    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(new InternetExplorerOptions(), config, browser(config), proxy);
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isFalse();
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_SSL_CERTS))).isTrue();
   }
@@ -62,8 +63,8 @@ final class CommonCapabilitiesTest {
   void transferCapabilitiesFromConfigurationEdge() {
     SelenideConfig config = new SelenideConfig();
     config.browser(EDGE);
-    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
-    assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isFalse();
+    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(new EdgeOptions(), config, browser(config), proxy);
+    assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isTrue();
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_SSL_CERTS))).isTrue();
   }
 
@@ -71,7 +72,8 @@ final class CommonCapabilitiesTest {
     if (raw != null) {
       if (raw instanceof String) {
         return Boolean.parseBoolean((String) raw);
-      } else if (raw instanceof Boolean) {
+      }
+      else if (raw instanceof Boolean) {
         return (Boolean) raw;
       }
     }
@@ -93,13 +95,13 @@ final class CommonCapabilitiesTest {
     @Nonnull
     public MutableCapabilities createCapabilities(Config config, Browser browser,
                                                   @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
-      return new DesiredCapabilities();
+      return new MutableCapabilities();
     }
 
     @Override
     @CheckReturnValue
     @Nonnull
-    public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+    public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
       return new DummyWebDriver();
     }
   }

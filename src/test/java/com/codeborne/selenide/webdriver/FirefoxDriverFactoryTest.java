@@ -3,13 +3,11 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -63,12 +61,12 @@ final class FirefoxDriverFactoryTest {
     assertThat(driverFactory.createCommonCapabilities(config, browser, proxy).getCapability("some.cap")).isEqualTo(25);
   }
 
-  @Test @Disabled
+  @Test
   void keepConfigurationFirefoxProfileWhenTransferPreferencesFromSystemPropsToDriver() {
     FirefoxProfile configurationProfile = new FirefoxProfile();
     configurationProfile.setPreference("some.conf.cap", 42);
     FirefoxOptions firefoxOptions = new FirefoxOptions().setProfile(configurationProfile);
-    config.browserCapabilities(new DesiredCapabilities(firefoxOptions));
+    config.browserCapabilities(firefoxOptions);
     givenSystemProperty("firefoxprofile.some.cap", "25");
 
     FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder).getProfile();
@@ -164,16 +162,16 @@ final class FirefoxDriverFactoryTest {
     assertThat(prefs.get("browser.download.folderList")).isEqualTo(2);
   }
 
-  @Test @Disabled("broken in Selenium 4, investigation needed")
+  @Test
   public void injectPrefs() {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.addPreference("general.useragent.override", "my agent");
     firefoxOptions.addPreference("boolean pref", true);
     firefoxOptions.addPreference("int pref", 10);
-    config.browserCapabilities(new DesiredCapabilities(firefoxOptions));
+    config.browserCapabilities(firefoxOptions);
 
     Map<String, Object> options = driverFactory.createCapabilities(config, browser, proxy, null).asMap();
-    assertThat(options.get("moz:firefoxOptions") != null);
+    assertThat(options.get("moz:firefoxOptions")).isNotNull();
 
     Map<String, Object> prefs = (Map<String, Object>) ((Map<String, Object>) options.get("moz:firefoxOptions")).get("prefs");
     assertThat(prefs.get("general.useragent.override")).isEqualTo("my agent");

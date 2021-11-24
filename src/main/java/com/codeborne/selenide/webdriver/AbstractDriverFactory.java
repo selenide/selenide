@@ -5,7 +5,6 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.impl.FileNamer;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.service.DriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +22,11 @@ import static java.lang.Integer.parseInt;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
+import static org.openqa.selenium.remote.CapabilityType.BROWSER_VERSION;
 import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 import static org.openqa.selenium.remote.CapabilityType.PROXY;
 import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_ALERTS;
+import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_JAVASCRIPT;
 import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
 
 @ParametersAreNonnullByDefault
@@ -55,12 +56,18 @@ public abstract class AbstractDriverFactory implements DriverFactory {
   @CheckReturnValue
   @Nonnull
   protected MutableCapabilities createCommonCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
-    DesiredCapabilities capabilities = new DesiredCapabilities();
+    return createCommonCapabilities(new MutableCapabilities(), config, browser, proxy);
+  }
+
+  @SuppressWarnings("unchecked")
+  @CheckReturnValue
+  @Nonnull
+  protected <T extends MutableCapabilities> T createCommonCapabilities(T capabilities, Config config, Browser browser, @Nullable Proxy proxy) {
     if (proxy != null) {
       capabilities.setCapability(PROXY, proxy);
     }
     if (config.browserVersion() != null && !config.browserVersion().isEmpty()) {
-      capabilities.setVersion(config.browserVersion());
+      capabilities.setCapability(BROWSER_VERSION, config.browserVersion());
     }
     capabilities.setCapability(PAGE_LOAD_STRATEGY, config.pageLoadStrategy());
     capabilities.setCapability(ACCEPT_SSL_CERTS, true);
@@ -68,15 +75,15 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     if (browser.supportsInsecureCerts()) {
       capabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
     }
-    capabilities.setJavascriptEnabled(true);
+    capabilities.setCapability(SUPPORTS_JAVASCRIPT, true);
     capabilities.setCapability(TAKES_SCREENSHOT, true);
     capabilities.setCapability(SUPPORTS_ALERTS, true);
 
     transferCapabilitiesFromSystemProperties(capabilities);
-    return capabilities.merge(config.browserCapabilities());
+    return (T) capabilities.merge(config.browserCapabilities());
   }
 
-  protected void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {
+  protected void transferCapabilitiesFromSystemProperties(MutableCapabilities currentBrowserCapabilities) {
     String prefix = "capabilities.";
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {

@@ -24,15 +24,11 @@ import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 @ParametersAreNonnullByDefault
 public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(EdgeDriverFactory.class);
-  private static final int FIRST_VERSION_BASED_ON_CHROMIUM = 75;
-  private static String browserVersion = null;
 
   @Override
   public void setupWebdriverBinary() {
     if (isSystemPropertyNotSet("webdriver.edge.driver")) {
-      WebDriverManager manager = WebDriverManager.edgedriver();
-      manager.setup();
-      browserVersion = manager.getDownloadedDriverVersion();
+      WebDriverManager.edgedriver().setup();
     }
   }
 
@@ -54,10 +50,8 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
   @Nonnull
   public EdgeOptions createCapabilities(Config config, Browser browser,
                                         @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
-    MutableCapabilities capabilities = createCommonCapabilities(config, browser, proxy);
-    if (isChromiumBased()) {
-      capabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
-    }
+    MutableCapabilities capabilities = createCommonCapabilities(new EdgeOptions(), config, browser, proxy);
+    capabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
 
     EdgeOptions options = new EdgeOptions().merge(capabilities);
     options.setHeadless(config.headless());
@@ -67,10 +61,8 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
       log.warn("Changing browser binary not supported in Edge, setting will be ignored.");
     }
 
-    if (isChromiumBased()) {
-      options.addArguments(createEdgeArguments(config));
-      options.setExperimentalOption("prefs", prefs(browserDownloadsFolder, System.getProperty("edgeoptions.prefs", "")));
-    }
+    options.addArguments(createEdgeArguments(config));
+    options.setExperimentalOption("prefs", prefs(browserDownloadsFolder, System.getProperty("edgeoptions.prefs", "")));
     return options;
   }
 
@@ -78,10 +70,5 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
   @Nonnull
   protected List<String> createEdgeArguments(Config config) {
     return createChromiumArguments(config, System.getProperty("edgeoptions.args"));
-  }
-
-  @CheckReturnValue
-  private boolean isChromiumBased() {
-    return browserVersion == null || majorVersion(browserVersion) >= FIRST_VERSION_BASED_ON_CHROMIUM;
   }
 }

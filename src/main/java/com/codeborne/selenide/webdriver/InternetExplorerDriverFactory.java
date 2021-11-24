@@ -41,7 +41,7 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   @Nonnull
   public InternetExplorerOptions createCapabilities(Config config, Browser browser,
                                                     @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
-    Capabilities capabilities = createCommonCapabilities(config, browser, proxy);
+    Capabilities capabilities = createCommonCapabilities(new InternetExplorerOptions(), config, browser, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
     if (!config.browserBinary().isEmpty()) {
       log.info("Using browser binary: {}", config.browserBinary());
