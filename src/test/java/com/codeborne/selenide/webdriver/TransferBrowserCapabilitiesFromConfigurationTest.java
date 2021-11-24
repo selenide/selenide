@@ -6,8 +6,8 @@ import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -31,9 +31,9 @@ final class TransferBrowserCapabilitiesFromConfigurationTest {
 
   @Test
   void transferCapabilitiesFromConfiguration() {
-    DesiredCapabilities someCapabilities = new DesiredCapabilities();
+    MutableCapabilities someCapabilities = new MutableCapabilities();
     someCapabilities.setCapability(SOME_CAP, "SOME_VALUE");
-    DesiredCapabilities mergedCapabilities = someCapabilities.merge(((Config) config).browserCapabilities());
+    MutableCapabilities mergedCapabilities = someCapabilities.merge(((Config) config).browserCapabilities());
 
     assertThat(mergedCapabilities.getCapability(SOME_CAP))
       .isEqualTo("SOME_VALUE_FROM_CONFIGURATION");

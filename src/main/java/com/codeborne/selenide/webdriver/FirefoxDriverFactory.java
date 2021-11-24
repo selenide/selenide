@@ -56,12 +56,12 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   @Nonnull
   public FirefoxOptions createCapabilities(Config config, Browser browser,
                                            @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
-    final FirefoxOptions initialOptions = new FirefoxOptions();
+    FirefoxOptions initialOptions = new FirefoxOptions();
     initialOptions.setHeadless(config.headless());
     setupBrowserBinary(config, initialOptions);
     setupPreferences(initialOptions);
 
-    final FirefoxOptions options = initialOptions.merge(createCommonCapabilities(config, browser, proxy));
+    final FirefoxOptions options = initialOptions.merge(createCommonCapabilities(new FirefoxOptions(), config, browser, proxy));
 
     setupDownloadsFolder(options, browserDownloadsFolder);
 

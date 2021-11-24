@@ -46,7 +46,7 @@ public class SafariDriverFactory extends AbstractDriverFactory {
     if (!config.browserBinary().isEmpty()) {
       throw new InvalidArgumentException("browser binary path not supported in Safari. Reset browserBinary setting.");
     }
-    options.merge(createCommonCapabilities(config, browser, proxy));
+    options.merge(createCommonCapabilities(new SafariOptions(), config, browser, proxy));
     return options;
   }
 }

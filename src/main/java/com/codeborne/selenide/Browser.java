@@ -58,6 +58,6 @@ public class Browser {
 
   @CheckReturnValue
   public boolean supportsInsecureCerts() {
-    return !isIE() && !isEdge() && !isSafari();
+    return !isIE() && !isSafari();
   }
 }

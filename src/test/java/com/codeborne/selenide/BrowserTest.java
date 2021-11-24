@@ -24,12 +24,12 @@ final class BrowserTest {
     assertThat(new Browser(CHROME, false).supportsInsecureCerts()).isTrue();
     assertThat(new Browser(FIREFOX, false).supportsInsecureCerts()).isTrue();
     assertThat(new Browser(OPERA, false).supportsInsecureCerts()).isTrue();
+    assertThat(new Browser(EDGE, false).supportsInsecureCerts()).isTrue();
   }
 
   @Test
   void microsoftBrowsersDoNotSupportInsecureCerts() {
     assertThat(new Browser(IE, false).supportsInsecureCerts()).isFalse();
     assertThat(new Browser(INTERNET_EXPLORER, false).supportsInsecureCerts()).isFalse();
-    assertThat(new Browser(EDGE, false).supportsInsecureCerts()).isFalse();
   }
 }

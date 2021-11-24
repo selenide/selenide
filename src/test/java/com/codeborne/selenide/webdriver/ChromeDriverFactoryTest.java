@@ -67,7 +67,7 @@ final class ChromeDriverFactoryTest {
   void shouldNotExcludeExtensionsSwitch_ifChromeIsOpenedWithExtensions() {
     ChromeOptions options = new ChromeOptions();
     options.addExtensions(toFile("firebug-1.11.4.xpi"), toFile("firepath-0.9.7-fx.xpi"));
-    config.browserCapabilities(new DesiredCapabilities(options));
+    config.browserCapabilities(options);
 
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
 

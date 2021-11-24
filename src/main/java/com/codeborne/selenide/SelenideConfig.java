@@ -2,7 +2,6 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.CiReportUrl;
 import org.openqa.selenium.MutableCapabilities;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Browsers.CHROME;
@@ -23,7 +22,7 @@ public class SelenideConfig implements Config {
   private String browserBinary = getProperty("selenide.browserBinary", "");
   private String pageLoadStrategy = getProperty("selenide.pageLoadStrategy", "normal");
   private long pageLoadTimeout = Long.parseLong(getProperty("selenide.pageLoadTimeout", "30000"));
-  private MutableCapabilities browserCapabilities = new DesiredCapabilities();
+  private MutableCapabilities browserCapabilities = new MutableCapabilities();
 
   private String baseUrl = getProperty("selenide.baseUrl", "http://localhost:8080");
   private long timeout = Long.parseLong(getProperty("selenide.timeout", "4000"));
