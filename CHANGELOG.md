@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.1.1 (released 24.11.2021)
+* #1591, #1626, #1630, #1631 problems with merging webdriver capabilities after upgrading to Selenium 4  --  fixed in PR #1642
+
 ## 6.1.0 (released 23.11.2021)
 * #1601 add selenide.properties support  --  thanks to Petro Ovcharenko for PR #1601 and #1495
 * #1561 Make it easy to configure proxy before it's started  --  thanks Boris Osipov for PR #1620
