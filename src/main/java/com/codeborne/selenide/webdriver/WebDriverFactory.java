@@ -97,7 +97,7 @@ public class WebDriverFactory {
                                             @Nullable File browserDownloadsFolder) {
     DriverFactory webdriverFactory = findFactory(browser);
 
-    if (config.remote() != null) {
+    if (config.remote() != null && !config.remote().equals("")) {
       MutableCapabilities capabilities = webdriverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
       return remoteDriverFactory.create(config, capabilities);
     }
