@@ -117,7 +117,11 @@ class StaticConfig implements Config {
   }
 
   @Override
+  /**
+   *  Returns null, if remote parameter unset or empty string
+   */
   public String remote() {
+    if (Configuration.remote != null && Configuration.remote.trim().equals("")) return null;
     return Configuration.remote;
   }
 
