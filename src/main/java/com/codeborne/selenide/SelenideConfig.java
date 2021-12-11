@@ -1,12 +1,12 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.CiReportUrl;
-import org.openqa.selenium.MutableCapabilities;
-
 import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.SelectorMode.CSS;
+
+import com.codeborne.selenide.impl.CiReportUrl;
+import org.openqa.selenium.MutableCapabilities;
 
 public class SelenideConfig implements Config {
   private final PropertiesReader properties = new PropertiesReader("selenide.properties");
@@ -19,7 +19,7 @@ public class SelenideConfig implements Config {
   private String browserPosition = getProperty("selenide.browserPosition", null);
   private boolean driverManagerEnabled = Boolean.parseBoolean(getProperty("selenide.driverManagerEnabled", "true"));
   private boolean webdriverLogsEnabled = Boolean.parseBoolean(getProperty("selenide.webdriverLogsEnabled", "false"));
-  private String browserBinary = getProperty("selenide.browserBinary", "");
+  private String browserBinary = getProperty("selenide.browserBinary", null);
   private String pageLoadStrategy = getProperty("selenide.pageLoadStrategy", "normal");
   private long pageLoadTimeout = Long.parseLong(getProperty("selenide.pageLoadTimeout", "30000"));
   private MutableCapabilities browserCapabilities = new MutableCapabilities();
@@ -41,7 +41,7 @@ public class SelenideConfig implements Config {
   private AssertionMode assertionMode = AssertionMode.valueOf(getProperty("selenide.assertionMode", STRICT.name()));
   private FileDownloadMode fileDownload = FileDownloadMode.valueOf(getProperty("selenide.fileDownload", HTTPGET.name()));
   private boolean proxyEnabled = Boolean.parseBoolean(getProperty("selenide.proxyEnabled", "false"));
-  private String proxyHost = getProperty("selenide.proxyHost", "");
+  private String proxyHost = getProperty("selenide.proxyHost", null);
   private int proxyPort = Integer.parseInt(getProperty("selenide.proxyPort", "0"));
 
   @Override
@@ -345,6 +345,14 @@ public class SelenideConfig implements Config {
   }
 
   private String getProperty(String key, String defaultValue) {
-    return properties.getProperty(key, defaultValue);
+    String value = properties.getProperty(key, defaultValue);
+    return replaceEmptyStringWithNull(value, defaultValue);
+  }
+
+  private String replaceEmptyStringWithNull(String value, String defaultValue) {
+    if (value != null && value.trim().isEmpty() && defaultValue == null) {
+      value = null;
+    }
+    return value;
   }
 }

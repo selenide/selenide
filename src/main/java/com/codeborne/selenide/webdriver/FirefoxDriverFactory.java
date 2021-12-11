@@ -74,7 +74,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   }
 
   protected void setupBrowserBinary(Config config, FirefoxOptions firefoxOptions) {
-    if (!config.browserBinary().isEmpty()) {
+    if (config.browserBinary() != null) {
       log.info("Using browser binary: {}", config.browserBinary());
       firefoxOptions.setBinary(config.browserBinary());
     }

@@ -56,7 +56,7 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
     EdgeOptions options = new EdgeOptions().merge(capabilities);
     options.setHeadless(config.headless());
 
-    if (!config.browserBinary().isEmpty()) {
+    if (config.browserBinary() == null) {
       log.info("Using browser binary: {}", config.browserBinary());
       log.warn("Changing browser binary not supported in Edge, setting will be ignored.");
     }
