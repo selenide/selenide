@@ -27,6 +27,12 @@ final class SelenideConfigTest {
     assertThat(new SelenideConfig().reportsUrl()).isEqualTo("http://ci.org/repository/download/my-build/1:id/");
   }
 
+  @Test
+  void replaceEmptyStringWithNullForPropertiesWithDefaultNullValue() {
+    System.setProperty("selenide.remote", "");
+    assertThat(new SelenideConfig().remote()).isNull();
+  }
+
   @BeforeEach
   @AfterEach
   void setUp() {
@@ -35,5 +41,6 @@ final class SelenideConfigTest {
     System.setProperty("teamcity.serverUrl", "");
     System.setProperty("teamcity.buildType.id", "");
     System.setProperty("build.number", "");
+    System.setProperty("selenide.remote", "");
   }
 }

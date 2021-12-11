@@ -56,7 +56,7 @@ public class OperaDriverFactory extends AbstractDriverFactory {
     if (config.headless()) {
       throw new InvalidArgumentException("headless browser not supported in Opera. Set headless property to false.");
     }
-    if (!config.browserBinary().isEmpty()) {
+    if (config.browserBinary() != null) {
       log.info("Using browser binary: {}", config.browserBinary());
       operaOptions.setBinary(config.browserBinary());
     }

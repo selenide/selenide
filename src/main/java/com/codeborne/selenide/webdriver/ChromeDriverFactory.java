@@ -57,7 +57,7 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
 
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
-    if (!config.browserBinary().isEmpty()) {
+    if (config.browserBinary() != null) {
       log.info("Using browser binary: {}", config.browserBinary());
       options.setBinary(config.browserBinary());
     }

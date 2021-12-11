@@ -43,7 +43,7 @@ public class SafariDriverFactory extends AbstractDriverFactory {
     if (config.headless()) {
       throw new InvalidArgumentException("headless browser not supported in Safari. Set headless property to false.");
     }
-    if (!config.browserBinary().isEmpty()) {
+    if (config.browserBinary() == null) {
       throw new InvalidArgumentException("browser binary path not supported in Safari. Reset browserBinary setting.");
     }
     options.merge(createCommonCapabilities(new SafariOptions(), config, browser, proxy));
