@@ -2,6 +2,8 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.ElementDescriber;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnsupportedCommandException;
@@ -14,8 +16,14 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
+
+import static java.util.Arrays.asList;
+import static java.util.regex.Pattern.DOTALL;
+import static java.util.regex.Pattern.compile;
 
 /**
  * Appium-specific element describer.
@@ -30,6 +38,7 @@ import java.util.function.Supplier;
 @ParametersAreNonnullByDefault
 public class AppiumElementDescriber implements ElementDescriber {
   private static final Logger logger = LoggerFactory.getLogger(AppiumElementDescriber.class);
+  private static final Pattern RE_IOS_UNSUPPORTED_ATTRIBUTE = compile(".*The attribute '\\w+' is unknown.*", DOTALL);
 
   @Nonnull
   @Override
@@ -40,17 +49,37 @@ public class AppiumElementDescriber implements ElementDescriber {
 
     return new Builder(element)
       .appendTagName()
-      .appendAttribute("resource-id")
-      .appendAttribute("checked")
-      .appendAttribute("content-desc")
-      .appendAttribute("enabled")
-      .appendAttribute("focused")
-      .appendAttribute("package")
-      .appendAttribute("name")
-      .appendAttribute("bounds")
-      .appendAttribute("displayed")
+      .appendAttributes(supportedAttributes(driver))
       .finish()
       .build();
+  }
+
+  protected List<String> supportedAttributes(Driver driver) {
+    if (driver.getWebDriver() instanceof AndroidDriver) {
+      return androidAttributes();
+    }
+    else if (driver.getWebDriver() instanceof IOSDriver) {
+      return iosAttributes();
+    }
+    else {
+      return genericAttributes();
+    }
+  }
+
+  protected List<String> androidAttributes() {
+    return asList(
+      "resource-id", "checked", "content-desc",
+      "enabled", "focused", "package",
+      "name", "className", "bounds", "displayed"
+    );
+  }
+
+  protected List<String> iosAttributes() {
+    return asList("enabled", "selected", "name", "type", "value", "visible");
+  }
+
+  protected List<String> genericAttributes() {
+    return asList("checked", "content-desc", "enabled", "name", "displayed");
   }
 
   @Nonnull
@@ -102,6 +131,11 @@ public class AppiumElementDescriber implements ElementDescriber {
       return this;
     }
 
+    private Builder appendAttributes(List<String> names) {
+      names.forEach(this::appendAttribute);
+      return this;
+    }
+
     private Builder appendAttribute(String name) {
       getAttribute(name, (value) -> {
         sb.append(" ").append(name).append("=\"").append(value).append("\"");
@@ -128,11 +162,13 @@ public class AppiumElementDescriber implements ElementDescriber {
         staleElementException = e;
         logger.debug("{}: {}", errorMessage.get(), e.toString());
       }
-      catch (UnsupportedCommandException e) {
-        logger.debug("{}: {}", errorMessage.get(), e.toString());
-      }
       catch (WebDriverException e) {
-        logger.info("{}: {}", errorMessage.get(), e.toString());
+        if (isUnsupportedAttributeError(e)) {
+          logger.debug("{}: {}", errorMessage.get(), e.toString());
+        }
+        else {
+          logger.info("{}: {}", errorMessage.get(), e.toString());
+        }
       }
       catch (RuntimeException e) {
         logger.warn("{}", errorMessage.get(), e);
@@ -170,5 +206,10 @@ public class AppiumElementDescriber implements ElementDescriber {
     private String build() {
       return sb.toString();
     }
+  }
+
+  static boolean isUnsupportedAttributeError(WebDriverException e) {
+    return e instanceof UnsupportedCommandException
+      || RE_IOS_UNSUPPORTED_ATTRIBUTE.matcher(e.getMessage()).matches();
   }
 }

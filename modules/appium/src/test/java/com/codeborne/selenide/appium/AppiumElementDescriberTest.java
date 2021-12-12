@@ -1,11 +1,16 @@
 package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.appium.AppiumElementDescriber.isUnsupportedAttributeError;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
@@ -16,6 +21,11 @@ public class AppiumElementDescriberTest {
   private final AppiumElementDescriber describer = new AppiumElementDescriber();
   private final Driver driver = mock(Driver.class);
   private final WebElement element = mock(WebElement.class);
+
+  @BeforeEach
+  void setUp() {
+    when(driver.getWebDriver()).thenReturn(mock(AndroidDriver.class));
+  }
 
   @Test
   public void printsTagName_ifPresent() {
@@ -116,7 +126,7 @@ public class AppiumElementDescriberTest {
   }
 
   @Test
-  public void ignoresErrorsWhenGettingAnyOfAttributes() {
+  public void ignoresErrorsWhenGettingAnyOfAttributes_android() {
     when(element.getAttribute(anyString())).thenThrow(new WebDriverException("Not implemented"));
     doReturn("android.widget.TextView").when(element).getAttribute("class");
     doReturn("Hello, world").when(element).getAttribute("text");
@@ -128,5 +138,35 @@ public class AppiumElementDescriberTest {
         " resource-id=\"com.android.calculator2:id/result\"" +
         " package=\"com.android.calculator2\">" +
         "Hello, world</TextView>");
+  }
+
+  @Test
+  public void ignoresErrorsWhenGettingAnyOfAttributes_ios() {
+    when(driver.getWebDriver()).thenReturn(mock(IOSDriver.class));
+    when(element.getTagName()).thenReturn("XCUIElementTypeImage");
+    when(element.getAttribute(anyString())).thenThrow(new WebDriverException("Not implemented"));
+    doReturn("Hello, world").when(element).getAttribute("label");
+    doReturn("true").when(element).getAttribute("enabled");
+
+    assertThat(describer.fully(driver, element))
+      .isEqualTo("<XCUIElementTypeImage class=\"?\" enabled=\"true\">" +
+        "Hello, world</XCUIElementTypeImage>");
+  }
+
+  @Test
+  void isUnsupportedAttributeError_android() {
+    assertThat(isUnsupportedAttributeError(new UnsupportedCommandException())).isTrue();
+  }
+
+  @Test
+  void isUnsupportedAttributeError_ios() {
+    WebDriverException error = new WebDriverException("Original error: The attribute 'text' is unknown. Valid attribute names are:");
+    assertThat(isUnsupportedAttributeError(error)).isTrue();
+  }
+
+  @Test
+  void isUnsupportedAttributeError_otherErrors() {
+    assertThat(isUnsupportedAttributeError(new WebDriverException("Not implemented"))).isFalse();
+    assertThat(isUnsupportedAttributeError(new NoSuchElementException("nope"))).isFalse();
   }
 }
