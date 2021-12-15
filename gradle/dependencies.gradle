@@ -6,7 +6,7 @@ ext {
   assertjVersion = '3.21.0'
   mockitoVersion = '4.1.0'
   browserupProxyVersion = '2.1.2'
-  littleProxyVersion = '2.0.5'
+  littleProxyVersion = '2.0.6'
   commonsFileuploadVersion = '1.4'
 }
 
