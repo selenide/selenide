@@ -1,5 +1,5 @@
 ext {
-  seleniumVersion = '4.1.0'
+  seleniumVersion = '4.1.1'
   junitVersion = '5.8.2'
   jettyVersion = '9.4.44.v20210927'
   nettyVersion = '4.1.72.Final'
