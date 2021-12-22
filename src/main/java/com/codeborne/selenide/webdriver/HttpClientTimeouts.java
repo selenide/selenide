@@ -4,9 +4,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.CommandExecutor;
 import org.openqa.selenium.remote.HttpCommandExecutor;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.TracedCommandExecutor;
 import org.openqa.selenium.remote.http.ClientConfig;
 import org.openqa.selenium.remote.http.HttpClient;
 import org.openqa.selenium.remote.http.netty.NettyClient;
+import org.openqa.selenium.remote.tracing.TracedHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +51,9 @@ class HttpClientTimeouts {
     if (executor instanceof HttpCommandExecutor) {
       setupTimeouts((HttpCommandExecutor) executor, connectTimeout, readTimeout);
     }
+    if (executor instanceof TracedCommandExecutor) {
+      setupTimeouts((TracedCommandExecutor) executor, connectTimeout, readTimeout);
+    }
   }
 
   private void setupTimeouts(HttpCommandExecutor executor, Duration connectTimeout, Duration readTimeout) throws Exception {
@@ -60,6 +65,28 @@ class HttpClientTimeouts {
     }
   }
 
+  private void setupTimeouts(TracedCommandExecutor tracedExecutor, Duration connectTimeout, Duration readTimeout) throws Exception {
+    Field delegateField = TracedCommandExecutor.class.getDeclaredField("delegate");
+    delegateField.setAccessible(true);
+    CommandExecutor executor = (CommandExecutor) delegateField.get(tracedExecutor);
+
+    if (executor instanceof HttpCommandExecutor) {
+      Field clientField = HttpCommandExecutor.class.getDeclaredField("client");
+      clientField.setAccessible(true);
+      HttpClient client = (HttpClient) clientField.get(executor);
+
+      if (client instanceof TracedHttpClient) {
+        Field clientDelegateField = TracedHttpClient.class.getDeclaredField("delegate");
+        clientDelegateField.setAccessible(true);
+        HttpClient clientDelegate = (HttpClient) clientDelegateField.get(client);
+
+        if (clientDelegate instanceof NettyClient) {
+          setupTimeouts((NettyClient) clientDelegate, connectTimeout, readTimeout);
+        }
+      }
+    }
+  }
+
   private void setupTimeouts(NettyClient client, Duration connectTimeout, Duration readTimeout) throws Exception {
     Field configField = NettyClient.class.getDeclaredField("config");
     configField.setAccessible(true);
@@ -68,6 +95,7 @@ class HttpClientTimeouts {
       setupTimeouts((ClientConfig) config, connectTimeout, readTimeout);
     }
   }
+
   private void setupTimeouts(ClientConfig config, Duration connectTimeout, Duration readTimeout) throws Exception {
     Duration previousConnectTimeout = config.connectionTimeout();
     Duration previousReadTimeout = config.readTimeout();

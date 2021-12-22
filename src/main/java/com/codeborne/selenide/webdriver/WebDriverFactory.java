@@ -96,19 +96,19 @@ public class WebDriverFactory {
                                             @Nullable Proxy proxy,
                                             @Nullable File browserDownloadsFolder) {
     DriverFactory webdriverFactory = findFactory(browser);
-
+    WebDriver webDriver;
     if (config.remote() != null) {
       MutableCapabilities capabilities = webdriverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-      return remoteDriverFactory.create(config, capabilities);
+      webDriver = remoteDriverFactory.create(config, capabilities);
     }
     else {
       if (config.driverManagerEnabled()) {
         webdriverFactory.setupWebdriverBinary();
       }
-      WebDriver webDriver = webdriverFactory.create(config, browser, proxy, browserDownloadsFolder);
-      httpClientTimeouts.setup(webDriver);
-      return webDriver;
+      webDriver = webdriverFactory.create(config, browser, proxy, browserDownloadsFolder);
     }
+    httpClientTimeouts.setup(webDriver);
+    return webDriver;
   }
 
   @CheckReturnValue
