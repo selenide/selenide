@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.1.2 (released 22.12.2021)
+* #1672 upgrade to Selenium 4.1.1
+* Bump nettyVersion from 4.1.70.Final to 4.1.71.Final
+* #1671 #1666 Bump littleproxy from 2.0.5 to 2.0.7
+
 ## 6.1.1 (released 24.11.2021)
 * #1591, #1626, #1630, #1631 problems with merging webdriver capabilities after upgrading to Selenium 4  --  fixed in PR #1642
 * #1631 change WebDriverProvider argument type from DesiredCapabilities to just Capabilities  --  see PR #1642
