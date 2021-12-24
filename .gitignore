@@ -1,5 +1,7 @@
 build
-.idea
+!.idea
+.idea/*
+!/.idea/icon.svg
 out
 *.ipr
 *.iws
