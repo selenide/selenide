@@ -18,7 +18,6 @@ import static io.netty.buffer.Unpooled.wrappedBuffer;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
-import static org.apache.hc.core5.http.HttpHeaders.CONTENT_LENGTH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class ProxyServerUsageTest extends ProxyIntegrationTest {
@@ -75,7 +74,7 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
       String url = messageInfo.getUrl();
       if (url.endsWith("page_with_dynamic_select.html")) {
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(request.protocolVersion(), OK, wrappedBuffer(mockedResponse()));
-        response.headers().set(CONTENT_LENGTH, response.content().readableBytes());
+        response.headers().set("Content-Length", response.content().readableBytes());
         return response;
       }
       return null;
