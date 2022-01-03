@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static com.codeborne.selenide.ElementsCollection.elementsToString;
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static java.lang.System.lineSeparator;
@@ -19,9 +20,13 @@ final class MatcherErrorTest {
 
   @Test
   void message() {
-    assertThat(new MatcherError("foo", "blah", null, mockCollection(".rows"), actualElements, ex, 4000).getMessage()).isEqualTo(
+    MatcherError error = new MatcherError(null,
+      "all of elements to match [class=active] predicate",
+      elementsToString(mockCollection(".rows").driver(), actualElements),
+      mockCollection(".rows"), ex, 4000);
+    assertThat(error.getMessage()).isEqualTo(
       "Collection matcher error" + lineSeparator() +
-        "Expected: foo of elements to match [blah] predicate" + lineSeparator() +
+        "Expected: all of elements to match [class=active] predicate" + lineSeparator() +
         "Collection: .rows" + lineSeparator() +
         "Elements: [" + lineSeparator() +
         "\t<div displayed:false>mr. %First</div>," + lineSeparator() +
@@ -32,10 +37,12 @@ final class MatcherErrorTest {
   }
 
   @Test
-  void message_whtExplanation() {
-    assertThat(new MatcherError("foo", "blah", "I think so", mockCollection(".rows"), actualElements, ex, 4000).getMessage()).isEqualTo(
+  void message_withExplanation() {
+    assertThat(new MatcherError("I think so",
+      "some of elements to match [class=active] predicate",
+      elementsToString(mockCollection(".rows").driver(), actualElements), mockCollection(".rows"), ex, 4000).getMessage()).isEqualTo(
       "Collection matcher error" + lineSeparator() +
-        "Expected: foo of elements to match [blah] predicate" + lineSeparator() +
+        "Expected: some of elements to match [class=active] predicate" + lineSeparator() +
         "Because: I think so" + lineSeparator() +
         "Collection: .rows" + lineSeparator() +
         "Elements: [" + lineSeparator() +

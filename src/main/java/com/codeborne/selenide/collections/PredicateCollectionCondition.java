@@ -11,6 +11,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.codeborne.selenide.ElementsCollection.elementsToString;
+
 @ParametersAreNonnullByDefault
 public abstract class PredicateCollectionCondition extends CollectionCondition {
   protected final String matcher;
@@ -33,7 +35,11 @@ public abstract class PredicateCollectionCondition extends CollectionCondition {
       elementNotFound.timeoutMs = timeoutMs;
       throw elementNotFound;
     } else {
-      throw new MatcherError(matcher, description, explanation, collection, elements, lastError, timeoutMs);
+      String expected = String.format("%s of elements to match [%s] predicate", matcher, description);
+      throw new MatcherError(explanation,
+        expected,
+        elementsToString(collection.driver(), elements),
+        collection, lastError, timeoutMs);
     }
   }
 

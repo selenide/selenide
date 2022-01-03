@@ -25,6 +25,9 @@ public class ElementShouldNot extends UIAssertionError {
         prefix, expectedCondition, searchCriteria, lineSeparator(),
         describe.fully(driver, element),
         actualValue(expectedCondition, driver, element, lastCheckResult)
-      ), lastError);
+      ),
+      expectedCondition,
+      lastCheckResult == null ? null : lastCheckResult.actualValue,
+      lastError);
   }
 }

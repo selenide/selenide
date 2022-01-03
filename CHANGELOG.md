@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.2.0
+* #1589 add "<Click to see difference>" to most of Selenide assertion errors
+
 ## 6.1.2 (released 22.12.2021)
 * #1672 upgrade to Selenium 4.1.1
 * Bump nettyVersion from 4.1.70.Final to 4.1.71.Final

@@ -25,6 +25,8 @@ public class ElementShould extends UIAssertionError {
         describe.fully(driver, element),
         actualValue(expectedCondition, driver, element, lastCheckResult)
       ),
+      expectedCondition,
+      lastCheckResult == null ? null : lastCheckResult.actualValue,
       lastError);
   }
 }
