@@ -40,13 +40,14 @@ final class SetSelectedCommandTest {
 
   @Test
   void executeMethodWhenElementIsNotDisplayed() {
+    when(locator.description()).thenReturn(".btn.btn-primary");
     when(mockedFoundElement.isDisplayed()).thenReturn(false);
     try {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
     }
     catch (InvalidStateException exception) {
       assertThat(exception)
-        .hasMessageStartingWith("Invalid element state: Cannot change invisible element");
+        .hasMessageStartingWith("Invalid element state [.btn.btn-primary]: Cannot change invisible element");
     }
   }
 
@@ -56,6 +57,7 @@ final class SetSelectedCommandTest {
   }
 
   private void checkExecuteMethodWhenTypeOfElementIsIncorrect(String tagName) {
+    when(locator.description()).thenReturn("input#username");
     when(mockedFoundElement.isDisplayed()).thenReturn(true);
     when(mockedFoundElement.getTagName()).thenReturn(tagName);
     when(mockedFoundElement.getAttribute("type")).thenReturn("href");
@@ -64,7 +66,7 @@ final class SetSelectedCommandTest {
     }
     catch (InvalidStateException exception) {
       assertThat(exception)
-        .hasMessageStartingWith("Invalid element state: Only use setSelected on checkbox/option/radio");
+        .hasMessageStartingWith("Invalid element state [input#username]: Only use setSelected on checkbox/option/radio");
     }
   }
 
@@ -79,6 +81,7 @@ final class SetSelectedCommandTest {
   }
 
   private void checkExecuteMethodWhenElementIsReadOnlyOrDisabled(String readOnlyValue, String disabledValue) {
+    when(locator.description()).thenReturn("input[name=q]");
     when(mockedFoundElement.isDisplayed()).thenReturn(true);
     when(mockedFoundElement.getTagName()).thenReturn("option");
     when(mockedFoundElement.getAttribute("readonly")).thenReturn(readOnlyValue);
@@ -87,7 +90,7 @@ final class SetSelectedCommandTest {
       setSelectedCommand.execute(proxy, locator, new Object[]{true})
     )
       .isInstanceOf(InvalidStateException.class)
-      .hasMessageStartingWith("Invalid element state: Cannot change value of readonly/disabled element");
+      .hasMessageStartingWith("Invalid element state [input[name=q]]: Cannot change value of readonly/disabled element");
   }
 
   @Test
