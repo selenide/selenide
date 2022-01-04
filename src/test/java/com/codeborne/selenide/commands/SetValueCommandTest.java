@@ -38,6 +38,7 @@ final class SetValueCommandTest {
     WebElement returnedElement = command.execute(proxy, locator, new Object[]{""});
     assertThat(returnedElement).isEqualTo(proxy);
     verify(mockedFoundElement).clear();
+    verify(locator).description();
   }
 
   @Test
@@ -46,6 +47,6 @@ final class SetValueCommandTest {
     assertThat(returnedElement).isEqualTo(proxy);
     verify(mockedFoundElement).clear();
     verify(mockedFoundElement).sendKeys("Stalker");
+    verify(locator).description();
   }
-
 }

@@ -9,7 +9,7 @@ final class ElementIsNotClickableExceptionTest {
   @Test
   void errorMessage() {
     WebDriverException cause = new WebDriverException("Sorry, is not clickable at the moment");
-    ElementIsNotClickableException e = new ElementIsNotClickableException(cause);
+    ElementIsNotClickableException e = new ElementIsNotClickableException("#link", cause);
 
     assertThat(e).hasMessageStartingWith("Element is not clickable");
     assertThat(e).hasMessageContaining("WebDriverException: Sorry, is not clickable at the moment");

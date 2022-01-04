@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
@@ -14,6 +15,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.impl.Events.events;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @ParametersAreNonnullByDefault
 public class SetValue implements Command<SelenideElement> {
@@ -26,17 +28,19 @@ public class SetValue implements Command<SelenideElement> {
     WebElement element = locator.findAndAssertElementIsInteractable();
     Driver driver = locator.driver();
 
-    setValueForTextInput(driver, element, text);
+    setValueForTextInput(driver, locator.description(), element, text);
     return proxy;
   }
 
-  private void setValueForTextInput(Driver driver, WebElement element, @Nullable String text) {
+  private void setValueForTextInput(Driver driver, String elementDescription, WebElement element, @Nullable String text) {
     if (text == null || text.isEmpty()) {
       element.clear();
     }
     else if (driver.config().fastSetValue()) {
       String error = setValueByJs(driver, element, text);
-      if (error != null) throw new InvalidStateException(error);
+      if (isNotEmpty(error)) {
+        throw new InvalidStateException(elementDescription, error);
+      }
       else {
         events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup", "change");
       }

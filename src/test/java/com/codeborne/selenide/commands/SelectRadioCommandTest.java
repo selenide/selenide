@@ -41,31 +41,32 @@ final class SelectRadioCommandTest {
 
   @Test
   void radioButtonIsReadOnly() {
-    givenRadioInput("ElementValue", true);
+    givenRadioInput("input.gender", "female", true);
 
-    assertThatThrownBy(() -> command.execute(proxy, locator, new Object[]{"ElementValue"}))
+    assertThatThrownBy(() -> command.execute(proxy, locator, new Object[]{"female"}))
       .isInstanceOf(InvalidStateException.class)
-      .hasMessageStartingWith("Invalid element state: Cannot select readonly radio button");
+      .hasMessageStartingWith("Invalid element state [input.gender]: Cannot select readonly radio button");
 
     verifyNoInteractions(click);
   }
 
   @Test
   void radioButton() {
-    WebElement input = givenRadioInput("ElementValue", false);
+    WebElement input = givenRadioInput(".btn.btn-primary", "Submit payment", false);
 
-    SelenideElement clickedElement = command.execute(proxy, locator, new Object[]{"ElementValue"});
+    SelenideElement clickedElement = command.execute(proxy, locator, new Object[]{"Submit payment"});
     assertThat(clickedElement.getWrappedElement()).isEqualTo(input);
     verify(click).click(driver, input);
   }
 
-  private WebElement givenRadioInput(String value, boolean readonly) {
+  private WebElement givenRadioInput(String selector, String value, boolean readonly) {
     WebElement input = mock(WebElement.class);
     when(input.getAttribute("value")).thenReturn(value);
     if (readonly) {
       when(input.getAttribute("readonly")).thenReturn("true");
     }
     when(locator.findAll()).thenReturn(singletonList(input));
+    when(locator.description()).thenReturn(selector);
     return input;
   }
 }
