@@ -28,7 +28,7 @@ dependencies {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
   }
 
-  compileOnly("com.browserup:browserup-proxy-core:$browserupProxyVersion")
+  compileOnly("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
   compileOnly("xyz.rogfam:littleproxy:$littleProxyVersion")
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
