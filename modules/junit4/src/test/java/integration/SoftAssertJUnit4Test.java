@@ -1,12 +1,12 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.junit5.SoftAssertsExtension;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import com.codeborne.selenide.junit.SoftAsserts;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 import static com.codeborne.selenide.AssertionMode.SOFT;
 import static com.codeborne.selenide.AssertionMode.STRICT;
@@ -15,22 +15,24 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 
-@ExtendWith({SoftAssertsExtension.class})
-public class SoftAssertJUnit5Test extends IntegrationTest {
-  @BeforeEach
-  void setUp() {
+public class SoftAssertJUnit4Test extends IntegrationTest {
+  @Rule
+  public SoftAsserts softAsserts = new SoftAsserts();
+
+  @Before
+  public void setUp() {
     Configuration.assertionMode = SOFT;
     open("https://duckduckgo.com/");
     $("#soft-assert-login").shouldNot(exist);
   }
 
   @Test
-  void blah1() {
+  public void blah1() {
     $("#foo").shouldNot(exist);
   }
 
   @Test
-  void blah2() {
+  public void blah2() {
     $("#zoo").shouldNot(exist);
 
     // uncomment to trigger test failure
@@ -38,20 +40,16 @@ public class SoftAssertJUnit5Test extends IntegrationTest {
     // $("#bar").should(exist);
   }
 
-  @AfterEach
-  void tearDown() {
+  @After
+  public void tearDown() {
     // uncomment to trigger test failure
-    // $("#foo").should(exist);
-    // $("#bar").should(exist);
+    // assertThat("male").isEqualTo("female");
   }
 
-  @AfterAll
-  static void afterAll() {
+  @AfterClass
+  public static void afterAll() {
     Configuration.assertionMode = STRICT;
     $("#soft-assert-logout").shouldNot(exist);
     closeWebDriver();
-
-    // uncomment to trigger test failure
-    // assertThat("zopa").isEqualTo("siski");
   }
 }

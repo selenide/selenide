@@ -37,6 +37,9 @@ public class SoftAsserts extends ExternalResource {
   @Override
   protected void after() {
     ErrorsCollector errorsCollector = requireNonNull(SelenideLogger.removeListener(LISTENER_SOFT_ASSERT));
-    errorsCollector.failIfErrors(currentTest.getDisplayName());
+
+    // if both test and "after" method threw an error, JUnit4 collects all of them
+    // and throws org.junit.internal.runners.model.MultipleFailureException
+    errorsCollector.failIfErrors(currentTest.getDisplayName(), null);
   }
 }

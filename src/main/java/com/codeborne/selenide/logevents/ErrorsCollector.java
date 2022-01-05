@@ -3,6 +3,7 @@ package com.codeborne.selenide.logevents;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.ex.SoftAssertionError;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +44,11 @@ public class ErrorsCollector implements LogEventListener {
    *
    * @param testName any string, usually name of current test
    */
-  public void failIfErrors(String testName) {
+  public void failIfErrors(String testName, @Nullable Throwable testFailure) {
     List<Throwable> errors = new ArrayList<>(this.errors);
+    if (testFailure != null) {
+      errors.add(testFailure);
+    }
     this.errors.clear();
 
     if (errors.size() == 1 && errors.get(0) instanceof AssertionError) {
@@ -63,5 +67,10 @@ public class ErrorsCollector implements LogEventListener {
           "mechanism as documented in https://github.com/selenide/selenide/wiki/SoftAssertions");
       }
     }
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + " [" + errors + "]";
   }
 }
