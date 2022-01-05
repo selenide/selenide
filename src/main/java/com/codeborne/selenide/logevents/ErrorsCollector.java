@@ -18,9 +18,13 @@ public class ErrorsCollector implements LogEventListener {
 
   private final List<Throwable> errors = new ArrayList<>();
 
+  protected boolean isEnabled() {
+    return true;
+  }
+
   @Override
   public void afterEvent(LogEvent event) {
-    if (event.getStatus() == FAIL) {
+    if (isEnabled() && event.getStatus() == FAIL) {
       errors.add(event.getError());
     }
   }

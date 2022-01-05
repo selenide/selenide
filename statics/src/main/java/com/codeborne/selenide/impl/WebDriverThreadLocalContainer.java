@@ -27,10 +27,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.codeborne.selenide.Configuration.reopenBrowserOnFail;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static java.lang.Thread.currentThread;
 
+@SuppressWarnings("deprecation")
 @ParametersAreNonnullByDefault
 public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private static final Logger log = LoggerFactory.getLogger(WebDriverThreadLocalContainer.class);
@@ -146,7 +146,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   public WebDriver getAndCheckWebDriver() {
     WebDriver webDriver = threadWebDriver.get(currentThread().getId());
 
-    if (webDriver != null && reopenBrowserOnFail && !browserHealthChecker.isBrowserStillOpen(webDriver)) {
+    if (webDriver != null && config.reopenBrowserOnFail() && !browserHealthChecker.isBrowserStillOpen(webDriver)) {
       log.info("Webdriver has been closed meanwhile. Let's re-create it.");
       closeWebDriver();
       webDriver = createDriver();

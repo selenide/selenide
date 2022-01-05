@@ -1,6 +1,7 @@
 package com.codeborne.selenide.junit5;
 
 import com.codeborne.selenide.logevents.ErrorsCollector;
+import com.codeborne.selenide.logevents.SoftAssertsErrorsCollector;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -42,7 +43,7 @@ public class SoftAssertsExtension implements BeforeAllCallback, BeforeEachCallba
     getErrorsCollector(context).ifPresent(collector -> {
       throw new IllegalStateException("Errors collector already exists: " + collector);
     });
-    ErrorsCollector errorsCollector = new ErrorsCollector();
+    ErrorsCollector errorsCollector = new SoftAssertsErrorsCollector();
     addListener(LISTENER_SOFT_ASSERT, errorsCollector);
     context.getStore(namespace).put(LISTENER_SOFT_ASSERT, errorsCollector);
   }
@@ -65,7 +66,7 @@ public class SoftAssertsExtension implements BeforeAllCallback, BeforeEachCallba
   @Override
   public void afterAll(ExtensionContext context) {
     removeListener(LISTENER_SOFT_ASSERT);
-    ErrorsCollector errorsCollector = (ErrorsCollector) context.getStore(namespace).remove(LISTENER_SOFT_ASSERT);
+    ErrorsCollector errorsCollector = context.getStore(namespace).remove(LISTENER_SOFT_ASSERT, ErrorsCollector.class);
     if (errorsCollector != null) {
       errorsCollector.failIfErrors(context.getDisplayName(), context.getExecutionException().orElse(null));
     }
