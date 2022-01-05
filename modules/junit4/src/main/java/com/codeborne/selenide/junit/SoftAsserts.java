@@ -2,6 +2,7 @@ package com.codeborne.selenide.junit;
 
 import com.codeborne.selenide.logevents.ErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.codeborne.selenide.logevents.SoftAssertsErrorsCollector;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -31,7 +32,7 @@ public class SoftAsserts extends ExternalResource {
 
   @Override
   protected void before() {
-    SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new ErrorsCollector());
+    SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new SoftAssertsErrorsCollector());
   }
 
   @Override

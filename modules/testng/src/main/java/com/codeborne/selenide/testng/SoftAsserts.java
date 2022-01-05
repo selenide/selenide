@@ -2,6 +2,7 @@ package com.codeborne.selenide.testng;
 
 import com.codeborne.selenide.logevents.ErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.codeborne.selenide.logevents.SoftAssertsErrorsCollector;
 import org.testng.ITestResult;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -54,9 +55,9 @@ public class SoftAsserts extends ExitCodeListener {
     boolean hasSoftAssertListener = shouldIntercept(result.getTestClass().getRealClass());
     boolean isTestMethod = shouldIntercept(result.getMethod().getConstructorOrMethod().getMethod());
     if (hasSoftAssertListener && isTestMethod && !listenerAlreadyAdded) {
-      SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new ErrorsCollector());
+      SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new SoftAssertsErrorsCollector());
     } else if (hasSoftAssertListener && !listenerAlreadyAdded) {
-      SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new ErrorsCollector());
+      SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new SoftAssertsErrorsCollector());
     }
   }
 
