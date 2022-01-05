@@ -82,7 +82,7 @@ public class SoftAsserts extends ExitCodeListener {
     ErrorsCollector errorsCollector = SelenideLogger.removeListener(LISTENER_SOFT_ASSERT);
     if (errorsCollector != null) {
       try {
-        errorsCollector.failIfErrors(result.getTestClass().getName() + '.' + result.getName());
+        errorsCollector.failIfErrors(result.getTestClass().getName() + '.' + result.getName(), result.getThrowable());
       }
       catch (AssertionError e) {
         result.setStatus(ITestResult.FAILURE);

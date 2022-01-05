@@ -72,7 +72,7 @@ final class ErrorsCollectorTest {
   void failIfErrorMethodWhenOnlyOneError() {
     errorsCollector.afterEvent(mockedFailedEvent);
     try {
-      errorsCollector.failIfErrors(defaultTestName);
+      errorsCollector.failIfErrors(defaultTestName, null);
       fail("Expected SoftAssertionError");
     }
     catch (SoftAssertionError error) {
@@ -83,7 +83,7 @@ final class ErrorsCollectorTest {
   }
 
   @Test
-  void failIfErrorMethodWhenMoreThenOneError() {
+  void failIfErrorMethodWhenMoreThanOneError() {
     LogEvent mockedFailedEvent2 = mock(LogEvent.class);
     StaleElementReferenceException failedEvent2Error = new StaleElementReferenceException("Second failure");
     when(mockedFailedEvent2.getStatus()).thenReturn(LogEvent.EventStatus.FAIL);
@@ -92,7 +92,7 @@ final class ErrorsCollectorTest {
     errorsCollector.afterEvent(mockedFailedEvent);
     errorsCollector.afterEvent(mockedFailedEvent2);
     try {
-      errorsCollector.failIfErrors(defaultTestName);
+      errorsCollector.failIfErrors(defaultTestName, null);
       fail("Expected SoftAssertionError");
     }
     catch (SoftAssertionError error) {
@@ -100,6 +100,28 @@ final class ErrorsCollectorTest {
         .hasMessageStartingWith("Test " + defaultTestName + " failed (2 failures)");
       assertThat(error.getFailures())
         .isEqualTo(asList(defaultError, failedEvent2Error));
+    }
+  }
+
+  @Test
+  void failIfErrorMethodWhenMethodThrewAnotherErrorInAdditionToSoftAsserts() {
+    LogEvent mockedFailedEvent2 = mock(LogEvent.class);
+    StaleElementReferenceException failedEvent2Error = new StaleElementReferenceException("Second failure");
+    when(mockedFailedEvent2.getStatus()).thenReturn(LogEvent.EventStatus.FAIL);
+    when(mockedFailedEvent2.getError()).thenReturn(failedEvent2Error);
+
+    errorsCollector.afterEvent(mockedFailedEvent);
+    errorsCollector.afterEvent(mockedFailedEvent2);
+    AssertionError assertionError = new AssertionError("simple hamcrest assertion error");
+    try {
+      errorsCollector.failIfErrors(defaultTestName, assertionError);
+      fail("Expected SoftAssertionError");
+    }
+    catch (SoftAssertionError error) {
+      assertThat(error)
+        .hasMessageStartingWith("Test " + defaultTestName + " failed (3 failures)");
+      assertThat(error.getFailures())
+        .isEqualTo(asList(defaultError, failedEvent2Error, assertionError));
     }
   }
 }
