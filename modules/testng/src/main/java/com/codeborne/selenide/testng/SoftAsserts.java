@@ -52,23 +52,27 @@ public class SoftAsserts extends ExitCodeListener {
   }
 
   void addSelenideErrorListener(ITestResult result) {
-    boolean listenerAlreadyAdded = SelenideLogger.hasListener(LISTENER_SOFT_ASSERT);
-    boolean hasSoftAssertListener = shouldIntercept(result.getTestClass().getRealClass());
-    boolean isTestMethod = shouldIntercept(result.getMethod().getConstructorOrMethod().getMethod());
-    if (hasSoftAssertListener && isTestMethod && !listenerAlreadyAdded) {
-      SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new SoftAssertsErrorsCollector());
-    }
-    else if (hasSoftAssertListener && !listenerAlreadyAdded) {
+    if (!SelenideLogger.hasListener(LISTENER_SOFT_ASSERT) &&
+      isTestClassApplicableForSoftAsserts(result) &&
+      isTestMethodApplicableForSoftAsserts(result)) {
       SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new SoftAssertsErrorsCollector());
     }
   }
 
-  boolean shouldIntercept(Class<?> testClass) {
+  private boolean isTestClassApplicableForSoftAsserts(ITestResult result) {
+    return isTestClassApplicableForSoftAsserts(result.getTestClass().getRealClass());
+  }
+
+  boolean isTestClassApplicableForSoftAsserts(Class<?> testClass) {
     Listeners listenersAnnotation = getListenersAnnotation(testClass);
     return listenersAnnotation != null && asList(listenersAnnotation.value()).contains(SoftAsserts.class);
   }
 
-  boolean shouldIntercept(@Nullable Method testMethod) {
+  private boolean isTestMethodApplicableForSoftAsserts(ITestResult result) {
+    return isTestMethodApplicableForSoftAsserts(result.getMethod().getConstructorOrMethod().getMethod());
+  }
+
+  boolean isTestMethodApplicableForSoftAsserts(@Nullable Method testMethod) {
     if (testMethod == null) return false;
 
     Test annotation = testMethod.getAnnotation(Test.class);
