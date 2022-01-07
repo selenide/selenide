@@ -8,6 +8,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.reporters.ExitCodeListener;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Method;
@@ -56,7 +57,8 @@ public class SoftAsserts extends ExitCodeListener {
     boolean isTestMethod = shouldIntercept(result.getMethod().getConstructorOrMethod().getMethod());
     if (hasSoftAssertListener && isTestMethod && !listenerAlreadyAdded) {
       SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new SoftAssertsErrorsCollector());
-    } else if (hasSoftAssertListener && !listenerAlreadyAdded) {
+    }
+    else if (hasSoftAssertListener && !listenerAlreadyAdded) {
       SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new SoftAssertsErrorsCollector());
     }
   }
@@ -76,19 +78,22 @@ public class SoftAsserts extends ExitCodeListener {
   Listeners getListenersAnnotation(Class<?> testClass) {
     Listeners annotation = testClass.getAnnotation(Listeners.class);
     return annotation != null ? annotation :
-        testClass.getSuperclass() != null ? getListenersAnnotation(testClass.getSuperclass()) : null;
+      testClass.getSuperclass() != null ? getListenersAnnotation(testClass.getSuperclass()) : null;
   }
 
   private void failIfErrors(ITestResult result) {
     ErrorsCollector errorsCollector = SelenideLogger.removeListener(LISTENER_SOFT_ASSERT);
     if (errorsCollector != null) {
-      try {
-        errorsCollector.failIfErrors(result.getTestClass().getName() + '.' + result.getName(), result.getThrowable());
-      }
-      catch (AssertionError e) {
+      AssertionError assertionError = errorsCollector.cleanAndGetAssertionError(testName(result), result.getThrowable());
+      if (assertionError != null) {
         result.setStatus(ITestResult.FAILURE);
-        result.setThrowable(e);
+        result.setThrowable(assertionError);
       }
     }
+  }
+
+  @Nonnull
+  private String testName(ITestResult result) {
+    return result.getTestClass().getName() + '.' + result.getName();
   }
 }

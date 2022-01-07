@@ -44,11 +44,12 @@ public class ErrorsCollector implements LogEventListener {
 
   /**
    * 1. Clears all collected errors, and
-   * 2. throws SoftAssertionError if there were some errors
+   * 2. returns SoftAssertionError if there were some errors
    *
    * @param testName any string, usually name of current test
    */
-  public void failIfErrors(String testName, @Nullable Throwable testFailure) {
+  @Nullable
+  public AssertionError cleanAndGetAssertionError(String testName, @Nullable Throwable testFailure) {
     List<Throwable> errors = new ArrayList<>(this.errors);
     if (testFailure != null) {
       errors.add(testFailure);
@@ -56,11 +57,19 @@ public class ErrorsCollector implements LogEventListener {
     this.errors.clear();
 
     if (errors.size() == 1 && errors.get(0) instanceof AssertionError) {
-      throw (AssertionError) errors.get(0);
+      return (AssertionError) errors.get(0);
     }
     if (!errors.isEmpty()) {
       String message = String.format("Test %s failed", testName);
-      throw new SoftAssertionError(message, errors);
+      return new SoftAssertionError(message, errors);
+    }
+    return null;
+  }
+
+  public void cleanAndThrowAssertionError(String testName, @Nullable Throwable testFailure) {
+    AssertionError error = cleanAndGetAssertionError(testName, testFailure);
+    if (error != null) {
+      throw error;
     }
   }
 
