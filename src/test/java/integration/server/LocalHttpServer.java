@@ -16,8 +16,10 @@ public class LocalHttpServer {
   private final List<FileItem> uploadedFiles = new CopyOnWriteArrayList<>();
   private final Set<String> sessions = new ConcurrentSkipListSet<>();
   private final Server server;
+  private final int port;
 
   public LocalHttpServer(int port, boolean ssl) {
+    this.port = port;
     server = new Server();
 
     if (ssl) {
@@ -41,6 +43,10 @@ public class LocalHttpServer {
     context.addServlet(new ServletHolder(new BasicAuthHandler()), "/basic-auth/*");
     context.addServlet(new ServletHolder(new HeadersPrinterHandler()), "/headers/*");
     context.addServlet(new ServletHolder(new FileRenderHandler(sessions)), "/*");
+  }
+
+  public int getPort() {
+    return port;
   }
 
   public List<FileItem> getUploadedFiles() {

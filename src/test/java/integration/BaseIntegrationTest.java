@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.io.IOException;
+import java.net.BindException;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Browsers.CHROME;
@@ -17,9 +19,8 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({LogTestNameExtension.class, TextReportExtension.class})
 public abstract class BaseIntegrationTest {
-  protected static LocalHttpServer server;
+  protected static volatile LocalHttpServer server;
   private static String protocol;
-  private static int port;
   protected static final String browser = System.getProperty("selenide.browser", CHROME);
   private static final boolean SSL = !SAFARI.equalsIgnoreCase(browser) && !FIREFOX.equalsIgnoreCase(browser);
   static final boolean headless = parseBoolean(System.getProperty("selenide.headless", "false"));
@@ -39,16 +40,33 @@ public abstract class BaseIntegrationTest {
     if (server == null) {
       synchronized (BaseIntegrationTest.class) {
         if (server == null) {
-          port = findFreePort();
-          server = new LocalHttpServer(port, SSL).start();
           protocol = SSL ? "https://" : "http://";
+          server = runWithRetry();
         }
       }
     }
   }
 
+  private static LocalHttpServer runWithRetry() throws Exception {
+    IOException lastError = null;
+    for (int i = 0; i < 5; i++) {
+      try {
+        return new LocalHttpServer(findFreePort(), SSL).start();
+      }
+      catch (IOException failedToStartServer) {
+        if (failedToStartServer.getCause() instanceof BindException) {
+          lastError = failedToStartServer;
+        }
+        else {
+          throw failedToStartServer;
+        }
+      }
+    }
+    throw lastError;
+  }
+
   protected static String getBaseUrl() {
-    return protocol + "127.0.0.1:" + port;
+    return protocol + "127.0.0.1:" + server.getPort();
   }
 
   protected static Browser browser() {
