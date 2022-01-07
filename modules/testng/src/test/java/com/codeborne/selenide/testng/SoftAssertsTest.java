@@ -42,15 +42,15 @@ final class SoftAssertsTest {
 
   @Test
   void interceptsTestMethod_ifTestClassHasDeclaredSoftAssertListener() {
-    assertThat(listener.shouldIntercept(SoftTest.class)).isTrue();
-    assertThat(listener.shouldIntercept(HardTest.class)).isFalse();
+    assertThat(listener.isTestClassApplicableForSoftAsserts(SoftTest.class)).isTrue();
+    assertThat(listener.isTestClassApplicableForSoftAsserts(HardTest.class)).isFalse();
   }
 
   @Test
   void shouldNotInterceptTestMethod_withDeclaredExpectedExceptions() throws NoSuchMethodException {
-    assertThat(listener.shouldIntercept(SoftTest.class.getMethod("someTestMethod")))
+    assertThat(listener.isTestMethodApplicableForSoftAsserts(SoftTest.class.getMethod("someTestMethod")))
       .isTrue();
-    assertThat(listener.shouldIntercept(SoftTest.class.getMethod("testWithExpectedException")))
+    assertThat(listener.isTestMethodApplicableForSoftAsserts(SoftTest.class.getMethod("testWithExpectedException")))
       .isFalse();
   }
 
