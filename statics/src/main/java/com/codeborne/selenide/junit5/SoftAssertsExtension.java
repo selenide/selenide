@@ -59,7 +59,7 @@ public class SoftAssertsExtension implements BeforeAllCallback, BeforeEachCallba
   @Override
   public void afterEach(final ExtensionContext context) {
     getErrorsCollector(context).ifPresent(collector ->
-      collector.failIfErrors(context.getDisplayName(), context.getExecutionException().orElse(null))
+      collector.cleanAndThrowAssertionError(context.getDisplayName(), context.getExecutionException().orElse(null))
     );
   }
 
@@ -68,7 +68,7 @@ public class SoftAssertsExtension implements BeforeAllCallback, BeforeEachCallba
     removeListener(LISTENER_SOFT_ASSERT);
     ErrorsCollector errorsCollector = context.getStore(namespace).remove(LISTENER_SOFT_ASSERT, ErrorsCollector.class);
     if (errorsCollector != null) {
-      errorsCollector.failIfErrors(context.getDisplayName(), context.getExecutionException().orElse(null));
+      errorsCollector.cleanAndThrowAssertionError(context.getDisplayName(), context.getExecutionException().orElse(null));
     }
   }
 

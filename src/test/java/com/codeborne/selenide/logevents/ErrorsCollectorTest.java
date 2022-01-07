@@ -72,7 +72,7 @@ final class ErrorsCollectorTest {
   void failIfErrorMethodWhenOnlyOneError() {
     errorsCollector.afterEvent(mockedFailedEvent);
     try {
-      errorsCollector.failIfErrors(defaultTestName, null);
+      errorsCollector.cleanAndThrowAssertionError(defaultTestName, null);
       fail("Expected SoftAssertionError");
     }
     catch (SoftAssertionError error) {
@@ -92,7 +92,7 @@ final class ErrorsCollectorTest {
     errorsCollector.afterEvent(mockedFailedEvent);
     errorsCollector.afterEvent(mockedFailedEvent2);
     try {
-      errorsCollector.failIfErrors(defaultTestName, null);
+      errorsCollector.cleanAndThrowAssertionError(defaultTestName, null);
       fail("Expected SoftAssertionError");
     }
     catch (SoftAssertionError error) {
@@ -114,7 +114,7 @@ final class ErrorsCollectorTest {
     errorsCollector.afterEvent(mockedFailedEvent2);
     AssertionError assertionError = new AssertionError("simple hamcrest assertion error");
     try {
-      errorsCollector.failIfErrors(defaultTestName, assertionError);
+      errorsCollector.cleanAndThrowAssertionError(defaultTestName, assertionError);
       fail("Expected SoftAssertionError");
     }
     catch (SoftAssertionError error) {
