@@ -72,16 +72,11 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void canUseSizeMethod() {
-    assertThat($$(By.name("domain")))
-      .hasSize(1);
-    assertThat($$("#theHiddenElement"))
-      .hasSize(1);
-    assertThat($$("#radioButtons input"))
-      .hasSize(4);
-    assertThat($$(By.xpath("//select[@name='domain']/option")))
-      .hasSize(4);
-    assertThat($$(By.name("non-existing-element")))
-      .hasSize(0);
+    assertThat($$(By.name("domain"))).hasSize(1);
+    assertThat($$("#theHiddenElement")).hasSize(1);
+    assertThat($$("#radioButtons input")).hasSize(4);
+    assertThat($$(By.xpath("//select[@name='domain']/option"))).hasSize(4);
+    assertThat($$(By.name("non-existing-element"))).hasSize(0);
   }
 
   @Test
@@ -277,49 +272,38 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void canIterateCollection_withIterator() {
     Iterator<SelenideElement> it = $$("[name=domain] option").iterator();
-    assertThat(it.hasNext())
-      .isTrue();
+    assertThat(it.hasNext()).isTrue();
     it.next().shouldHave(text("@livemail.ru"));
 
-    assertThat(it.hasNext())
-      .isTrue();
+    assertThat(it.hasNext()).isTrue();
     it.next().shouldHave(text("@myrambler.ru"));
 
-    assertThat(it.hasNext())
-      .isTrue();
+    assertThat(it.hasNext()).isTrue();
     it.next().shouldHave(text("@rusmail.ru"));
 
-    assertThat(it.hasNext())
-      .isTrue();
+    assertThat(it.hasNext()).isTrue();
     it.next().shouldHave(text("@мыло.ру"));
 
-    assertThat(it.hasNext())
-      .isFalse();
+    assertThat(it.hasNext()).isFalse();
   }
 
   @Test
   void canIterateCollection_withListIterator() {
     ListIterator<SelenideElement> it = $$("[name=domain] option").listIterator(3);
-    assertThat(it.hasNext())
-      .isTrue();
-    assertThat(it.hasPrevious())
-      .isTrue();
+    assertThat(it.hasNext()).isTrue();
+    assertThat(it.hasPrevious()).isTrue();
     it.previous().shouldHave(text("@rusmail.ru"));
 
-    assertThat(it.hasPrevious())
-      .isTrue();
+    assertThat(it.hasPrevious()).isTrue();
     it.previous().shouldHave(text("@myrambler.ru"));
 
-    assertThat(it.hasPrevious())
-      .isTrue();
+    assertThat(it.hasPrevious()).isTrue();
     it.previous().shouldHave(text("@livemail.ru"));
 
-    assertThat(it.hasPrevious())
-      .isFalse();
+    assertThat(it.hasPrevious()).isFalse();
 
     it.next().shouldHave(text("@livemail.ru"));
-    assertThat(it.hasPrevious())
-      .isTrue();
+    assertThat(it.hasPrevious()).isTrue();
   }
 
   @Test

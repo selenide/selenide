@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test::collection with delays</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h1>Texts will be updated soon</h1>
+<ul id="collection">
+  <li id="item1">Item #1</li>
+  <li id="item2">Item #2</li>
+  <li id="item3">Item #3</li>
+</ul>
+<h2 id="status"></h2>
+
+<script type="text/javascript">
+  const totalTime = new Date();
+  let size = 1;
+
+  function updateNextText() {
+    document.getElementById('item' + size).textContent = 'Updated Item #' + size;
+    size++;
+  }
+
+  function growCollection() {
+    const node = document.createElement('li');
+    const textNode = document.createTextNode('Additional text #' + size);
+    node.appendChild(textNode);
+    document.getElementById("collection").appendChild(node);
+    size++;
+  }
+
+  setTimeout(updateNextText, 310);
+  setTimeout(updateNextText, 320);
+  setTimeout(updateNextText, 330);
+
+  setTimeout(growCollection, 335);
+  setTimeout(growCollection, 340);
+</script>
+
+</body>
+</html>

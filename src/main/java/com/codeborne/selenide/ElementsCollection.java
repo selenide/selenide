@@ -33,6 +33,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
@@ -444,42 +446,91 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Does not reload collection elements while iterating it.
-   * Not recommended to use.
+   * Not recommended: As a rule, tests should not iterate collection elements.
+   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
    *
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   *
+   * @deprecated Use either {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
+   */
+  @Override
+  @Deprecated
+  public Stream<SelenideElement> stream() {
+    return super.stream();
+  }
+
+  /**
+   * Not recommended: As a rule, tests should not iterate collection elements.
+   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
+   *
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   *
+   * @deprecated Use either {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
+   */
+  @Override
+  @Deprecated
+  public Stream<SelenideElement> parallelStream() {
+    return super.parallelStream();
+  }
+
+  /**
+   * Not recommended: As a rule, tests should not iterate collection elements.
+   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
+   *
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   *
+   * @deprecated Use either {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
+   */
+  @Override
+  @Deprecated
+  public void forEach(Consumer<? super SelenideElement> action) {
+    super.forEach(action);
+  }
+
+  /**
+   * Does not reload collection elements while iterating it.
+   *
+   * Not recommended: As a rule, tests should not iterate collection elements.
+   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
+   *
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   *
+   * @deprecated use method {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
    */
   @Override
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   public Iterator<SelenideElement> iterator() {
-    return new SelenideElementIterator(fetch());
+    return asFixedIterable().iterator();
   }
 
   /**
    * Does not reload collection elements while iterating it.
-   * Not recommended to use.
+   *
+   * Not recommended: As a rule, tests should not iterate collection elements.
+   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
    *
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   *
+   * @deprecated use method {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
    */
   @Override
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   public ListIterator<SelenideElement> listIterator(int index) {
-    return new SelenideElementListIterator(fetch(), index);
-  }
-
-  private WebElementsCollectionWrapper fetch() {
-    List<WebElement> fetchedElements = collection.getElements();
-    return new WebElementsCollectionWrapper(driver(), fetchedElements);
+    return new SelenideElementListIterator(new CollectionSnapshot(collection), index);
   }
 
   /**
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   * @deprecated use method {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
    */
   @Override
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   public Object[] toArray() {
     List<WebElement> fetchedElements = collection.getElements();
     Object[] result = new Object[fetchedElements.size()];
@@ -496,11 +547,42 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * Use it to speed up your tests - but only if you know that collection will not be changed during the test.
    *
    * @return current state of this collection
+   * @see #asFixedIterable()
    */
   @CheckReturnValue
   @Nonnull
   public ElementsCollection snapshot() {
     return new ElementsCollection(new CollectionSnapshot(collection));
+  }
+
+  /**
+   * Returns a "static" {@link Iterable} which doesn't reload web elements during iteration.
+   *
+   * It's faster than {@link #asDynamicIterable()} ()},
+   * but can sometimes can cause {@link org.openqa.selenium.StaleElementReferenceException} etc.
+   * if elements are re-rendered during the iteration.
+   *
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests
+   * @since 6.2.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  public Iterable<SelenideElement> asFixedIterable() {
+    return () -> new SelenideElementIterator(new CollectionSnapshot(collection));
+  }
+
+  /**
+   * Returns a "dynamic" {@link Iterable} which reloads web elements during iteration.
+   *
+   * It's slower than {@link #asFixedIterable()}, but helps to avoid {@link org.openqa.selenium.StaleElementReferenceException} etc.
+   *
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests
+   * @since 6.2.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  public Iterable<SelenideElement> asDynamicIterable() {
+    return () -> new SelenideElementIterator(collection);
   }
 
   /**

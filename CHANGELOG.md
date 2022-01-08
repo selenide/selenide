@@ -3,6 +3,9 @@
 ## 6.2.0
 * #1589 add "<Click to see difference>" to most of Selenide assertion errors
 * add locator to some of Selenide error messages
+* #797 replace `$$.iterator()` by `$$.asReloadingIterable()` and `$$.asFixedIterable()`  --  see PR #1688
+* #1646 fix SoftAssert listener to avoid failing the test if soft asserts are disabled  --  see PR #1680
+* #372 [feature restored] avoid soft asserts for @Test method with "expectedExceptions" attribute
 
 ## 6.1.2 (released 22.12.2021)
 * #1672 upgrade to Selenium 4.1.1
