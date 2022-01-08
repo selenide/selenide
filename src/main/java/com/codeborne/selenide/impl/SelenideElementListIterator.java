@@ -7,7 +7,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ListIterator;
 
+/**
+ * @deprecated To be removed in following versions.
+ * Used only by deprecated method {@link com.codeborne.selenide.ElementsCollection#listIterator(int)}.
+ */
 @ParametersAreNonnullByDefault
+@Deprecated
 public class SelenideElementListIterator extends SelenideElementIterator implements ListIterator<SelenideElement> {
   public SelenideElementListIterator(CollectionSource collection, int index) {
     super(collection);

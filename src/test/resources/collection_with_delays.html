@@ -4,27 +4,32 @@
   <title>Test::collection with delays</title>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript">
-      var totalTime = new Date();
-      var size = 0;
-      function growCollection() {
-        document.getElementById('collection').innerHTML += '<li>Element #' + size + '</li>';
-        size++;
-
-        if (size < 20) {
-          setTimeout(growCollection, 20);
-        }
-        else {
-          document.getElementById('status').innerHTML += "Generated in " + (new Date() - totalTime) / 1000.0 + " seconds";
-        }
-      }
-
-  </script>
 </head>
-<body onload="growCollection();">
+<body>
 <h1>Elements will appear soon</h1>
 <ul id="collection">
 </ul>
 <h2 id="status"></h2>
+
+<script type="text/javascript">
+  const totalTime = new Date();
+  let size = 0;
+
+  function growCollection() {
+    document.getElementById('collection').innerHTML += '<li>Element #' + size + '</li>';
+    size++;
+
+    if (size < 20) {
+      setTimeout(growCollection, 20);
+    }
+    else {
+      document.getElementById('status').innerHTML += "Generated in " + (new Date() - totalTime) / 1000.0 + " seconds";
+    }
+  }
+
+  setTimeout(growCollection, 20);
+
+</script>
+
 </body>
 </html>
