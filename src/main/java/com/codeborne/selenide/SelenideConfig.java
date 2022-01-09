@@ -346,13 +346,10 @@ public class SelenideConfig implements Config {
 
   private String getProperty(String key, String defaultValue) {
     String value = properties.getProperty(key, defaultValue);
-    return replaceEmptyStringWithNull(value, defaultValue);
-  }
-
-  private String replaceEmptyStringWithNull(String value, String defaultValue) {
     if (value != null && value.trim().isEmpty() && defaultValue == null) {
-      value = null;
+      return null;
     }
     return value;
   }
+
 }

@@ -42,7 +42,7 @@ final class OperaDriverFactoryTest {
   void headlessCanNotBeSet() {
     config.headless(true);
     assertThatThrownBy(() -> factory.createCapabilities(config, browser, proxy, browserDownloadsFolder))
-      .isInstanceOf(InvalidArgumentException.class);
+      .isInstanceOf(IllegalArgumentException.class);
   }
 
   @SuppressWarnings("unchecked")
