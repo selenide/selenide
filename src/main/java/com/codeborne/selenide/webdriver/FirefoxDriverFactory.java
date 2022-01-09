@@ -19,7 +19,9 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -48,7 +50,22 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   @CheckReturnValue
   @Nonnull
   protected GeckoDriverService createDriverService(Config config) {
-    return withLog(config, new GeckoDriverService.Builder());
+    return withLog(config, new FFBuilder());
+  }
+
+  private static class FFBuilder extends GeckoDriverService.Builder {
+    @Override
+    protected List<String> createArgs() {
+      List<String> args = super.createArgs();
+      log.info("Starting Firefox with args {}", args);
+      return args;
+    }
+
+    @Override
+    protected GeckoDriverService createDriverService(File exe, int port, Duration timeout, List<String> args, Map<String, String> environment) {
+      log.info("Starting Firefox driver service: port={}, timeout={}, exe={}, args={}, environment={}", port, timeout, exe, args, environment);
+      return super.createDriverService(exe, port, timeout, args, environment);
+    }
   }
 
   @Override
