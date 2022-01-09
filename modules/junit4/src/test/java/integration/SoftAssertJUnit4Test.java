@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit.SoftAsserts;
+import com.codeborne.selenide.junit.TextReport;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,6 +19,9 @@ import static com.codeborne.selenide.Selenide.open;
 public class SoftAssertJUnit4Test extends IntegrationTest {
   @Rule
   public SoftAsserts softAsserts = new SoftAsserts();
+
+  @Rule
+  public TextReport textReport = new TextReport();
 
   @Before
   public void setUp() {
