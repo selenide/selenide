@@ -5,12 +5,16 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.grid.Main;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 abstract class AbstractGridTest extends IntegrationTest {
+  private final Logger log = LoggerFactory.getLogger(getClass());
+
   int hubPort;
 
   @BeforeEach
@@ -27,6 +31,7 @@ abstract class AbstractGridTest extends IntegrationTest {
     closeWebDriver();
 
     hubPort = findFreePort();
+    log.info("Start grid hub on port {}", hubPort);
     Main.main(new String[]{"standalone", "--port", String.valueOf(hubPort)});
 
     timeout = 4000;

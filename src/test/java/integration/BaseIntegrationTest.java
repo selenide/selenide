@@ -6,6 +6,8 @@ import integration.server.LocalHttpServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Locale;
 
@@ -17,7 +19,9 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({LogTestNameExtension.class, TextReportExtension.class})
 public abstract class BaseIntegrationTest {
-  protected static LocalHttpServer server;
+  private final Logger log = LoggerFactory.getLogger(getClass());
+
+  protected static volatile LocalHttpServer server;
   private static String protocol;
   private static int port;
   protected static final String browser = System.getProperty("selenide.browser", CHROME);
@@ -25,21 +29,22 @@ public abstract class BaseIntegrationTest {
   static final boolean headless = parseBoolean(System.getProperty("selenide.headless", "false"));
 
   @BeforeAll
-  static void setUpAll() throws Exception {
+  static void setUpAll() {
     Locale.setDefault(Locale.ENGLISH);
-    runLocalHttpServer();
   }
 
   @BeforeEach
-  final void resetUploadedFiles() {
+  final void resetUploadedFiles() throws Exception {
+    runLocalHttpServer();
     server.reset();
   }
 
-  private static void runLocalHttpServer() throws Exception {
+  private void runLocalHttpServer() throws Exception {
     if (server == null) {
       synchronized (BaseIntegrationTest.class) {
         if (server == null) {
           port = findFreePort();
+          log.info("Starting local http server on port {}, ssl: {}", port, SSL);
           server = new LocalHttpServer(port, SSL).start();
           protocol = SSL ? "https://" : "http://";
         }

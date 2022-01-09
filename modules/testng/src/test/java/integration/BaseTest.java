@@ -28,7 +28,7 @@ abstract class BaseTest {
   final void startServer() throws Exception {
     if (server == null) {
       int port = findFreePort();
-      log.info("START {} Test NG tests", Configuration.browser);
+      log.info("START {} Test NG tests on port {}", Configuration.browser, port);
       server = new LocalHttpServer(port, true).start();
       Configuration.baseUrl = "https://127.0.0.1:" + port;
     }
