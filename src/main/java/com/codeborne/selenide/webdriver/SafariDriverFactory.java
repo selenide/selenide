@@ -2,7 +2,6 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
-import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.safari.SafariDriver;
@@ -41,10 +40,10 @@ public class SafariDriverFactory extends AbstractDriverFactory {
                                           @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     SafariOptions options = new SafariOptions();
     if (config.headless()) {
-      throw new InvalidArgumentException("headless browser not supported in Safari. Set headless property to false.");
+      throw new IllegalArgumentException("headless browser not supported in Safari. Set headless property to false.");
     }
-    if (config.browserBinary() == null) {
-      throw new InvalidArgumentException("browser binary path not supported in Safari. Reset browserBinary setting.");
+    if (config.browserBinary() != null) {
+      throw new IllegalArgumentException("browser binary path not supported in Safari. Reset browserBinary setting.");
     }
     options.merge(createCommonCapabilities(new SafariOptions(), config, browser, proxy));
     return options;

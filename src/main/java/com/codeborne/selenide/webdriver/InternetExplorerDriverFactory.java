@@ -43,7 +43,7 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
                                                     @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     Capabilities capabilities = createCommonCapabilities(new InternetExplorerOptions(), config, browser, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
-    if (config.browserBinary() == null) {
+    if (config.browserBinary() != null) {
       log.info("Using browser binary: {}", config.browserBinary());
       log.warn("Changing browser binary not supported in InternetExplorer, setting will be ignored.");
     }

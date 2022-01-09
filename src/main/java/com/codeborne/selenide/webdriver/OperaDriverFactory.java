@@ -3,7 +3,6 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.opera.OperaDriver;
@@ -54,7 +53,7 @@ public class OperaDriverFactory extends AbstractDriverFactory {
                                          @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     OperaOptions operaOptions = new OperaOptions();
     if (config.headless()) {
-      throw new InvalidArgumentException("headless browser not supported in Opera. Set headless property to false.");
+      throw new IllegalArgumentException("headless browser not supported in Opera. Set headless property to false.");
     }
     if (config.browserBinary() != null) {
       log.info("Using browser binary: {}", config.browserBinary());
