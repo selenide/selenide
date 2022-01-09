@@ -62,6 +62,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.browser = System.getProperty("selenide.browser", CHROME);
     Configuration.baseUrl = getBaseUrl();
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
+    Configuration.webdriverLogsEnabled = true;
     Configuration.reportsFolder = System.getProperty("selenide.reportsFolder", "build/reports/tests");
     fastSetValue = false;
     browserSize = System.getProperty("selenide.browserSize", "1200x960");

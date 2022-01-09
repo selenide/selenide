@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'check', 'edge_headless' ]
+        gradle-task: [ 'check', 'firefox_headless' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -19,9 +19,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '11'
-      - name: Setup Edge
-        if: ${{ matrix.gradle-task == 'edge_headless' }}
-        uses: browser-actions/setup-edge@latest
+      - name: Setup Firefox
+        uses: browser-actions/setup-firefox@latest
       - name: Build with Gradle
         run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v2
@@ -34,7 +33,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'check', 'firefox_headless', 'chrome_headless' ]
+        gradle-task: [ 'firefox_headless' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2

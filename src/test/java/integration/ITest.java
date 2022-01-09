@@ -14,7 +14,9 @@ public abstract class ITest extends BaseIntegrationTest {
   private final long longTimeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
 
   private static final ThreadLocal<SelenideConfig> config = withInitial(() ->
-    new SelenideConfig().browser(browser).baseUrl(getBaseUrl()).timeout(1));
+    new SelenideConfig().browser(browser).baseUrl(getBaseUrl()).timeout(1)
+      .webdriverLogsEnabled(true)
+  );
 
   private static final ThreadLocal<SelenideDriver> driver = withInitial(() ->
     new SelenideDriver(config.get()));
