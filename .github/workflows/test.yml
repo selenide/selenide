@@ -6,28 +6,6 @@ on:
   pull_request:
 
 jobs:
-  run-tests-on-windows:
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        gradle-task: [ 'check', 'firefox_headless' ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: '11'
-      - name: Setup Firefox
-        uses: browser-actions/setup-firefox@latest
-      - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
-      - uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: test-report-win
-          path: ./**/build/reports
   run-tests-on-linux:
     runs-on: ubuntu-latest
     strategy:
@@ -43,10 +21,7 @@ jobs:
           java-version: '11'
       - name: Setup Firefox
         if: ${{ matrix.gradle-task != 'check' }}
-        run: |
-          sudo add-apt-repository ppa:ubuntu-mozilla-daily/ppa
-          sudo apt-get update
-          sudo apt-get install firefox-trunk
+        uses: browser-actions/setup-firefox@latest
       - uses: actions/cache@v2
         with:
           path: |
