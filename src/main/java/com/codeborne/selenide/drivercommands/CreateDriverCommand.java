@@ -28,6 +28,7 @@ import static com.codeborne.selenide.impl.FileHelper.deleteFolderIfEmpty;
 import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static java.lang.Thread.currentThread;
 
+@SuppressWarnings("deprecation")
 @ParametersAreNonnullByDefault
 public class CreateDriverCommand {
   private static final Logger log = LoggerFactory.getLogger(CreateDriverCommand.class);
@@ -53,7 +54,7 @@ public class CreateDriverCommand {
     }
 
     log.debug("Creating webdriver in thread {} (ip: {}, host: {})...",
-      currentThread().getId(), HostIdentifier.getHostName(), HostIdentifier.getHostAddress());
+      currentThread().getId(), HostIdentifier.getHostAddress(), HostIdentifier.getHostName());
 
     SelenideProxyServer selenideProxyServer = null;
     Proxy browserProxy = userProvidedProxy;
