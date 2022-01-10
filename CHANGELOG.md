@@ -1,11 +1,14 @@
 # Changelog
 
-## 6.2.0
-* #1589 add "<Click to see difference>" to most of Selenide assertion errors
+## 6.2.0 (released 10.01.2022)
+* #1589 add "<Click to see difference>" to most of Selenide assertion errors  --  see PR #1676
 * add locator to some of Selenide error messages
-* #797 replace `$$.iterator()` by `$$.asReloadingIterable()` and `$$.asFixedIterable()`  --  see PR #1688
+* #797 replace `$$.iterator()` by `$$.asDynamicIterable()` and `$$.asFixedIterable()`  --  see PR #1688
 * #1646 fix SoftAssert listener to avoid failing the test if soft asserts are disabled  --  see PR #1680
-* #372 [feature restored] avoid soft asserts for @Test method with "expectedExceptions" attribute
+* #1661 Loss of error messages after soft assert fail  --  see PR #1679
+* #372 [feature restored] avoid soft asserts for @Test method with "expectedExceptions" attribute  --  see PR #1685
+* #1682 Bump testng from 7.4.0 to 7.5
+* #1678 upgrade to BrowserUpProxy 2.1.3
 
 ## 6.1.2 (released 22.12.2021)
 * #1672 upgrade to Selenium 4.1.1
