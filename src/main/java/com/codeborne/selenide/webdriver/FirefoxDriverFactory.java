@@ -51,6 +51,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
         return new FirefoxDriver(createDriverService(config), createCapabilities(config, browser, proxy, browserDownloadsFolder));
       }
       catch (SessionNotCreatedException probablyPortAlreadyUsed) {
+        log.error("Failed to start firefox", probablyPortAlreadyUsed);
         failure = probablyPortAlreadyUsed;
       }
     }
