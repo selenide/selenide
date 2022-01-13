@@ -110,7 +110,7 @@ final class WebDriverThreadLocalContainerTest {
     @Override
     @CheckReturnValue
     @Nonnull
-    public WebDriver createDriver(@Nonnull Capabilities desiredCapabilities) {
+    public WebDriver createDriver(@Nonnull Capabilities capabilities) {
       WebDriver webdriver = mock(WebDriver.class);
       WebDriver.Options options = mock(WebDriver.Options.class);
       when(webdriver.manage()).thenReturn(options);

@@ -53,9 +53,9 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends ProxyIntegratio
     @Override
     @CheckReturnValue
     @Nonnull
-    public WebDriver createDriver(@Nonnull Capabilities desiredCapabilities) {
-      if (browser().isChrome()) return chrome(desiredCapabilities);
-      if (browser().isFirefox()) return firefox(desiredCapabilities);
+    public WebDriver createDriver(@Nonnull Capabilities capabilities) {
+      if (browser().isChrome()) return chrome(capabilities);
+      if (browser().isFirefox()) return firefox(capabilities);
       throw new IllegalStateException("Unsupported browser: " + browser().name);
     }
 

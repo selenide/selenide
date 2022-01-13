@@ -86,7 +86,7 @@ final class WebDriverRunnerTest {
     @Override
     @CheckReturnValue
     @Nonnull
-    public WebDriver createDriver(@Nonnull Capabilities desiredCapabilities) {
+    public WebDriver createDriver(@Nonnull Capabilities capabilities) {
       return driver;
     }
   }
