@@ -28,7 +28,7 @@ subprojects {
     testImplementation("commons-fileupload:commons-fileupload:${commonsFileuploadVersion}")
     testImplementation("org.mockito:mockito-core:$mockitoVersion")
     testImplementation("org.assertj:assertj-core:$assertjVersion")
-    implementation('org.slf4j:slf4j-api:1.7.32')
+    implementation('org.slf4j:slf4j-api:1.7.33')
     testRuntimeOnly('org.slf4j:slf4j-simple:1.7.32')
   }
 }
