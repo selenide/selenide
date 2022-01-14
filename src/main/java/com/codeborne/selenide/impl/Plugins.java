@@ -56,7 +56,7 @@ public class Plugins {
 
     String className = readFile(file).trim();
     try {
-      return instantiate(className);
+      return instantiate(className, klass);
     }
     catch (Exception e) {
       throw new IllegalStateException("Failed to initialize default plugin " + className + " from " + file, e);
@@ -64,9 +64,8 @@ public class Plugins {
   }
 
   @Nonnull
-  private static <T> T instantiate(String className) throws Exception {
-    @SuppressWarnings("unchecked")
-    Constructor<T> constructor = (Constructor<T>) Class.forName(className).getDeclaredConstructor();
+  private static <T> T instantiate(String className, Class<T> klass) throws Exception {
+    Constructor<? extends T> constructor = Class.forName(className).asSubclass(klass).getDeclaredConstructor();
     constructor.setAccessible(true);
     return constructor.newInstance();
   }
