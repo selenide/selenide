@@ -13,49 +13,54 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  run-tests-on-windows:
-    runs-on: windows-latest
+  matrix_prep:
+    name: Matrix Preparation
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    env:
+      # Ask matrix.js to produce 7 jobs
+      MATRIX_JOBS: 7
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 50
+      - id: set-matrix
+        run: |
+          node .github/workflows/matrix.js
+
+  test:
+    needs: matrix_prep
+    name: '${{ matrix.name }}'
+    runs-on: ${{ matrix.os }}
+    env:
+      TZ: ${{ matrix.tz }}
     strategy:
+      matrix: ${{fromJson(needs.matrix_prep.outputs.matrix)}}
       fail-fast: false
-      matrix:
-        gradle-task: [ 'check', 'edge_headless' ]
+      # max-parallel: 4
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v1
         with:
-          java-version: '11'
+          fetch-depth: 50
+      - name: Set up Java ${{ matrix.java_version }}, ${{ matrix.java_distribution }}
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.java_version }}
+          distribution: ${{ matrix.java_distribution }}
+          architecture: x64
       - name: Setup Edge
         if: ${{ matrix.gradle-task == 'edge_headless' }}
         uses: browser-actions/setup-edge@latest
-      - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
-      - uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: test-report-win
-          path: ./**/build/reports
-  run-tests-on-linux:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        gradle-task: [ 'check', 'firefox_headless', 'chrome_headless' ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: '11'
       - name: Setup Firefox
-        if: ${{ matrix.gradle-task != 'check' }}
+        if: ${{ matrix.os == 'ubuntu-latest' && (matrix.gradle-task == 'chrome_headless' || matrix.gradle-task == 'firefox_headless') }}
         run: |
           sudo add-apt-repository ppa:ubuntu-mozilla-daily/ppa
           sudo apt-get update
           sudo apt-get install firefox-trunk
       - uses: actions/cache@v2
+        if: ${{ matrix.os != 'windows-latest' }}
         with:
           path: |
             ~/.gradle/caches
@@ -63,8 +68,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Build with Gradle
+      - name: gradlew ${{ matrix.gradle-task }}
         run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
+        env:
+          _JAVA_OPTIONS: ${{ matrix.testExtraJvmArgs }}
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
