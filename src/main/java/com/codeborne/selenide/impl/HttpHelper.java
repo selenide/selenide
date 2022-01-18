@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.StringUtils.left;
 public class HttpHelper {
 
   private static final Pattern FILENAME_IN_CONTENT_DISPOSITION_HEADER =
-    Pattern.compile(".*filename\\*?=\"?((.+)'')?([^\";?]*)\"?(;charset=(.*))?.*", CASE_INSENSITIVE);
+    Pattern.compile(".*filename\\*? *= *\"?((.+)'')?([^\";?]*)\"?(;charset=(.*))?.*", CASE_INSENSITIVE);
 
   private static final Pattern FILENAME_FORBIDDEN_CHARACTERS =
     Pattern.compile("[#%&{}/\\\\<>*?$!'\":@+`|=]");
