@@ -18,7 +18,7 @@ final class HttpHelperTest {
       .isEqualTo("statement.xls");
 
     assertThat(helper.getFileNameFromContentDisposition(
-      "Content-Disposition", "Content-Disposition=attachment; filename = statement2.xls"))
+      "Content-Disposition", "Content-Disposition=attachment; filename = statement.xls"))
       .get()
       .isEqualTo("statement.xls");
 
