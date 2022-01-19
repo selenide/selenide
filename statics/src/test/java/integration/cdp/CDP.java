@@ -2,6 +2,7 @@ package integration.cdp;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WrapsDriver;
+import org.openqa.selenium.chromium.ChromiumNetworkConditions;
 import org.openqa.selenium.chromium.HasNetworkConditions;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
@@ -64,6 +65,12 @@ class CDP {
       WebDriver augmentedDriver = new Augmenter().augment(getWebDriver());
       return ((HasNetworkConditions) augmentedDriver);
     }
+  }
+
+  static void toggleOffline(boolean offline) {
+    ChromiumNetworkConditions networkConditions = new ChromiumNetworkConditions();
+    networkConditions.setOffline(offline);
+    getNetworkConditionsDriver().setNetworkConditions(networkConditions);
   }
 
   @FunctionalInterface
