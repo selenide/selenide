@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
   group = 'com.codeborne'
-  version = '6.2.0'
+  version = '6.2.1'
 }
 
 subprojects {

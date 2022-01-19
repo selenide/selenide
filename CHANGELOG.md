@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.1 (released 19.01.2022)
+* #1702 Ignore whitespaces for filename in Content-Disposition header  --  thanks Yevgeniy Mikhailov for PR #1702
+* #1703, #1433 override default timeouts for remote webdriver  --  thanks Irina Styazhkina for PR #1673
+
 ## 6.2.0 (released 10.01.2022)
 * #1589 add "<Click to see difference>" to most of Selenide assertion errors  --  see PR #1676
 * add locator to some of Selenide error messages
