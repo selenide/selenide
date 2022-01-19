@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.or;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
@@ -35,7 +36,7 @@ final class ChromiumNetworkConditionsTest extends IntegrationTest {
 
       CDP.toggleOffline(true);
       refresh();
-      $("h1").shouldHave(or("no network", text("no internet"), text("not connected")));
+      $("h1").shouldHave(or("no network", text("no internet"), text("not connected"), disappear));
 
       CDP.toggleOffline(false);
       refresh();
