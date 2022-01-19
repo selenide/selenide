@@ -18,6 +18,26 @@ final class HttpHelperTest {
       .isEqualTo("statement.xls");
 
     assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "Content-Disposition=attachment; filename = statement.xls"))
+      .get()
+      .isEqualTo("statement.xls");
+
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "Content-Disposition=attachment; filename =statement.xls"))
+      .get()
+      .isEqualTo("statement.xls");
+
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "Content-Disposition=attachment; filename   =   statement.xls"))
+      .get()
+      .isEqualTo("statement.xls");
+
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "Content-Disposition=attachment; filename= statement.xls"))
+      .get()
+      .isEqualTo("statement.xls");
+
+    assertThat(helper.getFileNameFromContentDisposition(
       "Content-Disposition", "Content-Disposition=inline; filename=\"statement-40817810048000102279.pdf\""))
       .get()
       .isEqualTo("statement-40817810048000102279.pdf");
