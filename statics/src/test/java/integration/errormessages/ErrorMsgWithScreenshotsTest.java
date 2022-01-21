@@ -14,9 +14,8 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static org.assertj.core.api.Assertions.assertThat;
+import static integration.errormessages.Helper.screenshot;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
 
 final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
   private String reportsUrl;
@@ -32,7 +31,7 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
   void mockScreenshots() {
     reportsUrl = Configuration.reportsUrl;
     reportsFolder = Configuration.reportsFolder;
-    Configuration.reportsFolder = "build/reports/tests/ErrorMsgWithScreenshotsTest";
+    Configuration.reportsFolder = "build/reports/tests";
     Configuration.reportsUrl = "http://ci.org/";
   }
 
@@ -67,47 +66,33 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
         .shouldBe(visible)
     )
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {#multirowTable/thead}")
-      .matches(e -> {
-        String path = "/integration/errormessages/ErrorMsgWithScreenshotsTest/reportWhichParentElementIsNotFound";
-        return ((ElementNotFound) e).getScreenshot().getImage()
-          .matches("http://ci\\.org/build/reports/tests/ErrorMsgWithScreenshotsTest" + path + "/\\d+\\.\\d+\\.(png|html)");
-      });
+      .hasMessageStartingWith("Element not found {#multirowTable/thead}")
+      .has(screenshot("/integration/errormessages/ErrorMsgWithScreenshotsTest/reportWhichParentElementIsNotFound"));
   }
 
   @Test
   void reportIfParentCollectionIsNotFound() {
-    try {
-      $("#multirowTable")
-        .findAll("thead")
-        .findBy(text("mymail@gmail.com"))
-        .find(".trash")
-        .shouldBe(visible);
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound e) {
-      assertThat(e)
-        .hasMessageContaining("Element not found {#multirowTable/thead");
-      String path = "/integration/errormessages/ErrorMsgWithScreenshotsTest/reportIfParentCollectionIsNotFound";
-      assertThat(e.getScreenshot().getImage())
-        .matches("http://ci\\.org/build/reports/tests/ErrorMsgWithScreenshotsTest" + path + "/\\d+\\.\\d+\\.(png|html)");
-    }
+    assertThatThrownBy(() -> $("#multirowTable")
+      .findAll("thead")
+      .findBy(text("mymail@gmail.com"))
+      .find(".trash")
+      .shouldBe(visible)
+    )
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("Element not found {#multirowTable/thead")
+      .has(screenshot("/integration/errormessages/ErrorMsgWithScreenshotsTest/reportIfParentCollectionIsNotFound"));
   }
 
   @Test
   void elementNotFoundInsideParent() {
-    try {
-      $("#multirowTable")
-        .findAll("tbody tr")
-        .findBy(text("Norris"))
-        .find(".second_row")
-        .shouldBe(visible);
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound e) {
-      assertThat(e)
-        .hasMessageContaining("Element not found {#multirowTable/tbody tr.findBy(text \"Norris\")/.second_row}");
-    }
+    assertThatThrownBy(() -> $("#multirowTable")
+      .findAll("tbody tr")
+      .findBy(text("Norris"))
+      .find(".second_row")
+      .shouldBe(visible)
+    )
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {#multirowTable/tbody tr.findBy(text \"Norris\")/.second_row}");
   }
 
   @Test

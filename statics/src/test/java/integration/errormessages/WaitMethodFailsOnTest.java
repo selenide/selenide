@@ -16,8 +16,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class WaitMethodFailsOnTest extends IntegrationTest {
   @BeforeEach
@@ -35,53 +34,37 @@ final class WaitMethodFailsOnTest extends IntegrationTest {
   void wait_until_text() {
     SelenideElement element = $(".detective");
 
-    try {
-      element.should(have(text("Müller")), Duration.ofMillis(42));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementShould expected) {
-      assertThat(expected).hasMessageStartingWith("Element should have text \"Müller\" {.detective}");
-    }
+    assertThatThrownBy(() -> element.should(have(text("Müller")), Duration.ofMillis(42)))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have text \"Müller\" {.detective}");
   }
 
   @Test
   void wait_until_visible() {
     SelenideElement element = $$("ul .nonexistent").get(1);
 
-    try {
-      element.shouldBe(visible, Duration.ofMillis(42));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
-      assertThat(expected).hasMessageStartingWith("Element not found {ul .nonexistent[1]}");
-      assertThat(expected).hasMessageContaining("Expected: visible");
-    }
+    assertThatThrownBy(() -> element.shouldBe(visible, Duration.ofMillis(42)))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {ul .nonexistent[1]}")
+      .hasMessageContaining("Expected: visible");
   }
 
   @Test
   void wait_while_visible() {
     SelenideElement element = $(".detective").shouldBe(visible);
 
-    try {
-      element.shouldNot(visible, Duration.ofMillis(42));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementShouldNot expected) {
-      assertThat(expected).hasMessageStartingWith("Element should not visible {.detective}"); // ugly text
-      assertThat(expected).hasMessageContaining("Actual value: visible");
-    }
+    assertThatThrownBy(() -> element.shouldNot(visible, Duration.ofMillis(42)))
+      .isInstanceOf(ElementShouldNot.class)
+      .hasMessageStartingWith("Element should not visible {.detective}")
+      .hasMessageContaining("Actual value: visible");
   }
 
   @Test
   void wait_while_has_text() {
     SelenideElement element = $(".detective").shouldBe(visible);
 
-    try {
-      element.shouldNot(have(text("Miller")), Duration.ofMillis(42));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementShouldNot expected) {
-      assertThat(expected).hasMessageStartingWith("Element should not have text \"Miller\" {.detective}");
-    }
+    assertThatThrownBy(() -> element.shouldNot(have(text("Miller")), Duration.ofMillis(42)))
+      .isInstanceOf(ElementShouldNot.class)
+      .hasMessageStartingWith("Element should not have text \"Miller\" {.detective}");
   }
 }

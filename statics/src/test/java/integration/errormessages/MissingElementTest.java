@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -23,9 +24,9 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.element;
-import static org.assertj.core.api.Assertions.assertThat;
+import static integration.errormessages.Helper.screenshot;
+import static integration.errormessages.Helper.webElementNotFound;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 final class MissingElementTest extends IntegrationTest {
@@ -55,21 +56,19 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void elementNotFound() {
-    try {
-      $("h9").shouldHave(text("expected text"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
-      String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/elementNotFound";
-      assertThat(expected)
-        .hasMessageMatching(String.format("Element not found \\{h9}%n" +
-          "Expected: text \"expected text\"%n" +
-          "Screenshot: " + path + png() + "%n" +
-          "Page source: " + path + html() + "%n" +
-          "Timeout: 15 ms.%n" +
-          "Caused by: NoSuchElementException:.*"));
-      assertThat(expected.getScreenshot().getImage()).matches(path + pngOrHtml());
-    }
+    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/elementNotFound";
+    assertThatThrownBy(() -> $("#h9").shouldHave(text("expected text")))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageMatching(String.format("Element not found \\{#h9}%n" +
+        "Expected: text \"expected text\"%n" +
+        "Screenshot: " + path + png() + "%n" +
+        "Page source: " + path + html() + "%n" +
+        "Timeout: 15 ms.%n" +
+        "Caused by: NoSuchElementException:.*"))
+      .has(screenshot("/integration/errormessages/MissingElementTest/elementNotFound"))
+      .getCause()
+      .isInstanceOf(NoSuchElementException.class)
+      .is(webElementNotFound("#h9"));
   }
 
   @Test
