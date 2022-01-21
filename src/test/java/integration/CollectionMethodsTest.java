@@ -217,7 +217,10 @@ final class CollectionMethodsTest extends ITest {
       .findAll("valid-selector")
       .shouldHave(texts("foo bar")))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {#multirowTable.findBy(text \"INVALID-TEXT\")}");
+      .hasMessageContaining("Element not found {#multirowTable.findBy(text \"INVALID-TEXT\")/valid-selector}")
+      .hasCauseInstanceOf(NoSuchElementException.class)
+      .getCause()
+      .hasMessageStartingWith("Cannot locate an element #multirowTable.findBy(text \"INVALID-TEXT\")");
   }
 
   @Test
