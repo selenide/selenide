@@ -3,7 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.ElementNotFound;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -52,7 +52,7 @@ public class CollectionElementByCondition extends WebElementSource {
       }
     }
 
-    throw new ElementNotFound(description(), condition);
+    throw new NoSuchElementException("Cannot locate an element " + description());
   }
 
   @Override

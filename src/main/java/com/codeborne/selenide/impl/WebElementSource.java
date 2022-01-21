@@ -7,6 +7,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -82,6 +83,9 @@ public abstract class WebElementSource {
   @CheckReturnValue
   @Nonnull
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
+    if (lastError instanceof UIAssertionError) {
+      throw new IllegalArgumentException("Unexpected UIAssertionError as a cause of ElementNotFound: " + lastError, lastError);
+    }
     return new ElementNotFound(description(), condition, lastError);
   }
 

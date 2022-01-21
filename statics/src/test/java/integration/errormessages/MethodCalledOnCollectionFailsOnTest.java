@@ -13,6 +13,8 @@ import org.openqa.selenium.NoSuchElementException;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
@@ -40,7 +42,8 @@ final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
       fail("Expected ElementNotFound");
-    } catch (ElementNotFound expected) {
+    }
+    catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul .nonexistent}");
       assertThat(expected)
@@ -74,7 +77,8 @@ final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
       fail("Expected ElementNotFound");
-    } catch (ElementNotFound expected) {
+    }
+    catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul .nonexistent.filter(css class \"the-expanse\")}");
       assertThat(expected)
@@ -99,7 +103,8 @@ final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
       fail("Expected ElementNotFound");
-    } catch (ElementNotFound expected) {
+    }
+    catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul li.filter(css class \"nonexistent\")}");
       assertThat(expected)
@@ -124,7 +129,8 @@ final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
       fail("Expected ElementNotFound");
-    } catch (ElementNotFound expected) {
+    }
+    catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {.nonexistent/li}");
       assertThat(expected)
@@ -160,7 +166,8 @@ final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
       fail("Expected ElementNotFound");
-    } catch (ElementNotFound expected) {
+    }
+    catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul/.nonexistent}");
       assertThat(expected)
@@ -200,7 +207,8 @@ final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     try {
       collection.shouldHave(size(3));
       fail("Expected ListSizeMismatch");
-    } catch (ListSizeMismatch expected) {
+    }
+    catch (ListSizeMismatch expected) {
       assertThat(expected).hasMessageStartingWith("List size mismatch: expected: = 3, actual: 2, collection: ul li");
       assertScreenshot(expected);
       assertThat(expected.getCause()).isNull();
@@ -214,11 +222,38 @@ final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     try {
       collection.shouldHave(size(3));
       fail("Expected ListSizeMismatch");
-    } catch (ListSizeMismatch expected) {
+    }
+    catch (ListSizeMismatch expected) {
       assertThat(expected).hasMessageStartingWith("List size mismatch: expected: = 3, actual: 0, collection: ul .nonexistent");
       assertScreenshot(expected);
       assertThat(expected.getCause()).isNull();
     }
+  }
+
+  @Test
+  void shouldNotWrap_ElementNotFound_error_twice() {
+    assertThatThrownBy(() ->
+      $$("ul").findBy(text("NOPE")).shouldBe(visible)
+    )
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {ul.findBy(text \"NOPE\")}")
+      .hasMessageContaining("Expected: visible")
+      .hasCauseInstanceOf(NoSuchElementException.class)
+      .getCause()
+      .hasMessageStartingWith("Cannot locate an element ul.findBy(text \"NOPE\")");
+  }
+
+  @Test
+  void shouldNotWrap_ElementNotFound_error_twice_whenIntermediateElementNotFound() {
+    assertThatThrownBy(() ->
+      $$("ul").findBy(text("NOPE")).find(byText("YES")).find(byText("NO")).shouldBe(visible)
+    )
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {ul.findBy(text \"NOPE\")}")
+      .hasMessageContaining("Expected: exist")
+      .hasCauseInstanceOf(NoSuchElementException.class)
+      .getCause()
+      .hasMessageStartingWith("Cannot locate an element ul.findBy(text \"NOPE\")");
   }
 
   @Test
