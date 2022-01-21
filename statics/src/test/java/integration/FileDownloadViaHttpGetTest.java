@@ -26,7 +26,6 @@ import static java.nio.file.Files.createTempDirectory;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.fail;
 
 final class FileDownloadViaHttpGetTest extends IntegrationTest {
   private static final String LISTENER = "SelenideLoggerTest";
@@ -138,22 +137,19 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @Test
   void downloadsGetsTimeoutException() throws IOException {
-    try {
+    assertThatThrownBy(() -> {
       $(byText("Download me slowly (2000 ms)")).download(1000);
-      fail("expected TimeoutException");
-    } catch (TimeoutException expected) {
-      assertThat(expected)
-        .hasMessageStartingWith("Failed to download ")
-        .hasMessageEndingWith("/files/hello_world.txt?pause=2000 in 1000 ms.");
-    }
+    })
+      .isInstanceOf(TimeoutException.class)
+      .hasMessageStartingWith("Failed to download ")
+      .hasMessageEndingWith("/files/hello_world.txt?pause=2000 in 1000 ms.");
   }
 
   @Test
   void downloadWithQueryParamsWithoutHeaders() throws FileNotFoundException {
     openFile("download.html");
-    final File downloadedFile = $("#link").download();
-    assertThat(downloadedFile.getName())
-      .isEqualTo("hello_world.txt");
+    File downloadedFile = $("#link").download();
+    assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
 
   @Test

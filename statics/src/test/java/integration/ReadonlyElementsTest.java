@@ -17,10 +17,7 @@ import static com.codeborne.selenide.Condition.exactValue;
 import static com.codeborne.selenide.Condition.readonly;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Selenide.$;
-import static org.assertj.core.api.Assertions.anyOf;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
 
 final class ReadonlyElementsTest extends IntegrationTest {
   @BeforeEach
@@ -37,30 +34,16 @@ final class ReadonlyElementsTest extends IntegrationTest {
 
   @Test
   void cannotSetValueToReadonlyField_slowSetValue() {
-    final List<String> exceptionMessages = Arrays.asList(
-      "Element is read-only and so may not be used for actions",
-      "Element must be user-editable in order to clear it",
-      "You may only edit editable elements",
-      "Invalid element state [By.name: username]: invalid element state",
-      "Element is read-only: <input name=\"username\">"
-    );
-
     Configuration.fastSetValue = false;
 
-    assertThat(verifySetValueThrowsException())
-      .is(anyOf(getExceptionMessagesCondition(exceptionMessages)));
-  }
-
-  private String verifySetValueThrowsException() {
-    try {
+    assertThatThrownBy(() -> {
       $(By.name("username")).val("another-username");
-      fail("should throw InvalidStateException where setting value to readonly/disabled element");
-      return null;
-    } catch (InvalidStateException expected) {
-      $(By.name("username")).shouldBe(empty);
-      $(By.name("username")).shouldHave(exactValue(""));
-      return expected.getMessage();
-    }
+    })
+      .as("should throw InvalidStateException where setting value to readonly/disabled element")
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageStartingWith("Invalid element state [By.name: username]");
+    $(By.name("username")).shouldBe(empty);
+    $(By.name("username")).shouldHave(exactValue(""));
   }
 
   private Condition<String> getExceptionMessagesCondition(final List<String> exceptionMessages) {
@@ -71,54 +54,44 @@ final class ReadonlyElementsTest extends IntegrationTest {
 
   @Test
   void cannotSetValueToDisabledField_slowSetValue() {
-    final List<String> exceptionMessages = Arrays.asList(
-      "Element must be user-editable in order to clear it",
-      "You may only edit editable elements",
-      "You may only interact with enabled elements",
-      "Element is not currently interactable and may not be manipulated",
-      "Invalid element state: invalid element state [By.name: username]: Element is not currently interactable and may not be manipulated",
-      "Element is disabled");
-
     Configuration.fastSetValue = false;
 
-    assertThat(verifySetValue2ThrowsException())
-      .is(anyOf(getExceptionMessagesCondition(exceptionMessages)));
-  }
-
-  private String verifySetValue2ThrowsException() {
-    try {
+    assertThatThrownBy(() -> {
       $(By.name("password")).setValue("another-pwd");
-      fail("should throw InvalidStateException where setting value to readonly/disabled element");
-      return null;
-    } catch (InvalidStateException expected) {
-      $(By.name("password")).shouldBe(empty);
-      $(By.name("password")).shouldHave(exactValue(""));
-      return expected.getMessage();
-    }
+    })
+      .as("should throw InvalidStateException where setting value to readonly/disabled element")
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageStartingWith("Invalid element state [By.name: password]");
+    $(By.name("password")).shouldBe(empty);
+    $(By.name("password")).shouldHave(exactValue(""));
   }
 
   @Test
   void cannotSetValueToReadonlyField_fastSetValue() {
-    final List<String> exceptionMessages = Arrays.asList(
-      "Cannot change value of readonly element",
-      "Element must be user-editable in order to clear it");
-
     Configuration.fastSetValue = true;
 
-    assertThat(verifySetValueThrowsException())
-      .is(anyOf(getExceptionMessagesCondition(exceptionMessages)));
+    assertThatThrownBy(() -> {
+      $(By.name("username")).val("another-username");
+    })
+      .as("should throw InvalidStateException where setting value to readonly/disabled element")
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageStartingWith("Invalid element state [By.name: username]");
+    $(By.name("username")).shouldBe(empty);
+    $(By.name("username")).shouldHave(exactValue(""));
   }
 
   @Test
   void cannotSetValueToDisabledField_fastSetValue() {
-    final List<String> exceptionMessages = Arrays.asList(
-      "Cannot change value of disabled element",
-      "Element is not currently interactable and may not be manipulated");
-
     Configuration.fastSetValue = true;
 
-    assertThat(verifySetValue2ThrowsException())
-      .is(anyOf(getExceptionMessagesCondition(exceptionMessages)));
+    assertThatThrownBy(() -> {
+      $(By.name("password")).setValue("another-pwd");
+    })
+      .as("should throw InvalidStateException where setting value to readonly/disabled element")
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageStartingWith("Invalid element state [By.name: password]");
+    $(By.name("password")).shouldBe(empty);
+    $(By.name("password")).shouldHave(exactValue(""));
   }
 
   @Test

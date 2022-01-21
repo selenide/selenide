@@ -42,13 +42,11 @@ final class SetSelectedCommandTest {
   void executeMethodWhenElementIsNotDisplayed() {
     when(locator.description()).thenReturn(".btn.btn-primary");
     when(mockedFoundElement.isDisplayed()).thenReturn(false);
-    try {
+    assertThatThrownBy(() -> {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
-    }
-    catch (InvalidStateException exception) {
-      assertThat(exception)
-        .hasMessageStartingWith("Invalid element state [.btn.btn-primary]: Cannot change invisible element");
-    }
+    })
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageStartingWith("Invalid element state [.btn.btn-primary]: Cannot change invisible element");
   }
 
   @Test
@@ -61,13 +59,12 @@ final class SetSelectedCommandTest {
     when(mockedFoundElement.isDisplayed()).thenReturn(true);
     when(mockedFoundElement.getTagName()).thenReturn(tagName);
     when(mockedFoundElement.getAttribute("type")).thenReturn("href");
-    try {
+
+    assertThatThrownBy(() -> {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
-    }
-    catch (InvalidStateException exception) {
-      assertThat(exception)
-        .hasMessageStartingWith("Invalid element state [input#username]: Only use setSelected on checkbox/option/radio");
-    }
+    })
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageStartingWith("Invalid element state [input#username]: Only use setSelected on checkbox/option/radio");
   }
 
   @Test
