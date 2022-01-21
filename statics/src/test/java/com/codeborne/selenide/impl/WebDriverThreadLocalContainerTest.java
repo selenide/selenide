@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -47,14 +47,9 @@ final class WebDriverThreadLocalContainerTest {
   void shouldNotOpenANewBrowser_ifSettingIsDisabled() {
     Configuration.reopenBrowserOnFail = false;
 
-    try {
-      container.getAndCheckWebDriver();
-      fail("expected IllegalStateException");
-    }
-    catch (IllegalStateException expected) {
-      assertThat(expected)
-        .hasMessageContaining("reopenBrowserOnFail=false");
-    }
+    assertThatThrownBy(() -> container.getAndCheckWebDriver())
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessageContaining("reopenBrowserOnFail=false");
   }
 
   @Test

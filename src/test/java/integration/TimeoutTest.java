@@ -6,11 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
-import java.time.Duration;
-
 import static com.codeborne.selenide.Condition.visible;
+import static java.time.Duration.ofMillis;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
+import static org.openqa.selenium.By.xpath;
 
 final class TimeoutTest extends ITest {
   @BeforeEach
@@ -24,48 +27,33 @@ final class TimeoutTest extends ITest {
     try {
       driver().getWebDriver().findElement(By.id("nonExistingElement"));
       fail("Looking for non-existing element should fail");
-    } catch (NoSuchElementException expectedException) {
+    }
+    catch (NoSuchElementException expectedException) {
       long end = System.nanoTime();
-      assertThat(end - start < 1200000000L)
-        .withFailMessage("Looking for non-existing element took more than 1.2 ms: " + (end - start) / 1000000 + " ms.")
-        .isTrue();
+      assertThat(end - start)
+        .withFailMessage("Looking for non-existing element took more than 1.2 ms: " + NANOSECONDS.toMillis(end - start) + " ms.")
+        .isLessThan(MILLISECONDS.toNanos(1200));
     }
   }
 
   @Test
   void timeoutShouldBeInMilliseconds() {
-    try {
-      $(By.xpath("//h16")).shouldBe(visible, Duration.ofMillis(15));
-    } catch (ElementNotFound expectedException) {
-      assertThat(expectedException.toString())
-        .withFailMessage(String.format("Error message should contain timeout '15 ms', but received: %s", expectedException.toString()))
-        .contains("15 ms");
-    }
+    assertThatThrownBy(() -> $(xpath("//h16")).shouldBe(visible, ofMillis(15)))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("15 ms");
   }
 
   @Test
   void timeoutShouldBeFormattedInErrorMessage() {
-    try {
-      $(By.xpath("//h19")).shouldBe(visible, Duration.ofMillis(1500));
-      fail("Expected ElementNotFound");
-    } catch (ElementNotFound expectedException) {
-      assertThat(expectedException.toString())
-        .withFailMessage(String.format("Error message should contain timeout '1.500 s', but received: %s",
-          expectedException.toString()))
-        .contains("1.500 s");
-    }
+    assertThatThrownBy(() -> $(xpath("//h19")).shouldBe(visible, ofMillis(1500)))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("1.500 s");
   }
 
   @Test
   void timeoutLessThanSecond() {
-    try {
-      $(By.xpath("//h18")).shouldBe(visible, Duration.ofMillis(800));
-      fail("Expected ElementNotFound");
-    } catch (ElementNotFound expectedException) {
-
-      assertThat(expectedException.toString())
-        .withFailMessage(String.format("Error message should contain timeout '800 ms', but received: %s", expectedException.toString()))
-        .contains("800 ms");
-    }
+    assertThatThrownBy(() -> $(xpath("//h18")).shouldBe(visible, ofMillis(800)))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("800 ms");
   }
 }

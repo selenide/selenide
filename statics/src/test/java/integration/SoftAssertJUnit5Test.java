@@ -52,6 +52,6 @@ public class SoftAssertJUnit5Test extends IntegrationTest {
     closeWebDriver();
 
     // uncomment to trigger test failure
-    // assertThat("zopa").isEqualTo("siski");
+    // assertThat("foo").isEqualTo("bar");
   }
 }

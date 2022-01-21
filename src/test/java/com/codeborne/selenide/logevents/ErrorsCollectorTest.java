@@ -9,6 +9,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -71,15 +72,10 @@ final class ErrorsCollectorTest {
   @Test
   void failIfErrorMethodWhenOnlyOneError() {
     errorsCollector.afterEvent(mockedFailedEvent);
-    try {
-      errorsCollector.cleanAndThrowAssertionError(defaultTestName, null);
-      fail("Expected SoftAssertionError");
-    }
-    catch (SoftAssertionError error) {
-      assertThat(error)
-        .withFailMessage("I couldn't find default error message in error message")
-        .hasMessageContaining(defaultErrorMessage);
-    }
+
+    assertThatThrownBy(() -> errorsCollector.cleanAndThrowAssertionError(defaultTestName, null))
+      .isInstanceOf(SoftAssertionError.class)
+      .hasMessageContaining(defaultErrorMessage);
   }
 
   @Test

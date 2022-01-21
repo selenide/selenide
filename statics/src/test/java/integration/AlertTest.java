@@ -18,7 +18,6 @@ import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.Selenide.prompt;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
 
 final class AlertTest extends IntegrationTest {
   @AfterAll
@@ -60,12 +59,12 @@ final class AlertTest extends IntegrationTest {
   void selenideChecksDialogText() {
     $(By.name("username")).val("Gregg");
     $(byValue("Alert button")).click();
-    try {
-      confirm("Good bye, Greg!");
-    } catch (DialogTextMismatch expected) {
-      return;
-    }
-    fail("Should throw DialogTextMismatch for mismatching text");
+
+    assertThatThrownBy(() -> confirm("Good bye, Gregg!"))
+      .isInstanceOf(DialogTextMismatch.class)
+      .hasMessageStartingWith("Dialog text mismatch")
+      .hasMessageContaining("Actual: Are you sure, Gregg?")
+      .hasMessageContaining("Expected: Good bye, Gregg!");
   }
 
   @Test
