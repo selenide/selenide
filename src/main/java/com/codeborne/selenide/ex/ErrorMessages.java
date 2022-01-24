@@ -28,6 +28,12 @@ public class ErrorMessages {
 
   @CheckReturnValue
   @Nonnull
+  protected static String duration(long durationMs) {
+    return String.format("%nDuration: %s", df.format(durationMs));
+  }
+
+  @CheckReturnValue
+  @Nonnull
   static String actualValue(Condition condition, Driver driver,
                             @Nullable WebElement element,
                             @Nullable CheckResult lastCheckResult) {

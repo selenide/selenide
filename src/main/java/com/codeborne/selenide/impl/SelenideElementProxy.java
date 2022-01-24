@@ -77,6 +77,7 @@ class SelenideElementProxy implements InvocationHandler {
       validateAssertionMode(config());
     }
 
+    long start = System.currentTimeMillis();
     long timeoutMs = getTimeoutMs(arguments);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.description(), method.getName(), args);
     try {
@@ -85,7 +86,8 @@ class SelenideElementProxy implements InvocationHandler {
       return result;
     }
     catch (Error error) {
-      Throwable wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs);
+      long end = System.currentTimeMillis();
+      Throwable wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs, end - start);
       SelenideLogger.commitStep(log, wrappedError);
       return continueOrBreak(proxy, method, wrappedError);
     }

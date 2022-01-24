@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.ex.ErrorMessages.causedBy;
+import static com.codeborne.selenide.ex.ErrorMessages.duration;
 import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 
@@ -24,6 +25,7 @@ public class UIAssertionError extends AssertionFailedError {
 
   private Screenshot screenshot = Screenshot.none();
   public long timeoutMs;
+  public long durationMs;
 
   protected UIAssertionError(String message) {
     super(message);
@@ -57,7 +59,7 @@ public class UIAssertionError extends AssertionFailedError {
 
   @CheckReturnValue
   protected String uiDetails() {
-    return screenshot.summary() + timeout(timeoutMs) + causedBy(getCause());
+    return screenshot.summary() + timeout(timeoutMs) + duration(durationMs) + causedBy(getCause());
   }
 
   /**
@@ -72,19 +74,25 @@ public class UIAssertionError extends AssertionFailedError {
 
   @CheckReturnValue
   public static Error wrap(Driver driver, Error error, long timeoutMs) {
-    return Cleanup.of.isInvalidSelectorError(error) ? error : wrapThrowable(driver, error, timeoutMs);
+    return wrap(driver, error, timeoutMs, -1);
+  }
+
+  @CheckReturnValue
+  public static Error wrap(Driver driver, Error error, long timeoutMs, long duration) {
+    return Cleanup.of.isInvalidSelectorError(error) ? error : wrapThrowable(driver, error, timeoutMs, duration);
   }
 
   @CheckReturnValue
   public static Throwable wrap(Driver driver, WebDriverException error, long timeoutMs) {
-    return Cleanup.of.isInvalidSelectorError(error) ? error : wrapThrowable(driver, error, timeoutMs);
+    return Cleanup.of.isInvalidSelectorError(error) ? error : wrapThrowable(driver, error, timeoutMs, -1);
   }
 
   @CheckReturnValue
-  private static UIAssertionError wrapThrowable(Driver driver, Throwable error, long timeoutMs) {
+  private static UIAssertionError wrapThrowable(Driver driver, Throwable error, long timeoutMs, long duration) {
     UIAssertionError uiError = error instanceof UIAssertionError ?
       (UIAssertionError) error : wrapToUIAssertionError(error);
     uiError.timeoutMs = timeoutMs;
+    uiError.durationMs = duration;
     if (uiError.screenshot.isPresent()) {
       log.warn("UIAssertionError already has screenshot: {} {} -> {}",
         uiError.getClass().getName(), uiError.getMessage(), uiError.screenshot);
