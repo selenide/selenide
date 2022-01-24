@@ -39,7 +39,7 @@ subprojects {
     systemProperties['selenide.browser'] = 'chrome'
     systemProperties['selenide.headless'] = 'true'
     systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome_headless'
-    include 'integration/**/*'
+    include 'integration/**/*ConfirmTest*'
     exclude 'com/codeborne/selenide/**/*'
   }
 
