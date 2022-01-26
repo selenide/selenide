@@ -82,7 +82,7 @@ public class Selenide {
    * <p>
    * A common authenticationType is "Basic". See Web HTTP reference for other types.
    * <p>
-   * This method can only work if - {@code Configuration.fileDownload == Configuration.FileDownloadMode.PROXY;}
+   * This method can only work if - {@code Configuration.proxyEnabled == true}
    *
    * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Proxy-Authorization">Web HTTP reference</a>
    * @see AuthenticationType
@@ -99,7 +99,7 @@ public class Selenide {
    * <p>
    * A common authenticationType is "Basic". See Web HTTP reference for other types.
    * <p>
-   * This method can only work if - {@code Configuration.fileDownload == Configuration.FileDownloadMode.PROXY;}
+   * This method can only work if - {@code Configuration.proxyEnabled == true}
    *
    * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Proxy-Authorization">Web HTTP reference</a>
    * @see AuthenticationType
