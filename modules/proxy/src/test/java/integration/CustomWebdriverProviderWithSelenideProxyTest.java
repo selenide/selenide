@@ -1,8 +1,7 @@
 package integration;
 
-import com.codeborne.selenide.AuthenticationType;
+import com.codeborne.selenide.BasicAuthCredentials;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Credentials;
 import com.codeborne.selenide.WebDriverProvider;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
@@ -19,6 +18,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.AuthenticationType.BASIC;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
@@ -44,7 +44,7 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends ProxyIntegratio
   public void userCanUserCustomWebdriverWithSelenideProxy() {
     Configuration.browser = MyWebDriverProvider.class.getName();
 
-    open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
+    open("/basic-auth/hello", BASIC, new BasicAuthCredentials("scott", "tiger"));
     $("body").shouldHave(text("Hello, scott:tiger!"));
   }
 

@@ -86,9 +86,12 @@ public class Selenide {
    *
    * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Proxy-Authorization">Web HTTP reference</a>
    * @see AuthenticationType
+   * @deprecated AFAIK "login+password" combination is only used in BASIC authentication. If you need basic auth, use
+   * {@link #open(String, AuthenticationType, Credentials)} with {@link BasicAuthCredentials} parameter.
    */
+  @Deprecated
   public static void open(String relativeOrAbsoluteUrl, AuthenticationType authenticationType, String login, String password) {
-    Credentials credentials = new Credentials(login, password);
+    Credentials credentials = new BasicAuthCredentials(login, password);
     open(relativeOrAbsoluteUrl, authenticationType, credentials);
   }
 
@@ -110,7 +113,7 @@ public class Selenide {
   }
 
   /**
-   * @see Selenide#open(URL, String, String, String)
+   * @see Selenide#open(String, String, String, String)
    */
   public static void open(URL absoluteUrl, String domain, String login, String password) {
     getSelenideDriver().open(absoluteUrl, domain, login, password);

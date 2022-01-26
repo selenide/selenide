@@ -1,7 +1,6 @@
 package integration;
 
-import com.codeborne.selenide.AuthenticationType;
-import com.codeborne.selenide.Credentials;
+import com.codeborne.selenide.BasicAuthCredentials;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
@@ -14,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
+import static com.codeborne.selenide.AuthenticationType.BASIC;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
@@ -40,7 +40,7 @@ final class CustomWebdriverWithSelenideProxyTest extends ProxyIntegrationTest {
       try {
         WebDriverRunner.setWebDriver(webDriver, proxy);
 
-        open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
+        open("/basic-auth/hello", BASIC, new BasicAuthCredentials("scott", "tiger"));
         $("body").shouldHave(text("Hello, scott:tiger!"));
       }
       finally {

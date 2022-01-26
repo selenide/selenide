@@ -9,11 +9,11 @@ import org.eclipse.jetty.util.security.Constraint;
 
 import static org.eclipse.jetty.util.security.Credential.getCredential;
 
-public class BasicAuthSecurityHandler extends ConstraintSecurityHandler {
+public class BearerTokenSecurityHandler extends ConstraintSecurityHandler {
   private final UserStore userStore = new UserStore();
 
-  public BasicAuthSecurityHandler(String context, String realm) {
-    setAuthenticator(new BasicAuthenticator());
+  public BearerTokenSecurityHandler(String context, String realm) {
+    setAuthenticator(new BearerTokenAuthenticator());
     setRealmName("myrealm");
     addConstraintMapping(constraintMapping(context));
     setLoginService(loginService(realm));
@@ -28,7 +28,7 @@ public class BasicAuthSecurityHandler extends ConstraintSecurityHandler {
 
   private Constraint constraint() {
     Constraint constraint = new Constraint();
-    constraint.setName(Constraint.__BASIC_AUTH);
+    constraint.setName("BEARER");
     constraint.setRoles(new String[]{"user" });
     constraint.setAuthenticate(true);
     return constraint;

@@ -1,6 +1,7 @@
 package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.AuthenticationType;
+import com.codeborne.selenide.BasicAuthCredentials;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Credentials;
 import com.codeborne.selenide.Driver;
@@ -17,6 +18,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.URL;
 import java.util.regex.Pattern;
 
+import static com.codeborne.selenide.AuthenticationType.BASIC;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static java.util.regex.Pattern.DOTALL;
 
@@ -27,24 +29,24 @@ public class Navigator {
   private final BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 
   public void open(SelenideDriver driver, String relativeOrAbsoluteUrl) {
-    navigateTo(driver, relativeOrAbsoluteUrl, AuthenticationType.BASIC, "", "", "");
+    navigateTo(driver, relativeOrAbsoluteUrl, null, null);
   }
 
   public void open(SelenideDriver driver, URL url) {
-    navigateTo(driver, url.toExternalForm(), AuthenticationType.BASIC, "", "", "");
+    navigateTo(driver, url.toExternalForm(), null, null);
   }
 
   public void open(SelenideDriver driver, String relativeOrAbsoluteUrl, String domain, String login, String password) {
-    navigateTo(driver, relativeOrAbsoluteUrl, AuthenticationType.BASIC, domain, login, password);
+    navigateTo(driver, relativeOrAbsoluteUrl, BASIC, new BasicAuthCredentials(domain, login, password));
   }
 
   public void open(SelenideDriver driver, URL url, String domain, String login, String password) {
-    navigateTo(driver, url.toExternalForm(), AuthenticationType.BASIC, domain, login, password);
+    navigateTo(driver, url.toExternalForm(), BASIC, new BasicAuthCredentials(domain, login, password));
   }
 
   public void open(SelenideDriver driver, String relativeOrAbsoluteUrl,
                    AuthenticationType authenticationType, Credentials credentials) {
-    navigateTo(driver, relativeOrAbsoluteUrl, authenticationType, "", credentials.login, credentials.password);
+    navigateTo(driver, relativeOrAbsoluteUrl, authenticationType, credentials);
   }
 
   private AuthenticationFilter basicAuthRequestFilter(SelenideProxyServer selenideProxy) {
@@ -56,17 +58,16 @@ public class Navigator {
     return isAbsoluteUrl(relativeOrAbsoluteUrl) ? relativeOrAbsoluteUrl : config.baseUrl() + relativeOrAbsoluteUrl;
   }
 
-  private void navigateTo(SelenideDriver driver, String relativeOrAbsoluteUrl,
-                          AuthenticationType authenticationType, String domain, String login, String password) {
+  private void navigateTo(SelenideDriver driver, String relativeOrAbsoluteUrl, @Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
     checkThatProxyIsEnabled(driver.config());
 
     String absoluteUrl = absoluteUrl(driver.config(), relativeOrAbsoluteUrl);
-    String url = appendBasicAuthIfNeeded(driver.config(), absoluteUrl, authenticationType, domain, login, password);
+    String url = appendBasicAuthIfNeeded(driver.config(), absoluteUrl, authenticationType, credentials);
 
     SelenideLogger.run("open", url, () -> {
       try {
         WebDriver webDriver = driver.getAndCheckWebDriver();
-        beforeNavigateTo(driver.config(), driver.getProxy(), authenticationType, domain, login, password);
+        beforeNavigateTo(driver.config(), driver.getProxy(), authenticationType, credentials);
         webDriver.navigate().to(url);
       }
       catch (WebDriverException e) {
@@ -103,48 +104,40 @@ public class Navigator {
   }
 
   private void beforeNavigateTo(Config config, @Nullable SelenideProxyServer selenideProxy,
-                                AuthenticationType authenticationType, String domain, String login, String password) {
+                                @Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
     if (config.proxyEnabled()) {
       checkThatProxyIsStarted(selenideProxy);
-      beforeNavigateToWithProxy(selenideProxy, authenticationType, domain, login, password);
+      beforeNavigateToWithProxy(selenideProxy, authenticationType, credentials);
     }
     else {
-      beforeNavigateToWithoutProxy(authenticationType, domain, login, password);
+      beforeNavigateToWithoutProxy(authenticationType, credentials);
     }
   }
 
   private void beforeNavigateToWithProxy(SelenideProxyServer selenideProxy,
-                                         AuthenticationType authenticationType, String domain, String login, String password) {
-    if (hasAuthentication(domain, login, password)) {
-      basicAuthRequestFilter(selenideProxy).setAuthentication(authenticationType, new Credentials(login, password));
+                                         @Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
+    if (authenticationType != null && credentials != null) {
+      basicAuthRequestFilter(selenideProxy).setAuthentication(authenticationType, credentials);
     }
     else {
       basicAuthRequestFilter(selenideProxy).removeAuthentication();
     }
   }
 
-  private void beforeNavigateToWithoutProxy(AuthenticationType authenticationType, String domain, String login, String password) {
-    if (hasAuthentication(domain, login, password) && authenticationType != AuthenticationType.BASIC) {
+  private void beforeNavigateToWithoutProxy(@Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
+    if (credentials != null && authenticationType != BASIC) {
       throw new UnsupportedOperationException("Cannot use " + authenticationType + " authentication without proxy server");
     }
   }
 
-  private boolean hasAuthentication(String domain, String login, String password) {
-    return !domain.isEmpty() || !login.isEmpty() || !password.isEmpty();
-  }
-
-  private String appendBasicAuthIfNeeded(Config config, String url,
-                                         AuthenticationType authType, String domain, String login, String password) {
-    return passBasicAuthThroughUrl(config, authType, domain, login, password)
-      ? basicAuthUrl.appendBasicAuthToURL(url, domain, login, password)
+  private String appendBasicAuthIfNeeded(Config config, String url, @Nullable AuthenticationType authType, @Nullable Credentials credentials) {
+    return passBasicAuthThroughUrl(config, authType, credentials)
+      ? basicAuthUrl.appendBasicAuthToURL(url, ((BasicAuthCredentials) credentials))
       : url;
   }
 
-  private boolean passBasicAuthThroughUrl(Config config,
-                                          AuthenticationType authenticationType, String domain, String login, String password) {
-    return hasAuthentication(domain, login, password) &&
-      !config.proxyEnabled() &&
-      authenticationType == AuthenticationType.BASIC;
+  private boolean passBasicAuthThroughUrl(Config config, @Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
+    return authenticationType == BASIC && credentials != null && !config.proxyEnabled();
   }
 
   boolean isAbsoluteUrl(String relativeOrAbsoluteUrl) {

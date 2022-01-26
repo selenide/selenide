@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.3.0
+* add support for BEARER token authentication
+
 ## 6.2.1 (released 19.01.2022)
 * #1702 Ignore whitespaces for filename in Content-Disposition header  --  thanks Yevgeniy Mikhailov for PR #1702
 * #1703, #1433 override default timeouts for remote webdriver  --  thanks Irina Styazhkina for PR #1673

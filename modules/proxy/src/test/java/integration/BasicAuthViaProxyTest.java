@@ -1,9 +1,10 @@
 package integration;
 
-import com.codeborne.selenide.AuthenticationType;
+import com.codeborne.selenide.BasicAuthCredentials;
 import com.codeborne.selenide.Credentials;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.AuthenticationType.BASIC;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -17,14 +18,14 @@ public class BasicAuthViaProxyTest extends ProxyIntegrationTest {
 
   @Test
   void canAuthUsingProxyWithLoginAndPassword() {
-    open("/basic-auth/hello", AuthenticationType.BASIC, "scott", "tiger");
+    open("/basic-auth/hello", BASIC, "scott", "tiger");
     $("body").shouldHave(text("Hello, scott:tiger!"));
   }
 
   @Test
   void canAuthUsingProxyWithCredentials() {
-    Credentials credentials = new Credentials("scott", "tiger");
-    open("/basic-auth/hello", AuthenticationType.BASIC, credentials);
+    Credentials credentials = new BasicAuthCredentials("scott", "tiger");
+    open("/basic-auth/hello", BASIC, credentials);
     $("body").shouldHave(text("Hello, scott:tiger!"));
     $("#bye").click();
     $("body").shouldHave(text("bye, scott:tiger!"));
@@ -32,15 +33,15 @@ public class BasicAuthViaProxyTest extends ProxyIntegrationTest {
 
   @Test
   void canSwitchToAnotherBasicAuth() {
-    open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
+    open("/basic-auth/hello", BASIC, new BasicAuthCredentials("scott", "tiger"));
     $("body").shouldHave(text("Hello, scott:tiger!"));
-    open("/basic-auth/hello2", AuthenticationType.BASIC, new Credentials("scott2", "tiger2"));
+    open("/basic-auth/hello2", BASIC, new BasicAuthCredentials("scott2", "tiger2"));
     $("body").shouldHave(text("Hello2, scott2:tiger2!"));
   }
 
   @Test
   void removesPreviousBasicAuthHeaders() {
-    open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
+    open("/basic-auth/hello", BASIC, new BasicAuthCredentials("scott", "tiger"));
     $("body").shouldHave(text("Hello, scott:tiger!"));
     open("/headers/hello3");
     $("body")
