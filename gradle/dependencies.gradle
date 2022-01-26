@@ -4,7 +4,8 @@ ext {
   jettyVersion = '9.4.44.v20210927'
   nettyVersion = '4.1.73.Final'
   assertjVersion = '3.22.0'
-  mockitoVersion = '4.3.0'
+  mockitoVersion = '4.3.1'
+  slf4jVersion = '1.7.35'
   browserupProxyVersion = '2.1.3'
   littleProxyVersion = '2.0.7'
   commonsFileuploadVersion = '1.4'
@@ -28,7 +29,7 @@ subprojects {
     testImplementation("commons-fileupload:commons-fileupload:${commonsFileuploadVersion}")
     testImplementation("org.mockito:mockito-core:$mockitoVersion")
     testImplementation("org.assertj:assertj-core:$assertjVersion")
-    implementation('org.slf4j:slf4j-api:1.7.33')
-    testRuntimeOnly('org.slf4j:slf4j-simple:1.7.33')
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
   }
 }
