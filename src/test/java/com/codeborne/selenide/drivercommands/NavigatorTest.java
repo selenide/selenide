@@ -1,7 +1,7 @@
 package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.AuthenticationType;
-import com.codeborne.selenide.Credentials;
+import com.codeborne.selenide.BasicAuthCredentials;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.logevents.LogEventListener;
@@ -143,7 +143,7 @@ final class NavigatorTest {
 
     Mockito.verify(navigation).to("https://some.com/login");
     Mockito.verify(authenticationFilter)
-      .setAuthentication(eq(AuthenticationType.BASIC), refEq(new Credentials("basic-auth-login", "basic-auth-password")));
+      .setAuthentication(eq(AuthenticationType.BASIC), refEq(new BasicAuthCredentials("basic-auth-login", "basic-auth-password")));
   }
 
   @Test
