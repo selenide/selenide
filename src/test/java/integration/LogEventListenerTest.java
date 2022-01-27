@@ -41,12 +41,13 @@ final class LogEventListenerTest extends BaseIntegrationTest {
     sa.assertThat(beforeEvents).hasSize(1);
     sa.assertThat(beforeEvents.get(0)).isEqualTo("before: $(#remove) click()");
 
-    sa.assertThat(afterEvents).hasSize(4);
+    sa.assertThat(afterEvents).hasSize(5);
 
-    sa.assertThat(afterEvents.get(0)).startsWith("after: $(open)");
-    sa.assertThat(afterEvents.get(1)).isEqualTo("after: $(#remove) should be(visible)");
-    sa.assertThat(afterEvents.get(2)).isEqualTo("after: $(#remove) click()");
-    sa.assertThat(afterEvents.get(3)).isEqualTo("after: $(#remove) should not be(visible)");
+    sa.assertThat(afterEvents.get(0)).startsWith("after: $(webdriver)");
+    sa.assertThat(afterEvents.get(1)).startsWith("after: $(open)");
+    sa.assertThat(afterEvents.get(2)).isEqualTo("after: $(#remove) should be(visible)");
+    sa.assertThat(afterEvents.get(3)).isEqualTo("after: $(#remove) click()");
+    sa.assertThat(afterEvents.get(4)).isEqualTo("after: $(#remove) should not be(visible)");
 
     sa.assertAll();
   }
