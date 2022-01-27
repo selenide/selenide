@@ -5,6 +5,7 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.impl.FileNamer;
 import com.codeborne.selenide.impl.Plugins;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.proxy.SelenideProxyServerFactory;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.impl.FileHelper.deleteFolderIfEmpty;
 import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
+import static com.codeborne.selenide.logevents.SelenideLogger.getReadableSubject;
 import static java.lang.Thread.currentThread;
 
 @SuppressWarnings("deprecation")
@@ -48,48 +50,50 @@ public class CreateDriverCommand {
                              @Nullable Proxy userProvidedProxy,
                              List<WebDriverEventListener> eventListeners,
                              List<WebDriverListener> listeners) {
-    if (!config.reopenBrowserOnFail()) {
-      throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
-        ", and cannot create a new webdriver because reopenBrowserOnFail=false");
-    }
-
-    log.debug("Creating webdriver in thread {} (ip: {}, host: {})...",
-      currentThread().getId(), HostIdentifier.getHostAddress(), HostIdentifier.getHostName());
-
-    SelenideProxyServer selenideProxyServer = null;
-    Proxy browserProxy = userProvidedProxy;
-
-    if (config.proxyEnabled()) {
-      SelenideProxyServerFactory selenideProxyServerFactory = Plugins.inject(SelenideProxyServerFactory.class);
-      try {
-        selenideProxyServer = selenideProxyServerFactory.create(config, userProvidedProxy);
-        browserProxy = selenideProxyServer.getSeleniumProxy();
+    return SelenideLogger.get("webdriver", getReadableSubject("create"), () -> {
+      if (!config.reopenBrowserOnFail()) {
+        throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
+          ", and cannot create a new webdriver because reopenBrowserOnFail=false");
       }
-      catch (NoClassDefFoundError e) {
-        throw new IllegalStateException("Cannot initialize proxy. " +
-          "Probably you should add BrowserUpProxy dependency to your project " +
-          "- see https://search.maven.org/search?q=a:browserup-proxy-core", e);
+
+      log.debug("Creating webdriver in thread {} (ip: {}, host: {})...",
+        currentThread().getId(), HostIdentifier.getHostAddress(), HostIdentifier.getHostName());
+
+      SelenideProxyServer selenideProxyServer = null;
+      Proxy browserProxy = userProvidedProxy;
+
+      if (config.proxyEnabled()) {
+        SelenideProxyServerFactory selenideProxyServerFactory = Plugins.inject(SelenideProxyServerFactory.class);
+        try {
+          selenideProxyServer = selenideProxyServerFactory.create(config, userProvidedProxy);
+          browserProxy = selenideProxyServer.getSeleniumProxy();
+        } catch (NoClassDefFoundError e) {
+          throw new IllegalStateException("Cannot initialize proxy. " +
+            "Probably you should add BrowserUpProxy dependency to your project " +
+            "- see https://search.maven.org/search?q=a:browserup-proxy-core", e);
+        }
       }
-    }
 
-    @Nullable File browserDownloadsFolder = config.remote() != null ? null :
-      ensureFolderExists(new File(config.downloadsFolder(), fileNamer.generateFileName()).getAbsoluteFile());
+      @Nullable File browserDownloadsFolder = config.remote() != null ? null :
+        ensureFolderExists(new File(config.downloadsFolder(), fileNamer.generateFileName()).getAbsoluteFile());
 
-    WebDriver webdriver = factory.createWebDriver(config, browserProxy, browserDownloadsFolder);
+      WebDriver webdriver = factory.createWebDriver(config, browserProxy, browserDownloadsFolder);
 
-    log.info("Created webdriver in thread {}: {} -> {}",
-      currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
+      log.info("Created webdriver in thread {}: {} -> {}",
+        currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
 
-    WebDriver webDriver = addListeners(webdriver, eventListeners, listeners);
-    Runtime.getRuntime().addShutdownHook(
-      new Thread(new SelenideDriverFinalCleanupThread(config, webDriver, selenideProxyServer))
-    );
-    if (browserDownloadsFolder != null) {
+      WebDriver webDriver = addListeners(webdriver, eventListeners, listeners);
+
       Runtime.getRuntime().addShutdownHook(
-        new Thread(() -> deleteFolderIfEmpty(browserDownloadsFolder))
+        new Thread(new SelenideDriverFinalCleanupThread(config, webDriver, selenideProxyServer))
       );
-    }
-    return new Result(webDriver, selenideProxyServer, BrowserDownloadsFolder.from(browserDownloadsFolder));
+      if (browserDownloadsFolder != null) {
+        Runtime.getRuntime().addShutdownHook(
+          new Thread(() -> deleteFolderIfEmpty(browserDownloadsFolder))
+        );
+      }
+      return new Result(webDriver, selenideProxyServer, BrowserDownloadsFolder.from(browserDownloadsFolder));
+    });
   }
 
   @Nonnull
