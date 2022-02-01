@@ -26,17 +26,16 @@ import java.time.Duration;
 @ParametersAreNonnullByDefault
 class HttpClientTimeouts {
   private static final Logger logger = LoggerFactory.getLogger(HttpClientTimeouts.class);
-  public static Duration defaultConnectTimeout = Duration.ofSeconds(10);
   public static Duration defaultReadTimeout = Duration.ofSeconds(90);
 
   public void setup(WebDriver webDriver) {
-    setup(webDriver, defaultConnectTimeout, defaultReadTimeout);
+    setup(webDriver, defaultReadTimeout);
   }
 
-  public void setup(WebDriver webDriver, Duration connectTimeout, Duration readTimeout) {
+  public void setup(WebDriver webDriver, Duration readTimeout) {
     if (webDriver instanceof RemoteWebDriver) {
       try {
-        setupTimeouts((RemoteWebDriver) webDriver, connectTimeout, readTimeout);
+        setupTimeouts((RemoteWebDriver) webDriver, readTimeout);
       }
       catch (Exception e) {
         throw new IllegalStateException("Failed to setup Selenium HttpClient timeouts", e);
@@ -44,34 +43,33 @@ class HttpClientTimeouts {
     }
   }
 
-  private void setupTimeouts(RemoteWebDriver webDriver, Duration connectTimeout, Duration readTimeout) throws Exception {
+  private void setupTimeouts(RemoteWebDriver webDriver, Duration readTimeout) throws Exception {
     CommandExecutor executor = webDriver.getCommandExecutor();
     if (executor instanceof HttpCommandExecutor) {
-      setupTimeouts((HttpCommandExecutor) executor, connectTimeout, readTimeout);
+      setupTimeouts((HttpCommandExecutor) executor, readTimeout);
     }
   }
 
-  private void setupTimeouts(HttpCommandExecutor executor, Duration connectTimeout, Duration readTimeout) throws Exception {
+  private void setupTimeouts(HttpCommandExecutor executor, Duration readTimeout) throws Exception {
     Field clientField = HttpCommandExecutor.class.getDeclaredField("client");
     clientField.setAccessible(true);
     HttpClient client = (HttpClient) clientField.get(executor);
     if (client instanceof NettyClient) {
-      setupTimeouts((NettyClient) client, connectTimeout, readTimeout);
+      setupTimeouts((NettyClient) client, readTimeout);
     }
   }
 
-  private void setupTimeouts(NettyClient client, Duration connectTimeout, Duration readTimeout) throws Exception {
+  private void setupTimeouts(NettyClient client, Duration readTimeout) throws Exception {
     Field configField = NettyClient.class.getDeclaredField("config");
     configField.setAccessible(true);
     Object config = configField.get(client);
     if (config instanceof ClientConfig) {
-      setupTimeouts((ClientConfig) config, connectTimeout, readTimeout);
+      setupTimeouts((ClientConfig) config, readTimeout);
     }
   }
-  private void setupTimeouts(ClientConfig config, Duration connectTimeout, Duration readTimeout) throws Exception {
+  private void setupTimeouts(ClientConfig config, Duration readTimeout) {
     Duration previousConnectTimeout = config.connectionTimeout();
     Duration previousReadTimeout = config.readTimeout();
-    config.connectionTimeout(connectTimeout);
     config.readTimeout(readTimeout);
     logger.info("Changed connectTimeout from {} to {}", previousConnectTimeout, config.connectionTimeout());
     logger.info("Changed readTimeout from {} to {}", previousReadTimeout, config.readTimeout());

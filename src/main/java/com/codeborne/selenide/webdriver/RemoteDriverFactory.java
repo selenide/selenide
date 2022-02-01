@@ -21,7 +21,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 
-import static com.codeborne.selenide.webdriver.HttpClientTimeouts.defaultConnectTimeout;
 import static com.codeborne.selenide.webdriver.HttpClientTimeouts.defaultReadTimeout;
 import static java.util.Collections.emptyMap;
 
@@ -29,7 +28,7 @@ import static java.util.Collections.emptyMap;
 public class RemoteDriverFactory {
   public WebDriver create(Config config, MutableCapabilities capabilities) {
     try {
-      TracedCommandExecutor tracedCommandExecutor = createExecutor(config, defaultReadTimeout, defaultConnectTimeout);
+      TracedCommandExecutor tracedCommandExecutor = createExecutor(config, defaultReadTimeout);
       RemoteWebDriver webDriver = new RemoteWebDriver(tracedCommandExecutor, capabilities);
       webDriver.setFileDetector(new LocalFileDetector());
       return webDriver;
@@ -41,11 +40,10 @@ public class RemoteDriverFactory {
 
   @Nonnull
   @CheckReturnValue
-  private TracedCommandExecutor createExecutor(Config config, Duration readTimeout, Duration connectTimeout) throws MalformedURLException {
+  private TracedCommandExecutor createExecutor(Config config, Duration readTimeout) throws MalformedURLException {
     ClientConfig clientConfig = ClientConfig.defaultConfig()
       .baseUrl(new URL(config.remote()))
-      .readTimeout(readTimeout)
-      .connectionTimeout(connectTimeout);
+      .readTimeout(readTimeout);
 
     Tracer tracer = OpenTelemetryTracer.getInstance();
 
