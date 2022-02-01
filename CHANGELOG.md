@@ -2,6 +2,7 @@
 
 ## 6.3.0
 * add support for BEARER token authentication
+* upgrade to Selenium 4.1.2
 
 ## 6.2.1 (released 19.01.2022)
 * #1702 Ignore whitespaces for filename in Content-Disposition header  --  thanks Yevgeniy Mikhailov for PR #1702
