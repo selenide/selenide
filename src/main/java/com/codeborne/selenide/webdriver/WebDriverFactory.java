@@ -105,6 +105,7 @@ public class WebDriverFactory {
       if (config.driverManagerEnabled()) {
         webdriverFactory.setupWebdriverBinary();
       }
+      System.setProperty("webdriver.http.factory", "selenide-netty-client-factory");
       WebDriver webDriver = webdriverFactory.create(config, browser, proxy, browserDownloadsFolder);
       httpClientTimeouts.setup(webDriver);
       return webDriver;
