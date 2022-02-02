@@ -5,6 +5,7 @@ import com.codeborne.selenide.Config;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Proxy;
+import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -42,7 +43,17 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   @CheckReturnValue
   @Nonnull
   public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
-    return new FirefoxDriver(createDriverService(config), createCapabilities(config, browser, proxy, browserDownloadsFolder));
+    SessionNotCreatedException failure = null;
+    for (int retries = 0; retries < 5; retries++) {
+      try {
+        return new FirefoxDriver(createDriverService(config), createCapabilities(config, browser, proxy, browserDownloadsFolder));
+      }
+      catch (SessionNotCreatedException probablyPortAlreadyUsed) {
+        log.error("Failed to start firefox", probablyPortAlreadyUsed);
+        failure = probablyPortAlreadyUsed;
+      }
+    }
+    throw failure;
   }
 
   @CheckReturnValue
