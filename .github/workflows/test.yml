@@ -44,10 +44,7 @@ jobs:
           java-version: '11'
       - name: Setup Firefox
         if: ${{ matrix.gradle-task != 'check' }}
-        run: |
-          sudo add-apt-repository ppa:ubuntu-mozilla-daily/ppa
-          sudo apt-get update
-          sudo apt-get install firefox-trunk
+        uses: browser-actions/setup-firefox@latest
       - uses: actions/cache@v2
         with:
           path: |
