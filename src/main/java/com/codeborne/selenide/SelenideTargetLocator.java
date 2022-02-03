@@ -41,12 +41,57 @@ public class SelenideTargetLocator implements TargetLocator {
     this.delegate = webDriver.switchTo();
   }
 
+  /**
+   * Switch to frame by index
+   * NB! Order of framew can be different in different browsers, see Selenide tests.
+   *
+   * @param index index of frame (0-based)
+   */
   @Override
   @Nonnull
   public WebDriver frame(int index) {
+    return frame(Wait(), index);
+  }
+
+  /**
+   * Switch to frame by index with a configurable timeout
+   * NB! Order of frames can be different in different browsers, see Selenide tests.
+   *
+   * @param index    index of frame (0-based)
+   * @param timeout the timeout duration. It overrides default Config.timeout()
+   */
+  @Nonnull
+  public WebDriver frame(int index, Duration timeout) {
+    return frame(Wait(timeout), index);
+  }
+
+  /**
+   * Switch to frame by name or id
+   *
+   * @param nameOrId name or id of frame
+   */
+  @Override
+  @Nonnull
+  public WebDriver frame(String nameOrId) {
+    return frame(Wait(), nameOrId);
+  }
+
+  /**
+   * Switch to frame by name or id with a configurable timeout
+   *
+   * @param nameOrId name or id of frame
+   * @param timeout            the timeout duration. It overrides default Config.timeout()
+   */
+  @Nonnull
+  public WebDriver frame(String nameOrId, Duration timeout) {
+    return frame(Wait(timeout), nameOrId);
+  }
+
+  @Nonnull
+  private WebDriver frame(SelenideWait wait, int index) {
     return SelenideLogger.get(String.format("frame(index: %s)", index), SWITCH_TO, () -> {
       try {
-        return Wait().until(frameToBeAvailableAndSwitchToIt(index));
+        return wait.until(frameToBeAvailableAndSwitchToIt(index));
       }
       catch (NoSuchElementException | TimeoutException e) {
         throw frameNotFoundError("No frame found with index: " + index, e);
@@ -60,12 +105,11 @@ public class SelenideTargetLocator implements TargetLocator {
     });
   }
 
-  @Override
   @Nonnull
-  public WebDriver frame(String nameOrId) {
+  private WebDriver frame(SelenideWait wait, String nameOrId) {
     return SelenideLogger.get("frame(" + nameOrId + ")", SWITCH_TO, () -> {
       try {
-        return Wait().until(frameToBeAvailableAndSwitchToIt(nameOrId));
+        return wait.until(frameToBeAvailableAndSwitchToIt(nameOrId));
       }
       catch (NoSuchElementException | TimeoutException e) {
         throw frameNotFoundError("No frame found with id/name: " + nameOrId, e);

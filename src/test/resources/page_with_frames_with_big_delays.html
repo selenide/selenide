@@ -1,0 +1,20 @@
+<html>
+<head>
+  <script language="javascript">
+    function showFrame()
+    {var iframe = document.createElement('iframe');
+      iframe.setAttribute('id', 'ifrm'); // assign an id
+      iframe.src = 'child_frame.txt';
+      document.getElementById("info").appendChild(iframe);
+    }
+    function showFrameWithDelay()
+    {setTimeout(showFrame, 5000);}
+  </script>
+</head>
+<body>
+<div>
+  <input type="button" id="btn" value="frame" OnClick="showFrameWithDelay();">
+</div>
+<div id="info"></div>
+</body>
+</html>
