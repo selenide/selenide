@@ -4,6 +4,7 @@
 * add support for BEARER token authentication
 * upgrade to Selenium 4.1.2
 * #1433 fix overriding default timeout for Selenium http client
+* add support for custom duration in `switchTo().frame()`
 
 ## 6.2.1 (released 19.01.2022)
 * #1702 Ignore whitespaces for filename in Content-Disposition header  --  thanks Yevgeniy Mikhailov for PR #1702
