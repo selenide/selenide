@@ -1,10 +1,13 @@
 # Changelog
 
 ## 6.3.0
-* add support for BEARER token authentication
-* upgrade to Selenium 4.1.2
+* #1722 add support for custom duration in `switchTo().frame()`  --  thanks @donesvad for PR #1722
+* #1650 add methods `Selectors.byTagAndText` and `Selectors.withTagAndText`  --  thanks Maurizio Lattuada for PR #1651
+* #1715 add "webdriver create" and "webdriver close" lines to Selenide report --  thanks Petro Ovcharenko for PR #1715
 * #1433 fix overriding default timeout for Selenium http client
-* add support for custom duration in `switchTo().frame()`
+* #1705 avoid duplicate wrapping of ElementNotFound error  --  see PR #1706
+* #1714 add support for BEARER token authentication
+* #1719 upgrade to Selenium 4.1.2  --  see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
 
 ## 6.2.1 (released 19.01.2022)
 * #1702 Ignore whitespaces for filename in Content-Disposition header  --  thanks Yevgeniy Mikhailov for PR #1702

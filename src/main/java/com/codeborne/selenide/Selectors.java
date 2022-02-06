@@ -2,8 +2,10 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.selector.ByAttribute;
 import com.codeborne.selenide.selector.ByShadow;
+import com.codeborne.selenide.selector.ByTagAndText;
 import com.codeborne.selenide.selector.ByText;
 import com.codeborne.selenide.selector.ByTextCaseInsensitive;
+import com.codeborne.selenide.selector.WithTagAndText;
 import com.codeborne.selenide.selector.WithText;
 import com.codeborne.selenide.selector.WithTextCaseInsensitive;
 import org.openqa.selenium.By;
@@ -30,6 +32,23 @@ public class Selectors {
   }
 
   /**
+   * Find element CONTAINING given text (as a substring).
+   * <p>
+   * This method ignores difference between space, \n, \r, \t and &nbsp;
+   * This method ignores multiple spaces.
+   *
+   * @param tag Html tag name (e.g. "dev", "span", "li", "a", "td")
+   * @param elementText Text to search inside element
+   * @return standard selenium By criteria`
+   * @since 6.3.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static By withTagAndText(String tag, String elementText) {
+    return new WithTagAndText(tag, elementText);
+  }
+
+  /**
    * Same as {@link #withText(String)}, but case-insensitive.
    * @since 5.22.0
    */
@@ -53,6 +72,24 @@ public class Selectors {
   @Nonnull
   public static By byText(String elementText) {
     return new ByText(elementText);
+  }
+
+  /**
+   * Find element that has given text (the whole text, not a substring).
+   * <p>
+   * This method ignores difference between space, \n, \r, \t and &nbsp;
+   * This method ignores multiple spaces.
+   * This method is case-sensitive.
+   *
+   * @param tag Html tag name (e.g. "dev", "span", "li", "a", "td")
+   * @param elementText Text that searched element should have
+   * @return standard selenium By criteria
+   * @since 6.3.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static By byTagAndText(String tag, String elementText) {
+    return new ByTagAndText(tag, elementText);
   }
 
   /**

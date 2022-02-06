@@ -11,8 +11,10 @@ import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byTagAndText;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byTextCaseInsensitive;
+import static com.codeborne.selenide.Selectors.withTagAndText;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selectors.withTextCaseInsensitive;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,9 +34,18 @@ final class ByTextTest extends ITest {
   }
 
   @Test
+  void userCanFindElementByTagAndText() {
+    $(byTagAndText("h1", "Page with selects")).shouldHave(text("Page with selects"));
+    $(byTagAndText("h2", "Page with selects")).shouldNot(exist);
+    $(byTagAndText("h2", "Dropdown list")).shouldHave(text("Dropdown list"));
+  }
+
+  @Test
   void spacesInTextAreIgnored() {
     $(byText("L'a Baskerville")).shouldHave(text("L'a Baskerville"));
     $(withText("L'a Baskerville")).shouldHave(text("L'a Baskerville"));
+    $(byTagAndText("td", "L'a Baskerville")).shouldHave(text("L'a Baskerville"));
+    $(withTagAndText("td", "L'a Baskerville")).shouldHave(text("L'a Baskerville"));
   }
 
   @Test
@@ -42,6 +53,8 @@ final class ByTextTest extends ITest {
     $("#hello-world").shouldHave(text("Hello world"));
     $(byText("Hello world")).shouldHave(attribute("id", "hello-world"));
     $(withText("Hello world")).shouldHave(text("Hello world"));
+    $(byTagAndText("span", "Hello world")).shouldHave(attribute("id", "hello-world"));
+    $(withTagAndText("span", "llo wor")).shouldHave(text("Hello world"));
     $(".level2").$(withText("Hello ")).shouldHave(text("Hello world"));
     $(".level2").$(withText(" world")).shouldHave(text("Hello world"));
   }
@@ -61,6 +74,13 @@ final class ByTextTest extends ITest {
     $(withText("age with s")).shouldHave(text("Page with selects"));
     $(withText("Dropdown")).shouldHave(text("Dropdown list"));
     $(withText("@livemail.r")).shouldHave(text("@livemail.ru"));
+  }
+
+  @Test
+  void canFindElementWithTagContainingText() {
+    $(withTagAndText("h1", "age with s")).shouldHave(text("Page with selects"));
+    $(withTagAndText("h2", "Dropdown")).shouldHave(text("Dropdown list"));
+    $(withTagAndText("option", "@livemail.r")).shouldHave(text("@livemail.ru"));
   }
 
   @Test
