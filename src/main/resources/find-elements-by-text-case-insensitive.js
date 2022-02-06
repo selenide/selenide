@@ -9,7 +9,7 @@
   while (nodeList.length < limit && treeWalker.nextNode()) {
     const node = treeWalker.currentNode;
 
-    if (node.nodeType === Node.TEXT_NODE && node.textContent.toLowerCase().replace(/\s+/gi, ' ') === text) {
+    if (node.nodeType === Node.TEXT_NODE && node.textContent.toLowerCase().replace(/\s+/gi, ' ').trim() === text) {
       nodeList.push(node.parentNode);
     }
   }

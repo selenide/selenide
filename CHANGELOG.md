@@ -3,6 +3,7 @@
 ## 6.3.0
 * #1722 add support for custom duration in `switchTo().frame()`  --  thanks @donesvad for PR #1722
 * #1650 add methods `Selectors.byTagAndText` and `Selectors.withTagAndText`  --  thanks Maurizio Lattuada for PR #1651
+* #1723 bugfix: ignore newlines leading/trailing spaces in `byTextCaseInsensitive`  --  see PR #1724
 * #1715 add "webdriver create" and "webdriver close" lines to Selenide report --  thanks Petro Ovcharenko for PR #1715
 * #1433 fix overriding default timeout for Selenium http client
 * #1705 avoid duplicate wrapping of ElementNotFound error  --  see PR #1706

@@ -46,6 +46,8 @@ final class ByTextTest extends ITest {
     $(withText("L'a Baskerville")).shouldHave(text("L'a Baskerville"));
     $(byTagAndText("td", "L'a Baskerville")).shouldHave(text("L'a Baskerville"));
     $(withTagAndText("td", "L'a Baskerville")).shouldHave(text("L'a Baskerville"));
+    $(byTextCaseInsensitive("L'a BaskervILLE")).shouldHave(text("L'a Baskerville"));
+    $(withTextCaseInsensitive("L'a BasKERVille")).shouldHave(text("L'a Baskerville"));
   }
 
   @Test
@@ -53,6 +55,8 @@ final class ByTextTest extends ITest {
     $("#hello-world").shouldHave(text("Hello world"));
     $(byText("Hello world")).shouldHave(attribute("id", "hello-world"));
     $(withText("Hello world")).shouldHave(text("Hello world"));
+    $(byTextCaseInsensitive("Hello WORLD")).shouldHave(attribute("id", "hello-world"));
+    $(withTextCaseInsensitive("HELLO world")).shouldHave(text("Hello world"));
     $(byTagAndText("span", "Hello world")).shouldHave(attribute("id", "hello-world"));
     $(withTagAndText("span", "llo wor")).shouldHave(text("Hello world"));
     $(".level2").$(withText("Hello ")).shouldHave(text("Hello world"));
@@ -95,12 +99,19 @@ final class ByTextTest extends ITest {
     $(byText("Маргарита")).shouldHave(text("Маргарита"));
     $(withText("Марг")).shouldHave(text("Маргарита"));
     $(byText("Кот \"Бегемот\"")).click();
+    $(withText("т \"Бегемот\"")).click();
+    $(byTextCaseInsensitive("КОТ \"бЕГЕмот\"")).click();
+    $(withTextCaseInsensitive("т \"бегеМОТ\"")).click();
   }
 
   @Test
   void quotesInText() {
     $(byText("Arnold \"Schwarzenegger\"")).shouldBe(visible);
+    $(byTagAndText("option", "Arnold \"Schwarzenegger\"")).shouldBe(visible);
+    $(byTextCaseInsensitive("arnold \"schWARZenegger\"")).shouldBe(visible);
+    $(withTextCaseInsensitive("old \"schWARZenegg")).shouldBe(visible);
     $("#hero").find(byText("Arnold \"Schwarzenegger\"")).shouldBe(visible);
+    $("#hero").find(byTagAndText("option", "Arnold \"Schwarzenegger\"")).shouldBe(visible);
     $("#apostrophes-and-quotes").find(By.linkText("Options with 'apostrophes' and \"quotes\"")).click();
   }
 
