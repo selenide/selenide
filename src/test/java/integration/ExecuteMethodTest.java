@@ -54,7 +54,7 @@ final class ExecuteMethodTest extends ITest {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining("Timeout: 1.100 s.");
     long elapsedTimeMs = System.currentTimeMillis() - startMs;
-    assertThat(elapsedTimeMs).isBetween(timeout, timeout * 2);
+    assertThat(elapsedTimeMs).isBetween(timeout, timeout * 3);
   }
 
   @Test
