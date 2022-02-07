@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.3.0
+## 6.3.0 (released 07.02.2022)
 * #1722 add support for custom duration in `switchTo().frame()`  --  thanks @donesvad for PR #1722
 * #1650 add methods `Selectors.byTagAndText` and `Selectors.withTagAndText`  --  thanks Maurizio Lattuada for PR #1651
 * #1723 bugfix: ignore newlines leading/trailing spaces in `byTextCaseInsensitive`  --  see PR #1724
@@ -9,6 +9,7 @@
 * #1705 avoid duplicate wrapping of ElementNotFound error  --  see PR #1706
 * #1714 add support for BEARER token authentication
 * #1719 upgrade to Selenium 4.1.2  --  see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* #1656 Selenide doesn't throw an exception if `selenide.remote` is set, but empty --  thanks Boris Osipov for PR #1663
 
 ## 6.2.1 (released 19.01.2022)
 * #1702 Ignore whitespaces for filename in Content-Disposition header  --  thanks Yevgeniy Mikhailov for PR #1702
