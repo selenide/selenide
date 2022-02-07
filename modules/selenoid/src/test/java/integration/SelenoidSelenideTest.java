@@ -15,6 +15,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,9 +51,9 @@ public class SelenoidSelenideTest {
   }
 
   private void checkDownload() throws IOException {
-    for (int i = 0; i < 8; i++){
+    for (int i = 0; i < 8; i++) {
       open("https://the-internet.herokuapp.com/download");
-      File file = $(byText("some-file.txt")).download();
+      File file = $(byText("some-file.txt")).download(withExtension("txt"));
       assertThat(file).hasName("some-file.txt");
       assertThat(readFileToString(file, UTF_8)).startsWith("{\\rtf");
     }

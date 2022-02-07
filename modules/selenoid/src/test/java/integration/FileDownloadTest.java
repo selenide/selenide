@@ -25,7 +25,7 @@ public class FileDownloadTest {
 
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setBrowserName("chrome");
-    capabilities.setVersion("86.0");
+    capabilities.setVersion("96.0");
     capabilities.setCapability("enableVNC", true);
     capabilities.setCapability("enableVideo", true);
     capabilities.setCapability("enableLog", true);
