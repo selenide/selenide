@@ -26,6 +26,7 @@ import java.util.Optional;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @ParametersAreNonnullByDefault
 public class FirefoxDriverFactory extends AbstractDriverFactory {
@@ -74,7 +75,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   }
 
   protected void setupBrowserBinary(Config config, FirefoxOptions firefoxOptions) {
-    if (config.browserBinary() != null) {
+    if (isNotEmpty(config.browserBinary())) {
       log.info("Using browser binary: {}", config.browserBinary());
       firefoxOptions.setBinary(config.browserBinary());
     }
