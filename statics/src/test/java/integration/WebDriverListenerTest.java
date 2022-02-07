@@ -21,7 +21,8 @@ public class WebDriverListenerTest extends IntegrationTest {
   private final Selenium4Listener listener = new Selenium4Listener();
 
   @BeforeEach
-  void openTestPage() {
+  @AfterEach
+  void resetPreviousBrowserWithListeners() {
     Selenide.closeWebDriver();
   }
 
