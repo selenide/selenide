@@ -21,6 +21,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 @ParametersAreNonnullByDefault
 public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(ChromeDriverFactory.class);
@@ -57,7 +59,7 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
 
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
-    if (config.browserBinary() != null) {
+    if (isNotEmpty(config.browserBinary())) {
       log.info("Using browser binary: {}", config.browserBinary());
       options.setBinary(config.browserBinary());
     }

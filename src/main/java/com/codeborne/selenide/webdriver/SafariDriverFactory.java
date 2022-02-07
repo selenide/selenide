@@ -14,6 +14,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 @ParametersAreNonnullByDefault
 public class SafariDriverFactory extends AbstractDriverFactory {
   @Override
@@ -42,7 +44,7 @@ public class SafariDriverFactory extends AbstractDriverFactory {
     if (config.headless()) {
       throw new IllegalArgumentException("headless browser not supported in Safari. Set headless property to false.");
     }
-    if (config.browserBinary() != null) {
+    if (isNotEmpty(config.browserBinary())) {
       throw new IllegalArgumentException("browser binary path not supported in Safari. Reset browserBinary setting.");
     }
     options.merge(createCommonCapabilities(new SafariOptions(), config, browser, proxy));

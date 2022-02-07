@@ -143,7 +143,7 @@ public class SelenideProxyServer {
   @CheckReturnValue
   @Nonnull
   private Proxy createSeleniumProxy() {
-    return config.proxyHost() == null
+    return isEmpty(config.proxyHost())
       ? ClientUtil.createSeleniumProxy(this.proxy)
       : ClientUtil.createSeleniumProxy(this.proxy, inetAddressResolver.getInetAddressByName(config.proxyHost()));
   }

@@ -17,6 +17,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 @ParametersAreNonnullByDefault
 public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(InternetExplorerDriverFactory.class);
@@ -43,7 +45,7 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
                                                     @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     Capabilities capabilities = createCommonCapabilities(new InternetExplorerOptions(), config, browser, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
-    if (config.browserBinary() != null) {
+    if (isNotEmpty(config.browserBinary())) {
       log.info("Using browser binary: {}", config.browserBinary());
       log.warn("Changing browser binary not supported in InternetExplorer, setting will be ignored.");
     }

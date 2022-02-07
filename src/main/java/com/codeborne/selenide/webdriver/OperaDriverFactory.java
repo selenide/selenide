@@ -17,6 +17,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 @ParametersAreNonnullByDefault
 public class OperaDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(OperaDriverFactory.class);
@@ -55,7 +57,7 @@ public class OperaDriverFactory extends AbstractDriverFactory {
     if (config.headless()) {
       throw new IllegalArgumentException("headless browser not supported in Opera. Set headless property to false.");
     }
-    if (config.browserBinary() != null) {
+    if (isNotEmpty(config.browserBinary())) {
       log.info("Using browser binary: {}", config.browserBinary());
       operaOptions.setBinary(config.browserBinary());
     }
