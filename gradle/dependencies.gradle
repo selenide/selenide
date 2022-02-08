@@ -1,7 +1,7 @@
 ext {
   seleniumVersion = '4.1.2'
   junitVersion = '5.8.2'
-  jettyVersion = '9.4.44.v20210927'
+  jettyVersion = '9.4.45.v20220203'
   nettyVersion = '4.1.73.Final'
   assertjVersion = '3.22.0'
   mockitoVersion = '4.3.1'
