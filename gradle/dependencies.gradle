@@ -5,7 +5,7 @@ ext {
   nettyVersion = '4.1.73.Final'
   assertjVersion = '3.22.0'
   mockitoVersion = '4.3.1'
-  slf4jVersion = '1.7.35'
+  slf4jVersion = '1.7.36'
   browserupProxyVersion = '2.1.3'
   littleProxyVersion = '2.0.7'
   commonsFileuploadVersion = '1.4'
