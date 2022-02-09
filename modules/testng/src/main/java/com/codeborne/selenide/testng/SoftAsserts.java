@@ -76,7 +76,7 @@ public class SoftAsserts extends ExitCodeListener {
     if (testMethod == null) return false;
 
     Test annotation = testMethod.getAnnotation(Test.class);
-    return annotation != null && asList(annotation.expectedExceptions()).isEmpty();
+    return annotation == null || asList(annotation.expectedExceptions()).isEmpty();
   }
 
   Listeners getListenersAnnotation(Class<?> testClass) {
