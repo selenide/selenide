@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.3.1 (released 09.02.2022)
+* #1731 re-enable using soft assertions in TestNG @Before* and @After* methods  --  see PR #1732
+* #1729 Bump nettyVersion from 4.1.73.Final to 4.1.74.Final
+
 ## 6.3.0 (released 07.02.2022)
 * #1722 add support for custom duration in `switchTo().frame()`  --  thanks @donesvad for PR #1722
 * #1650 add methods `Selectors.byTagAndText` and `Selectors.withTagAndText`  --  thanks Maurizio Lattuada for PR #1651
