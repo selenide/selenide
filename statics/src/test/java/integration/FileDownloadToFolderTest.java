@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -23,6 +24,7 @@ import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createTempDirectory;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -150,10 +152,12 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadsPotentiallyHarmfulWindowsFiles() throws IOException {
-    File downloadedFile = $(byText("Download EXE file")).download(withExtension("exe"));
+    File downloadedFile = $(byText("Download EXE file")).download(withNameMatching("tiny\\.exe.*"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("tiny.exe");
+    assertThat(downloadedFile.getName()).startsWith("tiny.exe");
     assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
+    assertThat(FileUtils.readFileToString(downloadedFile, UTF_8).trim())
+      .isEqualTo("Here might be potentially harmful exe file");
   }
 
   @Test
