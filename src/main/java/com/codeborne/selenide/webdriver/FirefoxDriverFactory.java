@@ -47,7 +47,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     SessionNotCreatedException failure = null;
     for (int retries = 0; retries < 5; retries++) {
       try {
-        return new FirefoxDriver(createDriverService(config), createCapabilities(config, browser, proxy, browserDownloadsFolder));
+        return new PatchedFirefoxDriver(createDriverService(config), createCapabilities(config, browser, proxy, browserDownloadsFolder));
       }
       catch (SessionNotCreatedException probablyPortAlreadyUsed) {
         log.error("Failed to start firefox", probablyPortAlreadyUsed);
