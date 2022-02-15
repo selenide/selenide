@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+* fixed firefox factory to allow user to replace configs for downloads
+
+
 ## 6.3.1 (released 09.02.2022)
 * #1731 re-enable using soft assertions in TestNG @Before* and @After* methods  --  see PR #1732
 * #1729 Bump nettyVersion from 4.1.73.Final to 4.1.74.Final
