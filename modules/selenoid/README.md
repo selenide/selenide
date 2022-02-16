@@ -16,13 +16,15 @@ and "test machine" is not accessible from "selenoid machine".
 This problem is addressed by `selenide-selenoid` plugin: _it can get files from Selenoid container_. 
 
 ## Features
-Currently the plugin supports only one feature:
+Currently the plugin supports the following features:
 * File download 
+* Access to clipboard  (get & set & verify clipboard contents)
+* BasicAuth
 
-We are going to implement more features, like using clipboard, reading logs and videos etc.
+We are going to implement more features like reading logs and videos etc.
 
 ## Usage
-1. Import `org.selenide:selenide-selenoid:2.2.0`
+1. Import `org.selenide:selenide-selenoid:2.2.1`
 2. Set `Configuration.fileDownload = FOLDER;`
 3. Use method `$.download()` as usually.
 

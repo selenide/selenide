@@ -1,9 +1,9 @@
 buildscript {
   ext.versions = [
-      selenide: '6.3.0',
+      selenide: '6.3.2',
       junit: '5.8.2',
       assertj: '3.22.0',
-      slf4j: '1.7.35'
+      slf4j: '1.7.36'
   ]
 }
 
