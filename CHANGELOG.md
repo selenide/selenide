@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.3.2 (released 16.02.2022)
+* #1733 Workaround for CDP issue with Firefox 97: https://github.com/SeleniumHQ/selenium/issues/10345
+* #1736 Bump browserup-proxy-core from 2.1.3 to 2.1.4
+* #1611 Selenide is built with Java17, but still can be run on Java8  (with a help of Jabel)
+
 ## 6.3.1 (released 09.02.2022)
 * #1731 re-enable using soft assertions in TestNG @Before* and @After* methods  --  see PR #1732
 * #1729 Bump nettyVersion from 4.1.73.Final to 4.1.74.Final
