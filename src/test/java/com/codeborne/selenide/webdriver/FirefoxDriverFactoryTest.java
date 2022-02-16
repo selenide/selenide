@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
+import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -177,6 +178,19 @@ final class FirefoxDriverFactoryTest {
     assertThat(prefs.get("general.useragent.override")).isEqualTo("my agent");
     assertThat(prefs.get("boolean pref")).isEqualTo(true);
     assertThat(prefs.get("int pref")).isEqualTo(10);
+  }
+
+  @Test
+  void canActivatePDFviewer() {
+    FirefoxOptions firefoxOptions = new FirefoxOptions();
+    firefoxOptions.addPreference("pdfjs.disabled", false);
+    config.browserCapabilities(firefoxOptions);
+
+    FirefoxOptions firefoxOptionsMerged = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+
+    Map<String, Object> prefsMap = getBrowserLaunchPrefs(FirefoxOptions.FIREFOX_OPTIONS, firefoxOptionsMerged);
+
+    assertThat(prefsMap).containsEntry("pdfjs.disabled", false);
   }
 
   @SuppressWarnings("unchecked")

@@ -75,12 +75,12 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
 
     setupDownloadsFolder(initialOptions, browserDownloadsFolder);
 
+    final FirefoxOptions options = initialOptions.merge(createCommonCapabilities(new FirefoxOptions(), config, browser, proxy));
+
     Map<String, String> ffProfile = collectFirefoxProfileFromSystemProperties();
     if (!ffProfile.isEmpty()) {
-      transferFirefoxProfileFromSystemProperties(initialOptions, ffProfile);
+      transferFirefoxProfileFromSystemProperties(options, ffProfile);
     }
-
-    final FirefoxOptions options = initialOptions.merge(createCommonCapabilities(new FirefoxOptions(), config, browser, proxy));
 
     injectFirefoxPrefs(options);
     return options;
