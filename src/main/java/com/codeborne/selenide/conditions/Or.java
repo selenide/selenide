@@ -50,7 +50,7 @@ public class Or extends Condition {
     List<CheckResult> results = new ArrayList<>();
     for (Condition c : conditions) {
       CheckResult check = c.check(driver, element);
-      if (check.verdict == ACCEPT) {
+      if (check.verdict() == ACCEPT) {
         return check;
       }
       else {
@@ -58,7 +58,7 @@ public class Or extends Condition {
       }
     }
 
-    String actualValues = results.stream().map(check -> String.valueOf(check.actualValue)).collect(joining(", "));
+    String actualValues = results.stream().map(check -> String.valueOf(check.actualValue())).collect(joining(", "));
     return new CheckResult(REJECT, actualValues);
   }
 

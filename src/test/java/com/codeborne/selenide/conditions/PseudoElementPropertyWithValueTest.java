@@ -26,18 +26,18 @@ final class PseudoElementPropertyWithValueTest {
   @Test
   void apply() {
     assertThat(new PseudoElementPropertyWithValue(":before", "content", "hello")
-      .check(driver, element).verdict).isEqualTo(ACCEPT);
+      .check(driver, element).verdict()).isEqualTo(ACCEPT);
     assertThat(new PseudoElementPropertyWithValue(":before", "content", "Hello")
-      .check(driver, element).verdict).isEqualTo(ACCEPT);
+      .check(driver, element).verdict()).isEqualTo(ACCEPT);
     assertThat(new PseudoElementPropertyWithValue(":before", "content", "dummy")
-      .check(driver, element).verdict).isEqualTo(REJECT);
+      .check(driver, element).verdict()).isEqualTo(REJECT);
   }
 
   @Test
   void actualValue() {
     PseudoElementPropertyWithValue condition = new PseudoElementPropertyWithValue(":before", "content", "hello");
     CheckResult checkResult = condition.check(driver, element);
-    assertThat(checkResult.actualValue).isEqualTo(":before {content: hello;}");
+    assertThat(checkResult.actualValue()).isEqualTo(":before {content: hello;}");
   }
 
   @Test

@@ -6,10 +6,18 @@ subprojects {
   tasks.withType(JavaCompile) {
     options.encoding = encoding
     options.debug = true
+    options.release = 8
+    sourceCompatibility = 17
   }
   compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 
   sourceCompatibility = '1.8'
+
+  java {
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(17)
+    }
+  }
 
   tasks.withType(Javadoc) {
     failOnError = false

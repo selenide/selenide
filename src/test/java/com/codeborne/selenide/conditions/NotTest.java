@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.openqa.selenium.WebElement;
 
+import java.time.LocalDateTime;
+
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,8 +50,8 @@ class NotTest {
       .thenReturn(new CheckResult(REJECT, "original condition actual value"));
 
     CheckResult checkResult = notCondition.check(driver, webElement);
-    assertThat(checkResult.actualValue).isEqualTo("original condition actual value");
-    assertThat(checkResult.verdict).isEqualTo(ACCEPT);
+    assertThat(checkResult.actualValue()).isEqualTo("original condition actual value");
+    assertThat(checkResult.verdict()).isEqualTo(ACCEPT);
     verify(originalCondition).check(driver, webElement);
   }
 
@@ -57,9 +59,10 @@ class NotTest {
   void applyFalse() {
     Driver driver = mock(Driver.class);
     WebElement webElement = mock(WebElement.class);
-    when(originalCondition.check(any(Driver.class), any(WebElement.class))).thenReturn(new CheckResult(ACCEPT, "displayed"));
+    LocalDateTime timestamp = LocalDateTime.parse("2020-12-31T23:58:59");
+    when(originalCondition.check(any(Driver.class), any(WebElement.class))).thenReturn(new CheckResult(ACCEPT, "displayed", timestamp));
 
-    assertThat(notCondition.check(driver, webElement)).isEqualTo(new CheckResult(REJECT, "displayed"));
+    assertThat(notCondition.check(driver, webElement)).isEqualTo(new CheckResult(REJECT, "displayed", timestamp));
     verify(originalCondition).check(driver, webElement);
   }
 
@@ -67,9 +70,10 @@ class NotTest {
   void applyTrue() {
     Driver driver = mock(Driver.class);
     WebElement webElement = mock(WebElement.class);
-    when(originalCondition.check(any(Driver.class), any(WebElement.class))).thenReturn(new CheckResult(REJECT, "hidden"));
+    LocalDateTime timestamp = LocalDateTime.parse("2020-12-31T23:58:59");
+    when(originalCondition.check(any(Driver.class), any(WebElement.class))).thenReturn(new CheckResult(REJECT, "hidden", timestamp));
 
-    assertThat(notCondition.check(driver, webElement)).isEqualTo(new CheckResult(ACCEPT, "hidden"));
+    assertThat(notCondition.check(driver, webElement)).isEqualTo(new CheckResult(ACCEPT, "hidden", timestamp));
     verify(originalCondition).check(driver, webElement);
   }
 

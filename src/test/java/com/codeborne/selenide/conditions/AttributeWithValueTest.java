@@ -22,13 +22,13 @@ final class AttributeWithValueTest {
 
   @Test
   void check() {
-    assertThat(new AttributeWithValue("data-id", "actual").check(driver, element).verdict).isEqualTo(ACCEPT);
-    assertThat(new AttributeWithValue("data-id", "expected").check(driver, element).verdict).isEqualTo(REJECT);
+    assertThat(new AttributeWithValue("data-id", "actual").check(driver, element).verdict()).isEqualTo(ACCEPT);
+    assertThat(new AttributeWithValue("data-id", "expected").check(driver, element).verdict()).isEqualTo(REJECT);
   }
 
   @Test
   void actualValue() {
-    assertThat(new AttributeWithValue("data-id", "expected").check(driver, element).actualValue).isEqualTo("data-id=\"actual\"");
+    assertThat(new AttributeWithValue("data-id", "expected").check(driver, element).actualValue()).isEqualTo("data-id=\"actual\"");
   }
 
   @Test

@@ -30,7 +30,7 @@ class CaseSensitiveTextTest {
   void shouldMatchExpectedPartOfActualTextWithSameCase() {
     when(element.getText()).thenReturn("John Malkovich The First");
 
-    assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
     verify(element).getTagName();
     verify(element).getText();
   }
@@ -39,7 +39,7 @@ class CaseSensitiveTextTest {
   void shouldMatchExpectedPartOfActualTextWithSameCaseIgnoresWhitespaces() {
     when(element.getText()).thenReturn("John Malkovich\t The   \n First");
 
-    assertThat(new CaseSensitiveText("John        Malkovich The   ").check(driver, element).verdict).isEqualTo(ACCEPT);
+    assertThat(new CaseSensitiveText("John        Malkovich The   ").check(driver, element).verdict()).isEqualTo(ACCEPT);
     verify(element).getTagName();
     verify(element).getText();
   }
@@ -48,7 +48,7 @@ class CaseSensitiveTextTest {
   void shouldNotMatchExpectedPartOfActualTextWithDifferentCase() {
     when(element.getText()).thenReturn("john Malkovich the first");
 
-    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
     verify(element).getTagName();
     verify(element).getText();
   }
@@ -57,7 +57,7 @@ class CaseSensitiveTextTest {
   void shouldNotMatchActualPartOfExpectedText() {
     when(element.getText()).thenReturn("John");
 
-    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
+    assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
     verify(element).getTagName();
     verify(element).getText();
   }
@@ -72,7 +72,7 @@ class CaseSensitiveTextTest {
     when(element.getText()).thenReturn("John");
     CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(checkResult.actualValue).isEqualTo("text=\"John\"");
+    assertThat(checkResult.actualValue()).isEqualTo("text=\"John\"");
     verify(element).getTagName();
     verify(element).getText();
   }
