@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+* fixed firefox factory to allow user to replace configs for downloads
+
 ## 6.3.2 (released 16.02.2022)
 * #1733 Workaround for CDP issue with Firefox 97: https://github.com/SeleniumHQ/selenium/issues/10345
 * #1736 Bump browserup-proxy-core from 2.1.3 to 2.1.4
