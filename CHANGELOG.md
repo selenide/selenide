@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 6.3.3 (released 20.02.2022)
 * fixed firefox factory to allow user to replace configs for downloads
+* Bump webdrivermanager from 5.0.3 to 5.1.0
 
 ## 6.3.2 (released 16.02.2022)
 * #1733 Workaround for CDP issue with Firefox 97: https://github.com/SeleniumHQ/selenium/issues/10345
