@@ -14,7 +14,7 @@ java {
 jar {
   manifest {
     attributes(
-      "Automatic-Module-Name": project.groupId + '.' + project.artifactId,
+      "Automatic-Module-Name": project.groupId + '.' + project.artifactId.replace('-', '.'),
       "Implementation-Title": project.groupId + '.' + project.artifactId,
       "Implementation-Version": archiveVersion,
       "Implementation-Vendor": "selenide.org")
