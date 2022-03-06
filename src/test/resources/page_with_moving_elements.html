@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Moving elements</title>
+  <meta charset="UTF-8">
+  <style type="text/css">
+    body {
+      margin: 0;
+    }
+  </style>
+  <script type="text/javascript">
+  </script>
+</head>
+<body>
+  <h1>Page with moving elements</h1>
+  <div id="area" style="position: relative; width: 820px; height: 520px; border: 1px solid lightgrey;">
+    <div id="target" style="position: absolute; background-color: lightblue">TARGET</div>
+  </div>
+
+  <script type="text/javascript">
+    let x = 0;
+    let y = 0;
+    let speedX = 10;
+    let speedY = 5;
+    let target = document.getElementById('target');
+
+    function move() {
+      if (x < 0 || x > 800) speedX = -speedX;
+      if (y < 0 || y > 500) speedY = -speedY;
+      x += speedX;
+      y += speedY;
+      target.style.left = x + 'px';
+      target.style.top = y + 'px';
+      setTimeout(move, 10)
+    }
+
+    move();
+  </script>
+</body>
+</html>
