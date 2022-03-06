@@ -15,7 +15,7 @@ public class AttributeWithValue extends Condition {
   protected final String expectedAttributeValue;
 
   public AttributeWithValue(String attributeName, String expectedAttributeValue) {
-    super("attribute");
+    super(String.format("attribute %s=\"%s\"", attributeName, expectedAttributeValue));
     this.attributeName = attributeName;
     this.expectedAttributeValue = expectedAttributeValue;
   }
@@ -28,13 +28,6 @@ public class AttributeWithValue extends Condition {
       expectedAttributeValue.equals(attributeValue),
       String.format("%s=\"%s\"", attributeName, attributeValue)
     );
-  }
-
-  @Nonnull
-  @CheckReturnValue
-  @Override
-  public String toString() {
-    return String.format("%s %s=\"%s\"", getName(), attributeName, expectedAttributeValue);
   }
 
   protected String getAttributeValue(WebElement element) {

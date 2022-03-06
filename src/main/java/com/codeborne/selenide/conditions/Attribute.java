@@ -13,7 +13,7 @@ public class Attribute extends Condition {
   private final String attributeName;
 
   public Attribute(String attributeName) {
-    super("attribute");
+    super("attribute " + attributeName);
     this.attributeName = attributeName;
   }
 
@@ -21,11 +21,6 @@ public class Attribute extends Condition {
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String attributeValue = element.getAttribute(attributeName);
-    return new CheckResult(attributeValue != null, String.format("%s=%s", attributeName, attributeValue));
-  }
-
-  @Override
-  public String toString() {
-    return getName() + " " + attributeName;
+    return new CheckResult(attributeValue != null, String.format("%s=\"%s\"", attributeName, attributeValue));
   }
 }
