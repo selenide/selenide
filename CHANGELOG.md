@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.3.4 (released 06.03.2022)
+* #1746 show expected attribute in error message
+
 ## 6.3.3 (released 20.02.2022)
 * fixed firefox factory to allow user to replace configs for downloads
 * Bump webdrivermanager from 5.0.3 to 5.1.0
