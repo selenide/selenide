@@ -2,7 +2,7 @@
 
 ## 6.3.4 (released 06.03.2022)
 * #1746 show expected attribute in error message
-#1746 add examples of custom conditions described in https://github.com/selenide/selenide/wiki/Custom-conditions
+* #1746 add examples of custom conditions described in https://github.com/selenide/selenide/wiki/Custom-conditions
 * #1748 fix automatic module name in generated binaries
 
 ## 6.3.3 (released 20.02.2022)

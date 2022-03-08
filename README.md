@@ -29,6 +29,13 @@ Selenide is based on and is compatible to Selenium WebDriver 4.0+
 
 Look for [detailed comparison of Selenide and Selenium WebDriver API](https://github.com/selenide/selenide/wiki/Selenide-vs-Selenium).
 
+#### Selenide for mobile apps
+You can use Selenide for testing mobile applications. See plugin [selenide-appium](https://github.com/selenide/selenide-appium).
+
+#### Selenide with Selenoid
+You can use Selenide for running tests in Selenoid containers. See plugin [selenide-selenoid](https://github.com/selenide/selenide-selenoid).
+
+
 ## Changelog
 
 Here is [CHANGELOG](https://github.com/selenide/selenide/blob/master/CHANGELOG.md)
