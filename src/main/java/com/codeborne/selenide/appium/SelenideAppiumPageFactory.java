@@ -4,12 +4,14 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.impl.WebElementSource;
-import io.appium.java_client.HasSessionDetails;
-import io.appium.java_client.MobileElement;
+import io.appium.java_client.HasBrowserCheck;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.DefaultElementByBuilder;
 import io.appium.java_client.pagefactory.bys.builder.AppiumByBuilder;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ByIdOrName;
 
 import javax.annotation.CheckReturnValue;
@@ -18,6 +20,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+
+import static io.appium.java_client.remote.options.SupportsAutomationNameOption.AUTOMATION_NAME_OPTION;
 
 @ParametersAreNonnullByDefault
 public class SelenideAppiumPageFactory extends SelenidePageFactory {
@@ -31,34 +35,30 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   }
 
   private DefaultElementByBuilder byBuilder(Driver driver) {
-    if (!HasSessionDetails.class.isAssignableFrom(driver.getWebDriver().getClass())) {
+    if (driver instanceof HasBrowserCheck && !((HasBrowserCheck) driver.getWebDriver()).isBrowser()) {
       return new DefaultElementByBuilder(null, null);
-    }
-    else {
-      HasSessionDetails d = (HasSessionDetails) driver.getWebDriver();
-      return new DefaultElementByBuilder(d.getPlatformName(), d.getAutomationName());
+    } else {
+      Capabilities d = ((RemoteWebDriver) driver).getCapabilities();
+      return new DefaultElementByBuilder(d.getPlatformName().toString(), d.getCapability(AUTOMATION_NAME_OPTION).toString());
     }
   }
 
   @CheckReturnValue
   @Nullable
   @Override
-  public Object decorate(ClassLoader loader,
-                         Driver driver, @Nullable WebElementSource searchContext,
-                         Field field, By selector, Type[] genericTypes) {
+  public Object decorate(ClassLoader loader, Driver driver, @Nullable WebElementSource searchContext, Field field, By selector, Type[] genericTypes) {
     if (selector instanceof ByIdOrName) {
       return decorateWithAppium(loader, searchContext, field);
     }
-
     return super.decorate(loader, driver, searchContext, field, selector, genericTypes);
   }
 
   private Object decorateWithAppium(ClassLoader loader, @Nullable WebElementSource searchContext, Field field) {
     AppiumFieldDecorator defaultAppiumFieldDecorator = new AppiumFieldDecorator(searchContext.getWebElement());
     Object appiumElement = defaultAppiumFieldDecorator.decorate(loader, field);
-    if (appiumElement instanceof MobileElement) {
+    if (appiumElement instanceof WebElement) {
       // TODO Make appiumElement lazy-loaded
-      return Selenide.$((MobileElement) appiumElement);
+      return Selenide.$((WebElement) appiumElement);
     }
     return appiumElement;
   }
