@@ -2,6 +2,7 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.WebDriverProvider;
 import io.appium.java_client.android.AndroidDriver;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -23,17 +24,19 @@ public class AndroidDriverProvider implements WebDriverProvider {
   @CheckReturnValue
   @Nonnull
   @Override
-  public WebDriver createDriver(DesiredCapabilities capabilities) {
-    capabilities.setCapability(PLATFORM_NAME, "Android");
-    capabilities.setCapability(DEVICE_NAME, "Android Emulator");
-    capabilities.setCapability(VERSION, "9.0");
-    capabilities.setCapability(APPLICATION_NAME, "Appium");
-    capabilities.setCapability(APP_PACKAGE, "com.android.calculator2");
-    capabilities.setCapability(APP_ACTIVITY, "com.android.calculator2.Calculator");
-    capabilities.setCapability(NEW_COMMAND_TIMEOUT, 11);
-    capabilities.setCapability(FULL_RESET, false);
+  public WebDriver createDriver(@Nonnull Capabilities capabilities) {
+    DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+    desiredCapabilities.merge(capabilities);
+    desiredCapabilities.setCapability(PLATFORM_NAME, "Android");
+    desiredCapabilities.setCapability(DEVICE_NAME, "Android Emulator");
+    desiredCapabilities.setCapability(VERSION, "9.0");
+    desiredCapabilities.setCapability(APPLICATION_NAME, "Appium");
+    desiredCapabilities.setCapability(APP_PACKAGE, "com.android.calculator2");
+    desiredCapabilities.setCapability(APP_ACTIVITY, "com.android.calculator2.Calculator");
+    desiredCapabilities.setCapability(NEW_COMMAND_TIMEOUT, 11);
+    desiredCapabilities.setCapability(FULL_RESET, false);
     try {
-      return new AndroidDriver<>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+      return new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), desiredCapabilities);
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }

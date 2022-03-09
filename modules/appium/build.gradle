@@ -4,7 +4,7 @@ defaultTasks 'check', 'test', 'publishToMavenLocal'
 
 group = 'com.codeborne'
 description = 'Selenide adaptor for Appium framework'
-version = '1.7.4'
+version = '1.7.5'
 
 tasks.withType(Test) {
   useJUnitPlatform()
