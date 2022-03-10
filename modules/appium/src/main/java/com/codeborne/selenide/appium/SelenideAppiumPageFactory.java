@@ -35,10 +35,10 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   }
 
   private DefaultElementByBuilder byBuilder(Driver driver) {
-    if (driver instanceof HasBrowserCheck && !((HasBrowserCheck) driver.getWebDriver()).isBrowser()) {
+    if (driver.getWebDriver() instanceof HasBrowserCheck && ((HasBrowserCheck) driver.getWebDriver()).isBrowser()) {
       return new DefaultElementByBuilder(null, null);
     } else {
-      Capabilities d = ((RemoteWebDriver) driver).getCapabilities();
+      Capabilities d = ((RemoteWebDriver) driver.getWebDriver()).getCapabilities();
       return new DefaultElementByBuilder(d.getPlatformName().toString(), d.getCapability(AUTOMATION_NAME_OPTION).toString());
     }
   }
