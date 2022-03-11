@@ -30,7 +30,7 @@ public class AndroidDriverWithDemos implements WebDriverProvider {
     options.setAutomationName(AutomationName.ANDROID_UIAUTOMATOR2);
     options.setPlatformName("Android");
     options.setDeviceName("Android Emulator");
-    options.setPlatformVersion("4.4.2");
+    options.setPlatformVersion("9.0");
     options.setCapability(APPLICATION_NAME, "Appium");
     options.setApp(app.getAbsolutePath());
     options.setAppPackage("io.appium.android.apis");
