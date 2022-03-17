@@ -5,10 +5,7 @@ import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.DummyRandomizer;
-import io.netty.handler.codec.http.DefaultHttpHeaders;
-import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpResponse;
-import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +25,7 @@ final class FileDownloadFilterTest {
   private final FileDownloadFilter filter = new FileDownloadFilter(
     new SelenideConfig().downloadsFolder("build/downloads"), new Downloader(new DummyRandomizer("random-text"))
   );
+  private final HttpRequest request = mock(HttpRequest.class);
   private final HttpResponse response = mock(HttpResponse.class);
   private final HttpMessageContents contents = mock(HttpMessageContents.class);
   private final HttpMessageInfo messageInfo = mock(HttpMessageInfo.class);
@@ -44,14 +42,28 @@ final class FileDownloadFilterTest {
     deleteDirectory(directory);
   }
 
-  private HttpHeaders mockHeaders() {
-    HttpHeaders headers = new DefaultHttpHeaders();
-    when(response.headers()).thenReturn(headers);
-    return headers;
+  @Test
+  void requestFilter_doesNothingIfNotActivated() {
+    filter.deactivate();
+    filter.filterRequest(request, contents, messageInfo);
+
+    verifyNoMoreInteractions(request);
+    verifyNoMoreInteractions(contents);
+    verifyNoMoreInteractions(messageInfo);
   }
 
   @Test
-  void doesNothingIfNotActivated() {
+  void requestFilter_addsRequestHeader_toDisableContentEncoding() {
+    mockHeaders(request).add("Accept-encoding", "br, gzip");;
+    filter.activate();
+
+    filter.filterRequest(request, contents, messageInfo);
+
+    assertThat(request.headers().get("accept-encoding")).isEqualTo("identity");
+  }
+
+  @Test
+  void responseFilter_doesNothingIfNotActivated() {
     filter.deactivate();
     filter.filterResponse(response, contents, messageInfo);
 
@@ -92,7 +104,7 @@ final class FileDownloadFilterTest {
   void interceptsHttpResponse() throws IOException {
     filter.activate();
     mockStatusCode(200, "200=success");
-    mockHeaders().add("content-disposition", "attachement; filename=report.pdf");
+    mockHeaders(response).add("content-disposition", "attachement; filename=report.pdf");
     when(contents.getBinaryContents()).thenReturn(new byte[]{1, 2, 3, 4, 5});
 
     filter.filterResponse(response, contents, messageInfo);
@@ -109,7 +121,7 @@ final class FileDownloadFilterTest {
   void usesNameFromURL_ifResponseHasNoContentDispositionHeader() throws IOException {
     filter.activate();
     mockStatusCode(200, "200=success");
-    mockHeaders();
+    mockHeaders(response);
     mockUrl("/foo/bar/cv.pdf?42");
     when(contents.getBinaryContents()).thenReturn("HELLO".getBytes(UTF_8));
 
@@ -122,5 +134,11 @@ final class FileDownloadFilterTest {
     assertThat(file.getName()).isEqualTo("cv.pdf");
     assertThat(file.getPath()).endsWith(expectedFile.getPath());
     assertThat(readFileToString(file, UTF_8)).isEqualTo("HELLO");
+  }
+
+  private HttpHeaders mockHeaders(HttpMessage message) {
+    HttpHeaders headers = new DefaultHttpHeaders();
+    when(message.headers()).thenReturn(headers);
+    return headers;
   }
 }

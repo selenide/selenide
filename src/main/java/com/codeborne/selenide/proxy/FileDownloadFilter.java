@@ -1,5 +1,6 @@
 package com.codeborne.selenide.proxy;
 
+import com.browserup.bup.filters.RequestFilter;
 import com.browserup.bup.filters.ResponseFilter;
 import com.browserup.bup.util.HttpMessageContents;
 import com.browserup.bup.util.HttpMessageInfo;
@@ -9,6 +10,7 @@ import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.Downloads;
 import com.codeborne.selenide.impl.HttpHelper;
 import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -27,7 +29,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @ParametersAreNonnullByDefault
-public class FileDownloadFilter implements ResponseFilter {
+public class FileDownloadFilter implements RequestFilter, ResponseFilter {
   private static final Logger log = LoggerFactory.getLogger(FileDownloadFilter.class);
 
   private final Config config;
@@ -67,6 +69,14 @@ public class FileDownloadFilter implements ResponseFilter {
    */
   public void deactivate() {
     active = false;
+  }
+
+  @Override
+  public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo) {
+    if (active) {
+      request.headers().set("Accept-Encoding", "identity");
+    }
+    return null;
   }
 
   @Override

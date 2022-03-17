@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.3.5 (released 17.03.2022)
+* #1755 disable content encoding when downloading files via proxy  --  see PR #1756
+
 ## 6.3.4 (released 06.03.2022)
 * #1746 show expected attribute in error message
 * #1746 add examples of custom conditions described in https://github.com/selenide/selenide/wiki/Custom-conditions

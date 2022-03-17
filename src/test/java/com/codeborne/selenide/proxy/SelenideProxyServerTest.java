@@ -37,6 +37,9 @@ final class SelenideProxyServerTest {
 
     FileDownloadFilter filter = proxyServer.responseFilter("download");
     assertThat(filter.downloads().files()).hasSize(0);
+
+    FileDownloadFilter requestFilter = proxyServer.requestFilter("download");
+    assertThat(requestFilter).isSameAs(filter);
   }
 
   @Test
