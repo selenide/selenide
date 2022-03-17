@@ -84,10 +84,13 @@ public class SelenideProxyServer {
         proxy.setChainedProxyNonProxyHosts(noProxyHosts);
       }
     }
+    FileDownloadFilter downloadFilter = new FileDownloadFilter(config);
+
     addRequestFilter("authentication", new AuthenticationFilter());
     addRequestFilter("requestSizeWatchdog", new RequestSizeWatchdog());
     addResponseFilter("responseSizeWatchdog", new ResponseSizeWatchdog());
-    addResponseFilter("download", new FileDownloadFilter(config));
+    addRequestFilter("download", downloadFilter);
+    addResponseFilter("download", downloadFilter);
 
     proxy.start(config.proxyPort());
     port = proxy.getPort();
