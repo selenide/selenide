@@ -40,10 +40,12 @@ import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Collections.emptyMap;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.stream.Collectors.joining;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.hc.client5.http.protocol.HttpClientContext.COOKIE_STORE;
@@ -209,13 +211,17 @@ public class DownloadFileWithHttpRequest {
       }
     }
 
-    log.info("Cannot extract file name from http headers. Found headers: ");
-    for (Header header : response.getHeaders()) {
-      log.info("{}={}", header.getName(), header.getValue());
-    }
+    log.info("Cannot extract file name for {}. Found headers: {}", fileToDownloadLocation, headersToString(response));
 
     String fileNameFromUrl = httpHelper.getFileName(fileToDownloadLocation);
-    return isNotBlank(fileNameFromUrl) ? fileNameFromUrl : downloader.randomFileName();
+    String result = isNotBlank(fileNameFromUrl) ? fileNameFromUrl : downloader.randomFileName();
+    log.info("Generated file name for {}: {}", fileToDownloadLocation, result);
+    return result;
+  }
+
+  @Nonnull
+  private String headersToString(HttpResponse response) {
+    return Stream.of(response.getHeaders()).map(h -> h.getName() + "=" + h.getValue()).collect(joining(", "));
   }
 
   protected void saveContentToFile(CloseableHttpResponse response, File downloadedFile) throws IOException {

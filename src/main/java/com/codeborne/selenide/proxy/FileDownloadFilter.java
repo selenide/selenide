@@ -119,13 +119,12 @@ public class FileDownloadFilter implements ResponseFilter {
     return httpHelper.getFileNameFromContentDisposition(response.headers)
       .map(httpHelper::normalize)
       .orElseGet(() -> {
-        log.info("Cannot extract file name from http headers. Found headers: ");
-        for (Map.Entry<String, String> header : response.headers.entrySet()) {
-          log.info("{}={}", header.getKey(), header.getValue());
-        }
+        log.info("Cannot extract file name from http headers for {}. Found headers: {}", response.url, response.headers);
 
         String fileNameFromUrl = httpHelper.getFileName(response.url);
-        return isNotBlank(fileNameFromUrl) ? fileNameFromUrl : downloader.randomFileName();
+        String result = isNotBlank(fileNameFromUrl) ? fileNameFromUrl : downloader.randomFileName();
+        log.info("Generated file name for {}: {}", response.url, result);
+        return result;
       });
   }
 
