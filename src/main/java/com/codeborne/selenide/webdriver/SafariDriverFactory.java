@@ -32,7 +32,7 @@ public class SafariDriverFactory extends AbstractDriverFactory {
   }
 
   private SafariDriverService createDriverService(Config config) {
-    return withLog(config, new SafariDriverService.Builder().usingTechnologyPreview(false));
+    return withLog(config, new SafariDriverService.Builder());
   }
 
   @Nonnull
