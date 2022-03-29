@@ -1,22 +1,17 @@
 package com.codeborne.selenide.webdriver;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
-import java.io.File;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 public class SafariDriverFactoryTest {
-  private SelenideConfig config = new SelenideConfig();
+  private final SelenideConfig config = new SelenideConfig().headless(false).downloadsFolder("build/should-not-be-used");
   private final Browser browser = new Browser(config.browser(), config.headless());
   private final SafariDriverFactory factory = new SafariDriverFactory();
-
-  @BeforeEach
-  void cleanup() {
-    config = new SelenideConfig().downloadsFolder("build/should-not-be-used");
-  }
 
   @Test
   void browserBinaryCannotBeSet() {
