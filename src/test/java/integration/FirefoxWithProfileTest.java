@@ -3,14 +3,16 @@ package integration;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SharedDownloadsFolder;
+import integration.FirefoxProfileReader.FirefoxProfileChecker;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
+
+import java.io.IOException;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.TestResources.toFile;
@@ -33,12 +35,11 @@ final class FirefoxWithProfileTest extends BaseIntegrationTest {
   }
 
   @Test
-  void createFirefoxWithCustomProfile() {
-    FirefoxProfile profile = createFirefoxProfileWithExtensions();
+  void createFirefoxWithCustomProfile() throws IOException {
     FirefoxOptions options = new FirefoxOptions();
-    options.setProfile(profile);
+    options.setProfile(createFirefoxProfileWithExtensions());
     if (browser().isHeadless()) options.setHeadless(true);
-    WebDriver firefox = new FirefoxDriver(options);
+    FirefoxDriver firefox = new FirefoxDriver(options);
 
     SelenideConfig config = new SelenideConfig().browser("firefox").baseUrl(getBaseUrl());
     customFirefox = new SelenideDriver(config, firefox, null, new SharedDownloadsFolder("build/downloads/456"));
@@ -48,6 +49,11 @@ final class FirefoxWithProfileTest extends BaseIntegrationTest {
     customFirefox.open("/page_with_jquery.html");
     customFirefox.$("#rememberMe").shouldBe(visible);
 
+    FirefoxProfileChecker profile = new FirefoxProfileReader().readProfile(firefox);
+    profile.assertPreference("plugin.state.flash", 42);
+    profile.assertPreference("extensions.firebug.showFirstRunPage", false);
+    profile.assertPreference("extensions.firebug.allPagesActivation", "on");
+    profile.assertPreference("intl.accept_languages", "no,en-us,en");
   }
 
   private FirefoxProfile createFirefoxProfileWithExtensions() {
@@ -58,6 +64,7 @@ final class FirefoxWithProfileTest extends BaseIntegrationTest {
     profile.setPreference("extensions.firebug.allPagesActivation", "on");
     profile.setPreference("intl.accept_languages", "no,en-us,en");
     profile.setPreference("extensions.firebug.console.enableSites", "true");
+    profile.setPreference("plugin.state.flash", 42);
     return profile;
   }
 }

@@ -7,7 +7,6 @@ import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.GeckoDriverService;
@@ -77,10 +76,8 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
 
     final FirefoxOptions options = initialOptions.merge(createCommonCapabilities(new FirefoxOptions(), config, browser, proxy));
 
-    Map<String, String> ffProfile = collectFirefoxProfileFromSystemProperties();
-    if (!ffProfile.isEmpty()) {
-      transferFirefoxProfileFromSystemProperties(options, ffProfile);
-    }
+    transferFirefoxProfileFromSystemProperties(options)
+      .ifPresent(profile -> options.setProfile(profile));
 
     injectFirefoxPrefs(options);
     return options;
@@ -142,17 +139,22 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     return result;
   }
 
-  protected void transferFirefoxProfileFromSystemProperties(FirefoxOptions firefoxOptions, Map<String, String> ffProfile) {
-    FirefoxProfile profile = Optional.ofNullable(firefoxOptions.getProfile()).orElseGet(FirefoxProfile::new);
+  @Nonnull
+  @CheckReturnValue
+  protected Optional<FirefoxProfile> transferFirefoxProfileFromSystemProperties(FirefoxOptions firefoxOptions) {
+    Map<String, String> ffProfile = collectFirefoxProfileFromSystemProperties();
+    if (ffProfile.isEmpty()) {
+      return Optional.empty();
+    }
 
+    FirefoxProfile profile = Optional.ofNullable(firefoxOptions.getProfile()).orElseGet(FirefoxProfile::new);
     for (Map.Entry<String, String> entry : ffProfile.entrySet()) {
       String capability = entry.getKey();
       String value = entry.getValue();
       log.debug("Use {}={}", capability, value);
       setCapability(profile, capability, value);
     }
-
-    firefoxOptions.setProfile(profile);
+    return Optional.of(profile);
   }
 
   protected void setCapability(FirefoxProfile profile, String capability, String value) {
