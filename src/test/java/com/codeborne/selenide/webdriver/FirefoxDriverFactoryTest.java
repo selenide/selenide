@@ -63,23 +63,9 @@ final class FirefoxDriverFactoryTest {
   }
 
   @Test
-  void keepConfigurationFirefoxProfileWhenTransferPreferencesFromSystemPropsToDriver() {
-    FirefoxProfile configurationProfile = new FirefoxProfile();
-    configurationProfile.setPreference("some.conf.cap", 42);
-    FirefoxOptions firefoxOptions = new FirefoxOptions().setProfile(configurationProfile);
-    config.browserCapabilities(firefoxOptions);
-    givenSystemProperty("firefoxprofile.some.cap", "25");
-
-    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder).getProfile();
-
-    assertThat(profile.getIntegerPreference("some.cap", 0)).isEqualTo(25);
-    assertThat(profile.getIntegerPreference("some.conf.cap", 0)).isEqualTo(42);
-  }
-
-  @Test
   void transferIntegerFirefoxProfilePreferencesFromSystemPropsToDriver() {
     givenSystemProperty("firefoxprofile.some.cap", "25");
-    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder).getProfile();
+    FirefoxProfile profile = driverFactory.transferFirefoxProfileFromSystemProperties(new FirefoxOptions()).get();
     assertThat(profile.getIntegerPreference("some.cap", 0)).isEqualTo(25);
   }
 
@@ -87,7 +73,7 @@ final class FirefoxDriverFactoryTest {
   void transferBooleanFirefoxProfilePreferencesFromSystemPropsToDriver() {
     givenSystemProperty("firefoxprofile.some.cap1", "faLSe");
     givenSystemProperty("firefoxprofile.some.cap2", "TRue");
-    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder).getProfile();
+    FirefoxProfile profile = driverFactory.transferFirefoxProfileFromSystemProperties(new FirefoxOptions()).get();
     assertThat(profile.getBooleanPreference("some.cap1", true)).isEqualTo(false);
     assertThat(profile.getBooleanPreference("some.cap2", false)).isEqualTo(true);
   }
@@ -95,7 +81,7 @@ final class FirefoxDriverFactoryTest {
   @Test
   void transferStringFirefoxProfilePreferencesFromSystemPropsToDriver() {
     givenSystemProperty("firefoxprofile.some.cap", "abdd");
-    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder).getProfile();
+    FirefoxProfile profile = driverFactory.transferFirefoxProfileFromSystemProperties(new FirefoxOptions()).get();
     assertThat(profile.getStringPreference("some.cap", "sjlj")).isEqualTo("abdd");
   }
 
@@ -195,7 +181,12 @@ final class FirefoxDriverFactoryTest {
 
   @SuppressWarnings("unchecked")
   private Map<String, Object> prefs(FirefoxOptions options) {
-    Map<String, Object> firefoxOptions = (Map<String, Object>) options.asMap().get("moz:firefoxOptions");
+    Map<String, Object> firefoxOptions = firefoxOptions(options);
     return (Map<String, Object>) firefoxOptions.get("prefs");
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> firefoxOptions(FirefoxOptions options) {
+    return (Map<String, Object>) options.asMap().get("moz:firefoxOptions");
   }
 }
