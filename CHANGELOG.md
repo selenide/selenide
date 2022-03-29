@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.4.0 (planned to 0x.04.2022)
+* #1759 upgrade to Selenium 4.1.3
+
 ## 6.3.5 (released 17.03.2022)
 * #1755 disable content encoding when downloading files via proxy  --  see PR #1756
 
