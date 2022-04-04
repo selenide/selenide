@@ -42,6 +42,7 @@ import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
+import static org.apache.commons.io.FileUtils.moveFile;
 import static org.openqa.selenium.OutputType.BYTES;
 import static org.openqa.selenium.OutputType.FILE;
 
@@ -265,14 +266,14 @@ public class ScreenShotLaboratory {
   @Nullable
   protected File savePageImageToFile(Config config, String fileName, Driver driver) {
     try {
-      Optional<byte[]> scrFile = photographer.takeScreenshot(driver, BYTES);
-      if (!scrFile.isPresent()) {
+      Optional<File> srcFile = photographer.takeScreenshot(driver, FILE);
+      if (!srcFile.isPresent()) {
         log.info("Webdriver doesn't support screenshots");
         return null;
       }
       File imageFile = new File(config.reportsFolder(), fileName + ".png").getAbsoluteFile();
       try {
-        FileHelper.writeToFile(scrFile.get(), imageFile);
+        moveFile(srcFile.get(), imageFile);
       }
       catch (IOException e) {
         log.error("Failed to save screenshot to {}", imageFile, e);

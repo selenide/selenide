@@ -6,9 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,18 +18,6 @@ public final class FileHelper {
   private static final Logger log = LoggerFactory.getLogger(FileHelper.class);
 
   private FileHelper() {
-  }
-
-  public static void writeToFile(byte[] source, File targetFile) throws IOException {
-    try (InputStream in = new ByteArrayInputStream(source)) {
-      copyFile(in, targetFile);
-    }
-  }
-
-  public static void copyFile(File sourceFile, File targetFile) throws IOException {
-    try (FileInputStream in = new FileInputStream(sourceFile)) {
-      copyFile(in, targetFile);
-    }
   }
 
   public static void copyFile(InputStream in, File targetFile) throws IOException {
