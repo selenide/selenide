@@ -137,7 +137,7 @@ public class Configuration {
    * - `none`: return immediately
    * <br>
    * In some cases `eager` can bring performance boosts for the slow tests.
-   * Though, we left default value `normal` because we afraid to break users' existing tests.
+   * Though, we left default value `normal` because we are afraid to break users' existing tests.
    * <br>
    * See https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy
    *
