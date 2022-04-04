@@ -34,7 +34,14 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
   private File extract(Config config, WebDriver driver, String fileName, boolean retryIfAlert) {
     File pageSource = createFile(config, fileName);
     try {
-      writeToFile(driver.getPageSource(), pageSource);
+      String source = driver.getPageSource();
+      if (source == null) {
+        log.error("Failed to save page source to {}: page source is <null>", fileName);
+        writeToFile("<null>", pageSource);
+      }
+      else {
+        writeToFile(source, pageSource);
+      }
     }
     catch (UnhandledAlertException e) {
       if (retryIfAlert) {
