@@ -43,6 +43,7 @@ public class SelenideConfig implements Config {
   private boolean proxyEnabled = Boolean.parseBoolean(getProperty("selenide.proxyEnabled", "false"));
   private String proxyHost = getProperty("selenide.proxyHost", null);
   private int proxyPort = Integer.parseInt(getProperty("selenide.proxyPort", "0"));
+  private boolean tracingEnabled = Boolean.parseBoolean(getProperty("selenide.tracingEnabled", "true"));
 
   @Override
   public String baseUrl() {
@@ -341,6 +342,16 @@ public class SelenideConfig implements Config {
 
   public SelenideConfig browserCapabilities(MutableCapabilities browserCapabilities) {
     this.browserCapabilities = browserCapabilities;
+    return this;
+  }
+
+  @Override
+  public boolean tracingEnabled() {
+    return tracingEnabled;
+  }
+
+  public SelenideConfig tracingEnabled(boolean tracingEnabled) {
+    this.tracingEnabled = tracingEnabled;
     return this;
   }
 
