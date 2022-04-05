@@ -8,6 +8,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -78,7 +79,10 @@ public class Mocks {
 
     CollectionSource collection = mock(CollectionSource.class);
     when(collection.driver()).thenReturn(driver);
+    when(collection.getSearchCriteria()).thenReturn(description);
+    when(collection.shortDescription()).thenReturn(description);
     when(collection.description()).thenReturn(description);
+    when(collection.getAlias()).thenReturn(NONE);
     when(collection.getElements()).thenReturn(asList(elements));
     for (int i = 0; i < elements.length; i++) {
       when(collection.getElement(i)).thenReturn(elements[i]);

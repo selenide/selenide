@@ -26,11 +26,27 @@ public interface CollectionSource {
 
   @CheckReturnValue
   @Nonnull
-  String description();
+  String getSearchCriteria();
+
+  @CheckReturnValue
+  @Nonnull
+  default String description() {
+    return getAlias().get(() -> getSearchCriteria());
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  default String shortDescription() {
+    return getAlias().getOrElse(() -> getSearchCriteria());
+  }
 
   @CheckReturnValue
   @Nonnull
   Driver driver();
+
+  @CheckReturnValue
+  @Nonnull
+  Alias getAlias();
 
   void setAlias(String alias);
 }

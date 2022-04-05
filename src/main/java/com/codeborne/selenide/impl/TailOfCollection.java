@@ -47,8 +47,8 @@ public class TailOfCollection implements CollectionSource {
   @Override
   @CheckReturnValue
   @Nonnull
-  public String description() {
-    return alias.getOrElse(() -> originalCollection.description() + ":last(" + size + ')');
+  public String getSearchCriteria() {
+    return originalCollection.description() + ":last(" + size + ')';
   }
 
   @Override
@@ -56,6 +56,12 @@ public class TailOfCollection implements CollectionSource {
   @Nonnull
   public Driver driver() {
     return originalCollection.driver();
+  }
+
+  @Nonnull
+  @Override
+  public Alias getAlias() {
+    return alias;
   }
 
   @Override

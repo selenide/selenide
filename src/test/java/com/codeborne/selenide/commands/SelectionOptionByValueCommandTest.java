@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.Collections;
 
+import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,7 +29,8 @@ final class SelectionOptionByValueCommandTest {
   void setup() {
     when(selectField.driver()).thenReturn(new DriverStub());
     when(selectField.getWebElement()).thenReturn(element);
-    when(selectField.description()).thenReturn("By.tagName{select}");
+    when(selectField.getAlias()).thenReturn(NONE);
+    when(selectField.getSearchCriteria()).thenReturn("By.tagName{select}");
     when(element.getText()).thenReturn("walue");
     when(element.getTagName()).thenReturn("select");
     when(foundElement.isSelected()).thenReturn(true);

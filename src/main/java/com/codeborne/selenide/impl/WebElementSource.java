@@ -86,7 +86,7 @@ public abstract class WebElementSource {
     if (lastError instanceof UIAssertionError) {
       throw new IllegalArgumentException("Unexpected UIAssertionError as a cause of ElementNotFound: " + lastError, lastError);
     }
-    return new ElementNotFound(description(), condition, lastError);
+    return new ElementNotFound(alias, getSearchCriteria(), condition, lastError);
   }
 
   @CheckReturnValue

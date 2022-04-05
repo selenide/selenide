@@ -67,7 +67,7 @@ final class ReportForChainedElementsTest extends BaseIntegrationTest {
         .shouldBe(visible, ofMillis(400));
     })
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {-the-h4-}");
+      .hasMessageStartingWith("Element \"-the-h4-\" not found {body/.h1/.h2/.h3/.h4}");
 
     assertTookScreenshots();
   }

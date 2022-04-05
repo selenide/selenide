@@ -49,8 +49,14 @@ public class HeadOfCollection implements CollectionSource {
   @Override
   @CheckReturnValue
   @Nonnull
-  public String description() {
-    return alias.getOrElse(() -> originalCollection.description() + ":first(" + size + ')');
+  public String getSearchCriteria() {
+    return originalCollection.description() + ":first(" + size + ')';
+  }
+
+  @Nonnull
+  @Override
+  public Alias getAlias() {
+    return alias;
   }
 
   @Override

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,6 +29,7 @@ final class SelectRadioCommandTest {
   @BeforeEach
   void setup() {
     when(locator.driver()).thenReturn(driver);
+    when(locator.getAlias()).thenReturn(NONE);
   }
 
   @Test
