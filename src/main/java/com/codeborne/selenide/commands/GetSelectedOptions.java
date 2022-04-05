@@ -58,8 +58,8 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     @Override
     @CheckReturnValue
     @Nonnull
-    public String description() {
-      return alias.getOrElse(() -> selectElement.description() + " selected options");
+    public String getSearchCriteria() {
+      return selectElement.description() + " selected options";
     }
 
     @Override
@@ -67,6 +67,12 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     @Nonnull
     public Driver driver() {
       return selectElement.driver();
+    }
+
+    @Nonnull
+    @Override
+    public Alias getAlias() {
+      return alias;
     }
 
     @Override

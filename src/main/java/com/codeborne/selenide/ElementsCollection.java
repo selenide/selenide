@@ -136,7 +136,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   protected ElementsCollection should(String prefix, Duration timeout, CollectionCondition... conditions) {
     validateAssertionMode(driver().config());
 
-    SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, (Object[]) conditions);
+    SelenideLog log = SelenideLogger.beginStep(collection.shortDescription(), "should " + prefix, (Object[]) conditions);
     try {
       for (CollectionCondition condition : conditions) {
         waitUntil(condition, timeout);
@@ -188,7 +188,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     while (!stopwatch.isTimeoutReached());
 
     if (lastError instanceof IndexOutOfBoundsException) {
-      throw new ElementNotFound(collection.description(), exist, lastError);
+      throw new ElementNotFound(collection.getAlias(), collection.description(), exist, lastError);
     }
     else if (lastError instanceof UIAssertionError) {
       throw (UIAssertionError) lastError;
@@ -606,7 +606,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @CheckReturnValue
   public String toString() {
     try {
-      return String.format("%s %s", collection.description(), elementsToString(driver(), getElements()));
+      return String.format("%s %s", collection.shortDescription(), elementsToString(driver(), getElements()));
     }
     catch (RuntimeException e) {
       return String.format("%s [%s]", collection.description(), Cleanup.of.webdriverExceptionMessage(e));

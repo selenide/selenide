@@ -50,7 +50,7 @@ final class WrappedElementTest extends IntegrationTest {
     assertThatThrownBy(() ->
       $(pageObject.categoryDropdown).as("Category list").selectOption("SomeOption")
     ).isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {Category list}")
+      .hasMessageContaining("Element \"Category list\" not found")
       .hasMessageContaining("Expected: exist");
   }
 

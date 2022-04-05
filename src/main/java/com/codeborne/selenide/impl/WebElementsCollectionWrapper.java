@@ -40,8 +40,15 @@ public class WebElementsCollectionWrapper implements CollectionSource {
   @Override
   @CheckReturnValue
   @Nonnull
+  public String getSearchCriteria() {
+    return "$$(" + elements.size() + " elements)";
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
   public String description() {
-    return alias.getOrElse(() -> "$$(" + elements.size() + " elements)");
+    return alias.getOrElse(() -> getSearchCriteria());
   }
 
   @Override
@@ -49,6 +56,12 @@ public class WebElementsCollectionWrapper implements CollectionSource {
   @Nonnull
   public Driver driver() {
     return driver;
+  }
+
+  @Nonnull
+  @Override
+  public Alias getAlias() {
+    return alias;
   }
 
   @Override

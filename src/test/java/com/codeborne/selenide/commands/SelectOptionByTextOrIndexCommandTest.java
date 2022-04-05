@@ -3,6 +3,7 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.impl.Alias;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,8 @@ final class SelectOptionByTextOrIndexCommandTest {
   void setup() {
     when(selectField.driver()).thenReturn(new DriverStub());
     when(selectField.getWebElement()).thenReturn(select);
-    when(selectField.description()).thenReturn("select#main");
+    when(selectField.getSearchCriteria()).thenReturn("select#main");
+    when(selectField.getAlias()).thenReturn(Alias.NONE);
     when(option.isSelected()).thenReturn(false);
   }
 

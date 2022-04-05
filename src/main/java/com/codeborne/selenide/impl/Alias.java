@@ -19,6 +19,11 @@ public class Alias {
     return text;
   }
 
+  @CheckReturnValue
+  public String get(Supplier<String> defaultValue) {
+    return text + " {" + defaultValue.get() + '}';
+  }
+
   /**
    * As a rule, you don't need to use this method directly.
    * @return text value of this alias (or empty text if alias is not defined)
@@ -40,6 +45,12 @@ public class Alias {
     @Override
     @CheckReturnValue
     public String getOrElse(Supplier<String> defaultValue) {
+      return defaultValue.get();
+    }
+
+    @Override
+    @CheckReturnValue
+    public String get(Supplier<String> defaultValue) {
       return defaultValue.get();
     }
 

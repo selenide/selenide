@@ -116,7 +116,7 @@ final class SelenideMethodsTest extends IntegrationTest {
       $(By.xpath("/long/ugly/xpath[1][2][3]")).as("Login button").should(exist);
     })
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {Login button}");
+      .hasMessageStartingWith("Element \"Login button\" not found {By.xpath: /long/ugly/xpath[1][2][3]}");
   }
 
   @Test

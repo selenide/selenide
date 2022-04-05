@@ -40,7 +40,7 @@ final class MultipleSelectTest extends ITest {
 
     assertThatThrownBy(() -> namedCollection.shouldHave(texts("Кот", "Бегемот")))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {my animals}");
+      .hasMessageStartingWith("Element \"my animals\" not found {#character selected options}");
   }
 
   @Test

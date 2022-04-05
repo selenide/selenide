@@ -259,7 +259,7 @@ final class ElementsCollectionTest {
 
   @Test
   void toStringFetchesCollectionFromWebdriverIfNotFetchedYet() {
-    when(source.description()).thenReturn("li.odd");
+    when(source.shortDescription()).thenReturn("li.odd");
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2));
     assertThat(collection)

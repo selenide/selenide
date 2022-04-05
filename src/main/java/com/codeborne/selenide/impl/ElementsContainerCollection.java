@@ -16,6 +16,7 @@ import java.lang.reflect.Type;
 import java.util.AbstractList;
 
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.impl.Alias.NONE;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
@@ -60,7 +61,7 @@ public class ElementsContainerCollection extends AbstractList<ElementsContainer>
       return elementSelector.findElements(driver, parent, selector).size();
     }
     catch (NoSuchElementException e) {
-      throw new ElementNotFound(selector.toString(), exist, e);
+      throw new ElementNotFound(NONE, selector.toString(), exist, e);
     }
   }
 }

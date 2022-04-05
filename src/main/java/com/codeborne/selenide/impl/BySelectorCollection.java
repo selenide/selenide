@@ -50,12 +50,7 @@ public class BySelectorCollection implements CollectionSource {
   @Override
   @CheckReturnValue
   @Nonnull
-  public String description() {
-    return alias.getOrElse(this::composeDescription);
-  }
-
-  @Nonnull
-  private String composeDescription() {
+  public String getSearchCriteria() {
     return parent == null ? describe.selector(selector) :
       parent.getSearchCriteria() + "/" + describe.selector(selector);
   }
@@ -65,6 +60,12 @@ public class BySelectorCollection implements CollectionSource {
   @Nonnull
   public Driver driver() {
     return driver;
+  }
+
+  @Nonnull
+  @Override
+  public Alias getAlias() {
+    return alias;
   }
 
   @Override

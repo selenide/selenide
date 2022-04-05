@@ -40,10 +40,8 @@ public class CollectionSnapshot implements CollectionSource {
   @Override
   @CheckReturnValue
   @Nonnull
-  public String description() {
-    return alias.getOrElse(() ->
-      String.format("%s.snapshot(%d elements)", originalCollection.description(), elementsSnapshot.size())
-    );
+  public String getSearchCriteria() {
+    return String.format("%s.snapshot(%d elements)", originalCollection.description(), elementsSnapshot.size());
   }
 
   @Override
@@ -51,6 +49,12 @@ public class CollectionSnapshot implements CollectionSource {
   @Nonnull
   public Driver driver() {
     return originalCollection.driver();
+  }
+
+  @Nonnull
+  @Override
+  public Alias getAlias() {
+    return alias;
   }
 
   @Override

@@ -47,8 +47,8 @@ public class FilteringCollection implements CollectionSource {
   @Override
   @CheckReturnValue
   @Nonnull
-  public String description() {
-    return alias.getOrElse(() -> originalCollection.description() + ".filter(" + filter + ')');
+  public String getSearchCriteria() {
+    return originalCollection.description() + ".filter(" + filter + ')';
   }
 
   @Override
@@ -56,6 +56,12 @@ public class FilteringCollection implements CollectionSource {
   @Nonnull
   public Driver driver() {
     return originalCollection.driver();
+  }
+
+  @Nonnull
+  @Override
+  public Alias getAlias() {
+    return alias;
   }
 
   @Override
