@@ -28,8 +28,8 @@ import static java.util.Collections.emptyMap;
 public class RemoteDriverFactory {
   public WebDriver create(Config config, MutableCapabilities capabilities) {
     try {
-      TracedCommandExecutor tracedCommandExecutor = createExecutor(config, defaultReadTimeout);
-      RemoteWebDriver webDriver = new RemoteWebDriver(tracedCommandExecutor, capabilities);
+      CommandExecutor commandExecutor = createExecutor(config, defaultReadTimeout);
+      RemoteWebDriver webDriver = new RemoteWebDriver(commandExecutor, capabilities);
       webDriver.setFileDetector(new LocalFileDetector());
       return webDriver;
     }
@@ -40,16 +40,20 @@ public class RemoteDriverFactory {
 
   @Nonnull
   @CheckReturnValue
-  private TracedCommandExecutor createExecutor(Config config, Duration readTimeout) throws MalformedURLException {
+  private CommandExecutor createExecutor(Config config, Duration readTimeout) throws MalformedURLException {
     ClientConfig clientConfig = ClientConfig.defaultConfig()
       .baseUrl(new URL(config.remote()))
       .readTimeout(readTimeout);
 
-    Tracer tracer = OpenTelemetryTracer.getInstance();
+    if(config.tracingEnabled()) {
+      Tracer tracer = OpenTelemetryTracer.getInstance();
 
-    CommandExecutor httpCommandExecutor = new HttpCommandExecutor(emptyMap(), clientConfig,
-      new TracedHttpClient.Factory(tracer, HttpClient.Factory.createDefault()));
+      CommandExecutor httpCommandExecutor = new HttpCommandExecutor(emptyMap(), clientConfig,
+        new TracedHttpClient.Factory(tracer, HttpClient.Factory.createDefault()));
 
-    return new TracedCommandExecutor(httpCommandExecutor, tracer);
+      return new TracedCommandExecutor(httpCommandExecutor, tracer);
+    }else {
+      return new HttpCommandExecutor(clientConfig);
+    }
   }
 }
