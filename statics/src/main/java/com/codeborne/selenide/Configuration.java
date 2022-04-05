@@ -335,12 +335,4 @@ public class Configuration {
    */
   public static String browserBinary = defaults.browserBinary();
 
-  /**
-   * If Selenide should use OpenTelemetry tracing added in Selenium 4+ version.
-   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.tracingEnabled=false"
-   * <br>
-   * Default: true
-   */
-  public static boolean tracingEnabled = defaults.tracingEnabled();
-
 }

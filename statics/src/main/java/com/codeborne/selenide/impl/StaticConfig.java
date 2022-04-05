@@ -165,9 +165,4 @@ class StaticConfig implements Config {
   public MutableCapabilities browserCapabilities() {
     return Configuration.browserCapabilities;
   }
-
-  @Override
-  public boolean tracingEnabled() {
-    return Configuration.tracingEnabled;
-  }
 }
