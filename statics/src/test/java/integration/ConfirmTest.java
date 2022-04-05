@@ -62,7 +62,6 @@ final class ConfirmTest extends IntegrationTest {
       .isInstanceOf(DialogTextMismatch.class)
       .hasMessageContaining("Actual: Get out of this page, John Mc'Clane?")
       .hasMessageContaining("Expected: Get out of this page, Maria?")
-      .hasMessageMatching("(?s).*Screenshot: file:.+\\.png.*")
       .hasMessageMatching("(?s).*Page source: file:.+\\.html.*")
       .hasMessageMatching("(?s).*Timeout: .+ m?s\\..*");
   }
