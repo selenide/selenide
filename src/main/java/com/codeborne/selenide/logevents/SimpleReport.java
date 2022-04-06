@@ -20,6 +20,8 @@ import java.util.OptionalInt;
 @ParametersAreNonnullByDefault
 public class SimpleReport {
   private static final Logger log = LoggerFactory.getLogger(SimpleReport.class);
+  private static final int MIN_FIRST_COLUMN_WIDTH = 20;
+  private static final int MAX_SECOND_COLUMN_WIDTH = 70;
 
   public void start() {
     checkThatSlf4jIsConfigured();
@@ -41,30 +43,46 @@ public class SimpleReport {
   @Nonnull
   @CheckReturnValue
   String generateReport(String title, List<LogEvent> events) {
-    OptionalInt maxLineLength = events
+    int firstColumnWidth = Math.max(maxLocatorLength(events).orElse(0), MIN_FIRST_COLUMN_WIDTH);
+    int secondColumnWidth = Math.min(maxSubjectLength(events).orElse(7), MAX_SECOND_COLUMN_WIDTH);
+
+    StringBuilder sb = new StringBuilder();
+    sb.append("Report for ").append(title).append('\n');
+
+    String delimiter = '+' + String.join("+", line(firstColumnWidth + 2), line(secondColumnWidth + 2), line(10 + 2), line(10 + 2)) + "+\n";
+
+    sb.append(delimiter);
+    sb.append(String.format("| %-" + firstColumnWidth + "s | %-" + secondColumnWidth + "s | %-10s | %-10s |%n", "Element", "Subject", "Status", "ms."));
+    sb.append(delimiter);
+
+    for (LogEvent e : events) {
+      sb.append(String.format("| %-" + firstColumnWidth + "s | %-" + secondColumnWidth + "s | %-10s | %-10s |%n", e.getElement(), e.getSubject(),
+              e.getStatus(), e.getDuration()));
+    }
+    sb.append(delimiter);
+    return sb.toString();
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  private OptionalInt maxLocatorLength(List<LogEvent> events) {
+    return events
             .stream()
             .map(LogEvent::getElement)
             .map(String::length)
             .mapToInt(Integer::intValue)
             .max();
+  }
 
-    int count = maxLineLength.orElse(0) >= 20 ? (maxLineLength.getAsInt()) : 20;
-
-    StringBuilder sb = new StringBuilder();
-    sb.append("Report for ").append(title).append('\n');
-
-    String delimiter = '+' + String.join("+", line(count + 2), line(70 + 2), line(10 + 2), line(10 + 2)) + "+\n";
-
-    sb.append(delimiter);
-    sb.append(String.format("| %-" + count + "s | %-70s | %-10s | %-10s |%n", "Element", "Subject", "Status", "ms."));
-    sb.append(delimiter);
-
-    for (LogEvent e : events) {
-      sb.append(String.format("| %-" + count + "s | %-70s | %-10s | %-10s |%n", e.getElement(), e.getSubject(),
-              e.getStatus(), e.getDuration()));
-    }
-    sb.append(delimiter);
-    return sb.toString();
+  @Nonnull
+  @CheckReturnValue
+  private OptionalInt maxSubjectLength(List<LogEvent> events) {
+    return events
+            .stream()
+            .map(LogEvent::getSubject)
+            .map(String::length)
+            .mapToInt(Integer::intValue)
+            .max();
   }
 
   public void clean() {
