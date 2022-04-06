@@ -9,7 +9,7 @@ import org.slf4j.helpers.NOPLoggerFactory;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collections;
+import java.util.List;
 import java.util.OptionalInt;
 
 /**
@@ -34,14 +34,21 @@ public class SimpleReport {
       return;
     }
 
-    OptionalInt maxLineLength = logEventListener.events()
+    String report = generateReport(title, logEventListener.events());
+    log.info(report);
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  String generateReport(String title, List<LogEvent> events) {
+    OptionalInt maxLineLength = events
             .stream()
             .map(LogEvent::getElement)
             .map(String::length)
             .mapToInt(Integer::intValue)
             .max();
 
-    int count = maxLineLength.orElse(0) >= 20 ? (maxLineLength.getAsInt() + 1) : 20;
+    int count = maxLineLength.orElse(0) >= 20 ? (maxLineLength.getAsInt()) : 20;
 
     StringBuilder sb = new StringBuilder();
     sb.append("Report for ").append(title).append('\n');
@@ -52,12 +59,12 @@ public class SimpleReport {
     sb.append(String.format("| %-" + count + "s | %-70s | %-10s | %-10s |%n", "Element", "Subject", "Status", "ms."));
     sb.append(delimiter);
 
-    for (LogEvent e : logEventListener.events()) {
+    for (LogEvent e : events) {
       sb.append(String.format("| %-" + count + "s | %-70s | %-10s | %-10s |%n", e.getElement(), e.getSubject(),
               e.getStatus(), e.getDuration()));
     }
     sb.append(delimiter);
-    log.info(sb.toString());
+    return sb.toString();
   }
 
   public void clean() {
