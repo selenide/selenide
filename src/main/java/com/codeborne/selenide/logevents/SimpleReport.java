@@ -46,14 +46,14 @@ public class SimpleReport {
     StringBuilder sb = new StringBuilder();
     sb.append("Report for ").append(title).append('\n');
 
-    String delimiter = '+' + String.join("+", line(count), line(70), line(10), line(10)) + "+\n";
+    String delimiter = '+' + String.join("+", line(count + 2), line(70 + 2), line(10 + 2), line(10 + 2)) + "+\n";
 
     sb.append(delimiter);
-    sb.append(String.format("|%-" + count + "s|%-70s|%-10s|%-10s|%n", "Element", "Subject", "Status", "ms."));
+    sb.append(String.format("| %-" + count + "s | %-70s | %-10s | %-10s |%n", "Element", "Subject", "Status", "ms."));
     sb.append(delimiter);
 
     for (LogEvent e : logEventListener.events()) {
-      sb.append(String.format("|%-" + count + "s|%-70s|%-10s|%-10s|%n", e.getElement(), e.getSubject(),
+      sb.append(String.format("| %-" + count + "s | %-70s | %-10s | %-10s |%n", e.getElement(), e.getSubject(),
               e.getStatus(), e.getDuration()));
     }
     sb.append(delimiter);
