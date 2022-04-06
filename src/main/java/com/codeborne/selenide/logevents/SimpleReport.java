@@ -12,6 +12,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.OptionalInt;
 
+import static java.lang.System.lineSeparator;
+
 /**
  * A simple text report of Selenide actions performed during test run.
  *
@@ -45,22 +47,84 @@ public class SimpleReport {
   String generateReport(String title, List<LogEvent> events) {
     int firstColumnWidth = Math.max(maxLocatorLength(events).orElse(0), MIN_FIRST_COLUMN_WIDTH);
     int secondColumnWidth = Math.min(maxSubjectLength(events).orElse(7), MAX_SECOND_COLUMN_WIDTH);
+    int estimatedReportLength = 20 + title.length() + (firstColumnWidth + secondColumnWidth + 35) * (4 + events.size());
 
-    StringBuilder sb = new StringBuilder();
-    sb.append("Report for ").append(title).append('\n');
-
-    String delimiter = '+' + String.join("+", line(firstColumnWidth + 2), line(secondColumnWidth + 2), line(10 + 2), line(10 + 2)) + "+\n";
-
-    sb.append(delimiter);
-    sb.append(String.format("| %-" + firstColumnWidth + "s | %-" + secondColumnWidth + "s | %-10s | %-10s |%n", "Element", "Subject", "Status", "ms."));
-    sb.append(delimiter);
+    ReportBuilder report = new ReportBuilder(firstColumnWidth, secondColumnWidth, estimatedReportLength);
+    report.appendTitle(title);
+    report.appendHeader();
 
     for (LogEvent e : events) {
-      sb.append(String.format("| %-" + firstColumnWidth + "s | %-" + secondColumnWidth + "s | %-10s | %-10s |%n", e.getElement(), e.getSubject(),
-              e.getStatus(), e.getDuration()));
+      report.appendEvent(e);
     }
-    sb.append(delimiter);
-    return sb.toString();
+    report.appendDelimiterLine();
+    return report.build();
+  }
+
+  private static class ReportBuilder {
+    private final int firstColumnWidth;
+    private final int secondColumnWidth;
+    private final String delimiterLine;
+    private final StringBuilder sb;
+
+    private ReportBuilder(int firstColumnWidth, int secondColumnWidth, int estimatedReportLength) {
+      this.firstColumnWidth = firstColumnWidth;
+      this.secondColumnWidth = secondColumnWidth;
+      delimiterLine = '+' + String.join("+", line(firstColumnWidth + 2), line(secondColumnWidth + 2), line(10 + 2), line(10 + 2)) + '+' + lineSeparator();
+      sb = new StringBuilder(estimatedReportLength);
+    }
+
+    private void appendTitle(String title) {
+      sb.append("Report for ").append(title).append(lineSeparator());
+      sb.append(delimiterLine);
+    }
+
+    @CheckReturnValue
+    @Nonnull
+    private String line(int count) {
+      StringBuilder sb = new StringBuilder(count);
+      for (int i = 0; i < count; i++) {
+        sb.append('-');
+      }
+      return sb.toString();
+    }
+
+    public void appendHeader() {
+      appendLine(sb, firstColumnWidth, secondColumnWidth, "Element", "Subject", "Status", "ms.");
+      appendDelimiterLine();
+    }
+
+    private void appendLine(StringBuilder sb, int firstColumnWidth, int secondColumnWidth,
+                            String first, String second, String third, String fourth) {
+      sb.append("| ");
+      append(sb, first, firstColumnWidth);
+      sb.append(" | ");
+      append(sb, second, secondColumnWidth);
+      sb.append(" | ");
+      append(sb, third, 10);
+      sb.append(" | ");
+      append(sb, fourth, 10);
+      sb.append(" |").append(lineSeparator());
+    }
+
+    private void appendEvent(LogEvent e) {
+      appendLine(sb, firstColumnWidth, secondColumnWidth, e.getElement(), e.getSubject(),
+        e.getStatus().name(), String.valueOf(e.getDuration()));
+    }
+
+    public void appendDelimiterLine() {
+      sb.append(delimiterLine);
+    }
+
+    private void append(StringBuilder sb, String text, int minLength) {
+      sb.append(text);
+      for (int i = text.length(); i < minLength; i++) {
+        sb.append(' ');
+      }
+    }
+
+    public String build() {
+      return sb.toString();
+    }
   }
 
   @Nonnull
@@ -89,17 +153,11 @@ public class SimpleReport {
     SelenideLogger.removeListener("simpleReport");
   }
 
-  @CheckReturnValue
-  @Nonnull
-  private String line(int count) {
-    return String.join("", Collections.nCopies(count, "-"));
-  }
-
   private static void checkThatSlf4jIsConfigured() {
     ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
     if (loggerFactory instanceof NOPLoggerFactory || loggerFactory.getLogger("com.codeborne.selenide") instanceof NOPLogger) {
-      throw new IllegalStateException("SLF4J is not configured. You will not see any Selenide logs. \n" +
-        "  Please add slf4j-simple.jar, slf4j-log4j12.jar or logback-classic.jar to your classpath. \n" +
+      throw new IllegalStateException("SLF4J is not configured. You will not see any Selenide logs. " + lineSeparator() +
+        "  Please add slf4j-simple.jar, slf4j-log4j12.jar or logback-classic.jar to your classpath. " + lineSeparator() +
         "  See https://github.com/selenide/selenide/wiki/slf4j");
     }
   }
