@@ -152,7 +152,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadsPotentiallyHarmfulWindowsFiles() throws IOException {
-    File downloadedFile = $(byText("Download EXE file")).download(withNameMatching("tiny\\.exe.*"));
+    File downloadedFile = $(byText("Download EXE file")).download(withNameMatching("\\w+\\.exe"));
 
     assertThat(downloadedFile.getName()).startsWith("tiny.exe");
     assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
