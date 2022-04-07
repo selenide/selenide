@@ -1,6 +1,8 @@
 # Changelog
 
-## 6.4.0 (planned to 0x.04.2022)
+## 6.4.0 (release 07.04.2022)
+* #1765 show both alias and selector in error message  --  see PR #1766
+* #1764 add space to the left and right of every value in @TextReport  --  see PR #1767
 * #1759 upgrade to Selenium 4.1.3
 
 ## 6.3.5 (released 17.03.2022)
