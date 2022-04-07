@@ -10,8 +10,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import static java.nio.file.Files.createDirectories;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 @ParametersAreNonnullByDefault
 public final class FileHelper {
@@ -54,8 +58,19 @@ public final class FileHelper {
       FileUtils.moveFile(srcFile, destFile);
     }
     catch (IOException e) {
+      File dir = srcFile.getParentFile();
       throw new IllegalStateException("Failed to move file " + srcFile.getAbsolutePath() +
-        " to " + destFile.getAbsolutePath(), e);
+        " to " + destFile.getAbsolutePath() + " (files in " + dir + ": " + list(dir) + ")", e);
+    }
+  }
+
+  private static List<String> list(File dir) {
+    try {
+      String[] files = dir.list();
+      return files == null ? emptyList() : asList(files);
+    }
+    catch (RuntimeException e) {
+      return singletonList("Failed to list files in directory " + dir + ": " + e);
     }
   }
 
