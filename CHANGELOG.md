@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.4.1
+* upgrade to WebDriverManager 5.1.1
+
 ## 6.4.0 (release 07.04.2022)
 * #1765 show both alias and selector in error message  --  see PR #1766
 * #1764 add space to the left and right of every value in @TextReport  --  see PR #1767
