@@ -9,6 +9,7 @@ ext {
   browserupProxyVersion = '2.1.4'
   littleProxyVersion = '2.0.7'
   commonsFileuploadVersion = '1.4'
+  byteBuddyVersion = '1.12.9'
 }
 
 subprojects {
@@ -18,7 +19,10 @@ subprojects {
 
   dependencies {
     annotationProcessor("com.github.bsideup.jabel:jabel-javac-plugin:0.4.2")
+    annotationProcessor("net.bytebuddy:byte-buddy:${byteBuddyVersion}")
+    annotationProcessor("net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}")
     compileOnly("com.github.bsideup.jabel:jabel-javac-plugin:0.4.2")
+
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {exclude group: 'net.bytebuddy'}
     implementation("com.google.guava:guava:31.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
