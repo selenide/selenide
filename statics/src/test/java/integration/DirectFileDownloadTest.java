@@ -2,7 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ final class DirectFileDownloadTest extends IntegrationTest {
     openFile("page_with_big_divs.html");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadFileByDirectLink() throws IOException, URISyntaxException {
     Configuration.timeout = 4000;
     File file = download("/files/hello_world.txt");
@@ -28,7 +28,7 @@ final class DirectFileDownloadTest extends IntegrationTest {
     assertThat(readFileToString(file, UTF_8)).isEqualTo("Hello, WinRar!");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadFileWithCyrillicName() throws IOException, URISyntaxException {
     Configuration.timeout = 4000;
     File file = download(new URI("/files/файл-с-русским-названием.txt"));
@@ -36,7 +36,7 @@ final class DirectFileDownloadTest extends IntegrationTest {
     assertThat(readFileToString(file, UTF_8)).isEqualTo("Превед медвед!");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadFileWithCustomTimeout() throws IOException, URISyntaxException {
     Configuration.timeout = 10;
     File file = download("/files/hello_world.txt?pause=1000", 1500);

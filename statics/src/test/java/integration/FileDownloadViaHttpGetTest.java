@@ -7,7 +7,7 @@ import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,7 +45,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     SelenideLogger.removeListener(LISTENER);
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFiles() throws IOException {
     File downloadedFile = $(byText("Download me")).download();
 
@@ -64,14 +64,14 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     assertThat(logEvent.getStatus()).isEqualTo(PASS);
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFileWithAlert() throws IOException {
     File downloadedFile = $(byText("Download me with alert")).download();
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFileWithCyrillicName() throws IOException {
     File downloadedFile = $(byText("Download file with cyrillic name")).download();
 
@@ -83,7 +83,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
       .startsWith(folder.getAbsolutePath());
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFileWithForbiddenCharactersInName() throws IOException {
     File downloadedFile = $(byText("Download file with \"forbidden\" characters in name"))
       .download(withExtension("txt"));
@@ -98,7 +98,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
       .startsWith(folder.getAbsolutePath());
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadMissingFile() {
     assertThatThrownBy(() -> $(byText("Download missing file")).download())
       .isInstanceOf(FileNotFoundException.class)
@@ -112,7 +112,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     assertThat(logEvent.getStatus()).isEqualTo(FAIL);
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadFileByName() {
     assertThatThrownBy(() -> $(byText("Download me")).download(withName("good_bye_world.txt")))
       .isInstanceOf(FileNotFoundException.class)
@@ -127,7 +127,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     assertThat(logEvent.getStatus()).isEqualTo(FAIL);
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadWithCustomTimeout() throws IOException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000);
 
@@ -135,7 +135,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
       .isEqualTo("hello_world.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsGetsTimeoutException() throws IOException {
     assertThatThrownBy(() -> {
       $(byText("Download me slowly (2000 ms)")).download(1000);
@@ -145,14 +145,14 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
       .hasMessageEndingWith("/files/hello_world.txt?pause=2000 in 1000 ms.");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadWithQueryParamsWithoutHeaders() throws FileNotFoundException {
     openFile("download.html");
     File downloadedFile = $("#link").download();
     assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFilesToCustomFolder() throws IOException {
     String downloadsFolder = createTempDirectory("selenide-tests-custom-folder-get").toString();
     Configuration.downloadsFolder = downloadsFolder;
@@ -163,14 +163,14 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
       .startsWith(new File(downloadsFolder).getAbsolutePath());
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsPdfFile() throws FileNotFoundException {
     File downloadedFile = $(byText("Download a PDF")).download(withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).isEqualTo("minimal.pdf");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadWithOptions() throws IOException {
     Configuration.fileDownload = PROXY;
     Configuration.timeout = 1;
@@ -182,7 +182,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadWithCustomMethodButStandardTimeout() throws IOException {
     Configuration.fileDownload = PROXY;
     Configuration.timeout = 4000;

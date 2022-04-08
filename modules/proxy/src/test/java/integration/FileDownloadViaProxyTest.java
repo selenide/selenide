@@ -2,7 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 
@@ -36,7 +36,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     timeout = 1000;
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFiles() throws IOException {
     File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
@@ -48,7 +48,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       .startsWith(folder.getAbsolutePath());
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFileWithAlert() throws IOException {
     File downloadedFile = $(byText("Download me with alert")).download(using(PROXY).withAction((driver, link) -> {
       link.click();
@@ -65,7 +65,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       .startsWith(folder.getAbsolutePath());
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFileWithCyrillicName() throws IOException {
     File downloadedFile = $(byText("Download file with cyrillic name")).download(withExtension("txt"));
 
@@ -77,7 +77,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       .startsWith(folder.getAbsolutePath());
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFileWithNorwayCharactersInName() throws IOException {
     File downloadedFile = $(byText("Download file with \"ø\" in name")).download(withExtension("txt"));
 
@@ -87,7 +87,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       .isEqualTo("Hello, Nørway!\n");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFileWithForbiddenCharactersInName() throws IOException {
     File downloadedFile = $(byText("Download file with \"forbidden\" characters in name"))
       .download(withExtension("txt"));
@@ -101,7 +101,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       .startsWith(folder.getAbsolutePath());
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadExternalFile() throws FileNotFoundException {
     open("https://the-internet.herokuapp.com/download");
     File video = $(By.linkText("some-file.txt")).download(withExtension("txt"));
@@ -109,7 +109,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       .isEqualTo("some-file.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadMissingFile() {
     timeout = 100;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("pdf")))
@@ -117,7 +117,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       .hasMessage("Failed to download file {by text: Download missing file} in 100 ms. with extension \"pdf\"");
   }
 
-  @Test
+  @RepeatedTest(10)
   public void download_withCustomTimeout() throws FileNotFoundException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000, withExtension("txt"));
 
@@ -125,28 +125,28 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       .isEqualTo("hello_world.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   public void download_byName() throws FileNotFoundException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(withName("hello_world.txt"));
 
     assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   public void download_byNameRegex() throws FileNotFoundException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(withNameMatching("hello_.\\w+\\.txt"));
 
     assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   public void download_byExtension() throws FileNotFoundException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(timeout, withExtension("txt"));
 
     assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFilesToCustomFolder() throws IOException {
     closeWebDriver();
 
@@ -165,14 +165,14 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     }
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsPdfFile() throws FileNotFoundException {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).isEqualTo("minimal.pdf");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsPotentiallyHarmfulWindowsFiles() throws IOException {
     File downloadedFile = $(byText("Download EXE file")).download(withExtension("exe"));
 
@@ -180,7 +180,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsPotentiallyHarmfulMacFiles() throws IOException {
     File downloadedFile = $(byText("Download DMG file")).download(withExtension("dmg"));
 
@@ -188,7 +188,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadWithOptions() throws IOException {
     Configuration.fileDownload = FOLDER;
     Configuration.timeout = 1;

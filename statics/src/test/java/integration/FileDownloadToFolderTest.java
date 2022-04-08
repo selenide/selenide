@@ -3,7 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 import org.openqa.selenium.By;
 
 import java.io.File;
@@ -40,7 +40,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     timeout = 4000;
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFiles() throws IOException {
     File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
@@ -52,7 +52,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .startsWith(folder.getAbsolutePath());
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFileWithAlert() throws IOException {
     File downloadedFile = $(byText("Download me with alert")).download(
       using(FOLDER).withFilter(withExtension("txt")).withAction(
@@ -68,7 +68,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .startsWith(folder.getAbsolutePath());
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFileWithCyrillicName() throws IOException {
     File downloadedFile = $(byText("Download file with cyrillic name")).download(withExtension("txt"));
 
@@ -80,7 +80,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .startsWith(folder.getAbsolutePath());
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadExternalFile() throws FileNotFoundException {
     open("https://the-internet.herokuapp.com/download");
     File video = $(By.linkText("some-file.txt")).download(withExtension("txt"));
@@ -88,7 +88,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThat(video.getName()).isEqualTo("some-file.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadMissingFile() {
     timeout = 100;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
@@ -96,7 +96,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .hasMessage("Failed to download file {by text: Download missing file} in 100 ms. with extension \"txt\"");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadMissingFileWithExtension() {
     timeout = 80;
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
@@ -104,28 +104,28 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .hasMessage("Failed to download file {by text: Download me} in 80 ms. with extension \"pdf\"");
   }
 
-  @Test
+  @RepeatedTest(10)
   public void download_byName() throws FileNotFoundException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(withName("hello_world.txt"));
 
     assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   public void download_byNameRegex() throws FileNotFoundException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(withNameMatching("hello_.+\\.txt"));
 
     assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   public void download_byExtension() throws FileNotFoundException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(timeout, withExtension("txt"));
 
     assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsFilesToCustomFolder() throws IOException {
     closeWebDriver();
     String customDownloadsFolder = createTempDirectory("selenide-tests-to-custom-folder").toString();
@@ -143,14 +143,14 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     }
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsPdfFile() throws IOException {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).matches("minimal.*.pdf");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsPotentiallyHarmfulWindowsFiles() throws IOException {
     File downloadedFile = $(byText("Download EXE file")).download(withNameMatching("\\w+\\.exe"));
 
@@ -160,7 +160,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .isEqualTo("Here might be potentially harmful exe file");
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadsPotentiallyHarmfulMacFiles() throws IOException {
     File downloadedFile = $(byText("Download DMG file")).download(withExtension("dmg"));
 
@@ -168,7 +168,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
   }
 
-  @Test
+  @RepeatedTest(10)
   void downloadWithOptions() throws IOException {
     Configuration.fileDownload = PROXY;
     Configuration.timeout = 1;
