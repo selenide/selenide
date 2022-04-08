@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
+import static java.lang.Thread.sleep;
 import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toList;
 
@@ -75,7 +76,16 @@ public class DownloadFileToFolder {
 
     Downloads newDownloads = waitForNewFiles(timeout, fileFilter, config, folder, downloadStartedAt);
     File downloadedFile = newDownloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
+    wainUntilDownloadCompletion(downloadedFile);
     return archiveFile(config, downloadedFile);
+  }
+
+  private void wainUntilDownloadCompletion(File downloadedFile) {
+    try {
+      sleep(500);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Nonnull
