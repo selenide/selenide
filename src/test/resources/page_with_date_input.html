@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test::date input</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h1>Page with date input</h1>
+
+<div style="width: 400px">
+  <form>
+    <fieldset title="User registration form">
+      <label> Birthday:
+        <input id="birthday" name="birthday" type="date" />
+      </label>
+      <br/>
+    </fieldset>
+
+    <div id="user-summary"></div>
+  </form>
+</div>
+
+<script>
+  document.getElementById('birthday').onchange = function (e) {
+    //console.log('e', e);
+    document.getElementById('user-summary').textContent = 'User birthday: ' + e.target.value;
+  }
+</script>
+
+</body>
+</html>

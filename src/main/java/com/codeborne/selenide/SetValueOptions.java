@@ -3,10 +3,12 @@ package com.codeborne.selenide;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
+import static com.codeborne.selenide.SetValueMethod.JS;
 import static com.codeborne.selenide.SetValueMethod.SEND_KEYS;
+import static java.time.format.DateTimeFormatter.ofPattern;
 
 @ParametersAreNonnullByDefault
 public class SetValueOptions {
@@ -28,6 +30,15 @@ public class SetValueOptions {
   @Nonnull
   public static SetValueOptions withText(CharSequence text) {
     return new SetValueOptions(SEND_KEYS, text, text);
+  }
+
+  /**
+   * Text value to set into input field
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static SetValueOptions withDate(LocalDate date) {
+    return new SetValueOptions(JS, date.format(ofPattern("yyyy-MM-dd")), date.format(ofPattern("dd.MM.yyyy")));
   }
 
   /**
