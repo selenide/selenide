@@ -44,16 +44,20 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement setValue(@Nullable String text);
+  SelenideElement setValue(@Nullable CharSequence text);
 
   /**
-   * Same as {@link #setValue(java.lang.String)}
+   * Same as {@link #setValue(java.lang.CharSequence)}
    *
    * @see com.codeborne.selenide.commands.Val
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement val(@Nullable String text);
+  SelenideElement val(@Nullable CharSequence text);
+
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement setValue(SetValueOptions text);
 
   /**
    * Append given text to the text field and trigger "change" event.
