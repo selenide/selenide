@@ -47,6 +47,7 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
   FileDownloadFilter(Config config, Downloader downloader) {
     this.config = config;
     this.downloader = downloader;
+    log.info("Created with config {}", config);
   }
 
   /**
@@ -56,11 +57,13 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
   public void activate() {
     reset();
     active = true;
+    log.info("Activated (now active={}).", active);
   }
 
   public void reset() {
     downloads.clear();
     responses.clear();
+    log.info("Reset (now active={}).", active);
   }
 
   /**
@@ -69,19 +72,27 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
    */
   public void deactivate() {
     active = false;
+    log.info("Deactivated (now active={}).", active);
   }
 
   @Override
   public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo) {
     if (active) {
+      log.info("Request {} -> Accept-Encoding := identity", messageInfo.getUrl());
       request.headers().set("Accept-Encoding", "identity");
+    }
+    else {
+      log.info("Request {} -> ignore (inactive)", messageInfo.getUrl());
     }
     return null;
   }
 
   @Override
   public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {
-    if (!active) return;
+    if (!active) {
+      log.info("Response {} -> ignore (inactive)", messageInfo.getUrl());
+      return;
+    }
 
     Response r = new Response(messageInfo.getUrl(),
       response.status().code(),
@@ -90,11 +101,13 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
       contents.getContentType(),
       contents.getTextContents()
     );
+    log.info("Response {} -> catch, code={}", messageInfo.getUrl(), response.status().code());
     responses.add(r);
 
     if (response.status().code() < 200 || response.status().code() >= 300) return;
 
     String fileName = getFileName(r);
+    log.info("Response {} -> catch, fileName={}", messageInfo.getUrl(), fileName);
 
     File file = downloader.prepareTargetFile(config, fileName);
     try {
