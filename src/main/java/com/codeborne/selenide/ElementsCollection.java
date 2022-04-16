@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
@@ -567,7 +568,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   @CheckReturnValue
   @Nonnull
-  public Iterable<SelenideElement> asFixedIterable() {
+  public SelenideElementIterable asFixedIterable() {
     return () -> new SelenideElementIterator(new CollectionSnapshot(collection));
   }
 
@@ -581,7 +582,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   @CheckReturnValue
   @Nonnull
-  public Iterable<SelenideElement> asDynamicIterable() {
+  public SelenideElementIterable asDynamicIterable() {
     return () -> new SelenideElementIterator(collection);
   }
 
@@ -617,5 +618,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @Nonnull
   private Driver driver() {
     return collection.driver();
+  }
+
+  public interface SelenideElementIterable extends Iterable<SelenideElement> {
+    default Stream<SelenideElement> stream() {
+      return StreamSupport.stream(spliterator(), false);
+    }
   }
 }
