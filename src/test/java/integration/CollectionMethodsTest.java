@@ -315,11 +315,11 @@ final class CollectionMethodsTest extends ITest {
     collection.first(2).shouldHave(size(2));
     collection.first(10).shouldHave(size(collection.size()));
 
-    List<String> regularSublist = $$x("//select[@name='domain']/option").stream()
+    List<String> regularSublist = $$x("//select[@name='domain']/option").asFixedIterable().stream()
       .map(SelenideElement::getText)
       .collect(toList()).subList(0, 2);
 
-    List<String> selenideSublist = collection.first(2).stream()
+    List<String> selenideSublist = collection.first(2).asFixedIterable().stream()
       .map(SelenideElement::getText)
       .collect(toList());
 
@@ -355,11 +355,11 @@ final class CollectionMethodsTest extends ITest {
     collection.last(2).shouldHave(size(2));
     collection.last(10).shouldHave(size(collection.size()));
 
-    List<String> regularSublist = $$x("//select[@name='domain']/option").stream()
+    List<String> regularSublist = $$x("//select[@name='domain']/option").asFixedIterable().stream()
       .map(SelenideElement::getText)
       .collect(toList()).subList(2, collection.size());
 
-    List<String> selenideSublist = collection.last(2).stream()
+    List<String> selenideSublist = collection.last(2).asFixedIterable().stream()
       .map(SelenideElement::getText)
       .collect(toList());
 

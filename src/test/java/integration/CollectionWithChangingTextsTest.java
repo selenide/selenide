@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
@@ -48,6 +50,28 @@ final class CollectionWithChangingTextsTest extends ITest {
     it.next().shouldHave(text("Additional text #4"));
     it.next().shouldHave(text("Additional text #5"));
     assertThat(it.hasNext()).isFalse();
+  }
+
+  @Test
+  void stream() {
+    List<String> texts = $$("#collection li").asDynamicIterable()
+      .stream()
+      .map(se -> se.getText()).collect(Collectors.toList());
+
+    assertThat(texts).containsExactly("Item #1", "Item #2", "Item #3");
+  }
+
+  @Test
+  void stream_afterNewElementsAppeared() throws InterruptedException {
+    waitForNewElementsRendered();
+
+    List<String> texts = $$("#collection li").asDynamicIterable()
+      .stream().map(se -> se.getText()).collect(Collectors.toList());
+
+    assertThat(texts).containsExactly(
+      "Updated Item #1", "Updated Item #2", "Updated Item #3",
+      "Additional text #4", "Additional text #5"
+    );
   }
 
   @Test
