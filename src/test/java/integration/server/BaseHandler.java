@@ -56,7 +56,21 @@ public abstract class BaseHandler extends HttpServlet {
       response.setHeader(httpHeader.getKey(), httpHeader.getValue());
     }
     try (OutputStream os = response.getOutputStream()) {
-      os.write(result.content);
+      int count = result.content.length;
+      if (count > 1000) {
+        os.write(result.content);
+      }
+      else {
+        for (int i = 0; i < count; i++) {
+          os.write(result.content[i]);
+          os.flush();
+          try {
+            Thread.sleep(30);
+          }
+          catch (InterruptedException ignore) {
+          }
+        }
+      }
     }
     logRequest(request, result.httpStatus, start);
     if (result.httpStatus >= SC_BAD_REQUEST) {
