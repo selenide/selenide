@@ -182,4 +182,13 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThat(readFileToString(downloadedFile, "UTF-8")).isEqualTo("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
+
+  @RepeatedTest(10)
+  void downloadEmptyFile() throws IOException {
+    File downloadedFile = $(byText("Download empty file")).download(withExtension("txt"));
+
+    assertThat(downloadedFile.getName()).matches("empty-file.*\\.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8")).isEqualTo("");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+  }
 }
