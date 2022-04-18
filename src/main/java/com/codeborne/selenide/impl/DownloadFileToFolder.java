@@ -16,11 +16,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import java.util.List;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.Thread.sleep;
+import static java.nio.file.Files.getLastModifiedTime;
 import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toList;
 
@@ -76,13 +81,38 @@ public class DownloadFileToFolder {
 
     Downloads newDownloads = waitForNewFiles(timeout, fileFilter, config, folder, downloadStartedAt);
     File downloadedFile = newDownloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
-    wainUntilDownloadCompletion(downloadedFile);
+    waitUntilDownloadCompletion(downloadedFile);
     return archiveFile(config, downloadedFile);
   }
 
-  private void wainUntilDownloadCompletion(File downloadedFile) {
+  private void waitUntilDownloadCompletion(File downloadedFile) {
+    Path path = downloadedFile.toPath();
     try {
-      sleep(500);
+      long lastSize = -1;
+      FileTime lastModifiedTime = FileTime.fromMillis(0);
+
+      pause();
+      FileTime currentModifiedTime = getLastModifiedTime(path);
+      long currentSize = Files.size(path);
+
+      while (!lastModifiedTime.equals(currentModifiedTime) || lastSize != currentSize) {
+        log.info("lastModifiedTime={}, currentModifiedTime={}, currentSize={} -> continue", lastModifiedTime.toMillis(), currentModifiedTime.toMillis(), currentSize);
+        lastModifiedTime = currentModifiedTime;
+        lastSize = currentSize;
+        pause();
+        currentModifiedTime = getLastModifiedTime(path);
+        currentSize = Files.size(path);
+      }
+      log.info("lastModifiedTime={}, currentModifiedTime={}, currentSize={} -> break", lastModifiedTime.toMillis(), currentModifiedTime.toMillis(), currentSize);
+    }
+    catch (IOException e) {
+      throw new RuntimeException("Failed to wait for download completion for " + downloadedFile.getAbsolutePath(), e);
+    }
+  }
+
+  private void pause() {
+    try {
+      sleep(50);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
