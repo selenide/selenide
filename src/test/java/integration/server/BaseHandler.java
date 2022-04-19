@@ -65,7 +65,7 @@ public abstract class BaseHandler extends HttpServlet {
           os.write(result.content[i]);
           os.flush();
           try {
-            Thread.sleep(30);
+            Thread.sleep(4);
           }
           catch (InterruptedException ignore) {
           }

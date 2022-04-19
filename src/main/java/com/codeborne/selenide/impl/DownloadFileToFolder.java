@@ -6,6 +6,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
+import com.github.bsideup.jabel.Desugar;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
+import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
 import static java.nio.file.Files.getLastModifiedTime;
 import static java.util.Collections.emptyMap;
@@ -75,45 +77,58 @@ public class DownloadFileToFolder {
     }
 
     folder.cleanupBeforeDownload();
-    long downloadStartedAt = System.currentTimeMillis();
+    long downloadStartedAt = currentTimeMillis();
 
     action.perform(driver, clickable);
 
     Downloads newDownloads = waitForNewFiles(timeout, fileFilter, config, folder, downloadStartedAt);
     File downloadedFile = newDownloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
-    waitUntilDownloadCompletion(downloadedFile);
+    waitUntilDownloadCompletion(downloadedFile, timeout);
     return archiveFile(config, downloadedFile);
   }
 
-  private void waitUntilDownloadCompletion(File downloadedFile) {
+  private void waitUntilDownloadCompletion(File downloadedFile, long timeout) {
     Path path = downloadedFile.toPath();
-    try {
-      long lastSize = -1;
-      FileTime lastModifiedTime = FileTime.fromMillis(0);
+    FileInfo last = new FileInfo(FileTime.fromMillis(0), -1);
+    pause();
+    FileInfo current = read(path);
+    long start = currentTimeMillis();
+    long lastChange = -1;
 
-      pause();
-      FileTime currentModifiedTime = getLastModifiedTime(path);
-      long currentSize = Files.size(path);
-
-      while (!lastModifiedTime.equals(currentModifiedTime) || lastSize != currentSize) {
-        log.info("lastModifiedTime={}, currentModifiedTime={}, currentSize={} -> continue", lastModifiedTime.toMillis(), currentModifiedTime.toMillis(), currentSize);
-        lastModifiedTime = currentModifiedTime;
-        lastSize = currentSize;
-        pause();
-        currentModifiedTime = getLastModifiedTime(path);
-        currentSize = Files.size(path);
+    for (; currentTimeMillis() - start < timeout; ) {
+      log.info("last: {}, current: {} -> continue", last, current);
+      if (!last.equals(current)) {
+        lastChange = currentTimeMillis();
       }
-      log.info("lastModifiedTime={}, currentModifiedTime={}, currentSize={} -> break", lastModifiedTime.toMillis(), currentModifiedTime.toMillis(), currentSize);
+      if (currentTimeMillis() - lastChange > 1000) {
+        log.info("File hasn't been modified for more than 1 second -> break");
+        break;
+      }
+      last = current;
+      pause();
+      current = read(path);
+    }
+    log.info("last: {}, current: {} -> break", last, current);
+  }
+
+  @Desugar
+  private record FileInfo(FileTime lastModifiedAt, long size) {
+  }
+
+  private FileInfo read(Path path) {
+    try {
+      return new FileInfo(getLastModifiedTime(path), Files.size(path));
     }
     catch (IOException e) {
-      throw new RuntimeException("Failed to wait for download completion for " + downloadedFile.getAbsolutePath(), e);
+      throw new RuntimeException("Failed to get information for file " + path.toAbsolutePath(), e);
     }
   }
 
   private void pause() {
     try {
-      sleep(50);
-    } catch (InterruptedException e) {
+      sleep(1);
+    }
+    catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
   }
