@@ -18,6 +18,7 @@ import static org.apache.commons.io.FileUtils.readFileToByteArray;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -49,6 +50,7 @@ final class FileDownloadFilterTest {
 
     verifyNoMoreInteractions(request);
     verifyNoMoreInteractions(contents);
+    verify(messageInfo).getUrl();
     verifyNoMoreInteractions(messageInfo);
   }
 
@@ -69,6 +71,7 @@ final class FileDownloadFilterTest {
 
     verifyNoMoreInteractions(response);
     verifyNoMoreInteractions(contents);
+    verify(messageInfo).getUrl();
     verifyNoMoreInteractions(messageInfo);
   }
 
