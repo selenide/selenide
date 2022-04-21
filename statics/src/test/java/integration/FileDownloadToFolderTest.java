@@ -99,9 +99,14 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   @RepeatedTest(10)
   void downloadMissingFileWithExtension() {
     timeout = 80;
-    assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
-      .isInstanceOf(FileNotFoundException.class)
-      .hasMessage("Failed to download file {by text: Download me} in 80 ms. with extension \"pdf\"");
+    try {
+      assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
+        .isInstanceOf(FileNotFoundException.class)
+        .hasMessage("Failed to download file {by text: Download me} in 80 ms. with extension \"pdf\"");
+    }
+    finally {
+      closeWebDriver();
+    }
   }
 
   @RepeatedTest(10)
