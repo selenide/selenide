@@ -126,7 +126,7 @@ public class DownloadFileToFolder {
 
   private void pause() {
     try {
-      sleep(1);
+      sleep(50);
     }
     catch (InterruptedException e) {
       throw new RuntimeException(e);
