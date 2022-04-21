@@ -61,7 +61,7 @@ public abstract class BaseHandler extends HttpServlet {
         os.write(result.content);
       }
       else {
-        long pause = 3000 / count;
+        long pause = 2500 / count;
         for (int i = 0; i < count; i++) {
           os.write(result.content[i]);
           os.flush();
