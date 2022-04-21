@@ -33,7 +33,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
   @BeforeEach
   void setUp() {
     openFile("page_with_uploads.html");
-    timeout = 1000;
+    timeout = 4000;
   }
 
   @RepeatedTest(10)
