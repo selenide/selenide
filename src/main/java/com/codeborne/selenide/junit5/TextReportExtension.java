@@ -32,7 +32,6 @@ public class TextReportExtension implements BeforeEachCallback, AfterEachCallbac
    * Initialize text report extension with specified failed tests log strategy.
    *
    * @param onFailedTest parameter that indicate if need to log failed tests
-   *
    * @return current extension instance
    */
   @Nonnull
@@ -45,7 +44,6 @@ public class TextReportExtension implements BeforeEachCallback, AfterEachCallbac
    * Initialize text report extension with specified successful tests log strategy.
    *
    * @param onSucceededTest parameter that indicate if need to log successful tests
-   *
    * @return current extension instance
    */
   @Nonnull
@@ -65,8 +63,10 @@ public class TextReportExtension implements BeforeEachCallback, AfterEachCallbac
   public void afterEach(final ExtensionContext context) {
     if (onFailedTest && context.getExecutionException().isPresent()) {
       report.finish(context.getDisplayName());
-    } else if (onSucceededTest) {
-      report.finish(context.getDisplayName());
+    }
+    else if (onSucceededTest) {
+      String uniqueId = context.getUniqueId();
+      report.finish(uniqueId);
     }
   }
 
