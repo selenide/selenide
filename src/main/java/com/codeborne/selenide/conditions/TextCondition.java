@@ -3,6 +3,7 @@ package com.codeborne.selenide.conditions;
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.TextCheck;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -21,6 +22,9 @@ public abstract class TextCondition extends Condition {
 
   @CheckReturnValue
   protected abstract boolean match(String actualText, String expectedText);
+  protected boolean match(TextCheck textCheck, String actualText, String expectedText) {
+    return match(actualText, expectedText);
+  }
 
   @Nullable
   @CheckReturnValue
@@ -33,7 +37,8 @@ public abstract class TextCondition extends Condition {
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String elementText = getText(driver, element);
-    return new CheckResult(match(elementText, expectedText), String.format("text=\"%s\"", elementText));
+    boolean match = match(driver.config().textCheck(), elementText, expectedText);
+    return new CheckResult(match, String.format("text=\"%s\"", elementText));
   }
 
   @Nonnull

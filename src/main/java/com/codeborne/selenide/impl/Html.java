@@ -12,6 +12,10 @@ public class Html {
   public static Html text = new Html();
 
   public boolean matches(String text, String regex) {
+    return Pattern.compile(regex, DOTALL).matcher(text).matches();
+  }
+
+  public boolean matchesSubstring(String text, String regex) {
     return Pattern.compile(".*" + regex + ".*", DOTALL).matcher(text).matches();
   }
 

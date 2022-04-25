@@ -25,11 +25,19 @@ public class DriverStub implements Driver {
   private final DownloadsFolder browserDownloadsFolder;
 
   public DriverStub() {
-    this("zopera");
+    this("netscape navigator");
   }
 
   public DriverStub(String browser) {
-    this(browser, new SharedDownloadsFolder("build/downloads/" + randomUUID()));
+    this(new SelenideConfig(), browser);
+  }
+
+  public DriverStub(Config config) {
+    this(config, "netscape navigator");
+  }
+
+  DriverStub(Config config, String browser) {
+    this(config, new Browser(browser, false), new DummyWebDriver(), null, new SharedDownloadsFolder("build/downloads/" + randomUUID()));
   }
 
   public DriverStub(String browser, DownloadsFolder downloadsFolder) {

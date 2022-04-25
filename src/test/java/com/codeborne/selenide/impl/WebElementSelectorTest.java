@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 
 final class WebElementSelectorTest {
   private final WebElementSelector selector = new WebElementSelector();
-  private final Browser browser = new Browser("zopera", false);
+  private final Browser browser = new Browser("netscape navigator", false);
   private final JSWebDriver webDriver = mock(JSWebDriver.class);
   private final WebElementSource parent = mock(WebElementSource.class);
 
@@ -113,7 +113,7 @@ final class WebElementSelectorTest {
 
   @Test
   void findElement_insideElement_cannotUseXpathStartingWithSlash() {
-    Driver driver = new DriverStub("zopera");
+    Driver driver = new DriverStub();
     SelenideElement parentElement = mockElement("div", "whatever");
     when(parent.getWebElement()).thenReturn(parentElement);
 
@@ -124,7 +124,7 @@ final class WebElementSelectorTest {
 
   @Test
   void findElements_insideElement_cannotUseXpathStartingWithSlash() {
-    Driver driver = new DriverStub("zopera");
+    Driver driver = new DriverStub();
     SelenideElement parentElement = mockElement("div", "whatever");
     when(parent.getWebElement()).thenReturn(parentElement);
 

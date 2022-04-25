@@ -3,6 +3,7 @@ package com.codeborne.selenide.conditions;
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.TextCheck;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
@@ -25,7 +26,14 @@ public class Value extends Condition {
   public CheckResult check(Driver driver, WebElement element) {
     String value = getValueAttribute(element);
     String actualValue = String.format("%s=\"%s\"", getName(), value);
-    return new CheckResult(Html.text.contains(value, expectedValue), actualValue);
+    return new CheckResult(match(driver.config().textCheck(), value), actualValue);
+  }
+
+  private boolean match(TextCheck textCheck, String value) {
+    return switch (textCheck) {
+      case FULL_TEXT -> Html.text.equals(value, expectedValue);
+      case PARTIAL_TEXT -> Html.text.contains(value, expectedValue);
+    };
   }
 
   @Nonnull
