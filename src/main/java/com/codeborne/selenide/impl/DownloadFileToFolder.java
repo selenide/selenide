@@ -89,6 +89,7 @@ public class DownloadFileToFolder {
 
   private void waitUntilDownloadCompletion(File downloadedFile, long timeout) {
     Path path = downloadedFile.toPath();
+    log.info("Waiting for download completion: {}", path.toAbsolutePath());
     FileInfo last = new FileInfo(FileTime.fromMillis(0), -1);
     pause();
     FileInfo current = read(path);

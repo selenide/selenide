@@ -5,6 +5,8 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.openqa.selenium.By;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,6 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class FileDownloadToFolderTest extends IntegrationTest {
+  private static final Logger log = LoggerFactory.getLogger(FileDownloadToFolderTest.class);
   private final File folder = new File(downloadsFolder).getAbsoluteFile();
 
   @BeforeEach
@@ -59,6 +62,8 @@ final class FileDownloadToFolderTest extends IntegrationTest {
         clickAndConfirm("Are you sure to download it?")
       )
     );
+
+    log.info("Downloaded file {}", downloadedFile.getAbsolutePath());
 
     assertThat(downloadedFile.getName())
       .matches("hello_world.*\\.txt");
