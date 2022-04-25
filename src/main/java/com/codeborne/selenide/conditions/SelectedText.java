@@ -1,6 +1,7 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.TextCheck;
 import com.codeborne.selenide.impl.Html;
 import com.codeborne.selenide.impl.JavaScript;
 import org.openqa.selenium.WebElement;
@@ -20,7 +21,15 @@ public class SelectedText extends TextCondition {
   @CheckReturnValue
   @Override
   protected boolean match(String actualText, String expectedText) {
-    return Html.text.containsCaseSensitive(actualText, expectedText);
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  protected boolean match(TextCheck textCheck, String actualText, String expectedText) {
+    return switch (textCheck) {
+      case FULL_TEXT -> Html.text.equalsCaseSensitive(actualText, expectedText);
+      case PARTIAL_TEXT -> Html.text.containsCaseSensitive(actualText, expectedText);
+    };
   }
 
   @Nullable

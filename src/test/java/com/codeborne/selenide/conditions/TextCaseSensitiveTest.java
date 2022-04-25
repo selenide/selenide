@@ -1,6 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -9,12 +11,12 @@ import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static com.codeborne.selenide.Mocks.mockSelect;
 import static com.codeborne.selenide.Mocks.option;
+import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 final class TextCaseSensitiveTest {
 
-  private final Driver driver = mock(Driver.class);
+  private final Driver driver = new DriverStub(new SelenideConfig().textCheck(PARTIAL_TEXT));
   private final WebElement elementShort = mockElement("One");
   private final WebElement elementLong = mockElement("ZeroOneTwo");
   private final WebElement singleSelectElement = mockSelect(option("One", true), option("Two"), option("Three"));

@@ -2,11 +2,14 @@ package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
+import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -14,7 +17,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 final class MatchTextTest {
-  private final Driver driver = mock(Driver.class);
+  private final Driver driver = new DriverStub(new SelenideConfig().textCheck(PARTIAL_TEXT));
 
   @Test
   void shouldMatchWholeString() {
@@ -60,7 +63,7 @@ final class MatchTextTest {
 
     assertThat(checkResult.actualValue()).isEqualTo("text=\"Chuck Norris' gmail account\"");
     verify(element).getText();
-    verifyNoMoreInteractions(driver, element);
+    verifyNoMoreInteractions(element);
   }
 
   private WebElement element(String text) {

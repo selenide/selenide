@@ -30,6 +30,7 @@ import static com.codeborne.selenide.Condition.type;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Mocks.elementWithAttribute;
+import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
@@ -39,7 +40,7 @@ import static org.mockito.Mockito.when;
 final class ConditionTest {
   private final WebDriver webDriver = new DummyWebDriver();
   private final SelenideProxyServer proxy = mock(SelenideProxyServer.class);
-  private final SelenideConfig config = new SelenideConfig();
+  private final SelenideConfig config = new SelenideConfig().textCheck(PARTIAL_TEXT);
   private final Driver driver = new DriverStub(config, new Browser("opera", false), webDriver, proxy);
 
   @Test

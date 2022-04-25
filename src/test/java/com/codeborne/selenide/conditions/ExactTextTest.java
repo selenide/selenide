@@ -2,6 +2,7 @@ package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,14 +16,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ExactTextTest {
-  private final Driver driver = mock(Driver.class);
+  private final Driver driver = new DriverStub();
   private final WebElement element = mock(WebElement.class);
 
   private final ExactText condition = new ExactText("John Malkovich");
 
   @AfterEach
   void verifyNoMoreInteractions() {
-    Mockito.verifyNoMoreInteractions(driver, element);
+    Mockito.verifyNoMoreInteractions(element);
   }
 
   @Test

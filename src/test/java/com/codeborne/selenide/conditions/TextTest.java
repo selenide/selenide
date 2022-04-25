@@ -2,6 +2,8 @@ package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -11,14 +13,14 @@ import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static com.codeborne.selenide.Mocks.mockSelect;
 import static com.codeborne.selenide.Mocks.option;
+import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 final class TextTest {
-  private final Driver driver = mock(Driver.class);
+  private final Driver driver = new DriverStub(new SelenideConfig().textCheck(PARTIAL_TEXT));
 
   @Test
   void apply_for_textInput() {
@@ -94,7 +96,7 @@ final class TextTest {
     assertThat(checkResult.actualValue()).isEqualTo("text=\"Hello World\"");
     verify(element).getTagName();
     verify(element).getText();
-    verifyNoMoreInteractions(driver, element);
+    verifyNoMoreInteractions(element);
   }
 
   @Test

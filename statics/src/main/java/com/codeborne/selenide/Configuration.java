@@ -229,6 +229,13 @@ public class Configuration {
   public static boolean fastSetValue = defaults.fastSetValue();
 
   /**
+   * Define behaviour of {@code $.shouldHave(text)}: full text or partial text.
+   *
+   * @since 6.5.0
+   */
+  public static TextCheck textCheck = defaults.textCheck();
+
+  /**
    * <p>Choose how Selenide should retrieve web elements: using default CSS or Sizzle (CSS3).</p>
    * <br>
    * <p>

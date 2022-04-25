@@ -5,6 +5,7 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.SelectorMode;
+import com.codeborne.selenide.TextCheck;
 import org.openqa.selenium.MutableCapabilities;
 
 /**
@@ -74,6 +75,11 @@ class StaticConfig implements Config {
   @Override
   public boolean fastSetValue() {
     return Configuration.fastSetValue;
+  }
+
+  @Override
+  public TextCheck textCheck() {
+    return Configuration.textCheck;
   }
 
   @Override

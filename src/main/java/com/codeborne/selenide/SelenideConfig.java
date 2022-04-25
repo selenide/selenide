@@ -37,6 +37,7 @@ public class SelenideConfig implements Config {
   private String downloadsFolder = getProperty("selenide.downloadsFolder", "build/downloads");
   private String reportsUrl = new CiReportUrl().getReportsUrl(getProperty("selenide.reportsUrl", null));
   private boolean fastSetValue = Boolean.parseBoolean(getProperty("selenide.fastSetValue", "false"));
+  private TextCheck textCheck = TextCheck.valueOf(getProperty("selenide.textCheck", TextCheck.FULL_TEXT.name()));
   private SelectorMode selectorMode = SelectorMode.valueOf(getProperty("selenide.selectorMode", CSS.name()));
   private AssertionMode assertionMode = AssertionMode.valueOf(getProperty("selenide.assertionMode", STRICT.name()));
   private FileDownloadMode fileDownload = FileDownloadMode.valueOf(getProperty("selenide.fileDownload", HTTPGET.name()));
@@ -159,8 +160,18 @@ public class SelenideConfig implements Config {
     return fastSetValue;
   }
 
+  @Override
+  public TextCheck textCheck() {
+    return textCheck;
+  }
+
   public SelenideConfig fastSetValue(boolean fastSetValue) {
     this.fastSetValue = fastSetValue;
+    return this;
+  }
+
+  public SelenideConfig textCheck(TextCheck textCheck) {
+    this.textCheck = textCheck;
     return this;
   }
 

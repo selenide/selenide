@@ -28,6 +28,7 @@ public interface Config {
   String downloadsFolder();
   String reportsUrl();
   boolean fastSetValue();
+  TextCheck textCheck();
   SelectorMode selectorMode();
   AssertionMode assertionMode();
   FileDownloadMode fileDownload();
