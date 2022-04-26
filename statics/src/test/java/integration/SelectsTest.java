@@ -9,6 +9,8 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.partialText;
+import static com.codeborne.selenide.Condition.partialTextCaseSensitive;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.textCaseSensitive;
@@ -228,10 +230,18 @@ final class SelectsTest extends IntegrationTest {
   void shouldHaveTextChecksSelectedOptions() {
     $("#cars").selectOptionByValue("saab", "audi");
 
-    $("#cars").shouldHave(text("audi").because("Option with text `Audi` is selected"));
-    $("#cars").shouldHave(text("saab").because("Option with text `Saab` is selected"));
-    $("#cars").shouldHave(textCaseSensitive("Audi").because("Option with text `Audi` is selected"));
-    $("#cars").shouldHave(textCaseSensitive("Saab").because("Option with text `Saab` is selected"));
+    $("#cars").shouldHave(text("saabaudi").because("Options `Audi` and `Saab` are selected"));
+    $("#cars").shouldHave(textCaseSensitive("SaabAudi").because("Options `Audi` and `Saab` are selected"));
+  }
+
+  @Test
+  void shouldHaveTextChecksSelectedOptions_partial() {
+    $("#cars").selectOptionByValue("saab", "audi");
+
+    $("#cars").shouldHave(partialText("audi").because("Option with text `Audi` is selected"));
+    $("#cars").shouldHave(partialText("saab").because("Option with text `Saab` is selected"));
+    $("#cars").shouldHave(partialTextCaseSensitive("Audi").because("Option with text `Audi` is selected"));
+    $("#cars").shouldHave(partialTextCaseSensitive("Saab").because("Option with text `Saab` is selected"));
   }
 
   @Test()

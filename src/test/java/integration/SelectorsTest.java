@@ -8,6 +8,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byAttribute;
@@ -57,20 +58,20 @@ final class SelectorsTest extends ITest {
 
   @Test
   void canFindElementById() {
-    $(byId("status")).shouldHave(text("Username:"));
+    $(byId("status")).shouldHave(partialText("Username:"));
   }
 
   @Test
   void canFindSelenideElementByXpath() {
     $x("//h1").shouldHave(text("Page with selects"));
-    $x("//*[@id='status']").shouldHave(text("Username:"));
+    $x("//*[@id='status']").shouldHave(partialText("Username:"));
     $x("//*[@name='domain']").shouldBe(visible);
   }
 
   @Test
   void canFindElementsCollectionByXpath() {
     $$x("//h1").get(0).shouldHave(text("Page with selects"));
-    $$x("//*[@id='status']").get(0).shouldHave(text("Username:"));
+    $$x("//*[@id='status']").get(0).shouldHave(partialText("Username:"));
     $$x("//*[@name='domain']").get(0).shouldBe(visible);
   }
 

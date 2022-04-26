@@ -36,7 +36,7 @@ final class SizzleSelectorsTest extends BaseIntegrationTest {
     driver.$("input:last").shouldHave(attribute("id", "some-button"));
     driver.$("input[name!='username'][name!='password']").shouldHave(attribute("name", "rememberMe"));
     driver.$(":header").shouldHave(text("Page with JQuery"));
-    driver.$(":header", 1).shouldHave(text("Now typing"));
+    driver.$(":header", 1).shouldHave(text("Now typing:"));
     driver.$("label:contains('assword')").shouldHave(text("Password:"));
     assertThat(driver.$(":parent:not('html'):not('head')").getTagName()).isEqualTo("title");
   }

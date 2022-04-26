@@ -20,13 +20,13 @@ final class SetDateValueTest extends IntegrationTest {
   void canSetDateValue_sendKeys() {
     LocalDate birthday = LocalDate.parse("1979-12-31");
     $("#birthday").setValue(withDate(birthday));
-    $("#user-summary").shouldHave(text("User birthday: "), text("1979-12-31"));
+    $("#user-summary").shouldHave(text("User birthday: 1979-12-31"));
   }
 
   @Test
   void canSetDateValue_usingJavascript() {
     LocalDate birthday = LocalDate.parse("1978-11-30");
     $("#birthday").setValue(withDate(birthday).usingMethod(JS));
-    $("#user-summary").shouldHave(text("User birthday: "), text("1978-11-30"));
+    $("#user-summary").shouldHave(text("User birthday: 1978-11-30"));
   }
 }

@@ -33,7 +33,7 @@ final class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   void shouldCondition_When$Element() {
     SelenideElement element = $("ul li");
 
-    element.shouldHave(text("Miller"));
+    element.shouldHave(text("Miller detective"));
   }
 
   @Test
@@ -54,7 +54,7 @@ final class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   void shouldCondition_WhenCollectionElementByIndex() {
     SelenideElement element = $$("ul li").get(0);
 
-    element.shouldHave(text("Miller"));
+    element.shouldHave(text("Miller detective"));
   }
 
   @Test

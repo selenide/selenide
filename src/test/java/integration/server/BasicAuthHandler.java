@@ -26,7 +26,9 @@ class BasicAuthHandler extends BaseHandler {
     byte[] userPasswordBytes = Base64.getDecoder().decode(userPasswordBase64);
     String userPassword = new String(userPasswordBytes, UTF_8);
     String path = request.getPathInfo().replace("/", "");
-    String html = String.format("<html><body>%s, %s!" +
+    String html = String.format("<html><body>" +
+      "<div id=\"greeting\">%s, %s!</div>" +
+      "<br>" +
       "<br>" +
       "<a id=\"bye\" href=\"/basic-auth/bye\">bye!</a></body></html>", path, userPassword);
 

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
 
+import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -88,12 +89,12 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
   void elementNotFoundInsideParent() {
     assertThatThrownBy(() -> $("#multirowTable")
       .findAll("tbody tr")
-      .findBy(text("Norris"))
+      .findBy(partialText("Norris"))
       .find(".second_row")
       .shouldBe(visible)
     )
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {#multirowTable/tbody tr.findBy(text \"Norris\")/.second_row}");
+      .hasMessageStartingWith("Element not found {#multirowTable/tbody tr.findBy(partial text \"Norris\")/.second_row}");
   }
 
   @Test

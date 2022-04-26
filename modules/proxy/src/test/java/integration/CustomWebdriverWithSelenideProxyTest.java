@@ -14,7 +14,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 import static com.codeborne.selenide.AuthenticationType.BASIC;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
@@ -41,7 +41,7 @@ final class CustomWebdriverWithSelenideProxyTest extends ProxyIntegrationTest {
         WebDriverRunner.setWebDriver(webDriver, proxy);
 
         open("/basic-auth/hello", BASIC, new BasicAuthCredentials("scott", "tiger"));
-        $("body").shouldHave(text("Hello, scott:tiger!"));
+        $("body").shouldHave(partialText("Hello, scott:tiger!"));
       }
       finally {
         closeWebDriver();
