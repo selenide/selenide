@@ -29,6 +29,7 @@ import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.id;
 import static com.codeborne.selenide.Condition.name;
+import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.readonly;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
@@ -213,10 +214,11 @@ final class SelenideMethodsTest extends IntegrationTest {
     assertThat($("#radioButtons").text())
       .isEqualTo("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland");
 
-    $("h1").shouldHave(text("Page "));
+    $("h1").shouldHave(partialText("Page "));
     $("h2").shouldHave(text("Dropdown list"));
-    $(By.name("domain")).find("option").shouldHave(text("vemail.r"));
-    $("#radioButtons").shouldHave(text("buttons"), text("Мастер"), text("Маргарита"));
+    $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
+    $(By.name("domain")).find("option").shouldHave(partialText("vemail.r"));
+    $("#radioButtons").shouldHave(partialText("buttons"), partialText("Мастер"), partialText("Маргарита"));
   }
 
   @Test
@@ -421,7 +423,7 @@ final class SelenideMethodsTest extends IntegrationTest {
   void userCanCheckConditions() {
     assertThat($("#login").is(visible))
       .isTrue();
-    assertThat($("#multirowTable").has(text("Chack")))
+    assertThat($("#multirowTable").has(partialText("Chack")))
       .isTrue();
 
     assertThat($(".non-existing-element").has(text("Ninja")))

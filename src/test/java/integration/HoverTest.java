@@ -26,17 +26,17 @@ final class HoverTest extends ITest {
 
   @Test
   void canEmulateHover() {
-    $("#hoverable").hover().shouldHave(text("It's hover"));
+    $("#hoverable").hover().shouldHave(text("It's hover!"));
     verifyCoordinates(400, 200);
 
     $("h1").hover();
-    $("#hoverable").shouldHave(text("It's not hover"));
+    $("#hoverable").shouldHave(text("It's not hover."));
     $("#coords").shouldHave(exactText(""));
   }
 
   @Test
   void hoverWithOffset() {
-    $("#hoverable").hover(withOffset(123, 122)).shouldHave(text("It's hover"));
+    $("#hoverable").hover(withOffset(123, 122)).shouldHave(text("It's hover!"));
     verifyCoordinates(523, 322);
   }
 

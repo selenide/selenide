@@ -45,7 +45,7 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends ProxyIntegratio
     Configuration.browser = MyWebDriverProvider.class.getName();
 
     open("/basic-auth/hello", BASIC, new BasicAuthCredentials("scott", "tiger"));
-    $("body").shouldHave(text("Hello, scott:tiger!"));
+    $("#greeting").shouldHave(text("Hello, scott:tiger!"));
   }
 
   @ParametersAreNonnullByDefault

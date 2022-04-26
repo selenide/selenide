@@ -31,7 +31,9 @@ class BearerTokenHandler extends BaseHandler {
       return new Result(SC_UNAUTHORIZED, CONTENT_TYPE_HTML_TEXT, "UNAUTHORIZED: Invalid bearer token " + bearerToken);
     }
     String path = request.getPathInfo().replace("/", "");
-    String html = String.format("<html><body>%s, %s!" +
+    String html = String.format("<html><body>" +
+      "<div id=\"greeting\">%s, %s!</div>" +
+      "<br>" +
       "<br>" +
       "<a id=\"bye\" href=\"/bearer-token-auth/bye\">bye!</a></body></html>", path, bearerToken);
 

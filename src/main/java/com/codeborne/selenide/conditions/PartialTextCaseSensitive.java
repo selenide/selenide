@@ -1,22 +1,19 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.TextCheck;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Locale;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @ParametersAreNonnullByDefault
-public class Text extends TextCondition {
+public class PartialTextCaseSensitive extends TextCondition {
 
-  public Text(final String text) {
-    super("text", text);
+  public PartialTextCaseSensitive(String text) {
+    super("partial text case sensitive", text);
 
     if (isEmpty(text)) {
       throw new IllegalArgumentException("Argument must not be null or empty string. " +
@@ -24,22 +21,12 @@ public class Text extends TextCondition {
     }
   }
 
-  @CheckReturnValue
   @Override
   protected boolean match(String actualText, String expectedText) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  protected boolean match(TextCheck textCheck, String actualText, String expectedText) {
-    return switch (textCheck) {
-      case FULL_TEXT -> Html.text.equals(actualText, expectedText.toLowerCase());
-      case PARTIAL_TEXT -> Html.text.contains(actualText, expectedText.toLowerCase(Locale.ROOT));
-    };
+    return Html.text.containsCaseSensitive(actualText, expectedText);
   }
 
   @Nullable
-  @CheckReturnValue
   @Override
   protected String getText(Driver driver, WebElement element) {
     return "select".equalsIgnoreCase(element.getTagName()) ?

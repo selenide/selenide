@@ -10,6 +10,7 @@ import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.or;
+import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static java.time.Duration.ofMillis;
@@ -60,12 +61,12 @@ final class LogicalOperationsWithConditions extends ITest {
 
   @Test
   void andRevertsExistingElement() {
-    $("h1").shouldHave(text("Element removed"), text("from DOM"));
-    $("h1").shouldHave(and("2 texts", text("Element removed"), text("from DOM")));
-    $("h1").shouldNotHave(and("2 texts", text("Lasnamäe"), text("from DOM")));
-    $("h1").shouldNotHave(and("2 texts", text("Element removed"), text("Lasnamäe")));
+    $("h1").shouldHave(partialText("Element removed"), partialText("from DOM"));
+    $("h1").shouldHave(and("2 texts", partialText("Element removed"), partialText("from DOM")));
+    $("h1").shouldNotHave(and("2 texts", partialText("Lasnamäe"), partialText("from DOM")));
+    $("h1").shouldNotHave(and("2 texts", partialText("Element removed"), partialText("Lasnamäe")));
 
-    assertThatThrownBy(() -> $("h1").shouldNotHave(and("2 texts", text("Element removed"), text("from DOM"))))
+    assertThatThrownBy(() -> $("h1").shouldNotHave(and("2 texts", partialText("Element removed"), partialText("from DOM"))))
       .isInstanceOf(ElementShouldNot.class);
   }
 
@@ -73,19 +74,19 @@ final class LogicalOperationsWithConditions extends ITest {
   void orRevertsExistingElement() {
     String text1 = "Element removed";
     String text2 = "from DOM";
-    $("h1").shouldHave(or("2 texts", text(text1), text(text2)));
-    $("h1").shouldHave(or("2 texts", text("Lasnamäe"), text(text2)));
-    $("h1").shouldHave(or("2 texts", text(text1), text("Lasnamäe")));
-    $("h1").shouldNotHave(or("2 texts", text("Tallinn"), text("Lasnamäe")));
+    $("h1").shouldHave(or("2 texts", partialText(text1), partialText(text2)));
+    $("h1").shouldHave(or("2 texts", partialText("Lasnamäe"), partialText(text2)));
+    $("h1").shouldHave(or("2 texts", partialText(text1), partialText("Lasnamäe")));
+    $("h1").shouldNotHave(or("2 texts", partialText("Tallinn"), partialText("Lasnamäe")));
 
     assertThatThrownBy(() ->
-      $("h1").shouldNotHave(or("2 texts", text(text1), text(text2))))
+      $("h1").shouldNotHave(or("2 texts", partialText(text1), partialText(text2))))
       .isInstanceOf(ElementShouldNot.class);
     assertThatThrownBy(() ->
-      $("h1").shouldNotHave(or("2 texts", text("Lasnamäe"), text(text2))))
+      $("h1").shouldNotHave(or("2 texts", partialText("Lasnamäe"), partialText(text2))))
       .isInstanceOf(ElementShouldNot.class);
     assertThatThrownBy(() ->
-      $("h1").shouldNotHave(or("2 texts", text(text1), text("Lasnamäe"))))
+      $("h1").shouldNotHave(or("2 texts", partialText(text1), partialText("Lasnamäe"))))
       .isInstanceOf(ElementShouldNot.class);
   }
 }

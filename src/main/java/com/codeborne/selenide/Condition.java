@@ -5,6 +5,8 @@ import com.codeborne.selenide.conditions.Attribute;
 import com.codeborne.selenide.conditions.AttributeWithValue;
 import com.codeborne.selenide.conditions.CaseSensitiveText;
 import com.codeborne.selenide.conditions.Checked;
+import com.codeborne.selenide.conditions.PartialText;
+import com.codeborne.selenide.conditions.PartialTextCaseSensitive;
 import com.codeborne.selenide.conditions.CssClass;
 import com.codeborne.selenide.conditions.CssValue;
 import com.codeborne.selenide.conditions.CustomMatch;
@@ -305,6 +307,32 @@ public abstract class Condition {
   @Nonnull
   public static Condition matchText(String regex) {
     return new MatchText(regex);
+  }
+
+  /**
+   * Assert that given element's text CONTAINS given text
+   *
+   * <p>Sample: <code>$("h1").shouldHave(partialText("ello Joh"))</code></p>
+   *
+   * @since 6.5.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition partialText(String regex) {
+    return new PartialText(regex);
+  }
+
+  /**
+   * Assert that given element's text CONTAINS given text (case-sensitive)
+   *
+   * <p>Sample: <code>$("h1").should(partialTextCaseSensitive("ELLO jOH"))</code></p>
+   *
+   * @since 6.5.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition partialTextCaseSensitive(String regex) {
+    return new PartialTextCaseSensitive(regex);
   }
 
   /**

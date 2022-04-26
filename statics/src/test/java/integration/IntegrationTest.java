@@ -24,6 +24,7 @@ import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.TextCheck.FULL_TEXT;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
@@ -80,6 +81,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.proxyHost = "";
     Configuration.fileDownload = HTTPGET;
     Configuration.reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "false"));
+    Configuration.textCheck = FULL_TEXT;
   }
 
   protected void openFile(String fileName) {

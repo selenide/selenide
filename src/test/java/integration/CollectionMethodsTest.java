@@ -39,6 +39,7 @@ import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.and;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
@@ -192,24 +193,26 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void userCanFilterOutMatchingElements() {
     $$("#multirowTable tr").shouldHave(size(2));
-    $$("#multirowTable tr").filterBy(text("Norris")).shouldHave(size(1));
+    $$("#multirowTable tr").filterBy(partialText("Norris")).shouldHave(size(1));
     $$("#multirowTable tr").filterBy(cssClass("inexisting")).shouldHave(size(0));
   }
 
   @Test
   void userCanExcludeMatchingElements() {
     $$("#multirowTable tr").shouldHave(size(2));
-    $$("#multirowTable tr").excludeWith(text("Chack")).shouldHave(size(0));
+    $$("#multirowTable tr").excludeWith(partialText("Chack")).shouldHave(size(0));
     $$("#multirowTable tr").excludeWith(cssClass("inexisting")).shouldHave(size(2));
   }
 
   @Test
   void errorMessageShouldShowFullAndConditionDescription() {
     ElementsCollection filteredRows = $$("#multirowTable tr")
-      .filterBy(and("condition name", text("Chack"), text("Baskerville")));
+      .filterBy(and("condition name", partialText("Chack"), partialText("Baskerville")));
 
     assertThatThrownBy(() -> filteredRows.shouldHave(size(0)))
-      .hasMessageContaining("collection: #multirowTable tr.filter(condition name: text \"Chack\" and text \"Baskerville\"");
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageContaining("collection: #multirowTable " +
+        "tr.filter(condition name: partial text \"Chack\" and partial text \"Baskerville\"");
   }
 
   @Test
@@ -226,7 +229,7 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void userCanFindMatchingElementFromList() {
-    $$("#multirowTable tr").findBy(text("Norris")).shouldHave(text("Norris"));
+    $$("#multirowTable tr").findBy(partialText("Norris")).shouldHave(text("Chack Norris"));
   }
 
   @Test
@@ -240,7 +243,7 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void collectionMethodsCanBeChained() {
     $$("#multirowTable tr").shouldHave(size(2))
-      .filterBy(text("Norris")).shouldHave(size(1));
+      .filterBy(partialText("Norris")).shouldHave(size(1));
   }
 
   @Test
@@ -339,7 +342,7 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void canGetElementByIndex_fromFirstNElements_ofFilteredCollection() {
     ElementsCollection collection = $$x("//select[@name='domain']/option")
-      .filterBy(text(".ru"))
+      .filterBy(partialText(".ru"))
       .first(2)
       .shouldHave(size(2));
 
@@ -370,7 +373,7 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void canGetElementByIndex_fromLastNElements_ofFilteredCollection() {
     ElementsCollection collection = $$x("//select[@name='domain']/option")
-      .filterBy(text(".ru"))
+      .filterBy(partialText(".ru"))
       .last(2)
       .shouldHave(size(2));
 

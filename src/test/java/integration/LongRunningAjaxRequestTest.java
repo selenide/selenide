@@ -8,7 +8,7 @@ import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +30,7 @@ final class LongRunningAjaxRequestTest extends ITest {
 
   @Test
   void dollarWaitsForElementWithIndex() {
-    $("#results li", 1).shouldHave(text("Result 2"));
+    $("#results li", 1).shouldHave(partialText("Result 2"));
   }
 
   @Test
@@ -67,12 +67,12 @@ final class LongRunningAjaxRequestTest extends ITest {
 
   @Test
   void shouldWaitsForCondition() {
-    $("#results").shouldHave(text("Result 1"));
+    $("#results").shouldHave(partialText("Result 1"));
   }
 
   @Test
   void shouldWaitsForAllConditions() {
-    $("#results").shouldHave(text("Result 1"), text("Result 2"));
+    $("#results").shouldHave(partialText("Result 1"), partialText("Result 2"));
   }
 
   @Test

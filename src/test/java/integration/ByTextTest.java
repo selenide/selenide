@@ -96,8 +96,8 @@ final class ByTextTest extends ITest {
 
   @Test
   void canFindElementsByI18nText() {
-    $(byText("Маргарита")).shouldHave(text("Маргарита"));
-    $(withText("Марг")).shouldHave(text("Маргарита"));
+    $(byText("Маргарита")).shouldHave(attribute("id", "radioButtons"));
+    $(withText("Марг")).shouldHave(attribute("id", "radioButtons"));
     $(byText("Кот \"Бегемот\"")).click();
     $(withText("т \"Бегемот\"")).click();
     $(byTextCaseInsensitive("КОТ \"бЕГЕмот\"")).click();

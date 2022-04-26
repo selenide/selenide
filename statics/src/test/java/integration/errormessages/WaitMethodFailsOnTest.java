@@ -63,8 +63,8 @@ final class WaitMethodFailsOnTest extends IntegrationTest {
   void wait_while_has_text() {
     SelenideElement element = $(".detective").shouldBe(visible);
 
-    assertThatThrownBy(() -> element.shouldNot(have(text("Miller")), Duration.ofMillis(42)))
+    assertThatThrownBy(() -> element.shouldNot(have(text("Miller detective")), Duration.ofMillis(42)))
       .isInstanceOf(ElementShouldNot.class)
-      .hasMessageStartingWith("Element should not have text \"Miller\" {.detective}");
+      .hasMessageStartingWith("Element should not have text \"Miller detective\" {.detective}");
   }
 }

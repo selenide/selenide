@@ -66,9 +66,9 @@ final class ShouldMethodWithTimeoutFailsOnTest extends IntegrationTest {
   void should_not_have_with_timeout() {
     SelenideElement element = $(".detective").shouldBe(visible);
 
-    assertThatThrownBy(() -> element.shouldNotHave(text("Miller"), Duration.ofNanos(20001000)))
+    assertThatThrownBy(() -> element.shouldNotHave(text("Miller detective"), Duration.ofNanos(20001000)))
       .isInstanceOf(ElementShouldNot.class)
-      .hasMessageStartingWith("Element should not have text \"Miller\" {.detective}")
+      .hasMessageStartingWith("Element should not have text \"Miller detective\" {.detective}")
       .hasMessageContaining("Timeout: 20 ms.");
   }
 }
