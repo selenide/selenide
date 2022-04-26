@@ -55,6 +55,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @CanIgnoreReturnValue
   SelenideElement val(@Nullable CharSequence text);
 
+  /**
+   * @see com.codeborne.selenide.commands.SetValue
+   * @since 6.5.0
+   */
   @Nonnull
   @CanIgnoreReturnValue
   SelenideElement setValue(SetValueOptions text);

@@ -18,7 +18,7 @@ import static com.codeborne.selenide.SetValueMethod.JS;
 import static com.codeborne.selenide.SetValueMethod.SEND_KEYS;
 import static com.codeborne.selenide.SetValueOptions.withText;
 import static com.codeborne.selenide.commands.Util.firstOf;
-import static com.codeborne.selenide.impl.Events.events;
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @ParametersAreNonnullByDefault
@@ -30,7 +30,7 @@ public class SetValue implements Command<SelenideElement> {
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     WebElement element = locator.findAndAssertElementIsInteractable();
     Driver driver = locator.driver();
-    SetValueOptions options = extractOptions(driver.config(), args);
+    SetValueOptions options = extractOptions(driver.config(), requireNonNull(args));
     setValueForTextInput(driver, locator.description(), element, options);
     return proxy;
   }
@@ -53,9 +53,6 @@ public class SetValue implements Command<SelenideElement> {
       String error = setValueByJs(driver, element, options.value());
       if (isNotEmpty(error)) {
         throw new InvalidStateException(elementDescription, error);
-      }
-      else {
-        events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup", "change");
       }
     }
     else {
