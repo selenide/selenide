@@ -66,6 +66,28 @@ subprojects {
     exclude 'com/codeborne/selenide/**/*'
   }
 
+  task safari(type: Test) {
+    systemProperties['selenide.browser'] = 'safari'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/safari'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
+  task opera(type: Test) {
+    systemProperties['selenide.browser'] = 'opera'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/opera'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
+  task opera_headless(type: Test) {
+    systemProperties['selenide.browser'] = 'opera'
+    systemProperties['selenide.headless'] = 'true'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/opera_headless'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
   task firefox_remote(type: Test) {
     systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
     systemProperties['selenide.browser'] = 'firefox'
