@@ -19,7 +19,7 @@ final class FastSetValueTest extends IntegrationTest {
   }
 
   @Test
-  void standardSetValueTriggersBlurCorrectly() {
+  void standardSetValue_triggersBlurCorrectly() {
     Configuration.fastSetValue = false;
     $("#username").setValue("john");
     $("#usernameHint").should(appear);
@@ -30,18 +30,7 @@ final class FastSetValueTest extends IntegrationTest {
   }
 
   @Test
-  void fastSetValueTriggersBlurCorrectly() {
-    Configuration.fastSetValue = true;
-    $("#username").setValue("john");
-    $("#usernameHint").should(appear);
-
-    $("#password").setValue("admin");
-    $("#usernameHint").should(disappear);
-    $("#passwordHint").should(appear);
-  }
-
-  @Test
-  void fastSetValue_withoutChangeEvent() {
+  void fastSetValue_triggersBlurCorrectly() {
     Configuration.fastSetValue = true;
     $("#username").setValue("john");
     $("#usernameHint").should(appear);
