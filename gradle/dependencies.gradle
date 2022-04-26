@@ -22,6 +22,7 @@ subprojects {
     annotationProcessor("net.bytebuddy:byte-buddy:${byteBuddyVersion}")
     annotationProcessor("net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}")
     compileOnly("com.github.bsideup.jabel:jabel-javac-plugin:0.4.2")
+    testCompileOnly("com.github.bsideup.jabel:jabel-javac-plugin:0.4.2")
 
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {exclude group: 'net.bytebuddy'}
     implementation("com.google.guava:guava:31.1-jre")
