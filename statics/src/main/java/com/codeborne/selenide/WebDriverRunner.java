@@ -66,8 +66,8 @@ public class WebDriverRunner {
    *
    * <br>
    * <p>
-   * NB! Be sure to call this method before calling <code>open(url)</code>.
-   * Otherwise Selenide will create its own WebDriver instance and would not close it.
+   * NB! Be sure to call this method before calling {@code open(url)}.
+   * Otherwise, Selenide will create its own WebDriver instance and would not close it.
    *
    * <p>
    * NB! When using your custom webdriver, you are responsible for closing it.

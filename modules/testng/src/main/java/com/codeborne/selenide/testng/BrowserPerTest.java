@@ -8,7 +8,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 
 /**
- * Annotate your test class with <code>@Listeners({ BrowserPerTest.class})</code>
+ * Annotate your test class with {@code @Listeners({ BrowserPerTest.class})}
  */
 @ParametersAreNonnullByDefault
 public class BrowserPerTest extends ExitCodeListener {
