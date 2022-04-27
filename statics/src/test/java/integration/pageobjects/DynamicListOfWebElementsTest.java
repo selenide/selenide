@@ -14,7 +14,6 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
-import static com.codeborne.selenide.Selenide.sleep;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class DynamicListOfWebElementsTest extends IntegrationTest {
@@ -26,7 +25,6 @@ public class DynamicListOfWebElementsTest extends IntegrationTest {
 
   @Test
   void shouldWaitUntilCollectionIsLoaded() {
-    sleep(500);
     MyPage page = page(MyPage.class);
     $(page.container.spans.get(0)).shouldHave(text("dynamic content"));
     $(page.container.spans.get(1)).shouldHave(text("dynamic content2"));
