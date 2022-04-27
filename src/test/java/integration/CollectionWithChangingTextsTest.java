@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.text;
 import static java.lang.Thread.sleep;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,9 +26,9 @@ final class CollectionWithChangingTextsTest extends ITest {
     Iterator<SelenideElement> it = $$("#collection li").snapshot()
       .shouldHave(size(3))
       .iterator();
-    it.next().shouldHave(text("Item #1"));
-    it.next().shouldHave(text("Item #2"));
-    it.next().shouldHave(text("Item #3"));
+    it.next().shouldHave(partialText("Item #1"));
+    it.next().shouldHave(partialText("Item #2"));
+    it.next().shouldHave(partialText("Item #3"));
     assertThat(it.hasNext()).isFalse();
   }
 

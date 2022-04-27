@@ -52,8 +52,6 @@ import static com.codeborne.selenide.Selenide.title;
 import static com.codeborne.selenide.Selenide.webdriver;
 import static com.codeborne.selenide.WebDriverConditions.urlContaining;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -195,12 +193,9 @@ final class SelenideMethodsTest extends IntegrationTest {
     $("#username").sendKeys(" x ");
     $("#username").pressTab();
 
-    if (!isChrome() && !isFirefox()) {
-      // fails in Chrome for unknown reason. In Firefox, it's just unstable.
-      $("#password").shouldBe(focused);
-      $("#username-mirror").shouldHave(text(" x "));
-      $("#username-blur-counter").shouldHave(text("blur: "));
-    }
+    $("#password").shouldBe(focused);
+    $("#username-mirror").shouldHave(text("x (1)"));
+    $("#username-blur-counter").shouldHave(text("blur: 1"));
   }
 
   @Test
