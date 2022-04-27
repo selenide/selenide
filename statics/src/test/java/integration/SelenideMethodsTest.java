@@ -49,12 +49,13 @@ import static com.codeborne.selenide.Selenide.actions;
 import static com.codeborne.selenide.Selenide.element;
 import static com.codeborne.selenide.Selenide.elements;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.Selenide.title;
+import static com.codeborne.selenide.Selenide.webdriver;
+import static com.codeborne.selenide.WebDriverConditions.urlContaining;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
-import static com.codeborne.selenide.WebDriverRunner.url;
+import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
@@ -131,7 +132,7 @@ final class SelenideMethodsTest extends IntegrationTest {
   @Test
   void shouldMethodCanUseCustomTimeout() {
     $("#theHiddenElement").should(exist, Duration.ofNanos(3_000_000_000L));
-    $("#theHiddenElement").shouldBe(hidden, Duration.ofMillis(3_000));
+    $("#theHiddenElement").shouldBe(hidden, ofMillis(3_000));
     $("#theHiddenElement").shouldHave(exactText(""), Duration.ofSeconds(3));
     $("#theHiddenElement").shouldNotHave(text("no"), Duration.ofHours(3));
   }
@@ -207,7 +208,7 @@ final class SelenideMethodsTest extends IntegrationTest {
     $(By.name("password")).setValue("john");
     $(By.name("password")).val("sherlyn");
     $(By.name("password")).shouldHave(value("sherlyn"));
-    $(By.name("password")).shouldHave(value("sherlyn"), Duration.ofMillis(1000));
+    $(By.name("password")).shouldHave(value("sherlyn"), ofMillis(1000));
     assertThat($(By.name("password")).val())
       .isEqualTo("sherlyn");
   }
@@ -250,13 +251,9 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanPressEnter() {
-    assertThat(url().indexOf("#submitted-form"))
-      .isEqualTo(-1);
+    webdriver().shouldNotHave(urlContaining("#submitted-form"));
     $(By.name("password")).val("Going to press ENTER").pressEnter();
-
-    sleep(500);
-    assertThat(url())
-      .contains("#submitted-form");
+    webdriver().shouldHave(urlContaining("#submitted-form"), ofMillis(500));
   }
 
   @Test
@@ -352,25 +349,19 @@ final class SelenideMethodsTest extends IntegrationTest {
   @Test
   void userCanFollowLinks() {
     $(By.linkText("Want to see ajax in action?")).scrollTo().click();
-    assertThat(url())
-      .withFailMessage("Actual URL is: " + url())
-      .contains("long_ajax_request.html");
+    webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(500));
   }
 
   @Test
   void userCanFollowLinksUsingScrollIntoViewBoolean() {
     $(By.linkText("Want to see ajax in action?")).scrollIntoView(false).click();
-    assertThat(url())
-      .withFailMessage("Actual URL is: " + url())
-      .contains("long_ajax_request.html");
+    webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(500));
   }
 
   @Test
   void userCanFollowLinksUsingScrollIntoViewOptions() {
     $(By.linkText("Want to see ajax in action?")).scrollIntoView("{behavior: \"smooth\", inline: \"center\"}").click();
-    assertThat(url())
-      .withFailMessage("Actual URL is: " + url())
-      .contains("long_ajax_request.html");
+    webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(500));
   }
 
   @Test
@@ -552,7 +543,7 @@ final class SelenideMethodsTest extends IntegrationTest {
   @Test
   void waitWhileMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
     assertThatThrownBy(() -> {
-      $("h1").shouldNotBe(visible.because("we expect it do disappear"), Duration.ofMillis(200));
+      $("h1").shouldNotBe(visible.because("we expect it do disappear"), ofMillis(200));
     })
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageStartingWith("Element should not be visible (because we expect it do disappear) {h1}")
@@ -563,7 +554,7 @@ final class SelenideMethodsTest extends IntegrationTest {
   @Test
   void waitUntilMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
     assertThatThrownBy(() -> {
-      $("h1").shouldBe(hidden.because("it's sensitive information"), Duration.ofMillis(100));
+      $("h1").shouldBe(hidden.because("it's sensitive information"), ofMillis(100));
     })
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("Element should be hidden (because it's sensitive information) {h1}")

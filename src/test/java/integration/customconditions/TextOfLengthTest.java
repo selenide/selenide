@@ -7,14 +7,11 @@ import com.codeborne.selenide.ex.ElementShould;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Locatable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.Stopwatch.sleepAtLeast;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ParametersAreNonnullByDefault
