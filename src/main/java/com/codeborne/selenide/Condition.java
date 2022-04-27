@@ -63,7 +63,7 @@ public abstract class Condition {
   public static final Condition exist = new Exist();
 
   /**
-   * Checks that element is not visible or does not exists.
+   * Checks that element is not visible or does not exist.
    * <p>
    * Opposite to {@link #appear}
    *
@@ -80,7 +80,7 @@ public abstract class Condition {
 
   /**
    * Synonym for {@link #visible} - may be used for better readability
-   * <p><code>$("#logoutLink").should(appear, 10000);</code></p>
+   * <p>{@code $("#logoutLink").should(appear, 10000);}</p>
    *
    * @deprecated use {@link #visible} or {@link #appear}
    */
@@ -90,21 +90,21 @@ public abstract class Condition {
   /**
    * Synonym for {@link #hidden} - may be used for better readability:
    *
-   * <p><code>$("#loginLink").should(disappear);</code></p>
+   * <p>{@code $("#loginLink").should(disappear);}</p>
    */
   public static final Condition disappear = hidden;
 
   /**
    * Check if element has "readonly" attribute (with any value)
    *
-   * <p>Sample: <code>$("input").shouldBe(readonly);</code></p>
+   * <p>Sample: {@code $("input").shouldBe(readonly);}</p>
    */
   public static final Condition readonly = attribute("readonly");
 
   /**
    * Check if element has given attribute (with any value)
    *
-   * <p>Sample: <code>$("#mydiv").shouldHave(attribute("fileId"));</code></p>
+   * <p>Sample: {@code $("#mydiv").shouldHave(attribute("fileId"));}</p>
    *
    * @param attributeName name of attribute, not null
    * @return true iff attribute exists
@@ -116,7 +116,7 @@ public abstract class Condition {
   }
 
   /**
-   * <p>Sample: <code>$("#mydiv").shouldHave(attribute("fileId", "12345"));</code></p>
+   * <p>Sample: {@code $("#mydiv").shouldHave(attribute("fileId", "12345"));}</p>
    *
    * @param attributeName          name of attribute
    * @param expectedAttributeValue expected value of attribute
@@ -130,7 +130,7 @@ public abstract class Condition {
   /**
    * Assert that given element's attribute matches given regular expression
    *
-   * <p>Sample: <code>$("h1").shouldHave(attributeMatching("fileId", ".*12345.*"))</code></p>
+   * <p>Sample: {@code $("h1").shouldHave(attributeMatching("fileId", ".*12345.*"))}</p>
    *
    * @param attributeName  name of attribute
    * @param attributeRegex regex to match attribute value
@@ -142,7 +142,7 @@ public abstract class Condition {
   }
 
   /**
-   * <p>Sample: <code>$("#mydiv").shouldHave(href("/one/two/three.pdf"));</code></p>
+   * <p>Sample: {@code $("#mydiv").shouldHave(href("/one/two/three.pdf"));}</p>
    * <p>
    * It looks similar to `$.shouldHave(attribute("href", href))`, but
    * it overcomes the fact that Selenium returns full url (even if "href" attribute in html contains relative url).
@@ -159,7 +159,7 @@ public abstract class Condition {
    * Assert that element contains given "value" attribute as substring
    * NB! Ignores difference in non-visible characters like spaces, non-breakable spaces, tabs, newlines  etc.
    *
-   * <p>Sample: <code>$("input").shouldHave(value("12345 666 77"));</code></p>
+   * <p>Sample: {@code $("input").shouldHave(value("12345 666 77"));}</p>
    *
    * @param expectedValue expected value of "value" attribute
    */
@@ -171,7 +171,7 @@ public abstract class Condition {
 
   /**
    * Check that element has given the property value of the pseudo-element
-   * <p>Sample: <code>$("input").shouldHave(pseudo(":first-letter", "color", "#ff0000"));</code></p>
+   * <p>Sample: {@code $("input").shouldHave(pseudo(":first-letter", "color", "#ff0000"));}</p>
    *
    * @param pseudoElementName pseudo-element name of the element,
    *                          ":before", ":after", ":first-letter", ":first-line", ":selection"
@@ -186,7 +186,7 @@ public abstract class Condition {
 
   /**
    * Check that element has given the "content" property of the pseudo-element
-   * <p>Sample: <code>$("input").shouldHave(pseudo(":before", "Hello"));</code></p>
+   * <p>Sample: {@code $("input").shouldHave(pseudo(":before", "Hello"));}</p>
    *
    * @param pseudoElementName pseudo-element name of the element, ":before", ":after"
    * @param expectedValue     expected content of the pseudo-element
@@ -198,7 +198,7 @@ public abstract class Condition {
   }
 
   /**
-   * <p>Sample: <code>$("#input").shouldHave(exactValue("John"));</code></p>
+   * <p>Sample: {@code $("#input").shouldHave(exactValue("John"));}</p>
    *
    * @param value expected value of input field
    */
@@ -210,7 +210,7 @@ public abstract class Condition {
 
   /**
    * Asserts the name attribute of the element to be exact string
-   * <p>Sample: <code>$("#input").shouldHave(name("username"))</code></p>
+   * <p>Sample: {@code $("#input").shouldHave(name("username"))}</p>
    *
    * @param name expected name of input field
    */
@@ -222,7 +222,7 @@ public abstract class Condition {
 
   /**
    * Asserts the type attribute of the element to be exact string
-   * <p>Sample: <code>$("#input").shouldHave(type("checkbox"))</code></p>
+   * <p>Sample: {@code $("#input").shouldHave(type("checkbox"))}</p>
    *
    * @param type expected type of input field
    */
@@ -233,7 +233,7 @@ public abstract class Condition {
   }
 
   /**
-   * <p>Sample: <code>$("#input").shouldHave(id("myForm"))</code></p>
+   * <p>Sample: {@code $("#input").shouldHave(id("myForm"))}</p>
    *
    * @param id expected id of input field
    */
@@ -245,17 +245,17 @@ public abstract class Condition {
 
   /**
    * 1) For input element, check that value is missing or empty
-   * <p>Sample: <code>$("#input").shouldBe(empty)</code></p>
+   * <p>Sample: {@code $("#input").shouldBe(empty)}</p>
    * <p>
    * 2) For other elements, check that text is empty
-   * <p>Sample: <code>$("h2").shouldBe(empty)</code></p>
+   * <p>Sample: {@code $("h2").shouldBe(empty)}</p>
    */
   public static final Condition empty = and("empty", exactValue(""), exactText(""));
 
   /**
    * Assert that given element's text matches given regular expression
    *
-   * <p>Sample: <code>$("h1").should(matchText("Hello\s*John"))</code></p>
+   * <p>Sample: {@code $("h1").should(matchText("Hello\s*John"))}</p>
    *
    * @param regex e.g. Kicked.*Chuck Norris - in this case ".*" can contain any characters including spaces, tabs, CR etc.
    */
@@ -270,7 +270,7 @@ public abstract class Condition {
    * Assert that element contains given text as a substring.
    * </p>
    *
-   * <p>Sample: <code>$("h1").shouldHave(text("Hello\s*John"))</code></p>
+   * <p>Sample: {@code $("h1").shouldHave(text("Hello\s*John"))}</p>
    *
    * <p>NB! Case insensitive</p>
    * <p>NB! Ignores multiple whitespaces between words</p>
@@ -301,9 +301,9 @@ public abstract class Condition {
   }
 
   /**
-   * Assert that element contains given text as a case sensitive substring
+   * Assert that element contains given text as a case-sensitive substring
    *
-   * <p>Sample: <code>$("h1").shouldHave(textCaseSensitive("Hello\s*John"))</code></p>
+   * <p>Sample: {@code $("h1").shouldHave(textCaseSensitive("Hello\s*John"))}</p>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
@@ -316,8 +316,8 @@ public abstract class Condition {
   }
 
   /**
-   * Assert that element has exactly (case insensitive) given text
-   * <p>Sample: <code>$("h1").shouldHave(exactText("Hello"))</code></p>
+   * Assert that element has exactly (case-insensitive) given text
+   * <p>Sample: {@code $("h1").shouldHave(exactText("Hello"))}</p>
    *
    * <p>Case insensitive</p>
    * <p>NB! Ignores multiple whitespaces between words</p>
@@ -332,7 +332,7 @@ public abstract class Condition {
 
   /**
    * Assert that element contains given text (without checking child elements).
-   * <p>Sample: <code>$("h1").shouldHave(ownText("Hello"))</code></p>
+   * <p>Sample: {@code $("h1").shouldHave(ownText("Hello"))}</p>
    *
    * <p>Case insensitive</p>
    * <p>NB! Ignores multiple whitespaces between words</p>
@@ -347,7 +347,7 @@ public abstract class Condition {
 
   /**
    * Assert that element has given text (without checking child elements).
-   * <p>Sample: <code>$("h1").shouldHave(ownText("Hello"))</code></p>
+   * <p>Sample: {@code $("h1").shouldHave(ownText("Hello"))}</p>
    *
    * <p>Case insensitive</p>
    * <p>NB! Ignores multiple whitespaces between words</p>
@@ -362,7 +362,7 @@ public abstract class Condition {
 
   /**
    * Assert that element has exactly the given text
-   * <p>Sample: <code>$("h1").shouldHave(exactTextCaseSensitive("Hello"))</code></p>
+   * <p>Sample: {@code $("h1").shouldHave(exactTextCaseSensitive("Hello"))}</p>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
@@ -375,8 +375,8 @@ public abstract class Condition {
   }
 
   /**
-   * Asserts that element has the given class. Element may other classes too.
-   * <p>Sample: <code>$("input").shouldHave(cssClass("active"));</code></p>
+   * Asserts that element has the given class. Element may have other classes as well.
+   * <p>Sample: {@code $("input").shouldHave(cssClass("active"));}</p>
    */
   @CheckReturnValue
   @Nonnull
@@ -466,7 +466,7 @@ public abstract class Condition {
    * <p>
    * Used for methods like $.shouldNot(exist), $.shouldNotBe(visible)
    * <p>
-   * Typically you don't need to use it.
+   * Typically, you don't need to use it.
    */
   @CheckReturnValue
   @Nonnull
@@ -565,8 +565,8 @@ public abstract class Condition {
    *
    * @param driver  selenide driver
    * @param element given WebElement
-   * @return  ACCEPT if element matches condition, or
-   *          REJECT if element doesn't match (and we should keep trying until timeout).
+   * @return {@link CheckResult.Verdict#ACCEPT} if element matches condition, or
+   *         {@link CheckResult.Verdict#REJECT} if element doesn't match (and we should keep trying until timeout).
    *
    * @since 6.0.0
    */

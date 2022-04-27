@@ -250,11 +250,14 @@ public class Selenide {
   }
 
   /**
+   * <p>
    * Not recommended. Test should not sleep, but should wait for some condition instead.
-   *
+   * </p>
+   * <p>
    * Implementation detail: method {@link java.lang.Thread#sleep(long)} is not guaranteed to
    * sleep exactly given number of milliseconds, it can awake earlier. That's why we need to use a
    * loop to guarantee the sleep duration.
+   * </p>
    *
    * @param milliseconds Time to sleep in milliseconds
    */
@@ -289,7 +292,7 @@ public class Selenide {
 
   /**
    * Wrap standard Selenium WebElement into SelenideElement
-   * to use additional methods like shouldHave(), selectOption() etc.
+   * to use additional methods like {@link SelenideElement#shouldHave(Condition...)}, {@link SelenideElement#selectOption(String...)} etc.
    *
    * @param webElement standard Selenium WebElement
    * @return given WebElement wrapped into SelenideElement
@@ -408,10 +411,10 @@ public class Selenide {
   /**
    * Locates all elements matching given CSS selector.
    * <p>
-   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * Method returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
-   *
+   * </p>
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return empty list if element was no found
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
@@ -424,7 +427,7 @@ public class Selenide {
 
   /**
    * Wrap standard Selenium WebElement into SelenideElement
-   * to use additional methods like shouldHave(), selectOption() etc.
+   * to use additional methods like {@link SelenideElement#shouldHave(Condition...)}, {@link SelenideElement#selectOption(String...)} etc.
    *
    * @param webElement standard Selenium WebElement
    * @return given WebElement wrapped into SelenideElement
@@ -451,7 +454,7 @@ public class Selenide {
   /**
    * Locates the first element matching given CSS selector
    *
-   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @param seleniumSelector any Selenium selector like {@link By#id(String)}, {@link By#name(String)} etc.
    * @return SelenideElement
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
@@ -464,7 +467,7 @@ public class Selenide {
   /**
    * Locates the Nth element matching given criteria
    *
-   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @param seleniumSelector any Selenium selector like {@link By#id(String)}, {@link By#name(String)} etc.
    * @param index            0..N
    * @return SelenideElement
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
@@ -478,7 +481,7 @@ public class Selenide {
   /**
    * Locates the Nth element matching given criteria
    *
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param cssSelector any CSS selector like {@code "input[name='first_name']"} or {@code "#messages .new_message"}
    * @param index       0..N
    * @return SelenideElement
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
@@ -491,7 +494,7 @@ public class Selenide {
 
   /**
    * Wrap standard Selenium WebElement collection into SelenideElement collection
-   * to use additional methods like shouldHave() etc.
+   * to use additional methods like {@link SelenideElement#shouldHave(Condition...)} etc.
    *
    * @param elements standard Selenium WebElement collection
    * @return given WebElement collection wrapped into SelenideElement collection
@@ -505,9 +508,9 @@ public class Selenide {
   /**
    * Locates all elements matching given CSS selector.
    * <p>
-   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * Method returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
-   * meaning that you can call methods .sendKeys(), click() etc. on it.
+   * meaning that you can call methods {@link WebElement#sendKeys(CharSequence...)}, {@link WebElement#click()} etc. on it.
    *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return empty list if element was no found
@@ -522,9 +525,9 @@ public class Selenide {
   /**
    * Locates all elements matching given CSS selector.
    * <p>
-   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * Method returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
-   * meaning that you can call methods .sendKeys(), click() etc. on it.
+   * meaning that you can call methods {@link WebElement#sendKeys(CharSequence...)}, {@link WebElement#click()} etc. on it.
    *
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return empty list if element was no found
@@ -537,7 +540,7 @@ public class Selenide {
   }
 
   /**
-   * @see JavascriptExecutor#executeScript(java.lang.String, java.lang.Object...)
+   * @see JavascriptExecutor#executeScript(String, java.lang.Object...)
    */
   @Nullable
   public static <T> T executeJavaScript(String jsCode, Object... arguments) {
@@ -545,7 +548,7 @@ public class Selenide {
   }
 
   /**
-   * @see JavascriptExecutor#executeAsyncScript(java.lang.String, java.lang.Object...)
+   * @see JavascriptExecutor#executeAsyncScript(String, java.lang.Object...)
    */
   @Nullable
   public static <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
@@ -645,7 +648,7 @@ public class Selenide {
    * Switch to window/tab/frame/parentFrame/innerFrame/alert.
    * Allows switching to window by title, index, name etc.
    * <p>
-   * Similar to org.openqa.selenium.WebDriver#switchTo(), but all methods wait until frame/window/alert
+   * Similar to {@link org.openqa.selenium.WebDriver#switchTo()}, but all methods wait until frame/window/alert
    * appears if it's not visible yet (like other Selenide methods).
    *
    * @return SelenideTargetLocator
@@ -728,7 +731,7 @@ public class Selenide {
   }
 
   /**
-   * Same as com.codeborne.selenide.Selenide#getWebDriverLogs(java.lang.String, java.util.logging.Level)
+   * Same as {@link Selenide#getWebDriverLogs(String, Level)}
    */
   @CheckReturnValue
   @Nonnull

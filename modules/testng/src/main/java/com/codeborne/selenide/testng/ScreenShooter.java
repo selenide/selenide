@@ -10,7 +10,7 @@ import org.testng.reporters.ExitCodeListener;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Annotate your test class with <code>@Listeners({ ScreenShooter.class})</code>
+ * Annotate your test class with {@code @Listeners({ ScreenShooter.class})}
  */
 @ParametersAreNonnullByDefault
 public class ScreenShooter extends ExitCodeListener {
