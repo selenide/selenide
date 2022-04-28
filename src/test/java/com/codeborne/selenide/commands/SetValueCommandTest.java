@@ -17,13 +17,15 @@ import static org.mockito.Mockito.when;
 final class SetValueCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final SetValue command = new SetValue();
+  private final Clear clear = mock(Clear.class);
+  private final SetValue command = new SetValue(clear);
   private final WebElement mockedFoundElement = mock(WebElement.class);
+  private final DriverStub driver = new DriverStub();
 
   @BeforeEach
   void setup() {
     when(locator.findAndAssertElementIsInteractable()).thenReturn(mockedFoundElement);
-    when(locator.driver()).thenReturn(new DriverStub());
+    when(locator.driver()).thenReturn(driver);
   }
 
   @AfterEach
@@ -37,16 +39,14 @@ final class SetValueCommandTest {
   void clearsTheInputIfArgsTextIsEmpty() {
     WebElement returnedElement = command.execute(proxy, locator, new Object[]{""});
     assertThat(returnedElement).isEqualTo(proxy);
-    verify(mockedFoundElement).clear();
-    verify(locator).description();
+    verify(clear).execute(driver, mockedFoundElement);
   }
 
   @Test
   void typesGivenTextIntoInputField() {
     WebElement returnedElement = command.execute(proxy, locator, new Object[]{"Stalker"});
     assertThat(returnedElement).isEqualTo(proxy);
-    verify(mockedFoundElement).clear();
+    verify(clear).execute(driver, mockedFoundElement);
     verify(mockedFoundElement).sendKeys("Stalker");
-    verify(locator).description();
   }
 }

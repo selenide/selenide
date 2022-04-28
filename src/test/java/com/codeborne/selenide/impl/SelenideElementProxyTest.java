@@ -18,7 +18,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.NotFoundException;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -42,6 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -58,10 +58,10 @@ final class SelenideElementProxyTest {
 
   @BeforeEach
   void mockWebDriver() {
-    when(webdriver.executeScript(anyString(), any(WebElement.class)))
+    when(webdriver.executeScript(anyString(), same(element)))
       .thenReturn(ImmutableMap.of("id", "id1", "class", "class1"));
     when(webdriver.getPageSource()).thenReturn("<html>mock</html>");
-
+    when((webdriver).executeScript("return navigator.platform")).thenReturn("Win32");
     when(element.getTagName()).thenReturn("h1");
     when(element.getText()).thenReturn("Hello world");
     when(element.isDisplayed()).thenReturn(true);
@@ -200,21 +200,13 @@ final class SelenideElementProxyTest {
   }
 
   @Test
-  void setValueShouldNotFailIfElementHasDisappearedWhileEnteringText() {
-    when(webdriver.findElement(any())).thenReturn(element);
-    when(webdriver.executeScript(anyString(), any()))
-      .thenThrow(new StaleElementReferenceException("element disappeared after entering text"));
-    driver.find("#firstName").setValue("john");
-    verify(webdriver).findElement(By.cssSelector("#firstName"));
-  }
-
-  @Test
   void shouldLogSetValueSubject() {
     SelenideLogger.addListener("test", new TestEventListener("#firstName", "set value", PASS));
     when(webdriver.findElement(any())).thenReturn(element);
 
     driver.find("#firstName").setValue("ABC");
 
+    verify(webdriver).executeScript("return navigator.platform");
     verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
