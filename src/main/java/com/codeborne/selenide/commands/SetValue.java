@@ -18,20 +18,29 @@ import static com.codeborne.selenide.SetValueMethod.JS;
 import static com.codeborne.selenide.SetValueMethod.SEND_KEYS;
 import static com.codeborne.selenide.SetValueOptions.withText;
 import static com.codeborne.selenide.commands.Util.firstOf;
+import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @ParametersAreNonnullByDefault
 public class SetValue implements Command<SelenideElement> {
   private final JavaScript js = new JavaScript("set-value.js");
+  private final Clear clear;
+
+  public SetValue() {
+    this(new Clear());
+  }
+
+  protected SetValue(Clear clear) {
+    this.clear = clear;
+  }
 
   @Override
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    WebElement element = locator.findAndAssertElementIsInteractable();
     Driver driver = locator.driver();
     SetValueOptions options = extractOptions(driver.config(), requireNonNull(args));
-    setValueForTextInput(driver, locator.description(), element, options);
+    setValueForTextInput(driver, locator, options);
     return proxy;
   }
 
@@ -45,19 +54,22 @@ public class SetValue implements Command<SelenideElement> {
     }
   }
 
-  private void setValueForTextInput(Driver driver, String elementDescription, WebElement element, SetValueOptions options) {
-    if (options.value() == null || options.value().length() == 0) {
-      element.clear();
-    }
-    else if (options.method() == JS) {
-      String error = setValueByJs(driver, element, options.value());
+  private void setValueForTextInput(Driver driver, WebElementSource locator, SetValueOptions options) {
+    WebElement element = locator.findAndAssertElementIsInteractable();
+    CharSequence value = firstNonNull(options.value(), "");
+
+    if (options.method() == JS) {
+      String error = setValueByJs(driver, element, value);
       if (isNotEmpty(error)) {
+        String elementDescription = locator.description();
         throw new InvalidStateException(elementDescription, error);
       }
     }
     else {
-      element.clear();
-      element.sendKeys(options.value());
+      clear.execute(driver, element);
+      if (value.length() > 0) {
+        element.sendKeys(value);
+      }
     }
   }
 

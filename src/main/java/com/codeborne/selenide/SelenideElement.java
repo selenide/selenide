@@ -81,6 +81,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement append(String text);
 
   /**
+   * Clear the input field
+   *
+   * <p>Basically it's the same as {@link WebElement#clear()}, but it works. :) </p>
+   * @see com.codeborne.selenide.commands.Clear
+   */
+  @CanIgnoreReturnValue
+  @Override
+  void clear();
+
+  /**
    * Press ENTER. Useful for input field and textareas: <pre>
    *  $("query").val("Aikido techniques").pressEnter();</pre>
    * <p>
