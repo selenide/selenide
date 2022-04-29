@@ -207,7 +207,6 @@ final class SelenideElementProxyTest {
 
     driver.find("#firstName").setValue("ABC");
 
-    verify(webdriver).executeScript("return navigator.platform");
     verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
