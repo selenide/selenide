@@ -5,6 +5,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -21,12 +22,15 @@ public class Not extends Condition {
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     CheckResult check = condition.check(driver, element);
     return new CheckResult(check.verdict() == ACCEPT ? REJECT : ACCEPT, check.actualValue(), check.timestamp());
   }
 
+  @Nonnull
+  @CheckReturnValue
   @Override
   public String toString() {
     return "not " + condition.toString();

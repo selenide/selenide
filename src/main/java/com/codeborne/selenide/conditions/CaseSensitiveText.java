@@ -5,6 +5,7 @@ import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -24,6 +25,7 @@ public class CaseSensitiveText extends TextCondition {
   }
 
   @Nullable
+  @CheckReturnValue
   @Override
   protected String getText(Driver driver, WebElement element) {
     return "select".equalsIgnoreCase(element.getTagName()) ?

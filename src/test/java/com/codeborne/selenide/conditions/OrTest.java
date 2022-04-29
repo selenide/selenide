@@ -6,6 +6,7 @@ import com.codeborne.selenide.Driver;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -183,17 +184,21 @@ final class OrTest {
     }
 
     @Nonnull
+    @CheckReturnValue
     @Override
     public CheckResult check(Driver driver, WebElement element) {
       return new CheckResult(this.applyResult, null);
     }
 
     @Nonnull
+    @CheckReturnValue
     @Override
     public Condition negate() {
       return new Not(this, !this.missingElementSatisfiesCondition());
     }
 
+    @Nonnull
+    @CheckReturnValue
     @Override
     public String toString() {
       return "SimpleCondition(" + this.applyResult + ", " + this.missingElementSatisfiesCondition() + ")";

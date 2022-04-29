@@ -5,6 +5,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -23,6 +24,7 @@ public class CssValue extends Condition {
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String actualCssValue = element.getCssValue(propertyName);
@@ -30,6 +32,8 @@ public class CssValue extends Condition {
     return new CheckResult(matches, String.format("%s=%s", propertyName, actualCssValue));
   }
 
+  @Nonnull
+  @CheckReturnValue
   @Override
   public String toString() {
     return getName() + " " + propertyName + '=' + expectedValue;

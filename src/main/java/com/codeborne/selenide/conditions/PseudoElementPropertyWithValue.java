@@ -5,6 +5,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -29,6 +30,7 @@ public class PseudoElementPropertyWithValue extends Condition {
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String value = getPseudoElementPropertyValue(driver, element);
@@ -39,6 +41,8 @@ public class PseudoElementPropertyWithValue extends Condition {
     return String.format("%s {%s: %s;}", pseudoElementName, propertyName, pseudoElementValue);
   }
 
+  @Nonnull
+  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("%s %s {%s: %s;}", getName(), pseudoElementName, propertyName, expectedPropertyValue);

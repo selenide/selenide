@@ -5,6 +5,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -39,12 +40,14 @@ public class Or extends Condition {
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
   public Condition negate() {
     return new Not(this, conditions.stream().map(Condition::negate).anyMatch(Condition::missingElementSatisfiesCondition));
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     List<CheckResult> results = new ArrayList<>();
@@ -62,6 +65,8 @@ public class Or extends Condition {
     return new CheckResult(REJECT, actualValues);
   }
 
+  @Nonnull
+  @CheckReturnValue
   @Override
   public String toString() {
     return getName() + ": " + conditions.stream().map(Condition::toString).collect(joining(" or "));
