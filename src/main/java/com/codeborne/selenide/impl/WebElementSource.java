@@ -19,11 +19,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
-import static com.codeborne.selenide.Condition.cssValue;
-import static com.codeborne.selenide.Condition.have;
+import static com.codeborne.selenide.Condition.editable;
+import static com.codeborne.selenide.Condition.interactable;
 import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.or;
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -96,6 +94,7 @@ public abstract class WebElementSource {
   }
 
   @Nullable
+  @CheckReturnValue
   public WebElement checkCondition(String prefix, Condition condition, boolean invert) {
     Condition check = invert ? not(condition) : condition;
 
@@ -134,20 +133,23 @@ public abstract class WebElementSource {
 
   /**
    * Asserts that returned element can be interacted with.
-   * <p>
-   * Elements which are transparent (opacity:0) are considered to be invisible, but interactable.
-   * User (as of 05.12.2018) can click, doubleClick etc., and enter text etc. to transparent elements
-   * for all major browsers
    *
    * @return element or throws ElementShould/ElementShouldNot exceptions
    */
-  @CheckReturnValue
   @Nonnull
+  @CheckReturnValue
   public WebElement findAndAssertElementIsInteractable() {
-    return requireNonNull(
-      checkCondition("be ",
-        or("visible or transparent", visible, have(cssValue("opacity", "0"))),
-        false)
-    );
+    return requireNonNull(checkCondition("be ", interactable, false));
+  }
+
+  /**
+   * Asserts that returned element is editable.
+   * @return element or throws ElementShould/ElementShouldNot exceptions
+   * @since 6.5.0
+   */
+  @Nonnull
+  @CheckReturnValue
+  public WebElement findAndAssertElementIsEditable() {
+    return requireNonNull(checkCondition("be ", editable, false));
   }
 }

@@ -31,7 +31,7 @@ public class Clear implements Command<SelenideElement> {
   @CheckReturnValue
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    WebElement input = locator.getWebElement();
+    WebElement input = locator.findAndAssertElementIsEditable();
     execute(locator.driver(), input);
     return proxy;
   }

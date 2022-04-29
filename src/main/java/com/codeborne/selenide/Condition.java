@@ -9,6 +9,7 @@ import com.codeborne.selenide.conditions.CssClass;
 import com.codeborne.selenide.conditions.CssValue;
 import com.codeborne.selenide.conditions.CustomMatch;
 import com.codeborne.selenide.conditions.Disabled;
+import com.codeborne.selenide.conditions.Editable;
 import com.codeborne.selenide.conditions.Enabled;
 import com.codeborne.selenide.conditions.ExactOwnText;
 import com.codeborne.selenide.conditions.ExactText;
@@ -18,6 +19,7 @@ import com.codeborne.selenide.conditions.ExplainedCondition;
 import com.codeborne.selenide.conditions.Focused;
 import com.codeborne.selenide.conditions.Hidden;
 import com.codeborne.selenide.conditions.Href;
+import com.codeborne.selenide.conditions.Interactable;
 import com.codeborne.selenide.conditions.IsImageLoaded;
 import com.codeborne.selenide.conditions.MatchAttributeWithValue;
 import com.codeborne.selenide.conditions.MatchText;
@@ -26,6 +28,7 @@ import com.codeborne.selenide.conditions.Not;
 import com.codeborne.selenide.conditions.Or;
 import com.codeborne.selenide.conditions.OwnText;
 import com.codeborne.selenide.conditions.PseudoElementPropertyWithValue;
+import com.codeborne.selenide.conditions.Readonly;
 import com.codeborne.selenide.conditions.Selected;
 import com.codeborne.selenide.conditions.SelectedText;
 import com.codeborne.selenide.conditions.Text;
@@ -95,11 +98,48 @@ public abstract class Condition {
   public static final Condition disappear = hidden;
 
   /**
-   * Check if element has "readonly" attribute (with any value)
-   *
-   * <p>Sample: {@code $("input").shouldBe(readonly);}</p>
+   * Check if element is interactable:
+   * <ol>
+   *  <li>either is visible, or</li>
+   *  <li>has css property "opacity: 0"</li>
+   * </ol>
+   * <p>
+   *   Elements which are transparent (opacity:0) are considered to be invisible, but interactable.
+   *   User can click, doubleClick etc., and enter text etc. to transparent elements
+   *   (for all major browsers).
+   * </p>
+   * <br/>
+   * <p>Example:</p>
+   * <p>{@code $("input[type=file]").shouldBe(interactable);}</p>
+   * <br/>
+   * @since 6.5.0
    */
-  public static final Condition readonly = attribute("readonly");
+  public static final Condition interactable = new Interactable();
+
+  /**
+   * <p>
+   *   Check if element has "readonly" attribute (with any value)
+   * </p>
+   * <br>
+   * <p>Sample:</p>
+   * <p>{@code $("input").shouldBe(readonly);}</p>
+   * <br>
+   */
+  public static final Condition readonly = new Readonly();
+
+  /**
+   * Check if element is "editable":
+   * <ul>
+   * <li>is {@link #interactable}, and</li>
+   * <li>is {@link #enabled}, and</li>
+   * <li>is not {@link #readonly}</li>
+   * </ul>
+   * <br>
+   * <p>Sample: {@code $("input").shouldBe(editable);}</p>
+   * <br>
+   * @since 6.5.0
+   */
+  public static final Condition editable = new Editable();
 
   /**
    * Check if element has given attribute (with any value)
