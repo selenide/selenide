@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
+import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.InvalidStateException;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.AfterEach;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.empty;
@@ -40,8 +40,8 @@ final class ReadonlyElementsTest extends IntegrationTest {
       $(By.name("username")).val("another-username");
     })
       .as("should throw InvalidStateException where setting value to readonly/disabled element")
-      .isInstanceOf(InvalidStateException.class)
-      .hasMessageStartingWith("Invalid element state [By.name: username]");
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be editable {By.name: username}");
     $(By.name("username")).shouldBe(empty);
     $(By.name("username")).shouldHave(exactValue(""));
   }
@@ -60,8 +60,8 @@ final class ReadonlyElementsTest extends IntegrationTest {
       $(By.name("password")).setValue("another-pwd");
     })
       .as("should throw InvalidStateException where setting value to readonly/disabled element")
-      .isInstanceOf(InvalidStateException.class)
-      .hasMessageStartingWith("Invalid element state [By.name: password]");
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be editable {By.name: password}");
     $(By.name("password")).shouldBe(empty);
     $(By.name("password")).shouldHave(exactValue(""));
   }
@@ -74,8 +74,8 @@ final class ReadonlyElementsTest extends IntegrationTest {
       $(By.name("username")).val("another-username");
     })
       .as("should throw InvalidStateException where setting value to readonly/disabled element")
-      .isInstanceOf(InvalidStateException.class)
-      .hasMessageStartingWith("Invalid element state [By.name: username]");
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be editable {By.name: username}");
     $(By.name("username")).shouldBe(empty);
     $(By.name("username")).shouldHave(exactValue(""));
   }
@@ -88,8 +88,8 @@ final class ReadonlyElementsTest extends IntegrationTest {
       $(By.name("password")).setValue("another-pwd");
     })
       .as("should throw InvalidStateException where setting value to readonly/disabled element")
-      .isInstanceOf(InvalidStateException.class)
-      .hasMessageStartingWith("Invalid element state [By.name: password]");
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be editable {By.name: password}");
     $(By.name("password")).shouldBe(empty);
     $(By.name("password")).shouldHave(exactValue(""));
   }
@@ -97,13 +97,15 @@ final class ReadonlyElementsTest extends IntegrationTest {
   @Test
   void cannotSetValueToReadonlyTextArea() {
     assertThatThrownBy(() -> $("#text-area").val("textArea value"))
-      .isInstanceOf(InvalidStateException.class);
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be editable {#text-area}");
   }
 
   @Test
   void cannotSetValueToDisabledTextArea() {
     assertThatThrownBy(() -> $("#text-area-disabled").val("textArea value"))
-      .isInstanceOf(InvalidStateException.class);
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be editable {#text-area-disabled}");
   }
 
   @Test

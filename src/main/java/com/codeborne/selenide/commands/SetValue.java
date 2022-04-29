@@ -55,7 +55,7 @@ public class SetValue implements Command<SelenideElement> {
   }
 
   private void setValueForTextInput(Driver driver, WebElementSource locator, SetValueOptions options) {
-    WebElement element = locator.findAndAssertElementIsInteractable();
+    WebElement element = locator.findAndAssertElementIsEditable();
     CharSequence value = firstNonNull(options.value(), "");
 
     if (options.method() == JS) {

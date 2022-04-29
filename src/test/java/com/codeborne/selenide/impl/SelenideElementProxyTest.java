@@ -65,6 +65,7 @@ final class SelenideElementProxyTest {
     when(element.getTagName()).thenReturn("h1");
     when(element.getText()).thenReturn("Hello world");
     when(element.isDisplayed()).thenReturn(true);
+    when(element.isEnabled()).thenReturn(true);
   }
 
   @AfterEach

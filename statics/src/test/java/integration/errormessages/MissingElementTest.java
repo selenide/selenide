@@ -124,7 +124,7 @@ final class MissingElementTest extends IntegrationTest {
     )
       .isInstanceOf(ElementShould.class)
       .hasMessageMatching(String.format(
-        "Element should be visible or transparent: visible or have css value opacity=0 \\{#theHiddenElement}%n" +
+        "Element should be interactable \\{#theHiddenElement}%n" +
           "Element: '<div id=\"theHiddenElement\" displayed:false></div>'%n" +
           "Actual value: hidden, opacity=1%n" +
           "Screenshot: " + path + png() + "%n" +
@@ -178,11 +178,11 @@ final class MissingElementTest extends IntegrationTest {
       $(pageObject.categoryDropdown).click()
     ).isInstanceOf(ElementNotFound.class)
       .hasMessageMatching(String.format("Element not found \\{By.id: invalid_id}%n" +
-        "Expected: visible or transparent: visible or have css value opacity=0%n" +
-        "Screenshot: " + path + png() + "%n" +
-        "Page source: " + path + html() + "%n" +
+        "Expected: interactable%n" +
+        "Screenshot: %s%s%n" +
+        "Page source: %s%s%n" +
         "Timeout: 15 ms.%n" +
-        "Caused by: NoSuchElementException:.*"));
+        "Caused by: NoSuchElementException:.*", path, png(), path, html()));
   }
 
   @Test

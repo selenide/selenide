@@ -24,14 +24,14 @@ final class SetValueCommandTest {
 
   @BeforeEach
   void setup() {
-    when(locator.findAndAssertElementIsInteractable()).thenReturn(mockedFoundElement);
+    when(locator.findAndAssertElementIsEditable()).thenReturn(mockedFoundElement);
     when(locator.driver()).thenReturn(driver);
   }
 
   @AfterEach
   void noMoreInteractions() {
     verify(locator).driver();
-    verify(locator).findAndAssertElementIsInteractable();
+    verify(locator).findAndAssertElementIsEditable();
     verifyNoMoreInteractions(proxy, locator, mockedFoundElement);
   }
 
