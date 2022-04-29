@@ -5,6 +5,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
@@ -19,6 +20,7 @@ public class CustomMatch extends Condition {
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     boolean matched = predicate.test(element);
@@ -26,6 +28,8 @@ public class CustomMatch extends Condition {
   }
 
 
+  @Nonnull
+  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("match '%s' predicate.", getName());

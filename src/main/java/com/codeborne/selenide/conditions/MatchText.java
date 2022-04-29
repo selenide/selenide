@@ -2,6 +2,7 @@ package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.impl.Html;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -16,6 +17,7 @@ public class MatchText extends TextCondition {
     }
   }
 
+  @CheckReturnValue
   @Override
   protected boolean match(String actualText, String expectedText) {
     return Html.text.matches(actualText, expectedText);

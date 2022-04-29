@@ -5,6 +5,7 @@ import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -24,12 +25,14 @@ public class Text extends TextCondition {
     }
   }
 
+  @CheckReturnValue
   @Override
   protected boolean match(String actualText, String expectedText) {
     return Html.text.contains(actualText, expectedText.toLowerCase());
   }
 
   @Nullable
+  @CheckReturnValue
   @Override
   protected String getText(Driver driver, WebElement element) {
     return "select".equalsIgnoreCase(element.getTagName()) ?

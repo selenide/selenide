@@ -634,6 +634,7 @@ public abstract class Condition {
   }
 
   @Nonnull
+  @CheckReturnValue
   public Condition negate() {
     return new Not(this, missingElementSatisfiesCondition);
   }
@@ -641,21 +642,26 @@ public abstract class Condition {
   /**
    * Should be used for explaining the reason of condition
    */
-  @CheckReturnValue
   @Nonnull
+  @CheckReturnValue
   public Condition because(String message) {
     return new ExplainedCondition(this, message);
   }
 
+  @Nonnull
+  @CheckReturnValue
   @Override
   public String toString() {
     return name;
   }
 
+  @Nonnull
+  @CheckReturnValue
   public String getName() {
     return name;
   }
 
+  @CheckReturnValue
   public boolean missingElementSatisfiesCondition() {
     return missingElementSatisfiesCondition;
   }

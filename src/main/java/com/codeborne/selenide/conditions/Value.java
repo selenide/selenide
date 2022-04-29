@@ -6,6 +6,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -19,6 +20,7 @@ public class Value extends Condition {
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String value = getValueAttribute(element);
@@ -26,6 +28,8 @@ public class Value extends Condition {
     return new CheckResult(Html.text.contains(value, expectedValue), actualValue);
   }
 
+  @Nonnull
+  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("%s=\"%s\"", getName(), expectedValue);

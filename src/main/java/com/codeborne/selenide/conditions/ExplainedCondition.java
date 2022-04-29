@@ -5,6 +5,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -20,17 +21,21 @@ public class ExplainedCondition extends Condition {
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     return delegate.check(driver, element);
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
   public Condition negate() {
     return delegate.negate().because(message);
   }
 
+  @Nonnull
+  @CheckReturnValue
   @Override
   public String toString() {
     return delegate.toString() + " (because " + message + ")";

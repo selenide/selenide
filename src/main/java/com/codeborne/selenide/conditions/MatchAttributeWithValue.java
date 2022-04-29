@@ -5,6 +5,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.regex.Pattern;
@@ -21,12 +22,15 @@ public class MatchAttributeWithValue extends Condition {
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String attributeValue = getAttributeValue(element);
     return new CheckResult(attributeRegex.matcher(attributeValue).matches(), String.format("%s~/%s/", attributeName, attributeValue));
   }
 
+  @Nonnull
+  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("%s %s~/%s/", getName(), attributeName, attributeRegex);
