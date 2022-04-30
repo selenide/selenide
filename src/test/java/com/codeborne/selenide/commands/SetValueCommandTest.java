@@ -39,14 +39,14 @@ final class SetValueCommandTest {
   void clearsTheInputIfArgsTextIsEmpty() {
     WebElement returnedElement = command.execute(proxy, locator, new Object[]{""});
     assertThat(returnedElement).isEqualTo(proxy);
-    verify(clear).execute(driver, mockedFoundElement);
+    verify(clear).clear(driver, mockedFoundElement);
   }
 
   @Test
   void typesGivenTextIntoInputField() {
     WebElement returnedElement = command.execute(proxy, locator, new Object[]{"Stalker"});
     assertThat(returnedElement).isEqualTo(proxy);
-    verify(clear).execute(driver, mockedFoundElement);
+    verify(clear).clear(driver, mockedFoundElement);
     verify(mockedFoundElement).sendKeys("Stalker");
   }
 }
