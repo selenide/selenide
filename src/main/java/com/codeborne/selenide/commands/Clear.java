@@ -41,16 +41,26 @@ public class Clear implements Command<SelenideElement> {
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     WebElement input = locator.findAndAssertElementIsEditable();
-    execute(locator.driver(), input);
+    clearAndTrigger(locator.driver(), input);
     return proxy;
   }
 
-  /*
-   * This is the shortest keys combination I found in May 2022.
+  /**
+   * Clear the input content and trigger "change" and "blur" events
    *
+   * <p>
+   * This is the shortest keys combination I found in May 2022.<br>
    * It seems to work in Firefox, Chrome on Mac and on Linux smoothly.
+   * </p>
    */
-  public void execute(Driver driver, WebElement input) {
+  protected void clearAndTrigger(Driver driver, WebElement input) {
     input.sendKeys(HOME, chord(SHIFT, END), BACK_SPACE, TAB);
+  }
+
+  /**
+   * Clear the input content without triggering "change" and "blur" events
+   */
+  public void clear(Driver driver, WebElement input) {
+    input.sendKeys(HOME, chord(SHIFT, END), BACK_SPACE);
   }
 }

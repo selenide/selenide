@@ -66,7 +66,7 @@ public class SetValue implements Command<SelenideElement> {
       }
     }
     else {
-      clear.execute(driver, element);
+      clear.clear(driver, element);
       if (value.length() > 0) {
         element.sendKeys(value);
       }
