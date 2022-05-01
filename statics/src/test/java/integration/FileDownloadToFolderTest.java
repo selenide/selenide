@@ -201,4 +201,28 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThat(readFileToString(downloadedFile, "UTF-8")).isEqualTo("");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
+
+  @RepeatedTest(10)
+  void downloadsFileWithPartExtension() throws IOException {
+    File downloadedFile = $(byText("Download file *part")).download(withExtension("part"));
+
+    assertThat(downloadedFile.getName())
+      .matches("hello_world.*\\.part");
+    assertThat(readFileToString(downloadedFile, "UTF-8").trim())
+      .isEqualTo("Hello, part WinRar!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @RepeatedTest(10)
+  void downloadsFileWithCrdownloadExtension() throws IOException {
+    File downloadedFile = $(byText("Download file *crdownload")).download(withExtension("crdownload"));
+
+    assertThat(downloadedFile.getName())
+      .matches("hello_world.*\\.crdownload");
+    assertThat(readFileToString(downloadedFile, "UTF-8").trim())
+      .isEqualTo("Hello, crdownload WinRar!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
 }
