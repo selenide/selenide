@@ -9,7 +9,7 @@ ext {
   browserupProxyVersion = '2.1.4'
   littleProxyVersion = '2.0.7'
   commonsFileuploadVersion = '1.4'
-  byteBuddyVersion = '1.12.9'
+  byteBuddyVersion = '1.12.10'
 }
 
 subprojects {
