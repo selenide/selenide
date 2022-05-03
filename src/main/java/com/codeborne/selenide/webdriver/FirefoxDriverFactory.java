@@ -108,6 +108,13 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("browser.helperApps.neverAsk.saveToDisk", popularContentTypes());
     firefoxOptions.addPreference("pdfjs.disabled", true);  // disable the built-in viewer
     firefoxOptions.addPreference("browser.download.folderList", 2); // 0=Desktop, 1=Downloads, 2="reuse last location"
+    firefoxOptions.addPreference("browser.download.loglevel", "Info"); // default is "Error"
+    firefoxOptions.addPreference("browser.download.panel.shown", true); // default is true
+    firefoxOptions.addPreference("browser.download.saveLinkAsFilenameTimeout", 8888); // default is 4000
+    firefoxOptions.addPreference("dom.block_download_insecure", false); // default is true
+    firefoxOptions.addPreference("browser.tabs.closeWindowWithLastTab", true);
+    firefoxOptions.addPreference("browser.download.alwaysOpenPanel", false);
+    firefoxOptions.addPreference("browser.download.manager.addToRecentDocs", false);
   }
 
   @CheckReturnValue

@@ -8,6 +8,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static org.apache.commons.io.FilenameUtils.getExtension;
 
 @ParametersAreNonnullByDefault
 public abstract class DownloadsFolder {
@@ -41,5 +42,10 @@ public abstract class DownloadsFolder {
   @Override
   public String toString() {
     return folder.getPath();
+  }
+
+  public boolean hasFiles(String extension) {
+    return files().stream()
+      .anyMatch(file -> getExtension(file.getName()).equalsIgnoreCase(extension));
   }
 }

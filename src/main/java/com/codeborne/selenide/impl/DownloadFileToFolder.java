@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
@@ -29,6 +30,7 @@ import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
 import static java.nio.file.Files.getLastModifiedTime;
 import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
@@ -81,15 +83,34 @@ public class DownloadFileToFolder {
 
     action.perform(driver, clickable);
 
+    waitUntilDownloadsCompleted(driver.browser(), timeout, folder);
     Downloads newDownloads = waitForNewFiles(timeout, fileFilter, config, folder, downloadStartedAt);
     File downloadedFile = newDownloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
     waitUntilDownloadCompletion(downloadedFile, timeout);
+    if (log.isDebugEnabled()) {
+      log.debug("All downloaded files in {}: {}", folder, folder.files().stream().map(f -> f.getName()).collect(joining("\n")));
+    }
     return archiveFile(config, downloadedFile);
   }
 
   private void waitUntilDownloadCompletion(File downloadedFile, long timeout) {
     Path path = downloadedFile.toPath();
     log.info("Waiting for download completion: {}", path.toAbsolutePath());
+    waitUntilFileHaveNotBeenChanged(timeout, path);
+  }
+
+  private void waitUntilFileDisappears(DownloadsFolder folder, String extension, long timeout) {
+    for (long start = currentTimeMillis(); currentTimeMillis() - start < timeout && folder.hasFiles(extension); ) {
+      log.info("Found {} files in {}, waiting...", extension, folder);
+      pause();
+    }
+
+    if (folder.hasFiles(extension)) {
+      log.warn("Folder {} still contains files {}", folder, extension);
+    }
+  }
+
+  private void waitUntilFileHaveNotBeenChanged(long timeout, Path path) {
     FileInfo last = new FileInfo(FileTime.fromMillis(0), -1);
     pause();
     FileInfo current = read(path);
@@ -144,9 +165,18 @@ public class DownloadFileToFolder {
       log.info(hasDownloads.downloads.filesAsString());
     }
     if (log.isDebugEnabled()) {
-      log.debug("All downloaded files in {}: {}", folder, folder.files());
+      log.debug("All downloaded files in {}: {}", folder, folder.files().stream().map(f -> f.getName()).collect(joining("\n")));
     }
     return hasDownloads.downloads;
+  }
+
+  private void waitUntilDownloadsCompleted(Browser browser, long timeout, DownloadsFolder folder) {
+    if (browser.isChrome() || browser.isEdge() || browser.isOpera()) {
+      waitUntilFileDisappears(folder, "crdownload", timeout);
+    }
+    else if (browser.isFirefox()) {
+      waitUntilFileDisappears(folder, "part", timeout);
+    }
   }
 
   @Nonnull
