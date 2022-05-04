@@ -24,7 +24,7 @@ jobs:
         uses: browser-actions/setup-edge@latest
       - name: Build with Gradle
         run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: test-report-win
@@ -55,7 +55,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Build with Gradle
         run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: test-report
