@@ -18,6 +18,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
+          cache: 'gradle'
           java-version: '17'
       - name: Setup Edge
         if: ${{ matrix.gradle-task == 'edge_headless' }}
@@ -41,6 +43,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
+          cache: 'gradle'
           java-version: '17'
       - name: Setup Firefox
         if: ${{ matrix.gradle-task != 'check' }}
