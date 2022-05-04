@@ -14,7 +14,7 @@ jobs:
         gradle-task: [ 'check', 'edge_headless' ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
@@ -37,7 +37,7 @@ jobs:
         gradle-task: [ 'check', 'firefox_headless', 'chrome_headless' ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
