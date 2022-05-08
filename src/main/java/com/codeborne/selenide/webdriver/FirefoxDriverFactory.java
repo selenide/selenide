@@ -7,6 +7,7 @@ import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.GeckoDriverService;
@@ -46,7 +47,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     SessionNotCreatedException failure = null;
     for (int retries = 0; retries < 5; retries++) {
       try {
-        return new PatchedFirefoxDriver(createDriverService(config), createCapabilities(config, browser, proxy, browserDownloadsFolder));
+        return new FirefoxDriver(createDriverService(config), createCapabilities(config, browser, proxy, browserDownloadsFolder));
       }
       catch (SessionNotCreatedException probablyPortAlreadyUsed) {
         log.error("Failed to start firefox", probablyPortAlreadyUsed);
