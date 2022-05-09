@@ -38,7 +38,6 @@ public class WebDriverFactory {
   private final Map<String, Class<? extends AbstractDriverFactory>> factories = factories();
   private final RemoteDriverFactory remoteDriverFactory = new RemoteDriverFactory();
   private final BrowserResizer browserResizer = new BrowserResizer();
-  private final HttpClientTimeouts httpClientTimeouts = new HttpClientTimeouts();
 
   @CheckReturnValue
   @Nonnull
@@ -106,9 +105,7 @@ public class WebDriverFactory {
         webdriverFactory.setupWebdriverBinary();
       }
       System.setProperty("webdriver.http.factory", "selenide-netty-client-factory");
-      WebDriver webDriver = webdriverFactory.create(config, browser, proxy, browserDownloadsFolder);
-      httpClientTimeouts.setup(webDriver);
-      return webDriver;
+      return webdriverFactory.create(config, browser, proxy, browserDownloadsFolder);
     }
   }
 
