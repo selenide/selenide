@@ -178,7 +178,7 @@ public class Configuration {
    * <br>
    * Default value: false
    * <br>
-   * Supported browsers: Chrome
+   * Supported browsers: Chrome, Edge
    */
   public static boolean fullPageScreenshots = defaults.fullPageScreenshots();
 
