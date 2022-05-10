@@ -44,16 +44,16 @@ public class WebdriverPhotographer implements Photographer {
   public <T> Optional<T> takeFullScreenshot(Driver driver, OutputType<T> outputType) {
     if (driver.getWebDriver() instanceof ChromiumDriver chromiumDriver) {
       Options options = getOptions(chromiumDriver);
-
-      HashMap<String, Object> clip = new HashMap<>();
-      clip.put("x", 0);
-      clip.put("y", 0);
-      clip.put("width", options.fullWidth());
-      clip.put("height", options.fullHeight());
-      clip.put("scale", 1);
-      HashMap<String, Object> captureScreenshotOptions = new HashMap<>();
-      captureScreenshotOptions.put("clip", clip);
-      captureScreenshotOptions.put("captureBeyondViewport", !options.fitsViewport());
+      HashMap<String, Object> captureScreenshotOptions = new HashMap<>() {{
+        put("clip", new HashMap<>() {{
+          put("x", 0);
+          put("y", 0);
+          put("width", options.fullWidth());
+          put("height", options.fullHeight());
+          put("scale", 1);
+        }});
+        put("captureBeyondViewport", !options.fitsViewport());
+      }};
 
       Map<String, Object> result = chromiumDriver.executeCdpCommand("Page.captureScreenshot", captureScreenshotOptions);
 
