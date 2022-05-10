@@ -51,7 +51,7 @@ jobs:
         uses: browser-actions/setup-firefox@latest
       - name: Setup Chrome
         if: ${{ matrix.gradle-task != 'check' }}
-        uses: browser-actions/setup-chrome@latest
+        uses: browser-actions/setup-chrome@stable
       - uses: actions/cache@v3
         with:
           path: |
