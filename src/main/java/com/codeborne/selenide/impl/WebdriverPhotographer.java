@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
+import com.github.bsideup.jabel.Desugar;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -8,7 +9,7 @@ import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v101.page.Page;
-import org.openqa.selenium.devtools.v101.emulation.Emulation;
+import org.openqa.selenium.devtools.v101.page.model.Viewport;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -42,20 +43,19 @@ public class WebdriverPhotographer implements Photographer {
 
   public <T> Optional<T> takeFullScreenshot(Driver driver, OutputType<T> outputType) {
     if (driver.getWebDriver() instanceof ChromiumDriver chromiumDriver) {
-      long width = (long) chromiumDriver.executeScript("return document.body.scrollWidth");
-      long height = (long) chromiumDriver.executeScript("return document.body.scrollHeight");
-      long scale = (long) chromiumDriver.executeScript("return window.devicePixelRatio");
+      Options options = getOptions(chromiumDriver);
 
-      HashMap<String, Object> setDeviceMetricsOverride = new HashMap<>();
-      setDeviceMetricsOverride.put("mobile", false);
-      setDeviceMetricsOverride.put("width", width);
-      setDeviceMetricsOverride.put("height", height);
-      setDeviceMetricsOverride.put("deviceScaleFactor", scale);
-      chromiumDriver.executeCdpCommand("Emulation.setDeviceMetricsOverride", setDeviceMetricsOverride);
+      HashMap<String, Object> clip = new HashMap<>();
+      clip.put("x", 0);
+      clip.put("y", 0);
+      clip.put("width", options.fullWidth());
+      clip.put("height", options.fullHeight());
+      clip.put("scale", 1);
+      HashMap<String, Object> captureScreenshotOptions = new HashMap<>();
+      captureScreenshotOptions.put("clip", clip);
+      captureScreenshotOptions.put("captureBeyondViewport", !options.fitsViewport());
 
-      Map<String, Object> result = chromiumDriver.executeCdpCommand("Page.captureScreenshot", new HashMap<>());
-
-      chromiumDriver.executeCdpCommand("Emulation.clearDeviceMetricsOverride", new HashMap<>());
+      Map<String, Object> result = chromiumDriver.executeCdpCommand("Page.captureScreenshot", captureScreenshotOptions);
 
       String base64 = (String) result.get("data");
       T screenshot = outputType.convertFromBase64Png(base64);
@@ -67,42 +67,39 @@ public class WebdriverPhotographer implements Photographer {
       DevTools devTools = ((HasDevTools) webDriver).getDevTools();
       devTools.createSession();
 
-      Integer width = (int) (long) remoteWebDriver.executeScript("return document.body.scrollWidth");
-      Integer height = (int) (long) remoteWebDriver.executeScript("return document.body.scrollHeight");
-      long scale = (long) remoteWebDriver.executeScript("return window.devicePixelRatio");
-
-      devTools.send(Emulation.setDeviceMetricsOverride(
-          width,
-          height,
-          scale,
-          false,
-          Optional.empty(),
-          Optional.empty(),
-          Optional.empty(),
-          Optional.empty(),
-          Optional.empty(),
-          Optional.empty(),
-          Optional.empty(),
-          Optional.empty(),
-          Optional.empty()
-        )
-      );
+      Options options = getOptions(remoteWebDriver);
+      Viewport viewport = new Viewport(0, 0, options.fullWidth(), options.fullHeight(), 1);
 
       String base64 = devTools.send(Page.captureScreenshot(
           Optional.empty(),
           Optional.empty(),
+          Optional.of(viewport),
           Optional.empty(),
-          Optional.empty(),
-        Optional.empty()
+          Optional.of(!options.fitsViewport())
         )
       );
-
-      devTools.send(Emulation.clearDeviceMetricsOverride());
 
       T screenshot = outputType.convertFromBase64Png(base64);
       return Optional.of(screenshot);
     }
 
     return Optional.empty();
+  }
+
+
+  private Options getOptions(RemoteWebDriver webDriver) {
+    long fullWidth = (long) webDriver.executeScript("return Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, document.body.offsetWidth, document.documentElement.offsetWidth, document.body.clientWidth, document.documentElement.clientWidth)");
+    long fullHeight = (long) webDriver.executeScript("return  Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight, document.body.clientHeight, document.documentElement.clientHeight)");
+
+    long viewWidth = (long) webDriver.executeScript("return window.innerWidth");
+    long viewHeight = (long) webDriver.executeScript("return window.innerHeight");
+
+    boolean fitsViewport = fullWidth <= viewWidth && fullHeight <= viewHeight;
+
+    return new Options(fullWidth, fullHeight, viewWidth, viewHeight, fitsViewport);
+  }
+
+  @Desugar
+  private record Options(long fullWidth, long fullHeight, long viewWidth, long viewHeight, boolean fitsViewport) {
   }
 }
