@@ -61,7 +61,7 @@ final class ScreenshotsTest extends IntegrationTest {
     File screenshot = Selenide.screenshot(OutputType.FILE);
     BufferedImage img = ImageIO.read(screenshot);
 
-    assertThat(img.getWidth()).isBetween(50, 3000);
+    assertThat(img.getWidth()).isBetween(2000, 3000);
     assertThat(img.getHeight()).isBetween(2000, 3000);
 
     assertThat(screenshots.getContextScreenshots().get(0)).isSameAs(screenshot);
@@ -74,7 +74,7 @@ final class ScreenshotsTest extends IntegrationTest {
     File screenshot = Selenide.screenshot(OutputType.FILE);
     BufferedImage img = ImageIO.read(screenshot);
 
-    assertThat(img.getWidth()).isBetween(50, 3000);
+    assertThat(img.getWidth()).isBetween(2000, 3000);
     assertThat(img.getHeight()).isBetween(1000, 2000);
 
     assertThat(screenshots.getContextScreenshots().get(0)).isSameAs(screenshot);
