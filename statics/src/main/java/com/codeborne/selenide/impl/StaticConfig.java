@@ -50,6 +50,10 @@ class StaticConfig implements Config {
   public boolean screenshots() {
     return Configuration.screenshots;
   }
+  @Override
+  public boolean fullPageScreenshots() {
+    return Configuration.fullPageScreenshots;
+  }
 
   @Override
   public boolean savePageSource() {
