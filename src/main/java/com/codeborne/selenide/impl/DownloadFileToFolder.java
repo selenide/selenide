@@ -73,6 +73,7 @@ public class DownloadFileToFolder {
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
     DownloadsFolder folder = driver.browserDownloadsFolder();
+    long pollingInterval = Math.max(config.pollingInterval(), 50);
 
     if (folder == null) {
       throw new IllegalStateException("Downloads folder is not configured");
@@ -83,26 +84,26 @@ public class DownloadFileToFolder {
 
     action.perform(driver, clickable);
 
-    waitUntilDownloadsCompleted(driver.browser(), timeout, folder);
+    waitUntilDownloadsCompleted(driver.browser(), timeout, pollingInterval, folder);
     Downloads newDownloads = waitForNewFiles(timeout, fileFilter, config, folder, downloadStartedAt);
     File downloadedFile = newDownloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
-    waitUntilDownloadCompletion(downloadedFile, timeout);
+    waitUntilDownloadCompletion(downloadedFile, timeout, pollingInterval);
     if (log.isDebugEnabled()) {
       log.debug("All downloaded files in {}: {}", folder, folder.files().stream().map(f -> f.getName()).collect(joining("\n")));
     }
     return archiveFile(config, downloadedFile);
   }
 
-  private void waitUntilDownloadCompletion(File downloadedFile, long timeout) {
+  private void waitUntilDownloadCompletion(File downloadedFile, long timeout, long pollingInterval) {
     Path path = downloadedFile.toPath();
     log.info("Waiting for download completion: {}", path.toAbsolutePath());
-    waitUntilFileHaveNotBeenChanged(timeout, path);
+    waitUntilFileHaveNotBeenChanged(path, timeout, pollingInterval);
   }
 
-  private void waitUntilFileDisappears(DownloadsFolder folder, String extension, long timeout) {
+  private void waitUntilFileDisappears(DownloadsFolder folder, String extension, long timeout, long pollingInterval) {
     for (long start = currentTimeMillis(); currentTimeMillis() - start < timeout && folder.hasFiles(extension); ) {
       log.info("Found {} files in {}, waiting...", extension, folder);
-      pause();
+      pause(pollingInterval);
     }
 
     if (folder.hasFiles(extension)) {
@@ -110,9 +111,9 @@ public class DownloadFileToFolder {
     }
   }
 
-  private void waitUntilFileHaveNotBeenChanged(long timeout, Path path) {
+  private void waitUntilFileHaveNotBeenChanged(Path path, long timeout, long pollingInterval) {
     FileInfo last = new FileInfo(FileTime.fromMillis(0), -1);
-    pause();
+    pause(pollingInterval);
     FileInfo current = read(path);
     long start = currentTimeMillis();
     long lastChange = -1;
@@ -127,7 +128,7 @@ public class DownloadFileToFolder {
         break;
       }
       last = current;
-      pause();
+      pause(pollingInterval);
       current = read(path);
     }
     log.info("last: {}, current: {} -> break", last, current);
@@ -146,9 +147,9 @@ public class DownloadFileToFolder {
     }
   }
 
-  private void pause() {
+  private void pause(long milliseconds) {
     try {
-      sleep(50);
+      sleep(milliseconds);
     }
     catch (InterruptedException e) {
       throw new RuntimeException(e);
@@ -170,12 +171,13 @@ public class DownloadFileToFolder {
     return hasDownloads.downloads;
   }
 
-  private void waitUntilDownloadsCompleted(Browser browser, long timeout, DownloadsFolder folder) {
+  private void waitUntilDownloadsCompleted(Browser browser, long timeout, long pollingInterval, DownloadsFolder folder) {
+    pause(pollingInterval);
     if (browser.isChrome() || browser.isEdge() || browser.isOpera()) {
-      waitUntilFileDisappears(folder, "crdownload", timeout);
+      waitUntilFileDisappears(folder, "crdownload", timeout, pollingInterval);
     }
     else if (browser.isFirefox()) {
-      waitUntilFileDisappears(folder, "part", timeout);
+      waitUntilFileDisappears(folder, "part", timeout, pollingInterval);
     }
   }
 
