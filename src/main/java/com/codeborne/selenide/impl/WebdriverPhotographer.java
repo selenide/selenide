@@ -3,7 +3,14 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chromium.ChromiumDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.devtools.v101.page.Page;
+import org.openqa.selenium.devtools.v101.emulation.Emulation;
+import org.openqa.selenium.remote.Augmenter;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -54,6 +61,48 @@ public class WebdriverPhotographer implements Photographer {
       T screenshot = outputType.convertFromBase64Png(base64);
       return Optional.of(screenshot);
     }
+
+    if (driver.getWebDriver() instanceof RemoteWebDriver remoteWebDriver) {
+      WebDriver webDriver = new Augmenter().augment(remoteWebDriver);
+      DevTools devTools = ((HasDevTools) webDriver).getDevTools();
+      devTools.createSession();
+
+      Integer width = (int) (long) remoteWebDriver.executeScript("return document.body.scrollWidth");
+      Integer height = (int) (long) remoteWebDriver.executeScript("return document.body.scrollHeight");
+      long scale = (long) remoteWebDriver.executeScript("return window.devicePixelRatio");
+
+      devTools.send(Emulation.setDeviceMetricsOverride(
+          width,
+          height,
+          scale,
+          false,
+          Optional.empty(),
+          Optional.empty(),
+          Optional.empty(),
+          Optional.empty(),
+          Optional.empty(),
+          Optional.empty(),
+          Optional.empty(),
+          Optional.empty(),
+          Optional.empty()
+        )
+      );
+
+      String base64 = devTools.send(Page.captureScreenshot(
+          Optional.empty(),
+          Optional.empty(),
+          Optional.empty(),
+          Optional.empty(),
+        Optional.empty()
+        )
+      );
+
+      devTools.send(Emulation.clearDeviceMetricsOverride());
+
+      T screenshot = outputType.convertFromBase64Png(base64);
+      return Optional.of(screenshot);
+    }
+
     return Optional.empty();
   }
 }
