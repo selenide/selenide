@@ -69,12 +69,13 @@ public class DownloadFileWithProxyServer {
 
     filter.activate();
     try {
-      waiter.wait(filter, new PreviousDownloadsCompleted(), timeout, config.pollingInterval());
+      long pollingInterval = Math.max(config.pollingInterval(), 50);
+      waiter.wait(filter, new PreviousDownloadsCompleted(), timeout, pollingInterval);
 
       filter.reset();
       action.perform(driver, clickable);
 
-      waiter.wait(filter, new HasDownloads(fileFilter), timeout, config.pollingInterval());
+      waiter.wait(filter, new HasDownloads(fileFilter), timeout, pollingInterval);
 
       if (log.isInfoEnabled()) {
         log.info(filter.downloads().filesAsString());
