@@ -216,7 +216,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @RepeatedTest(10)
   void downloadsFileWithCrdownloadExtension() throws IOException {
-    File downloadedFile = $(byText("Download file *crdownload")).download(withExtension("crdownload"));
+    File downloadedFile = $(byText("Download file *crdownload")).download(withName("hello_world.crdownload"));
 
     assertThat(downloadedFile.getName())
       .matches("hello_world.*\\.crdownload");
