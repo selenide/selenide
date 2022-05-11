@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.codeborne.selenide.Browsers.CHROME;
+import static com.codeborne.selenide.Browsers.EDGE;
+
 @ParametersAreNonnullByDefault
 public class WebdriverPhotographer implements Photographer {
   @Nonnull
@@ -52,7 +55,7 @@ public class WebdriverPhotographer implements Photographer {
           put("height", options.fullHeight());
           put("scale", 1);
         }});
-        put("captureBeyondViewport", !options.fitsViewport());
+        put("captureBeyondViewport", options.exceedViewport());
       }};
 
       Map<String, Object> result = chromiumDriver.executeCdpCommand("Page.captureScreenshot", captureScreenshotOptions);
@@ -63,6 +66,11 @@ public class WebdriverPhotographer implements Photographer {
     }
 
     if (driver.getWebDriver() instanceof RemoteWebDriver remoteWebDriver) {
+      String browserName = remoteWebDriver.getCapabilities().getBrowserName();
+      if (!(browserName.equalsIgnoreCase(CHROME) || browserName.equalsIgnoreCase(EDGE))) {
+        return Optional.empty();
+      }
+
       WebDriver webDriver = new Augmenter().augment(remoteWebDriver);
       DevTools devTools = ((HasDevTools) webDriver).getDevTools();
       devTools.createSession();
@@ -75,7 +83,7 @@ public class WebdriverPhotographer implements Photographer {
           Optional.empty(),
           Optional.of(viewport),
           Optional.empty(),
-          Optional.of(!options.fitsViewport())
+          Optional.of(options.exceedViewport())
         )
       );
 
@@ -94,12 +102,12 @@ public class WebdriverPhotographer implements Photographer {
     long viewWidth = (long) webDriver.executeScript("return window.innerWidth");
     long viewHeight = (long) webDriver.executeScript("return window.innerHeight");
 
-    boolean fitsViewport = fullWidth <= viewWidth && fullHeight <= viewHeight;
+    boolean exceedViewport = fullWidth > viewWidth || fullHeight > viewHeight;
 
-    return new Options(fullWidth, fullHeight, viewWidth, viewHeight, fitsViewport);
+    return new Options(fullWidth, fullHeight, viewWidth, viewHeight, exceedViewport);
   }
 
   @Desugar
-  private record Options(long fullWidth, long fullHeight, long viewWidth, long viewHeight, boolean fitsViewport) {
+  private record Options(long fullWidth, long fullHeight, long viewWidth, long viewHeight, boolean exceedViewport) {
   }
 }
