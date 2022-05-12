@@ -7,6 +7,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.webdriver.ChromeDriverFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -44,6 +45,11 @@ final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
     assumeThat(isChrome()).isTrue();
   }
 
+  @AfterEach
+  void revertDefaultConfig() {
+    Configuration.fullPageScreenshots = false;
+  }
+
   @Test
   void customWebdriverProviderCanUseRemoteWebdriver() {
     MyFactory.port = hubPort;
@@ -63,7 +69,7 @@ final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
     assertThat(screenshots.getContextScreenshots()).isEmpty();
 
     File screenshot = Selenide.screenshot(OutputType.FILE);
-    BufferedImage img = ImageIO.read(screenshot);
+    BufferedImage img = ImageIO.read( screenshot);
 
     assertThat(img.getWidth()).isBetween(2000, 3000);
     assertThat(img.getHeight()).isBetween(2000, 3000);

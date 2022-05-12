@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -26,6 +27,11 @@ final class ScreenshotsTest extends IntegrationTest {
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");
     assertThat(screenshots.getContextScreenshots()).isEmpty();
+  }
+
+  @AfterEach
+  void revertDefaultConfig() {
+    Configuration.fullPageScreenshots = false;
   }
 
   @Test
