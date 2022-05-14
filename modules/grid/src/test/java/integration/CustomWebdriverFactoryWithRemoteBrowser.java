@@ -7,7 +7,6 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.webdriver.ChromeDriverFactory;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -45,11 +44,6 @@ final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
     assumeThat(isChrome()).isTrue();
   }
 
-  @AfterEach
-  void revertDefaultConfig() {
-    Configuration.fullPageScreenshots = false;
-  }
-
   @Test
   void customWebdriverProviderCanUseRemoteWebdriver() {
     MyFactory.port = hubPort;
@@ -63,7 +57,6 @@ final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
     MyFactory.port = hubPort;
 
     Configuration.browser = MyFactory.class.getName();
-    Configuration.fullPageScreenshots = true;
 
     openFile("page_with_selects_without_jquery.html");
     assertThat(screenshots.getContextScreenshots()).isEmpty();

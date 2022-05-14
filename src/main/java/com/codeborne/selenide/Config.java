@@ -23,7 +23,6 @@ public interface Config {
   boolean reopenBrowserOnFail();
   boolean clickViaJs();
   boolean screenshots();
-  boolean fullPageScreenshots();
   boolean savePageSource();
   String reportsFolder();
   String downloadsFolder();

@@ -31,7 +31,6 @@ public class SelenideConfig implements Config {
   private boolean reopenBrowserOnFail = Boolean.parseBoolean(getProperty("selenide.reopenBrowserOnFail", "true"));
   private boolean clickViaJs = Boolean.parseBoolean(getProperty("selenide.clickViaJs", "false"));
   private boolean screenshots = Boolean.parseBoolean(getProperty("selenide.screenshots", "true"));
-  private boolean fullPageScreenshots = Boolean.parseBoolean(getProperty("selenide.fullPageScreenshots", "false"));
   private boolean savePageSource = Boolean.parseBoolean(getProperty("selenide.savePageSource", "true"));
   private String reportsFolder = getProperty("selenide.reportsFolder", "build/reports/tests");
   private String downloadsFolder = getProperty("selenide.downloadsFolder", "build/downloads");
@@ -111,16 +110,6 @@ public class SelenideConfig implements Config {
 
   public SelenideConfig screenshots(boolean screenshots) {
     this.screenshots = screenshots;
-    return this;
-  }
-  
-  @Override
-  public boolean fullPageScreenshots() {
-    return fullPageScreenshots;
-  }
-
-  public SelenideConfig fullPageScreenshots(boolean fullPageScreenshots) {
-    this.fullPageScreenshots = fullPageScreenshots;
     return this;
   }
 

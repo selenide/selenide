@@ -29,22 +29,6 @@ public class WebdriverPhotographer implements Photographer {
   @CheckReturnValue
   @Override
   public <T> Optional<T> takeScreenshot(Driver driver, OutputType<T> outputType) {
-    if (driver.config().fullPageScreenshots()) {
-      return takeFullScreenshot(driver, outputType);
-    } else {
-      return takeVisibleScreenshot(driver, outputType);
-    }
-  }
-
-  public <T> Optional<T> takeVisibleScreenshot(Driver driver, OutputType<T> outputType) {
-    if (driver.getWebDriver() instanceof TakesScreenshot) {
-      T screenshot = ((TakesScreenshot) driver.getWebDriver()).getScreenshotAs(outputType);
-      return Optional.of(screenshot);
-    }
-    return Optional.empty();
-  }
-
-  public <T> Optional<T> takeFullScreenshot(Driver driver, OutputType<T> outputType) {
     if (driver.getWebDriver() instanceof ChromiumDriver chromiumDriver) {
       Options options = getOptions(chromiumDriver);
       HashMap<String, Object> captureScreenshotOptions = new HashMap<>() {{
@@ -68,7 +52,7 @@ public class WebdriverPhotographer implements Photographer {
     if (driver.getWebDriver() instanceof RemoteWebDriver remoteWebDriver) {
       String browserName = remoteWebDriver.getCapabilities().getBrowserName();
       if (!(browserName.equalsIgnoreCase(CHROME) || browserName.equalsIgnoreCase(EDGE))) {
-        return Optional.empty();
+        return takeDefaultScreenshot(driver, outputType);
       }
 
       WebDriver webDriver = new Augmenter().augment(remoteWebDriver);
@@ -91,9 +75,16 @@ public class WebdriverPhotographer implements Photographer {
       return Optional.of(screenshot);
     }
 
-    return Optional.empty();
+    return takeDefaultScreenshot(driver, outputType);
   }
 
+  private <T> Optional<T> takeDefaultScreenshot(Driver driver, OutputType<T> outputType) {
+    if (driver.getWebDriver() instanceof TakesScreenshot) {
+      T screenshot = ((TakesScreenshot) driver.getWebDriver()).getScreenshotAs(outputType);
+      return Optional.of(screenshot);
+    }
+    return Optional.empty();
+  }
 
   private Options getOptions(RemoteWebDriver webDriver) {
     long fullWidth = (long) webDriver.executeScript("return Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, document.body.offsetWidth, document.documentElement.offsetWidth, document.body.clientWidth, document.documentElement.clientWidth)");

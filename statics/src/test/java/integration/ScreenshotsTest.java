@@ -1,10 +1,8 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -27,11 +25,6 @@ final class ScreenshotsTest extends IntegrationTest {
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");
     assertThat(screenshots.getContextScreenshots()).isEmpty();
-  }
-
-  @AfterEach
-  void revertDefaultConfig() {
-    Configuration.fullPageScreenshots = false;
   }
 
   @Test
@@ -62,26 +55,11 @@ final class ScreenshotsTest extends IntegrationTest {
 
   @Test
   void canTakeFullScreenshot() throws IOException {
-    Configuration.fullPageScreenshots = true;
-
     File screenshot = Selenide.screenshot(OutputType.FILE);
     BufferedImage img = ImageIO.read(screenshot);
 
     assertThat(img.getWidth()).isBetween(2000, 3000);
     assertThat(img.getHeight()).isBetween(2000, 3000);
-
-    assertThat(screenshots.getContextScreenshots().get(0)).isSameAs(screenshot);
-  }
-
-  @Test
-  void canTakeVisibleScreenshot() throws IOException {
-    Configuration.fullPageScreenshots = false;
-
-    File screenshot = Selenide.screenshot(OutputType.FILE);
-    BufferedImage img = ImageIO.read(screenshot);
-
-    assertThat(img.getWidth()).isBetween(2000, 3000);
-    assertThat(img.getHeight()).isBetween(1000, 2000);
 
     assertThat(screenshots.getContextScreenshots().get(0)).isSameAs(screenshot);
   }

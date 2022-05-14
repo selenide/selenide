@@ -173,16 +173,6 @@ public class Configuration {
   public static boolean screenshots = defaults.screenshots();
 
   /**
-   * Defines if Selenide takes full page screenshots on failing tests.
-   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.fullPageScreenshots=false".
-   * <br>
-   * Default value: false
-   * <br>
-   * Supported browsers: Chrome, Edge
-   */
-  public static boolean fullPageScreenshots = defaults.fullPageScreenshots();
-
-  /**
    * Defines if Selenide saves page source on failing tests.
    * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.savePageSource=false".
    * <br>
