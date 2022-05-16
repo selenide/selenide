@@ -5,6 +5,8 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,6 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class FileDownloadToFolderTest extends IntegrationTest {
+  private static final Logger log = LoggerFactory.getLogger(FileDownloadToFolderTest.class);
   private final File folder = new File(downloadsFolder).getAbsoluteFile();
 
   @BeforeEach
@@ -59,6 +62,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
         clickAndConfirm("Are you sure to download it?")
       )
     );
+    log.info("Downloaded file {}", downloadedFile.getAbsolutePath());
 
     assertThat(downloadedFile.getName())
       .matches("hello_world.*\\.txt");
@@ -181,5 +185,38 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
     assertThat(readFileToString(downloadedFile, "UTF-8")).isEqualTo("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
+  void downloadEmptyFile() throws IOException {
+    File downloadedFile = $(byText("Download empty file")).download(withExtension("txt"));
+
+    assertThat(downloadedFile.getName()).matches("empty-file.*\\.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8")).isEqualTo("");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
+  void downloadsFileWithPartExtension() throws IOException {
+    File downloadedFile = $(byText("Download file *part")).download(withExtension("part"));
+
+    assertThat(downloadedFile.getName())
+      .matches("hello_world.*\\.part");
+    assertThat(readFileToString(downloadedFile, "UTF-8").trim())
+      .isEqualTo("Hello, part WinRar!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
+  void downloadsFileWithCrdownloadExtension() throws IOException {
+    File downloadedFile = $(byText("Download file *crdownload")).download(withName("hello_world.crdownload"));
+
+    assertThat(downloadedFile.getName())
+      .matches("hello_world.*\\.crdownload");
+    assertThat(readFileToString(downloadedFile, "UTF-8").trim())
+      .isEqualTo("Hello, crdownload WinRar!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
   }
 }

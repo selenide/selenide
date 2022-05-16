@@ -25,6 +25,7 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
@@ -49,6 +50,13 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     timeout = 1;
     clickViaJs = false;
     downloadsFolder = "build/downloads";
+  }
+
+  @BeforeEach
+  final void openBlankPage() {
+    if (hasWebDriverStarted()) {
+      open("about:blank");
+    }
   }
 
   @AfterAll
