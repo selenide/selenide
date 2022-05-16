@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
@@ -20,7 +21,10 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
+import static java.lang.System.currentTimeMillis;
+import static java.lang.Thread.sleep;
 import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
@@ -62,6 +66,7 @@ public class DownloadFileToFolder {
                                                         DownloadAction action) throws FileNotFoundException {
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
+    long pollingInterval = Math.max(config.pollingInterval(), 50);
     DownloadsFolder folder = driver.browserDownloadsFolder();
 
     if (folder == null) {
@@ -69,13 +74,39 @@ public class DownloadFileToFolder {
     }
 
     folder.cleanupBeforeDownload();
-    long downloadStartedAt = System.currentTimeMillis();
+    long downloadStartedAt = currentTimeMillis();
 
     action.perform(driver, clickable);
 
+    waitUntilDownloadsCompleted(driver.browser(), timeout, pollingInterval, folder);
     Downloads newDownloads = waitForNewFiles(timeout, fileFilter, config, folder, downloadStartedAt);
     File downloadedFile = newDownloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
+
+    if (log.isDebugEnabled()) {
+      log.debug("All downloaded files in {}: {}", folder, folder.files().stream().map(f -> f.getName()).collect(joining("\n")));
+    }
     return archiveFile(config, downloadedFile);
+  }
+
+  private void waitUntilDownloadsCompleted(Browser browser, long timeout, long pollingInterval, DownloadsFolder folder) {
+    pause(pollingInterval);
+    if (browser.isChrome() || browser.isEdge() || browser.isOpera()) {
+      waitUntilFileDisappears(folder, "crdownload", timeout, pollingInterval);
+    }
+    else if (browser.isFirefox()) {
+      waitUntilFileDisappears(folder, "part", timeout, pollingInterval);
+    }
+  }
+
+  private void waitUntilFileDisappears(DownloadsFolder folder, String extension, long timeout, long pollingInterval) {
+    for (long start = currentTimeMillis(); currentTimeMillis() - start < timeout && folder.hasFiles(extension); ) {
+      log.info("Found {} files in {}, waiting...", extension, folder);
+      pause(pollingInterval);
+    }
+
+    if (folder.hasFiles(extension)) {
+      log.warn("Folder {} still contains files {}", folder, extension);
+    }
   }
 
   @Nonnull
@@ -88,9 +119,18 @@ public class DownloadFileToFolder {
       log.info(hasDownloads.downloads.filesAsString());
     }
     if (log.isDebugEnabled()) {
-      log.debug("All downloaded files in {}: {}", folder, folder.files());
+      log.debug("All downloaded files in {}: {}", folder, folder.files().stream().map(f -> f.getName()).collect(joining("\n")));
     }
     return hasDownloads.downloads;
+  }
+
+  private void pause(long milliseconds) {
+    try {
+      sleep(milliseconds);
+    }
+    catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Nonnull

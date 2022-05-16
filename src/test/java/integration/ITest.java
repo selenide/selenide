@@ -89,6 +89,9 @@ public abstract class ITest extends BaseIntegrationTest {
   }
 
   protected void openFile(String fileName) {
+    if (driver().hasWebDriverStarted()) {
+      driver().open("about:blank");
+    }
     driver().open("/" + fileName + "?browser=" + browser +
       "&timeout=" + driver().config().timeout());
   }
