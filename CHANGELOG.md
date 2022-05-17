@@ -1,9 +1,25 @@
 # Changelog
 
-## 6.4.1
-* upgrade to WebDriverManager 5.1.1
+## 6.5.0 (released 17.05.2022)
 
-## 6.4.0 (release 07.04.2022)
+* #1768 add method to mask passwords etc. in reports -- see PR #1770
+* #1753 add method to set value in <input type=date> -- see PR #1770
+* #1497 Make $.setValue("") work properly with React, Vue.js and other hipster frameworks -- see PR #1787
+* #1497 implement $.clear() by pressing "Home -> Shift+End -> Backspace -> Tab" -- see PR #1787
+* #960 Don't trigger "change"/"blur" events when clearing the input in "setValue" method -- see PR #1787
+* #1784 trigger "blur" event on previous active element -- see commit 593e6fc900500d9
+* #1523 Methods $.setValue() and $.append() check that the element is editable (not disabled or readonly) -- see PR #1787
+* #1523 introduce new conditions "interactable" and "editable" -- see PR #1787
+* #1779 Method $.download(FOLDER) now waits for the full completion of download -- see PR #1804 and #1769
+* #1763 Disable built-in Selenium OpenTelemetry tracing -- thanks to Petro Ovcharenko and Aliaksandr Rasolka
+* #1773 add non-deprecated `stream()` method to selenide collections -- see PR #1774
+* Bump seleniumVersion from 4.1.3 to 4.1.4
+* upgrade to WebDriverManager 5.1.1
+* Bump nettyVersion from 4.1.75.Final to 4.1.77.Final
+* Bump LittleProxy from 2.0.7 to 2.0.9 
+* remove code that was not needed after introducing SelenideNettyClientFactory -- see PR #1798
+
+## 6.4.0 (released 07.04.2022)
 * #1765 show both alias and selector in error message  --  see PR #1766
 * #1764 add space to the left and right of every value in @TextReport  --  see PR #1767
 * #1759 upgrade to Selenium 4.1.3
