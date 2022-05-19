@@ -9,6 +9,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.Locale;
 
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -28,7 +29,7 @@ public class Text extends TextCondition {
   @CheckReturnValue
   @Override
   protected boolean match(String actualText, String expectedText) {
-    return Html.text.contains(actualText, expectedText.toLowerCase());
+    return Html.text.contains(actualText, expectedText.toLowerCase(Locale.ROOT));
   }
 
   @Nullable

@@ -13,6 +13,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -44,7 +45,7 @@ public class Describe {
       // ignore
     }
     catch (WebDriverException probablyBrowserDoesNotSupportJavaScript) {
-      if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase().contains("method is not implemented")) {
+      if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase(Locale.ROOT).contains("method is not implemented")) {
         log.warn("Failed to get attributes via JS: {}", probablyBrowserDoesNotSupportJavaScript.toString());
       }
     }
@@ -81,7 +82,7 @@ public class Describe {
       return this;
     }
     catch (WebDriverException probablyBrowserDoesNotSupportJavaScript) {
-      if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase().contains("method is not implemented")) {
+      if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase(Locale.ROOT).contains("method is not implemented")) {
         log.warn("Failed to get attribute {}: {}", attributeName, probablyBrowserDoesNotSupportJavaScript.toString());
       }
       return this;
