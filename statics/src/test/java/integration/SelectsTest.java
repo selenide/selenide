@@ -140,8 +140,24 @@ final class SelectsTest extends IntegrationTest {
     $("#hero").shouldNotHave(text("John Mc'Lain").because("Option is not selected yet"));
 
     $("#hero").selectOptionByValue("john mc'lain");
-    $("#hero").shouldHave(text("john mc'lain").because("Option with text `John Mc'Lain` is selected"));
-    $("#hero").shouldHave(textCaseSensitive("John Mc'Lain").because("Option with text `John Mc'Lain` is selected"));
+    $("#hero").shouldHave(text("john mc'lain")
+      .because("Option with text `John Mc'Lain` is selected"));
+  }
+
+  @Test
+  void shouldHaveTextChecksSelectedOption_caseInsensitive() {
+    $("#hero").shouldHave(text("JOHN MC'LAIN")
+      .because("The comparison is case-insensitive by default"));
+  }
+
+  @Test
+  void shouldHaveTextChecksSelectedOption_caseSensitive() {
+    $("#hero").selectOptionByValue("john mc'lain");
+
+    $("#hero").shouldHave(
+      textCaseSensitive("John Mc'Lain")
+        .because("Option with text `John Mc'Lain` is selected")
+    );
   }
 
   @Test
