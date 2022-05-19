@@ -8,10 +8,12 @@ import java.util.regex.PatternSyntaxException;
 import static com.codeborne.selenide.Condition.exactOwnText;
 import static com.codeborne.selenide.Condition.exactOwnTextCaseSensitive;
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
 import static com.codeborne.selenide.Condition.matchText;
 import static com.codeborne.selenide.Condition.ownText;
 import static com.codeborne.selenide.Condition.ownTextCaseSensitive;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -113,5 +115,34 @@ final class ElementTextTest extends IntegrationTest {
   void cannotUseInvalidRegularExpression() {
     assertThatThrownBy(() -> $("#child_div1").should(matchText("{")))
       .isInstanceOf(PatternSyntaxException.class);
+  }
+
+  @Test
+  void text_ignoresCase() {
+    $("#upper-case").shouldHave(text("this is sparta!"));
+    $("#upper-case").shouldHave(text("THIS IS SPARTA!"));
+    $("#upper-case").shouldHave(text("IS IS SPA"));
+    $("#upper-case").shouldHave(text("is is spa"));
+  }
+
+  @Test
+  void exactText_ignoresCase() {
+    $("#upper-case").shouldHave(exactText("this is sparta!"));
+    $("#upper-case").shouldHave(exactText("THIS IS SPARTA!"));
+    $("#upper-case").shouldNotHave(exactText("IS IS SPA"));
+  }
+
+  @Test
+  void text_caseSensitive() {
+    $("#upper-case").shouldNotHave(textCaseSensitive("This is Sparta!"));
+    $("#upper-case").shouldHave(textCaseSensitive("THIS IS SPARTA!"));
+    $("#upper-case").shouldHave(textCaseSensitive("IS IS SPA"));
+  }
+
+  @Test
+  void exactText_caseSensitive() {
+    $("#upper-case").shouldNotHave(exactTextCaseSensitive("this is sparta!"));
+    $("#upper-case").shouldHave(exactTextCaseSensitive("THIS IS SPARTA!"));
+    $("#upper-case").shouldNotHave(exactTextCaseSensitive("IS IS SPA"));
   }
 }

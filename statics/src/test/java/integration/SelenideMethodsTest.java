@@ -162,8 +162,8 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanGetTextAndHtmlOfHiddenElement() {
-    assertThat($("#theHiddenElement").innerHtml().trim().toLowerCase())
-      .isEqualTo("видишь суслика? и я не вижу. <b>а он есть</b>!");
+    assertThat($("#theHiddenElement").innerHtml().trim())
+      .isEqualToIgnoringCase("видишь суслика? и я не вижу. <b>а он есть</b>!");
 
     assertThat($("#theHiddenElement").innerText().trim())
       .isEqualTo("Видишь суслика? И я не вижу. А он есть!");
