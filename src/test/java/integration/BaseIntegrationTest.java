@@ -24,10 +24,11 @@ public abstract class BaseIntegrationTest {
   protected static final String browser = System.getProperty("selenide.browser", CHROME);
   private static final boolean SSL = !SAFARI.equalsIgnoreCase(browser) && !FIREFOX.equalsIgnoreCase(browser);
   static final boolean headless = parseBoolean(System.getProperty("selenide.headless", "false"));
+  private static final Locale defaultLocale = Locale.getDefault();
 
   @BeforeAll
   static void setUpAll() throws Exception {
-    Locale.setDefault(Locale.ENGLISH);
+    Locale.setDefault(defaultLocale);
     runLocalHttpServer();
   }
 

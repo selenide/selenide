@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public class UseLocaleExtension implements InvocationInterceptor {
 
-  private String language;
+  private final String language;
 
   public UseLocaleExtension(String language) {
     this.language = language;
@@ -23,7 +23,8 @@ public class UseLocaleExtension implements InvocationInterceptor {
     Locale.setDefault(new Locale(language));
     try {
       invocation.proceed();
-    } finally {
+    }
+    finally {
       Locale.setDefault(previous);
     }
   }
