@@ -1,5 +1,8 @@
 == Changelog
 
+=== 2.0.1 (released 20.05.2022)
+* upgrade to Selenide 6.5.0
+
 === 2.0.0 (released 11.03.2022)
 * #65 upgrade to Appium 8 / Selenium 4 / Selenide 6  -- thanks to Milena Sobolewska for PR #67
 
