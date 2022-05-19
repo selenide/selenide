@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -109,7 +110,7 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
   private Map<String, String> toMap(HttpHeaders headers) {
     Map<String, String> map = new HashMap<>();
     for (Map.Entry<String, String> header : headers) {
-      map.put(header.getKey().toLowerCase(), header.getValue());
+      map.put(header.getKey().toLowerCase(Locale.ROOT), header.getValue());
     }
     return map;
   }

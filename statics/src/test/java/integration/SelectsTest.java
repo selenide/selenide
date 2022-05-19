@@ -146,6 +146,8 @@ final class SelectsTest extends IntegrationTest {
 
   @Test
   void shouldHaveTextChecksSelectedOption_caseInsensitive() {
+    $("#hero").selectOptionByValue("john mc'lain");
+
     $("#hero").shouldHave(text("JOHN MC'LAIN")
       .because("The comparison is case-insensitive by default"));
   }

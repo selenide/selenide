@@ -21,6 +21,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.codeborne.selenide.Browsers.CHROME;
@@ -113,7 +114,7 @@ public class WebDriverFactory {
   @Nonnull
   private DriverFactory findFactory(Browser browser) {
     Class<? extends AbstractDriverFactory> factoryClass = factories.getOrDefault(
-      browser.name.toLowerCase(), DefaultDriverFactory.class);
+      browser.name.toLowerCase(Locale.ROOT), DefaultDriverFactory.class);
     try {
       return factoryClass.getConstructor().newInstance();
     }
