@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.2.3 (released 20.05.2022)
+* upgrade to Selenide 6.5.0
+
 ## 2.2.2 (released 16.05.2022)
 * #13 Now selenide-selenoid doesn't fetch `selenide-proxy` as transitive dependency, only `selenide`.
 * upgrade to Selenide 6.4.0
