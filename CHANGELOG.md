@@ -1,7 +1,10 @@
 # Changelog
 
-## 6.5.0 (released 17.05.2022)
+## 6.5.1 (released 25.05.2022)
+* #1808 Don't move focus to next element when calling $.clear() -- see PR #1809
+* Bump browserup-proxy-core from 2.1.4 to 2.1.5
 
+## 6.5.0 (released 17.05.2022)
 * #1768 add method to mask passwords etc. in reports -- see PR #1770
 * #1753 add method to set value in <input type=date> -- see PR #1770
 * #1497 Make $.setValue("") work properly with React, Vue.js and other hipster frameworks -- see PR #1787
