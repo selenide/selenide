@@ -15,7 +15,6 @@ import static org.openqa.selenium.Keys.BACK_SPACE;
 import static org.openqa.selenium.Keys.END;
 import static org.openqa.selenium.Keys.HOME;
 import static org.openqa.selenium.Keys.SHIFT;
-import static org.openqa.selenium.Keys.TAB;
 import static org.openqa.selenium.Keys.chord;
 
 /**
@@ -54,7 +53,8 @@ public class Clear implements Command<SelenideElement> {
    * </p>
    */
   protected void clearAndTrigger(Driver driver, WebElement input) {
-    input.sendKeys(HOME, chord(SHIFT, END), BACK_SPACE, TAB);
+    clear(driver, input);
+    driver.executeJavaScript("document.activeElement?.blur()");
   }
 
   /**

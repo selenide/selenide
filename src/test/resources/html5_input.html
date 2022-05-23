@@ -9,6 +9,21 @@
 
 <input type="number" id="id1"/>
 
+<label>Username: <span id="username-mirror"></span>
+  <input type="text" name="username" onchange="onUsernameChanged(this)"></label>
 
+<label>Password <span id="password-mirror"></span>
+  <input type="password" name="password" onchange="onPasswordChanged(this)"></label>
+
+<button id="ok" onclick="return false;" value="ok"></button>
+
+<script>
+  function onUsernameChanged(e) {
+    document.getElementById('username-mirror').innerText = e.value;
+  }
+  function onPasswordChanged(e) {
+    document.getElementById('password-mirror').innerText = e.value;
+  }
+</script>
 </body>
 </html>
