@@ -27,6 +27,7 @@ import com.codeborne.selenide.conditions.NamedCondition;
 import com.codeborne.selenide.conditions.Not;
 import com.codeborne.selenide.conditions.Or;
 import com.codeborne.selenide.conditions.OwnText;
+import com.codeborne.selenide.conditions.OwnTextCaseSensitive;
 import com.codeborne.selenide.conditions.PseudoElementPropertyWithValue;
 import com.codeborne.selenide.conditions.Readonly;
 import com.codeborne.selenide.conditions.Selected;
@@ -383,6 +384,21 @@ public abstract class Condition {
   @Nonnull
   public static Condition ownText(String text) {
     return new OwnText(text);
+  }
+
+  /**
+   * Assert that element contains given text (without checking child elements).
+   * <p>Sample: {@code $("h1").shouldHave(ownTextCaseSensitive("Hello"))}</p>
+   *
+   * <p>Case sensitive</p>
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
+   * @param text expected text of HTML element without its children
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition ownTextCaseSensitive(String text) {
+    return new OwnTextCaseSensitive(text);
   }
 
   /**

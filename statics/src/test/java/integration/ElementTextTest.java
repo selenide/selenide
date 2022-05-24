@@ -9,6 +9,7 @@ import static com.codeborne.selenide.Condition.exactOwnText;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.matchText;
 import static com.codeborne.selenide.Condition.ownText;
+import static com.codeborne.selenide.Condition.ownTextCaseSensitive;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,6 +65,19 @@ final class ElementTextTest extends IntegrationTest {
     $("#parent_div").shouldNotHave(exactOwnText("papa"));
     $("#parent_div").shouldNotHave(exactOwnText("Son"));
     $("#parent_div").shouldNotHave(exactOwnText("Daughter"));
+  }
+
+  @Test
+  void canCheckCaseSensitiveTextOfElementWithoutChildren() {
+    $("#child_div1").shouldHave(ownTextCaseSensitive("Son"));
+    $("#child_div1").shouldHave(ownTextCaseSensitive("So"));
+    $("#child_div1").shouldNotHave(ownTextCaseSensitive("son"));
+    $("#child_div2").shouldHave(ownTextCaseSensitive("Daughter"));
+    $("#parent_div").shouldNotHave(ownTextCaseSensitive("Big Papa"));
+    $("#parent_div").shouldNotHave(ownTextCaseSensitive("Papa"));
+    $("#parent_div").shouldHave(ownTextCaseSensitive("papa"));
+    $("#parent_div").shouldNotHave(ownTextCaseSensitive("Son"));
+    $("#parent_div").shouldNotHave(ownTextCaseSensitive("Daughter"));
   }
 
   @Test
