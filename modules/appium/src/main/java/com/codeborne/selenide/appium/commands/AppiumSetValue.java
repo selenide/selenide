@@ -1,0 +1,35 @@
+package com.codeborne.selenide.appium.commands;
+
+import com.codeborne.selenide.Command;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.commands.SetValue;
+import com.codeborne.selenide.impl.WebElementSource;
+import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.WebElement;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import static com.google.common.base.MoreObjects.firstNonNull;
+import static java.util.Objects.requireNonNull;
+
+@ParametersAreNonnullByDefault
+public class AppiumSetValue implements Command<SelenideElement> {
+  private final SetValue defaultImplementation = new SetValue();
+
+  @Nonnull
+  @Override
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+    if (locator.driver().getWebDriver() instanceof AppiumDriver) {
+      WebElement element = locator.findAndAssertElementIsInteractable();
+      CharSequence text = firstNonNull((CharSequence) requireNonNull(args)[0], "");
+      element.clear();
+      element.sendKeys(text);
+      return proxy;
+    }
+    else {
+      return defaultImplementation.execute(proxy, locator, args);
+    }
+  }
+}
