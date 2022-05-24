@@ -1,5 +1,9 @@
 == Changelog
 
+=== 2.0.2 (released 24.05.2022)
+* upgrade to Selenide 6.5.1
+* fix UnsupportedCommandException in `$.setValue()`  --  see https://github.com/selenide/selenide/issues/1810
+
 === 2.0.1 (released 20.05.2022)
 * upgrade to Selenide 6.5.0
 
