@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.regex.PatternSyntaxException;
 
 import static com.codeborne.selenide.Condition.exactOwnText;
+import static com.codeborne.selenide.Condition.exactOwnTextCaseSensitive;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.matchText;
 import static com.codeborne.selenide.Condition.ownText;
@@ -64,6 +65,20 @@ final class ElementTextTest extends IntegrationTest {
     $("#parent_div").shouldNotHave(exactOwnText("papa"));
     $("#parent_div").shouldNotHave(exactOwnText("Son"));
     $("#parent_div").shouldNotHave(exactOwnText("Daughter"));
+  }
+
+  @Test
+  void canCheckExactTextCaseSensitiveOfElementWithoutChildren() {
+    $("#child_div1").shouldHave(exactOwnTextCaseSensitive("Son"));
+    $("#child_div1").shouldNotHave(exactOwnTextCaseSensitive("son"));
+    $("#child_div1").shouldNotHave(exactOwnTextCaseSensitive("So"));
+    $("#child_div2").shouldHave(exactOwnTextCaseSensitive("Daughter"));
+    $("#parent_div").shouldHave(exactOwnTextCaseSensitive("Big papa"));
+    $("#parent_div").shouldNotHave(exactOwnTextCaseSensitive("papa"));
+    $("#parent_div").shouldNotHave(exactOwnTextCaseSensitive("Son"));
+    $("#parent_div").shouldNotHave(exactOwnTextCaseSensitive("son"));
+    $("#parent_div").shouldNotHave(exactOwnTextCaseSensitive("So"));
+    $("#parent_div").shouldNotHave(exactOwnTextCaseSensitive("Daughter"));
   }
 
   @Test
