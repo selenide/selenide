@@ -12,6 +12,7 @@ import com.codeborne.selenide.conditions.Disabled;
 import com.codeborne.selenide.conditions.Editable;
 import com.codeborne.selenide.conditions.Enabled;
 import com.codeborne.selenide.conditions.ExactOwnText;
+import com.codeborne.selenide.conditions.ExactOwnTextCaseSensitive;
 import com.codeborne.selenide.conditions.ExactText;
 import com.codeborne.selenide.conditions.ExactTextCaseSensitive;
 import com.codeborne.selenide.conditions.Exist;
@@ -398,6 +399,21 @@ public abstract class Condition {
   @Nonnull
   public static Condition exactOwnText(String text) {
     return new ExactOwnText(text);
+  }
+
+  /**
+   * Assert that element has given text (without checking child elements).
+   * <p>Sample: {@code $("h1").shouldHave(exactOwnTextCaseSensitive("Hello"))}</p>
+   *
+   * <p>Case sensitive</p>
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
+   * @param text expected text of HTML element without its children
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition exactOwnTextCaseSensitive(String text) {
+    return new ExactOwnTextCaseSensitive(text);
   }
 
   /**
