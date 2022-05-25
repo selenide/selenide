@@ -16,12 +16,12 @@ sourceSets {
 dependencies {
   api('org.opentest4j:opentest4j:1.2.0')
 
-  api('io.github.bonigarcia:webdrivermanager:5.1.1') {
+  api('io.github.bonigarcia:webdrivermanager:5.2.0') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
     exclude group: 'com.github.docker-java'
     exclude group: 'org.rauschig'
+    exclude group: 'commons-lang'
   }
-  implementation('commons-lang:commons-lang:2.6') {because 'used by webdrivermanager'}
   implementation('org.apache.commons:commons-compress:1.21') {because 'used by webdrivermanager'}
 
   implementation('org.apache.httpcomponents.client5:httpclient5:5.1.3') {
