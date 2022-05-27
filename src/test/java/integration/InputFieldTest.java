@@ -33,8 +33,8 @@ final class InputFieldTest extends ITest {
     input.setValue("456");
     assertThat(input.getValue()).isEqualTo("456");
 
-    input.setValue("456");
-    input.setValue((String) null);
+    input.setValue("789");
+    input.clear();
     assertThat(input.getValue()).isEqualTo("");
   }
 

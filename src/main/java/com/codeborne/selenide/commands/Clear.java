@@ -53,14 +53,24 @@ public class Clear implements Command<SelenideElement> {
    * </p>
    */
   protected void clearAndTrigger(Driver driver, WebElement input) {
-    clear(driver, input);
-    driver.executeJavaScript("document.activeElement?.blur()");
+    if (driver.browser().isSafari()) {
+      input.clear();
+    }
+    else {
+      clear(driver, input);
+      driver.executeJavaScript("document.activeElement?.blur()");
+    }
   }
 
   /**
    * Clear the input content without triggering "change" and "blur" events
    */
   public void clear(Driver driver, WebElement input) {
-    input.sendKeys(HOME, chord(SHIFT, END), BACK_SPACE);
+    if (driver.browser().isSafari()) {
+      input.clear();
+    }
+    else {
+      input.sendKeys(HOME, chord(SHIFT, END), BACK_SPACE);
+    }
   }
 }
