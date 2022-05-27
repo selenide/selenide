@@ -71,6 +71,7 @@ subprojects {
     systemProperties['selenide.reportsFolder'] = 'build/reports/tests/safari'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    maxParallelForks = 1
   }
 
   task opera(type: Test) {
