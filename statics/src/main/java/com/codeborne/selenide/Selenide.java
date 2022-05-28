@@ -896,7 +896,8 @@ public class Selenide {
    * Default implementation acts via {@link java.awt.Toolkit} and supports only local runs.
    * <p>
    * Remote runs support can be implemented via plugins.
-   * Plugin for Selenoid will be released soon.
+   * Plugin for Selenoid supports clipboard since v1.1.0.
+   * @see <a href="https://github.com/selenide/selenide-selenoid">selenide-selenoid</a>
    * <p>
    * Pay attention that Clipboard is shared resource for instance where tests runs
    * and keep in mind while developing test suite with multiple tests for clipboard.
