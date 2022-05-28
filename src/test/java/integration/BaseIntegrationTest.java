@@ -7,15 +7,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.IOException;
-import java.net.BindException;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.SAFARI;
+import static integration.server.LocalHttpServer.startWithRetry;
 import static java.lang.Boolean.parseBoolean;
-import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({LogTestNameExtension.class, TextReportExtension.class})
 public abstract class BaseIntegrationTest {
@@ -42,28 +40,10 @@ public abstract class BaseIntegrationTest {
       synchronized (BaseIntegrationTest.class) {
         if (server == null) {
           protocol = SSL ? "https://" : "http://";
-          server = runWithRetry();
+          server = startWithRetry(SSL);
         }
       }
     }
-  }
-
-  private static LocalHttpServer runWithRetry() throws Exception {
-    IOException lastError = null;
-    for (int i = 0; i < 5; i++) {
-      try {
-        return new LocalHttpServer(findFreePort(), SSL).start();
-      }
-      catch (IOException failedToStartServer) {
-        if (failedToStartServer.getCause() instanceof BindException) {
-          lastError = failedToStartServer;
-        }
-        else {
-          throw failedToStartServer;
-        }
-      }
-    }
-    throw lastError;
   }
 
   protected static String getBaseUrl() {
