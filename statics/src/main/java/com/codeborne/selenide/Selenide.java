@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.drivercommands.DevTools;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.By;
@@ -911,6 +912,23 @@ public class Selenide {
   @CheckReturnValue
   public static Clipboard clipboard() {
     return getSelenideDriver().getClipboard();
+  }
+
+  /**
+   * Provide access to Chromium DevTools.
+   * Default implementation supports local or Selenium grid 4 sessions only.
+   * <p>
+   * Remote runs support can be implemented via plugins.
+   * Plugin for Selenoid will be released soon.
+   * <p>
+   *
+   * @return DevTools
+   * @since 6.X.0
+   */
+  @Nonnull
+  @CheckReturnValue
+  public static DevTools devTools() {
+    return getSelenideDriver().devTools();
   }
 
   /**

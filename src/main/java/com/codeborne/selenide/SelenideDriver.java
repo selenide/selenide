@@ -1,13 +1,10 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.drivercommands.DevTools;
 import com.codeborne.selenide.drivercommands.LazyDriver;
 import com.codeborne.selenide.drivercommands.Navigator;
 import com.codeborne.selenide.drivercommands.WebDriverWrapper;
-import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
-import com.codeborne.selenide.impl.ElementFinder;
-import com.codeborne.selenide.impl.JavaScript;
-import com.codeborne.selenide.impl.PageObjectFactory;
-import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import com.codeborne.selenide.impl.*;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.By;
@@ -47,6 +44,8 @@ public class SelenideDriver {
   private final Config config;
   private final Driver driver;
 
+  private final DevTools devTools;
+
   public SelenideDriver(Config config) {
     this(config, emptyList(), emptyList());
   }
@@ -69,6 +68,7 @@ public class SelenideDriver {
   public SelenideDriver(Config config, Driver driver) {
     this.config = config;
     this.driver = driver;
+    this.devTools = new DevTools(driver);
   }
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
@@ -79,6 +79,7 @@ public class SelenideDriver {
                         DownloadsFolder browserDownloadsFolder) {
     this.config = config;
     this.driver = new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder);
+    this.devTools = new DevTools(driver);
   }
 
   @CheckReturnValue
@@ -461,6 +462,12 @@ public class SelenideDriver {
   @Nonnull
   public Clipboard getClipboard() {
     return inject(ClipboardService.class).getClipboard(driver());
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public DevTools devTools() {
+    return devTools;
   }
 
   private static final PageObjectFactory pageFactory = inject(PageObjectFactory.class);
