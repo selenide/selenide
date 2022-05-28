@@ -69,8 +69,8 @@ public class CreateDriverCommand {
           browserProxy = selenideProxyServer.getSeleniumProxy();
         } catch (NoClassDefFoundError e) {
           throw new IllegalStateException("Cannot initialize proxy. " +
-            "Probably you should add BrowserUpProxy dependency to your project " +
-            "- see https://search.maven.org/search?q=a:browserup-proxy-core", e);
+            "Probably you should add \"selenide-proxy\" dependency to your project " +
+            "- see https://search.maven.org/search?q=a:selenide-proxy", e);
         }
       }
 

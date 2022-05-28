@@ -395,6 +395,7 @@ public abstract class Condition {
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
    * @param text expected text of HTML element without its children
+   * @since 6.6.0
    */
   @CheckReturnValue
   @Nonnull
@@ -425,6 +426,7 @@ public abstract class Condition {
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
    * @param text expected text of HTML element without its children
+   * @since 6.6.0
    */
   @CheckReturnValue
   @Nonnull
