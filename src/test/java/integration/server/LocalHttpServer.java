@@ -7,10 +7,14 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import java.io.IOException;
+import java.net.BindException;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import static org.openqa.selenium.net.PortProber.findFreePort;
 
 public class LocalHttpServer {
   private final List<FileItem> uploadedFiles = new CopyOnWriteArrayList<>();
@@ -18,7 +22,7 @@ public class LocalHttpServer {
   private final Server server;
   private final int port;
 
-  public LocalHttpServer(int port, boolean ssl) {
+  LocalHttpServer(int port, boolean ssl) {
     this.port = port;
     server = new Server();
 
@@ -62,6 +66,24 @@ public class LocalHttpServer {
   public LocalHttpServer start() throws Exception {
     server.start();
     return this;
+  }
+
+  public static LocalHttpServer startWithRetry(boolean ssl) throws Exception {
+    IOException lastError = null;
+    for (int i = 0; i < 5; i++) {
+      try {
+        return new LocalHttpServer(findFreePort(), ssl).start();
+      }
+      catch (IOException failedToStartServer) {
+        if (failedToStartServer.getCause() instanceof BindException) {
+          lastError = failedToStartServer;
+        }
+        else {
+          throw failedToStartServer;
+        }
+      }
+    }
+    throw lastError;
   }
 
   /**

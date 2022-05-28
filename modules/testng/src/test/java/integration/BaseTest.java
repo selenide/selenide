@@ -12,7 +12,6 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 
 import static com.codeborne.selenide.AssertionMode.STRICT;
-import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @Listeners({SoftAsserts.class, TextReport.class, BrowserPerTest.class, ScreenShooter.class})
 abstract class BaseTest {
@@ -27,10 +26,9 @@ abstract class BaseTest {
   @BeforeSuite
   final void startServer() throws Exception {
     if (server == null) {
-      int port = findFreePort();
       log.info("START {} Test NG tests", Configuration.browser);
-      server = new LocalHttpServer(port, true).start();
-      Configuration.baseUrl = "https://127.0.0.1:" + port;
+      server = LocalHttpServer.startWithRetry(true).start();
+      Configuration.baseUrl = "https://127.0.0.1:" + server.getPort();
     }
   }
 }
