@@ -6,12 +6,70 @@ on:
   pull_request:
 
 jobs:
-  run-tests-on-windows:
-    runs-on: windows-latest
+#  run-tests-on-windows:
+#    runs-on: windows-latest
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        gradle-task: [ 'check', 'edge_headless' ]
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Set up JDK
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'temurin'
+#          cache: 'gradle'
+#          java-version: '17'
+#      - name: Setup Edge
+#        if: ${{ matrix.gradle-task == 'edge_headless' }}
+#        uses: browser-actions/setup-edge@latest
+#      - name: Build with Gradle
+#        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
+#      - uses: actions/upload-artifact@v3
+#        if: failure()
+#        with:
+#          name: test-report-win
+#          path: ./**/build/reports
+#  run-tests-on-linux:
+#    runs-on: ubuntu-latest
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        gradle-task: [ 'check', 'firefox_headless', 'chrome_headless' ]
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Set up JDK
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'temurin'
+#          cache: 'gradle'
+#          java-version: '17'
+#      - name: Setup Firefox
+#        if: ${{ matrix.gradle-task != 'check' }}
+#        uses: browser-actions/setup-firefox@latest
+#      - uses: actions/cache@v3
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Build with Gradle
+#        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
+#      - uses: actions/upload-artifact@v3
+#        if: failure()
+#        with:
+#          name: test-report
+#          path: ./**/build/reports/
+  run-tests-on-macos:
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'check', 'edge_headless' ]
+        gradle-task: [ 'check', 'safari' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -21,34 +79,6 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
           java-version: '17'
-      - name: Setup Edge
-        if: ${{ matrix.gradle-task == 'edge_headless' }}
-        uses: browser-actions/setup-edge@latest
-      - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
-      - uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: test-report-win
-          path: ./**/build/reports
-  run-tests-on-linux:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        gradle-task: [ 'check', 'firefox_headless', 'chrome_headless' ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          cache: 'gradle'
-          java-version: '17'
-      - name: Setup Firefox
-        if: ${{ matrix.gradle-task != 'check' }}
-        uses: browser-actions/setup-firefox@latest
       - uses: actions/cache@v3
         with:
           path: |
@@ -57,7 +87,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Build with Gradle
+      - name: Prepare safari driver
+        run: |
+          sudo safaridriver --enable
+          safaridriver -p 0 &
+      - name: Run tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
         if: failure()
