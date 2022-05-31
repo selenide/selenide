@@ -72,7 +72,7 @@ public class BearerTokenAuthenticator extends LoginAuthenticator {
   }
 
   @Override
-  public boolean secureResponse(ServletRequest req, ServletResponse res, boolean mandatory, User validatedUser) throws ServerAuthException {
+  public boolean secureResponse(ServletRequest req, ServletResponse res, boolean mandatory, User validatedUser) {
     return true;
   }
 }

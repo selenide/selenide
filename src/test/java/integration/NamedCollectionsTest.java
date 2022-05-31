@@ -31,10 +31,13 @@ public class NamedCollectionsTest extends ITest {
   @Test
   void canGiveCollectionHumanReadableName_filtered_and_named() {
     assertThatThrownBy(() -> {
-      $$x("/long/ugly/xpath").as("Login buttons").filter(enabled).as("enabled buttons").shouldHave(size(666));
+      $$x("/long/ugly/xpath").as("Login buttons")
+        .filter(enabled).as("enabled buttons")
+        .shouldHave(size(666));
     })
       .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageStartingWith("List size mismatch: expected: = 666, actual: 0, collection: enabled buttons {Login buttons {By.xpath: /long/ugly/xpath}.filter(enabled)}");
+      .hasMessageStartingWith("List size mismatch: expected: = 666, actual: 0, collection:" +
+        " enabled buttons {Login buttons {By.xpath: /long/ugly/xpath}.filter(enabled)}");
   }
 
   @Test
@@ -43,7 +46,8 @@ public class NamedCollectionsTest extends ITest {
       $$x("/long/ugly/xpath").as("Login buttons").filter(enabled).shouldHave(size(666));
     })
       .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageStartingWith("List size mismatch: expected: = 666, actual: 0, collection: Login buttons {By.xpath: /long/ugly/xpath}.filter(enabled)");
+      .hasMessageStartingWith("List size mismatch: expected: = 666, actual: 0, collection:" +
+        " Login buttons {By.xpath: /long/ugly/xpath}.filter(enabled)");
   }
 
   @Test
@@ -72,7 +76,8 @@ public class NamedCollectionsTest extends ITest {
       $$x("/long/ugly/xpath").first(42).shouldHave(size(666));
     })
       .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageStartingWith("List size mismatch: expected: = 666, actual: 0, collection: By.xpath: /long/ugly/xpath:first(42)");
+      .hasMessageStartingWith("List size mismatch: expected: = 666, actual: 0," +
+        " collection: By.xpath: /long/ugly/xpath:first(42)");
   }
 
   @Test
