@@ -2,7 +2,6 @@ package com.codeborne.selenide.proxy;
 
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.BasicAuthCredentials;
-import com.codeborne.selenide.Credentials;
 import io.netty.handler.codec.http.DefaultHttpRequest;
 import org.junit.jupiter.api.Test;
 

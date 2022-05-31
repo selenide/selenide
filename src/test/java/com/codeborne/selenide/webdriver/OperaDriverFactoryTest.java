@@ -4,7 +4,6 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.opera.OperaOptions;
 

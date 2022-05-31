@@ -12,11 +12,6 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.be;
-import static com.codeborne.selenide.Condition.hidden;
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.visible;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ParametersAreNonnullByDefault

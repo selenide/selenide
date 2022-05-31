@@ -3,7 +3,6 @@ package integration.customconditions;
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.Stopwatch;
 import com.codeborne.selenide.ex.ElementShould;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
