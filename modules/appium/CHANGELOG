@@ -1,5 +1,8 @@
 == Changelog
 
+=== 2.0.3 (released 31.05.2022)
+* upgrade to Appium 8.1.0  --  see https://github.com/appium/java-client/blob/master/README.md#changelog
+
 === 2.0.2 (released 24.05.2022)
 * upgrade to Selenide 6.5.1
 * fix UnsupportedCommandException in `$.setValue()`  --  see https://github.com/selenide/selenide/issues/1810
