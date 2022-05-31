@@ -28,7 +28,8 @@ final class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback,
 
   @Override
   public void afterEach(ExtensionContext context) {
-    getLogger(context.getRequiredTestClass().getName()).info("finished {} - {} {}", context.getDisplayName(), verdict(context), memory());
+    getLogger(context.getRequiredTestClass().getName())
+      .info("finished {} - {} {}", context.getDisplayName(), verdict(context), memory());
   }
 
   private String verdict(ExtensionContext context) {
