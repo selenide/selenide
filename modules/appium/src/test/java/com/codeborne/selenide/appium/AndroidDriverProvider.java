@@ -25,7 +25,6 @@ public class AndroidDriverProvider implements WebDriverProvider {
     options.setAutomationName(AutomationName.ANDROID_UIAUTOMATOR2);
     options.setPlatformName("Android");
     options.setDeviceName("Android Emulator");
-    options.setPlatformVersion("9.0");
     options.setCapability(APPLICATION_NAME, "Appium");
     options.setAppPackage("com.android.calculator2");
     options.setAppActivity("com.android.calculator2.Calculator");
