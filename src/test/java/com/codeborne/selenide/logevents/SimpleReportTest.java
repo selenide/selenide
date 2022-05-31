@@ -68,7 +68,7 @@ final class SimpleReportTest {
   }
 
   private static class Log extends SelenideLog {
-    public Log(String element, String subject, EventStatus status) {
+    Log(String element, String subject, EventStatus status) {
       super(element, subject);
       setStatus(status);
     }

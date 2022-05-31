@@ -17,7 +17,6 @@ import org.eclipse.jetty.security.authentication.LoginAuthenticator;
 import org.eclipse.jetty.server.Authentication;
 import org.eclipse.jetty.server.Authentication.User;
 import org.eclipse.jetty.server.UserIdentity;
-import org.eclipse.jetty.util.security.Constraint;
 
 public class BearerTokenAuthenticator extends LoginAuthenticator {
   @Override

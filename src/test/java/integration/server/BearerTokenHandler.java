@@ -1,16 +1,13 @@
 package integration.server;
 
-import com.google.common.collect.Sets;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static org.apache.hc.core5.http.HttpStatus.SC_UNAUTHORIZED;
