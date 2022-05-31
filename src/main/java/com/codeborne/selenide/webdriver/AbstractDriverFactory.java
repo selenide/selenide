@@ -62,7 +62,10 @@ public abstract class AbstractDriverFactory implements DriverFactory {
 
   @CheckReturnValue
   @Nonnull
-  protected <T extends MutableCapabilities> T createCommonCapabilities(T capabilities, Config config, Browser browser, @Nullable Proxy proxy) {
+  protected <T extends MutableCapabilities> T createCommonCapabilities(T capabilities,
+                                                                       Config config,
+                                                                       Browser browser,
+                                                                       @Nullable Proxy proxy) {
     if (proxy != null) {
       capabilities.setCapability(PROXY, proxy);
     }
