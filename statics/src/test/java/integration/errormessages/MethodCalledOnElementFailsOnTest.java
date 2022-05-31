@@ -174,16 +174,21 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
   @Test
   void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection_WithNonExistentStartCollection() {
-    SelenideElement element = $$("ul .nonexistent").filterBy(cssClass("the-expanse")).findBy(cssClass("detective")).find("label");
+    SelenideElement element = $$("ul .nonexistent").
+      filterBy(cssClass("the-expanse"))
+      .findBy(cssClass("detective"))
+      .find("label");
 
     assertThatThrownBy(() -> element.shouldHave(exactText("detective")))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {ul .nonexistent.filter(css class \"the-expanse\").findBy(css class \"detective\")}")
+      .hasMessageStartingWith("Element not found " +
+        "{ul .nonexistent.filter(css class \"the-expanse\").findBy(css class \"detective\")}")
       .hasMessageContaining("Expected: exist")
       .has(screenshot())
       .getCause()
       .isInstanceOf(NoSuchElementException.class)
-      .hasMessageStartingWith("Cannot locate an element ul .nonexistent.filter(css class \"the-expanse\").findBy(css class \"detective\")");
+      .hasMessageStartingWith("Cannot locate an element" +
+        " ul .nonexistent.filter(css class \"the-expanse\").findBy(css class \"detective\")");
   }
 
   @Test
@@ -220,7 +225,8 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     assertThatThrownBy(() -> element.shouldHave(exactText("detective")))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {ul li.filter(css class \"the-expanse\").findBy(css class \"detective\")/.nonexistent}")
+      .hasMessageStartingWith("Element not found " +
+        "{ul li.filter(css class \"the-expanse\").findBy(css class \"detective\")/.nonexistent}")
       .hasMessageContaining("Expected: exact text \"detective\"")
       .has(screenshot())
       .getCause()

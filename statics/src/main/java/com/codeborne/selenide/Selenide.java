@@ -292,7 +292,8 @@ public class Selenide {
 
   /**
    * Wrap standard Selenium WebElement into SelenideElement
-   * to use additional methods like {@link SelenideElement#shouldHave(Condition...)}, {@link SelenideElement#selectOption(String...)} etc.
+   * to use additional methods like {@link SelenideElement#shouldHave(Condition...)},
+   * {@link SelenideElement#selectOption(String...)} etc.
    *
    * @param webElement standard Selenium WebElement
    * @return given WebElement wrapped into SelenideElement
@@ -427,7 +428,8 @@ public class Selenide {
 
   /**
    * Wrap standard Selenium WebElement into SelenideElement
-   * to use additional methods like {@link SelenideElement#shouldHave(Condition...)}, {@link SelenideElement#selectOption(String...)} etc.
+   * to use additional methods like {@link SelenideElement#shouldHave(Condition...)},
+   * {@link SelenideElement#selectOption(String...)} etc.
    *
    * @param webElement standard Selenium WebElement
    * @return given WebElement wrapped into SelenideElement
