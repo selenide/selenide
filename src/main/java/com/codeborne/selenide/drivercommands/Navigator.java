@@ -138,7 +138,7 @@ public class Navigator {
                                          @Nullable AuthenticationType authType,
                                          @Nullable Credentials credentials) {
     return passBasicAuthThroughUrl(config, authType, credentials)
-      ? basicAuthUrl.appendBasicAuthToURL(url, ((BasicAuthCredentials) credentials))
+      ? basicAuthUrl.appendBasicAuthToURL(url, (BasicAuthCredentials) credentials)
       : url;
   }
 

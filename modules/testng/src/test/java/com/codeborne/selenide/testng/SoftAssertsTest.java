@@ -16,7 +16,6 @@ import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -129,10 +128,10 @@ final class SoftAssertsTest {
   }
 
   @Listeners(SoftAsserts.class)
-  private static abstract class BaseSoftTest {
+  private abstract static class BaseSoftTest {
   }
 
-  private static abstract class SoftTest extends BaseSoftTest {
+  private abstract static class SoftTest extends BaseSoftTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public abstract void testWithExpectedException();
 
@@ -141,15 +140,15 @@ final class SoftAssertsTest {
   }
 
   @Listeners(TextReport.class)
-  private static abstract class BaseHardTest {
+  private abstract static class BaseHardTest {
   }
 
-  private static abstract class HardTest extends BaseHardTest {
+  private abstract static class HardTest extends BaseHardTest {
     @Test
     public abstract void yetAnotherTestMethod();
   }
 
-  private static abstract class AnotherTest {
+  private abstract static class AnotherTest {
     @Test
     public abstract void yetAnotherTestMethod();
   }
