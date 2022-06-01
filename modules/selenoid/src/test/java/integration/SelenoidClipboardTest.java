@@ -16,19 +16,15 @@ import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SelenoidClipboardTest {
-
   @BeforeEach
   public void prepare() {
-    Configuration.remote = "http://localhost:4444/wd/hub";
-    open("https://www.w3schools.com/howto/howto_js_copy_clipboard.asp");
-    $(".snigel-cmp-framework").shouldBe(visible);
-    executeJavaScript("const popup = document.getElementById('snigel-cmp-framework'); popup.parentNode.removeChild(popup);");
+    open("/clipboard.html");
   }
 
   @Test
   public void getClipboardContent() {
-    $("#myInput").shouldHave(attribute("value", "Hello World"));
-    $("[onclick='myFunction()']").shouldBe(visible).click();
+    $("#text-input").shouldHave(attribute("value", "Hello World"));
+    $("#copy-button").shouldBe(visible).click();
     clipboard().shouldHave(content("Hello World"));
     assertEquals("Hello World", clipboard().getText());
   }
@@ -38,10 +34,5 @@ public class SelenoidClipboardTest {
     clipboard().setText("John Wick");
     assertEquals("John Wick", clipboard().getText());
     clipboard().shouldHave(content("John Wick"));
-  }
-
-  @AfterEach
-  public void tearDown() {
-    closeWebDriver();
   }
 }
