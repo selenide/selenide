@@ -59,7 +59,7 @@ final class ScreenshotsTest extends IntegrationTest {
     BufferedImage img = ImageIO.read(screenshot);
 
     assertThat(img.getWidth()).isBetween(1200, 3000);
-    assertThat(img.getHeight()).isBetween(2000, 3000);
+    assertThat(img.getHeight()).isBetween(960, 3000);
 
     assertThat(screenshots.getContextScreenshots().get(0)).isSameAs(screenshot);
   }
