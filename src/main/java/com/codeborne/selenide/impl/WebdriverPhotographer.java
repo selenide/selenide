@@ -25,6 +25,8 @@ import static com.codeborne.selenide.Browsers.EDGE;
 
 @ParametersAreNonnullByDefault
 public class WebdriverPhotographer implements Photographer {
+  private static final JavaScript js = new JavaScript("get-screen-size.js");
+
   @Nonnull
   @CheckReturnValue
   @Override
@@ -87,18 +89,11 @@ public class WebdriverPhotographer implements Photographer {
   }
 
   private Options getOptions(RemoteWebDriver webDriver) {
-    long fullWidth = (long) webDriver.executeScript("return Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, document.body.offsetWidth, document.documentElement.offsetWidth, document.body.clientWidth, document.documentElement.clientWidth)");
-    long fullHeight = (long) webDriver.executeScript("return  Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight, document.body.clientHeight, document.documentElement.clientHeight)");
-
-    long viewWidth = (long) webDriver.executeScript("return window.innerWidth");
-    long viewHeight = (long) webDriver.executeScript("return window.innerHeight");
-
-    boolean exceedViewport = fullWidth > viewWidth || fullHeight > viewHeight;
-
-    return new Options(fullWidth, fullHeight, viewWidth, viewHeight, exceedViewport);
+    Map<String, Object> size = js.execute(webDriver);
+    return new Options((long) size.get("fullWidth"), (long) size.get("fullHeight"), (boolean) size.get("exceedViewport"));
   }
 
   @Desugar
-  private record Options(long fullWidth, long fullHeight, long viewWidth, long viewHeight, boolean exceedViewport) {
+  private record Options(long fullWidth, long fullHeight, boolean exceedViewport) {
   }
 }

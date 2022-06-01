@@ -98,8 +98,14 @@ public class Mocks {
     return collection;
   }
 
-  public static void givenScreenSize(RemoteWebDriver webDriver, long fullWidth, long fullHeight, long viewWidth, long viewHeight) {
-    when(webDriver.executeScript(anyString())).thenReturn(fullWidth, fullHeight, viewWidth, viewHeight);
+  public static void givenScreenSize(RemoteWebDriver webDriver, long fullWidth, long fullHeight, boolean exceedViewport) {
+    when(webDriver.executeScript(anyString())).thenReturn(
+      ImmutableMap.of(
+        "fullWidth", fullWidth,
+        "fullHeight", fullHeight,
+        "exceedViewport", exceedViewport
+      )
+    );
   }
 
   public static void givenCdpScreenshot(HasCdp webDriver, String png) {

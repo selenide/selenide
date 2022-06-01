@@ -224,7 +224,7 @@ final class ScreenShotLaboratoryTest {
   @Test
   void canFormatScreenShotPathWithSpaces() {
     ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
-    givenScreenSize(webDriver, 1600, 1200, 800, 600);
+    givenScreenSize(webDriver, 1600, 1200, false);
     givenCdpScreenshot(webDriver, "some png source");
 
     config.reportsUrl("http://ci.org/job/123/artifact");
@@ -239,7 +239,7 @@ final class ScreenShotLaboratoryTest {
   @Test
   void doNotEncodeReportsURL() {
     ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
-    givenScreenSize(webDriver, 1600, 1200, 800, 600);
+    givenScreenSize(webDriver, 1600, 1200, false);
     givenCdpScreenshot(webDriver, "some png source");
 
     config.reportsUrl("http://ci.org/path%20with%spaces/");

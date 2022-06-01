@@ -41,7 +41,7 @@ final class ModalTest {
     when(webDriver.getPageSource()).thenReturn("<html/>");
     when(webDriver.getScreenshotAs(FILE)).thenReturn(asTemporaryFile("/screenshot.png"));
     reportsBaseUri = new File(System.getProperty("user.dir"), config.reportsFolder()).getAbsoluteFile().toURI();
-    givenScreenSize(webDriver, 1600, 1200, 800, 600);
+    givenScreenSize(webDriver, 1600, 1200, false);
     givenCdpScreenshot(webDriver, "some png source");
   }
 
