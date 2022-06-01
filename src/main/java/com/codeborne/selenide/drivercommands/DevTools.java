@@ -7,12 +7,11 @@ import com.codeborne.selenide.impl.CdpProvider;
 import org.openqa.selenium.devtools.v102.storage.Storage;
 
 public class DevTools {
-  private final CdpProvider cdpProvider;
+  private static final CdpProvider cdpProvider = inject(CdpProvider.class);;
   private final Driver driver;
 
   public DevTools(Driver driver) {
     this.driver = driver;
-    this.cdpProvider = inject(CdpProvider.class);
   }
 
   public org.openqa.selenium.devtools.DevTools seleniumDevTools() {

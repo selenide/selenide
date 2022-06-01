@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
+import org.openqa.selenium.chromium.ChromiumDriver;
 
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.EDGE;
@@ -29,6 +30,11 @@ public class Browser {
   @CheckReturnValue
   public boolean isChrome() {
     return CHROME.equalsIgnoreCase(name);
+  }
+
+  @CheckReturnValue
+  public boolean isChromium() {
+    return ChromiumDriver.IS_CHROMIUM_BROWSER.test(name);
   }
 
   @CheckReturnValue

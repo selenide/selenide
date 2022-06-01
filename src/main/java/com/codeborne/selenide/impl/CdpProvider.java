@@ -1,7 +1,9 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.devtools.DevTools;
 
@@ -16,12 +18,14 @@ public interface CdpProvider {
   @CheckReturnValue
   DevTools getCdp(Driver driver);
 
-  default void chromiumGuard(Driver driver) {
-    HasCapabilities hasCapabilities = (HasCapabilities) driver.getWebDriver();
-    boolean isChromium = ChromiumDriver.IS_CHROMIUM_BROWSER
-      .test(hasCapabilities.getCapabilities().getBrowserName());
-    if (!isChromium) {
-      throw new DevToolsException("Cannot create devtools for non-chromium browser");
+  default void requireChromium(WebDriver driver) {
+    if (driver instanceof HasCapabilities hasCapabilities) {
+      boolean isChromium = new Browser(hasCapabilities.getCapabilities().getBrowserName(), false).isChromium();
+      if (!isChromium) {
+        throw new DevToolsException("Cannot create devtools for non-chromium browser");
+      }
+    } else {
+      throw new IllegalArgumentException("Driver must have capabilities");
     }
   }
 }

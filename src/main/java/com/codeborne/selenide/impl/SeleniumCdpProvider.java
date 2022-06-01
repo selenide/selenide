@@ -15,9 +15,9 @@ public class SeleniumCdpProvider implements CdpProvider {
   @Nonnull
   @CheckReturnValue
   public DevTools getCdp(Driver driver) {
-    chromiumGuard(driver);
-    WebDriver webDriver = new Augmenter().augment(driver.getWebDriver());
-    DevTools devTools = ((HasDevTools) webDriver).getDevTools();
+    WebDriver webDriver = driver.getWebDriver();
+    requireChromium(webDriver);
+    DevTools devTools = ((HasDevTools) new Augmenter().augment(webDriver)).getDevTools();
     devTools.createSessionIfThereIsNotOne();
     return devTools;
   }
