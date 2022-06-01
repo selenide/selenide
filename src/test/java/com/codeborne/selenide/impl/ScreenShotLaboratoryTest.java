@@ -17,10 +17,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.codeborne.selenide.Mocks.givenCdpScreenshot;
+import static com.codeborne.selenide.Mocks.givenScreenSize;
 import static java.io.File.separatorChar;
 import static java.lang.System.lineSeparator;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.io.IOUtils.resourceToByteArray;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -221,9 +222,10 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void canFormatScreenShotPathWithSpaces() throws IOException {
+  void canFormatScreenShotPathWithSpaces() {
     ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
+    givenScreenSize(webDriver, 1600, 1200, 800, 600);
+    givenCdpScreenshot(webDriver, "some png source");
 
     config.reportsUrl("http://ci.org/job/123/artifact");
     config.reportsFolder("build/reports/path with spaces/");
@@ -235,9 +237,10 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void doNotEncodeReportsURL() throws IOException {
+  void doNotEncodeReportsURL() {
     ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
+    givenScreenSize(webDriver, 1600, 1200, 800, 600);
+    givenCdpScreenshot(webDriver, "some png source");
 
     config.reportsUrl("http://ci.org/path%20with%spaces/");
 
@@ -253,9 +256,8 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void convertsScreenshotFileNameToCIUrl() throws IOException {
+  void convertsScreenshotFileNameToCIUrl() {
     config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
     String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
@@ -271,8 +273,6 @@ final class ScreenShotLaboratoryTest {
     // directory, that not in 'user.dir'
     config.reportsFolder(Files.createTempDirectory("artifacts-storage").toFile().getAbsolutePath());
 
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
-
     String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
       .as("Concatenate reportUrl with screenshot file name if it saved outside of build/project home dir")
@@ -280,7 +280,7 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void returnsScreenshotFileName() throws IOException {
+  void returnsScreenshotFileName() {
     config.reportsUrl(null);
     String currentDir = System.getProperty("user.dir");
     if (separatorChar == '\\') {
@@ -288,8 +288,6 @@ final class ScreenShotLaboratoryTest {
     }
 
     currentDir = currentDir.replace(" ", "%20"); //the screenshot path uses %20 instead of the space character
-
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
     String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
@@ -307,11 +305,10 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void printHtmlPath_if_savePageSourceIsEnabled() throws IOException {
+  void printHtmlPath_if_savePageSourceIsEnabled() {
     config.savePageSource(false);
     config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
     doReturn(new File("build/reports/page123.html")).when(extractor).extract(eq(config), eq(webDriver), any());
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
     Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshot.summary()).isEqualTo(
@@ -321,11 +318,5 @@ final class ScreenShotLaboratoryTest {
 
   private String normalize(String path) {
     return separatorChar == '\\' ? path.replace('/', separatorChar) : path;
-  }
-
-  private File asTemporaryFile(String resource) throws IOException {
-    File tempFile = File.createTempFile("selenide-", "-screenshot-" + UUID.randomUUID());
-    FileUtils.writeByteArrayToFile(tempFile, resourceToByteArray(resource));
-    return tempFile;
   }
 }

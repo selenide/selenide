@@ -1,15 +1,23 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.CollectionSource;
+import com.google.common.collect.ImmutableMap;
+import org.apache.commons.codec.binary.Base64;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chromium.HasCdp;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.impl.Alias.NONE;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -88,5 +96,14 @@ public class Mocks {
       when(collection.getElement(i)).thenReturn(elements[i]);
     }
     return collection;
+  }
+
+  public static void givenScreenSize(RemoteWebDriver webDriver, long fullWidth, long fullHeight, long viewWidth, long viewHeight) {
+    when(webDriver.executeScript(anyString())).thenReturn(fullWidth, fullHeight, viewWidth, viewHeight);
+  }
+
+  public static void givenCdpScreenshot(HasCdp webDriver, String png) {
+    String base64Png = Base64.encodeBase64String(png.getBytes(UTF_8));
+    when(webDriver.executeCdpCommand(eq("Page.captureScreenshot"), any())).thenReturn(ImmutableMap.of("data", base64Png));
   }
 }

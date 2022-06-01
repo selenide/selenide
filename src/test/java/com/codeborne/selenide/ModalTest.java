@@ -13,6 +13,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.UUID;
 
+import static com.codeborne.selenide.Mocks.givenCdpScreenshot;
+import static com.codeborne.selenide.Mocks.givenScreenSize;
 import static org.apache.commons.io.IOUtils.resourceToByteArray;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -39,6 +41,8 @@ final class ModalTest {
     when(webDriver.getPageSource()).thenReturn("<html/>");
     when(webDriver.getScreenshotAs(FILE)).thenReturn(asTemporaryFile("/screenshot.png"));
     reportsBaseUri = new File(System.getProperty("user.dir"), config.reportsFolder()).getAbsoluteFile().toURI();
+    givenScreenSize(webDriver, 1600, 1200, 800, 600);
+    givenCdpScreenshot(webDriver, "some png source");
   }
 
   @Test
