@@ -52,4 +52,15 @@ final class ScreenshotsTest extends IntegrationTest {
       .hasSize(1);
     assertThat(screenshots.getContextScreenshots().get(0)).isSameAs(screenshot);
   }
+
+  @Test
+  void canTakeFullScreenshot() throws IOException {
+    File screenshot = Selenide.screenshot(OutputType.FILE);
+    BufferedImage img = ImageIO.read(screenshot);
+
+    assertThat(img.getWidth()).isBetween(2000, 3000);
+    assertThat(img.getHeight()).isBetween(2000, 3000);
+
+    assertThat(screenshots.getContextScreenshots().get(0)).isSameAs(screenshot);
+  }
 }

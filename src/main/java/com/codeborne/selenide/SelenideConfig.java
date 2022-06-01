@@ -31,7 +31,6 @@ public class SelenideConfig implements Config {
   private boolean reopenBrowserOnFail = Boolean.parseBoolean(getProperty("selenide.reopenBrowserOnFail", "true"));
   private boolean clickViaJs = Boolean.parseBoolean(getProperty("selenide.clickViaJs", "false"));
   private boolean screenshots = Boolean.parseBoolean(getProperty("selenide.screenshots", "true"));
-
   private boolean savePageSource = Boolean.parseBoolean(getProperty("selenide.savePageSource", "true"));
   private String reportsFolder = getProperty("selenide.reportsFolder", "build/reports/tests");
   private String downloadsFolder = getProperty("selenide.downloadsFolder", "build/downloads");
