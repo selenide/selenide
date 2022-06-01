@@ -20,9 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.codeborne.selenide.Browsers.CHROME;
-import static com.codeborne.selenide.Browsers.EDGE;
-
 @ParametersAreNonnullByDefault
 public class WebdriverPhotographer implements Photographer {
   private static final JavaScript js = new JavaScript("get-screen-size.js");
@@ -52,12 +49,10 @@ public class WebdriverPhotographer implements Photographer {
     }
 
     if (driver.getWebDriver() instanceof RemoteWebDriver remoteWebDriver) {
-      String browserName = remoteWebDriver.getCapabilities().getBrowserName();
-      if (!(browserName.equalsIgnoreCase(CHROME) || browserName.equalsIgnoreCase(EDGE))) {
+      WebDriver webDriver = new Augmenter().augment(remoteWebDriver);
+      if (!(webDriver instanceof HasDevTools)) {
         return takeDefaultScreenshot(driver, outputType);
       }
-
-      WebDriver webDriver = new Augmenter().augment(remoteWebDriver);
       DevTools devTools = ((HasDevTools) webDriver).getDevTools();
       devTools.createSession();
 
