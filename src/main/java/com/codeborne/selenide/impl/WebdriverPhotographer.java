@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
 import com.github.bsideup.jabel.Desugar;
+import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -16,7 +17,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,16 +30,15 @@ public class WebdriverPhotographer implements Photographer {
   public <T> Optional<T> takeScreenshot(Driver driver, OutputType<T> outputType) {
     if (driver.getWebDriver() instanceof ChromiumDriver chromiumDriver) {
       Options options = getOptions(chromiumDriver);
-      HashMap<String, Object> captureScreenshotOptions = new HashMap<>() {{
-        put("clip", new HashMap<>() {{
-          put("x", 0);
-          put("y", 0);
-          put("width", options.fullWidth());
-          put("height", options.fullHeight());
-          put("scale", 1);
-        }});
-        put("captureBeyondViewport", options.exceedViewport());
-      }};
+      Map<String, Object> captureScreenshotOptions = ImmutableMap.of(
+        "clip", ImmutableMap.of(
+          "x", 0,
+          "y", 0,
+          "width", options.fullWidth(),
+          "height", options.fullHeight(),
+          "scale", 1),
+        "captureBeyondViewport", options.exceedViewport()
+      );
 
       Map<String, Object> result = chromiumDriver.executeCdpCommand("Page.captureScreenshot", captureScreenshotOptions);
 
