@@ -62,9 +62,9 @@ final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
     assertThat(screenshots.getContextScreenshots()).isEmpty();
 
     File screenshot = Selenide.screenshot(OutputType.FILE);
-    BufferedImage img = ImageIO.read( screenshot);
+    BufferedImage img = ImageIO.read(screenshot);
 
-    assertThat(img.getWidth()).isBetween(2000, 3000);
+    assertThat(img.getWidth()).isBetween(1000, 3000);
     assertThat(img.getHeight()).isBetween(2000, 3000);
 
     assertThat(screenshots.getContextScreenshots().get(0)).isSameAs(screenshot);
