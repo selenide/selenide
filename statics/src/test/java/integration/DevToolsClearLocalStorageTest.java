@@ -2,7 +2,10 @@ package integration;
 
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.Assumptions;
@@ -13,6 +16,7 @@ final class DevToolsClearLocalStorageTest extends IntegrationTest {
 
   @BeforeEach
   void addDataToLocalStorage() {
+    assumeThat(isChrome() || isEdge()).isTrue();
     open("/start_page.html");
     executeJavaScript("localStorage.setItem('key1', 'item1');");
     executeJavaScript("localStorage.setItem('key2', 'item2');");

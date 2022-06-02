@@ -2,6 +2,7 @@ package integration;
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 final class DevtoolsWithGridTest extends AbstractGridTest {
   @BeforeEach
   void openBrowser() {
-    assumeThat(isChrome()).isTrue();
+    assumeThat(isChrome() || isEdge()).isTrue();
     Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";
     open("/start_page.html");
   }

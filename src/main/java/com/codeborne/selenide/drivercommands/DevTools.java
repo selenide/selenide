@@ -4,6 +4,7 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.CdpProvider;
+import java.util.function.Consumer;
 import org.openqa.selenium.devtools.v102.storage.Storage;
 
 public class DevTools {
@@ -18,15 +19,21 @@ public class DevTools {
     return cdpProvider.getCdp(driver);
   }
 
-  public void clearCookies() {
-    try (var cdp = cdpProvider.getCdp(driver)) {
-      cdp.send(Storage.clearDataForOrigin("*", "cookies"));
+  public void runWithDevTools(Consumer<org.openqa.selenium.devtools.DevTools> block) {
+    try (org.openqa.selenium.devtools.DevTools devTools = seleniumDevTools()) {
+      block.accept(devTools);
     }
   }
 
+  public void clearCookies() {
+    runWithDevTools(cdp -> {
+      cdp.send(Storage.clearDataForOrigin("*", "cookies"));
+    });
+  }
+
   public void clearLocalStorage() {
-    try (var cdp = cdpProvider.getCdp(driver)) {
+    runWithDevTools(cdp -> {
       cdp.send(Storage.clearDataForOrigin("*", "local_storage"));
-    }
+    });
   }
 }

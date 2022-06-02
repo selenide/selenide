@@ -13,13 +13,14 @@ import java.net.URL;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class DevToolsClearCookiesTest extends IntegrationTest {
   @BeforeEach
   void addCookiesBeforeTest() throws MalformedURLException {
-    assumeThat(isChrome()).isTrue();
+    assumeThat(isChrome() || isEdge()).isTrue();
     open("/start_page.html");
 
     String domain = new URL(getWebDriver().getCurrentUrl()).getHost();
