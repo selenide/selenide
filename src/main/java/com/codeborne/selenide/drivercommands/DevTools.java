@@ -7,7 +7,7 @@ import com.codeborne.selenide.impl.CdpProvider;
 import org.openqa.selenium.devtools.v102.storage.Storage;
 
 public class DevTools {
-  private static final CdpProvider cdpProvider = inject(CdpProvider.class);;
+  private static final CdpProvider cdpProvider = inject(CdpProvider.class);
   private final Driver driver;
 
   public DevTools(Driver driver) {
@@ -19,13 +19,13 @@ public class DevTools {
   }
 
   public void clearCookies() {
-    try(var cdp = cdpProvider.getCdp(driver)) {
+    try (var cdp = cdpProvider.getCdp(driver)) {
       cdp.send(Storage.clearDataForOrigin("*", "cookies"));
     }
   }
 
   public void clearLocalStorage() {
-    try(var cdp = cdpProvider.getCdp(driver)) {
+    try (var cdp = cdpProvider.getCdp(driver)) {
       cdp.send(Storage.clearDataForOrigin("*", "local_storage"));
     }
   }

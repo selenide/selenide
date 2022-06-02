@@ -4,7 +4,6 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.devtools.DevTools;
 
 import javax.annotation.CheckReturnValue;

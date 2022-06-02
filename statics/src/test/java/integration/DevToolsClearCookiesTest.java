@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class DevToolsClearCookiesTest extends IntegrationTest {
-
   @BeforeEach
   void addCookiesBeforeTest() throws MalformedURLException {
     assumeThat(isChrome()).isTrue();

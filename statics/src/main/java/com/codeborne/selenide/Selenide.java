@@ -915,7 +915,7 @@ public class Selenide {
   }
 
   /**
-   * Provide access to Chromium DevTools.
+   * Provide access to Chromium DevTools features.
    * Default implementation supports local or Selenium grid 4 sessions only.
    * <p>
    * Remote runs support can be implemented via plugins.
@@ -923,7 +923,7 @@ public class Selenide {
    * <p>
    *
    * @return DevTools
-   * @since 6.X.0
+   * @since 6.6.0
    */
   @Nonnull
   @CheckReturnValue
