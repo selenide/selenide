@@ -17,7 +17,6 @@ import org.eclipse.jetty.security.authentication.LoginAuthenticator;
 import org.eclipse.jetty.server.Authentication;
 import org.eclipse.jetty.server.Authentication.User;
 import org.eclipse.jetty.server.UserIdentity;
-import org.eclipse.jetty.util.security.Constraint;
 
 public class BearerTokenAuthenticator extends LoginAuthenticator {
   @Override
@@ -72,7 +71,7 @@ public class BearerTokenAuthenticator extends LoginAuthenticator {
   }
 
   @Override
-  public boolean secureResponse(ServletRequest req, ServletResponse res, boolean mandatory, User validatedUser) throws ServerAuthException {
+  public boolean secureResponse(ServletRequest req, ServletResponse res, boolean mandatory, User validatedUser) {
     return true;
   }
 }

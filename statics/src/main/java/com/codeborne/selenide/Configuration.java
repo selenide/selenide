@@ -68,7 +68,8 @@ public class Configuration {
   /**
    * Should Selenide re-spawn browser if it's disappeared (hangs, broken, unexpectedly closed).
    * <br>
-   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.reopenBrowserOnFail=false".
+   * Can be configured either programmatically, via selenide.properties file
+   * or by system property "-Dselenide.reopenBrowserOnFail=false".
    * <br>
    * Set this property to false if you want to disable automatic re-spawning the browser.
    * <br>
@@ -95,7 +96,8 @@ public class Configuration {
 
   /**
    * URL of remote web driver (in case of using Selenium Grid).
-   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.remote=http://localhost:5678/wd/hub".
+   * Can be configured either programmatically, via selenide.properties file
+   * or by system property "-Dselenide.remote=http://localhost:5678/wd/hub".
    * <br>
    * Default value: null (Grid is not used).
    */
@@ -182,7 +184,8 @@ public class Configuration {
 
   /**
    * Folder to store screenshots to.
-   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.reportsFolder=test-result/reports".
+   * Can be configured either programmatically, via selenide.properties file
+   * or by system property "-Dselenide.reportsFolder=test-result/reports".
    * <br>
    * Default value: "build/reports/tests" (this is default for Gradle projects)
    */
@@ -190,7 +193,8 @@ public class Configuration {
 
     /**
    * Folder to store downloaded files to.
-   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.downloadsFolder=test-result/downloads".
+   * Can be configured either programmatically, via selenide.properties file
+     * or by system property "-Dselenide.downloadsFolder=test-result/downloads".
    * <br>
    * Default value: "build/downloads" (this is default for Gradle projects)
    */
@@ -200,7 +204,8 @@ public class Configuration {
    * Optional: URL of CI server where reports are published to.
    * In case of Jenkins, it is "BUILD_URL/artifact" by default.
    * <br>
-   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.reportsUrl=http://jenkins-host/reports".
+   * Can be configured either programmatically, via selenide.properties file
+   * or by system property "-Dselenide.reportsUrl=http://jenkins-host/reports".
    * <br>
    * If it's given, names of screenshots are printed as
    * "http://ci.mycompany.com/job/my-job/446/artifact/build/reports/tests/my_test.png" - it's useful to analyze test
@@ -241,7 +246,8 @@ public class Configuration {
   /**
    * <p>Assertion mode</p>
    *
-   * <p>Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.assertionMode=SOFT".</p>
+   * <p>Can be configured either programmatically, via selenide.properties file
+   * or by system property "-Dselenide.assertionMode=SOFT".</p>
    *
    * <br>
    *   Possible values: "STRICT" or "SOFT"
@@ -296,7 +302,8 @@ public class Configuration {
    * Controls Selenide and WebDriverManager integration.
    * When integration is enabled you don't need to download and setup any browser driver executables.
    * See https://github.com/bonigarcia/webdrivermanager for WebDriverManager configuration details.
-   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.driverManagerEnabled=false"
+   * Can be configured either programmatically, via selenide.properties file
+   * or by system property "-Dselenide.driverManagerEnabled=false"
    * <br>
    *
    * Default: true
@@ -331,7 +338,8 @@ public class Configuration {
   /**
    * Sets the path to browser executable.
    * Works only for Chrome, Firefox and Opera.
-   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.browserBinary=/path/to/binary"
+   * Can be configured either programmatically, via selenide.properties file
+   * or by system property "-Dselenide.browserBinary=/path/to/binary"
    */
   public static String browserBinary = defaults.browserBinary();
 

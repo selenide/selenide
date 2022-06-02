@@ -61,7 +61,7 @@ final class SelenideElementProxyTest {
     when(webdriver.executeScript(anyString(), same(element)))
       .thenReturn(ImmutableMap.of("id", "id1", "class", "class1"));
     when(webdriver.getPageSource()).thenReturn("<html>mock</html>");
-    when((webdriver).executeScript("return navigator.platform")).thenReturn("Win32");
+    when(webdriver.executeScript("return navigator.platform")).thenReturn("Win32");
     when(element.getTagName()).thenReturn("h1");
     when(element.getText()).thenReturn("Hello world");
     when(element.isDisplayed()).thenReturn(true);

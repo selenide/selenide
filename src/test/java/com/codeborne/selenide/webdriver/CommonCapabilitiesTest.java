@@ -45,7 +45,11 @@ final class CommonCapabilitiesTest {
   void transferCapabilitiesFromConfigurationInternetExplorer() {
     SelenideConfig config = new SelenideConfig();
     config.browser(INTERNET_EXPLORER);
-    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(new InternetExplorerOptions(), config, browser(config), proxy);
+    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(
+      new InternetExplorerOptions(),
+      config,
+      browser(config),
+      proxy);
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isFalse();
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_SSL_CERTS))).isTrue();
   }
@@ -54,7 +58,11 @@ final class CommonCapabilitiesTest {
   void transferCapabilitiesFromConfigurationIE() {
     SelenideConfig config = new SelenideConfig();
     config.browser(IE);
-    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(new InternetExplorerOptions(), config, browser(config), proxy);
+    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(
+      new InternetExplorerOptions(),
+      config,
+      browser(config),
+      proxy);
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isFalse();
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_SSL_CERTS))).isTrue();
   }

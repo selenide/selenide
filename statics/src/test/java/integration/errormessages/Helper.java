@@ -53,7 +53,8 @@ public class Helper {
           return assertionError.getMessage().startsWith("Unable to locate element: " + selector);
         }
         else {
-          return assertionError.getMessage().startsWith("no such element: Unable to locate element: {\"method\":\"css selector\",\"selector\":\"" + selector + "\"}");
+          return assertionError.getMessage()
+            .startsWith("no such element: Unable to locate element: {\"method\":\"css selector\",\"selector\":\"" + selector + "\"}");
         }
       }
     };

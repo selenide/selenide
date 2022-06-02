@@ -69,7 +69,12 @@ public class SimpleReport {
     private ReportBuilder(int firstColumnWidth, int secondColumnWidth, int estimatedReportLength) {
       this.firstColumnWidth = firstColumnWidth;
       this.secondColumnWidth = secondColumnWidth;
-      delimiterLine = '+' + String.join("+", line(firstColumnWidth + 2), line(secondColumnWidth + 2), line(10 + 2), line(10 + 2)) + '+' + lineSeparator();
+      delimiterLine = '+' + String.join("+",
+        line(firstColumnWidth + 2),
+        line(secondColumnWidth + 2),
+        line(10 + 2),
+        line(10 + 2)
+      ) + '+' + lineSeparator();
       sb = new StringBuilder(estimatedReportLength);
     }
 

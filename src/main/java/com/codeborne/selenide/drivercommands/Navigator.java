@@ -58,7 +58,10 @@ public class Navigator {
     return isAbsoluteUrl(relativeOrAbsoluteUrl) ? relativeOrAbsoluteUrl : config.baseUrl() + relativeOrAbsoluteUrl;
   }
 
-  private void navigateTo(SelenideDriver driver, String relativeOrAbsoluteUrl, @Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
+  private void navigateTo(SelenideDriver driver,
+                          String relativeOrAbsoluteUrl,
+                          @Nullable AuthenticationType authenticationType,
+                          @Nullable Credentials credentials) {
     checkThatProxyIsEnabled(driver.config());
 
     String absoluteUrl = absoluteUrl(driver.config(), relativeOrAbsoluteUrl);
@@ -130,13 +133,18 @@ public class Navigator {
     }
   }
 
-  private String appendBasicAuthIfNeeded(Config config, String url, @Nullable AuthenticationType authType, @Nullable Credentials credentials) {
+  private String appendBasicAuthIfNeeded(Config config,
+                                         String url,
+                                         @Nullable AuthenticationType authType,
+                                         @Nullable Credentials credentials) {
     return passBasicAuthThroughUrl(config, authType, credentials)
-      ? basicAuthUrl.appendBasicAuthToURL(url, ((BasicAuthCredentials) credentials))
+      ? basicAuthUrl.appendBasicAuthToURL(url, (BasicAuthCredentials) credentials)
       : url;
   }
 
-  private boolean passBasicAuthThroughUrl(Config config, @Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
+  private boolean passBasicAuthThroughUrl(Config config,
+                                          @Nullable AuthenticationType authenticationType,
+                                          @Nullable Credentials credentials) {
     return authenticationType == BASIC && credentials != null && !config.proxyEnabled();
   }
 
