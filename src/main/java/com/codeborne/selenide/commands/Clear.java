@@ -2,6 +2,7 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.Platform;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
@@ -11,11 +12,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static org.openqa.selenium.Keys.BACK_SPACE;
-import static org.openqa.selenium.Keys.END;
-import static org.openqa.selenium.Keys.HOME;
-import static org.openqa.selenium.Keys.SHIFT;
-import static org.openqa.selenium.Keys.chord;
+import static org.openqa.selenium.Keys.DELETE;
 
 /**
  * Clean the input field value.
@@ -54,13 +51,23 @@ public class Clear implements Command<SelenideElement> {
    */
   protected void clearAndTrigger(Driver driver, WebElement input) {
     clear(driver, input);
-    driver.executeJavaScript("document.activeElement?.blur()");
+    driver.executeJavaScript("arguments[0].blur()", input);
   }
 
   /**
    * Clear the input content without triggering "change" and "blur" events
    */
   public void clear(Driver driver, WebElement input) {
-    input.sendKeys(HOME, chord(SHIFT, END), BACK_SPACE);
+    Platform platform = driver.getPlatform();
+    if (platform.isUnknown()) {
+      input.clear();
+    }
+    else {
+      CharSequence modifier = platform.modifierKey();
+      driver.actions()
+        .sendKeys(input, "0")
+        .keyDown(modifier).sendKeys("a").keyUp(modifier).sendKeys(DELETE)
+        .perform();
+    }
   }
 }
