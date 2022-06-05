@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -12,6 +13,8 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 @ParametersAreNonnullByDefault
 public interface Driver {
@@ -69,6 +72,24 @@ public interface Driver {
   @Nonnull
   default String getUserAgent() {
     return executeJavaScript("return navigator.userAgent;");
+  }
+
+  @Nonnull
+  default Platform getPlatform() {
+    if (!(getWebDriver() instanceof JavascriptExecutor)) {
+      return Platform.UNKNOWN;
+    }
+    try {
+      String platform = executeJavaScript("return navigator.platform");
+      if (platform == null || platform.trim().isEmpty()) {
+        getLogger(getClass()).warn("Cannot detect platform: navigator.platform returned \"{}\"", platform);
+      }
+      return new Platform(platform);
+    }
+    catch (WebDriverException cannotExecuteJavascript) {
+      getLogger(getClass()).debug("Cannot get navigator.platform", cannotExecuteJavascript);
+      return Platform.UNKNOWN;
+    }
   }
 
   @CheckReturnValue

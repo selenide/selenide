@@ -39,7 +39,7 @@ final class SetValueCommandTest {
   void clearsTheInputIfArgsTextIsEmpty() {
     WebElement returnedElement = command.execute(proxy, locator, new Object[]{""});
     assertThat(returnedElement).isEqualTo(proxy);
-    verify(clear).clear(driver, mockedFoundElement);
+    verify(clear).clearAndTrigger(driver, mockedFoundElement);
   }
 
   @Test
