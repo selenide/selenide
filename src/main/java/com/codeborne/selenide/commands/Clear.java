@@ -59,10 +59,9 @@ public class Clear implements Command<SelenideElement> {
    */
   public void clear(Driver driver, WebElement input) {
     Platform platform = driver.getPlatform();
-    if (platform.isUnknown()) {
-      input.clear();
-    }
-    else {
+    input.clear();
+
+    if (!platform.isUnknown()) {
       CharSequence modifier = platform.modifierKey();
       driver.actions()
         .sendKeys(input, "0")
