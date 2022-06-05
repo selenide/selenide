@@ -66,9 +66,12 @@ public class SetValue implements Command<SelenideElement> {
       }
     }
     else {
-      clear.clear(driver, element);
       if (value.length() > 0) {
+        clear.clear(driver, element);
         element.sendKeys(value);
+      }
+      else {
+        clear.clearAndTrigger(driver, element);
       }
     }
   }
