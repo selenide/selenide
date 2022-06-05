@@ -6,7 +6,6 @@ subprojects {
   task ie(type: Test) {
     systemProperties['selenide.browser'] = 'ie'
     systemProperties['selenide.timeout'] = '8000'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/ie'
     include 'integration/**/*'
     exclude '**/AlertText.*'
     exclude '**/ConfirmTest.*'
@@ -15,7 +14,6 @@ subprojects {
 
   task edge(type: Test) {
     systemProperties['selenide.browser'] = 'edge'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/edge'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
   }
@@ -23,14 +21,12 @@ subprojects {
   task edge_headless(type: Test) {
     systemProperties['selenide.browser'] = 'edge'
     systemProperties['selenide.headless'] = 'true'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/edge_headless'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
   }
 
   task chrome(type: Test) {
     systemProperties['selenide.browser'] = 'chrome'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
   }
@@ -38,7 +34,6 @@ subprojects {
   task chrome_headless(type: Test) {
     systemProperties['selenide.browser'] = 'chrome'
     systemProperties['selenide.headless'] = 'true'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome_headless'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
   }
@@ -46,14 +41,12 @@ subprojects {
   task chrome_remote(type: Test) {
     systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
     systemProperties['selenide.browser'] = 'chrome'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome_remote'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
   }
 
   task firefox(type: Test) {
     systemProperties['selenide.browser'] = 'firefox'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
   }
@@ -61,14 +54,12 @@ subprojects {
   task firefox_headless(type: Test) {
     systemProperties['selenide.browser'] = 'firefox'
     systemProperties['selenide.headless'] = 'true'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox_headless'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
   }
 
   task safari(type: Test) {
     systemProperties['selenide.browser'] = 'safari'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/safari'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
     maxParallelForks = 1
@@ -76,7 +67,6 @@ subprojects {
 
   task opera(type: Test) {
     systemProperties['selenide.browser'] = 'opera'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/opera'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
   }
@@ -84,7 +74,6 @@ subprojects {
   task opera_headless(type: Test) {
     systemProperties['selenide.browser'] = 'opera'
     systemProperties['selenide.headless'] = 'true'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/opera_headless'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
   }
@@ -92,7 +81,6 @@ subprojects {
   task firefox_remote(type: Test) {
     systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
     systemProperties['selenide.browser'] = 'firefox'
-    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox_remote'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
   }
@@ -101,6 +89,8 @@ subprojects {
     useJUnitPlatform()
     systemProperty('file.encoding', encoding)
     systemProperty('BUILD_URL', System.getenv()['BUILD_URL'])
+    systemProperties['selenide.reportsFolder'] = "${reportsDir}/tests/${name}"
+
     if (System.getenv('CI')) {
       maxParallelForks = 1
     } else {
