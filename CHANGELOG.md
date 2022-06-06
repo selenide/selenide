@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.5.2 (released 06.06.2022)
+* #1497 fix $.clear implementation: use "Ctrl+A" / "Cmd+A" instead of "Home -> Shift+A -> Delete" (which didn't work on Safari and latest Firefox)
+
 ## 6.5.1 (released 25.05.2022)
 * #1808 Don't move focus to next element when calling $.clear() -- see PR #1809
 * Bump browserup-proxy-core from 2.1.4 to 2.1.5
