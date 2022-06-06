@@ -24,6 +24,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.element;
+import static integration.errormessages.Helper.getReportsFolder;
 import static integration.errormessages.Helper.screenshot;
 import static integration.errormessages.Helper.webElementNotFound;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -45,7 +46,7 @@ final class MissingElementTest extends IntegrationTest {
     reportsUrl = Configuration.reportsUrl;
     reportsFolder = Configuration.reportsFolder;
     Configuration.reportsUrl = "http://ci.org/";
-    Configuration.reportsFolder = "build/reports/tests";
+    Configuration.reportsFolder = getReportsFolder();
   }
 
   @AfterEach
@@ -56,7 +57,7 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void elementNotFound() {
-    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/elementNotFound";
+    String path = path("elementNotFound");
     assertThatThrownBy(() -> $("#h9").shouldHave(text("expected text")))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageMatching(String.format("Element not found \\{#h9}%n" +
@@ -65,7 +66,7 @@ final class MissingElementTest extends IntegrationTest {
         "Page source: " + path + html() + "%n" +
         "Timeout: 15 ms.%n" +
         "Caused by: NoSuchElementException:.*"))
-      .has(screenshot("/integration/errormessages/MissingElementTest/elementNotFound"))
+      .has(screenshot(path("elementNotFound")))
       .getCause()
       .isInstanceOf(NoSuchElementException.class)
       .is(webElementNotFound("#h9"));
@@ -73,7 +74,7 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void elementTextDoesNotMatch() {
-    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/elementTextDoesNotMatch";
+    String path = path("elementTextDoesNotMatch");
     assertThatThrownBy(() ->
       $("h2").shouldHave(text("expected text"))
     )
@@ -88,7 +89,7 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void elementAttributeDoesNotMatch() {
-    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/elementAttributeDoesNotMatch";
+    String path = path("elementAttributeDoesNotMatch");
     assertThatThrownBy(() ->
       $("h2").shouldHave(attribute("name", "header"))
     )
@@ -103,7 +104,7 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void wrapperTextDoesNotMatch() {
-    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/wrapperTextDoesNotMatch";
+    String path = path("wrapperTextDoesNotMatch");
     assertThatThrownBy(() ->
       $(element(By.tagName("h2"))).shouldHave(text("expected text"))
     )
@@ -118,7 +119,7 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void clickHiddenElement() {
-    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/clickHiddenElement";
+    String path = path("clickHiddenElement");
     assertThatThrownBy(() ->
       $("#theHiddenElement").click()
     )
@@ -134,7 +135,7 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void pageObjectElementTextDoesNotMatch() {
-    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/pageObjectElementTextDoesNotMatch";
+    String path = path("pageObjectElementTextDoesNotMatch");
     assertThatThrownBy(() ->
       $(pageObject.header1).shouldHave(text("expected text"))
     )
@@ -149,7 +150,7 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void pageObjectWrapperTextDoesNotMatch() {
-    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/pageObjectWrapperTextDoesNotMatch";
+    String path = path("pageObjectWrapperTextDoesNotMatch");
     assertThatThrownBy(() ->
       $(pageObject.header2).shouldHave(text("expected text"))
     )
@@ -173,7 +174,7 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void clickUnexistingWrappedElement() {
-    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/clickUnexistingWrappedElement";
+    String path = path("clickUnexistingWrappedElement");
     assertThatThrownBy(() ->
       $(pageObject.categoryDropdown).click()
     ).isInstanceOf(ElementNotFound.class)
@@ -187,7 +188,7 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void existingElementShouldNotExist() {
-    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/existingElementShouldNotExist";
+    String path = path("existingElementShouldNotExist");
     assertThatThrownBy(() ->
       $("h2").shouldNot(exist)
     )
@@ -202,7 +203,7 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void nonExistingElementShouldNotBeHidden() {
-    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/nonExistingElementShouldNotBeHidden";
+    String path = path("nonExistingElementShouldNotBeHidden");
     assertThatThrownBy(() ->
       $("h14").shouldNotBe(hidden)
     )
@@ -226,8 +227,8 @@ final class MissingElementTest extends IntegrationTest {
       .hasMessageContainingAll(
         "is not clickable at point",
         "Other element would receive the click",
-        "Screenshot: http://ci.org/build/reports/tests",
-        "Page source: http://ci.org/build/reports/tests"
+        "Screenshot: " + path("clickingNonClickableElement"),
+        "Page source: " + path("clickingNonClickableElement")
       );
   }
 
@@ -252,5 +253,9 @@ final class MissingElementTest extends IntegrationTest {
 
     @FindBy(id = "invalid_id")
     private WebElement categoryDropdown;
+  }
+
+  private static String path(String testName) {
+    return Helper.path("MissingElementTest", testName);
   }
 }
