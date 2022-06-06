@@ -6,12 +6,14 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.time.Duration;
 import java.util.Arrays;
 
 import static com.codeborne.selenide.commands.Util.firstOf;
@@ -54,7 +56,29 @@ public class Click implements Command<Void> {
   }
 
   protected void click(Driver driver, WebElement webElement, ClickOptions clickOptions) {
-    switch (clickOptions.clickOption()) {
+    Duration timeout = clickOptions.timeout();
+    if (timeout == null || timeout.toMillis() == driver.config().pageLoadTimeout()) {
+      doClick(driver, webElement, clickOptions);
+    }
+    else {
+      withTimeout(driver, timeout, () -> doClick(driver, webElement, clickOptions));
+    }
+  }
+
+  private void withTimeout(Driver driver, Duration timeout, Runnable lambda) {
+    WebDriver.Timeouts wdTimeouts = driver.getWebDriver().manage().timeouts();
+    Duration originalPageLoadTimeout = wdTimeouts.getPageLoadTimeout();
+    try {
+      wdTimeouts.pageLoadTimeout(timeout);
+      lambda.run();
+    }
+    finally {
+      wdTimeouts.pageLoadTimeout(originalPageLoadTimeout);
+    }
+  }
+
+  private void doClick(Driver driver, WebElement webElement, ClickOptions clickOptions) {
+    switch (clickOptions.clickMethod()) {
       case DEFAULT: {
         defaultClick(driver, webElement, clickOptions.offsetX(), clickOptions.offsetY());
         break;
@@ -64,7 +88,7 @@ public class Click implements Command<Void> {
         break;
       }
       default: {
-        throw new IllegalArgumentException("Unknown click option: " + clickOptions.clickOption());
+        throw new IllegalArgumentException("Unknown click option: " + clickOptions.clickMethod());
       }
     }
   }

@@ -74,13 +74,8 @@ public abstract class BaseHandler extends HttpServlet {
   }
 
   byte[] readFileContent(String fileName) throws IOException {
-    InputStream in = currentThread().getContextClassLoader().getResourceAsStream(fileName);
-    if (in == null) return null;
-    try {
-      return IOUtils.toByteArray(in);
-    }
-    finally {
-      in.close();
+    try (InputStream in = currentThread().getContextClassLoader().getResourceAsStream(fileName)) {
+      return in == null ? null : IOUtils.toByteArray(in);
     }
   }
 

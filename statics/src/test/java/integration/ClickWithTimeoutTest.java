@@ -1,0 +1,36 @@
+package integration;
+
+import com.codeborne.selenide.Configuration;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
+import static com.codeborne.selenide.ClickOptions.usingJavaScript;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Selenide.$;
+import static java.time.Duration.ofSeconds;
+
+/**
+ * Click a link which loads a very slow page.
+ * Link with id="slow-link" loads a page with 1.5 seconds.
+ */
+final class ClickWithTimeoutTest extends IntegrationTest {
+  @BeforeEach
+  void openTestPage() {
+    Configuration.timeout = 100;
+    Configuration.pageLoadTimeout = 200;
+    openFile("page_with_link_to_slow_page.html");
+  }
+
+  @Test
+  void canClickSlowLink() {
+    $("#slow-link").click(usingDefaultMethod().timeout(ofSeconds(2)));
+    $("h1").shouldHave(exactText("Selenide"), ofSeconds(2));
+  }
+
+  @Test
+  void canClickSlowLink_withJavascript() {
+    $("#slow-link").click(usingJavaScript().timeout(ofSeconds(2)));
+    $("h1").shouldHave(exactText("Selenide"), ofSeconds(2));
+  }
+}
