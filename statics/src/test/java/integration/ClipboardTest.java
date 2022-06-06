@@ -4,7 +4,6 @@ import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.ClipboardConditions.content;
@@ -17,8 +16,12 @@ import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled("Need configure X11 for github actions, not sure that it needs")
-public class DefaultClipboardTest extends IntegrationTest {
+public class ClipboardTest extends IntegrationTest {
+  static {
+    System.setProperty("selenide.browser", "firefox");
+    System.setProperty("selenide.browser", "edge");
+    System.setProperty("selenide.browser", "chrome");
+  }
 
   @BeforeEach
   public void openTestPage() {

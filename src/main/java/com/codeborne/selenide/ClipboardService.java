@@ -9,6 +9,6 @@ public class ClipboardService {
   @CheckReturnValue
   @Nonnull
   public Clipboard getClipboard(Driver driver) {
-    return new DefaultClipboard(driver);
+    return driver.supportsJavascript() ? new JSClipboard(driver) : new AwtClipboard(driver);
   }
 }

@@ -10,10 +10,10 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
 @ParametersAreNonnullByDefault
-public class DefaultClipboard implements Clipboard {
+public class AwtClipboard implements Clipboard {
   private final Driver driver;
 
-  public DefaultClipboard(Driver driver) {
+  public AwtClipboard(Driver driver) {
     this.driver = driver;
   }
 

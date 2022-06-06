@@ -1,6 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Config;
+import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +53,7 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     preferences.put("credentials_enable_service", false);
     preferences.put("plugins.always_open_pdf_externally", true);
     preferences.put("profile.default_content_setting_values.automatic_downloads", 1);
+    preferences.put("profile.content_settings.exceptions.clipboard", getClipBoardSettingsMap(1));
 
     if (browserDownloadsFolder != null) {
       preferences.put("download.default_directory", browserDownloadsFolder.getAbsolutePath());
@@ -60,6 +62,13 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
 
     log.debug("Using chromium preferences: {}", preferences);
     return preferences;
+  }
+
+  protected Map<String, Object> getClipBoardSettingsMap(int settingValue) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("last_modified", String.valueOf(System.currentTimeMillis()));
+    map.put("setting", settingValue);
+    return ImmutableMap.of("[*.],*", map);
   }
 
   @Nonnull

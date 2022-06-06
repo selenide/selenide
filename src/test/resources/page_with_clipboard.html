@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TODO</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+  <h1>TODO</h1>
+
+  <script>
+    document.oncopy = function(e) {
+      const pastedText = e.clipboardData && e.clipboardData.getData && e.clipboardData.getData('Text');
+      console.log('copy', pastedText)
+    }
+
+    document.onpaste = function(e) {
+      const pastedText = e.clipboardData && e.clipboardData.getData && e.clipboardData.getData('Text');
+      console.log('paste', pastedText)
+    };
+  </script>
+</body>
+</html>
