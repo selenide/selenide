@@ -1,5 +1,7 @@
 package integration.server;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,6 +11,7 @@ import java.util.Set;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
+@ParametersAreNonnullByDefault
 class FileRenderHandler extends BaseHandler {
   private final Set<String> sessions;
 
@@ -23,6 +26,7 @@ class FileRenderHandler extends BaseHandler {
 
   @Override
   public Result get(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    sleepIfNeeded(request.getParameter("duration"));
     String fileName = getFilenameFromRequest(request);
     byte[] fileContent = readFileContent(fileName);
     if (fileContent == null) {
@@ -31,6 +35,17 @@ class FileRenderHandler extends BaseHandler {
 
     generateSessionId(response);
     return new Result(SC_OK, getContentType(fileName), fileContent);
+  }
+
+  private void sleepIfNeeded(@Nullable String duration) {
+    if (duration != null) {
+      try {
+        Thread.sleep(Long.parseLong(duration));
+      }
+      catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+    }
   }
 
   private void generateSessionId(HttpServletResponse http) {

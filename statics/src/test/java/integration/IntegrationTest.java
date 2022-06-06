@@ -69,6 +69,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   protected static void resetSettings() {
     timeout = 1;
     pollingInterval = 0;
+    Configuration.pageLoadTimeout = Long.parseLong(System.getProperty("selenide.pageLoadTimeout", "30000"));
     Configuration.browser = System.getProperty("selenide.browser", CHROME);
     Configuration.baseUrl = getBaseUrl();
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));

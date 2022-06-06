@@ -11,12 +11,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 final class ClickOptionsTest {
   @Test
   void javaScriptMethod() {
-    assertThat(usingJavaScript().clickOption()).isEqualTo(JS);
+    assertThat(usingJavaScript().clickMethod()).isEqualTo(JS);
   }
 
   @Test
   void defaultMethod() {
-    assertThat(usingDefaultMethod().clickOption()).isEqualTo(DEFAULT);
+    assertThat(usingDefaultMethod().clickMethod()).isEqualTo(DEFAULT);
   }
 
   @Test
