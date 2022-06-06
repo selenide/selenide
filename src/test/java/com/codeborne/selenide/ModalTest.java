@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.UUID;
 
+import static com.codeborne.selenide.ModalOptions.withExpectedText;
 import static org.apache.commons.io.IOUtils.resourceToByteArray;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -51,7 +52,7 @@ final class ModalTest {
 
   @Test
   void confirmWithExpectedTextAcceptsDialogAndReturnsText() {
-    String text = new Modal(driver).confirm(ALERT_TEXT);
+    String text = new Modal(driver).confirm(withExpectedText(ALERT_TEXT));
 
     verify(alert).accept();
     assertThat(text).isEqualTo(ALERT_TEXT);
@@ -61,7 +62,7 @@ final class ModalTest {
   void confirmWithIncorrectExpectedTextAcceptsDialogAndThrowsException() {
     DialogTextMismatch exception = assertThrows(
       DialogTextMismatch.class,
-      () -> new Modal(driver).confirm("Are you sure?"));
+      () -> new Modal(driver).confirm(withExpectedText("Are you sure?")));
 
     verify(alert).accept();
     assertThat(exception.getMessage())
@@ -105,7 +106,7 @@ final class ModalTest {
     verify(alert).accept();
     assertThat(exception.getMessage())
       .contains(String.format("Actual: %s%nExpected: Are you sure?%n", ALERT_TEXT))
-      .contains("Screenshot: " +  convertFilePath(System.getProperty("user.dir") + "/" + config.reportsFolder() + "/"));
+      .contains("Screenshot: " + convertFilePath(System.getProperty("user.dir") + "/" + config.reportsFolder() + "/"));
   }
 
   @Test
@@ -139,7 +140,8 @@ final class ModalTest {
   private String convertFilePath(String path) {
     try {
       return new File(path).getAbsoluteFile().toURI().toURL().toExternalForm();
-    } catch (MalformedURLException e) {
+    }
+    catch (MalformedURLException e) {
       return "file://" + path;
     }
   }

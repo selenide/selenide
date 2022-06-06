@@ -5,44 +5,45 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta http-equiv="Content-Language" content="ru"/>
   <script type="text/javascript">
-      function triggerAlert() {
-        setTimeout(runAlert, 1000);
+    function triggerAlert() {
+      setTimeout(runAlert, 600);
+      return false;
+    }
+
+    function triggerPrompt() {
+      setTimeout(runPrompt, 600);
+      return false;
+    }
+
+    function runAlert() {
+      const username = document.getElementById('username').value;
+      alert("Are you sure, " + username + "?");
+      document.getElementById('message').innerHTML = 'Hello, ' + username + '!';
+      document.getElementById('container').innerHTML = '';
+    }
+
+    function runPrompt() {
+      const username = prompt("Please input your username", "default");
+      document.getElementById('message').innerHTML = 'Hello, ' + username + '!';
+      document.getElementById('container').innerHTML = '';
+    }
+
+    function triggerConfirm(link) {
+      setTimeout(() => runConfirm(link), 1000);
+      return false;
+    }
+
+    function runConfirm(link) {
+      const username = document.getElementById('username').value;
+      if (confirm("Get out of this page, " + username + "?")) {
+        location = link.getAttribute('href')
         return false;
       }
-
-      function triggerPrompt() {
-        setTimeout(runPrompt, 1000);
+      else {
+        document.getElementById('message').innerHTML = 'Stay here, ' + username;
         return false;
       }
-
-      function runAlert() {
-        var username = document.getElementById('username').value;
-        alert("Are you sure, " + username + "?");
-        document.getElementById('message').innerHTML = 'Hello, ' + username + '!';
-        document.getElementById('container').innerHTML = '';
-      }
-
-      function runPrompt() {
-        var username = prompt("Please input your username", "default");
-        document.getElementById('message').innerHTML = 'Hello, ' + username + '!';
-        document.getElementById('container').innerHTML = '';
-      }
-
-      function triggerConfirm() {
-        setTimeout(runConfirm, 1000);
-        return false;
-      }
-
-      function runConfirm() {
-        var username = document.getElementById('username').value;
-        if (confirm("Get out of this page, " + username + "?")) {
-          return true;
-        }
-        else {
-          document.getElementById('message').innerHTML = 'Stay here, ' + username;
-          return false;
-        }
-      }
+    }
 
   </script>
 </head>
@@ -60,11 +61,11 @@
       </label> <br/>
       <input type="button" onclick="return runAlert();" value="Alert button"><br/><br/>
       <input type="button" onclick="return runPrompt();" value="Prompt button"><br/><br/>
-      <a href="page_with_jquery.html" onclick="return runConfirm();">Confirm button</a><br/><br/>
+      <a href="page_with_jquery.html" onclick="return runConfirm(this);">Confirm button</a><br/><br/>
 
       <input type="button" onclick="return triggerAlert();" value="Slow alert"><br/><br/>
       <input type="button" onclick="return triggerPrompt();" value="Slow prompt"><br/><br/>
-      <a href="page_with_jquery.html" onclick="return triggerConfirm();">Slow confirm</a><br/><br/>
+      <a href="page_with_jquery.html" onclick="return triggerConfirm(this);">Slow confirm</a><br/><br/>
     </fieldset>
   </form>
 </div>

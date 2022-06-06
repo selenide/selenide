@@ -9,11 +9,14 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.ModalOptions.withExpectedText;
+import static com.codeborne.selenide.ModalOptions.withTimeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.Selenide.dismiss;
+import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -48,9 +51,42 @@ final class ConfirmTest extends IntegrationTest {
   }
 
   @Test
+  void canConfirm_withCustomTimeout() {
+    timeout = 1;
+    $(byText("Slow confirm")).click();
+    confirm(withTimeout(ofSeconds(2)));
+    $("h1").shouldHave(text("Page with JQuery"), ofSeconds(2));
+  }
+
+  @Test
+  void canConfirm_withExpectedText_andCustomTimeout() {
+    timeout = 1;
+    $(byText("Slow confirm")).click();
+    confirm(withExpectedText("Get out of this page, " + USER_NAME + '?').timeout(ofSeconds(2)));
+    $("h1").shouldHave(text("Page with JQuery"), ofSeconds(2));
+  }
+
+  @Test
   void canCancelConfirmDialog() {
     $(byText("Confirm button")).click();
-    dismiss("Get out of this page, " + USER_NAME + '?');
+    dismiss();
+    $("#message").shouldHave(text("Stay here, " + USER_NAME));
+    $("#container").shouldNotBe(empty);
+  }
+
+  @Test
+  void canCancelConfirmDialog_withExpectedText() {
+    $(byText("Confirm button")).click();
+    dismiss(withExpectedText("Get out of this page, " + USER_NAME + '?'));
+    $("#message").shouldHave(text("Stay here, " + USER_NAME));
+    $("#container").shouldNotBe(empty);
+  }
+
+  @Test
+  void canCancelConfirmDialog_withExpectedText_andCustomTimeout() {
+    timeout = 1;
+    $(byText("Confirm button")).click();
+    dismiss(withExpectedText("Get out of this page, " + USER_NAME + '?').timeout(ofSeconds(2)));
     $("#message").shouldHave(text("Stay here, " + USER_NAME));
     $("#container").shouldNotBe(empty);
   }
