@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.ex.ElementShould;
+import com.codeborne.selenide.ex.ElementShouldNot;
 import com.codeborne.selenide.ex.InvalidStateException;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.AfterEach;
@@ -167,7 +168,9 @@ final class ReadonlyElementsTest extends IntegrationTest {
 
   @Test
   void readonlyAttributeIsShownInErrorMessage() {
-    assertThatThrownBy(() -> $(By.name("username")).shouldNotHave(readonly))
+    assertThatThrownBy(() -> $(By.name("username")).shouldNotBe(readonly))
+      .isInstanceOf(ElementShouldNot.class)
+      .hasMessageStartingWith("Element should not be readonly {By.name: username}")
       .hasMessageMatching("(?s).*<input.*readonly.*");
   }
 }

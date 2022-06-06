@@ -8,12 +8,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.and;
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.checked;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.cssValue;
 import static com.codeborne.selenide.Condition.disabled;
+import static com.codeborne.selenide.Condition.disappear;
+import static com.codeborne.selenide.Condition.editable;
+import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exist;
@@ -21,11 +26,15 @@ import static com.codeborne.selenide.Condition.focused;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.href;
+import static com.codeborne.selenide.Condition.image;
+import static com.codeborne.selenide.Condition.interactable;
 import static com.codeborne.selenide.Condition.match;
+import static com.codeborne.selenide.Condition.matchText;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.or;
 import static com.codeborne.selenide.Condition.ownText;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.type;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -296,5 +305,68 @@ final class ConditionsTest extends ITest {
       .hasMessageStartingWith("Element not found {#missing}")
       .hasMessageContaining("Expected: exist")
       .hasMessageNotContaining("Actual value");
+  }
+
+  @Test
+  void appear_errorMessage() {
+    assertThatThrownBy(() -> $("#theHiddenElement").should(appear))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be visible {#theHiddenElement}");
+  }
+
+  @Test
+  void appears_errorMessage() {
+    assertThatThrownBy(() -> $("#theHiddenElement").should(appears))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be visible {#theHiddenElement}");
+  }
+
+  @Test
+  void disappear_errorMessage() {
+    assertThatThrownBy(() -> $("h1").should(disappear))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be hidden {h1}");
+  }
+
+  @Test
+  void interactable_errorMessage() {
+    assertThatThrownBy(() -> $("#theHiddenElement").shouldBe(interactable))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be interactable {#theHiddenElement}");
+  }
+
+  @Test
+  void editable_errorMessage() {
+    assertThatThrownBy(() -> $("#theHiddenElement").shouldBe(editable))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be editable {#theHiddenElement}");
+  }
+
+  @Test
+  void type_errorMessage() {
+    assertThatThrownBy(() -> $("[name=domain]").shouldHave(type("tel")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have attribute type=\"tel\" {[name=domain]}");
+  }
+
+  @Test
+  void empty_errorMessage() {
+    assertThatThrownBy(() -> $("h1").shouldBe(empty))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be empty: attribute value=\"\" and exact text \"\" {h1}");
+  }
+
+  @Test
+  void matchText_errorMessage() {
+    assertThatThrownBy(() -> $("h1").should(matchText("Wrong text")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should match text \"Wrong text\" {h1}");
+  }
+
+  @Test
+  void image_errorMessage() {
+    assertThatThrownBy(() -> $("h1").shouldBe(image))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be image {h1}");
   }
 }
