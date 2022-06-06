@@ -18,6 +18,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 
@@ -43,7 +44,7 @@ public class SelenideTargetLocator implements TargetLocator {
 
   /**
    * Switch to frame by index
-   * NB! Order of framew can be different in different browsers, see Selenide tests.
+   * NB! Order of frames can be different in different browsers, see Selenide tests.
    *
    * @param index index of frame (0-based)
    */
@@ -62,7 +63,7 @@ public class SelenideTargetLocator implements TargetLocator {
    */
   @Nonnull
   public WebDriver frame(int index, Duration timeout) {
-    return frame(Wait(timeout), index);
+    return frame(Wait(timeoutMs(timeout)), index);
   }
 
   /**
@@ -84,7 +85,7 @@ public class SelenideTargetLocator implements TargetLocator {
    */
   @Nonnull
   public WebDriver frame(String nameOrId, Duration timeout) {
-    return frame(Wait(timeout), nameOrId);
+    return frame(Wait(timeoutMs(timeout)), nameOrId);
   }
 
   @Nonnull
@@ -171,11 +172,17 @@ public class SelenideTargetLocator implements TargetLocator {
   @Override
   @Nonnull
   public Alert alert() {
+    return alert(Duration.ofMillis(config.timeout()));
+  }
+
+  @Nonnull
+  public Alert alert(@Nullable Duration timeout) {
+    long timeoutMs = timeoutMs(timeout);
     try {
-      return Wait().until(alertIsPresent());
+      return Wait(timeoutMs).until(alertIsPresent());
     }
     catch (TimeoutException e) {
-      throw alertNotFoundError(e);
+      throw alertNotFoundError(e, timeoutMs);
     }
   }
 
@@ -221,11 +228,11 @@ public class SelenideTargetLocator implements TargetLocator {
    * NB! Order of windows/tabs can be different in different browsers, see Selenide tests.
    *
    * @param index    index of window (0-based)
-   * @param duration the timeout duration. It overrides default Config.timeout()
+   * @param timeout the timeout duration. It overrides default Config.timeout()
    */
   @Nonnull
-  public WebDriver window(int index, Duration duration) {
-    return window(Wait(duration), index);
+  public WebDriver window(int index, Duration timeout) {
+    return window(Wait(timeoutMs(timeout)), index);
   }
 
   /**
@@ -243,11 +250,11 @@ public class SelenideTargetLocator implements TargetLocator {
    * Switch to window/tab by name/handle/title with a configurable timeout
    *
    * @param nameOrHandleOrTitle name or handle or title of window/tab
-   * @param duration            the timeout duration. It overrides default Config.timeout()
+   * @param timeout            the timeout duration. It overrides default Config.timeout()
    */
   @Nonnull
-  public WebDriver window(String nameOrHandleOrTitle, Duration duration) {
-    return window(Wait(duration), nameOrHandleOrTitle);
+  public WebDriver window(String nameOrHandleOrTitle, Duration timeout) {
+    return window(Wait(timeoutMs(timeout)), nameOrHandleOrTitle);
   }
 
   private WebDriver window(SelenideWait wait, int index) {
@@ -278,11 +285,15 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   private SelenideWait Wait() {
-    return new SelenideWait(webDriver, config.timeout(), config.pollingInterval());
+    return Wait(timeoutMs(null));
   }
 
-  private SelenideWait Wait(Duration timeout) {
-    return new SelenideWait(webDriver, timeout.toMillis(), config.pollingInterval());
+  private SelenideWait Wait(long timeoutMs) {
+    return new SelenideWait(webDriver, timeoutMs, config.pollingInterval());
+  }
+
+  private long timeoutMs(@Nullable Duration timeout) {
+    return timeout == null ? config.timeout() : timeout.toMillis();
   }
 
   private Error frameNotFoundError(String message, Throwable cause) {
@@ -295,8 +306,8 @@ public class SelenideTargetLocator implements TargetLocator {
     return UIAssertionError.wrap(driver, error, config.timeout());
   }
 
-  private Error alertNotFoundError(Throwable cause) {
+  private Error alertNotFoundError(Throwable cause, long timeoutMs) {
     var error = new AlertNotFoundException(cause);
-    return UIAssertionError.wrap(driver, error, config.timeout());
+    return UIAssertionError.wrap(driver, error, timeoutMs);
   }
 }

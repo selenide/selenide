@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 
+import static com.codeborne.selenide.ModalOptions.withExpectedText;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
 import static com.codeborne.selenide.logevents.SelenideLogger.getReadableSubject;
 
@@ -575,7 +576,7 @@ public class Selenide {
    */
   @Nullable
   public static String confirm() {
-    return getSelenideDriver().modal().confirm();
+    return confirm(ModalOptions.none());
   }
 
   /**
@@ -587,7 +588,20 @@ public class Selenide {
    */
   @Nullable
   public static String confirm(@Nullable String expectedDialogText) {
-    return getSelenideDriver().modal().confirm(expectedDialogText);
+    return confirm(withExpectedText(expectedDialogText));
+  }
+
+  /**
+   * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
+   *
+   * @param options parameters: timeout, expected texts etc.
+   * @return actual dialog text
+   * @throws DialogTextMismatch if confirmation message differs from expected message
+   * @since 6.6.0
+   */
+  @Nullable
+  public static String confirm(ModalOptions options) {
+    return getSelenideDriver().modal().confirm(options);
   }
 
   /**
@@ -597,7 +611,7 @@ public class Selenide {
    */
   @Nullable
   public static String prompt() {
-    return getSelenideDriver().modal().prompt();
+    return prompt(ModalOptions.none(), null);
   }
 
   /**
@@ -608,7 +622,7 @@ public class Selenide {
    */
   @Nullable
   public static String prompt(@Nullable String inputText) {
-    return getSelenideDriver().modal().prompt(inputText);
+    return prompt(ModalOptions.none(), inputText);
   }
 
   /**
@@ -621,7 +635,21 @@ public class Selenide {
    */
   @Nullable
   public static String prompt(@Nullable String expectedDialogText, @Nullable String inputText) {
-    return getSelenideDriver().modal().prompt(expectedDialogText, inputText);
+    return prompt(withExpectedText(expectedDialogText), inputText);
+  }
+
+  /**
+   * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'prompt').
+   *
+   * @param options parameters: timeout, expected texts etc.
+   * @param inputText          if not null, sets value in prompt dialog input
+   * @return actual dialog text
+   * @throws DialogTextMismatch if confirmation message differs from expected message
+   * @since 6.6.0
+   */
+  @Nullable
+  public static String prompt(ModalOptions options, @Nullable String inputText) {
+    return getSelenideDriver().modal().prompt(options, inputText);
   }
 
   /**
@@ -631,7 +659,7 @@ public class Selenide {
    */
   @Nullable
   public static String dismiss() {
-    return getSelenideDriver().modal().dismiss();
+    return dismiss(ModalOptions.none());
   }
 
   /**
@@ -643,7 +671,20 @@ public class Selenide {
    */
   @Nullable
   public static String dismiss(@Nullable String expectedDialogText) {
-    return getSelenideDriver().modal().dismiss(expectedDialogText);
+    return dismiss(withExpectedText(expectedDialogText));
+  }
+
+  /**
+   * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
+   *
+   * @param options if not null, check that confirmation dialog displays this message (case-sensitive)
+   * @return actual dialog text
+   * @throws DialogTextMismatch if confirmation message differs from expected message
+   * @since 6.6.0
+   */
+  @Nullable
+  public static String dismiss(ModalOptions options) {
+    return getSelenideDriver().modal().dismiss(options);
   }
 
   /**
