@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import static com.codeborne.selenide.Selenide.$;
 import static integration.ImageTestHelper.BLUE;
@@ -34,7 +35,7 @@ final class ScreenshotTest extends IntegrationTest {
     assertThat(screenshot).isNotNull();
     log.info("Analyze the element screenshot {}", screenshot.getAbsolutePath());
 
-    String screenshotFolder = new File(System.getProperty("user.dir"), Configuration.reportsFolder).getCanonicalPath();
+    String screenshotFolder = screenshotFolder();
     assertThat(screenshot.getPath())
       .as(String.format("Screenshot file should be located in %s, but was: %s", screenshotFolder, screenshot.getPath()))
       .startsWith(screenshotFolder);
@@ -46,5 +47,11 @@ final class ScreenshotTest extends IntegrationTest {
 
     assertBorder(img, RED);
     assertBody(img, BLUE);
+  }
+
+  private String screenshotFolder() {
+    return Paths.get(Configuration.reportsFolder)
+      .toAbsolutePath()
+      .toString();
   }
 }

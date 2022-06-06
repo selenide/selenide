@@ -20,7 +20,6 @@ import java.util.UUID;
 import static com.codeborne.selenide.Mocks.givenCdpScreenshot;
 import static com.codeborne.selenide.Mocks.givenScreenSize;
 import static java.io.File.separatorChar;
-import static java.lang.System.lineSeparator;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,7 +39,8 @@ final class ScreenShotLaboratoryTest {
   private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);
   private final Photographer photographer = mock(Photographer.class);
   private final PageSourceExtractor extractor = mock(PageSourceExtractor.class);
-  private final Clock clock = new DummyClock(12356789L);
+  private final long ts = System.currentTimeMillis();
+  private final Clock clock = new DummyClock(ts);
   private final ScreenShotLaboratory screenshots = new ScreenShotLaboratory(photographer, extractor, clock);
 
   @BeforeEach
@@ -54,12 +54,12 @@ final class ScreenShotLaboratoryTest {
 
   @Test
   void composesScreenshotNameFromTestClassAndMethod() {
-    String expected = "/build/reports/tests/MyTest/helloWorldTest.12356789.png";
+    String expected = String.format("/build/reports/tests/MyTest/helloWorldTest.%s.png", ts);
     assertThat(screenshots.takeScreenShot(driver, "MyTest", "helloWorldTest").getImage())
       .isEqualTo(workingDirectory + expected);
 
-    String expectedFileName = workingDirectory + "/build/reports/tests/org/selenide/SelenideMethodsTest/" +
-      "userCanListMatchingSubElements.12356789.png";
+    String expectedFileName = String.format("%s/build/reports/tests/org/selenide/SelenideMethodsTest/" +
+      "userCanListMatchingSubElements.%s.png", workingDirectory, ts);
     assertThat(screenshots.takeScreenShot(
       driver,
       "org.selenide.SelenideMethodsTest",
@@ -70,31 +70,31 @@ final class ScreenShotLaboratoryTest {
   @Test
   void composesScreenshotNameAsTimestampPlusCounter() {
     assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
-      .isEqualTo(workingDirectory + "/build/reports/tests/12356789.0.png");
+      .isEqualTo(String.format("%s/build/reports/tests/%s.0.png", workingDirectory, ts));
     assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
-      .isEqualTo(workingDirectory + "/build/reports/tests/12356789.1.png");
+      .isEqualTo(String.format("%s/build/reports/tests/%s.1.png", workingDirectory, ts));
     assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
-      .isEqualTo(workingDirectory + "/build/reports/tests/12356789.2.png");
+      .isEqualTo(String.format("%s/build/reports/tests/%s.2.png", workingDirectory, ts));
   }
 
   @Test
   void screenshotsCanByGroupedByTests() {
     screenshots.startContext("ui/MyTest/test_some_method/");
     assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
-      .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.0.png");
+      .isEqualTo(String.format("%s/build/reports/tests/ui/MyTest/test_some_method/%s.0.png", workingDirectory, ts));
     assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
-      .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.1.png");
+      .isEqualTo(String.format("%s/build/reports/tests/ui/MyTest/test_some_method/%s.1.png", workingDirectory, ts));
     assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
-      .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.2.png");
+      .isEqualTo(String.format("%s/build/reports/tests/ui/MyTest/test_some_method/%s.2.png", workingDirectory, ts));
 
     List<File> contextScreenshots = screenshots.finishContext();
     assertThat(contextScreenshots).hasSize(3);
     assertThat(contextScreenshots.get(0))
-      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/ui/MyTest/test_some_method/%s.0.png", ts)));
     assertThat(contextScreenshots.get(1))
-      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/ui/MyTest/test_some_method/%s.1.png", ts)));
     assertThat(contextScreenshots.get(2))
-      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.2.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/ui/MyTest/test_some_method/%s.2.png", ts)));
   }
 
   @Test
@@ -112,15 +112,15 @@ final class ScreenShotLaboratoryTest {
     List<File> allScreenshots = screenshots.getScreenshots();
     assertThat(allScreenshots).hasSize(5);
     assertThat(allScreenshots.get(0))
-      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/ui/MyTest/test_some_method/%s.0.png", ts)));
     assertThat(allScreenshots.get(1))
-      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/ui/MyTest/test_some_method/%s.1.png", ts)));
     assertThat(allScreenshots.get(2))
-      .hasToString(dir + normalize("/build/reports/tests/ui/YourTest/test_another_method/12356789.2.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/ui/YourTest/test_another_method/%s.2.png", ts)));
     assertThat(allScreenshots.get(3))
-      .hasToString(dir + normalize("/build/reports/tests/12356789.3.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/%s.3.png", ts)));
     assertThat(allScreenshots.get(4))
-      .hasToString(dir + normalize("/build/reports/tests/12356789.4.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/%s.4.png", ts)));
   }
 
   @Test
@@ -138,15 +138,15 @@ final class ScreenShotLaboratoryTest {
     List<File> allThreadScreenshots = screenshots.getThreadScreenshots();
     assertThat(allThreadScreenshots).hasSize(5);
     assertThat(allThreadScreenshots.get(0))
-      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/ui/MyTest/test_some_method/%s.0.png", ts)));
     assertThat(allThreadScreenshots.get(1))
-      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/ui/MyTest/test_some_method/%s.1.png", ts)));
     assertThat(allThreadScreenshots.get(2))
-      .hasToString(dir + normalize("/build/reports/tests/ui/YourTest/test_another_method/12356789.2.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/ui/YourTest/test_another_method/%s.2.png", ts)));
     assertThat(allThreadScreenshots.get(3))
-      .hasToString(dir + normalize("/build/reports/tests/12356789.3.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/%s.3.png", ts)));
     assertThat(allThreadScreenshots.get(4))
-      .hasToString(dir + normalize("/build/reports/tests/12356789.4.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/%s.4.png", ts)));
   }
 
   @Test
@@ -171,15 +171,15 @@ final class ScreenShotLaboratoryTest {
 
     screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastScreenshot())
-      .hasToString(dir + normalize("/build/reports/tests/12356789.0.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/%s.0.png", ts)));
 
     screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastScreenshot())
-      .hasToString(dir + normalize("/build/reports/tests/12356789.1.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/%s.1.png", ts)));
 
     screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastScreenshot())
-      .hasToString(dir + normalize("/build/reports/tests/12356789.2.png"));
+      .hasToString(dir + normalize(String.format("/build/reports/tests/%s.2.png", ts)));
   }
 
   @Test
@@ -189,15 +189,15 @@ final class ScreenShotLaboratoryTest {
 
     screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasValue(new File("build/reports/tests/12356789.0.png").getAbsoluteFile());
+      .hasValue(new File(String.format("build/reports/tests/%s.0.png", ts)).getAbsoluteFile());
 
     screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasValue(new File("build/reports/tests/12356789.1.png").getAbsoluteFile());
+      .hasValue(new File(String.format("build/reports/tests/%s.1.png", ts)).getAbsoluteFile());
 
     screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasValue(new File("build/reports/tests/12356789.2.png").getAbsoluteFile());
+      .hasValue(new File(String.format("build/reports/tests/%s.2.png", ts)).getAbsoluteFile());
   }
 
   @Test
@@ -210,15 +210,15 @@ final class ScreenShotLaboratoryTest {
       .isEmpty();
     screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastContextScreenshot())
-      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.0.png").getAbsoluteFile());
+      .hasValue(new File(String.format("build/reports/tests/ui/MyTest/test_some_method/%s.0.png", ts)).getAbsoluteFile());
 
     screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastContextScreenshot())
-      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.1.png").getAbsoluteFile());
+      .hasValue(new File(String.format("build/reports/tests/ui/MyTest/test_some_method/%s.1.png", ts)).getAbsoluteFile());
 
     screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastContextScreenshot())
-      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.2.png").getAbsoluteFile());
+      .hasValue(new File(String.format("build/reports/tests/ui/MyTest/test_some_method/%s.2.png", ts)).getAbsoluteFile());
   }
 
   @Test
@@ -311,9 +311,10 @@ final class ScreenShotLaboratoryTest {
     doReturn(new File("build/reports/page123.html")).when(extractor).extract(eq(config), eq(webDriver), any());
 
     Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
-    assertThat(screenshot.summary()).isEqualTo(
-      lineSeparator() + "Screenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/12356789.0.png" +
-        lineSeparator() + "Page source: http://ci.mycompany.com/job/666/artifact/build/reports/page123.html");
+    assertThat(screenshot.summary()).isEqualTo(String.format(
+      "%nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/%s.0.png" +
+        "%nPage source: http://ci.mycompany.com/job/666/artifact/build/reports/page123.html", ts
+    ));
   }
 
   private String normalize(String path) {

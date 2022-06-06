@@ -18,6 +18,7 @@ import static com.codeborne.selenide.TestResources.toFile;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchExcludeSwitches;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
+import static java.lang.Boolean.TRUE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,6 +53,17 @@ final class ChromeDriverFactoryTest {
     assertThat(prefsMap).containsEntry("profile.default_content_setting_values.automatic_downloads", 1);
     assertThat(prefsMap).containsEntry("download.default_directory",
       new File(DOWNLOADS_FOLDER).getAbsolutePath());
+  }
+
+  @Test
+  void mergesDefaultCapabilities() {
+    ChromeOptions options = factory.createCapabilities(new SelenideConfig(), browser, null, new File("/tmp/downloads-folder-456789"));
+
+    assertThat(options.getCapability("acceptInsecureCerts")).isEqualTo(TRUE);
+    assertThat(options.getCapability("acceptSslCerts")).isEqualTo(TRUE);
+    assertThat(options.getCapability("browserName")).isEqualTo("chrome");
+    assertThat(options.getCapability("javascriptEnabled")).isEqualTo(TRUE);
+    assertThat(options.getCapability("takesScreenshot")).isEqualTo(TRUE);
   }
 
   @Test

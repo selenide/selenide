@@ -53,8 +53,8 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public MutableCapabilities createCapabilities(Config config, Browser browser,
-                                                @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
+  public ChromeOptions createCapabilities(Config config, Browser browser,
+                                          @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     ChromeOptions commonCapabilities = createCommonCapabilities(new ChromeOptions(), config, browser, proxy);
 
     ChromeOptions options = new ChromeOptions();

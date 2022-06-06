@@ -3,9 +3,12 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.safari.SafariOptions;
 
 import java.io.File;
 
+import static java.lang.Boolean.TRUE;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SafariDriverFactoryTest {
@@ -27,5 +30,15 @@ public class SafariDriverFactoryTest {
     assertThatThrownBy(() -> factory.createCapabilities(config, browser, null, new File("/tmp/downloads-folder-12345")))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("headless browser not supported in Safari. Set headless property to false.");
+  }
+
+  @Test
+  void mergesDefaultCapabilities() {
+    SafariOptions options = factory.createCapabilities(config, browser, null, new File("/tmp/downloads-folder-12345"));
+    assertThat(options.getCapability("acceptInsecureCerts")).isEqualTo(TRUE);
+    assertThat(options.getCapability("acceptSslCerts")).isEqualTo(TRUE);
+    assertThat(options.getCapability("browserName")).isEqualTo("safari");
+    assertThat(options.getCapability("javascriptEnabled")).isEqualTo(TRUE);
+    assertThat(options.getCapability("takesScreenshot")).isEqualTo(TRUE);
   }
 }

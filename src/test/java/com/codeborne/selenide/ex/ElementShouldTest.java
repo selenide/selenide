@@ -10,7 +10,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
-import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.visible;
 import static java.lang.System.lineSeparator;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +23,7 @@ final class ElementShouldTest {
     String searchCriteria = By.name("selenide").toString();
     Exception cause = new NoSuchElementException("By.name: q");
     CheckResult checkResult = new CheckResult(REJECT, "visible:false");
-    ElementShould elementShould = new ElementShould(driver, searchCriteria, "be ", appear, checkResult, webElement, cause);
+    ElementShould elementShould = new ElementShould(driver, searchCriteria, "be ", visible, checkResult, webElement, cause);
 
     assertThat(elementShould)
       .hasMessage("Element should be visible {By.name: selenide}" + lineSeparator() +

@@ -81,7 +81,7 @@ public abstract class Condition {
    *
    * <p>Sample: {@code $("#logoutLink").should(appear);}</p>
    */
-  public static final Condition appear = visible;
+  public static final Condition appear = be(visible);
 
   /**
    * Synonym for {@link #visible} - may be used for better readability
@@ -90,14 +90,14 @@ public abstract class Condition {
    * @deprecated use {@link #visible} or {@link #appear}
    */
   @Deprecated
-  public static final Condition appears = visible;
+  public static final Condition appears = be(visible);
 
   /**
    * Synonym for {@link #hidden} - may be used for better readability:
    *
    * <p>{@code $("#loginLink").should(disappear);}</p>
    */
-  public static final Condition disappear = hidden;
+  public static final Condition disappear = be(hidden);
 
   /**
    * Check if element is interactable:

@@ -14,6 +14,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static integration.errormessages.Helper.getReportsFolder;
 import static integration.errormessages.Helper.screenshot;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -31,7 +32,7 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
   void mockScreenshots() {
     reportsUrl = Configuration.reportsUrl;
     reportsFolder = Configuration.reportsFolder;
-    Configuration.reportsFolder = "build/reports/tests";
+    Configuration.reportsFolder = getReportsFolder();
     Configuration.reportsUrl = "http://ci.org/";
   }
 
@@ -67,7 +68,7 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
     )
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {#multirowTable/thead}")
-      .has(screenshot("/integration/errormessages/ErrorMsgWithScreenshotsTest/reportWhichParentElementIsNotFound"));
+      .has(screenshot(path("reportWhichParentElementIsNotFound")));
   }
 
   @Test
@@ -80,7 +81,7 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
     )
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining("Element not found {#multirowTable/thead")
-      .has(screenshot("/integration/errormessages/ErrorMsgWithScreenshotsTest/reportIfParentCollectionIsNotFound"));
+      .has(screenshot(path("reportIfParentCollectionIsNotFound")));
   }
 
   @Test
@@ -101,5 +102,9 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
       .find("theeeead")
       .find(".second_row")
       .shouldNotBe(visible);
+  }
+
+  private static String path(String testName) {
+    return Helper.path("ErrorMsgWithScreenshotsTest", testName);
   }
 }

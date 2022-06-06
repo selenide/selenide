@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Boolean.TRUE;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,6 +53,17 @@ class EdgeDriverFactoryTest {
     assertThat(prefs.get("profile.default_content_setting_values.automatic_downloads")).isEqualTo(1);
     assertThat(prefs.get("safebrowsing.enabled")).isEqualTo(true);
     assertThat((String) prefs.get("download.default_directory")).endsWith("downloads-folder-456789");
+  }
+
+  @Test
+  void mergesDefaultCapabilities() {
+    EdgeOptions options = factory.createCapabilities(new SelenideConfig(), browser, null, new File("/tmp/downloads-folder-456789"));
+
+    assertThat(options.getCapability("acceptInsecureCerts")).isEqualTo(TRUE);
+    assertThat(options.getCapability("acceptSslCerts")).isEqualTo(TRUE);
+    assertThat(options.getCapability("browserName")).isEqualTo("MicrosoftEdge");
+    assertThat(options.getCapability("javascriptEnabled")).isEqualTo(TRUE);
+    assertThat(options.getCapability("takesScreenshot")).isEqualTo(TRUE);
   }
 
   @SuppressWarnings("unchecked")
