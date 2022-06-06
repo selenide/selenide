@@ -18,6 +18,7 @@ import java.util.Set;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
+import static java.lang.Boolean.TRUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -41,6 +42,17 @@ final class FirefoxDriverFactoryTest {
   private void givenSystemProperty(String name, String value) {
     systemProperties.add(name);
     System.setProperty(name, value);
+  }
+
+  @Test
+  void mergesDefaultCapabilities() {
+    FirefoxOptions options = driverFactory.createCapabilities(new SelenideConfig(), browser, null, null);
+
+    assertThat(options.getCapability("acceptInsecureCerts")).isEqualTo(TRUE);
+    assertThat(options.getCapability("acceptSslCerts")).isEqualTo(TRUE);
+    assertThat(options.getCapability("browserName")).isEqualTo("firefox");
+    assertThat(options.getCapability("javascriptEnabled")).isEqualTo(TRUE);
+    assertThat(options.getCapability("takesScreenshot")).isEqualTo(TRUE);
   }
 
   @Test
