@@ -11,6 +11,7 @@ import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v101.page.Page;
 import org.openqa.selenium.devtools.v101.page.model.Viewport;
+import org.openqa.selenium.firefox.HasFullPageScreenshot;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -28,7 +29,11 @@ public class WebdriverPhotographer implements Photographer {
   @CheckReturnValue
   @Override
   public <T> Optional<T> takeScreenshot(Driver driver, OutputType<T> outputType) {
-    if (driver.getWebDriver() instanceof ChromiumDriver chromiumDriver) {
+    WebDriver wd = driver.getWebDriver();
+    if (wd instanceof HasFullPageScreenshot webDriver) {
+      return Optional.of(webDriver.getFullPageScreenshotAs(outputType));
+    }
+    if (wd instanceof ChromiumDriver chromiumDriver) {
       Options options = getOptions(chromiumDriver);
       Map<String, Object> captureScreenshotOptions = ImmutableMap.of(
         "clip", ImmutableMap.of(
@@ -47,8 +52,11 @@ public class WebdriverPhotographer implements Photographer {
       return Optional.of(screenshot);
     }
 
-    if (driver.getWebDriver() instanceof RemoteWebDriver remoteWebDriver) {
+    if (wd instanceof RemoteWebDriver remoteWebDriver) {
       WebDriver webDriver = new Augmenter().augment(remoteWebDriver);
+      if (webDriver instanceof HasFullPageScreenshot smartWebDriver) {
+        return Optional.of(smartWebDriver.getFullPageScreenshotAs(outputType));
+      }
       if (!(webDriver instanceof HasDevTools)) {
         return takeDefaultScreenshot(driver, outputType);
       }
