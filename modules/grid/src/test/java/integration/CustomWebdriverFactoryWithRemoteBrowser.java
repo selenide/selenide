@@ -65,7 +65,7 @@ final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
     BufferedImage img = ImageIO.read(screenshot);
 
     assertThat(img.getWidth()).isBetween(1000, 3000);
-    assertThat(img.getHeight()).isBetween(1600, 3000);
+    assertThat(img.getHeight()).isBetween(1100, 3000);
 
     assertThat(screenshots.getContextScreenshots().get(0)).isSameAs(screenshot);
   }
