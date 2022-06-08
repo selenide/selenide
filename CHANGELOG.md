@@ -1,10 +1,32 @@
 # Changelog
 
+## 6.6.0 (released 08.06.2022)
+
+* #1497 extract clearing input with a shortcut to a separate plugin -- see PR #1847 and #1838
+* #1819 fix $.clear() in Safari -- see PR #1820
+* #1811 Add exact own text case-sensitive condition -- thanks to Kachurin Alexandr
+* #1812 Add own text case-sensitive condition -- thanks to Kachurin Alexandr
+* #1572 add $.click method with custom timeout -- see PR #1845
+* #1721 add methods confirm(), dismiss(), prompt() with custom timeout -- see PR #1846
+* #1848 fix method Driver.executeJavaScript() to support wrapped webdriver
+* #1840 fix wording of some conditions to sound grammatically correct
+* #1807 fix case-related issues when running tests on TR locale -- thanks to Vladimir Sitnikov for the hint in PR #1696
+* #1836 add Safari options -- see PR #1841
+* #1834 fix SoftAsserts with TestNG (downgraded TestNG from 7.5 to 7.4.0) -- see PR #1843
+* #1814 upgrade to webdrivermanager 5.2.0
+* #1832 upgrade to selenium 4.2.1 -- see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+
+## 6.5.2 (released 06.06.2022)
+
+* #1497 fix $.clear implementation: use "Ctrl+A" / "Cmd+A" instead of "Home -> Shift+A -> Delete" (which didn't work on Safari and latest Firefox)
+
 ## 6.5.1 (released 25.05.2022)
+
 * #1808 Don't move focus to next element when calling $.clear() -- see PR #1809
 * Bump browserup-proxy-core from 2.1.4 to 2.1.5
 
 ## 6.5.0 (released 17.05.2022)
+
 * #1768 add method to mask passwords etc. in reports -- see PR #1770
 * #1753 add method to set value in <input type=date> -- see PR #1770
 * #1497 Make $.setValue("") work properly with React, Vue.js and other hipster frameworks -- see PR #1787
@@ -19,7 +41,7 @@
 * Bump seleniumVersion from 4.1.3 to 4.1.4
 * upgrade to WebDriverManager 5.1.1
 * Bump nettyVersion from 4.1.75.Final to 4.1.77.Final
-* Bump LittleProxy from 2.0.7 to 2.0.9 
+* Bump LittleProxy from 2.0.7 to 2.0.9
 * remove code that was not needed after introducing SelenideNettyClientFactory -- see PR #1798
 
 ## 6.4.0 (released 07.04.2022)
