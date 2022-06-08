@@ -13,6 +13,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.impl.JavaScript.jsExecutor;
+
 @ParametersAreNonnullByDefault
 public interface Driver {
   @CheckReturnValue
@@ -51,12 +53,12 @@ public interface Driver {
 
   @SuppressWarnings("unchecked")
   default <T> T executeJavaScript(String jsCode, Object... arguments) {
-    return (T) ((JavascriptExecutor) getWebDriver()).executeScript(jsCode, arguments);
+    return (T) jsExecutor(getWebDriver()).executeScript(jsCode, arguments);
   }
 
   @SuppressWarnings("unchecked")
   default <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
-    return (T) ((JavascriptExecutor) getWebDriver()).executeAsyncScript(jsCode, arguments);
+    return (T) jsExecutor(getWebDriver()).executeAsyncScript(jsCode, arguments);
   }
 
   default void clearCookies() {

@@ -30,7 +30,7 @@ public class JavaScript {
     return execute(driver.getWebDriver(), arguments);
   }
 
-  private JavascriptExecutor jsExecutor(SearchContext context) {
+  public static JavascriptExecutor jsExecutor(SearchContext context) {
     if (context instanceof JavascriptExecutor) {
       return (JavascriptExecutor) context;
     }
