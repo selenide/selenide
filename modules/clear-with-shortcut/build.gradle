@@ -1,5 +1,5 @@
 ext {
-  artifactId = 'clear-with-shortcut'
+  artifactId = 'selenide-clear-with-shortcut'
 }
 
 dependencies {

@@ -18,7 +18,8 @@
 
 ## 6.5.2 (released 06.06.2022)
 
-* #1497 fix $.clear implementation: use "Ctrl+A" / "Cmd+A" instead of "Home -> Shift+A -> Delete" (which didn't work on Safari and latest Firefox)
+* #1497 fix $.clear implementation: use "Ctrl+A -> Delete" instead of "Home -> Shift+A -> Delete" (which didn't work on Safari and latest Firefox).
+See PR #1838.
 
 ## 6.5.1 (released 25.05.2022)
 
