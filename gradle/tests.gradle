@@ -21,7 +21,7 @@ subprojects {
   task edge_headless(type: Test) {
     systemProperties['selenide.browser'] = 'edge'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*'
+    include 'integration/**/*Screenshot*'
     exclude 'com/codeborne/selenide/**/*'
   }
 
@@ -34,7 +34,7 @@ subprojects {
   task chrome_headless(type: Test) {
     systemProperties['selenide.browser'] = 'chrome'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*'
+    include 'integration/**/*Screenshot*'
     exclude 'com/codeborne/selenide/**/*'
   }
 
@@ -54,7 +54,7 @@ subprojects {
   task firefox_headless(type: Test) {
     systemProperties['selenide.browser'] = 'firefox'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*'
+    include 'integration/**/*Screenshot*'
     exclude 'com/codeborne/selenide/**/*'
   }
 
@@ -74,7 +74,7 @@ subprojects {
   task opera_headless(type: Test) {
     systemProperties['selenide.browser'] = 'opera'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*'
+    include 'integration/**/*Screenshot*'
     exclude 'com/codeborne/selenide/**/*'
   }
 
