@@ -2,20 +2,14 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.Platform;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import static org.openqa.selenium.Keys.DELETE;
 
 /**
  * Clean the input field value.
@@ -35,8 +29,6 @@ import static org.openqa.selenium.Keys.DELETE;
  */
 @ParametersAreNonnullByDefault
 public class Clear implements Command<SelenideElement> {
-  private static final Logger log = LoggerFactory.getLogger(Clear.class);
-
   @Nonnull
   @CheckReturnValue
   @Override
@@ -64,22 +56,5 @@ public class Clear implements Command<SelenideElement> {
    */
   public void clear(Driver driver, WebElement input) {
     input.clear();
-    clearWithShortcut(driver, input);
-  }
-
-  protected void clearWithShortcut(Driver driver, WebElement input) {
-    Platform platform = driver.getPlatform();
-    if (!platform.isUnknown()) {
-      try {
-        CharSequence modifier = platform.modifierKey();
-        driver.actions()
-          .sendKeys(input, "0")
-          .keyDown(modifier).sendKeys("a").keyUp(modifier).sendKeys(DELETE)
-          .perform();
-      }
-      catch (WebDriverException failedToPressKeys) {
-        log.error("Failed to clear the input with shortcut", failedToPressKeys);
-      }
-    }
   }
 }

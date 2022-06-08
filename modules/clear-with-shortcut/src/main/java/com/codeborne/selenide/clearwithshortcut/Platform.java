@@ -1,4 +1,4 @@
-package com.codeborne.selenide;
+package com.codeborne.selenide.clearwithshortcut;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -16,17 +16,17 @@ import static org.openqa.selenium.Keys.CONTROL;
  * @since 6.6.0
  */
 @ParametersAreNonnullByDefault
-public class Platform {
+class Platform {
   public static final Platform UNKNOWN = new Platform("?");
 
   private final String platform;
 
-  public Platform(@Nullable String platform) {
+  Platform(@Nullable String platform) {
     this.platform = platform == null || platform.trim().isEmpty() ? "?" : platform.trim().toLowerCase(ROOT);
   }
 
   @CheckReturnValue
-  public boolean isUnknown() {
+  boolean isUnknown() {
     return "?".equals(platform);
   }
 

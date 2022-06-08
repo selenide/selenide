@@ -92,7 +92,7 @@ public class Commands {
     add("setValue", new SetValue());
     add("val", new Val());
     add("append", new Append());
-    add("clear", new Clear());
+    add("clear", inject(Clear.class));
   }
 
   private void addFindCommands() {
