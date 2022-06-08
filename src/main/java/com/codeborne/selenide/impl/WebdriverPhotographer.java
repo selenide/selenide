@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chromium.ChromiumDriver;
+import org.openqa.selenium.chromium.HasCdp;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v101.page.Page;
@@ -33,8 +33,8 @@ public class WebdriverPhotographer implements Photographer {
     if (wd instanceof HasFullPageScreenshot webDriver) {
       return Optional.of(webDriver.getFullPageScreenshotAs(outputType));
     }
-    if (wd instanceof ChromiumDriver chromiumDriver) {
-      Options options = getOptions(chromiumDriver);
+    if (wd instanceof HasCdp cdp) {
+      Options options = getOptions(wd);
       Map<String, Object> captureScreenshotOptions = ImmutableMap.of(
         "clip", ImmutableMap.of(
           "x", 0,
@@ -45,7 +45,7 @@ public class WebdriverPhotographer implements Photographer {
         "captureBeyondViewport", options.exceedViewport()
       );
 
-      Map<String, Object> result = chromiumDriver.executeCdpCommand("Page.captureScreenshot", captureScreenshotOptions);
+      Map<String, Object> result = cdp.executeCdpCommand("Page.captureScreenshot", captureScreenshotOptions);
 
       String base64 = (String) result.get("data");
       T screenshot = outputType.convertFromBase64Png(base64);
@@ -90,7 +90,7 @@ public class WebdriverPhotographer implements Photographer {
     return Optional.empty();
   }
 
-  private Options getOptions(RemoteWebDriver webDriver) {
+  private Options getOptions(WebDriver webDriver) {
     Map<String, Object> size = js.execute(webDriver);
     return new Options((long) size.get("fullWidth"), (long) size.get("fullHeight"), (boolean) size.get("exceedViewport"));
   }
