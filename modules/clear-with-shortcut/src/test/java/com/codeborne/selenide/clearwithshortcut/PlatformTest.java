@@ -1,4 +1,4 @@
-package com.codeborne.selenide;
+package com.codeborne.selenide.clearwithshortcut;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;

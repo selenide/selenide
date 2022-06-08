@@ -18,6 +18,7 @@ import static com.codeborne.selenide.SetValueMethod.JS;
 import static com.codeborne.selenide.SetValueMethod.SEND_KEYS;
 import static com.codeborne.selenide.SetValueOptions.withText;
 import static com.codeborne.selenide.commands.Util.firstOf;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -28,7 +29,7 @@ public class SetValue implements Command<SelenideElement> {
   private final Clear clear;
 
   public SetValue() {
-    this(new Clear());
+    this(inject(Clear.class));
   }
 
   protected SetValue(Clear clear) {
