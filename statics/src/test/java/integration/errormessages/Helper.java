@@ -11,10 +11,15 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Paths;
 
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ParametersAreNonnullByDefault
 public class Helper {
@@ -91,5 +96,12 @@ public class Helper {
         }
       }
     };
+  }
+
+  public static void verifyScreenshotSize(File screenshot, int width, int height) throws IOException {
+    BufferedImage img = ImageIO.read(screenshot);
+    log.info("Verify screenshot {} of size {}x{}", screenshot.getAbsolutePath(), img.getWidth(), img.getHeight());
+    assertThat(img.getWidth()).isBetween(width * 2 - 50, width * 2 + 50);
+    assertThat(img.getHeight()).isBetween(height * 2 - 50, height * 2 + 50);
   }
 }

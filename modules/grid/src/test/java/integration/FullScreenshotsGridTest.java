@@ -1,21 +1,22 @@
 package integration;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.OutputType;
 
+import java.io.File;
+import java.io.IOException;
+
+import static com.codeborne.selenide.Selenide.webdriver;
+import static com.codeborne.selenide.WebDriverConditions.title;
+import static integration.errormessages.Helper.verifyScreenshotSize;
+
 public class FullScreenshotsGridTest extends AbstractGridTest {
+  private static final int width = 2200;
+  private static final int height = 3300;
 
   @BeforeEach
   void setUp() {
@@ -35,8 +36,8 @@ public class FullScreenshotsGridTest extends AbstractGridTest {
    */
   @Test
   void canTakeFullScreenshotWithTwoTabs() throws IOException {
-    openFile("page_with_selects_without_jquery.html");
-    $("h1").shouldHave(text("Page with selects"));
+    openFile("page_of_fixed_size_2200x3300.html");
+    webdriver().shouldHave(title("Test::page of fixed size 2200x3300"));
 
     Selenide.executeJavaScript("window.open()");
     Selenide.switchTo().window(1);
@@ -44,9 +45,7 @@ public class FullScreenshotsGridTest extends AbstractGridTest {
     Selenide.switchTo().window(0);
 
     File screenshot = Selenide.screenshot(OutputType.FILE);
-    BufferedImage img = ImageIO.read(screenshot);
 
-    assertThat(img.getWidth()).isBetween(2200, 3000);
-    assertThat(img.getHeight()).isBetween(2400, 3000);
+    verifyScreenshotSize(screenshot, width, height);
   }
 }
