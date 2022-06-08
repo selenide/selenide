@@ -1,13 +1,14 @@
 package com.codeborne.selenide.conditions.webdriver;
 
 import com.codeborne.selenide.ObjectCondition;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import static com.codeborne.selenide.impl.JavaScript.jsExecutor;
 
 @ParametersAreNonnullByDefault
 public abstract class CurrentFrameCondition implements ObjectCondition<WebDriver> {
@@ -50,7 +51,7 @@ public abstract class CurrentFrameCondition implements ObjectCondition<WebDriver
   @CheckReturnValue
   @Nonnull
   protected String getCurrentFrameUrl(WebDriver webDriver) {
-    return ((JavascriptExecutor) webDriver).executeScript("return window.location.href").toString();
+    return jsExecutor(webDriver).executeScript("return window.location.href").toString();
   }
 
   @Nonnull
