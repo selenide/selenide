@@ -101,7 +101,17 @@ public class Helper {
   public static void verifyScreenshotSize(File screenshot, int width, int height) throws IOException {
     BufferedImage img = ImageIO.read(screenshot);
     log.info("Verify screenshot {} of size {}x{}", screenshot.getAbsolutePath(), img.getWidth(), img.getHeight());
-    assertThat(img.getWidth()).isBetween(width * 2 - 50, width * 2 + 50);
-    assertThat(img.getHeight()).isBetween(height * 2 - 50, height * 2 + 50);
+    if (nearlyEqual(img.getWidth(), width * 2) && nearlyEqual(img.getHeight(), height * 2)) {
+      // it's Retina display, it has 2x more pixels
+      log.info("Screenshot matches {}x{} on Retina display", width, height);
+    }
+    else {
+      assertThat(img.getWidth()).isBetween(width - 50, width + 50);
+      assertThat(img.getHeight()).isBetween(height - 50, height + 50);
+    }
+  }
+
+  private static boolean nearlyEqual(int actual, int expected) {
+    return actual > expected - 50 && actual < expected + 50;
   }
 }
