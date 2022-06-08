@@ -29,7 +29,8 @@ public class FullScreenshotsGridTest extends AbstractGridTest {
 
   /*
    It fails in non-local Chromium.
-   Probably it failed because here https://github.com/SeleniumHQ/selenium/blob/trunk/java/src/org/openqa/selenium/devtools/DevTools.java#L99
+   Probably it failed because here
+   https://github.com/SeleniumHQ/selenium/blob/trunk/java/src/org/openqa/selenium/devtools/DevTools.java#L99
    wrong targedId detected and devtools sends Page.captureScreenshot to an inactive page that leads TimeoutException.
    */
   @Test
