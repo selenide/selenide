@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.6.1 (released 09.06.2022)
+
+* #1850 restore byte-buddy dependency (needed by WebDriverDecorator)
+
 ## 6.6.0 (released 08.06.2022)
 
 * #1497 extract clearing input with a shortcut to a separate plugin -- see PR #1847 and #1838
