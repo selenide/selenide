@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.HasTimeout;
+
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -10,7 +12,7 @@ import static com.codeborne.selenide.ClickMethod.DEFAULT;
 import static com.codeborne.selenide.ClickMethod.JS;
 
 @ParametersAreNonnullByDefault
-public class ClickOptions {
+public class ClickOptions implements HasTimeout {
   private final int offsetX;
   private final int offsetY;
   private final ClickMethod clickMethod;
@@ -54,6 +56,7 @@ public class ClickOptions {
 
   @CheckReturnValue
   @Nullable
+  @Override
   public Duration timeout() {
     return timeout;
   }

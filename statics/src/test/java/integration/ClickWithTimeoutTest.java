@@ -8,6 +8,7 @@ import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.$;
+import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
 
 /**
@@ -25,12 +26,18 @@ final class ClickWithTimeoutTest extends IntegrationTest {
   @Test
   void canClickSlowLink() {
     $("#slow-link").click(usingDefaultMethod().timeout(ofSeconds(2)));
-    $("h1").shouldHave(exactText("Selenide"), ofSeconds(2));
+    $("h1").shouldHave(exactText("Selenide"), ofMillis(1_900));
   }
 
   @Test
   void canClickSlowLink_withJavascript() {
     $("#slow-link").click(usingJavaScript().timeout(ofSeconds(2)));
-    $("h1").shouldHave(exactText("Selenide"), ofSeconds(2));
+    $("h1").shouldHave(exactText("Selenide"), ofMillis(1_900));
+  }
+
+  @Test
+  void canClickLinkWhichAppearsLongerThanStandardTimeout() {
+    $("#slow-hidden-link").click(usingJavaScript().timeout(ofSeconds(2)));
+    $("h1").shouldHave(exactText("Selenide"), ofMillis(1_900));
   }
 }
