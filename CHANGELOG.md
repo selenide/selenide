@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.6.2 (released 10.06.2022)
+
+* upgrade to selenium 4.2.2 -- see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+
 ## 6.6.1 (released 09.06.2022)
 
 * #1850 restore byte-buddy dependency (needed by WebDriverDecorator)
