@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.HasTimeout;
 import com.github.bsideup.jabel.Desugar;
 
 import javax.annotation.CheckReturnValue;
@@ -13,7 +14,7 @@ import java.time.Duration;
 public record ModalOptions(
   @Nullable String expectedText,
   @Nullable Duration timeout
-) {
+) implements HasTimeout {
 
   @CheckReturnValue
   @Nonnull

@@ -20,9 +20,11 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.impl.Plugins.inject;
+import static java.util.Optional.ofNullable;
 
 @ParametersAreNonnullByDefault
 public class DownloadFile implements Command<File> {
@@ -49,7 +51,7 @@ public class DownloadFile implements Command<File> {
     WebElement link = linkWithHref.findAndAssertElementIsInteractable();
     Config config = linkWithHref.driver().config();
     DownloadOptions options = getDownloadOptions(config, args);
-    long timeout = options.getTimeout(config.timeout());
+    long timeout = ofNullable(options.timeout()).map(Duration::toMillis).orElse(config.timeout());
 
     log.debug("Download file: {}", options);
 

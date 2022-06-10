@@ -2,6 +2,8 @@ package com.codeborne.selenide;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -16,7 +18,7 @@ final class DownloadOptionsTest {
     DownloadOptions options = using(PROXY);
 
     assertThat(options.getMethod()).isEqualTo(PROXY);
-    assertThat(options.getTimeout(4000)).isEqualTo(4000);
+    assertThat(options.timeout()).isNull();
     assertThat(options.getFilter()).isEqualTo(none());
   }
 
@@ -25,7 +27,7 @@ final class DownloadOptionsTest {
     DownloadOptions options = using(PROXY).withTimeout(9999);
 
     assertThat(options.getMethod()).isEqualTo(PROXY);
-    assertThat(options.getTimeout(4000)).isEqualTo(9999);
+    assertThat(options.timeout().toMillis()).isEqualTo(9999);
     assertThat(options.getFilter()).isEqualTo(none());
   }
 
@@ -34,16 +36,16 @@ final class DownloadOptionsTest {
     DownloadOptions options = using(FOLDER).withFilter(withExtension("pdf"));
 
     assertThat(options.getMethod()).isEqualTo(FOLDER);
-    assertThat(options.getTimeout(8000)).isEqualTo(8000);
+    assertThat(options.timeout()).isNull();
     assertThat(options.getFilter()).usingRecursiveComparison().isEqualTo(withExtension("pdf"));
   }
 
   @Test
   void customSettings() {
-    DownloadOptions options = using(FOLDER).withFilter(withExtension("ppt")).withTimeout(1234);
+    DownloadOptions options = using(FOLDER).withFilter(withExtension("ppt")).withTimeout(Duration.ofMillis(1234));
 
     assertThat(options.getMethod()).isEqualTo(FOLDER);
-    assertThat(options.getTimeout(4000)).isEqualTo(1234);
+    assertThat(options.timeout().toMillis()).isEqualTo(1234);
     assertThat(options.getFilter()).usingRecursiveComparison().isEqualTo(withExtension("ppt"));
   }
 

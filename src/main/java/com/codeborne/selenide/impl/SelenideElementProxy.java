@@ -22,7 +22,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import static com.codeborne.selenide.AssertionMode.SOFT;
@@ -33,31 +32,31 @@ import static java.util.Arrays.asList;
 @ParametersAreNonnullByDefault
 class SelenideElementProxy implements InvocationHandler {
   private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
-      "as",
-      "toWebElement",
-      "toString",
-      "getSearchCriteria",
-      "$",
-      "$x",
-      "find",
-      "$$",
-      "$$x",
-      "findAll",
-      "parent",
-      "sibling",
-      "preceding",
-      "lastChild",
-      "closest",
-      "ancestor"
+    "as",
+    "toWebElement",
+    "toString",
+    "getSearchCriteria",
+    "$",
+    "$x",
+    "find",
+    "$$",
+    "$$x",
+    "findAll",
+    "parent",
+    "sibling",
+    "preceding",
+    "lastChild",
+    "closest",
+    "ancestor"
   ));
 
   private static final Set<String> methodsForSoftAssertion = new HashSet<>(asList(
-      "should",
-      "shouldBe",
-      "shouldHave",
-      "shouldNot",
-      "shouldNotHave",
-      "shouldNotBe"
+    "should",
+    "shouldBe",
+    "shouldHave",
+    "shouldNot",
+    "shouldNotHave",
+    "shouldNotBe"
   ));
 
   private final WebElementSource webElementSource;
@@ -170,7 +169,12 @@ class SelenideElementProxy implements InvocationHandler {
 
   @CheckReturnValue
   private long getTimeoutMs(Arguments arguments) {
-    Optional<Duration> duration = arguments.ofType(Duration.class);
-    return duration.map(Duration::toMillis).orElse(config().timeout());
+    return arguments.ofType(Duration.class).map(Duration::toMillis)
+      .orElseGet(() ->
+        arguments.ofType(HasTimeout.class).map(HasTimeout::timeout).map(Duration::toMillis)
+          .orElseGet(() ->
+            config().timeout()
+          )
+      );
   }
 }
