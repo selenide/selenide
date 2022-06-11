@@ -3,7 +3,6 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -51,10 +50,8 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
   @Nonnull
   public EdgeOptions createCapabilities(Config config, Browser browser,
                                         @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
-    MutableCapabilities capabilities = createCommonCapabilities(new EdgeOptions(), config, browser, proxy);
-    capabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
-
-    EdgeOptions options = new EdgeOptions().merge(capabilities);
+    EdgeOptions options = createCommonCapabilities(new EdgeOptions(), config, browser, proxy);
+    options.setCapability(ACCEPT_INSECURE_CERTS, true);
     options.setHeadless(config.headless());
 
     if (isNotEmpty(config.browserBinary())) {
