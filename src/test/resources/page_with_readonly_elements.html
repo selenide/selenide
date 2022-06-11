@@ -20,7 +20,9 @@
     }
 
     $(function () {
-      $('#enable-inputs').on('click', scheduleEnableInputs)
+      $('#enable-inputs')
+        .on('click', scheduleEnableInputs)
+        .show();
     });
 
   </script>
@@ -59,7 +61,7 @@
 </div>
 
 
-<a id="enable-inputs" href="#">Enable input fields</a>
+<a id="enable-inputs" href="#" style="display: none;">Enable input fields</a>
 
 </body>
 </html>
