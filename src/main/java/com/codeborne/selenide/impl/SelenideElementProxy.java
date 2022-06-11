@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -76,7 +75,7 @@ class SelenideElementProxy implements InvocationHandler {
       validateAssertionMode(config());
     }
 
-    long timeoutMs = getTimeoutMs(arguments);
+    long timeoutMs = arguments.getTimeoutMs(config().timeout());
     SelenideLog log = SelenideLogger.beginStep(webElementSource.description(), method.getName(), args);
     try {
       Object result = dispatchAndRetry(timeoutMs, config().pollingInterval(), proxy, method, args);
@@ -165,16 +164,5 @@ class SelenideElementProxy implements InvocationHandler {
     if (e instanceof JavascriptException) return false;
 
     return e instanceof Exception || e instanceof AssertionError;
-  }
-
-  @CheckReturnValue
-  private long getTimeoutMs(Arguments arguments) {
-    return arguments.ofType(Duration.class).map(Duration::toMillis)
-      .orElseGet(() ->
-        arguments.ofType(HasTimeout.class).map(HasTimeout::timeout).map(Duration::toMillis)
-          .orElseGet(() ->
-            config().timeout()
-          )
-      );
   }
 }
