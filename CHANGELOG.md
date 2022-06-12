@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.6.3 (released 12.06.2022)
+
+* #1572 use custom timeout for commands which have timeout  --  see PR #1853
+* #1854 simplify creation of EdgeOptions
+
 ## 6.6.2 (released 10.06.2022)
 
 * upgrade to selenium 4.2.2 -- see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
