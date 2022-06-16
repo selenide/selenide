@@ -15,6 +15,7 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'java-library'
   apply plugin: 'checkstyle'
+  apply plugin: 'com.github.spotbugs'
 }
 
 apply from: 'gradle/compilation.gradle'
