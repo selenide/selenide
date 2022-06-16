@@ -11,7 +11,6 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.SetValueMethod.JS;
@@ -38,7 +37,7 @@ public class SetValue implements Command<SelenideElement> {
 
   @Override
   @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     Driver driver = locator.driver();
     SetValueOptions options = extractOptions(driver.config(), requireNonNull(args));
     setValueForTextInput(driver, locator, options);
