@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.commands.Util.firstOf;
@@ -18,7 +17,7 @@ public class Ancestor implements Command<SelenideElement> {
   @Override
   @CheckReturnValue
   @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     String selector = firstOf(args);
     int indexPredicate = args.length > 1 ?
       (args[1] instanceof Integer ? (int) args[1] + 1 : 1) :

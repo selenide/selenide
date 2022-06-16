@@ -6,7 +6,6 @@ import com.codeborne.selenide.impl.WebElementSource;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.util.Objects.requireNonNull;
@@ -16,7 +15,7 @@ public class As implements Command<SelenideElement> {
   @Override
   @CheckReturnValue
   @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     locator.setAlias((String) requireNonNull(args)[0]);
     return proxy;
   }

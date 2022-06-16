@@ -530,6 +530,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @param alias a human-readable name of this element (null or empty string not allowed)
    * @return this element
+   * @see com.codeborne.selenide.commands.As
    * @since 5.17.0
    */
   @CheckReturnValue
