@@ -9,32 +9,47 @@ buildscript {
   }
 }
 
-import com.github.spotbugs.snom.SpotBugsTask
-
-spotbugs {
-  effort = 'max'
-  excludeFilter = rootProject.file('config/spotbugs/excludeFilter.xml')
-}
-
-tasks.withType(SpotBugsTask) {
-  reports {
-    xml.enabled = true
-    html.enabled = false
+subprojects {
+  spotbugs {
+    effort = 'max'
+    excludeFilter = rootProject.file('config/spotbugs/excludeFilter.xml')
   }
-}
 
-tasks.withType(Checkstyle) {
-  maxWarnings = 0
-  showViolations = true
-  reports {
-    xml.enabled true
-    html.enabled false
+  spotbugsMain {
+    reports {
+      xml { required = true }
+      html {
+        required = true
+        outputLocation = file("$buildDir/reports/spotbugs/main.html")
+        stylesheet = 'fancy-hist.xsl'
+      }
+    }
   }
-}
 
-sonarqube {
-  properties {
-    property 'sonar.projectName', 'selenide'
-    property 'sonar.jacoco.reportPaths', "$project.buildDir/jacoco/test.exec, $project.buildDir/jacoco/chrome_headless.exec, $project.buildDir/jacoco/firefox_headless.exec"
+  spotbugsTest {
+    reports {
+      xml { required = true }
+      html {
+        required = true
+        outputLocation = file("$buildDir/reports/spotbugs/test.html")
+        stylesheet = 'fancy-hist.xsl'
+      }
+    }
+  }
+
+  tasks.withType(Checkstyle) {
+    maxWarnings = 0
+    showViolations = true
+    reports {
+      xml.enabled(System.getenv('CI') != null)
+      html.enabled(System.getenv('CI') == null)
+    }
+  }
+
+  sonarqube {
+    properties {
+      property 'sonar.projectName', 'selenide'
+      property 'sonar.jacoco.reportPaths', "$project.buildDir/jacoco/test.exec, $project.buildDir/jacoco/chrome_headless.exec, $project.buildDir/jacoco/firefox_headless.exec"
+    }
   }
 }
