@@ -38,7 +38,9 @@ class FileDownloadHandler extends BaseHandler {
       try {
         Thread.sleep(Long.parseLong(request.getParameter("pause")));
       }
-      catch (InterruptedException ignore) {
+      catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        throw new RuntimeException(e);
       }
     }
 

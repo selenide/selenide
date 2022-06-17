@@ -129,6 +129,7 @@ public class DownloadFileToFolder {
       sleep(milliseconds);
     }
     catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
       throw new RuntimeException(e);
     }
   }

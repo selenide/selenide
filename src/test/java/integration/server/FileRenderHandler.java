@@ -43,6 +43,7 @@ class FileRenderHandler extends BaseHandler {
         Thread.sleep(Long.parseLong(duration));
       }
       catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
         throw new RuntimeException(e);
       }
     }
