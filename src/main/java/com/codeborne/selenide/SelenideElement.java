@@ -930,7 +930,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Get value of selected option in select field
    *
    * @see com.codeborne.selenide.commands.GetSelectedValue
-   * @return null if the selected option doesn't have "value" attribute
+   * @return null if the selected option doesn't have "value" attribute (or the select doesn't have options at all)
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
@@ -939,12 +939,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get text of selected option in select field
-   *
+   * @return null if there is no selected options (or the select doesn't have options at all)
    * @see com.codeborne.selenide.commands.GetSelectedText
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
-  @Nonnull
+  @Nullable
   String getSelectedText();
 
   /**
