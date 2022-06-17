@@ -41,33 +41,60 @@ final class SelectsTest extends IntegrationTest {
   void userCanGetSelectedOption_none() {
     $("select#hero").getSelectedOption().shouldHave(exactText("-- Select your hero --"));
     $("select#gender").getSelectedOption().shouldHave(exactText(""));
+  }
 
-    assertThatThrownBy(() -> {
-      $("select#empty-select").getSelectedOption().shouldNot(exist);
-    })
-      // TODO fix me: https://github.com/selenide/selenide/issues/1581
-      // it should not fail, but return a lazy-loaded SelenideElement
+  @Test
+  void userCanGetSelectedOption_selectHasNoOptions() {
+    $("select#empty-select").getSelectedOption().shouldNot(exist);
+
+    assertThatThrownBy(() -> $("select#empty-select").getSelectedOption().text())
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {select#empty-select}");
+      .hasMessageStartingWith("Element not found {selected option}");
+  }
+
+  @Test
+  void userCanGetSelectedOption_selectNotFound() {
+    assertThat($("select#missing-select").getSelectedOption().exists()).isFalse();
+
+    assertThatThrownBy(() -> $("select#missing-select").getSelectedOption().text())
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {select#missing-select}");
   }
 
   @Test
   void userCanGetSelectedOptionValue_none() {
     assertThat($("select#hero").getSelectedValue()).isEqualTo("");
     assertThat($("select#gender").getSelectedValue()).isEqualTo("");
+  }
+
+  @Test
+  void userCanGetSelectedOptionValue_selectHasNoOptions() {
     assertThat($("select#empty-select").getSelectedValue()).isNull();
+  }
+
+  @Test
+  void userCanGetSelectedOptionValue_selectNotFound() {
+    assertThatThrownBy(() -> $("select#missing-select").getSelectedValue())
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {select#missing-select}");
   }
 
   @Test
   void userCanGetSelectedOptionText_none() {
     assertThat($("select#hero").getSelectedText()).isEqualTo("-- Select your hero --");
     assertThat($("select#gender").getSelectedText()).isEqualTo("");
+  }
 
-    assertThatThrownBy(() -> {
-      $("select#empty-select").getSelectedText();
-    })
+  @Test
+  void userCanGetSelectedOptionText_selectHasNoOptions() {
+    assertThat($("select#empty-select").getSelectedText()).isNull();
+  }
+
+  @Test
+  void userCanGetSelectedOptionText_selectNotFound() {
+    assertThatThrownBy(() -> $("select#missing-select").getSelectedText())
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {select#empty-select}");
+      .hasMessageStartingWith("Element not found {select#missing-select}");
   }
 
   @Test

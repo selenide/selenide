@@ -3,14 +3,13 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.openqa.selenium.support.ui.Select;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
+import static com.codeborne.selenide.impl.JSElementFinder.wrap;
 
 @ParametersAreNonnullByDefault
 public class GetSelectedOption implements Command<SelenideElement> {
@@ -18,6 +17,6 @@ public class GetSelectedOption implements Command<SelenideElement> {
   @CheckReturnValue
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource selectElement, @Nullable Object[] args) {
-    return wrap(selectElement.driver(), new Select(selectElement.getWebElement()).getFirstSelectedOption());
+    return wrap(selectElement.driver(), "selected option", selectElement, "return arguments[0].options[arguments[0].selectedIndex];");
   }
 }
