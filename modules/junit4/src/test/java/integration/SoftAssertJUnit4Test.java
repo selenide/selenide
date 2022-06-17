@@ -17,11 +17,11 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 
 public class SoftAssertJUnit4Test extends IntegrationTest {
-  @Rule
-  public SoftAsserts softAsserts = new SoftAsserts();
+  @Rule @SuppressWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
+  public final SoftAsserts softAsserts = new SoftAsserts();
 
-  @Rule
-  public TextReport textReport = new TextReport();
+  @Rule @SuppressWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
+  public final TextReport textReport = new TextReport();
 
   @Before
   public void setUp() {
