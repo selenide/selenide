@@ -66,7 +66,7 @@ final class DownloadFileTest {
   void canDownloadFile_withProxyServer() throws IOException {
     config.proxyEnabled(true).fileDownload(PROXY);
     SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
-    when(linkWithHref.driver()).thenReturn(new DriverStub(config, null, null, selenideProxy));
+    when(linkWithHref.driver()).thenReturn(new DriverStub(config, selenideProxy));
     when(proxy.download(any(), any(), anyLong(), any(), any())).thenReturn(file);
 
     File f = command.execute(seLink, linkWithHref, new Object[]{9000L});

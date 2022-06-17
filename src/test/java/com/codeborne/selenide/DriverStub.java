@@ -36,6 +36,10 @@ public class DriverStub implements Driver {
     this(new SelenideConfig(), new Browser(browser, false), new DummyWebDriver(), null, downloadsFolder);
   }
 
+  public DriverStub(Config config, @Nullable SelenideProxyServer proxy) {
+    this(config, new Browser("zopera", true), new DummyWebDriver(), proxy);
+  }
+
   public DriverStub(Config config, Browser browser,
                     WebDriver webDriver,
                     @Nullable SelenideProxyServer proxy) {
