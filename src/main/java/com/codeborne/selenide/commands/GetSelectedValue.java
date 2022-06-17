@@ -3,6 +3,7 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -25,7 +26,13 @@ public class GetSelectedValue implements Command<String> {
   @CheckReturnValue
   @Nullable
   public String execute(SelenideElement proxy, WebElementSource selectElement, @Nullable Object[] args) {
-    WebElement option = getSelectedOption.execute(proxy, selectElement, args);
-    return option == null ? null : option.getAttribute("value");
+    try {
+      WebElement option = getSelectedOption.execute(proxy, selectElement, args);
+      return option.getAttribute("value");
+    }
+    catch (NoSuchElementException noSelectedOptions) {
+      // TODO fix me: https://github.com/selenide/selenide/issues/1581
+      return null;
+    }
   }
 }

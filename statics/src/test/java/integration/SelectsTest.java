@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.empty;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.textCaseSensitive;
@@ -33,6 +35,39 @@ final class SelectsTest extends IntegrationTest {
       .isEqualTo("myrambler.ru");
     assertThat(select.getSelectedText())
       .isEqualTo("@myrambler.ru");
+  }
+
+  @Test
+  void userCanGetSelectedOption_none() {
+    $("select#hero").getSelectedOption().shouldHave(exactText("-- Select your hero --"));
+    $("select#gender").getSelectedOption().shouldHave(exactText(""));
+
+    assertThatThrownBy(() -> {
+      $("select#empty-select").getSelectedOption().shouldNot(exist);
+    })
+      // TODO fix me: https://github.com/selenide/selenide/issues/1581
+      // it should not fail, but return a lazy-loaded SelenideElement
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {select#empty-select}");
+  }
+
+  @Test
+  void userCanGetSelectedOptionValue_none() {
+    assertThat($("select#hero").getSelectedValue()).isEqualTo("");
+    assertThat($("select#gender").getSelectedValue()).isEqualTo("");
+    assertThat($("select#empty-select").getSelectedValue()).isNull();
+  }
+
+  @Test
+  void userCanGetSelectedOptionText_none() {
+    assertThat($("select#hero").getSelectedText()).isEqualTo("-- Select your hero --");
+    assertThat($("select#gender").getSelectedText()).isEqualTo("");
+
+    assertThatThrownBy(() -> {
+      $("select#empty-select").getSelectedText();
+    })
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {select#empty-select}");
   }
 
   @Test
