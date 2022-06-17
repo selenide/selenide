@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.commands.Util.firstOf;
+import static java.util.Objects.requireNonNull;
 
 @ParametersAreNonnullByDefault
 public class GetPseudoValue implements Command<String> {
@@ -24,7 +25,7 @@ public class GetPseudoValue implements Command<String> {
     String pseudoElement = firstOf(args);
 
     if (args.length > 1) {
-      String propertyName = (String) args[1];
+      String propertyName = (String) requireNonNull(args[1], "property name is a required parameter");
       return locator.driver().executeJavaScript(JS_CODE, locator.getWebElement(), pseudoElement, propertyName);
     }
 
