@@ -10,7 +10,7 @@
 
 <div class="container">
   <div class="container">
-    <div id="domain-container" class="container">
+    <div id="character-container" class="container">
       <h2>Favorite characters</h2>
       <div class="container">
         <select id="character" multiple="multiple">
@@ -21,7 +21,71 @@
         </select>
       </div>
     </div>
+
+    <button id="button-select-animals">Select animals</button>
+    <button id="button-select-people">Select people</button>
   </div>
 </div>
+
+<div class="container">
+  <div class="container">
+    <div id="cars-container" class="container">
+      <h2>Favorite characters</h2>
+      <div class="container">
+        <select id="cars" multiple="multiple">
+        </select>
+      </div>
+    </div>
+
+    <button id="button-select-german-cars" style="display: none;">Select German cars</button>
+  </div>
+</div>
+
+<script>
+  const characterSelect = document.getElementById('character');
+  document.getElementById('button-select-animals').addEventListener('click', () => {
+    setTimeout(() => {
+      characterSelect.options[2].selected = true;
+    }, 500);
+  });
+  document.getElementById('button-select-people').addEventListener('click', () => {
+    setTimeout(() => {
+      characterSelect.options[0].selected = true;
+      characterSelect.options[1].selected = true;
+    }, 500);
+  });
+
+  const carSelect = document.getElementById('cars');
+  const buttonSelectGermanCars = document.getElementById('button-select-german-cars');
+
+  function addCar(name, value, selected) {
+    const option = document.createElement('option');
+    option.value = value;
+    option.innerHTML = name;
+    option.selected = selected;
+    carSelect.appendChild(option);
+  }
+  setTimeout(() => {
+    for (let i = 0; i < 1000; i++) {
+      addCar('Ziguli #' + i, 'ziguli-' + i, false);
+    }
+    addCar('Mercedes', 'mercedes', false);
+    addCar('Toyota', 'toyota', true);
+    addCar('BMW', 'bmw', false);
+    addCar('Mazda', 'mazda', true);
+    addCar('Audi', 'audi', false);
+    buttonSelectGermanCars.style.display = 'block';
+  }, 600)
+
+  buttonSelectGermanCars.addEventListener('click', () => {
+    setTimeout(() => {
+      carSelect.options[1000].selected = true;
+      carSelect.options[1001].selected = false;
+      carSelect.options[1002].selected = true;
+      carSelect.options[1003].selected = false;
+      carSelect.options[1004].selected = true;
+    }, 600);
+  });
+</script>
 </body>
 </html>
