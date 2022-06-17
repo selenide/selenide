@@ -72,7 +72,7 @@ final class ExactTextsTest {
   }
 
   @Test
-  void failWithEmptyElementsLIst() {
+  void failWithEmptyElementsList() {
     failOnEmptyOrNullElementsList(emptyList());
   }
 
