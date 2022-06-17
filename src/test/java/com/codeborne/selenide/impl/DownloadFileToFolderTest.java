@@ -77,7 +77,9 @@ final class DownloadFileToFolderTest {
   private File file(long modifiedAt) throws IOException {
     File file = createTempFile("selenide-tests", "new-file");
     FileUtils.touch(file);
-    file.setLastModified(modifiedAt);
+    if (!file.setLastModified(modifiedAt)) {
+      throw new IllegalStateException("Failed to set last modified time to file " + file.getAbsolutePath());
+    }
     return file;
   }
 }

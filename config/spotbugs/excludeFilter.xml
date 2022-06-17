@@ -33,8 +33,20 @@
     <Bug code="SS"/>
   </Match>
   <Match>
-    <Class name="integration.SoftAssertInParametrizedTest$TestPage"/>
+    <Class name="~.*\.*Test"/>
+    <Bug pattern="RV_RETURN_VALUE_IGNORED"/>
+  </Match>
+  <Match>
+    <Class name="~.*\.*Test"/>
+    <Bug pattern="RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT"/>
+  </Match>
+  <Match>
+    <Class name="~.*\.*TestPage"/>
     <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
+  </Match>
+  <Match>
+    <Class name="~.*\.*TestPage"/>
+    <Bug pattern="UUF_UNUSED_FIELD"/>
   </Match>
   <Match>
     <Class name="com.codeborne.selenide.SelenideDriver"/>
