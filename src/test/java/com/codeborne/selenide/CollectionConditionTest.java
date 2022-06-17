@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.collections.ContainExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTexts;
+import com.codeborne.selenide.collections.ExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitiveInAnyOrder;
 import com.codeborne.selenide.collections.ListSize;
 import com.codeborne.selenide.collections.SizeGreaterThan;
@@ -89,6 +90,26 @@ final class CollectionConditionTest {
     assertThat(collectionCondition)
       .as("Exact texts content")
       .hasToString("Exact texts [One, Two, Three]");
+  }
+
+  @Test
+  void exactTextsCaseSensitiveWithObjectsList() {
+    CollectionCondition collectionCondition = CollectionCondition.exactTextsCaseSensitive("One", "Two", "Three");
+    assertThat(collectionCondition)
+      .isInstanceOf(ExactTextsCaseSensitive.class);
+    assertThat(collectionCondition)
+      .as("Exact texts case sensitive content")
+      .hasToString("Exact texts case sensitive [One, Two, Three]");
+  }
+
+  @Test
+  void exactTextsCaseSensitiveWithListOfStrings() {
+    CollectionCondition collectionCondition = CollectionCondition.exactTextsCaseSensitive(asList("One", "Two", "Three"));
+    assertThat(collectionCondition)
+      .isInstanceOf(ExactTextsCaseSensitive.class);
+    assertThat(collectionCondition)
+      .as("Exact texts case sensitive content")
+      .hasToString("Exact texts case sensitive [One, Two, Three]");
   }
 
   @Test
