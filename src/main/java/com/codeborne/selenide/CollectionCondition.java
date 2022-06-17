@@ -4,6 +4,7 @@ import com.codeborne.selenide.collections.AllMatch;
 import com.codeborne.selenide.collections.AnyMatch;
 import com.codeborne.selenide.collections.ContainExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTexts;
+import com.codeborne.selenide.collections.ExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitiveInAnyOrder;
 import com.codeborne.selenide.collections.ItemWithText;
 import com.codeborne.selenide.collections.ListSize;
@@ -126,6 +127,26 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   @CheckReturnValue
   public static CollectionCondition exactTexts(List<String> expectedTexts) {
     return new ExactTexts(expectedTexts);
+  }
+
+  /**
+   * Checks that given collection has given case sensitive texts (each collection element EQUALS TO CASE SENSITIVE corresponding text)
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   */
+  @CheckReturnValue
+  public static CollectionCondition exactTextsCaseSensitive(String... expectedTexts) {
+    return new ExactTextsCaseSensitive(expectedTexts);
+  }
+
+  /**
+   * Checks that given collection has given case sensitive texts (each collection element EQUALS TO CASE SENSITIVE corresponding text)
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   */
+  @CheckReturnValue
+  public static CollectionCondition exactTextsCaseSensitive(List<String> expectedTexts) {
+    return new ExactTextsCaseSensitive(expectedTexts);
   }
 
   /**
