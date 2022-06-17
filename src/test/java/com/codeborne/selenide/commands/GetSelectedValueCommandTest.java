@@ -3,6 +3,7 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.NoSuchElementException;
 
 import static com.codeborne.selenide.Mocks.mockElement;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,9 +20,7 @@ final class GetSelectedValueCommandTest {
 
   @Test
   void selectedOptionReturnsNothing() {
-    // TODO fix me: https://github.com/selenide/selenide/issues/1581
-    //when(getSelectedOptionCommand.execute(any(), any(), any())).thenThrow(new NoSuchElementException("No options are selected"));
-    when(getSelectedOptionCommand.execute(any(), any(), any())).thenReturn(null);
+    when(getSelectedOptionCommand.execute(any(), any(), any())).thenThrow(new NoSuchElementException("No options are selected"));
     assertThat(command.execute(proxy, selectElement, null)).isNull();
     verify(getSelectedOptionCommand).execute(proxy, selectElement, null);
   }
