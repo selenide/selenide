@@ -93,9 +93,14 @@ public abstract class WebElementSource {
     return arg instanceof By ? (By) arg : By.cssSelector((String) arg);
   }
 
+  @SuppressWarnings("ResultOfMethodCallIgnored")
+  public void checkCondition(String prefix, Condition condition, boolean invert) {
+    checkConditionAndReturnElement(prefix, condition, invert);
+  }
+
   @Nullable
   @CheckReturnValue
-  public WebElement checkCondition(String prefix, Condition condition, boolean invert) {
+  private WebElement checkConditionAndReturnElement(String prefix, Condition condition, boolean invert) {
     Condition check = invert ? not(condition) : condition;
 
     Throwable lastError = null;
@@ -139,7 +144,7 @@ public abstract class WebElementSource {
   @Nonnull
   @CheckReturnValue
   public WebElement findAndAssertElementIsInteractable() {
-    return requireNonNull(checkCondition("be ", interactable, false));
+    return requireNonNull(checkConditionAndReturnElement("be ", interactable, false));
   }
 
   /**
@@ -150,6 +155,6 @@ public abstract class WebElementSource {
   @Nonnull
   @CheckReturnValue
   public WebElement findAndAssertElementIsEditable() {
-    return requireNonNull(checkCondition("be ", editable, false));
+    return requireNonNull(checkConditionAndReturnElement("be ", editable, false));
   }
 }
