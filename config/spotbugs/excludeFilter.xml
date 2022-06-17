@@ -59,5 +59,9 @@
     <Class name="com.codeborne.selenide.SelenideDriver"/>
     <Bug pattern="NM_METHOD_NAMING_CONVENTION"/>
   </Match>
+  <Match>
+    <Class name="com.codeborne.selenide.Selenide"/>
+    <Bug pattern="NM_METHOD_NAMING_CONVENTION"/>
+  </Match>
 </FindBugsFilter>
 
