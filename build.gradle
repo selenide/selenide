@@ -16,6 +16,7 @@ subprojects {
   apply plugin: 'java-library'
   apply plugin: 'checkstyle'
   apply plugin: 'com.github.spotbugs'
+  apply plugin: "org.sonarqube"
 }
 
 apply from: 'gradle/compilation.gradle'
