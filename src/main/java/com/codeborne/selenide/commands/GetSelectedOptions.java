@@ -8,7 +8,6 @@ import com.codeborne.selenide.impl.Alias;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -37,22 +36,18 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     @CheckReturnValue
     @Nonnull
     public List<WebElement> getElements() {
-      return select(selectElement).getAllSelectedOptions();
+      return selectElement.driver().executeJavaScript(
+        "return arguments[0].selectedOptions", selectElement.getWebElement()
+      );
     }
 
     @Override
     @CheckReturnValue
     @Nonnull
     public WebElement getElement(int index) {
-      return index == 0 ?
-        select(selectElement).getFirstSelectedOption() :
-        select(selectElement).getAllSelectedOptions().get(index);
-    }
-
-    @CheckReturnValue
-    @Nonnull
-    private Select select(WebElementSource selectElement) {
-      return new Select(selectElement.getWebElement());
+      return selectElement.driver().executeJavaScript(
+        "return arguments[0].selectedOptions[arguments[1]]", selectElement.getWebElement(), index
+      );
     }
 
     @Override
