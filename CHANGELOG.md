@@ -1,5 +1,12 @@
 # Changelog
 
+## 6.6.4 (released 20.06.2022)
+
+* #1861 Added collection condition `exactTextsCaseSensitive` -- thanks to Ben Heap
+* #1581 make method $.getSelectedOption() lazy-loaded -- see PR #1864
+* #1857 Bump nettyVersion from 4.1.77.Final to 4.1.78.Final
+* #1860 Bump browserup-proxy-core from 2.1.5 to 2.2.0
+
 ## 6.6.3 (released 12.06.2022)
 
 * #1572 use custom timeout for commands which have timeout  --  see PR #1853
