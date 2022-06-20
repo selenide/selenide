@@ -907,9 +907,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Find (first) selected option from this select field
    *
    * @return WebElement for selected &lt;option&gt; element
-   * @throws NoSuchElementException if no options are selected
    * @see com.codeborne.selenide.commands.GetSelectedOption
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull

@@ -26,6 +26,7 @@ import static com.codeborne.selenide.CollectionCondition.anyMatch;
 import static com.codeborne.selenide.CollectionCondition.containExactTextsCaseSensitive;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
+import static com.codeborne.selenide.CollectionCondition.exactTextsCaseSensitive;
 import static com.codeborne.selenide.CollectionCondition.itemWithText;
 import static com.codeborne.selenide.CollectionCondition.noneMatch;
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -575,11 +576,25 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void shouldContainTexts() {
+  void shouldContainExactTextsCaseSensitive() {
     $$("#hero option")
       .should(containExactTextsCaseSensitive("Denzel Washington", "John Mc'Lain", "Arnold \"Schwarzenegger\""));
     $$("#user-table th")
       .should(containExactTextsCaseSensitive("First name", "Last name"));
+  }
+
+  @Test
+  void shouldHaveExactTextsCaseSensitive() {
+    $$("#hero option")
+      .should(exactTextsCaseSensitive("-- Select your hero --", "John Mc'Lain", "Arnold \"Schwarzenegger\"", "Mickey \"Rock'n'Roll\" Rourke", "Denzel Washington"));
+    $$("#user-table th")
+      .should(exactTextsCaseSensitive("First name", "Last name", "Age"));
+
+    assertThatThrownBy(() -> $$("#user-table th").should(exactTextsCaseSensitive("First name", "Last name", "ge")))
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageContaining("Texts mismatch")
+      .hasMessageContaining("Actual: [First name, Last name, Age]")
+      .hasMessageContaining("Expected: [First name, Last name, ge]");
   }
 
   @Test

@@ -130,7 +130,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   }
 
   /**
-   * Checks that given collection has given case sensitive texts (each collection element EQUALS TO CASE SENSITIVE corresponding text)
+   * Checks that given collection has given case-sensitive texts (each collection element EQUALS TO CASE SENSITIVE corresponding text)
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
@@ -140,7 +140,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   }
 
   /**
-   * Checks that given collection has given case sensitive texts (each collection element EQUALS TO CASE SENSITIVE corresponding text)
+   * Checks that given collection has given case-sensitive texts (each collection element EQUALS TO CASE SENSITIVE corresponding text)
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
@@ -290,7 +290,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
     @Override
     public String toString() {
-      return delegate.toString() + " (because " + message + ")";
+      return delegate + " (because " + message + ")";
     }
 
     @Override
