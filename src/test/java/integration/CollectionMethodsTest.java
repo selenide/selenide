@@ -585,10 +585,18 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void shouldHaveExactTextsCaseSensitive() {
-    $$("#hero option")
-      .should(exactTextsCaseSensitive("-- Select your hero --", "John Mc'Lain", "Arnold \"Schwarzenegger\"", "Mickey \"Rock'n'Roll\" Rourke", "Denzel Washington"));
-    $$("#user-table th")
-      .should(exactTextsCaseSensitive("First name", "Last name", "Age"));
+    $$("#hero option").should(exactTextsCaseSensitive(
+      "-- Select your hero --",
+      "John Mc'Lain",
+      "Arnold \"Schwarzenegger\"",
+      "Mickey \"Rock'n'Roll\" Rourke",
+      "Denzel Washington"
+    ));
+    $$("#user-table th").should(exactTextsCaseSensitive(
+      "First name",
+      "Last name",
+      "Age"
+    ));
 
     assertThatThrownBy(() -> $$("#user-table th").should(exactTextsCaseSensitive("First name", "Last name", "ge")))
       .isInstanceOf(TextsMismatch.class)
