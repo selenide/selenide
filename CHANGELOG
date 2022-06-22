@@ -1,5 +1,9 @@
 == Changelog
 
+=== 2.0.4 (released 23.06.2022)
+* upgrade to Appium 8.1.1 ("Perform safe typecast while getting the platform name")
+* upgrade to Selenide 6.6.4
+
 === 2.0.3 (released 31.05.2022)
 * upgrade to Appium 8.1.0  --  see https://github.com/appium/java-client/blob/master/README.md#changelog
 

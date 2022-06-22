@@ -22,11 +22,8 @@ Just add to pom.xml:
 <dependency>
     <groupId>com.codeborne</groupId>
     <artifactId>selenide-appium</artifactId>
-    <version>2.0.3</version>
+    <version>2.0.4</version>
 </dependency>
 ```
 
-NB! This library is only needed if you want to use PageFactory (annotations like `@AndroidFindBy`).
-
-If you don't need `@FooFindBy` annotations, consider using a [more simple approach](https://github.com/selenide-examples/selenide-appium).
-It just uses usual Selenide `$` calls to find elements in mobile app. 
+For a reference, see a [sample project](https://github.com/selenide-examples/selenide-appium). 
