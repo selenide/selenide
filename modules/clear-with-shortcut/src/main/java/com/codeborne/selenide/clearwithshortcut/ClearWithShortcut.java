@@ -4,11 +4,8 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.Clear;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WrapsDriver;
-import org.openqa.selenium.JavascriptExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,12 +74,7 @@ public class ClearWithShortcut extends Clear {
   @Nonnull
   @CheckReturnValue
   protected Platform getPlatform(Driver driver) {
-    WebDriver webDriver = driver.getWebDriver();
-
-    if (webDriver instanceof WrapsDriver)
-      webDriver = ((WrapsDriver) webDriver).getWrappedDriver();
-
-    if (!(webDriver instanceof JavascriptExecutor)) {
+    if (!driver.supportsJavascript()) {
       return Platform.UNKNOWN;
     }
     try {

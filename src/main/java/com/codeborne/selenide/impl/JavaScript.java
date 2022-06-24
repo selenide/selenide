@@ -9,6 +9,7 @@ import org.openqa.selenium.WrapsDriver;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 public class JavaScript {
@@ -31,15 +32,18 @@ public class JavaScript {
   }
 
   public static JavascriptExecutor jsExecutor(SearchContext context) {
-    if (context instanceof JavascriptExecutor) {
-      return (JavascriptExecutor) context;
+    return asJsExecutor(context)
+      .orElseThrow(() -> new IllegalArgumentException("Context is not JS-aware: " + context));
+  }
+
+  public static Optional<JavascriptExecutor> asJsExecutor(SearchContext context) {
+    if (context instanceof WrapsDriver wrapsDriver) {
+      context = wrapsDriver.getWrappedDriver();
     }
-    else if (context instanceof WrapsDriver) {
-      return (JavascriptExecutor) ((WrapsDriver) context).getWrappedDriver();
-    }
-    else {
-      throw new IllegalArgumentException("Context is not JS-aware: " + context);
-    }
+
+    return context instanceof JavascriptExecutor ?
+      Optional.of((JavascriptExecutor) context) :
+      Optional.empty();
   }
 
   @Nullable

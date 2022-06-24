@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.interactions.Actions;
@@ -13,6 +12,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.impl.JavaScript.asJsExecutor;
 import static com.codeborne.selenide.impl.JavaScript.jsExecutor;
 
 @ParametersAreNonnullByDefault
@@ -48,7 +48,7 @@ public interface Driver {
 
   @CheckReturnValue
   default boolean supportsJavascript() {
-    return hasWebDriverStarted() && getWebDriver() instanceof JavascriptExecutor;
+    return hasWebDriverStarted() && asJsExecutor(getWebDriver()).isPresent();
   }
 
   @SuppressWarnings("unchecked")
