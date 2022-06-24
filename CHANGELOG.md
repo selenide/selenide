@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.6.5 (released 24.06.2022)
+
+* #1869 Bump seleniumVersion from 4.2.2 to 4.3.0
+* #1868 Bump byteBuddyVersion from 1.12.10 to 1.12.11
+
 ## 6.6.4 (released 20.06.2022)
 
 * #1861 Added collection condition `exactTextsCaseSensitive` -- thanks to Ben Heap
