@@ -36,7 +36,6 @@ public class SafariDriverFactoryTest {
   void mergesDefaultCapabilities() {
     SafariOptions options = factory.createCapabilities(config, browser, null, new File("/tmp/downloads-folder-12345"));
     assertThat(options.getCapability("acceptInsecureCerts")).isEqualTo(TRUE);
-    assertThat(options.getCapability("acceptSslCerts")).isEqualTo(TRUE);
     assertThat(options.getCapability("browserName")).isEqualTo("safari");
     assertThat(options.getCapability("javascriptEnabled")).isEqualTo(TRUE);
     assertThat(options.getCapability("takesScreenshot")).isEqualTo(TRUE);

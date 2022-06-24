@@ -28,7 +28,6 @@ import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
-import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 
 @ExtendWith(ScreenShooterExtension.class)
 public abstract class IntegrationTest extends BaseIntegrationTest {
@@ -135,7 +134,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   private static void addSslErrorIgnoreOptions(MutableCapabilities options) {
-    options.setCapability(ACCEPT_SSL_CERTS, true);
     options.setCapability(ACCEPT_INSECURE_CERTS, true);
   }
 }

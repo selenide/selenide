@@ -21,7 +21,7 @@ final class CleanupTest {
       "System info: os.name: 'Linux', os.arch: 'amd64', os.version: '3.5.0-23-generic', java.version: '1.7.0_10'\n" +
       "Session ID: 610138404f5c180a4f3153785e66c528\n" +
       "Driver info: org.openqa.selenium.chrome.ChromeDriver\n" +
-      "Capabilities [{platform=LINUX, chrome.chromedriverVersion=26.0.1383.0, acceptSslCerts=false, " +
+      "Capabilities [{platform=LINUX, chrome.chromedriverVersion=26.0.1383.0, " +
       "javascriptEnabled=true, browserName=chrome, rotatable=false, locationContextEnabled=false, " +
       "version=24.0.1312.56, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, " +
       "browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, applicationCacheEnabled=false, " +
