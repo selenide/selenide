@@ -23,7 +23,7 @@ final class CleanupTest {
       "Driver info: org.openqa.selenium.chrome.ChromeDriver\n" +
       "Capabilities [{platform=LINUX, chrome.chromedriverVersion=26.0.1383.0, " +
       "javascriptEnabled=true, browserName=chrome, rotatable=false, locationContextEnabled=false, " +
-      "version=24.0.1312.56, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, " +
+      "version=24.0.1312.56, cssSelectorsEnabled=true, databaseEnabled=false, " +
       "browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, applicationCacheEnabled=false, " +
       "takesScreenshot=true}]";
     String expectedException = "NoSuchElementException: The element could not be found";
