@@ -49,7 +49,6 @@ final class FirefoxDriverFactoryTest {
     FirefoxOptions options = driverFactory.createCapabilities(new SelenideConfig(), browser, null, null);
 
     assertThat(options.getCapability("acceptInsecureCerts")).isEqualTo(TRUE);
-    assertThat(options.getCapability("acceptSslCerts")).isEqualTo(TRUE);
     assertThat(options.getCapability("browserName")).isEqualTo("firefox");
     assertThat(options.getCapability("javascriptEnabled")).isEqualTo(TRUE);
     assertThat(options.getCapability("takesScreenshot")).isEqualTo(TRUE);

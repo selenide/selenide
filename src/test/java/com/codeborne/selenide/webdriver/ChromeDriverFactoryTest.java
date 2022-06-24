@@ -60,7 +60,6 @@ final class ChromeDriverFactoryTest {
     ChromeOptions options = factory.createCapabilities(new SelenideConfig(), browser, null, new File("/tmp/downloads-folder-456789"));
 
     assertThat(options.getCapability("acceptInsecureCerts")).isEqualTo(TRUE);
-    assertThat(options.getCapability("acceptSslCerts")).isEqualTo(TRUE);
     assertThat(options.getCapability("browserName")).isEqualTo("chrome");
     assertThat(options.getCapability("javascriptEnabled")).isEqualTo(TRUE);
     assertThat(options.getCapability("takesScreenshot")).isEqualTo(TRUE);

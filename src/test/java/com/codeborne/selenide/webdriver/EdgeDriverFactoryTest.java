@@ -60,7 +60,6 @@ class EdgeDriverFactoryTest {
     EdgeOptions options = factory.createCapabilities(new SelenideConfig(), browser, null, new File("/tmp/downloads-folder-456789"));
 
     assertThat(options.getCapability("acceptInsecureCerts")).isEqualTo(TRUE);
-    assertThat(options.getCapability("acceptSslCerts")).isEqualTo(TRUE);
     assertThat(options.getCapability("browserName")).isEqualTo("MicrosoftEdge");
     assertThat(options.getCapability("javascriptEnabled")).isEqualTo(TRUE);
     assertThat(options.getCapability("takesScreenshot")).isEqualTo(TRUE);
