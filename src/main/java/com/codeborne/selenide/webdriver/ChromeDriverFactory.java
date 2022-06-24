@@ -37,9 +37,8 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  @SuppressWarnings("deprecation")
   public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
-    MutableCapabilities chromeOptions = createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    ChromeOptions chromeOptions = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     log.debug("Chrome options: {}", chromeOptions);
     return new ChromeDriver(buildService(config), chromeOptions);
   }
