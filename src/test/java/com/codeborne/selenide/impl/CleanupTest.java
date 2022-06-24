@@ -22,7 +22,7 @@ final class CleanupTest {
       "Session ID: 610138404f5c180a4f3153785e66c528\n" +
       "Driver info: org.openqa.selenium.chrome.ChromeDriver\n" +
       "Capabilities [{platform=LINUX, chrome.chromedriverVersion=26.0.1383.0, " +
-      "javascriptEnabled=true, browserName=chrome, rotatable=false, locationContextEnabled=false, " +
+      "browserName=chrome, rotatable=false, locationContextEnabled=false, " +
       "version=24.0.1312.56, cssSelectorsEnabled=true, databaseEnabled=false, " +
       "browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, applicationCacheEnabled=false, " +
       "takesScreenshot=true}]";
