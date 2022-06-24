@@ -50,7 +50,6 @@ final class FirefoxDriverFactoryTest {
 
     assertThat(options.getCapability("acceptInsecureCerts")).isEqualTo(TRUE);
     assertThat(options.getCapability("browserName")).isEqualTo("firefox");
-    assertThat(options.getCapability("takesScreenshot")).isEqualTo(TRUE);
   }
 
   @Test

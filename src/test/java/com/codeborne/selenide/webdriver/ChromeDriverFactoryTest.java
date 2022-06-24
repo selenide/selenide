@@ -61,7 +61,6 @@ final class ChromeDriverFactoryTest {
 
     assertThat(options.getCapability("acceptInsecureCerts")).isEqualTo(TRUE);
     assertThat(options.getCapability("browserName")).isEqualTo("chrome");
-    assertThat(options.getCapability("takesScreenshot")).isEqualTo(TRUE);
   }
 
   @Test

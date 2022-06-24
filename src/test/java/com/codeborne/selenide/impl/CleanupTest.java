@@ -24,8 +24,7 @@ final class CleanupTest {
       "Capabilities [{platform=LINUX, chrome.chromedriverVersion=26.0.1383.0, " +
       "browserName=chrome, rotatable=false, locationContextEnabled=false, " +
       "version=24.0.1312.56, cssSelectorsEnabled=true, databaseEnabled=false, " +
-      "browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, applicationCacheEnabled=false, " +
-      "takesScreenshot=true}]";
+      "browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, applicationCacheEnabled=false}]";
     String expectedException = "NoSuchElementException: The element could not be found";
     assertThat(Cleanup.of.webdriverExceptionMessage(webDriverException))
       .isEqualTo(expectedException);
