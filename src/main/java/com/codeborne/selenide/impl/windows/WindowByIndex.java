@@ -20,7 +20,7 @@ public class WindowByIndex implements ExpectedCondition<WebDriver> {
 
   @Override
   @Nullable
-  public WebDriver apply(@SuppressWarnings("NullableProblems") WebDriver driver) {
+  public WebDriver apply(WebDriver driver) {
     try {
       List<String> windowHandles = new ArrayList<>(driver.getWindowHandles());
       return driver.switchTo().window(windowHandles.get(index));
