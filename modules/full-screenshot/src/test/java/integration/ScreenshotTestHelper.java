@@ -1,5 +1,7 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,8 +9,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class ScreenshotTestHelper {
   private static final Logger log = LoggerFactory.getLogger(ScreenshotTestHelper.class);
@@ -18,11 +21,17 @@ public class ScreenshotTestHelper {
     log.info("Verify screenshot {} of size {}x{}", screenshot.getAbsolutePath(), img.getWidth(), img.getHeight());
     if (nearlyEqual(img.getWidth(), width * 2) && nearlyEqual(img.getHeight(), height * 2)) {
       // it's Retina display, it has 2x more pixels
-      log.info("Screenshot matches {}x{} on Retina display", width, height);
+      log.info("Screenshot matches {}x{} size on Retina display", width, height);
+    }
+    else if (nearlyEqual(img.getWidth(), width) && nearlyEqual(img.getHeight(), height)) {
+      log.info("Screenshot matches {}x{} size", width, height);
     }
     else {
-      assertThat(img.getWidth()).isBetween(width - 50, width + 50);
-      assertThat(img.getHeight()).isBetween(height - 50, height + 50);
+      File archivedFile = new File(Configuration.reportsFolder, UUID.randomUUID() + ".png");
+      FileUtils.copyFile(screenshot, archivedFile);
+      log.info("Screenshot matches {}x{} size", width, height);
+      fail(String.format("Screenshot %s is expected to have size %sx%s, but actual size: %sx%s",
+        archivedFile.getAbsolutePath(), width, height, img.getWidth(), img.getHeight()));
     }
   }
 

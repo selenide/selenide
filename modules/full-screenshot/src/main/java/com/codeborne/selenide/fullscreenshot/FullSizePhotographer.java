@@ -81,7 +81,7 @@ public class FullSizePhotographer implements Photographer {
         return defaultImplementation.takeScreenshot(driver, outputType);
       }
       DevTools devTools = ((HasDevTools) webDriver).getDevTools();
-      devTools.createSession();
+      devTools.createSessionIfThereIsNotOne();
 
       Options options = getOptions(remoteWebDriver);
       Viewport viewport = new Viewport(0, 0, options.fullWidth(), options.fullHeight(), 1);
