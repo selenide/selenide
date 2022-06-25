@@ -8,6 +8,7 @@ import com.github.bsideup.jabel.Desugar;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.chromium.HasCdp;
 import org.openqa.selenium.devtools.DevTools;
@@ -17,6 +18,8 @@ import org.openqa.selenium.devtools.v101.page.model.Viewport;
 import org.openqa.selenium.firefox.HasFullPageScreenshot;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -26,10 +29,12 @@ import java.util.Optional;
 
 /**
  * Implementation of {@link Photographer} which can take full-size screenshots.
+ *
  * @since 6.7.0
  */
 @ParametersAreNonnullByDefault
 public class FullSizePhotographer implements Photographer {
+  private static final Logger log = LoggerFactory.getLogger(FullSizePhotographer.class);
   private static final JavaScript js = new JavaScript("get-screen-size.js");
 
   private final WebdriverPhotographer defaultImplementation;
@@ -46,59 +51,89 @@ public class FullSizePhotographer implements Photographer {
   @Override
   @CheckReturnValue
   public <T> Optional<T> takeScreenshot(Driver driver, OutputType<T> outputType) {
-    WebDriver wd = driver.getWebDriver();
-    if (wd instanceof WrapsDriver) {
-      wd = ((WrapsDriver) wd).getWrappedDriver();
+    try {
+      Optional<T> result = takeFullSizeScreenshot(driver, outputType);
+      return result.isPresent() ? result :
+        defaultImplementation.takeScreenshot(driver, outputType);
     }
-    if (wd instanceof HasFullPageScreenshot webDriver) {
-      return Optional.of(webDriver.getFullPageScreenshotAs(outputType));
+    catch (WebDriverException e) {
+      log.error("Failed to take full-size screenshot", e);
+      return defaultImplementation.takeScreenshot(driver, outputType);
     }
-    if (wd instanceof HasCdp cdp) {
-      Options options = getOptions(wd);
-      Map<String, Object> captureScreenshotOptions = ImmutableMap.of(
-        "clip", ImmutableMap.of(
-          "x", 0,
-          "y", 0,
-          "width", options.fullWidth(),
-          "height", options.fullHeight(),
-          "scale", 1),
-        "captureBeyondViewport", options.exceedViewport()
-      );
+  }
 
-      Map<String, Object> result = cdp.executeCdpCommand("Page.captureScreenshot", captureScreenshotOptions);
+  @Nonnull
+  private <T> Optional<T> takeFullSizeScreenshot(Driver driver, OutputType<T> outputType) {
+    WebDriver webDriver = unwrap(driver);
 
-      String base64 = (String) result.get("data");
-      T screenshot = outputType.convertFromBase64Png(base64);
-      return Optional.of(screenshot);
+    if (webDriver instanceof HasFullPageScreenshot firefoxDriver) {
+      return Optional.of(firefoxDriver.getFullPageScreenshotAs(outputType));
     }
-
-    if (wd instanceof RemoteWebDriver remoteWebDriver) {
-      WebDriver webDriver = new Augmenter().augment(remoteWebDriver);
-      if (webDriver instanceof HasFullPageScreenshot smartWebDriver) {
-        return Optional.of(smartWebDriver.getFullPageScreenshotAs(outputType));
-      }
-      if (!(webDriver instanceof HasDevTools)) {
-        return defaultImplementation.takeScreenshot(driver, outputType);
-      }
-      DevTools devTools = ((HasDevTools) webDriver).getDevTools();
-      devTools.createSessionIfThereIsNotOne();
-
-      Options options = getOptions(remoteWebDriver);
-      Viewport viewport = new Viewport(0, 0, options.fullWidth(), options.fullHeight(), 1);
-
-      String base64 = devTools.send(Page.captureScreenshot(
-          Optional.empty(),
-          Optional.empty(),
-          Optional.of(viewport),
-          Optional.empty(),
-          Optional.of(options.exceedViewport())
-        )
-      );
-
-      T screenshot = outputType.convertFromBase64Png(base64);
-      return Optional.of(screenshot);
+    if (webDriver instanceof HasCdp) {
+      return takeScreenshotWithCDP((WebDriver & HasCdp) webDriver, outputType);
+    }
+    if (webDriver instanceof HasDevTools) {
+      return takeScreenshot((WebDriver & HasDevTools) webDriver, outputType);
     }
     return Optional.empty();
+  }
+
+  private WebDriver unwrap(Driver driver) {
+    WebDriver webDriver = driver.getWebDriver();
+    if (webDriver instanceof WrapsDriver) {
+      webDriver = ((WrapsDriver) webDriver).getWrappedDriver();
+    }
+    if (webDriver instanceof RemoteWebDriver remoteWebDriver) {
+      webDriver = new Augmenter().augment(remoteWebDriver);
+    }
+    return webDriver;
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  private <WD extends WebDriver & HasDevTools, ResultType> Optional<ResultType> takeScreenshot(
+    WD devtoolsDriver, OutputType<ResultType> outputType
+  ) {
+    DevTools devTools = devtoolsDriver.getDevTools();
+    devTools.createSessionIfThereIsNotOne();
+
+    Options options = getOptions(devtoolsDriver);
+    Viewport viewport = new Viewport(0, 0, options.fullWidth(), options.fullHeight(), 1);
+
+    String base64 = devTools.send(Page.captureScreenshot(
+        Optional.empty(),
+        Optional.empty(),
+        Optional.of(viewport),
+        Optional.empty(),
+        Optional.of(options.exceedViewport())
+      )
+    );
+
+    ResultType screenshot = outputType.convertFromBase64Png(base64);
+    return Optional.of(screenshot);
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  private <WD extends WebDriver & HasCdp, ResultType> Optional<ResultType> takeScreenshotWithCDP(
+    WD cdpDriver, OutputType<ResultType> outputType
+  ) {
+    Options options = getOptions(cdpDriver);
+    Map<String, Object> captureScreenshotOptions = ImmutableMap.of(
+      "clip", ImmutableMap.of(
+        "x", 0,
+        "y", 0,
+        "width", options.fullWidth(),
+        "height", options.fullHeight(),
+        "scale", 1),
+      "captureBeyondViewport", options.exceedViewport()
+    );
+
+    Map<String, Object> result = cdpDriver.executeCdpCommand("Page.captureScreenshot", captureScreenshotOptions);
+
+    String base64 = (String) result.get("data");
+    ResultType screenshot = outputType.convertFromBase64Png(base64);
+    return Optional.of(screenshot);
   }
 
   private Options getOptions(WebDriver webDriver) {
