@@ -19,9 +19,9 @@ import static java.time.Duration.ofSeconds;
 final class ClickWithTimeoutTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
+    openFile("page_with_link_to_slow_page.html");
     Configuration.timeout = 100;
     Configuration.pageLoadTimeout = 200;
-    openFile("page_with_link_to_slow_page.html");
   }
 
   @Test
