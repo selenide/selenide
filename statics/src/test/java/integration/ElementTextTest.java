@@ -14,6 +14,7 @@ import static com.codeborne.selenide.Condition.matchText;
 import static com.codeborne.selenide.Condition.ownText;
 import static com.codeborne.selenide.Condition.ownTextCaseSensitive;
 import static com.codeborne.selenide.Condition.partialText;
+import static com.codeborne.selenide.Condition.partialTextCaseSensitive;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Selenide.$;
@@ -158,8 +159,12 @@ final class ElementTextTest extends IntegrationTest {
   void text_ignoresCase() {
     $("#upper-case").shouldHave(text("this is sparta!"));
     $("#upper-case").shouldHave(text("THIS IS SPARTA!"));
-    $("#upper-case").shouldHave(text("IS IS SPA"));
-    $("#upper-case").shouldHave(text("is is spa"));
+  }
+
+  @Test
+  void partialText_ignoresCase() {
+    $("#upper-case").shouldHave(partialText("IS IS SPA"));
+    $("#upper-case").shouldHave(partialText("is is spa"));
   }
 
   @Test
@@ -173,7 +178,12 @@ final class ElementTextTest extends IntegrationTest {
   void text_caseSensitive() {
     $("#upper-case").shouldNotHave(textCaseSensitive("This is Sparta!"));
     $("#upper-case").shouldHave(textCaseSensitive("THIS IS SPARTA!"));
-    $("#upper-case").shouldHave(textCaseSensitive("IS IS SPA"));
+    $("#upper-case").shouldNotHave(textCaseSensitive("IS IS SPA"));
+  }
+
+  @Test
+  void partialText_caseSensitive() {
+    $("#upper-case").shouldHave(partialTextCaseSensitive("IS IS SPA"));
   }
 
   @Test

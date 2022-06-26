@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static java.util.Locale.ROOT;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -66,7 +67,7 @@ public class SelenideLogger {
   @CheckReturnValue
   @Nonnull
   static String readableMethodName(String methodName) {
-    return REGEX_UPPER_CASE.matcher(methodName).replaceAll(" $1").toLowerCase();
+    return REGEX_UPPER_CASE.matcher(methodName).replaceAll(" $1").toLowerCase(ROOT);
   }
 
   @CheckReturnValue

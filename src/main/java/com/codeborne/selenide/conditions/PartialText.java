@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static java.util.Locale.ROOT;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @ParametersAreNonnullByDefault
@@ -23,7 +24,7 @@ public class PartialText extends TextCondition {
 
   @Override
   protected boolean match(String actualText, String expectedText) {
-    return Html.text.contains(actualText, expectedText.toLowerCase());
+    return Html.text.contains(actualText, expectedText.toLowerCase(ROOT));
   }
 
   @Nullable

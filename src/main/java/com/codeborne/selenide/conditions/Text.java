@@ -8,8 +8,8 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Locale;
 
+import static java.util.Locale.ROOT;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @ParametersAreNonnullByDefault
@@ -33,8 +33,8 @@ public class Text extends TextCondition {
   @Override
   protected boolean match(TextCheck textCheck, String actualText, String expectedText) {
     return switch (textCheck) {
-      case FULL_TEXT -> Html.text.equals(actualText, expectedText.toLowerCase());
-      case PARTIAL_TEXT -> Html.text.contains(actualText, expectedText.toLowerCase(Locale.ROOT));
+      case FULL_TEXT -> Html.text.equals(actualText, expectedText.toLowerCase(ROOT));
+      case PARTIAL_TEXT -> Html.text.contains(actualText, expectedText.toLowerCase(ROOT));
     };
   }
 
