@@ -1,5 +1,8 @@
 == Changelog
 
+=== 2.0.5 (released 27.06.2022)
+* upgrade to Selenide 6.6.5 and Selenium 4.3.0
+
 === 2.0.4 (released 23.06.2022)
 * upgrade to Appium 8.1.1 ("Perform safe typecast while getting the platform name")
 * upgrade to Selenide 6.6.4
