@@ -9,9 +9,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
 
 @ParametersAreNonnullByDefault
 class Util {
@@ -40,5 +42,24 @@ class Util {
         throw new IllegalArgumentException("Unknown parameter: " + arg);
     }
     return conditions;
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  @SafeVarargs
+  public static <T> List<T> merge(T first, T... others) {
+    List<T> result = new ArrayList<>(1 + others.length);
+    result.add(first);
+    result.addAll(asList(others));
+    return unmodifiableList(result);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static List<Integer> merge(int first, int[] others) {
+    List<Integer> result = new ArrayList<>(1 + others.length);
+    result.add(first);
+    IntStream.of(others).forEach(i -> result.add(i));
+    return unmodifiableList(result);
   }
 }

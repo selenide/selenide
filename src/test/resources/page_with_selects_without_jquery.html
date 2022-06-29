@@ -58,7 +58,7 @@
       <h2>Dropdown list</h2>
       <h6 id="selectedDomain"></h6>
       <div id="dropdown-list-container" class="container">
-        <select name="domain" onchange="onDomainChanged(this);">
+        <select id="domain" name="domain" onchange="onDomainChanged(this);">
           <option value="livemail.ru" data-mailServerId="111">@livemail.ru</option>
           <option value="myrambler.ru" data-mailServerId="222A">@myrambler.ru</option>
           <option value="rusmail.ru" data-mailServerId="33333B">@rusmail.ru</option>
@@ -222,6 +222,7 @@
     <option value="saab">Saab</option>
     <option value="opel">Opel</option>
     <option value="audi">Audi</option>
+    <option value="zhiguli" disabled>Zhiguli</option>
   </select>
 </div>
 
@@ -236,6 +237,15 @@
 
 <select name="emptySelect" id="empty-select">
 </select>
+
+<div class="container">
+  <h2><a href="#">Disabled select</a></h2>
+  <select id="disabled-select" disabled>
+    <option value="">-- Select the frozen --</option>
+    <option value="elsa">Elsa</option>
+    <option value="anna">Anna</option>
+  </select>
+</div>
 
 </body>
 </html>
