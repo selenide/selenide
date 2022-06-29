@@ -47,9 +47,9 @@ public class AppiumElementDescriber implements ElementDescriber {
       return "null";
     }
 
-    return new Builder(element)
+    return new Builder(element, supportedAttributes(driver))
       .appendTagName()
-      .appendAttributes(supportedAttributes(driver))
+      .appendAttributes()
       .finish()
       .build();
   }
@@ -75,7 +75,7 @@ public class AppiumElementDescriber implements ElementDescriber {
   }
 
   protected List<String> iosAttributes() {
-    return asList("enabled", "selected", "name", "type", "value", "visible");
+    return asList("enabled", "selected", "name", "value", "visible");
   }
 
   protected List<String> genericAttributes() {
@@ -85,7 +85,7 @@ public class AppiumElementDescriber implements ElementDescriber {
   @Nonnull
   @Override
   public String briefly(Driver driver, @Nonnull WebElement element) {
-    return new Builder(element)
+    return new Builder(element, supportedAttributes(driver))
       .appendTagName()
       .appendAttribute("resource-id")
       .finish()
@@ -107,32 +107,39 @@ public class AppiumElementDescriber implements ElementDescriber {
   @ParametersAreNonnullByDefault
   private static class Builder {
     private final WebElement element;
+    private final List<String> supportedAttributes;
     private String className = "?";
     private String tagName = "?";
     private String text = "?";
     private final StringBuilder sb = new StringBuilder();
     private StaleElementReferenceException staleElementException;
 
-    private Builder(WebElement element) {
+    private Builder(WebElement element, List<String> supportedAttributes) {
       this.element = element;
+      this.supportedAttributes = supportedAttributes;
     }
 
     private Builder appendTagName() {
-      getAttribute("class", (className) -> {
-        this.className = className;
-        tagName = className.replaceFirst(".+\\.(.+)", "$1");
-      });
+      if (supportedAttributes.contains("class")) {
+        getAttribute("class", (className) -> {
+          this.className = className;
+          tagName = className.replaceFirst(".+\\.(.+)", "$1");
+        });
+      }
       if ("?".equals(tagName)) {
         safeCall(element::getTagName, () -> "Failed to get tag name", (tagName) -> {
           this.tagName = tagName;
         });
       }
-      sb.append("<").append(tagName).append(" class=\"").append(className).append("\"");
+      sb.append("<").append(tagName);
+      if (!"?".equals(className)) {
+        sb.append(" class=\"").append(className).append("\"");
+      }
       return this;
     }
 
-    private Builder appendAttributes(List<String> names) {
-      names.forEach(this::appendAttribute);
+    private Builder appendAttributes() {
+      supportedAttributes.forEach(this::appendAttribute);
       return this;
     }
 
