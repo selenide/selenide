@@ -39,6 +39,18 @@ public class ClickOptions implements HasTimeout {
   }
 
   @CheckReturnValue
+  @Nonnull
+  public static ClickOptions withOffset(int offsetX, int offsetY) {
+    return new ClickOptions(DEFAULT, offsetX, offsetY, null);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static ClickOptions withTimeout(Duration timeout) {
+    return new ClickOptions(DEFAULT, 0, 0, timeout);
+  }
+
+  @CheckReturnValue
   public int offsetX() {
     return offsetX;
   }
