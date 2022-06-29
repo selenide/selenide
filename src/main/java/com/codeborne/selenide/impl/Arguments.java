@@ -4,6 +4,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Optional;
 
 public class Arguments {
@@ -24,6 +25,17 @@ public class Arguments {
         return Optional.of((T) arg);
     }
     return Optional.empty();
+  }
+
+  public <T> T nth(int index) {
+    if (args == null) {
+      throw new IllegalArgumentException("Missing arguments");
+    }
+    if (index >= args.length) {
+      throw new IllegalArgumentException("Missing argument #" + index + " in " + Arrays.toString(args));
+    }
+    //noinspection unchecked
+    return (T) args[index];
   }
 
   @CheckReturnValue
