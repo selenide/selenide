@@ -8,6 +8,7 @@ import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
+import static com.codeborne.selenide.ClickOptions.withOffset;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -37,6 +38,13 @@ final class ClickRelativeTest extends IntegrationTest {
     Configuration.clickViaJs = true;
 
     $("#page").click(usingDefaultMethod().offset(123, 222));
+
+    $("#coords").shouldHave(exactText("(523, 522)"));
+  }
+
+  @Test
+  void userCanClickElementWithOffset() {
+    $("#page").click(withOffset(123, 222));
 
     $("#coords").shouldHave(exactText("(523, 522)"));
   }
