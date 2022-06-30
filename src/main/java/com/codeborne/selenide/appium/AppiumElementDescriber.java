@@ -7,6 +7,7 @@ import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnsupportedCommandException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class AppiumElementDescriber implements ElementDescriber {
       return "null";
     }
 
-    return new Builder(element, supportedAttributes(driver))
+    return new Builder(element, driver.getWebDriver(), supportedAttributes(driver))
       .appendTagName()
       .appendAttributes()
       .finish()
@@ -85,7 +86,7 @@ public class AppiumElementDescriber implements ElementDescriber {
   @Nonnull
   @Override
   public String briefly(Driver driver, @Nonnull WebElement element) {
-    return new Builder(element, supportedAttributes(driver))
+    return new Builder(element, driver.getWebDriver(), supportedAttributes(driver))
       .appendTagName()
       .appendAttribute("resource-id")
       .finish()
@@ -107,22 +108,22 @@ public class AppiumElementDescriber implements ElementDescriber {
   @ParametersAreNonnullByDefault
   private static class Builder {
     private final WebElement element;
+    private final WebDriver webDriver;
     private final List<String> supportedAttributes;
-    private String className = "?";
     private String tagName = "?";
     private String text = "?";
     private final StringBuilder sb = new StringBuilder();
     private StaleElementReferenceException staleElementException;
 
-    private Builder(WebElement element, List<String> supportedAttributes) {
+    private Builder(WebElement element, WebDriver webDriver, List<String> supportedAttributes) {
       this.element = element;
+      this.webDriver = webDriver;
       this.supportedAttributes = supportedAttributes;
     }
 
     private Builder appendTagName() {
-      if (supportedAttributes.contains("class")) {
+      if (webDriver instanceof AndroidDriver) {
         getAttribute("class", (className) -> {
-          this.className = className;
           tagName = className.replaceFirst(".+\\.(.+)", "$1");
         });
       }
@@ -132,9 +133,6 @@ public class AppiumElementDescriber implements ElementDescriber {
         });
       }
       sb.append("<").append(tagName);
-      if (!"?".equals(className)) {
-        sb.append(" class=\"").append(className).append("\"");
-      }
       return this;
     }
 
