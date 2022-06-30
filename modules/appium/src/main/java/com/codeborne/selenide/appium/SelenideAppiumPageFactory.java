@@ -10,8 +10,8 @@ import io.appium.java_client.pagefactory.DefaultElementByBuilder;
 import io.appium.java_client.pagefactory.bys.builder.AppiumByBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ByIdOrName;
 
 import javax.annotation.CheckReturnValue;
@@ -38,8 +38,10 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     if (driver.getWebDriver() instanceof HasBrowserCheck && ((HasBrowserCheck) driver.getWebDriver()).isBrowser()) {
       return new DefaultElementByBuilder(null, null);
     } else {
-      Capabilities d = ((RemoteWebDriver) driver.getWebDriver()).getCapabilities();
-      return new DefaultElementByBuilder(d.getPlatformName().toString(), d.getCapability(AUTOMATION_NAME_OPTION).toString());
+      Capabilities d = ((HasCapabilities) driver.getWebDriver()).getCapabilities();
+      String platform = String.valueOf(d.getPlatformName());
+      String automationName = String.valueOf(d.getCapability(AUTOMATION_NAME_OPTION));
+      return new DefaultElementByBuilder(platform, automationName);
     }
   }
 
