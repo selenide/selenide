@@ -3,8 +3,8 @@ package com.codeborne.selenide.appium.ios_test_app;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.webdriver.DriverFactory;
-import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.ios.IOSDriver;
+import io.appium.java_client.ios.options.XCUITestOptions;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static io.appium.java_client.remote.AutomationName.IOS_XCUI_TEST;
-
 class IosTestAppDriverFactory implements DriverFactory {
   @Override
   public void setupWebdriverBinary() {
@@ -25,12 +23,9 @@ class IosTestAppDriverFactory implements DriverFactory {
 
   @Nonnull
   @Override
-  public UiAutomator2Options createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
+  public XCUITestOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     File app = downloadApp();
-    UiAutomator2Options options = new UiAutomator2Options();
-    options.setAutomationName(IOS_XCUI_TEST);
-    options.setPlatformName("iOS");
-    options.setPlatformVersion("15.5");
+    XCUITestOptions options = new XCUITestOptions();
     options.setDeviceName("iPhone 12");
     options.setApp(app.getAbsolutePath());
     options.setFullReset(false);
@@ -40,7 +35,7 @@ class IosTestAppDriverFactory implements DriverFactory {
   @Nonnull
   @Override
   public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
-    UiAutomator2Options options = createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    XCUITestOptions options = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     try {
       return new IOSDriver(new URL("http://127.0.0.1:4723/wd/hub"), options);
     }
