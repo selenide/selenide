@@ -108,10 +108,17 @@ public class LazyDriver implements Driver {
   @CheckReturnValue
   @Nonnull
   public synchronized WebDriver getAndCheckWebDriver() {
-    if (webDriver != null && config.reopenBrowserOnFail() && !browserHealthChecker.isBrowserStillOpen(webDriver)) {
-      log.info("Webdriver has been closed meanwhile. Let's re-create it.");
-      close();
-      createDriver();
+    if (webDriver != null && !browserHealthChecker.isBrowserStillOpen(webDriver)) {
+      if (config.reopenBrowserOnFail()) {
+        log.info("Webdriver has been closed meanwhile. Let's re-create it.");
+        close();
+        createDriver();
+      }
+      else {
+        close();
+        throw new IllegalStateException("Webdriver for current thread: " + currentThread().getId() +
+          " has been closed meanwhile, and cannot create a new webdriver because reopenBrowserOnFail=false");
+      }
     }
     else if (webDriver == null) {
       log.info("No webdriver is bound to current thread: {} - let's create a new webdriver", currentThread().getId());

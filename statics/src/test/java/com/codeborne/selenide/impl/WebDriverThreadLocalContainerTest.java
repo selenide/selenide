@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +17,12 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 final class WebDriverThreadLocalContainerTest {
-  private final WebDriverThreadLocalContainer container = new WebDriverThreadLocalContainer();
+  private final BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
+  private final WebDriverThreadLocalContainer container = new WebDriverThreadLocalContainer(browserHealthChecker);
 
   @BeforeEach
   void mockWebDriver() {
@@ -41,15 +44,6 @@ final class WebDriverThreadLocalContainerTest {
   void tearDown() {
     WebDriverRunner.setProxy(null);
     closeWebDriver();
-  }
-
-  @Test
-  void shouldNotOpenANewBrowser_ifSettingIsDisabled() {
-    Configuration.reopenBrowserOnFail = false;
-
-    assertThatThrownBy(() -> container.getAndCheckWebDriver())
-      .isInstanceOf(IllegalStateException.class)
-      .hasMessageContaining("reopenBrowserOnFail=false");
   }
 
   @Test
@@ -99,6 +93,48 @@ final class WebDriverThreadLocalContainerTest {
     assertThat(webDriver).isNotNull();
     assertThat(container.allWebDriverThreads).hasSize(0);
     assertThat(container.cleanupThreadStarted.get()).isFalse();
+  }
+
+  @Test
+  void checksIfBrowser_hasDiedMeanwhile() {
+    WebDriver oldDriver = container.getAndCheckWebDriver();
+    when(browserHealthChecker.isBrowserStillOpen(oldDriver)).thenReturn(true);
+
+    WebDriver webDriver = container.getAndCheckWebDriver();
+
+    assertThat(webDriver).isSameAs(oldDriver);
+    verify(browserHealthChecker).isBrowserStillOpen(oldDriver);
+  }
+
+  @Test
+  void reopensBrowser_ifItHasDiedMeanwhile() {
+    WebDriver oldDriver = container.getAndCheckWebDriver();
+    when(browserHealthChecker.isBrowserStillOpen(oldDriver)).thenReturn(false);
+
+    WebDriver webDriver = container.getAndCheckWebDriver();
+    assertThat(webDriver).isNotNull();
+    assertThat(webDriver).isNotEqualTo(oldDriver);
+    verify(oldDriver).quit();
+    assertThat(container.allWebDriverThreads).hasSize(2);
+    assertThat(container.threadWebDriver).hasSize(1);
+    assertThat(container.threadWebDriver.get(container.allWebDriverThreads.iterator().next().getId())).isSameAs(webDriver);
+    assertThat(container.cleanupThreadStarted.get()).isTrue();
+  }
+
+  @Test
+  void shouldNotReopenBrowser_if_reopenBrowserOnFail_isFalse() {
+    Configuration.reopenBrowserOnFail = false;
+    WebDriver oldDriver = container.getAndCheckWebDriver();
+    when(browserHealthChecker.isBrowserStillOpen(oldDriver)).thenReturn(false);
+
+    assertThatThrownBy(() -> container.getAndCheckWebDriver())
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessageContaining("has been closed meanwhile")
+      .hasMessageContaining("cannot create a new webdriver because reopenBrowserOnFail=false");
+    verify(oldDriver).quit();
+    assertThat(container.allWebDriverThreads).hasSize(1);
+    assertThat(container.threadWebDriver).hasSize(0);
+    assertThat(container.cleanupThreadStarted.get()).isTrue();
   }
 
   private static class DummyProvider implements WebDriverProvider {
