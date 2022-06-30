@@ -1,7 +1,8 @@
 == Changelog
 
-=== 2.1.0 (released 30.06.2022)
+=== 2.1.0 (released 01.07.2022)
 * #70 fix NPE "Cannot invoke "Object.toString()" because the return value of "org.openqa.selenium.Capabilities.getCapability(String)" is null"
+* upgrade to Selenide 6.6.6
 
 === 2.0.5 (released 27.06.2022)
 * upgrade to Selenide 6.6.5 and Selenium 4.3.0
