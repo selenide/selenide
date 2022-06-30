@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.6.6 (released 01.07.2022)
+
+* #1862 #1866 remove usages of deprecated capabilities ("acceptSslCerts", "handlesAlerts", "javascriptEnabled", "takesScreenshot")  --  see PR #1870
+* #1856 fix ClearWithShortcut when using EventFiringDriver  --  thanks to Petro Ovcharenko
+* #1875 Add shorter syntax to click
+* #1878 support mobile apps when checking webdriver health  --  see PR #1879
+* #1880 open a browser when `open()` is called for the first time (even if `reopenBrowserOnFail` is `false`)  --  see PR #1881
+* upgrade to WebDriverManager 5.2.1
+* Bump byteBuddyVersion from 1.12.11 to 1.12.12
+
 ## 6.6.5 (released 24.06.2022)
 
 * #1869 Bump seleniumVersion from 4.2.2 to 4.3.0
