@@ -4,6 +4,7 @@ import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
@@ -42,5 +43,12 @@ final class BrowserHealthCheckerTest {
     doThrow(new NoSuchSessionException("oops")).when(webdriver).getTitle();
 
     assertThat(checker.isBrowserStillOpen(webdriver)).isFalse();
+  }
+
+  @Test
+  void isBrowserStillOpen_UnsupportedCommandException_means_webdriverIsStillAlive() {
+    doThrow(new UnsupportedCommandException("this is Appium")).when(webdriver).getTitle();
+
+    assertThat(checker.isBrowserStillOpen(webdriver)).isTrue();
   }
 }

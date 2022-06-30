@@ -2,6 +2,7 @@ package com.codeborne.selenide.drivercommands;
 
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.slf4j.Logger;
@@ -16,6 +17,10 @@ public class BrowserHealthChecker {
   public boolean isBrowserStillOpen(WebDriver webDriver) {
     try {
       webDriver.getTitle();
+      return true;
+    }
+    catch (UnsupportedCommandException notSupportedButAlive) {
+      log.debug("getTitle() is not supported by webdriver: {}", notSupportedButAlive.toString());
       return true;
     }
     catch (UnreachableBrowserException e) {
