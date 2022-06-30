@@ -51,11 +51,6 @@ public class CreateDriverCommand {
                              List<WebDriverEventListener> eventListeners,
                              List<WebDriverListener> listeners) {
     return SelenideLogger.get("webdriver", getReadableSubject("create"), () -> {
-      if (!config.reopenBrowserOnFail()) {
-        throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
-          ", and cannot create a new webdriver because reopenBrowserOnFail=false");
-      }
-
       log.debug("Creating webdriver in thread {} (ip: {}, host: {})...",
         currentThread().getId(), HostIdentifier.getHostAddress(), HostIdentifier.getHostName());
 

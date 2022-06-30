@@ -144,6 +144,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     webdriver().shouldHave(numberOfWindows(2));
     switchTo().window(1).close();
     webdriver().shouldHave(numberOfWindows(1));
+    switchTo().window(0);
   }
 
   @Test

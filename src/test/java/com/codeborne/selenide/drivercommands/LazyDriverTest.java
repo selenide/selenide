@@ -6,6 +6,7 @@ import com.codeborne.selenide.impl.DummyFileNamer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.stubbing.Answer;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 
@@ -15,16 +16,14 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 final class LazyDriverTest {
   private final Config config = mock(Config.class);
-  private final WebDriver webdriver = new DummyWebDriver();
+  private WebDriver webdriver;
   private final WebDriverFactory factory = mock(WebDriverFactory.class);
   private final BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
   private final CreateDriverCommand createDriverCommand = new CreateDriverCommand(new DummyFileNamer("123_456_78"));
@@ -34,7 +33,6 @@ final class LazyDriverTest {
   @BeforeEach
   void mockLogging() {
     when(config.downloadsFolder()).thenReturn("build/down");
-    when(config.reopenBrowserOnFail()).thenReturn(true);
     when(config.proxyEnabled()).thenReturn(true);
     driver = new LazyDriver(config, null, emptyList(), emptyList(),
       factory, browserHealthChecker, createDriverCommand, closeDriverCommand);
@@ -42,8 +40,10 @@ final class LazyDriverTest {
 
   @BeforeEach
   void setUp() {
-    doReturn(webdriver).when(factory).createWebDriver(any(), any(), any());
-    doReturn(webdriver).when(factory).createWebDriver(any(), isNull(), any());
+    when(factory.createWebDriver(any(), any(), any())).thenAnswer((Answer<WebDriver>) invocation -> {
+      webdriver = spy(new DummyWebDriver());
+      return webdriver;
+    });
   }
 
   @Test
@@ -70,18 +70,35 @@ final class LazyDriverTest {
   void checksIfBrowserIsStillAlive() {
     givenOpenedBrowser();
     when(config.reopenBrowserOnFail()).thenReturn(true);
+    when(browserHealthChecker.isBrowserStillOpen(any())).thenReturn(true);
 
     assertThat(driver.getAndCheckWebDriver()).isEqualTo(webdriver);
-    verify(browserHealthChecker).isBrowserStillOpen(any());
+    verify(browserHealthChecker).isBrowserStillOpen(webdriver);
   }
 
   @Test
-  void doesNotReopenBrowserIfItFailed() {
-    givenOpenedBrowser();
-    when(config.reopenBrowserOnFail()).thenReturn(false);
+  void reopensBrowserIfItsDied() {
+    WebDriver diedWebdriver = givenOpenedBrowser();
+    when(config.reopenBrowserOnFail()).thenReturn(true);
+    when(browserHealthChecker.isBrowserStillOpen(any())).thenReturn(false);
 
-    assertThat(driver.getAndCheckWebDriver()).isEqualTo(webdriver);
-    verify(browserHealthChecker, never()).isBrowserStillOpen(any());
+    assertThat(driver.getAndCheckWebDriver()).isNotEqualTo(diedWebdriver);
+    verify(browserHealthChecker).isBrowserStillOpen(diedWebdriver);
+    verify(diedWebdriver).quit();
+  }
+
+  @Test
+  void shouldNotReopenBrowserIfItFailed() {
+    WebDriver diedWebdriver = givenOpenedBrowser();
+    when(config.reopenBrowserOnFail()).thenReturn(false);
+    when(browserHealthChecker.isBrowserStillOpen(any())).thenReturn(false);
+
+    assertThatThrownBy(() -> driver.getAndCheckWebDriver())
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessageContaining("has been closed meanwhile")
+      .hasMessageContaining("cannot create a new webdriver because reopenBrowserOnFail=false");
+    verify(browserHealthChecker).isBrowserStillOpen(diedWebdriver);
+    verify(diedWebdriver).quit();
   }
 
   @Test
@@ -123,7 +140,8 @@ final class LazyDriverTest {
     return mockedProxy;
   }
 
-  private void givenOpenedBrowser() {
+  private WebDriver givenOpenedBrowser() {
     assertThat(driver.getAndCheckWebDriver()).isSameAs(webdriver);
+    return webdriver;
   }
 }

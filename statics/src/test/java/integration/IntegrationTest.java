@@ -79,6 +79,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
     Configuration.fileDownload = HTTPGET;
+    Configuration.reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "false"));
   }
 
   protected void openFile(String fileName) {

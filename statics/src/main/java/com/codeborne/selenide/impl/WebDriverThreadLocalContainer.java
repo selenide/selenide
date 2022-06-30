@@ -44,12 +44,20 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Nullable private Proxy userProvidedProxy;
 
   private final Config config = new StaticConfig();
-  private final BrowserHealthChecker browserHealthChecker = new BrowserHealthChecker();
+  private final BrowserHealthChecker browserHealthChecker;
   private final WebDriverFactory factory = new WebDriverFactory();
   private final CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
   private final CreateDriverCommand createDriverCommand = new CreateDriverCommand();
 
   final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
+
+  public WebDriverThreadLocalContainer() {
+    this(new BrowserHealthChecker());
+  }
+
+  WebDriverThreadLocalContainer(BrowserHealthChecker browserHealthChecker) {
+    this.browserHealthChecker = browserHealthChecker;
+  }
 
   @Override
   public void addListener(WebDriverEventListener listener) {
@@ -145,16 +153,25 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Nonnull
   public WebDriver getAndCheckWebDriver() {
     WebDriver webDriver = threadWebDriver.get(currentThread().getId());
-
-    if (webDriver != null && config.reopenBrowserOnFail() && !browserHealthChecker.isBrowserStillOpen(webDriver)) {
-      log.info("Webdriver has been closed meanwhile. Let's re-create it.");
-      closeWebDriver();
-      webDriver = createDriver();
-    }
-    else if (webDriver == null) {
+    if (webDriver == null) {
       log.info("No webdriver is bound to current thread: {} - let's create a new webdriver", currentThread().getId());
       webDriver = createDriver();
+      return webDriver;
     }
+
+    if (browserHealthChecker.isBrowserStillOpen(webDriver)) {
+      return webDriver;
+    }
+
+    if (!config.reopenBrowserOnFail()) {
+      closeWebDriver();
+      throw new IllegalStateException("Webdriver for current thread: " + currentThread().getId() +
+        " has been closed meanwhile, and cannot create a new webdriver because reopenBrowserOnFail=false");
+    }
+
+    log.info("Webdriver has been closed meanwhile. Let's re-create it.");
+    closeWebDriver();
+    webDriver = createDriver();
     return webDriver;
   }
 

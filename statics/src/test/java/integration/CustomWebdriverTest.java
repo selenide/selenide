@@ -100,5 +100,6 @@ final class CustomWebdriverTest extends IntegrationTest {
   void tearDown() {
     if (browser1 != null) browser1.quit();
     if (browser2 != null) browser2.quit();
+    closeWebDriver();
   }
 }
