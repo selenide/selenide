@@ -6,6 +6,9 @@ class ExtensionFilter implements FileFilter {
   private final String extension;
 
   ExtensionFilter(String extension) {
+    if (extension.indexOf('.') > -1) {
+      throw new IllegalArgumentException(String.format("File extension cannot contain dot: '%s'", extension));
+    }
     this.extension = extension;
   }
 

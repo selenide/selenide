@@ -6,6 +6,7 @@ import java.io.File;
 
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class ExtensionFilterTest {
   private static final String FILTER_DESCRIPTION = "with extension \"pdf\"";
@@ -21,6 +22,13 @@ final class ExtensionFilterTest {
     assertThat(filter.match(new DownloadedFile(new File("cv.pdf.gz"), emptyMap()))).isFalse();
     assertThat(filter.match(new DownloadedFile(new File("cv.xpdf"), emptyMap()))).isFalse();
     assertThat(filter.match(new DownloadedFile(new File("cv.pdfx"), emptyMap()))).isFalse();
+  }
+
+  @Test
+  void ignoresDotInExtension() {
+    assertThatThrownBy(() -> new ExtensionFilter(".pdf"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("File extension cannot contain dot: '.pdf'");
   }
 
   @Test
