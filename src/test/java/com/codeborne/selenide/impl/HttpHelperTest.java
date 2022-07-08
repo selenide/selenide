@@ -95,6 +95,16 @@ final class HttpHelperTest {
   }
 
   @Test
+  void decodesBase64EncodedFileName() {
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "attachment; " +
+        "filename=\"4oSWIDg0MjMg0L7RgiAxMSDQvNCw0Y8gMjAyMiDQsy5wZGY=\"; " +
+        "filename*=UTF-8''4oSWIDg0MjMg0L7RgiAxMSDQvNCw0Y8gMjAyMiDQsy5wZGY%3D"))
+      .get()
+      .isEqualTo("№ 8423 от 11 мая 2022 г.pdf");
+  }
+
+  @Test
   void fileNameIsNone_ifContentDispositionHeaderIsEmpty() {
     assertThat(helper.getFileNameFromContentDisposition("Content-Disposition", null).isPresent())
       .isFalse();
