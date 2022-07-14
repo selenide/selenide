@@ -39,7 +39,9 @@ public class LazyWebElementSnapshot extends WebElementSource {
   @Nonnull
   @Override
   public WebElement getWebElement() {
-    return snapshot != null ? snapshot : (snapshot = delegate.getWebElement());
+    return snapshot = (snapshot == null) ?
+      delegate.getWebElement() :
+      snapshot;
   }
 
   @Nonnull

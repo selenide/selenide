@@ -22,9 +22,9 @@ public class LazyCollectionSnapshot implements CollectionSource {
   @Nonnull
   @Override
   public List<WebElement> getElements() {
-    return elementsSnapshot != null ?
-      elementsSnapshot :
-      (elementsSnapshot = new ArrayList<>(delegate.getElements()));
+    return elementsSnapshot = (elementsSnapshot == null) ?
+      new ArrayList<>(delegate.getElements()) :
+      elementsSnapshot;
   }
 
   @Nonnull
