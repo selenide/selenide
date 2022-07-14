@@ -17,10 +17,6 @@ import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -29,6 +25,10 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Factory class to make using Page Objects simpler and easier.
@@ -47,8 +47,7 @@ public class SelenidePageFactory implements PageObjectFactory {
       Constructor<PageObjectClass> constructor = pageObjectClass.getDeclaredConstructor();
       constructor.setAccessible(true);
       return page(driver, constructor.newInstance());
-    }
-    catch (ReflectiveOperationException e) {
+    } catch (ReflectiveOperationException e) {
       throw new PageObjectException("Failed to create new instance of " + pageObjectClass, e);
     }
   }
@@ -66,7 +65,7 @@ public class SelenidePageFactory implements PageObjectFactory {
    * Similar to the other "initElements" methods, but takes an {@link FieldDecorator} which is used
    * for decorating each of the fields.
    *
-   * @param page      The object to decorate the fields of
+   * @param page The object to decorate the fields of
    */
   public void initElements(Driver driver, @Nullable WebElementSource searchContext, Object page, Type[] genericTypes) {
     Class<?> proxyIn = page.getClass();
@@ -81,7 +80,7 @@ public class SelenidePageFactory implements PageObjectFactory {
     Field[] fields = proxyIn.getDeclaredFields();
     for (Field field : fields) {
       if (!isInitialized(page, field)) {
-        By selector = findSelector(driver, field);
+        By selector = findSelector(field);
         Object value = decorate(page.getClass().getClassLoader(), driver, searchContext, field, selector, genericTypes);
         if (value != null) {
           setFieldValue(page, field, value);
@@ -91,16 +90,19 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @Nonnull
-  protected By findSelector(Driver driver, Field field) {
+  protected By findSelector(Field field) {
     return new Annotations(field).buildBy();
+  }
+
+  private boolean shouldCache(Field field) {
+    return new Annotations(field).isLookupCached();
   }
 
   protected void setFieldValue(Object page, Field field, Object value) {
     try {
       field.setAccessible(true);
       field.set(page, value);
-    }
-    catch (IllegalAccessException e) {
+    } catch (IllegalAccessException e) {
       throw new PageObjectException("Failed to assign field " + field + " to value " + value, e);
     }
   }
@@ -110,8 +112,7 @@ public class SelenidePageFactory implements PageObjectFactory {
     try {
       field.setAccessible(true);
       return field.get(page) != null;
-    }
-    catch (IllegalAccessException e) {
+    } catch (IllegalAccessException e) {
       throw new PageObjectException("Failed to access field " + field + " in " + page, e);
     }
   }
@@ -122,9 +123,11 @@ public class SelenidePageFactory implements PageObjectFactory {
   public ElementsContainer createElementsContainer(Driver driver, @Nullable WebElementSource searchContext, Field field, By selector) {
     try {
       WebElementSource self = new ElementFinder(driver, searchContext, selector, 0);
+      if (shouldCache(field)) {
+        self = new LazyWebElementSnapshot(self);
+      }
       return initElementsContainer(driver, field, self);
-    }
-    catch (ReflectiveOperationException e) {
+    } catch (ReflectiveOperationException e) {
       throw new PageObjectException("Failed to create elements container for field " + field.getName(), e);
     }
   }
@@ -176,27 +179,42 @@ public class SelenidePageFactory implements PageObjectFactory {
     if (ElementsContainer.class.equals(field.getDeclaringClass()) && "self".equals(field.getName())) {
       if (searchContext != null) {
         return ElementFinder.wrap(SelenideElement.class, searchContext);
-      }
-      else {
+      } else {
         logger.warn("Cannot initialize field {}", field);
         return null;
       }
     }
     if (WebElement.class.isAssignableFrom(field.getType())) {
-      return ElementFinder.wrap(driver, searchContext, selector, 0);
+      return decorateWebElement(driver, searchContext, selector, field);
     }
     if (ElementsCollection.class.isAssignableFrom(field.getType()) ||
       isDecoratableList(field, genericTypes, WebElement.class)) {
-      return new ElementsCollection(new BySelectorCollection(driver, searchContext, selector));
-    }
-    else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
+      return createElementsCollection(driver, searchContext, selector, field);
+    } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(driver, searchContext, field, selector);
-    }
-    else if (isDecoratableList(field, genericTypes, ElementsContainer.class)) {
+    } else if (isDecoratableList(field, genericTypes, ElementsContainer.class)) {
       return createElementsContainerList(driver, searchContext, field, genericTypes, selector);
     }
 
     return defaultFieldDecorator(driver, searchContext).decorate(loader, field);
+  }
+
+  @Nonnull
+  protected SelenideElement decorateWebElement(Driver driver, @Nullable WebElementSource searchContext, By selector,
+                                               Field field) {
+    return shouldCache(field) ?
+      LazyWebElementSnapshot.wrap(new ElementFinder(driver, searchContext, selector, 0)) :
+      ElementFinder.wrap(driver, searchContext, selector, 0);
+  }
+
+  @Nonnull
+  protected ElementsCollection createElementsCollection(Driver driver, @Nullable WebElementSource searchContext,
+                                                        By selector, Field field) {
+    CollectionSource collection = new BySelectorCollection(driver, searchContext, selector);
+    if (shouldCache(field)) {
+      collection = new LazyCollectionSnapshot(collection);
+    }
+    return new ElementsCollection(collection);
   }
 
   @CheckReturnValue
@@ -214,8 +232,11 @@ public class SelenidePageFactory implements PageObjectFactory {
     if (listType == null) {
       throw new IllegalArgumentException("Cannot detect list type for " + field);
     }
-
-    return new ElementsContainerCollection(this, driver, searchContext, field, listType, genericTypes, selector);
+    CollectionSource collection = new BySelectorCollection(driver, searchContext, selector);
+    if (shouldCache(field)) {
+      collection = new LazyCollectionSnapshot(collection);
+    }
+    return new ElementsContainerCollection(this, driver, field, listType, genericTypes, collection);
   }
 
   @CheckReturnValue
@@ -241,8 +262,7 @@ public class SelenidePageFactory implements PageObjectFactory {
     if (firstType instanceof TypeVariable) {
       int indexOfType = indexOf(field.getDeclaringClass(), firstType);
       return (Class<?>) genericTypes[indexOfType];
-    }
-    else if (firstType instanceof Class) {
+    } else if (firstType instanceof Class) {
       return (Class<?>) firstType;
     }
     throw new IllegalArgumentException("Cannot detect list type of " + field);
