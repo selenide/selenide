@@ -94,7 +94,7 @@ public class SelenidePageFactory implements PageObjectFactory {
     return new Annotations(field).buildBy();
   }
 
-  private boolean shouldCache(Field field) {
+  protected boolean shouldCache(Field field) {
     return new Annotations(field).isLookupCached();
   }
 
