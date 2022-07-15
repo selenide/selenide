@@ -51,7 +51,7 @@ public class Cleanup {
     String message = error.getMessage();
     if (message == null) return false;
 
-    return (error instanceof InvalidSelectorException && !message.contains("\"Element is not selectable\"")) ||
+    return error instanceof InvalidSelectorException && !message.contains("\"Element is not selectable\"") ||
       isInvalidSelectorMessage(message) ||
       error.getCause() != null && error.getCause() != error && isInvalidSelectorError(error.getCause());
   }
