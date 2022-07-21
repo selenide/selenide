@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
 import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Objects.requireNonNull;
 
@@ -21,7 +22,7 @@ public class AppiumSetValue implements Command<SelenideElement> {
   @Nonnull
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    if (locator.driver().getWebDriver() instanceof AppiumDriver) {
+    if (instanceOf(locator.driver(), AppiumDriver.class)) {
       WebElement element = locator.findAndAssertElementIsInteractable();
       CharSequence text = firstNonNull((CharSequence) requireNonNull(args)[0], "");
       element.clear();

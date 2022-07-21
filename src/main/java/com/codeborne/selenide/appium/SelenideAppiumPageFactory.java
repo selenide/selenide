@@ -20,7 +20,9 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.Optional;
 
+import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
 import static io.appium.java_client.remote.options.SupportsAutomationNameOption.AUTOMATION_NAME_OPTION;
 
 @ParametersAreNonnullByDefault
@@ -35,14 +37,20 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   }
 
   private DefaultElementByBuilder byBuilder(Driver driver) {
-    if (driver.getWebDriver() instanceof HasBrowserCheck && ((HasBrowserCheck) driver.getWebDriver()).isBrowser()) {
+    Optional<HasBrowserCheck> hasBrowserCheck = cast(driver, HasBrowserCheck.class);
+    if (hasBrowserCheck.isPresent() && hasBrowserCheck.get().isBrowser()) {
       return new DefaultElementByBuilder(null, null);
-    } else {
-      Capabilities d = ((HasCapabilities) driver.getWebDriver()).getCapabilities();
+    }
+
+    Optional<HasCapabilities> hasCapabilities = cast(driver, HasCapabilities.class);
+    if (hasCapabilities.isPresent()) {
+      Capabilities d = hasCapabilities.get().getCapabilities();
       String platform = String.valueOf(d.getPlatformName());
       String automationName = String.valueOf(d.getCapability(AUTOMATION_NAME_OPTION));
       return new DefaultElementByBuilder(platform, automationName);
     }
+
+    return new DefaultElementByBuilder(null, null);
   }
 
   @CheckReturnValue

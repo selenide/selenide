@@ -4,13 +4,13 @@ import com.codeborne.selenide.Clipboard;
 import com.codeborne.selenide.DefaultClipboard;
 import com.codeborne.selenide.Driver;
 import io.appium.java_client.clipboard.HasClipboard;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WrapsDriver;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
+
+import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
 
 /**
  * @since 1.6.10
@@ -60,13 +60,6 @@ public class AppiumClipboard implements Clipboard {
   }
 
   private Optional<HasClipboard> getWebDriver() {
-    WebDriver webdriver = driver.getWebDriver();
-    if (webdriver instanceof WrapsDriver) {
-      webdriver = ((WrapsDriver) webdriver).getWrappedDriver();
-    }
-
-    return webdriver instanceof HasClipboard ?
-      Optional.of((HasClipboard) webdriver) :
-      Optional.empty();
+    return cast(driver, HasClipboard.class);
   }
 }
