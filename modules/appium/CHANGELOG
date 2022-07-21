@@ -1,5 +1,8 @@
 == Changelog
 
+=== 2.1.1 (released 21.07.2022)
+* #72 fix clipboard work with webdriver that has some listeners added  --  see PR #73
+
 === 2.1.0 (released 01.07.2022)
 * #70 fix NPE "Cannot invoke "Object.toString()" because the return value of "org.openqa.selenium.Capabilities.getCapability(String)" is null"
 * upgrade to Selenide 6.6.6
