@@ -10,12 +10,10 @@ import org.openqa.selenium.WebDriver;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
+import static com.codeborne.selenide.appium.SampleApp.downloadAndroidApp;
 import static org.openqa.selenium.remote.CapabilityType.APPLICATION_NAME;
 
 public class AndroidDriverWithDemos implements WebDriverProvider {
@@ -23,7 +21,7 @@ public class AndroidDriverWithDemos implements WebDriverProvider {
   @Nonnull
   @Override
   public WebDriver createDriver(@Nonnull Capabilities capabilities) {
-    File app = downloadApk();
+    File app = downloadAndroidApp();
 
     UiAutomator2Options options = new UiAutomator2Options();
     options.merge(capabilities);
@@ -40,18 +38,5 @@ public class AndroidDriverWithDemos implements WebDriverProvider {
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  private File downloadApk() {
-    File apk = new File("build/ApiDemos-debug.apk");
-    if (!apk.exists()) {
-      String url = "https://github.com/appium/sample-code/blob/master/sample-code/apps/ApiDemos/bin/ApiDemos-debug.apk?raw=true";
-      try (InputStream in = new URL(url).openStream()) {
-        copyInputStreamToFile(in, apk);
-      } catch (IOException e) {
-        throw new AssertionError("Failed to download apk", e);
-      }
-    }
-    return apk;
   }
 }
