@@ -9,13 +9,15 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
+
 @ParametersAreNonnullByDefault
 public class AppiumClick extends Click {
   @Override
   @Nonnull
   @CheckReturnValue
   protected WebElement findElement(WebElementSource locator) {
-    if (locator.driver().getWebDriver() instanceof AppiumDriver) {
+    if (instanceOf(locator.driver(), AppiumDriver.class)) {
       return locator.getWebElement();
     }
     else {

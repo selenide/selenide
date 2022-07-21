@@ -5,9 +5,6 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
-import org.openqa.selenium.support.events.WebDriverListener;
-
-import java.lang.reflect.Method;
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
@@ -18,11 +15,12 @@ public class BaseTest {
     closeWebDriver();
     Configuration.browserSize = null;
     Configuration.browser = AndroidDriverProvider.class.getName();
-    WebDriverRunner.addListener(new WebDriverListener() {
-      @Override
-      public void beforeAnyCall(Object target, Method method, Object[] args) {
-      }
-    });
+//    TODO support these listeners as well
+//    WebDriverRunner.addListener(new WebDriverListener() {
+//      @Override
+//      public void beforeAnyCall(Object target, Method method, Object[] args) {
+//      }
+//    });
     WebDriverRunner.addListener(new AbstractWebDriverEventListener() {
     });
     open();

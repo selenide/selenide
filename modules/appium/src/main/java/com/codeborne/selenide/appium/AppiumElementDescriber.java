@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
+import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
 import static java.util.Arrays.asList;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.compile;
@@ -56,10 +57,10 @@ public class AppiumElementDescriber implements ElementDescriber {
   }
 
   protected List<String> supportedAttributes(Driver driver) {
-    if (driver.getWebDriver() instanceof AndroidDriver) {
+    if (instanceOf(driver, AndroidDriver.class)) {
       return androidAttributes();
     }
-    else if (driver.getWebDriver() instanceof IOSDriver) {
+    else if (instanceOf(driver, IOSDriver.class)) {
       return iosAttributes();
     }
     else {
@@ -122,7 +123,7 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
 
     private Builder appendTagName() {
-      if (webDriver instanceof AndroidDriver) {
+      if (instanceOf(webDriver, AndroidDriver.class)) {
         getAttribute("class", (className) -> {
           tagName = className.replaceFirst(".+\\.(.+)", "$1");
         });

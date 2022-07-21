@@ -10,13 +10,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
+
 @ParametersAreNonnullByDefault
 public class AppiumClear extends Clear {
   @Nonnull
   @CheckReturnValue
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    if (locator.driver().getWebDriver() instanceof AppiumDriver) {
+    if (instanceOf(locator.driver(), AppiumDriver.class)) {
       locator.findAndAssertElementIsInteractable().clear();
       return proxy;
     }
