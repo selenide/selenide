@@ -12,6 +12,6 @@ import java.time.Duration;
  * @since 5.22.0
  */
 @ParametersAreNonnullByDefault
-class HttpClientTimeouts {
+public class HttpClientTimeouts {
   public static Duration defaultReadTimeout = Duration.ofSeconds(90);
 }
