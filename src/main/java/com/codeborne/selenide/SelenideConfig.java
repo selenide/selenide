@@ -1,12 +1,12 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.CiReportUrl;
+import org.openqa.selenium.MutableCapabilities;
+
 import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.SelectorMode.CSS;
-
-import com.codeborne.selenide.impl.CiReportUrl;
-import org.openqa.selenium.MutableCapabilities;
 
 public class SelenideConfig implements Config {
   private final PropertiesReader properties = new PropertiesReader("selenide.properties");
@@ -37,7 +37,7 @@ public class SelenideConfig implements Config {
   private String downloadsFolder = getProperty("selenide.downloadsFolder", "build/downloads");
   private String reportsUrl = new CiReportUrl().getReportsUrl(getProperty("selenide.reportsUrl", null));
   private boolean fastSetValue = Boolean.parseBoolean(getProperty("selenide.fastSetValue", "false"));
-  private TextCheck textCheck = TextCheck.valueOf(getProperty("selenide.textCheck", TextCheck.FULL_TEXT.name()));
+  private TextCheck textCheck = TextCheck.valueOf(getProperty("selenide.textCheck", TextCheck.PARTIAL_TEXT.name()));
   private SelectorMode selectorMode = SelectorMode.valueOf(getProperty("selenide.selectorMode", CSS.name()));
   private AssertionMode assertionMode = AssertionMode.valueOf(getProperty("selenide.assertionMode", STRICT.name()));
   private FileDownloadMode fileDownload = FileDownloadMode.valueOf(getProperty("selenide.fileDownload", HTTPGET.name()));

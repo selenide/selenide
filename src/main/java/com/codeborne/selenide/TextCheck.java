@@ -1,7 +1,7 @@
 package com.codeborne.selenide;
 
 /**
- * @since 6.5.0
+ * @since 6.7.0
  */
 public enum TextCheck {
   /**

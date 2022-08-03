@@ -231,7 +231,7 @@ public class Configuration {
   /**
    * Define behaviour of {@code $.shouldHave(text)}: full text or partial text.
    *
-   * @since 6.5.0
+   * @since 6.7.0
    */
   public static TextCheck textCheck = defaults.textCheck();
 
