@@ -71,8 +71,8 @@ final class GetSetValueTest extends IntegrationTest {
     $(By.name("password")).setValue("john   \u00a0 Malkovich");
     $(By.name("password")).shouldHave(value("john Malkovich"));
 
-    $("#text-area").setValue("john   \u00a0 \r\nMalkovich\n");
-    $("#text-area").shouldHave(value("john Malkovich"));
+    $("#empty-text-area").setValue("john   \u00a0 \r\nMalkovich\n");
+    $("#empty-text-area").shouldHave(value("john Malkovich"));
   }
 
   @Test
