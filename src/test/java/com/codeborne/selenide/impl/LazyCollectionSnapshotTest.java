@@ -25,7 +25,7 @@ public class LazyCollectionSnapshotTest {
   }
 
   @Test
-  void testShouldCacheAllElements() {
+  void shouldCacheAllElements() {
     // Given
     LazyCollectionSnapshot lazyCollectionSnapshot = new LazyCollectionSnapshot(collectionSource);
 
@@ -39,7 +39,7 @@ public class LazyCollectionSnapshotTest {
   }
 
   @Test
-  void testShouldCacheIndexedElement() {
+  void shouldCacheIndexedElement() {
     // Given
     LazyCollectionSnapshot lazyCollectionSnapshot = new LazyCollectionSnapshot(collectionSource);
 
@@ -53,7 +53,7 @@ public class LazyCollectionSnapshotTest {
   }
 
   @Test
-  void testShouldNotCacheDifferentIndexedElements() {
+  void shouldNotCacheDifferentIndexedElements() {
     // Given
     LazyCollectionSnapshot lazyCollectionSnapshot = new LazyCollectionSnapshot(collectionSource);
 

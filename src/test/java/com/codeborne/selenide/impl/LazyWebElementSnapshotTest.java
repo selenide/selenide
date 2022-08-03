@@ -14,7 +14,7 @@ public class LazyWebElementSnapshotTest {
   private final WebElementSource source = mock(WebElementSource.class);
 
   @Test
-  void testElementShouldBeCached() {
+  void elementShouldBeCached() {
     // Given
     when(source.getWebElement()).thenAnswer(invocation -> mock(WebElement.class));
     LazyWebElementSnapshot cachedSource = new LazyWebElementSnapshot(source);

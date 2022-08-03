@@ -32,7 +32,7 @@ public class CacheLookupPageObjectTest extends IntegrationTest {
   }
 
   @Test
-  void testCachedWebElementShouldThrowStaleElementReferenceException() {
+  void cachedWebElementShouldThrowStaleElementReferenceException() {
     assertThatCode(() -> pageWithSelects.webElement.getText()).doesNotThrowAnyException();
 
     removeElements(SelectsPage.WEB_ELEMENT_LOCATOR);
@@ -43,7 +43,7 @@ public class CacheLookupPageObjectTest extends IntegrationTest {
   }
 
   @Test
-  void testCachedSelenideElementShouldThrowStaleElementReferenceException() {
+  void cachedSelenideElementShouldThrowStaleElementReferenceException() {
     assertThatCode(() -> pageWithSelects.selenideElement.getText()).doesNotThrowAnyException();
 
     removeElements(SelectsPage.SELENIDE_ELEMENT_LOCATOR);
@@ -54,7 +54,7 @@ public class CacheLookupPageObjectTest extends IntegrationTest {
   }
 
   @Test
-  void testCachedElementContainerShouldThrowStaleElementReferenceException() {
+  void cachedElementContainerShouldThrowStaleElementReferenceException() {
     assertThatCode(() -> pageWithSelects.elementsContainer.getSelf().getText()).doesNotThrowAnyException();
 
     removeElements(SelectsPage.ELEMENTS_CONTAINER_LOCATOR);
@@ -69,7 +69,7 @@ public class CacheLookupPageObjectTest extends IntegrationTest {
   }
 
   @Test
-  void testCachedElementsCollectionElementsShouldThrowStaleElementReferenceException() {
+  void cachedElementsCollectionElementsShouldThrowStaleElementReferenceException() {
     assertThat(pageWithSelects.elementsCollection.asDynamicIterable()).isNotEmpty();
 
     removeElements(SelectsPage.ELEMENTS_COLLECTION_LOCATOR);
@@ -84,7 +84,7 @@ public class CacheLookupPageObjectTest extends IntegrationTest {
   }
 
   @Test
-  void testCachedElementsContainerCollectionShouldThrowStaleElementReferenceException() {
+  void cachedElementsContainerCollectionShouldThrowStaleElementReferenceException() {
     assertThat(pageWithSelects.elementsContainerCollection).isNotEmpty();
 
     removeElements(SelectsPage.ELEMENTS_CONTAINER_COLLECTION_LOCATOR);

@@ -58,11 +58,12 @@ public class LazyPageObjectTest extends IntegrationTest {
     MyPage myPage = page(MyPage.class);
     myPage.wrongContent.h42.shouldNot(exist);
     myPage.h3.shouldNot(exist);
-    List<MyForm> thisLinedShouldNotFail = myPage.wrongContent.forms;
+    List<MyForm> thisLineShouldNotFail = myPage.wrongContent.forms;
 
-    assertThatThrownBy(thisLinedShouldNotFail::size)
+    assertThatThrownBy(thisLineShouldNotFail::size)
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {By.tagName: form}")
+      .hasMessageStartingWith("Element not found {By.className: wrong-content/By.tagName: form}")
+      .hasMessageContaining("Timeout: 0 ms.")
       .getCause()
       .isInstanceOf(NoSuchElementException.class);
   }
