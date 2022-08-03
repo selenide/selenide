@@ -1,9 +1,9 @@
 package com.codeborne.selenide.impl;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Locale;
 import java.util.regex.Pattern;
 
+import static java.util.Locale.ROOT;
 import static java.util.regex.Pattern.DOTALL;
 
 @ParametersAreNonnullByDefault
@@ -20,7 +20,7 @@ public class Html {
   }
 
   public boolean contains(String text, String subtext) {
-    return reduceSpaces(text.toLowerCase(Locale.ROOT)).contains(reduceSpaces(subtext.toLowerCase(Locale.ROOT)));
+    return reduceSpaces(text.toLowerCase(ROOT)).contains(reduceSpaces(subtext.toLowerCase(ROOT)));
   }
 
   public boolean containsCaseSensitive(String text, String subtext) {

@@ -9,7 +9,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static java.util.Locale.ROOT;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @ParametersAreNonnullByDefault
@@ -33,8 +32,8 @@ public class Text extends TextCondition {
   @Override
   protected boolean match(TextCheck textCheck, String actualText, String expectedText) {
     return switch (textCheck) {
-      case FULL_TEXT -> Html.text.equals(actualText, expectedText.toLowerCase(ROOT));
-      case PARTIAL_TEXT -> Html.text.contains(actualText, expectedText.toLowerCase(ROOT));
+      case FULL_TEXT -> Html.text.equals(actualText, expectedText);
+      case PARTIAL_TEXT -> Html.text.contains(actualText, expectedText);
     };
   }
 
