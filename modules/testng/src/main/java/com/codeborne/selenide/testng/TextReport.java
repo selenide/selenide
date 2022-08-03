@@ -1,21 +1,26 @@
 package com.codeborne.selenide.testng;
 
 import com.codeborne.selenide.logevents.SimpleReport;
-import com.codeborne.selenide.testng.annotations.Report;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
+import org.testng.ITestNGListener;
 import org.testng.ITestResult;
+import org.testng.annotations.Listeners;
 import org.testng.internal.ConstructorOrMethod;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
 
 /**
  * Reports for all method of annotated class in the suite.
- * Annotate any test class in your suite with {@code @Listeners({TextReport.class})}
- * Annotate test classes to be reported with {@code @{@link Report}}
- * @since Selenide 3.6
+ * Annotate test classes to be reported with {@code @Listeners({TextReport.class})}.
+ * Child classes inherit {@code @Listeners({TextReport.class})} from parent classes.
  *
- * Use either {@link TextReport} or {@link GlobalTextReport}, never both
+ * @since Selenide 3.6
  */
 @ParametersAreNonnullByDefault
 public class TextReport implements IInvokedMethodListener {
@@ -45,8 +50,22 @@ public class TextReport implements IInvokedMethodListener {
 
   private boolean isClassAnnotatedWithReport(IInvokedMethod method) {
     ConstructorOrMethod consOrMethod = method.getTestMethod().getConstructorOrMethod();
-    Report annotation = consOrMethod.getDeclaringClass().getAnnotation(Report.class);
-    return annotation != null;
+    Class<?> testClass = consOrMethod.getDeclaringClass();
+    return isClassAnnotatedWithReport(testClass);
   }
 
+  boolean isClassAnnotatedWithReport(@Nullable Class<?> testClass) {
+    if (testClass == null) return false;
+    return getListeners(testClass).stream().anyMatch(this::isTextReportListener)
+      || isClassAnnotatedWithReport(testClass.getSuperclass());
+  }
+
+  private List<Class<? extends ITestNGListener>> getListeners(Class<?> testClass) {
+    Listeners annotation = testClass.getAnnotation(Listeners.class);
+    return annotation != null ? Arrays.asList(annotation.value()) : emptyList();
+  }
+
+  private boolean isTextReportListener(Class<? extends ITestNGListener> listener) {
+    return TextReport.class.isAssignableFrom(listener) || GlobalTextReport.class.isAssignableFrom(listener);
+  }
 }
