@@ -314,7 +314,7 @@ public abstract class Condition {
    *
    * <p>Sample: <code>$("h1").shouldHave(partialText("ello Joh"))</code></p>
    *
-   * @since 6.5.0
+   * @since 6.7.0
    */
   @CheckReturnValue
   @Nonnull
@@ -327,7 +327,7 @@ public abstract class Condition {
    *
    * <p>Sample: <code>$("h1").should(partialTextCaseSensitive("ELLO jOH"))</code></p>
    *
-   * @since 6.5.0
+   * @since 6.7.0
    */
   @CheckReturnValue
   @Nonnull
