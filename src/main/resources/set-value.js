@@ -2,18 +2,18 @@
 
   function triggerEvent(target, eventName) {
     if (document.createEventObject) {
-      let event = document.createEventObject();
+      var event = document.createEventObject();
       target.fireEvent('on' + eventName, event);
     }
     else {
-      let event = document.createEvent('HTMLEvents');
+      var event = document.createEvent('HTMLEvents');
       event.initEvent(eventName, true, true);
       target.dispatchEvent(event);
     }
   }
 
   function trigger(target, eventNames) {
-    for (const i in eventNames) {
+    for (var i in eventNames) {
       try {
         triggerEvent(target, eventNames[i]);
       }
@@ -28,7 +28,7 @@
 
   trigger(document.activeElement, ['blur']);
   webelement.focus();
-  const maxlength = webelement.getAttribute('maxlength') == null ? -1 : parseInt(webelement.getAttribute('maxlength'));
+  var maxlength = webelement.getAttribute('maxlength') == null ? -1 : parseInt(webelement.getAttribute('maxlength'));
   webelement.value = maxlength === -1 ? text : text.length <= maxlength ? text : text.substring(0, maxlength);
   trigger(webelement, ['focus', 'keydown', 'keypress', 'input', 'keyup', 'change']);
 
