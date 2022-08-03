@@ -8,6 +8,7 @@ import com.codeborne.selenide.impl.windows.FrameByIdOrName;
 import com.codeborne.selenide.impl.windows.WindowByIndex;
 import com.codeborne.selenide.impl.windows.WindowByNameOrHandle;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.codeborne.selenide.webdriver.BrowserResizer;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.NoSuchElementException;
@@ -29,6 +30,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.frameToBeAvailab
 @ParametersAreNonnullByDefault
 public class SelenideTargetLocator implements TargetLocator {
   private static final String SWITCH_TO = SelenideLogger.getReadableSubject("switchTo");
+  private static final BrowserResizer browserResizer = new BrowserResizer();
 
   private final Driver driver;
   private final WebDriver webDriver;
@@ -281,7 +283,10 @@ public class SelenideTargetLocator implements TargetLocator {
 
   @Override
   public WebDriver newWindow(WindowType typeHint) {
-    return webDriver.switchTo().newWindow(typeHint);
+    WebDriver wd = webDriver.switchTo().newWindow(typeHint);
+    browserResizer.adjustBrowserSize(config, wd);
+    browserResizer.adjustBrowserPosition(config, wd);
+    return wd;
   }
 
   private SelenideWait Wait() {

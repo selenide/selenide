@@ -14,6 +14,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Browsers.CHROME;
+import static com.codeborne.selenide.Configuration.browserPosition;
 import static com.codeborne.selenide.Configuration.browserSize;
 import static com.codeborne.selenide.Configuration.clickViaJs;
 import static com.codeborne.selenide.Configuration.downloadsFolder;
@@ -75,6 +76,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.reportsFolder = System.getProperty("selenide.reportsFolder", "build/reports/tests");
     fastSetValue = false;
     browserSize = System.getProperty("selenide.browserSize", "1200x960");
+    browserPosition = System.getProperty("selenide.browserPosition");
     Configuration.assertionMode = STRICT;
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
