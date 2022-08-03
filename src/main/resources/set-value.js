@@ -1,11 +1,21 @@
 (function(webelement, text) {
 
+  function triggerEvent(target, eventName) {
+    if (document.createEventObject) {
+      let event = document.createEventObject();
+      target.fireEvent('on' + eventName, event);
+    }
+    else {
+      let event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      target.dispatchEvent(event);
+    }
+  }
+
   function trigger(target, ...eventNames) {
     for (const i in eventNames) {
       try {
-        const event = document.createEvent('HTMLEvents');
-        event.initEvent(eventNames[i], true, true);
-        target.dispatchEvent(event);
+        triggerEvent(target, eventNames[i]);
       }
       catch (staleElementException) {
         console.log('failed to trigger event', eventNames[i])
