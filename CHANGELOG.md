@@ -1,21 +1,21 @@
 # Changelog
 
 ## 6.7.0 (released 04.08.2022)
-#1780 verify the whole text in `$.shouldHave(text)`, not a substring  --  see PR #1783
-#1799 implement full-size screenshots as a separate Selenide plugin  --  see PR #1858; thanks to Aliaksandr Rasolka for PR #1800
-#1894 add @CacheLookup annotation support  --  thanks to [Ilya Koshaleu](https://github.com/groov1kk)
-#1891 deprecate TestNG annotation @Report  --  see PR #1909
-#1886 decode downloaded file name if it's base64-encoded  --  see PR #1889
-#1907 restore IE support in setValue
-#1902 make HttpClientTimeouts public
-#1885 make type of setValue() parameter String again  --  see PR #1888
-#1887 give user a clear hint in case of invalid file extension parameter
-#1904 bump byteBuddyVersion from 1.12.12 to 1.12.13
-#1901 bump webdrivermanager from 5.2.1 to 5.2.3
-#1900 bump JUnit from 5.8.2 to 5.9.0
-#1896 bump LittleProxy from 2.0.9 to 2.0.10
-#1895 bump browserup-proxy-core from 2.2.0 to 2.2.1
-#1892 bump nettyVersion from 4.1.78.Final to 4.1.79.Final
+* #1780 verify the whole text in `$.shouldHave(text)`, not a substring  --  see PR #1783
+* #1799 implement full-size screenshots as a separate Selenide plugin  --  see PR #1858; thanks to Aliaksandr Rasolka for PR #1800
+* #1894 add @CacheLookup annotation support  --  thanks to [Ilya Koshaleu](https://github.com/groov1kk)
+* #1891 deprecate TestNG annotation @Report  --  see PR #1909
+* #1886 decode downloaded file name if it's base64-encoded  --  see PR #1889
+* #1907 restore IE support in setValue
+* #1902 make HttpClientTimeouts public
+* #1885 make type of setValue() parameter String again  --  see PR #1888
+* #1887 give user a clear hint in case of invalid file extension parameter
+* #1904 bump byteBuddyVersion from 1.12.12 to 1.12.13
+* #1901 bump webdrivermanager from 5.2.1 to 5.2.3
+* #1900 bump JUnit from 5.8.2 to 5.9.0
+* #1896 bump LittleProxy from 2.0.9 to 2.0.10
+* #1895 bump browserup-proxy-core from 2.2.0 to 2.2.1
+* #1892 bump nettyVersion from 4.1.78.Final to 4.1.79.Final
 
 ## 6.6.6 (released 01.07.2022)
 
