@@ -1,5 +1,8 @@
 == Changelog
 
+=== 2.1.2 (released 08.08.2022)
+* upgrade to Selenide 6.7.1
+
 === 2.1.1 (released 21.07.2022)
 * #72 fix clipboard work with webdriver that has some listeners added  --  see PR #73
 
