@@ -7,6 +7,8 @@ import io.appium.java_client.PerformsTouchActions;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.ElementOption;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebElement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,12 +34,16 @@ public class AppiumDragAndDropTo extends DragAndDropTo {
     target.shouldBe(visible);
 
     new TouchAction<>(appiumDriver.get())
-      .longPress(ElementOption.element(locator.getWebElement()))
+      .longPress(toOption(locator.getWebElement()))
       .waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000)))
-      .moveTo(ElementOption.element(target.getWrappedElement()))
+      .moveTo(toOption(target.getWrappedElement()))
       .release()
       .perform();
 
     return proxy;
+  }
+
+  private static ElementOption toOption(WebElement locator) {
+    return ElementOption.element(cast(locator, RemoteWebElement.class));
   }
 }
