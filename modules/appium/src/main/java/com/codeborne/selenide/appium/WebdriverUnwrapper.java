@@ -2,7 +2,9 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
+import org.openqa.selenium.WrapsElement;
 
 import java.util.Optional;
 
@@ -32,5 +34,17 @@ public class WebdriverUnwrapper {
     return klass.isAssignableFrom(unwrappedWebdriver.getClass()) ?
       Optional.of((T) unwrappedWebdriver) :
       Optional.empty();
+  }
+
+  public static <T> T cast(WebElement probablyWrappedWebElement, Class<T> klass) {
+    WebElement unwrappedWebElement = probablyWrappedWebElement instanceof WrapsElement ?
+      ((WrapsElement) probablyWrappedWebElement).getWrappedElement() :
+      probablyWrappedWebElement;
+
+    if (!klass.isAssignableFrom(unwrappedWebElement.getClass())) {
+      throw new IllegalArgumentException("WebElement " + unwrappedWebElement + " is not instance of " + klass.getName());
+    }
+    //noinspection unchecked
+    return (T) unwrappedWebElement;
   }
 }

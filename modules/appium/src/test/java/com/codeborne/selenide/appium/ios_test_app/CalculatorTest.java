@@ -1,9 +1,11 @@
 package com.codeborne.selenide.appium.ios_test_app;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.junit5.TextReportExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
@@ -19,6 +21,8 @@ public class CalculatorTest {
     closeWebDriver();
     Configuration.browser = IosTestAppDriverFactory.class.getName();
     Configuration.browserSize = null;
+    WebDriverRunner.addListener(new AbstractWebDriverEventListener() {
+    });
     open();
 
     CalculatorPage page = new CalculatorPage();
