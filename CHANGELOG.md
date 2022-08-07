@@ -1,6 +1,11 @@
 # Changelog
 
+## 6.7.1 (released 08.08.2022)
+
+* #1894 restore Driver parameter in SelenidePageFactory.findSelector() - it's used by `selenide-appium`.
+
 ## 6.7.0 (released 04.08.2022)
+
 * #1780 verify the whole text in `$.shouldHave(text)`, not a substring  --  see PR #1783
 * #1799 implement full-size screenshots as a separate Selenide plugin  --  see PR #1858; thanks to Aliaksandr Rasolka for PR #1800
 * #1894 add @CacheLookup annotation support  --  thanks to [Ilya Koshaleu](https://github.com/groov1kk)
