@@ -64,6 +64,7 @@ public class Commands {
     add("attr", new GetAttribute());
     add("getAttribute", new GetAttribute());
     add("getCssValue", new GetCssValue());
+    add("css", new GetCss());
     add("data", new GetDataAttribute());
     add("exists", new Exists());
     add("getOwnText", new GetOwnText());

@@ -1,5 +1,8 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.commands.GetAttribute;
+import com.codeborne.selenide.commands.GetCss;
+import com.codeborne.selenide.commands.GetCssValue;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.WebElementSource;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
@@ -19,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.Duration;
+import java.util.Map;
 
 /**
  * Wrapper around {@link WebElement} with additional methods like
@@ -301,6 +305,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * {@inheritDoc}
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   * @see GetAttribute
    */
   @Override
   @Nullable
@@ -310,11 +315,22 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * {@inheritDoc}
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   * @see GetCssValue
    */
   @Override
   @Nonnull
   @CheckReturnValue
   String getCssValue(String propertyName);
+
+  /**
+   * Get all CSS properties of the element.
+   * This can be useful to investigate some failing tests (log, debug etc.)
+   * @see GetCss
+   * @since 6.8.0
+   */
+  @Nonnull
+  @CheckReturnValue
+  Map<String, String> css();
 
   /**
    * Checks if element exists true on the current page.
