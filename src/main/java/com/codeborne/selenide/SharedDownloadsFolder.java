@@ -12,4 +12,8 @@ public class SharedDownloadsFolder extends DownloadsFolder {
   @Override
   public void cleanupBeforeDownload() {
   }
+
+  @Override
+  public void deleteIfEmpty() {
+  }
 }

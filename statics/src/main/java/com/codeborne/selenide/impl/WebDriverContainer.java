@@ -38,7 +38,7 @@ public interface WebDriverContainer {
   WebDriver getAndCheckWebDriver();
 
   @CheckReturnValue
-  @Nonnull
+  @Nullable
   DownloadsFolder getBrowserDownloadsFolder();
 
   void closeWindow();

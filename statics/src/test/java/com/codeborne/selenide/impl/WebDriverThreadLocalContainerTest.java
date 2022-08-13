@@ -80,8 +80,8 @@ final class WebDriverThreadLocalContainerTest {
     assertThat(webDriver).isNotNull();
     assertThat(container.allWebDriverThreads).hasSize(1);
     assertThat(container.threadWebDriver).hasSize(1);
-    assertThat(container.threadWebDriver.get(container.allWebDriverThreads.iterator().next().getId())).isSameAs(webDriver);
-    assertThat(container.cleanupThreadStarted.get()).isTrue();
+    assertThat(container.threadWebDriver.get(container.allWebDriverThreads.iterator().next().getId()).webDriver()).isSameAs(webDriver);
+    assertThat(container.isDeadThreadsWatchdogStarted()).isTrue();
   }
 
   @Test
@@ -92,7 +92,7 @@ final class WebDriverThreadLocalContainerTest {
 
     assertThat(webDriver).isNotNull();
     assertThat(container.allWebDriverThreads).hasSize(0);
-    assertThat(container.cleanupThreadStarted.get()).isFalse();
+    assertThat(container.isDeadThreadsWatchdogStarted()).isFalse();
   }
 
   @Test
@@ -117,8 +117,8 @@ final class WebDriverThreadLocalContainerTest {
     verify(oldDriver).quit();
     assertThat(container.allWebDriverThreads).hasSize(2);
     assertThat(container.threadWebDriver).hasSize(1);
-    assertThat(container.threadWebDriver.get(container.allWebDriverThreads.iterator().next().getId())).isSameAs(webDriver);
-    assertThat(container.cleanupThreadStarted.get()).isTrue();
+    assertThat(container.threadWebDriver.get(container.allWebDriverThreads.iterator().next().getId()).webDriver()).isSameAs(webDriver);
+    assertThat(container.isDeadThreadsWatchdogStarted()).isTrue();
   }
 
   @Test
@@ -134,7 +134,7 @@ final class WebDriverThreadLocalContainerTest {
     verify(oldDriver).quit();
     assertThat(container.allWebDriverThreads).hasSize(1);
     assertThat(container.threadWebDriver).hasSize(0);
-    assertThat(container.cleanupThreadStarted.get()).isTrue();
+    assertThat(container.isDeadThreadsWatchdogStarted()).isTrue();
   }
 
   private static class DummyProvider implements WebDriverProvider {
