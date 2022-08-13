@@ -27,7 +27,6 @@ final class LazyDriverTest {
   private final WebDriverFactory factory = mock(WebDriverFactory.class);
   private final BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
   private final CreateDriverCommand createDriverCommand = new CreateDriverCommand(new DummyFileNamer("123_456_78"));
-  private final CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
   private LazyDriver driver;
 
   @BeforeEach
@@ -35,7 +34,7 @@ final class LazyDriverTest {
     when(config.downloadsFolder()).thenReturn("build/down");
     when(config.proxyEnabled()).thenReturn(true);
     driver = new LazyDriver(config, null, emptyList(), emptyList(),
-      factory, browserHealthChecker, createDriverCommand, closeDriverCommand);
+      factory, browserHealthChecker, createDriverCommand);
   }
 
   @BeforeEach
@@ -126,7 +125,7 @@ final class LazyDriverTest {
     when(config.proxyEnabled()).thenReturn(true);
 
     driver = new LazyDriver(config, mockProxy("selenide:0"), emptyList(), emptyList(),
-      factory, browserHealthChecker, createDriverCommand, closeDriverCommand);
+      factory, browserHealthChecker, createDriverCommand);
     givenOpenedBrowser();
 
     driver.close();

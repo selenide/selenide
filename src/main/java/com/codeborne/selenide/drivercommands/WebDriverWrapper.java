@@ -4,6 +4,7 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.impl.WebDriverInstance;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -14,8 +15,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * A `Driver` implementation which uses given webdriver [and proxy].
  * It doesn't open a new browser.
@@ -25,83 +24,69 @@ import static java.util.Objects.requireNonNull;
 public class WebDriverWrapper implements Driver {
   private static final Logger log = LoggerFactory.getLogger(WebDriverWrapper.class);
 
-  private final Config config;
-  private final WebDriver webDriver;
-  private final SelenideProxyServer selenideProxy;
-  private final DownloadsFolder browserDownloadsFolder;
-  private final BrowserHealthChecker browserHealthChecker;
-  private final CloseDriverCommand closeDriverCommand;
+  private final WebDriverInstance wd;
+  private final BrowserHealthChecker browserHealthChecker = new BrowserHealthChecker();
 
   public WebDriverWrapper(Config config, WebDriver webDriver,
                           @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder) {
-    this(config, webDriver, selenideProxy, browserDownloadsFolder, new BrowserHealthChecker(), new CloseDriverCommand());
+    this(new WebDriverInstance(config, webDriver, selenideProxy, browserDownloadsFolder));
   }
 
-  private WebDriverWrapper(Config config, WebDriver webDriver,
-                           @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder,
-                           BrowserHealthChecker browserHealthChecker, CloseDriverCommand closeDriverCommand) {
-    requireNonNull(config, "config must not be null");
-    requireNonNull(webDriver, "webDriver must not be null");
-
-    this.config = config;
-    this.webDriver = webDriver;
-    this.selenideProxy = selenideProxy;
-    this.browserDownloadsFolder = browserDownloadsFolder;
-    this.browserHealthChecker = browserHealthChecker;
-    this.closeDriverCommand = closeDriverCommand;
+  private WebDriverWrapper(WebDriverInstance wd) {
+    this.wd = wd;
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public Config config() {
-    return config;
+    return wd.config();
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public Browser browser() {
-    return new Browser(config.browser(), config.headless());
+    return new Browser(wd.config().browser(), wd.config().headless());
   }
 
   @Override
   @CheckReturnValue
   public boolean hasWebDriverStarted() {
-    return webDriver != null;
+    return wd.webDriver() != null;
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public WebDriver getWebDriver() {
-    return webDriver;
+    return wd.webDriver();
   }
 
   @Override
   @CheckReturnValue
   @Nullable
   public SelenideProxyServer getProxy() {
-    return selenideProxy;
+    return wd.proxy();
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public WebDriver getAndCheckWebDriver() {
-    if (webDriver == null || !browserHealthChecker.isBrowserStillOpen(webDriver)) {
+    if (wd.webDriver() == null || !browserHealthChecker.isBrowserStillOpen(wd.webDriver())) {
       log.info("Webdriver has been closed meanwhile");
       close();
       throw new IllegalStateException("Webdriver has been closed meanwhile");
     }
-    return webDriver;
+    return wd.webDriver();
   }
 
   @Override
   @CheckReturnValue
   @Nullable
   public DownloadsFolder browserDownloadsFolder() {
-    return browserDownloadsFolder;
+    return wd.downloadsFolder();
   }
 
   /**
@@ -113,6 +98,6 @@ public class WebDriverWrapper implements Driver {
    */
   @Override
   public void close() {
-    closeDriverCommand.close(config, webDriver, selenideProxy);
+    wd.dispose();
   }
 }

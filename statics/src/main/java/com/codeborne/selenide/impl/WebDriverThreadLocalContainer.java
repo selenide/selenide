@@ -4,8 +4,8 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.SharedDownloadsFolder;
 import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
-import com.codeborne.selenide.drivercommands.CloseDriverCommand;
 import com.codeborne.selenide.drivercommands.CreateDriverCommand;
+import com.codeborne.selenide.drivercommands.WebdriversRegistry;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -38,18 +39,17 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private final List<WebDriverEventListener> eventListeners = new ArrayList<>();
   private final List<WebDriverListener> listeners = new ArrayList<>();
   final Collection<Thread> allWebDriverThreads = new ConcurrentLinkedQueue<>();
-  final Map<Long, WebDriver> threadWebDriver = new ConcurrentHashMap<>(4);
-  private final Map<Long, SelenideProxyServer> threadProxyServer = new ConcurrentHashMap<>(4);
-  private final Map<Long, DownloadsFolder> threadDownloadsFolder = new ConcurrentHashMap<>(4);
-  @Nullable private Proxy userProvidedProxy;
+  final Map<Long, WebDriverInstance> threadWebDriver = new ConcurrentHashMap<>(4);
+
+  @Nullable
+  private Proxy userProvidedProxy;
 
   private final Config config = new StaticConfig();
   private final BrowserHealthChecker browserHealthChecker;
   private final WebDriverFactory factory = new WebDriverFactory();
-  private final CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
   private final CreateDriverCommand createDriverCommand = new CreateDriverCommand();
 
-  final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
+  private final AtomicBoolean deadThreadsWatchdogStarted = new AtomicBoolean(false);
 
   public WebDriverThreadLocalContainer() {
     this(new BrowserHealthChecker());
@@ -104,22 +104,15 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     resetWebDriver();
 
     long threadId = currentThread().getId();
-    if (selenideProxy != null) {
-      threadProxyServer.put(threadId, selenideProxy);
-    }
-    threadWebDriver.put(threadId, webDriver);
-    threadDownloadsFolder.put(threadId, browserDownloadsFolder);
+    threadWebDriver.put(threadId, new WebDriverInstance(config, webDriver, selenideProxy, browserDownloadsFolder));
   }
 
   /**
-   * Remove links to webdriver/proxy, but don't close the webdriver/proxy itself.
+   * Remove links to webdriver/proxy, but DON'T CLOSE the webdriver/proxy itself.
    */
   @Override
   public void resetWebDriver() {
-    long threadId = currentThread().getId();
-    threadProxyServer.remove(threadId);
-    threadWebDriver.remove(threadId);
-    threadDownloadsFolder.remove(threadId);
+    threadWebDriver.remove(currentThread().getId());
   }
 
   @Override
@@ -133,30 +126,27 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   @CheckReturnValue
   public boolean hasWebDriverStarted() {
-    WebDriver webDriver = threadWebDriver.get(currentThread().getId());
-    return webDriver != null;
+    return currentThreadDriver().map(driver -> driver.webDriver() != null).orElse(false);
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public WebDriver getWebDriver() {
-    long threadId = currentThread().getId();
-    if (!threadWebDriver.containsKey(threadId)) {
-      throw new IllegalStateException("No webdriver is bound to current thread: " + threadId + ". You need to call open(url) first.");
-    }
-    return threadWebDriver.get(threadId);
+    return currentThreadDriver().map(WebDriverInstance::webDriver)
+      .orElseThrow(() -> new IllegalStateException(
+        "No webdriver is bound to current thread: " + currentThread().getId() + ". You need to call open(url) first.")
+      );
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public WebDriver getAndCheckWebDriver() {
-    WebDriver webDriver = threadWebDriver.get(currentThread().getId());
+    WebDriver webDriver = currentThreadDriver().map(WebDriverInstance::webDriver).orElse(null);
     if (webDriver == null) {
       log.info("No webdriver is bound to current thread: {} - let's create a new webdriver", currentThread().getId());
-      webDriver = createDriver();
-      return webDriver;
+      return createDriver().webDriver();
     }
 
     if (browserHealthChecker.isBrowserStillOpen(webDriver)) {
@@ -171,43 +161,41 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
     log.info("Webdriver has been closed meanwhile. Let's re-create it.");
     closeWebDriver();
-    webDriver = createDriver();
-    return webDriver;
+    return createDriver().webDriver();
   }
 
-  @Nonnull
+  @Nullable
   @Override
   public DownloadsFolder getBrowserDownloadsFolder() {
-    return threadDownloadsFolder.get(currentThread().getId());
+    return currentThreadDriver().map(WebDriverInstance::downloadsFolder).orElse(null);
+  }
+
+  private Optional<WebDriverInstance> currentThreadDriver() {
+    return Optional.ofNullable(threadWebDriver.get(currentThread().getId()));
   }
 
   @CheckReturnValue
   @Nonnull
-  private WebDriver createDriver() {
-    CreateDriverCommand.Result result = createDriverCommand.createDriver(config, factory, userProvidedProxy, eventListeners, listeners);
+  private WebDriverInstance createDriver() {
+    WebDriverInstance result = createDriverCommand.createDriver(config, factory, userProvidedProxy, eventListeners, listeners);
     long threadId = currentThread().getId();
-    threadWebDriver.put(threadId, result.webDriver);
-    if (result.selenideProxyServer != null) {
-      threadProxyServer.put(threadId, result.selenideProxyServer);
-    }
-    if (result.browserDownloadsFolder != null) {
-      threadDownloadsFolder.put(threadId, result.browserDownloadsFolder);
-    }
+    threadWebDriver.put(threadId, result);
+
     if (config.holdBrowserOpen()) {
       log.info("Browser and proxy will stay open due to holdBrowserOpen=true: {} -> {}, {}",
-        threadId, result.webDriver, result.selenideProxyServer);
+        threadId, result.webDriver(), result.proxy());
     }
     else {
       markForAutoClose(currentThread());
     }
-    return result.webDriver;
+    return result;
   }
 
   @Override
   @CheckReturnValue
   @Nullable
   public SelenideProxyServer getProxyServer() {
-    return threadProxyServer.get(currentThread().getId());
+    return currentThreadDriver().map(WebDriverInstance::proxy).orElse(null);
   }
 
   @Override
@@ -221,9 +209,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public void closeWebDriver() {
     long threadId = currentThread().getId();
-    WebDriver driver = threadWebDriver.get(threadId);
-    SelenideProxyServer proxy = threadProxyServer.get(threadId);
-    closeDriverCommand.close(config, driver, proxy);
+    WebDriverInstance driver = threadWebDriver.get(threadId);
+    if (driver != null) {
+      driver.dispose();
+      WebdriversRegistry.unregister(driver);
+    }
 
     resetWebDriver();
   }
@@ -257,14 +247,18 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     return executeJavaScript("return window.location.href").toString();
   }
 
+  boolean isDeadThreadsWatchdogStarted() {
+    return deadThreadsWatchdogStarted.get();
+  }
+
   private void markForAutoClose(Thread thread) {
     allWebDriverThreads.add(thread);
 
-    if (!cleanupThreadStarted.get()) {
+    if (!isDeadThreadsWatchdogStarted()) {
       synchronized (this) {
-        if (!cleanupThreadStarted.get()) {
-          new UnusedWebdriversCleanupThread(allWebDriverThreads, threadWebDriver, threadProxyServer, threadDownloadsFolder).start();
-          cleanupThreadStarted.set(true);
+        if (!isDeadThreadsWatchdogStarted()) {
+          new DeadThreadsWatchdog(allWebDriverThreads, threadWebDriver).start();
+          deadThreadsWatchdogStarted.set(true);
         }
       }
     }

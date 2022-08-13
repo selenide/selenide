@@ -2,9 +2,9 @@ package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.BrowserDownloadsFolder;
 import com.codeborne.selenide.Config;
-import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.impl.FileNamer;
 import com.codeborne.selenide.impl.Plugins;
+import com.codeborne.selenide.impl.WebDriverInstance;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.proxy.SelenideProxyServerFactory;
@@ -25,7 +25,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.List;
 
-import static com.codeborne.selenide.impl.FileHelper.deleteFolderIfEmpty;
 import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static com.codeborne.selenide.logevents.SelenideLogger.getReadableSubject;
 import static java.lang.Thread.currentThread;
@@ -45,11 +44,11 @@ public class CreateDriverCommand {
   }
 
   @Nonnull
-  public Result createDriver(Config config,
-                             WebDriverFactory factory,
-                             @Nullable Proxy userProvidedProxy,
-                             List<WebDriverEventListener> eventListeners,
-                             List<WebDriverListener> listeners) {
+  public WebDriverInstance createDriver(Config config,
+                                        WebDriverFactory factory,
+                                        @Nullable Proxy userProvidedProxy,
+                                        List<WebDriverEventListener> eventListeners,
+                                        List<WebDriverListener> listeners) {
     return SelenideLogger.get("webdriver", getReadableSubject("create"), () -> {
       log.debug("Creating webdriver in thread {} (ip: {}, host: {})...",
         currentThread().getId(), HostIdentifier.getHostAddress(), HostIdentifier.getHostName());
@@ -62,15 +61,17 @@ public class CreateDriverCommand {
         try {
           selenideProxyServer = selenideProxyServerFactory.create(config, userProvidedProxy);
           browserProxy = selenideProxyServer.getSeleniumProxy();
-        } catch (NoClassDefFoundError e) {
+        }
+        catch (NoClassDefFoundError e) {
           throw new IllegalStateException("Cannot initialize proxy. " +
             "Probably you should add \"selenide-proxy\" dependency to your project " +
             "- see https://search.maven.org/search?q=a:selenide-proxy", e);
         }
       }
 
-      @Nullable File browserDownloadsFolder = config.remote() != null ? null :
+      File browserDownloadsFolder = config.remote() != null ? null :
         ensureFolderExists(new File(config.downloadsFolder(), fileNamer.generateFileName()).getAbsoluteFile());
+      BrowserDownloadsFolder downloadsFolder = BrowserDownloadsFolder.from(browserDownloadsFolder);
 
       WebDriver webdriver = factory.createWebDriver(config, browserProxy, browserDownloadsFolder);
 
@@ -78,16 +79,9 @@ public class CreateDriverCommand {
         currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
 
       WebDriver webDriver = addListeners(webdriver, eventListeners, listeners);
-
-      Runtime.getRuntime().addShutdownHook(
-        new Thread(new SelenideDriverFinalCleanupThread(config, webDriver, selenideProxyServer))
-      );
-      if (browserDownloadsFolder != null) {
-        Runtime.getRuntime().addShutdownHook(
-          new Thread(() -> deleteFolderIfEmpty(browserDownloadsFolder))
-        );
-      }
-      return new Result(webDriver, selenideProxyServer, BrowserDownloadsFolder.from(browserDownloadsFolder));
+      WebDriverInstance result = new WebDriverInstance(config, webDriver, selenideProxyServer, downloadsFolder);
+      WebdriversRegistry.register(result);
+      return result;
     });
   }
 
@@ -121,24 +115,7 @@ public class CreateDriverCommand {
     }
 
     log.info("Add listeners to webdriver: {}", listeners);
-    EventFiringDecorator wrapper = new EventFiringDecorator(listeners.toArray(new WebDriverListener[]{}));
+    EventFiringDecorator<WebDriver> wrapper = new EventFiringDecorator<>(listeners.toArray(new WebDriverListener[]{}));
     return wrapper.decorate(webdriver);
-  }
-
-  @ParametersAreNonnullByDefault
-  public static class Result {
-    public final WebDriver webDriver;
-    @Nullable
-    public final SelenideProxyServer selenideProxyServer;
-    @Nullable
-    public final DownloadsFolder browserDownloadsFolder;
-
-    public Result(WebDriver webDriver,
-                  @Nullable SelenideProxyServer selenideProxyServer,
-                  @Nullable DownloadsFolder browserDownloadsFolder) {
-      this.webDriver = webDriver;
-      this.selenideProxyServer = selenideProxyServer;
-      this.browserDownloadsFolder = browserDownloadsFolder;
-    }
   }
 }

@@ -33,6 +33,8 @@ public abstract class DownloadsFolder {
 
   public abstract void cleanupBeforeDownload();
 
+  public abstract void deleteIfEmpty();
+
   @CheckReturnValue
   @Nonnull
   public File file(String fileName) {

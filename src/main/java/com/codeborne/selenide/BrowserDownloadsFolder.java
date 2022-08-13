@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.FileHelper;
+
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -28,6 +30,11 @@ public final class BrowserDownloadsFolder extends DownloadsFolder {
     catch (IOException e) {
       throw new IllegalStateException("Failed to cleanup folder " + folder.getAbsolutePath(), e);
     }
+  }
+
+  @Override
+  public void deleteIfEmpty() {
+    FileHelper.deleteFolderIfEmpty(folder);
   }
 
   @Nullable

@@ -154,7 +154,7 @@ public class WebDriverRunner {
   }
 
   @CheckReturnValue
-  @Nonnull
+  @Nullable
   public static DownloadsFolder getBrowserDownloadsFolder() {
     return webdriverContainer.getBrowserDownloadsFolder();
   }
