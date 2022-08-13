@@ -68,6 +68,10 @@ public class LocalHttpServer {
     return this;
   }
 
+  public void stop() throws Exception {
+    server.stop();
+  }
+
   public static LocalHttpServer startWithRetry(boolean ssl) throws Exception {
     IOException lastError = null;
     for (int i = 0; i < 5; i++) {
