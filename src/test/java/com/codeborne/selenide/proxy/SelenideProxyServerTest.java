@@ -74,7 +74,7 @@ final class SelenideProxyServerTest {
   void canShutdownProxyServer() {
     when(bmp.isStarted()).thenReturn(true);
     proxyServer.shutdown();
-    verify(bmp).abort();
+    verify(bmp).stop();
   }
 
   @Test

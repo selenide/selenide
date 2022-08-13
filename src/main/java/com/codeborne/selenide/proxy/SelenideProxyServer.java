@@ -157,7 +157,7 @@ public class SelenideProxyServer {
   public void shutdown() {
     if (proxy.isStarted()) {
       try {
-        proxy.abort();
+        proxy.stop();
       }
       catch (IllegalStateException ignore) {
       }
