@@ -1,5 +1,12 @@
 # Changelog
 
+## 6.7.2 (released 14.08.2022)
+
+* #1917 fix memory leak in Selenide -- see PR #1919
+* #1918 upgrade to LittleProxy 2.0.11 which also has fixed a memory leak
+* #1913 upgrade to selenium 4.4.0 -- see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* #1920 fix `full-size-screenshot`: pick the right window on remote webdriver
+
 ## 6.7.1 (released 08.08.2022)
 
 * #1894 restore Driver parameter in SelenidePageFactory.findSelector() - it's used by `selenide-appium`.
