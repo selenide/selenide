@@ -29,7 +29,7 @@ public class ScreenshotTestHelper {
     else {
       File archivedFile = new File(Configuration.reportsFolder, UUID.randomUUID() + ".png");
       FileUtils.copyFile(screenshot, archivedFile);
-      log.info("Screenshot matches {}x{} size", width, height);
+      log.info("Screenshot does not match {}x{} size: {}", width, height, archivedFile.getAbsolutePath());
       fail(String.format("Screenshot %s is expected to have size %sx%s, but actual size: %sx%s",
         archivedFile.getAbsolutePath(), width, height, img.getWidth(), img.getHeight()));
     }

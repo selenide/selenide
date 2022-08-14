@@ -36,11 +36,6 @@ public class FullScreenshotsGridTest extends AbstractGridTest {
     Configuration.remote = null;
   }
 
-  /*
-     In non-local browser (grid),
-     It fails or takes a screenshot of the wrong tab.
-     See https://github.com/SeleniumHQ/selenium/issues/10810
-     */
   @Test
   void canTakeFullScreenshotWithTwoTabs() throws IOException {
     openFile("page_of_fixed_size_2200x3300.html");
