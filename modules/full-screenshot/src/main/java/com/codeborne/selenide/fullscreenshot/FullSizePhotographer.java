@@ -95,7 +95,7 @@ public class FullSizePhotographer implements Photographer {
     WD devtoolsDriver, OutputType<ResultType> outputType
   ) {
     DevTools devTools = devtoolsDriver.getDevTools();
-    devTools.createSessionIfThereIsNotOne();
+    devTools.createSessionIfThereIsNotOne(devtoolsDriver.getWindowHandle());
 
     Options options = getOptions(devtoolsDriver);
     Viewport viewport = new Viewport(0, 0, options.fullWidth(), options.fullHeight(), 1);
