@@ -2,6 +2,7 @@
 
 ## 2.2.4 (released 14.08.2022)
 * upgrade to Selenide 6.7.2
+* #20 fix reading multiline clipboard content
 
 ## 2.2.3 (released 20.05.2022)
 * upgrade to Selenide 6.5.0

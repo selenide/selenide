@@ -10,12 +10,9 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
@@ -28,7 +25,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -65,7 +61,7 @@ public class SelenoidClient {
     try (InputStream in = connectionFromUrl(url).getInputStream()) {
       Path uniqueDir = Files.createTempDirectory("selenoid-download");
       File file = new File(uniqueDir.toFile(), fileName);
-      try (OutputStream out = new FileOutputStream(file)) {
+      try (OutputStream out = Files.newOutputStream(file.toPath())) {
         IOUtils.copyLarge(in, out);
       }
       log.debug("Downloaded file from {} to {}", url, file.getAbsolutePath());
@@ -110,8 +106,8 @@ public class SelenoidClient {
             if (code != 200)
                 throw new RuntimeException("Something went wrong while getting clipboard! Response code: " + code);
 
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                return reader.lines().collect(Collectors.joining());
+            try (InputStream in = connection.getInputStream()) {
+                return IOUtils.toString(in, UTF_8);
             }
         } catch (IOException e) {
             throw new RuntimeException("Something went wrong while getting clipboard!", e);
