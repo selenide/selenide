@@ -40,6 +40,14 @@ public class SelenoidClipboardTest {
     clipboard().shouldHave(content("John Wick"));
   }
 
+  @Test
+  public void setAndGetClipboardMultilineContent() {
+    String multilineText = "John\nWick\r\nThe\nGreat\r";
+    clipboard().setText(multilineText);
+    assertEquals(multilineText, clipboard().getText());
+    clipboard().shouldHave(content(multilineText));
+  }
+
   @AfterEach
   public void tearDown() {
     closeWebDriver();
