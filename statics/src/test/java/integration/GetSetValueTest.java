@@ -2,11 +2,13 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShould;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.partialValue;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selenide.$;
 import static java.time.Duration.ofMillis;
@@ -73,6 +75,35 @@ final class GetSetValueTest extends IntegrationTest {
 
     $("#empty-text-area").setValue("john   \u00a0 \r\nMalkovich\n");
     $("#empty-text-area").shouldHave(value("john Malkovich"));
+  }
+
+  @Test
+  void canCheckValueSubstring() {
+    $(By.name("password")).setValue("John Malkovich");
+    $(By.name("password")).shouldHave(partialValue("ohn Malkov"));
+
+    $("#empty-text-area").setValue("John Malkovich");
+    $("#empty-text-area").shouldHave(partialValue("hn Malk"));
+  }
+
+  @Test
+  void value_errorMessage() {
+    $("#empty-text-area").setValue("Bilbo Baggins");
+
+    assertThatThrownBy(() -> $("#empty-text-area").shouldHave(value("Bilbo Sumkins")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have value=\"Bilbo Sumkins\" {#empty-text-area}")
+      .hasMessageContaining("Actual value: value=\"Bilbo Baggins\"");
+  }
+
+  @Test
+  void partialValue_errorMessage() {
+    $("#empty-text-area").setValue("Bilbo Baggins");
+
+    assertThatThrownBy(() -> $("#empty-text-area").shouldHave(partialValue("Bilbo Big")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have partial value \"Bilbo Big\" {#empty-text-area}")
+      .hasMessageContaining("Actual value: value=\"Bilbo Baggins\"");
   }
 
   @Test
