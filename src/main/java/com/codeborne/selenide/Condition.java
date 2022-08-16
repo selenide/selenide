@@ -31,6 +31,7 @@ import com.codeborne.selenide.conditions.Not;
 import com.codeborne.selenide.conditions.Or;
 import com.codeborne.selenide.conditions.OwnText;
 import com.codeborne.selenide.conditions.OwnTextCaseSensitive;
+import com.codeborne.selenide.conditions.PartialValue;
 import com.codeborne.selenide.conditions.PseudoElementPropertyWithValue;
 import com.codeborne.selenide.conditions.Readonly;
 import com.codeborne.selenide.conditions.Selected;
@@ -211,6 +212,21 @@ public abstract class Condition {
   @Nonnull
   public static Condition value(String expectedValue) {
     return new Value(expectedValue);
+  }
+
+  /**
+   * Assert that element contains given "value" attribute as substring
+   * NB! Ignores difference in non-visible characters like spaces, non-breakable spaces, tabs, newlines  etc.
+   *
+   * <p>Sample: {@code $("input").shouldHave(partialValue("12345 666 77"));}</p>
+   *
+   * @param expectedValue expected value of "value" attribute
+   * @since 6.7.3
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition partialValue(String expectedValue) {
+    return new PartialValue(expectedValue);
   }
 
   /**
