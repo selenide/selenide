@@ -1,5 +1,7 @@
 # Changelog
 
+* add feature #1
+
 ## 6.7.2 (released 14.08.2022)
 
 * #1917 fix memory leak in Selenide -- see PR #1919
