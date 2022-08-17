@@ -67,5 +67,10 @@ class DisposablesRegistryTest {
     public void dispose() {
       disposed.incrementAndGet();
     }
+
+
+
+    SDFDSFSDDSDS
+
   }
 }
