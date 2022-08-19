@@ -36,6 +36,7 @@ import com.codeborne.selenide.conditions.PseudoElementPropertyWithValue;
 import com.codeborne.selenide.conditions.Readonly;
 import com.codeborne.selenide.conditions.Selected;
 import com.codeborne.selenide.conditions.SelectedText;
+import com.codeborne.selenide.conditions.TagName;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
@@ -490,6 +491,17 @@ public abstract class Condition {
   @Nonnull
   public static Condition exactTextCaseSensitive(String text) {
     return new ExactTextCaseSensitive(text);
+  }
+
+  /**
+   * Asserts that element has the given tag name.
+   * <p>Sample: {@code $(".btn-primary").shouldHave(tagName("button"));}</p>
+   * @since 6.8.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition tagName(String cssClass) {
+    return new TagName(cssClass);
   }
 
   /**
