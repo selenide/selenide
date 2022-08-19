@@ -40,6 +40,7 @@ import static com.codeborne.selenide.Condition.and;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.partialText;
+import static com.codeborne.selenide.Condition.tagName;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
@@ -195,6 +196,8 @@ final class CollectionMethodsTest extends ITest {
     $$("#multirowTable tr").shouldHave(size(2));
     $$("#multirowTable tr").filterBy(partialText("Norris")).shouldHave(size(1));
     $$("#multirowTable tr").filterBy(cssClass("inexisting")).shouldHave(size(0));
+    $$("#multirowTable *").filterBy(tagName("tr")).shouldHave(size(2));
+    $$("#multirowTable *").filterBy(tagName("td")).shouldHave(size(4));
   }
 
   @Test
@@ -202,6 +205,7 @@ final class CollectionMethodsTest extends ITest {
     $$("#multirowTable tr").shouldHave(size(2));
     $$("#multirowTable tr").excludeWith(partialText("Chack")).shouldHave(size(0));
     $$("#multirowTable tr").excludeWith(cssClass("inexisting")).shouldHave(size(2));
+    $$("table").excludeWith(tagName("table")).shouldHave(size(0));
   }
 
   @Test
