@@ -119,8 +119,10 @@ public class Commands {
   private void addSelectCommands() {
     add("getSelectedOption", new GetSelectedOption());
     add("getSelectedOptions", new GetSelectedOptions());
-    add("getSelectedText", new GetSelectedText());
-    add("getSelectedValue", new GetSelectedValue());
+    add("getSelectedText", new GetSelectedOptionText());
+    add("getSelectedOptionText", new GetSelectedOptionText());
+    add("getSelectedValue", new GetSelectedOptionValue());
+    add("getSelectedOptionValue", new GetSelectedOptionValue());
     add("selectOption", new SelectOptionByTextOrIndex());
     add("selectOptionContainingText", new SelectOptionContainingText());
     add("selectOptionByValue", new SelectOptionByValue());

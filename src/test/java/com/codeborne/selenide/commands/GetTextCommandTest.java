@@ -15,8 +15,8 @@ final class GetTextCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
   private final SelenideElement mockedElement = mock(SelenideElement.class);
-  private final GetSelectedText getSelectedTextCommand = mock(GetSelectedText.class);
-  private final GetText command = new GetText(getSelectedTextCommand);
+  private final GetSelectedOptionText getSelectedOptionTextCommand = mock(GetSelectedOptionText.class);
+  private final GetText command = new GetText(getSelectedOptionTextCommand);
 
   @BeforeEach
   void setup() {
@@ -26,11 +26,11 @@ final class GetTextCommandTest {
   @Test
   void selectElement() {
     when(mockedElement.getTagName()).thenReturn("select");
-    when(getSelectedTextCommand.execute(any(), any(), any())).thenReturn("Selected Text");
+    when(getSelectedOptionTextCommand.execute(any(), any(), any())).thenReturn("Selected Text");
 
     assertThat(command.execute(proxy, locator, null)).isEqualTo("Selected Text");
 
-    verify(getSelectedTextCommand).execute(proxy, locator, null);
+    verify(getSelectedOptionTextCommand).execute(proxy, locator, null);
   }
 
   @Test

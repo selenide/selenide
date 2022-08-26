@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.commands.GetSelectedOptionText;
+import com.codeborne.selenide.commands.GetSelectedOptionValue;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.WebElementSource;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
@@ -927,10 +929,18 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Get value of selected option in select field
    *
-   * @see com.codeborne.selenide.commands.GetSelectedValue
+   * @see GetSelectedOptionValue
    * @return null if the selected option doesn't have "value" attribute (or the select doesn't have options at all)
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
+  @CheckReturnValue
+  @Nullable
+  String getSelectedOptionValue();
+
+  /**
+   * @deprecated Use {@link #getSelectedOptionValue()} instead
+   */
+  @Deprecated
   @CheckReturnValue
   @Nullable
   String getSelectedValue();
@@ -938,9 +948,18 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Get text of selected option in select field
    * @return null if there is no selected options (or the select doesn't have options at all)
-   * @see com.codeborne.selenide.commands.GetSelectedText
+   * @throws IllegalArgumentException if the element type is not <select/>
+   * @see GetSelectedOptionText
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
+  @CheckReturnValue
+  @Nullable
+  String getSelectedOptionText();
+
+  /**
+   * @deprecated Use {@link #getSelectedOptionText()} instead
+   */
+  @Deprecated
   @CheckReturnValue
   @Nullable
   String getSelectedText();

@@ -22,9 +22,9 @@ final class DynamicSelectsTest extends ITest {
 
     SelenideElement select = $("#language");
     select.getSelectedOption().shouldBe(selected);
-    assertThat(select.getSelectedValue())
+    assertThat(select.getSelectedOptionValue())
       .isEqualTo("'eng'");
-    assertThat(select.getSelectedText())
+    assertThat(select.getSelectedOptionText())
       .isEqualTo("l'a \"English\"");
   }
 
@@ -34,16 +34,16 @@ final class DynamicSelectsTest extends ITest {
 
     SelenideElement select = $("#language");
     select.getSelectedOption().shouldBe(selected);
-    assertThat(select.getSelectedValue())
+    assertThat(select.getSelectedOptionValue())
       .isEqualTo("\"est\"");
-    assertThat(select.getSelectedText())
+    assertThat(select.getSelectedOptionText())
       .isEqualTo("l'a \"Eesti\"");
   }
 
   @Test
   void selectByXPath() {
     $(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).selectOption("l'a \"English\"");
-    assertThat($(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).getSelectedText())
+    assertThat($(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).getSelectedOptionText())
       .isEqualTo("l'a \"English\"");
   }
 
