@@ -33,9 +33,9 @@ final class SelectsTest extends IntegrationTest {
     select.selectOptionByValue("myrambler.ru");
 
     select.getSelectedOption().shouldBe(selected);
-    assertThat(select.getSelectedValue())
+    assertThat(select.getSelectedOptionValue())
       .isEqualTo("myrambler.ru");
-    assertThat(select.getSelectedText())
+    assertThat(select.getSelectedOptionText())
       .isEqualTo("@myrambler.ru");
   }
 
@@ -65,36 +65,36 @@ final class SelectsTest extends IntegrationTest {
 
   @Test
   void userCanGetSelectedOptionValue_none() {
-    assertThat($("select#hero").getSelectedValue()).isEqualTo("");
-    assertThat($("select#gender").getSelectedValue()).isEqualTo("");
+    assertThat($("select#hero").getSelectedOptionValue()).isEqualTo("");
+    assertThat($("select#gender").getSelectedOptionValue()).isEqualTo("");
   }
 
   @Test
   void userCanGetSelectedOptionValue_selectHasNoOptions() {
-    assertThat($("select#empty-select").getSelectedValue()).isNull();
+    assertThat($("select#empty-select").getSelectedOptionValue()).isNull();
   }
 
   @Test
   void userCanGetSelectedOptionValue_selectNotFound() {
-    assertThatThrownBy(() -> $("select#missing-select").getSelectedValue())
+    assertThatThrownBy(() -> $("select#missing-select").getSelectedOptionValue())
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {select#missing-select}");
   }
 
   @Test
   void userCanGetSelectedOptionText_none() {
-    assertThat($("select#hero").getSelectedText()).isEqualTo("-- Select your hero --");
-    assertThat($("select#gender").getSelectedText()).isEqualTo("");
+    assertThat($("select#hero").getSelectedOptionText()).isEqualTo("-- Select your hero --");
+    assertThat($("select#gender").getSelectedOptionText()).isEqualTo("");
   }
 
   @Test
   void userCanGetSelectedOptionText_selectHasNoOptions() {
-    assertThat($("select#empty-select").getSelectedText()).isNull();
+    assertThat($("select#empty-select").getSelectedOptionText()).isNull();
   }
 
   @Test
   void userCanGetSelectedOptionText_selectNotFound() {
-    assertThatThrownBy(() -> $("select#missing-select").getSelectedText())
+    assertThatThrownBy(() -> $("select#missing-select").getSelectedOptionText())
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {select#missing-select}");
   }
@@ -124,19 +124,19 @@ final class SelectsTest extends IntegrationTest {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
 
     select.selectOption(0);
-    assertThat(select.getSelectedText())
+    assertThat(select.getSelectedOptionText())
       .isEqualTo("@livemail.ru");
 
     select.selectOption(1);
-    assertThat(select.getSelectedText())
+    assertThat(select.getSelectedOptionText())
       .isEqualTo("@myrambler.ru");
 
     select.selectOption(2);
-    assertThat(select.getSelectedText())
+    assertThat(select.getSelectedOptionText())
       .isEqualTo("@rusmail.ru");
 
     select.selectOption(3);
-    assertThat(select.getSelectedText())
+    assertThat(select.getSelectedOptionText())
       .isEqualTo("@мыло.ру");
   }
 
@@ -162,9 +162,9 @@ final class SelectsTest extends IntegrationTest {
     select.selectOption("@мыло.ру");
 
     select.getSelectedOption().shouldBe(selected);
-    assertThat(select.getSelectedValue())
+    assertThat(select.getSelectedOptionValue())
       .isEqualTo("мыло.ру");
-    assertThat(select.getSelectedText())
+    assertThat(select.getSelectedOptionText())
       .isEqualTo("@мыло.ру");
   }
 
@@ -173,19 +173,19 @@ final class SelectsTest extends IntegrationTest {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
     select.selectOptionContainingText("ыло.р");
 
-    assertThat(select.getSelectedText())
+    assertThat(select.getSelectedOptionText())
       .isEqualTo("@мыло.ру");
   }
 
   @Test
   void getSelectedText_cannotBeNull() {
     SelenideElement select = $("select#gender");
-    assertThat(select.getSelectedText()).isEqualTo("");
+    assertThat(select.getSelectedOptionText()).isEqualTo("");
 
     select.selectOptionContainingText("emal");
-    assertThat(select.getSelectedText()).isEqualTo("Female");
+    assertThat(select.getSelectedOptionText()).isEqualTo("Female");
 
-    assertThatThrownBy(() -> $("select#missing").getSelectedText())
+    assertThatThrownBy(() -> $("select#missing").getSelectedOptionText())
       .isInstanceOf(ElementNotFound.class);
   }
 
@@ -298,5 +298,19 @@ final class SelectsTest extends IntegrationTest {
 
     $(By.xpath("//select[@name='domain']")).selectOptionByValue("myrambler.ru");
     $("#selectedDomain").shouldHave(text("@myrambler.ru"));
+  }
+
+  @Test
+  void getSelectedOptionText_isOnlyApplicableToSelect() {
+    assertThatThrownBy(() -> $("h1").getSelectedOptionText())
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageStartingWith("Expected <select>, but received: <h1>");
+  }
+
+  @Test
+  void getSelectedOptionValue_isOnlyApplicableToSelect() {
+    assertThatThrownBy(() -> $("h1").getSelectedOptionValue())
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageStartingWith("Expected <select>, but received: <h1>");
   }
 }

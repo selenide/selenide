@@ -12,14 +12,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class GetText implements Command<String> {
-  private final GetSelectedText getSelectedText;
+  private final GetSelectedOptionText getSelectedOptionText;
 
   public GetText() {
-    this(new GetSelectedText());
+    this(new GetSelectedOptionText());
   }
 
-  GetText(GetSelectedText getSelectedtext) {
-    this.getSelectedText = getSelectedtext;
+  GetText(GetSelectedOptionText getSelectedtextOption) {
+    this.getSelectedOptionText = getSelectedtextOption;
   }
 
   @Override
@@ -28,7 +28,7 @@ public class GetText implements Command<String> {
   public String execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     WebElement element = locator.getWebElement();
     return "select".equalsIgnoreCase(element.getTagName()) ?
-        getSelectedText.execute(proxy, locator, args) :
-        element.getText();
+      getSelectedOptionText.execute(proxy, locator, args) :
+      element.getText();
   }
 }
