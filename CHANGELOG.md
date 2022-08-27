@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.7.3 (released 27.08.2022)
+
+* #1923 add condition `partialValue`  --  see PR #1924
+* #1928 add condition $.shouldHave(tagName("div"))  --  see PR #1929
+* #1934 Check that element is <select> in methods $.getSelectedText(), getSelectedValue()
+* #1934 rename `$.getSelectedText()` to `$.getSelectedOptionText()`, `$.getSelectedValue()` to `$.getSelectedOptionValue()`
+* #1932 Bump webdrivermanager from 5.2.3 to 5.3.0
+* #1931 Bump slf4jVersion from 1.7.36 to 2.0.0
+* #1921 Bump browserup-proxy-core from 2.2.1 to 2.2.2
+
 ## 6.7.2 (released 14.08.2022)
 
 * #1917 fix memory leak in Selenide -- see PR #1919
