@@ -35,4 +35,5 @@ public interface Config {
   boolean proxyEnabled();
   String proxyHost();
   int proxyPort();
+  long remoteReadTimeout();
 }

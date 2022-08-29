@@ -113,6 +113,11 @@ class StaticConfig implements Config {
   }
 
   @Override
+  public long remoteReadTimeout() {
+    return Configuration.remoteReadTimeout;
+  }
+
+  @Override
   public String browser() {
     return Configuration.browser;
   }
