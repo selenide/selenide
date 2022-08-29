@@ -16,13 +16,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 
-import static com.codeborne.selenide.webdriver.HttpClientTimeouts.defaultReadTimeout;
-
 @ParametersAreNonnullByDefault
 public class RemoteDriverFactory {
   public WebDriver create(Config config, MutableCapabilities capabilities) {
     try {
-      CommandExecutor commandExecutor = createExecutor(config, defaultReadTimeout);
+      CommandExecutor commandExecutor = createExecutor(config);
       RemoteWebDriver webDriver = new RemoteWebDriver(commandExecutor, capabilities);
       webDriver.setFileDetector(new LocalFileDetector());
       return webDriver;
@@ -34,10 +32,10 @@ public class RemoteDriverFactory {
 
   @Nonnull
   @CheckReturnValue
-  private CommandExecutor createExecutor(Config config, Duration readTimeout) throws MalformedURLException {
+  private CommandExecutor createExecutor(Config config) throws MalformedURLException {
     ClientConfig clientConfig = ClientConfig.defaultConfig()
       .baseUrl(new URL(config.remote()))
-      .readTimeout(readTimeout);
+      .readTimeout(Duration.ofMillis(config.remoteReadTimeout()));
 
     return new HttpCommandExecutor(clientConfig);
   }

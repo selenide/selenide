@@ -350,4 +350,14 @@ public class Configuration {
    */
   public static String browserBinary = defaults.browserBinary();
 
+  /**
+   * Sets read timeout in milliseconds for remote browser connections.
+   * Applies only when remote is specified.
+   * Can be configured either programmatically, via selenide.properties file
+   * or by system property "-Dselenide.remoteReadTimeout=180000"
+   * <br>
+   * Default: 90000
+   */
+  public static long remoteReadTimeout = defaults.remoteReadTimeout();
+
 }
