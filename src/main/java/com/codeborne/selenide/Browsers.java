@@ -5,6 +5,7 @@ package com.codeborne.selenide;
  */
 public interface Browsers {
   String CHROME = "chrome";
+  String CHROMIUM = "chromium";
   String IE = "ie";
   String INTERNET_EXPLORER = "internet explorer";
   String EDGE = "edge";

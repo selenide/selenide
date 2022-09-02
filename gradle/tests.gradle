@@ -43,7 +43,18 @@ subprojects {
     outputs.upToDateWhen {false}
   }
 
-  tasks.register("chrome_remote", Test) {
+  tasks.register("chromium_headless", Test) {
+    systemProperties['selenide.browser'] = 'chromium'
+    systemProperties['selenide.headless'] = 'true'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chromium_headless'
+//    systemProperties['selenide.browserBinary'] = '/opt/homebrew/bin/chromium'
+//    systemProperties['selenide.browserBinary'] = '/usr/bin/chromium-browser'
+    systemProperties['selenide.webdriverLogsEnabled'] = 'true'
+    include 'integration/**/*AlertTest*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
+  task chrome_remote(type: Test) {
     systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
     systemProperties['selenide.browser'] = 'chrome'
     include 'integration/**/*'

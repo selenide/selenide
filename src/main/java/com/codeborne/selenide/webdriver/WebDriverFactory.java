@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.codeborne.selenide.Browsers.CHROME;
+import static com.codeborne.selenide.Browsers.CHROMIUM;
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.IE;
@@ -44,6 +45,7 @@ public class WebDriverFactory {
   private Map<String, Class<? extends AbstractDriverFactory>> factories() {
     Map<String, Class<? extends AbstractDriverFactory>> result = new HashMap<>();
     result.put(CHROME, ChromeDriverFactory.class);
+    result.put(CHROMIUM, ChromiumDriverFactory.class);
     result.put(FIREFOX, FirefoxDriverFactory.class);
     result.put(EDGE, EdgeDriverFactory.class);
     result.put(INTERNET_EXPLORER, InternetExplorerDriverFactory.class);
