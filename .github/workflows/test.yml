@@ -67,9 +67,9 @@ jobs:
           sudo apt update
           sudo apt install brave-browser
       - name: Check Brave
-        run: brave --version
+        run: brave-browser --version
       - name: Which Brave
-        run: which brave
+        run: which brave-browser
       - uses: actions/cache@v3
         with:
           path: |
