@@ -24,7 +24,10 @@ jobs:
       - name: Setup Chromium
         if: ${{ matrix.gradle-task != 'check' }}
         uses: browser-actions/setup-chrome@latest
+      - name: Check Chromium
         run: chrome --version
+      - name: Which Chromium
+        run: which chrome
       - uses: actions/cache@v3
         with:
           path: |
