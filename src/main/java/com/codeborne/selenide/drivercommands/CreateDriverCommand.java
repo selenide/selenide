@@ -9,6 +9,7 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.proxy.SelenideProxyServerFactory;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.net.HostIdentifier;
@@ -24,6 +25,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static com.codeborne.selenide.logevents.SelenideLogger.getReadableSubject;
@@ -77,6 +79,10 @@ public class CreateDriverCommand {
 
       log.info("Created webdriver in thread {}: {} -> {}",
         currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
+      if (webdriver instanceof JavascriptExecutor) {
+        Map<String, Object> navigator = (Map<String, Object>) ((JavascriptExecutor) webdriver).executeScript("return window.navigator");
+        log.info("Created webdriver: {}", navigator);
+      }
 
       WebDriver webDriver = addListeners(webdriver, eventListeners, listeners);
       WebDriverInstance result = new WebDriverInstance(config, webDriver, selenideProxyServer, downloadsFolder);
