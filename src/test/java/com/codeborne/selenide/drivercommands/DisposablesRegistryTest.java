@@ -27,7 +27,7 @@ class DisposablesRegistryTest {
   }
 
   @Test
-  void unregisteringLastItem_removesShutdownHooks() {
+  void canUnregisteringItems_ifDisposedEarlier() {
     CovidTest test1 = new CovidTest();
     CovidTest test2 = new CovidTest();
     registry.register(test1);
@@ -40,7 +40,7 @@ class DisposablesRegistryTest {
     assertThat(registry.size()).isEqualTo(1);
 
     registry.unregister(test2);
-    assertThat(registry.isShutdownHookRegistered()).isFalse();
+    assertThat(registry.isShutdownHookRegistered()).isTrue();
     assertThat(registry.size()).isEqualTo(0);
   }
 

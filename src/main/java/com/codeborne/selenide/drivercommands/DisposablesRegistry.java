@@ -38,12 +38,9 @@ class DisposablesRegistry<T extends Disposable> {
   public synchronized void unregister(T webdriver) {
     disposables.remove(webdriver);
     log.info("Unregister {} in {} [size={}]", webdriver, currentThread().getId(), disposables.size());
-    if (disposables.isEmpty()) {
-      cancel();
-    }
   }
 
-  void cancel() {
+  synchronized void cancel() {
     if (isShutdownHookRegistered()) {
       log.info("Remove shutdown hook in {}", currentThread().getId());
       Runtime.getRuntime().removeShutdownHook(shutdownHook);
@@ -55,7 +52,7 @@ class DisposablesRegistry<T extends Disposable> {
     return disposables.size();
   }
 
-  boolean isShutdownHookRegistered() {
+  synchronized boolean isShutdownHookRegistered() {
     return shutdownHook != null;
   }
 
