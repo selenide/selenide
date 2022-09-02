@@ -43,3 +43,45 @@ jobs:
         with:
           name: test-report
           path: ./**/build/reports/
+  run-tests-on-brave:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        gradle-task: [ 'chrome_headless' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          cache: 'gradle'
+          java-version: '17'
+      - name: Setup Brave
+        if: ${{ matrix.gradle-task != 'check' }}
+        run: |
+          sudo apt install apt-transport-https curl
+          sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+          sudo apt update
+          sudo apt install brave-browser
+      - name: Check Brave
+        run: brave --version
+      - name: Which Brave
+        run: which brave
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Build with Gradle
+        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: test-report
+          path: ./**/build/reports/
