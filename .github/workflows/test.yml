@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'chromium_headless' ]
+        gradle-task: [ 'chrome_headless' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
