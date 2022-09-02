@@ -171,4 +171,9 @@ class StaticConfig implements Config {
   public MutableCapabilities browserCapabilities() {
     return Configuration.browserCapabilities;
   }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 }
