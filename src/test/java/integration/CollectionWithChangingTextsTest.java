@@ -87,8 +87,8 @@ final class CollectionWithChangingTextsTest extends ITest {
     assertThat(it.hasNext()).isFalse();
   }
 
-  // File "collection_with_changing_texts.html" contains JavaScript which adds new elements after 340 ms.
+  // File "collection_with_changing_texts.html" contains JavaScript which adds new elements after 840 ms.
   private void waitForNewElementsRendered() throws InterruptedException {
-    sleep(350);
+    sleep(850);
   }
 }
