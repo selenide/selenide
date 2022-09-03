@@ -1,11 +1,16 @@
 # Changelog
 
+## 6.7.4 (released 04.09.2022)
+* #1942 fix exception in "Dead threads watchdog" #1942 --  see PR #1943
+* #1935 Bump Netty from 4.1.79.Final to 4.1.80.Final
+
 ## 6.7.3 (released 27.08.2022)
 
 * #1923 add condition `partialValue`  --  see PR #1924
-* #1928 add condition $.shouldHave(tagName("div"))  --  see PR #1929
-* #1934 Check that element is <select> in methods $.getSelectedText(), getSelectedValue()
-* #1934 rename `$.getSelectedText()` to `$.getSelectedOptionText()`, `$.getSelectedValue()` to `$.getSelectedOptionValue()`
+* #1928 add condition `$.shouldHave(tagName("div"))`  --  see PR #1929
+* #1934 Check that element is `<select>` in methods `$.getSelectedText()`, `getSelectedValue()`
+* #1934 rename `$.getSelectedText()` to `$.getSelectedOptionText()`
+* #1934 rename `$.getSelectedValue()` to `$.getSelectedOptionValue()`
 * #1932 Bump webdrivermanager from 5.2.3 to 5.3.0
 * #1931 Bump slf4jVersion from 1.7.36 to 2.0.0
 * #1921 Bump browserup-proxy-core from 2.2.1 to 2.2.2
@@ -161,8 +166,8 @@ See PR #1838.
 * #1703, #1433 override default timeouts for remote webdriver  --  thanks Irina Styazhkina for PR #1673
 
 ## 6.2.0 (released 10.01.2022)
-* #1589 add "<Click to see difference>" to most of Selenide assertion errors  --  see PR #1676
-* add locator to some of Selenide error messages
+* #1589 add "<Click to see difference>" to most of the Selenide assertion errors  --  see PR #1676
+* add locator to some Selenide error messages
 * #797 replace `$$.iterator()` by `$$.asDynamicIterable()` and `$$.asFixedIterable()`  --  see PR #1688
 * #1646 fix SoftAssert listener to avoid failing the test if soft asserts are disabled  --  see PR #1680
 * #1661 Loss of error messages after soft assert fail  --  see PR #1679
@@ -236,7 +241,7 @@ See PR #1838.
 
 ## 5.24.0 (released 29.08.2021)
 * #1525 add method `$.execute(Command, Duration)` for running custom commands with a custom timeout  --  thanks to Evgenii Plugatar for PR #1531
-* #1532 fix searching shadow roots inside of a web element  --  see PR #1536
+* #1532 fix searching shadow roots inside a web element  --  see PR #1536
 * #1527 `$.execute(Command)` and `$.execute(Command, Duration)` methods no longer pass arguments to custom command  --  thanks to Evgenii Plugatar for PR #1535
 * #1467 Avoid spam in logs when webdriver is already closed  --  see PR #1540
 * #1534 `Or` and `And` conditions work correctly with non-existent element  --  thanks to Evgenii Plugatar for PR #1539
@@ -369,7 +374,7 @@ See PR #1838.
 * #1344 Fixed OS dependencies in Selenide tests  --  thanks to Daniel H. Peger for PR #1345
 * #1343 Simple code cleanup  --  thanks to Yuri Orlov
 * Upgraded to browserup-proxy:2.1.2 and guava:30.1-jre
-* Support for chrome 88, edge 89, opera 73
+* Support for Chrome 88, Edge 89, Opera 73
 
 ## 5.16.2 (released 25.11.2020)
 * #1332 return old click(int, int) command logic  --  thanks to Petro Ovcharenko for PR #1333
@@ -406,7 +411,7 @@ See PR #1838.
 * #1307 Allow Chrome to download multiple files in one request (set as default setting)  --  thanks to Alexei Vinogradov for PR #1308
 * #1322 allow downloading a file with slash in name  --  see PR #1323
 * fix version of Guava 30.0-jre (to avoid all those endless problems when Maven or Gradle transitively resolves too old Guava version)
-* Build Selenide with github actions (instead of Travis CI)  --  thanks to Boris Osipov for PR #1319
+* Build Selenide with GitHub actions (instead of Travis CI)  --  thanks to Boris Osipov for PR #1319
 
 ## 5.15.1 (released 03.10.2020)
 * Fix creating logs dir in parallel tests
@@ -476,7 +481,7 @@ See PR #1838.
   * Thanks to @SeleniumTestAB for PR #1095 
 * #1109 Enable "mobile emulation" mode in grid --  see PR #1163
 * #1139 Cannot set Firefox preference via system properties  --  see PR #1165
-* #1093 Enable "ACCEPT_INSECURE_CERTS" setting for chromium-based Edge versions  --  see PR #1167
+* #1093 Enable "ACCEPT_INSECURE_CERTS" setting for Chromium-based Edge versions  --  see PR #1167
 * #1149 Upgrade to WebDriverManager 4.0.0
 * upgrade to browserup-proxy-core:2.1.0
 * #1138 fix 'emptyMethod' folder name  --  thanks to Denis Gaievskyi for PR #1138
@@ -522,7 +527,7 @@ See https://github.com/selenide/selenide/milestone/94?closed=1
 ## 5.8.0 (released 28.02.2020)
 * #662 Added Condition with Predicate<WebElement> parameter as alternative to check element conditions  --  thanks to Dmytro Stekanov for #1059
 * #845 Added methods $.sibling() and $.preceding()  --  thanks to Dmytro Stekanov for #1064
-* #994 Added method to check content of ":before" and other pseudo elements  --  thanks to Denys Shynkarenko for PR #1045
+* #994 Added method to check content of ":before" and other pseudo-elements  --  thanks to Denys Shynkarenko for PR #1045
 * #1071 Fixing issue when SoftAssertionsExtension for JUnit5 sometimes marked passed tests as failed 
 * $.click() now clicks the CENTER of element (also for Configuration.clickViaJS=true)  
 
@@ -637,7 +642,7 @@ See https://github.com/selenide/selenide/milestone/94?closed=1
 
 ## 5.0.1 (released 07.11.2018)
 * Upgrade to selenium-java 3.141.5
-* #855 Lock chromedriver version for chrome 70
+* #855 Lock chromedriver version for Chrome 70
 * #747 fixed IndexOutOfBounds if CollectionElement does not exist  --  thanks to Denys Shynkarenko for PR #837 
 * #844 fixed ClassCastException in `$$.toArray()`  --  thanks to BorisOsipov for PR #847 
 * #840 generate random file name if failed to extract it from URL or http header
@@ -657,13 +662,13 @@ See https://github.com/selenide/selenide/milestone/94?closed=1
 * #817 fix "FirefoxDriverFactory overwrites Firefox profile provided by Configuration"  --  thanks @BorisOsipov for PR #821
 * bugfix: method Selenide.download() should not fail if there is no opened browser yet
 * #825 Upgrade to WebDriverManager 3.0.0 (again)
-* #825 Add a workaround for WebDriverManager issue when it calls github too often and gets 403 error
-* #832 Added support for screenshots outside of "user.dir" in CI server
+* #825 Add a workaround for WebDriverManager issue when it calls GitHub too often and gets 403 error
+* #832 Added support for screenshots outside "user.dir" in CI server
 
 Technical changes (probably should not affect end users):
 * Move junit5-api dependency to compile level
 * upgrade to htmlunitdriver 2.33.0
-* Move constants IE, FIREFOX etc from class `WebDriverRunner` to its parent class `Browsers`
+* Move constants IE, FIREFOX etc. from class `WebDriverRunner` to its parent class `Browsers`
 * Move classes `Selenide`, `WebDriverRunner`, `Configuration` to subfolder `statics`. 
 * Move default settings logic from `Configuration` to `SelenideConfig`. 
 
@@ -891,7 +896,7 @@ Technical changes (probably should not affect end users):
 * See #391 add method $.selectOptionContainingText()
 * See #378 Cut off WebElement screenshot size when it doesn't fit in full page screenshot
 * See #379 added support for transferring any capability via System Property (-Dcapabilities.xxx=yyy)
-* support for cloud services like BrowserStack, SauceLabs etc through supporting of  arbitrary capabilities.
+* support for cloud services like BrowserStack, SauceLabs etc. through supporting of  arbitrary capabilities.
 
 ## 4.1 (Released 01.12.2016)
 
@@ -977,7 +982,7 @@ Technical changes (probably should not affect end users):
 * See #321 set default page load strategy back to "normal"
 * fixed TestNG TextReport Listener, now only classes annotated with @Report will get reported - thanks to Alexei Vinogradov!
 * See #335 Add support for non-public page objects
-* See #329 Add support for JBrowser driver (but most of Selenide tests still fail with it :( )  - thanks to Anil Kumar Reddy Gaddam for pull request!
+* See #329 Add support for JBrowser driver (but most Selenide tests still fail with it :( )  - thanks to Anil Kumar Reddy Gaddam for pull request!
 * See #341 Use Selenide timeout when downloading files
 * See #320 Implementation of basic auth. for many browsers - thanks to @dimand58
 
@@ -989,7 +994,7 @@ Technical changes (probably should not affect end users):
 
 * See #274 added advanced checks for collection size: <, <=, >, >=, <>
 * See #308 set page load strategy to "none" by default
-* See #306 method $.toString() always includes latest value of "value" attribute
+* See #306 method $.toString() always includes the latest value of "value" attribute
 * Upgraded to selenium-java 2.53.0, [changelog](https://github.com/SeleniumHQ/selenium/blob/master/java/CHANGELOG)
 
 ## 3.4 (Released 03.03.2016)
@@ -1084,11 +1089,11 @@ Technical changes (probably should not affect end users):
 ## 2.25 (Released 30.11.2015)
 
 * Changed license from LGPL 3.0 to MIT (less restrictive)
-* See #250 add TextReport (ex. PrettyReportCreator) for TestNG
-* See #227 add method $$.first() and $$.last()
-* See #242 #226 add method Screenshots.getLastScreenshot()
-* See #226 rename method getScreenShotAsFile() to takeScreenShotAsFile() because it actually takes screenshot
-* See #246 add method Selenide.confirm() without text parameter. Sometimes you want to just confirm without verifying text.
+* See #250 add `TextReport` (ex. `PrettyReportCreator`) for TestNG
+* See #227 add method `$$.first()` and `$$.last()`
+* See #242 #226 add method `Screenshots.getLastScreenshot()`
+* See #226 rename method `getScreenShotAsFile()` to `takeScreenShotAsFile()` because it actually takes screenshot
+* See #246 add method `Selenide.confirm()` without text parameter. Sometimes you want to just confirm without verifying text.
 * See #232 methods `confirm()` and `dismiss()` return actual dialog text
 * See #244 add ability to skip re-spawning browser after it disappears/closes unexpectedly (added property `-Dselenide.reopenBrowserOnFail=false`)
 * upgrade to htmlunit 2.19
@@ -1231,10 +1236,10 @@ Now it's possible to write asserts with comment / error message:
 
 ## 2.10 (Released 18.04.2014)
 
-* Added method switchToWindow(String title)
-* Added methods $.hover() and $.dragAndDropTo(target)
-* Added methods $.parent(), $.closest("tag") and $.closest(".class")
-* Added functions getJavascriptErrors() and assertNoJavascriptErrors()
+* Added method `switchToWindow(String title)`
+* Added methods `$.hover()` and `$.dragAndDropTo(target)`
+* Added methods `$.parent()`, `$.closest("tag")` and `$.closest(".class")`
+* Added functions `getJavascriptErrors()` and `assertNoJavascriptErrors()`
 * Automatically attach javascript errors to error message when test fails
 
 * Improved mechanism of closing webdrivers (suggested by Alexandr Gavrilenko)
@@ -1254,7 +1259,7 @@ Now it's possible to write asserts with comment / error message:
 * Removed confusing messages about "reportsUrl" and "BUILD_URL"(use LOG.config log level)
 * See #104 Method $.download() throws FileNotFoundException (for 40x error) or RuntimeException (for 50x error)
 * See #105 Selenide should wait 4 seconds and re-try even in case of invalidSelectorException
-* See #107 Selenide should cleanup all unused browsers immediately
+* See #107 Selenide should clean up all unused browsers immediately
 * See #108 Consistently maximize browser windows independently of webdriver creation mode.
 
 ## 2.8.1 (Released 24.02.2014)
@@ -1268,7 +1273,7 @@ Now it's possible to write asserts with comment / error message:
 ### Non-backward compatible changes:
 
 * See #96 Method `WebDriverRunner.setWebDriver()` does not close previous webdriver. You are responsible for webdriver lifecycle if you are using setWebDriver().
-* See #63 Method `Condition.actualValue()` is optional (it's not needed in most cases). It makes creating custom conditions even more easier.
+* See #63 Method `Condition.actualValue()` is optional (it's not needed in most cases). It makes creating custom conditions even easier.
 
 ### Improvements:
 
@@ -1278,27 +1283,29 @@ Now it's possible to write asserts with comment / error message:
 
 ### New features:
 
-* See #93 User can get text and html of hidden element with new methods $.innerText() and $.innerHtml()
-* See #77 Added methods back() and forward()
-* See #71 Added method setSelected(boolean) for checking checkboxes
-* See #86 - added methods $.is(condition), $.has(condition)
+* See #93 User can get text and html of hidden element with new methods `$.innerText()` and `$.innerHtml()`
+* See #77 Added methods `back()` and `forward()`
+* See #71 Added method `setSelected(boolean)` for checking checkboxes
+* See #86 - added methods `$.is(condition)`, `$.has(condition)`
 * See #62 Added composite condition AND
 * See #94 SelenideElement implements WrapsElement
-* See #88 Method $(WebElement parent, By selector, int index) made public. Added method $(WebElement parent, By selector).
+* See #88 Method `$(WebElement parent, By selector, int index)` made public. Added method `$(WebElement parent, By selector)`.
 * See #82 Added setting "selenide.browser" as a synonym for "browser"
-* Method executeJavaScript() can accept multiple arguments
+* Method `executeJavaScript()` can accept multiple arguments
 
 ## 2.7 (Released 31.12.2013)
 
-* See #59 Automatically take screenshot on any failures. More exactly, when any of methods $.shouldXXX(condition) fails.
-* See #59 When running tests in Jenkinks, Selenide shows public URL of screenshots (using BUILD_URL variable provided by Jenkins). It's incredibly convenient because you can watch screenshots right in the Jenkins report.
+* See #59 Automatically take screenshot on any failures. More exactly, when any of methods `$.shouldXXX(condition)` fails.
+* See #59 When running tests in Jenkins, Selenide shows public URL of screenshots 
+  (using BUILD_URL variable provided by Jenkins).
+  It's incredibly convenient because you can watch screenshots right in the Jenkins report.
 * See #59 Added method getScreenshots() for retrieving all taken screenshots
 * Upgraded to Selenium 2.39.0
 
 ## 2.6.1 (Released 29.11.2013)
 
 * The most wanted feature is finally here!
-  Added method $.download() for downloading file by "href" attribute!
+  Added method `$.download()` for downloading file by "href" attribute!
 
 ## 2.6 (Released 26.11.2013)
 
@@ -1307,9 +1314,9 @@ Now it's possible to write asserts with comment / error message:
 ## 2.5 (Released 11.11.2013)
 
 * Created annotations for TestNG that automatically create browser per test/per class
-* Added method $.attr("name") as a synonym for $.getAttribute("name").
-* Added method $.name() as a synonym for $.attr("name")
-* Better support for PhantomJS: ignore alerts and confirms
+* Added method `$.attr("name")` as a synonym for `$.getAttribute("name")`.
+* Added method `$.name()` as a synonym for `$.attr("name")`
+* Better support for `PhantomJS`: ignore alerts and confirms
 * All webdrivers accept SSL certificates by default
 * Selenide clearly says if timeout is mistakenly given in seconds instead of milliseconds.
 * Condition constructor has been simplified (for easier creation of custom conditions)
@@ -1330,8 +1337,8 @@ Now it's possible to write asserts with comment / error message:
 
 ### Bugfixes:
 
-* Method "$$.findBy" waits until element matches the condition
-* Method $.append() first waits until element gets visible
+* Method `$$.findBy` waits until element matches the condition
+* Method `$.append()` first waits until element gets visible
 
 ### Technical issues:
 
@@ -1381,17 +1388,17 @@ Now it's possible to write asserts with comment / error message:
 * Added support for TestNG
 * Added support for Selenium FluentWait API
 * Added support for Selenium Actions API
-* Added method $.findAll() returning list of matching elements.
-* Added method $$.findBy
-* Added method $$.shouldHave(texts("A", "B", "C")) for asserting texts of all matching elements
-* Added method $.data(attr) as a synonym for $.getAttribute("data-" + attr)
-* Added conditions "name", "not", "type", "id": $("#username").shouldHave(name("firstName"))
-* text and exactText conditions are case insensitive (reason - in css designer can apply text transformations and tests will fail)
-* introduced textCaseSensitive and exactTextCaseSensitive conditions
+* Added method `$.findAll()` returning list of matching elements.
+* Added method `$$.findBy`
+* Added method `$$.shouldHave(texts("A", "B", "C"))` for asserting texts of all matching elements
+* Added method `$.data(attr)` as a synonym for `$.getAttribute("data-" + attr)`
+* Added conditions "name", "not", "type", "id": `$("#username").shouldHave(name("firstName"))`
+* text and exactText conditions are case-insensitive (reason - in css designer can apply text transformations and tests will fail)
+* introduced `textCaseSensitive` and `exactTextCaseSensitive` conditions
 * added open methods to Selenide class that return page object by class
-* Methods $.selectOption and $.selectOptionByValue trigger change event when possible.
+* Methods `$.selectOption` and `$.selectOptionByValue` trigger change event when possible.
 * Class ElementsCollection now contains list of SelenideElements (instead of WebElements).
-* Removed deprecated condition "haveText". Use $.shouldHave(text("john")) instead.
+* Removed deprecated condition "haveText". Use `$.shouldHave(text("john"))` instead.
 * Excluded org.webbit, netty, selenium-iphone-driver, selenium-safari-driver from Selenide dependencies to avoid loading too much useless stuff unless it's really needed.
 * Now Condition implements Predicate<WebElement>. So it can be used for filtering collections.
 
@@ -1467,11 +1474,11 @@ Now it's possible to write asserts with comment / error message:
 ## 1.7 (Released 22.10.2012)
 
 * Added file uploading functionality (file is taken from test classpath)
-* Added methods $().should(), $().shouldHave, $().shouldBe(), $().shouldNot, $().shouldNotBe, $().find()
-* Added method $().toString() for logging WebElement in human-readable format.
+* Added methods `$().should()`, `$().shouldHave`, `$().shouldBe()`, `$().shouldNot`, `$().shouldNotBe`, `$().find()`
+* Added method `$().toString()` for logging WebElement in human-readable format.
 * Added wait-methods with CSS Selector parameter
-* Added method DOM.confirm() for clicking on confirmation dialog (alert)
+* Added method `DOM.confirm()` for clicking on confirmation dialog (alert)
 * Added support for Opera browser
-* Added method Navigation.refresh() for reloading current page
-* Added condition "present", "notPresent", "exist".
-* Added selector "byText" and condition "matchesText" for matching elements by regex
+* Added method `Navigation.refresh()` for reloading current page
+* Added condition `present`, `notPresent`, `exist`.
+* Added selector `byText` and condition `matchesText` for matching elements by regex
