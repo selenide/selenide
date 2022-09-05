@@ -1,7 +1,8 @@
 # Changelog
 
-## 6.7.4 (released 04.09.2022)
+## 6.7.4 (released 05.09.2022)
 * #1942 fix exception in "Dead threads watchdog" #1942 --  see PR #1943
+* #1936 Add remote read timeout as configurable parameter  --  thanks to Rodion Goritskov for PR #1936
 * #1935 Bump Netty from 4.1.79.Final to 4.1.80.Final
 
 ## 6.7.3 (released 27.08.2022)

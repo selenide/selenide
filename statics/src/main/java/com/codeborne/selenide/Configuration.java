@@ -357,7 +357,7 @@ public class Configuration {
    * or by system property "-Dselenide.remoteReadTimeout=180000"
    * <br>
    * Default: 90000
+   * @since 6.7.4
    */
   public static long remoteReadTimeout = defaults.remoteReadTimeout();
-
 }

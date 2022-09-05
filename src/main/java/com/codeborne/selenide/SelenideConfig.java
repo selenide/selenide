@@ -364,6 +364,7 @@ public class SelenideConfig implements Config {
     return value;
   }
 
+  @Override
   public long remoteReadTimeout() {
     return remoteReadTimeout;
   }
