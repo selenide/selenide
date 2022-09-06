@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.selector.ByAttribute;
 import com.codeborne.selenide.selector.ByShadow;
+import com.codeborne.selenide.selector.ByDeepShadow;
 import com.codeborne.selenide.selector.ByTagAndText;
 import com.codeborne.selenide.selector.ByText;
 import com.codeborne.selenide.selector.ByTextCaseInsensitive;
@@ -145,6 +146,16 @@ public class Selectors {
   @Nonnull
   public static By shadowCss(String target, String shadowHost, String... innerShadowHosts) {
     return ByShadow.cssSelector(target, shadowHost, innerShadowHosts);
+  }
+
+  /**
+   * @see ByDeepShadow#cssSelector(java.lang.String)
+   * @since v6.8.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static By shadowDeepCss(String target) {
+    return ByDeepShadow.cssSelector(target);
   }
 
   /**

@@ -49,7 +49,7 @@
       const shadow = document.getElementById('shadow-host').attachShadow({mode: "open"});
 
       shadow.appendChild(newElement('p', {}, 'Inside Shadow-DOM'));
-      shadow.appendChild(newElement('div', {'id': 'inner-shadow-host'}));
+      shadow.appendChild(newElement('div', {'id': 'inner-shadow-host', 'class': 'inner-shadow-host'}));
       shadow.appendChild(newElement('div', {class: 'test-class'}, 'text-test-class-1'));
       shadow.appendChild(newElement('div', {class: 'test-class'}, 'text-test-class-2'));
       shadow.appendChild(createInput("inputInShadow"));
@@ -76,7 +76,7 @@
 <h1>Page with Shadow DOM</h1>
 
 <h2>Nested Shadow DOM</h2>
-<div id="shadow-host"></div>
+<div id="shadow-host" class="shadow-host"></div>
 
 <h2>Multiple nested Shadow hosts</h2>
 <div id="shadow-container"></div>
