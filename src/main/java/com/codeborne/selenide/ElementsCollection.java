@@ -333,7 +333,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * Outputs string presentation of the element's collection
    *
    * @param elements elements of string
-   * @return e.g. "[<h1>foo</h1>, <h2>bar</h2>]"
+   * @return e.g. {@code "[<h1>foo</h1>, <h2>bar</h2>]"}
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
@@ -563,7 +563,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * but can sometimes can cause {@link org.openqa.selenium.StaleElementReferenceException} etc.
    * if elements are re-rendered during the iteration.
    *
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * @since 6.2.0
    */
   @CheckReturnValue
@@ -577,7 +577,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    *
    * It's slower than {@link #asFixedIterable()}, but helps to avoid {@link org.openqa.selenium.StaleElementReferenceException} etc.
    *
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * @since 6.2.0
    */
   @CheckReturnValue

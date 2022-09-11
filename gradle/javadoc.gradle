@@ -7,5 +7,4 @@ task javadocForSite(type: Javadoc) {
   classpath += project(":modules:grid").sourceSets.main.compileClasspath
   classpath += project(":modules:junit4").sourceSets.main.compileClasspath
   classpath += project(":modules:testng").sourceSets.main.compileClasspath
-  failOnError = false
 }

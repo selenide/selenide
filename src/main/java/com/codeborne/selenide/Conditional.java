@@ -15,7 +15,7 @@ import java.time.Duration;
  *
  * <p>
  * To use it just implement for appropriate type,
- * e.g. `YourType implements Conditional<YourType>`
+ * e.g. {@code YourType implements Conditional<YourType>}
  * </p>
  *
  * {@link com.codeborne.selenide.impl.Waiter}

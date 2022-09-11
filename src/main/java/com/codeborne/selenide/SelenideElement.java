@@ -948,7 +948,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Get text of selected option in select field
    * @return null if there is no selected options (or the select doesn't have options at all)
-   * @throws IllegalArgumentException if the element type is not <select/>
+   * @throws IllegalArgumentException if the element type is not {@code <select/>}
    * @see GetSelectedOptionText
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
