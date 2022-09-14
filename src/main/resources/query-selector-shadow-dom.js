@@ -1,6 +1,36 @@
 (function (selector, element) {
-/// THIRD PARTY LIB CODE STARTS
-/// Sources below transpiled from https://github.com/Georgegriff/query-selector-shadow-dom via npm install && npm run build
+//   Sources below transpiled from https://github.com/Georgegriff/query-selector-shadow-dom
+//   with custom rollup.config.js content:
+//   import babel from 'rollup-plugin-babel';
+//   import babelrc from 'babelrc-rollup';
+//
+//   const babelConfig = {
+//     'presets': [
+//       ['@babel/preset-env', {
+//         'targets': {
+//           'browsers': ['last 1 chrome version']
+//         },
+//         'loose': true
+//       }]
+//     ]
+//   };
+//
+//   export default {
+//     input: 'src/querySelectorDeep.js',
+//     plugins: [
+//       babel(babelrc({
+//         addExternalHelpersPlugin: false,
+//         config: babelConfig,
+//         exclude: 'node_modules/**'
+//       }))
+//     ],
+//     output: {
+//       format: 'iife',
+//       name: 'querySelectorShadowDom',
+//       file: 'dist/querySelectorShadowDom.js'
+//     }
+//   };
+// THIRD PARTY LIB CODE STARTS
   const querySelectorShadowDom = (function (exports) {
     'use strict';
 
@@ -330,8 +360,6 @@
     return exports;
 
   }({}));
-
-
 /// THIRD PARTY LIB CODE ENDS
 return querySelectorShadowDom.querySelectorAllDeep(selector, element);
 })(...arguments);
