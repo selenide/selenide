@@ -3,6 +3,7 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.impl.Alias;
 import com.codeborne.selenide.impl.ElementDescriber;
 import org.openqa.selenium.WebElement;
 
@@ -17,11 +18,12 @@ import static java.lang.System.lineSeparator;
 public class ElementShouldNot extends UIAssertionError {
   private static final ElementDescriber describe = inject(ElementDescriber.class);
 
-  public ElementShouldNot(Driver driver, String searchCriteria, String prefix,
+  public ElementShouldNot(Driver driver, Alias alias, String searchCriteria, String prefix,
                           Condition expectedCondition, @Nullable CheckResult lastCheckResult,
                           WebElement element, @Nullable Throwable lastError) {
     super(
-      String.format("Element should not %s%s {%s}%sElement: '%s'%s",
+      String.format("Element%s should not %s%s {%s}%sElement: '%s'%s",
+        alias.appendable(),
         prefix, expectedCondition, searchCriteria, lineSeparator(),
         describe.fully(driver, element),
         actualValue(expectedCondition, driver, element, lastCheckResult)

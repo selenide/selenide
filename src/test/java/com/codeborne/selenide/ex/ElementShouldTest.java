@@ -4,6 +4,7 @@ import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.Mocks;
+import com.codeborne.selenide.impl.Alias;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -23,7 +24,7 @@ final class ElementShouldTest {
     String searchCriteria = By.name("selenide").toString();
     Exception cause = new NoSuchElementException("By.name: q");
     CheckResult checkResult = new CheckResult(REJECT, "visible:false");
-    ElementShould elementShould = new ElementShould(driver, searchCriteria, "be ", visible, checkResult, webElement, cause);
+    ElementShould elementShould = new ElementShould(driver, Alias.NONE, searchCriteria, "be ", visible, checkResult, webElement, cause);
 
     assertThat(elementShould)
       .hasMessage("Element should be visible {By.name: selenide}" + lineSeparator() +

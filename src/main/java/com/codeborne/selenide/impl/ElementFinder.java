@@ -44,16 +44,27 @@ public class ElementFinder extends WebElementSource {
 
   @CheckReturnValue
   @Nonnull
-  @SuppressWarnings("unchecked")
   public static <T extends SelenideElement> T wrap(Driver driver,
                                                    Class<T> clazz,
                                                    @Nullable WebElementSource parent,
                                                    By criteria,
                                                    int index) {
+    return wrap(driver, clazz, parent, criteria, index, null);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  @SuppressWarnings("unchecked")
+  public static <T extends SelenideElement> T wrap(Driver driver,
+                                                   Class<T> clazz,
+                                                   @Nullable WebElementSource parent,
+                                                   By criteria,
+                                                   int index,
+                                                   @Nullable String alias) {
     return (T) Proxy.newProxyInstance(
       currentThread().getContextClassLoader(),
       new Class<?>[]{clazz},
-      new SelenideElementProxy(new ElementFinder(driver, parent, criteria, index)));
+      new SelenideElementProxy(new ElementFinder(driver, parent, criteria, index, alias)));
   }
 
   @CheckReturnValue
@@ -73,10 +84,15 @@ public class ElementFinder extends WebElementSource {
   private final int index;
 
   ElementFinder(Driver driver, @Nullable WebElementSource parent, By criteria, int index) {
+    this(driver, parent, criteria, index, null);
+  }
+
+  ElementFinder(Driver driver, @Nullable WebElementSource parent, By criteria, int index, @Nullable String alias) {
     this.driver = driver;
     this.parent = parent;
     this.criteria = criteria;
     this.index = index;
+    if (alias != null) setAlias(alias);
   }
 
   @Override

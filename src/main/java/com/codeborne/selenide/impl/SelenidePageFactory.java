@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.As;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
@@ -180,11 +181,19 @@ public class SelenidePageFactory implements PageObjectFactory {
     return decorate(loader, driver, searchContext, field, selector, classGenericTypes);
   }
 
+  @Nullable
+  @CheckReturnValue
+  private String alias(Field field) {
+    As alias = field.getAnnotation(As.class);
+    return alias == null ? null : alias.value();
+  }
+
   @CheckReturnValue
   @Nullable
   public Object decorate(ClassLoader loader,
                          Driver driver, @Nullable WebElementSource searchContext,
                          Field field, By selector, Type[] genericTypes) {
+    String alias = alias(field);
     if (ElementsContainer.class.equals(field.getDeclaringClass()) && "self".equals(field.getName())) {
       if (searchContext != null) {
         return ElementFinder.wrap(SelenideElement.class, searchContext);
@@ -195,11 +204,11 @@ public class SelenidePageFactory implements PageObjectFactory {
       }
     }
     if (WebElement.class.isAssignableFrom(field.getType())) {
-      return decorateWebElement(driver, searchContext, selector, field);
+      return decorateWebElement(driver, searchContext, selector, field, alias);
     }
     if (ElementsCollection.class.isAssignableFrom(field.getType()) ||
       isDecoratableList(field, genericTypes, WebElement.class)) {
-      return createElementsCollection(driver, searchContext, selector, field);
+      return createElementsCollection(driver, searchContext, selector, field, alias);
     }
     else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(driver, searchContext, field, selector);
@@ -213,16 +222,19 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   @Nonnull
   protected SelenideElement decorateWebElement(Driver driver, @Nullable WebElementSource searchContext, By selector,
-                                               Field field) {
+                                               Field field, @Nullable String alias) {
     return shouldCache(field) ?
-      LazyWebElementSnapshot.wrap(new ElementFinder(driver, searchContext, selector, 0)) :
-      ElementFinder.wrap(driver, searchContext, selector, 0);
+      LazyWebElementSnapshot.wrap(new ElementFinder(driver, searchContext, selector, 0, alias)) :
+      ElementFinder.wrap(driver, SelenideElement.class, searchContext, selector, 0, alias);
   }
 
   @Nonnull
   protected ElementsCollection createElementsCollection(Driver driver, @Nullable WebElementSource searchContext,
-                                                        By selector, Field field) {
+                                                        By selector, Field field, @Nullable String alias) {
     CollectionSource collection = new BySelectorCollection(driver, searchContext, selector);
+    if (alias != null) {
+      collection.setAlias(alias);
+    }
     if (shouldCache(field)) {
       collection = new LazyCollectionSnapshot(collection);
     }
