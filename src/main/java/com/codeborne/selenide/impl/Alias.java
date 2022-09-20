@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
@@ -22,6 +23,12 @@ public class Alias {
   @CheckReturnValue
   public String get(Supplier<String> defaultValue) {
     return text + " {" + defaultValue.get() + '}';
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  public String appendable() {
+    return getText() == null ? "" : " \"" + getText() + "\"";
   }
 
   /**

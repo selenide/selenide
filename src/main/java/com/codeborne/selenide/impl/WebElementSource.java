@@ -129,10 +129,10 @@ public abstract class WebElementSource {
       throw createElementNotFoundError(check, lastError);
     }
     else if (invert) {
-      throw new ElementShouldNot(driver(), description(), prefix, condition, checkResult, element, lastError);
+      throw new ElementShouldNot(driver(), getAlias(), getSearchCriteria(), prefix, condition, checkResult, element, lastError);
     }
     else {
-      throw new ElementShould(driver(), description(), prefix, condition, checkResult, element, lastError);
+      throw new ElementShould(driver(), getAlias(), getSearchCriteria(), prefix, condition, checkResult, element, lastError);
     }
   }
 
