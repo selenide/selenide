@@ -14,6 +14,7 @@ import java.io.IOException;
 import static com.codeborne.selenide.Selenide.webdriver;
 import static com.codeborne.selenide.WebDriverConditions.title;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static integration.ScreenshotTestHelper.verifyScreenshotSize;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
@@ -24,6 +25,7 @@ public class FullScreenshotsGridTest extends AbstractGridTest {
   @BeforeAll
   static void beforeAll() {
     assumeThat(isEdge()).as("Edge throws 'unknown command: session/*/goog/cdp/execute'").isFalse();
+    assumeThat(isFirefox()).as("Broken after upgrading to Firefox 105").isFalse();
   }
 
   @BeforeEach
