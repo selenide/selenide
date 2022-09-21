@@ -154,6 +154,20 @@ public class SelenideDriver {
     return pageFactory.page(driver(), pageObjectClass);
   }
 
+  /**
+   * @since 6.8.0
+   * @param reified Don't pass any values here. It's Java Magic :)
+   */
+  @CheckReturnValue
+  @Nonnull
+  @SuppressWarnings("unchecked")
+  public <PageObjectClass> PageObjectClass page(PageObjectClass... reified) {
+    if (reified.length > 0) {
+      throw new IllegalArgumentException("Please don't pass any values here. Java will detect page object class automagically.");
+    }
+    return pageFactory.page(driver(), (Class<PageObjectClass>) reified.getClass().getComponentType());
+  }
+
   @CheckReturnValue
   @Nonnull
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {

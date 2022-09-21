@@ -721,6 +721,17 @@ public class Selenide {
   }
 
   /**
+   * Create a Page Object instance
+   * @since 6.8.0
+   * @param reified Don't pass any values here. It's Java Magic :)
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static <PageObjectClass> PageObjectClass page(PageObjectClass... reified) {
+    return getSelenideDriver().page(reified);
+  }
+
+  /**
    * Initialize a given Page Object instance
    */
   @CheckReturnValue
