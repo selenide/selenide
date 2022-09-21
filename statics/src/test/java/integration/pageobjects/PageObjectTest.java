@@ -28,7 +28,7 @@ final class PageObjectTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
-    pageWithSelects = page(SelectsPage.class);
+    pageWithSelects = page();
   }
 
   @Test

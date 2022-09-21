@@ -13,13 +13,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
 
 import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.lang.Thread.currentThread;
 
 @ParametersAreNonnullByDefault
 public class JSElementFinder extends WebElementSource {
-  private final ElementDescriber describe = inject(ElementDescriber.class);
-
   @CheckReturnValue
   @Nonnull
   @SuppressWarnings("unchecked")
