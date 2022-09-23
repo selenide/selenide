@@ -7,7 +7,7 @@ ext {
   mockitoVersion = '4.8.0'
   slf4jVersion = '2.0.2'
   browserupProxyVersion = '2.2.3'
-  littleProxyVersion = '2.0.11'
+  littleProxyVersion = '2.0.12'
   commonsFileuploadVersion = '1.4'
   jabelVersion = '0.4.2'
   byteBuddyVersion = '1.12.17'
@@ -25,7 +25,10 @@ subprojects {
     compileOnly("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
     testCompileOnly("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
 
-    api("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
+    api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
+      exclude group: 'io.opentelemetry'
+      exclude group: 'org.slf4j'
+    }
     implementation("com.google.guava:guava:31.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("commons-io:commons-io:2.11.0")
@@ -37,7 +40,7 @@ subprojects {
     testImplementation("commons-fileupload:commons-fileupload:${commonsFileuploadVersion}")
     testImplementation("org.mockito:mockito-core:$mockitoVersion")
     testImplementation("org.assertj:assertj-core:$assertjVersion")
-    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    api("org.slf4j:slf4j-api:$slf4jVersion")
     testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
   }
 }
