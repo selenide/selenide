@@ -21,6 +21,7 @@ dependencies {
     exclude group: 'com.github.docker-java'
     exclude group: 'org.rauschig'
     exclude group: 'commons-lang'
+    exclude group: 'org.slf4j'
   }
   implementation('org.apache.commons:commons-compress:1.21') {because 'used by webdrivermanager'}
 
