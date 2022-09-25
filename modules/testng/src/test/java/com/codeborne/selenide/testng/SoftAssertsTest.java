@@ -11,7 +11,6 @@ import org.testng.annotations.Test;
 import org.testng.internal.ConstructorOrMethod;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
@@ -20,6 +19,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 import static org.testng.ITestResult.FAILURE;
 
 public final class SoftAssertsTest {
@@ -32,25 +35,23 @@ public final class SoftAssertsTest {
 
   @Test
   void findsListenersAnnotationFromParentClass() {
-    assertThat(listener.getListenersAnnotation(BaseSoftTest.class)).isNotNull();
-    assertThat(listener.getListenersAnnotation(SoftTest.class)).isNotNull();
-    assertThat(listener.getListenersAnnotation(BaseHardTest.class)).isNotNull();
-    assertThat(listener.getListenersAnnotation(HardTest.class)).isNotNull();
-    assertThat(listener.getListenersAnnotation(AnotherTest.class)).isNull();
+    assertNotNull(listener.getListenersAnnotation(BaseSoftTest.class));
+    assertNotNull(listener.getListenersAnnotation(SoftTest.class));
+    assertNotNull(listener.getListenersAnnotation(BaseHardTest.class));
+    assertNotNull(listener.getListenersAnnotation(HardTest.class));
+    assertNull(listener.getListenersAnnotation(AnotherTest.class));
   }
 
   @Test
   void interceptsTestMethod_ifTestClassHasDeclaredSoftAssertListener() {
-    assertThat(listener.isTestClassApplicableForSoftAsserts(SoftTest.class)).isTrue();
-    assertThat(listener.isTestClassApplicableForSoftAsserts(HardTest.class)).isFalse();
+    assertTrue(listener.isTestClassApplicableForSoftAsserts(SoftTest.class));
+    assertFalse(listener.isTestClassApplicableForSoftAsserts(HardTest.class));
   }
 
   @Test
   void shouldNotInterceptTestMethod_withDeclaredExpectedExceptions() throws NoSuchMethodException {
-    assertThat(listener.isTestMethodApplicableForSoftAsserts(SoftTest.class.getMethod("someTestMethod")))
-      .isTrue();
-    assertThat(listener.isTestMethodApplicableForSoftAsserts(SoftTest.class.getMethod("testWithExpectedException")))
-      .isFalse();
+    assertTrue(listener.isTestMethodApplicableForSoftAsserts(SoftTest.class.getMethod("someTestMethod")));
+    assertFalse(listener.isTestMethodApplicableForSoftAsserts(SoftTest.class.getMethod("testWithExpectedException")));
   }
 
   @Test
@@ -59,7 +60,7 @@ public final class SoftAssertsTest {
 
     listener.addSelenideErrorListener(result);
 
-    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT)).isTrue();
+    assertTrue(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT));
   }
 
   private ITestResult mockTestResult(Class<?> testClass, String methodName) throws Exception {
@@ -83,7 +84,7 @@ public final class SoftAssertsTest {
 
     listener.addSelenideErrorListener(result);
 
-    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT)).isFalse();
+    assertFalse(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT));
   }
 
   @Test
@@ -100,7 +101,7 @@ public final class SoftAssertsTest {
     verify(result).setStatus(FAILURE);
     verify(result).setThrowable(softAssertionError);
     verify(errorsCollector).cleanAndGetAssertionError("com.codeborne.selenide.testng.SoftAssertsTest$SoftTest.someTestMethod", null);
-    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT)).isFalse();
+    assertFalse(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT));
   }
 
   @Test

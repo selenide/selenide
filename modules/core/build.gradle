@@ -34,6 +34,9 @@ dependencies {
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
+  testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')

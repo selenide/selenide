@@ -3,32 +3,33 @@ package com.codeborne.selenide.testng;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public final class TextReportTest {
   private final TextReport listener = new TextReport();
 
   @Test
   void classesMarkedWith_TextReport_shouldGeneratedReport() {
-    assertThat(listener.isClassAnnotatedWithReport(BaseTestWithTextReport.class)).isTrue();
-    assertThat(listener.isClassAnnotatedWithReport(BaseTestWithGlobalTextReport.class)).isTrue();
-    assertThat(listener.isClassAnnotatedWithReport(TestWithCustomTextReport.class)).isTrue();
+    assertTrue(listener.isClassAnnotatedWithReport(BaseTestWithTextReport.class));
+    assertTrue(listener.isClassAnnotatedWithReport(BaseTestWithGlobalTextReport.class));
+    assertTrue(listener.isClassAnnotatedWithReport(TestWithCustomTextReport.class));
   }
 
   @Test
   void classesNotMarkedWith_TextReport_shouldNotGeneratedReport() {
-    assertThat(listener.isClassAnnotatedWithReport(AnotherTestWithoutTextReport.class)).isFalse();
+    assertFalse(listener.isClassAnnotatedWithReport(AnotherTestWithoutTextReport.class));
   }
 
   @Test
   void allChildrenClassesInherit_TextReport() {
-    assertThat(listener.isClassAnnotatedWithReport(SomeTestWithTextReport.class)).isTrue();
-    assertThat(listener.isClassAnnotatedWithReport(TestWithOwnListeners.class)).isTrue();
+    assertTrue(listener.isClassAnnotatedWithReport(SomeTestWithTextReport.class));
+    assertTrue(listener.isClassAnnotatedWithReport(TestWithOwnListeners.class));
   }
 
   @Test
   void allChildrenClassesInherit_GlobalTextReport() {
-    assertThat(listener.isClassAnnotatedWithReport(SomeTestWithGlobalTextReport.class)).isTrue();
+    assertTrue(listener.isClassAnnotatedWithReport(SomeTestWithGlobalTextReport.class));
   }
 
   @Listeners(TextReport.class)

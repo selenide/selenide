@@ -24,6 +24,10 @@ subprojects {
     annotationProcessor("net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}")
     compileOnly("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
     testCompileOnly("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
+    compileOnly("net.bytebuddy:byte-buddy:${byteBuddyVersion}")
+    compileOnly("net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}")
+    testCompileOnly("net.bytebuddy:byte-buddy:${byteBuddyVersion}")
+    testCompileOnly("net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}")
 
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
       exclude group: 'io.opentelemetry'
@@ -38,8 +42,6 @@ subprojects {
     testImplementation("io.netty:netty-codec:$nettyVersion")
     testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
     testImplementation("commons-fileupload:commons-fileupload:${commonsFileuploadVersion}")
-    testImplementation("org.mockito:mockito-core:$mockitoVersion")
-    testImplementation("org.assertj:assertj-core:$assertjVersion")
     api("org.slf4j:slf4j-api:$slf4jVersion")
     testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
   }

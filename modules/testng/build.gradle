@@ -15,6 +15,7 @@ dependencies {
     exclude(group: 'org.apache.ant')
     exclude(group: 'com.google.inject')
   }
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
 }
 
 tasks.withType(Test) {
