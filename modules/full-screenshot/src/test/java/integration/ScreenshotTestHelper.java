@@ -11,8 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.fail;
-
 public class ScreenshotTestHelper {
   private static final Logger log = LoggerFactory.getLogger(ScreenshotTestHelper.class);
 
@@ -30,7 +28,7 @@ public class ScreenshotTestHelper {
       File archivedFile = new File(Configuration.reportsFolder, UUID.randomUUID() + ".png");
       FileUtils.copyFile(screenshot, archivedFile);
       log.info("Screenshot does not match {}x{} size: {}", width, height, archivedFile.getAbsolutePath());
-      fail(String.format("Screenshot %s is expected to have size %sx%s, but actual size: %sx%s",
+      throw new AssertionError(String.format("Screenshot %s is expected to have size %sx%s, but actual size: %sx%s",
         archivedFile.getAbsolutePath(), width, height, img.getWidth(), img.getHeight()));
     }
   }
