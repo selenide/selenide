@@ -1,7 +1,18 @@
 # Changelog
 
+## 6.8.0 (released 25.09.2022)
+* #1946 deep shadow selectors support  --  thanks to Boris Osipov for PR #1947
+* #1961 Add method page() without Class argument  --  thanks to Tagir Valeev for the [hint](https://twitter.com/tagir_valeev/status/1262763570904719361)
+* #1903 add annotation @As for page object fields  --  see PR #1956
+* #1963 Removed "opentelemetry" dependency - we didn't use it since PR #1763
+* Bump BrowserUpProxy from 2.2.2 to 2.2.3
+* Bump LittleProxy from 2.0.11 to 2.0.12
+* Bump Netty from 4.1.80.Final to 4.1.82.Final
+* Bump slf4j from 2.0.0 to 2.0.2
+* Bump JUnit from 5.9.0 to 5.9.1  --  see https://junit.org/junit5/docs/5.9.1/release-notes/
+
 ## 6.7.4 (released 05.09.2022)
-* #1942 fix exception in "Dead threads watchdog" #1942 --  see PR #1943
+* #1942 fix exception in "Dead threads' watchdog" #1942 --  see PR #1943
 * #1936 Add remote read timeout as configurable parameter  --  thanks to Rodion Goritskov for PR #1936
 * #1935 Bump Netty from 4.1.79.Final to 4.1.80.Final
 
