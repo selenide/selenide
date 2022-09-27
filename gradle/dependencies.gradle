@@ -30,7 +30,6 @@ subprojects {
     testCompileOnly("net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}")
 
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
-      exclude group: 'io.opentelemetry'
       exclude group: 'org.slf4j'
     }
     implementation("com.google.guava:guava:31.1-jre")

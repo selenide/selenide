@@ -30,7 +30,7 @@ public class FullScreenshotsGridTest extends AbstractGridTest {
 
   @BeforeEach
   void setUp() {
-    Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";
+    Configuration.remote = gridUrl.toString();
   }
 
   @AfterEach

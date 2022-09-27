@@ -17,7 +17,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -33,7 +32,7 @@ final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
 
   @Test
   void customWebdriverProviderCanUseRemoteWebdriver() {
-    MyFactory.port = hubPort;
+    MyFactory.url = gridUrl;
     Configuration.browser = MyFactory.class.getName();
     openFile("page_with_selects_without_jquery.html");
     $$("#radioButtons input").shouldHave(size(4));
@@ -41,7 +40,7 @@ final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
 
   @ParametersAreNonnullByDefault
   static class MyFactory extends ChromeDriverFactory {
-    static int port;
+    static URL url;
 
     @Override
     @CheckReturnValue
@@ -51,20 +50,9 @@ final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
       options.setHeadless(config.headless());
       addSslErrorIgnoreCapabilities(options);
 
-      RemoteWebDriver webDriver = new RemoteWebDriver(toURL("http://localhost:" + port + "/wd/hub"), options);
+      RemoteWebDriver webDriver = new RemoteWebDriver(url, options);
       webDriver.setFileDetector(new LocalFileDetector());
       return webDriver;
-    }
-
-    @CheckReturnValue
-    @Nonnull
-    private static URL toURL(String url) {
-      try {
-        return new URL(url);
-      }
-      catch (MalformedURLException e) {
-        throw new RuntimeException(e);
-      }
     }
   }
 }

@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.8.1 (released 27.09.2022)
+* #1965 restore "opentelemetry" dependency
+
 ## 6.8.0 (released 25.09.2022)
 * #1946 deep shadow selectors support  --  thanks to Boris Osipov for PR #1947
 * #1961 Add method page() without Class argument  --  thanks to Tagir Valeev for the [hint](https://twitter.com/tagir_valeev/status/1262763570904719361)

@@ -496,7 +496,7 @@ public abstract class Condition {
   /**
    * Asserts that element has the given tag name.
    * <p>Sample: {@code $(".btn-primary").shouldHave(tagName("button"));}</p>
-   * @since 6.8.0
+   * @since 6.7.3
    */
   @CheckReturnValue
   @Nonnull

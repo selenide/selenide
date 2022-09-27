@@ -136,7 +136,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsGetsTimeoutException() throws IOException {
+  void downloadsGetsTimeoutException() {
     assertThatThrownBy(() -> {
       $(byText("Download me slowly (2000 ms)")).download(1000);
     })
