@@ -15,13 +15,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 final class SeleniumGridTest extends AbstractGridTest {
   @BeforeEach
   void setUp() {
-    Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";
+    Configuration.remote = gridUrl.toString();
     System.setProperty("chromeoptions.mobileEmulation", "deviceName=Nexus 5");
   }
 
   @AfterEach
   void tearDown() {
-    Configuration.remote = null;
     System.clearProperty("chromeoptions.mobileEmulation");
   }
 

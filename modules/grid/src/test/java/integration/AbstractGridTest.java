@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.UncheckedIOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
@@ -17,10 +20,10 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 abstract class AbstractGridTest extends IntegrationTest {
   private final Logger log = LoggerFactory.getLogger(getClass());
 
-  int hubPort;
+  protected URL gridUrl;
 
   @BeforeEach
-  final void setUpGrid() {
+  final void setUpGrid() throws MalformedURLException {
     if (WebDriverRunner.isChrome()) {
       WebDriverManager.chromedriver().setup();
     }
@@ -36,7 +39,7 @@ abstract class AbstractGridTest extends IntegrationTest {
       int port = findFreePort();
       try {
         Main.main(new String[]{"standalone", "--port", String.valueOf(port)});
-        hubPort = port;
+        gridUrl = new URL("http://localhost:" + port + "/wd/hub");
         break;
       }
       catch (UncheckedIOException portAlreadyUsed) {
@@ -50,5 +53,7 @@ abstract class AbstractGridTest extends IntegrationTest {
   @AfterEach
   final void tearDownGrid() {
     closeWebDriver();
+    gridUrl = null;
+    Configuration.remote = null;
   }
 }
