@@ -32,6 +32,7 @@ import static java.util.Arrays.asList;
 class SelenideElementProxy implements InvocationHandler {
   private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
     "as",
+    "getAlias",
     "toWebElement",
     "toString",
     "getSearchCriteria",
