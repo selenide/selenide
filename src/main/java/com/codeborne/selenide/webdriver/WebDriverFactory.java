@@ -120,6 +120,7 @@ public class WebDriverFactory {
       if (System.getProperty("webdriver.http.factory") == null) {
         System.setProperty("webdriver.http.factory", "selenide-netty-client-factory");
       }
+      System.setProperty("webdriver.http.factory", "jdk-http-client");
       return webdriverFactory.create(config, browser, proxy, browserDownloadsFolder);
     }
   }
