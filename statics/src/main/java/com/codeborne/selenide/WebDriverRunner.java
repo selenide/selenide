@@ -263,14 +263,6 @@ public class WebDriverRunner {
   }
 
   /**
-   * Is Selenide configured to use Opera browser
-   */
-  @CheckReturnValue
-  public static boolean isOpera() {
-    return browser().isOpera();
-  }
-
-  /**
    * Delete all the browser cookies
    */
   public static void clearBrowserCache() {

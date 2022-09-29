@@ -29,7 +29,6 @@ import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
-import static com.codeborne.selenide.Browsers.OPERA;
 import static com.codeborne.selenide.Browsers.SAFARI;
 
 @ParametersAreNonnullByDefault
@@ -49,7 +48,6 @@ public class WebDriverFactory {
     result.put(EDGE, EdgeDriverFactory.class);
     result.put(INTERNET_EXPLORER, InternetExplorerDriverFactory.class);
     result.put(IE, InternetExplorerDriverFactory.class);
-    result.put(OPERA, OperaDriverFactory.class);
     result.put(SAFARI, SafariDriverFactory.class);
     return result;
   }
