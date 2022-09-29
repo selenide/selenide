@@ -25,7 +25,7 @@ final class SelectOptionByTextOrIndexCommandTest {
   private final WebElementSource selectField = mock(WebElementSource.class);
   private final SelectOptionByTextOrIndex command = new SelectOptionByTextOrIndex();
   private final WebElement select = mockWebElement("select", "This is element text");
-  private final WebElement option = mock(WebElement.class);
+  private final WebElement option = mockWebElement("option", "");
 
   @BeforeEach
   void setup() {

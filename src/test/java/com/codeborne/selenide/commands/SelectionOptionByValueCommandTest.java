@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.Collections;
 
+import static com.codeborne.selenide.Mocks.mockWebElement;
 import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,31 +23,29 @@ final class SelectionOptionByValueCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource selectField = mock(WebElementSource.class);
   private final SelectOptionByValue selectOptionByValueCommand = new SelectOptionByValue();
-  private final WebElement element = mock(WebElement.class);
-  private final WebElement foundElement = mock(WebElement.class);
+  private final WebElement select = mockWebElement("select", "walue");
+  private final WebElement option = mockWebElement("option", "");
 
   @BeforeEach
   void setup() {
     when(selectField.driver()).thenReturn(new DriverStub());
-    when(selectField.getWebElement()).thenReturn(element);
+    when(selectField.getWebElement()).thenReturn(select);
     when(selectField.getAlias()).thenReturn(NONE);
     when(selectField.getSearchCriteria()).thenReturn("By.tagName{select}");
-    when(element.getText()).thenReturn("walue");
-    when(element.getTagName()).thenReturn("select");
-    when(foundElement.isSelected()).thenReturn(true);
+    when(option.isSelected()).thenReturn(true);
   }
 
   @Test
   void selectByValueWithStringFromArgs() {
-    when(element.findElements(By.xpath(".//option[@value = \"walue\"]")))
-      .thenReturn(Collections.singletonList(foundElement));
+    when(select.findElements(By.xpath(".//option[@value = \"walue\"]")))
+      .thenReturn(Collections.singletonList(option));
     selectOptionByValueCommand.execute(proxy, selectField, new Object[]{"walue"});
   }
 
   @Test
   void selectByValueWithStringArrayFromArgs() {
-    when(element.findElements(By.xpath(".//option[@value = \"walue\"]")))
-      .thenReturn(Collections.singletonList(foundElement));
+    when(select.findElements(By.xpath(".//option[@value = \"walue\"]")))
+      .thenReturn(Collections.singletonList(option));
     selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{"walue"}});
   }
 
@@ -58,7 +57,7 @@ final class SelectionOptionByValueCommandTest {
 
   @Test
   void selectByValueWhenElementIsNotFound() {
-    when(element.findElements(By.xpath(".//option[@value = \"walue\"]")))
+    when(select.findElements(By.xpath(".//option[@value = \"walue\"]")))
       .thenReturn(emptyList());
 
     assertThatThrownBy(() ->

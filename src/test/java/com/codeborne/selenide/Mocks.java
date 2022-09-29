@@ -43,6 +43,7 @@ public class Mocks {
   public static SelenideElement mockSelect(WebElement... options) {
     SelenideElement select = mockElement("select", "");
     when(select.isSelected()).thenReturn(true);
+    when(select.isEnabled()).thenReturn(true);
     when(select.findElements(By.tagName("option"))).thenReturn(asList(options));
     return select;
   }
@@ -68,6 +69,7 @@ public class Mocks {
     when(element.getTagName()).thenReturn(tag);
     when(element.getText()).thenReturn(text);
     when(element.isDisplayed()).thenReturn(true);
+    when(element.isEnabled()).thenReturn(true);
     return element;
   }
 
