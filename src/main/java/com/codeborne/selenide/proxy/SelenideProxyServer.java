@@ -6,6 +6,9 @@ import com.browserup.bup.filters.RequestFilter;
 import com.browserup.bup.filters.ResponseFilter;
 import com.codeborne.selenide.Config;
 import org.openqa.selenium.Proxy;
+import org.openqa.selenium.net.NetworkUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -16,7 +19,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+import static com.browserup.bup.client.ClientUtil.getConnectableAddress;
 import static java.lang.Integer.parseInt;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -27,8 +32,9 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 @ParametersAreNonnullByDefault
 public class SelenideProxyServer {
+  private static final Logger log = LoggerFactory.getLogger(SelenideProxyServer.class);
+
   private final Config config;
-  private final InetAddressResolver inetAddressResolver;
   @Nullable
   private final Proxy outsideProxy;
   @Nullable
@@ -45,15 +51,13 @@ public class SelenideProxyServer {
    * @param outsideProxy another proxy server used by test author for his own need (can be null)
    */
   public SelenideProxyServer(Config config, @Nullable Proxy outsideProxy) {
-    this(config, outsideProxy, new InetAddressResolver(), new BrowserUpProxyServerUnlimited());
+    this(config, outsideProxy, new BrowserUpProxyServerUnlimited());
   }
 
   protected SelenideProxyServer(Config config, @Nullable Proxy outsideProxy,
-                                InetAddressResolver inetAddressResolver,
                                 BrowserUpProxy proxy) {
     this.config = config;
     this.outsideProxy = outsideProxy;
-    this.inetAddressResolver = inetAddressResolver;
     this.proxy = proxy;
   }
 
@@ -147,8 +151,17 @@ public class SelenideProxyServer {
   @Nonnull
   private Proxy createSeleniumProxy() {
     return isEmpty(config.proxyHost())
-      ? ClientUtil.createSeleniumProxy(this.proxy)
-      : ClientUtil.createSeleniumProxy(this.proxy, inetAddressResolver.getInetAddressByName(config.proxyHost()));
+      ? ClientUtil.createSeleniumProxy(this.proxy, guessHostName())
+      : ClientUtil.createSeleniumProxy(this.proxy, config.proxyHost());
+  }
+
+  private String guessHostName() {
+    String browserupHostName = getConnectableAddress().getHostName();
+    String seleniumHostName = new NetworkUtils().getNonLoopbackAddressOfThisMachine();
+    if (!Objects.equals(browserupHostName, seleniumHostName)) {
+      log.info("Host name resolved by BrowserUpProxy: '{}', resolved by Selenium: '{}'", browserupHostName, seleniumHostName);
+    }
+    return seleniumHostName;
   }
 
   /**
