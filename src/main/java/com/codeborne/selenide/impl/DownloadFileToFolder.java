@@ -90,7 +90,7 @@ public class DownloadFileToFolder {
 
   private void waitUntilDownloadsCompleted(Browser browser, long timeout, long pollingInterval, DownloadsFolder folder) {
     pause(pollingInterval);
-    if (browser.isChrome() || browser.isEdge() || browser.isOpera()) {
+    if (browser.isChrome() || browser.isEdge()) {
       waitUntilFileDisappears(folder, "crdownload", timeout, pollingInterval);
     }
     else if (browser.isFirefox()) {

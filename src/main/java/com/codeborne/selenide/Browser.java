@@ -8,7 +8,6 @@ import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
-import static com.codeborne.selenide.Browsers.OPERA;
 import static com.codeborne.selenide.Browsers.SAFARI;
 
 @ParametersAreNonnullByDefault
@@ -44,11 +43,6 @@ public class Browser {
   @CheckReturnValue
   public boolean isEdge() {
     return EDGE.equalsIgnoreCase(name);
-  }
-
-  @CheckReturnValue
-  public boolean isOpera() {
-    return OPERA.equalsIgnoreCase(name);
   }
 
   @CheckReturnValue

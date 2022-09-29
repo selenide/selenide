@@ -80,7 +80,7 @@ public class Configuration {
   /**
    * Which browser to use.
    * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.browser=ie".
-   * Supported values: "chrome", "firefox", "ie", "opera", "edge"
+   * Supported values: "chrome", "firefox", "ie", "edge", "safari".
    * <br>
    * Default value: "chrome"
    */
@@ -344,7 +344,7 @@ public class Configuration {
 
   /**
    * Sets the path to browser executable.
-   * Works only for Chrome, Firefox and Opera.
+   * Works only for Chrome and Firefox.
    * Can be configured either programmatically, via selenide.properties file
    * or by system property "-Dselenide.browserBinary=/path/to/binary"
    */

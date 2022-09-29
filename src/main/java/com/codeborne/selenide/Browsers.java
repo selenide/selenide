@@ -9,12 +9,5 @@ public interface Browsers {
   String INTERNET_EXPLORER = "internet explorer";
   String EDGE = "edge";
   String FIREFOX = "firefox";
-
-  /**
-   * To use OperaDriver, you need to include extra dependency to your project:
-   * &lt;dependency org="com.opera" name="operadriver" rev="1.5" conf="test-&gt;default"/&gt;
-   */
-  String OPERA = "opera";
-
   String SAFARI = "safari";
 }

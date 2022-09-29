@@ -65,19 +65,6 @@ subprojects {
     maxParallelForks = 1
   }
 
-  task opera(type: Test) {
-    systemProperties['selenide.browser'] = 'opera'
-    include 'integration/**/*'
-    exclude 'com/codeborne/selenide/**/*'
-  }
-
-  task opera_headless(type: Test) {
-    systemProperties['selenide.browser'] = 'opera'
-    systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*'
-    exclude 'com/codeborne/selenide/**/*'
-  }
-
   task firefox_remote(type: Test) {
     systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
     systemProperties['selenide.browser'] = 'firefox'
