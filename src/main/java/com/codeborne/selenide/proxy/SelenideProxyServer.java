@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import static com.browserup.bup.client.ClientUtil.getConnectableAddress;
 import static java.lang.Integer.parseInt;
@@ -33,6 +34,8 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @ParametersAreNonnullByDefault
 public class SelenideProxyServer {
   private static final Logger log = LoggerFactory.getLogger(SelenideProxyServer.class);
+  private static final Pattern REGEX_HOST_NAME = Pattern.compile("(.*):.*");
+  private static final Pattern REGEX_PORT = Pattern.compile(".*:(.*)");
 
   private final Config config;
   @Nullable
@@ -139,8 +142,8 @@ public class SelenideProxyServer {
 
   static InetSocketAddress getProxyAddress(Proxy proxy) {
     String httpProxy = proxy.getHttpProxy();
-    String host = httpProxy.replaceFirst("(.*):.*", "$1");
-    String port = httpProxy.replaceFirst(".*:(.*)", "$1");
+    String host = REGEX_HOST_NAME.matcher(httpProxy).replaceFirst("$1");
+    String port = REGEX_PORT.matcher(httpProxy).replaceFirst("$1");
     return new InetSocketAddress(host, parseInt(port));
   }
 
