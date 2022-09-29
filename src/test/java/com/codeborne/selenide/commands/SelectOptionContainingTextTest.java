@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Mocks.mockWebElement;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,9 +21,9 @@ import static org.mockito.Mockito.when;
 final class SelectOptionContainingTextTest {
   private final SelectOptionContainingText command = new SelectOptionContainingText();
 
-  private final WebElement element = mock(WebElement.class);
-  private final WebElement option1 = mock(WebElement.class);
-  private final WebElement option2 = mock(WebElement.class);
+  private final WebElement element = mockWebElement("select", "");
+  private final WebElement option1 = mockWebElement("option", "");
+  private final WebElement option2 = mockWebElement("option", "");
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource select = mock(WebElementSource.class);
 
