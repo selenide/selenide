@@ -159,10 +159,13 @@ public class SelenideProxyServer {
   }
 
   private String guessHostName() {
-    String browserupHostName = getConnectableAddress().getHostName();
+    String browserupHostName = getConnectableAddress().getHostAddress();
     String seleniumHostName = new NetworkUtils().getNonLoopbackAddressOfThisMachine();
-    if (!Objects.equals(browserupHostName, seleniumHostName)) {
-      log.info("Host name resolved by BrowserUpProxy: '{}', resolved by Selenium: '{}'", browserupHostName, seleniumHostName);
+    if (Objects.equals(browserupHostName, seleniumHostName)) {
+      log.info("Using proxy host: '{}'", seleniumHostName);
+    }
+    else {
+      log.info("Using proxy host resolved by Selenium: '{}' (fyi BrowserUpProxy resolved : '{}')", seleniumHostName, browserupHostName);
     }
     return seleniumHostName;
   }
