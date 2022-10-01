@@ -6,10 +6,26 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class BearerTokenCredentials implements Credentials {
+  public final String domain;
   public final String token;
 
+  /**
+   * @deprecated Use constructor with domain and token
+   */
+  @Deprecated
   public BearerTokenCredentials(String token) {
+    this("", token);
+  }
+
+  public BearerTokenCredentials(String domain, String token) {
+    this.domain = domain;
     this.token = token;
+  }
+
+  @Nonnull
+  @Override
+  public String domain() {
+    return domain;
   }
 
   @Override
@@ -23,6 +39,6 @@ public class BearerTokenCredentials implements Credentials {
   @CheckReturnValue
   @Nonnull
   public String toString() {
-    return encode();
+    return String.format("%s:%s", domain, token);
   }
 }
