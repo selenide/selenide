@@ -32,6 +32,11 @@ public class AuthenticationFilter implements RequestFilter {
   }
 
   boolean needsHeader(String url) {
+    if (credentials.domain().isEmpty()) {
+      // support deprecated methods with empty domain
+      // Remove this if before releasing Selenide 7.0.0
+      return true;
+    }
     String host = getHostname(url);
     return host != null && host.equalsIgnoreCase(credentials.domain());
   }

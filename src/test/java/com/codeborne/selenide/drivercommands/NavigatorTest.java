@@ -1,6 +1,5 @@
 package com.codeborne.selenide.drivercommands;
 
-import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.BasicAuthCredentials;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
@@ -14,6 +13,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.openqa.selenium.WebDriver;
 
+import static com.codeborne.selenide.AuthenticationType.BASIC;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -139,11 +139,11 @@ final class NavigatorTest {
     config.browser("opera");
     config.proxyEnabled(true);
 
-    navigator.open(selenideDriver, "https://some.com/login", "", "basic-auth-login", "basic-auth-password");
+    navigator.open(selenideDriver, "https://some.com/login", "some.eu", "basic-auth-login", "basic-auth-password");
 
     Mockito.verify(navigation).to("https://some.com/login");
     Mockito.verify(authenticationFilter)
-      .setAuthentication(eq(AuthenticationType.BASIC), refEq(new BasicAuthCredentials("basic-auth-login", "basic-auth-password")));
+      .setAuthentication(eq(BASIC), refEq(new BasicAuthCredentials("some.eu", "basic-auth-login", "basic-auth-password")));
   }
 
   @Test

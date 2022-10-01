@@ -86,6 +86,15 @@ final class AuthenticationFilterTest {
   }
 
   @Test
+  void shouldAddHeaderIfDomainIsEmpty_legacyMode() {
+    filter.setAuthentication(BEARER, new BasicAuthCredentials("username", "password"));
+    assertThat(filter.needsHeader("https://burger-queen.com")).isTrue();
+    assertThat(filter.needsHeader("https://s3.aws.com")).isTrue();
+    assertThat(filter.needsHeader("file:///foo/bar")).isTrue();
+    assertThat(filter.needsHeader("foo")).isTrue();
+  }
+
+  @Test
   void extractsHostName() {
     assertThat(filter.getHostname("http://burger-queen.com")).isEqualTo("burger-queen.com");
     assertThat(filter.getHostname("https://burger-queen.com.eu/zoo")).isEqualTo("burger-queen.com.eu");
