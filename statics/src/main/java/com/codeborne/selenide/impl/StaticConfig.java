@@ -118,6 +118,11 @@ class StaticConfig implements Config {
   }
 
   @Override
+  public long remoteConnectionTimeout() {
+    return Configuration.remoteConnectionTimeout;
+  }
+
+  @Override
   public String browser() {
     return Configuration.browser;
   }

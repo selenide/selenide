@@ -36,4 +36,5 @@ public interface Config {
   String proxyHost();
   int proxyPort();
   long remoteReadTimeout();
+  long remoteConnectionTimeout();
 }

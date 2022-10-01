@@ -35,7 +35,8 @@ public class RemoteDriverFactory {
   private CommandExecutor createExecutor(Config config) throws MalformedURLException {
     ClientConfig clientConfig = ClientConfig.defaultConfig()
       .baseUrl(new URL(config.remote()))
-      .readTimeout(Duration.ofMillis(config.remoteReadTimeout()));
+      .readTimeout(Duration.ofMillis(config.remoteReadTimeout()))
+      .connectionTimeout(Duration.ofMillis(config.remoteConnectionTimeout()));
 
     return new HttpCommandExecutor(clientConfig);
   }

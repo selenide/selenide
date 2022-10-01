@@ -13,6 +13,6 @@ import java.time.Duration;
  */
 @ParametersAreNonnullByDefault
 public class HttpClientTimeouts {
-  @Deprecated
   public static Duration defaultLocalReadTimeout = Duration.ofSeconds(90);
+  public static Duration defaultLocalConnectTimeout = Duration.ofSeconds(10);
 }
