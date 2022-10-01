@@ -13,19 +13,13 @@ import static com.codeborne.selenide.Selenide.open;
 public class BasicAuthViaProxyTest extends ProxyIntegrationTest {
   @Test
   void canPassBasicAuth_via_proxy() {
-    open("/basic-auth/hello", "", "scott", "tiger");
-    $("#greeting").shouldHave(text("Hello, scott:tiger!"));
-  }
-
-  @Test
-  void canAuthUsingProxyWithLoginAndPassword() {
-    open("/basic-auth/hello", BASIC, "scott", "tiger");
+    open("/basic-auth/hello", domain(), "scott", "tiger");
     $("#greeting").shouldHave(text("Hello, scott:tiger!"));
   }
 
   @Test
   void canAuthUsingProxyWithCredentials() {
-    Credentials credentials = new BasicAuthCredentials("scott", "tiger");
+    Credentials credentials = new BasicAuthCredentials(domain(), "scott", "tiger");
     open("/basic-auth/hello", BASIC, credentials);
     $("#greeting").shouldHave(text("Hello, scott:tiger!"));
     $("#bye").click();
@@ -34,15 +28,15 @@ public class BasicAuthViaProxyTest extends ProxyIntegrationTest {
 
   @Test
   void canSwitchToAnotherBasicAuth() {
-    open("/basic-auth/hello", BASIC, new BasicAuthCredentials("scott", "tiger"));
+    open("/basic-auth/hello", BASIC, new BasicAuthCredentials(domain(), "scott", "tiger"));
     $("#greeting").shouldHave(text("Hello, scott:tiger!"));
-    open("/basic-auth/hello2", BASIC, new BasicAuthCredentials("scott2", "tiger2"));
+    open("/basic-auth/hello2", BASIC, new BasicAuthCredentials(domain(), "scott2", "tiger2"));
     $("#greeting").shouldHave(text("Hello2, scott2:tiger2!"));
   }
 
   @Test
   void removesPreviousBasicAuthHeaders() {
-    open("/basic-auth/hello", BASIC, new BasicAuthCredentials("scott", "tiger"));
+    open("/basic-auth/hello", BASIC, new BasicAuthCredentials(domain(), "scott", "tiger"));
     $("#greeting").shouldHave(text("Hello, scott:tiger!"));
     open("/headers/hello3");
     $("body")
