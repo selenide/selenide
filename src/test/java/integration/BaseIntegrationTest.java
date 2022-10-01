@@ -46,8 +46,12 @@ public abstract class BaseIntegrationTest {
     }
   }
 
+  protected static String domain() {
+    return "127.0.0.1";
+  }
+
   protected static String getBaseUrl() {
-    return protocol + "127.0.0.1:" + server.getPort();
+    return protocol + domain() + ":" + server.getPort();
   }
 
   protected static Browser browser() {

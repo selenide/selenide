@@ -13,6 +13,10 @@ public class BasicAuthCredentials implements Credentials {
   public final String login;
   public final String password;
 
+  /**
+   * @deprecated Use constructor with domain, login and password
+   */
+  @Deprecated
   public BasicAuthCredentials(String login, String password) {
     this("", login, password);
   }
@@ -21,6 +25,12 @@ public class BasicAuthCredentials implements Credentials {
     this.domain = domain;
     this.login = login;
     this.password = password;
+  }
+
+  @Nonnull
+  @Override
+  public String domain() {
+    return domain;
   }
 
   /**
@@ -44,6 +54,6 @@ public class BasicAuthCredentials implements Credentials {
   @CheckReturnValue
   @Nonnull
   public String toString() {
-    return combine();
+    return String.format("%s:%s:%s", domain, login, password);
   }
 }

@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.open;
 public class BearerTokenAuthViaProxyTest extends ProxyIntegrationTest {
   @Test
   void canAuthUsingProxyWithCredentials() {
-    Credentials credentials = new BearerTokenCredentials("token-123");
+    Credentials credentials = new BearerTokenCredentials(domain(), "token-123");
     open("/bearer-token-auth/hello", BEARER, credentials);
     $("#greeting").shouldHave(text("Hello, token-123!"));
     $("#bye").click();
@@ -22,15 +22,15 @@ public class BearerTokenAuthViaProxyTest extends ProxyIntegrationTest {
 
   @Test
   void canSwitchToAnotherBearerToken() {
-    open("/bearer-token-auth/hello", BEARER, new BearerTokenCredentials("token-123"));
+    open("/bearer-token-auth/hello", BEARER, new BearerTokenCredentials(domain(), "token-123"));
     $("#greeting").shouldHave(text("Hello, token-123!"));
-    open("/bearer-token-auth/hello2", BEARER, new BearerTokenCredentials("token-456"));
+    open("/bearer-token-auth/hello2", BEARER, new BearerTokenCredentials(domain(), "token-456"));
     $("#greeting").shouldHave(text("Hello2, token-456!"));
   }
 
   @Test
   void removesPreviousAuthHeaders() {
-    open("/bearer-token-auth/hello", BEARER, new BearerTokenCredentials("token-123"));
+    open("/bearer-token-auth/hello", BEARER, new BearerTokenCredentials(domain(), "token-123"));
     $("#greeting").shouldHave(text("Hello, token-123!"));
     open("/headers/hello3");
     $("body")
@@ -40,7 +40,7 @@ public class BearerTokenAuthViaProxyTest extends ProxyIntegrationTest {
 
   @Test
   void invalidBearerToken() {
-    open("/bearer-token-auth/hello", BEARER, new BearerTokenCredentials("foo-bar-789"));
+    open("/bearer-token-auth/hello", BEARER, new BearerTokenCredentials(domain(), "foo-bar-789"));
     $("body").shouldHave(text("UNAUTHORIZED: Invalid bearer token foo-bar-789"));
   }
 }

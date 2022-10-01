@@ -9,4 +9,8 @@ public interface Credentials {
   @CheckReturnValue
   @Nonnull
   String encode();
+
+  @CheckReturnValue
+  @Nonnull
+  String domain();
 }
