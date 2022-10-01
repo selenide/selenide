@@ -3,7 +3,7 @@ package integration.proxy;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import integration.ProxyIntegrationTest;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,10 +12,10 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.refresh;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
-import static io.netty.buffer.Unpooled.wrappedBuffer;
-import static io.netty.handler.codec.http.HttpResponseStatus.OK;
+import static com.codeborne.selenide.proxy.RequestMatchers.urlEndsWith;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,19 +70,16 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
     open();
 
     SelenideProxyServer selenideProxy = requireNonNull(getSelenideProxy());
-    selenideProxy.addRequestFilter("mock-server-response", (request, contents, messageInfo) -> {
-      String url = messageInfo.getUrl();
-      if (url.endsWith("page_with_dynamic_select.html")) {
-        DefaultFullHttpResponse response = new DefaultFullHttpResponse(request.protocolVersion(), OK, wrappedBuffer(mockedResponse()));
-        response.headers().set("Content-Length", response.content().readableBytes());
-        return response;
-      }
-      return null;
-    });
+    selenideProxy.responseMocker().mock("selects-page-mock", urlEndsWith("page_with_dynamic_select.html"), mockedResponse());
 
     openFile("page_with_frames.html");
     switchTo().frame("leftFrame");
     $("h1").shouldHave(text("This is a fake response"));
+
+    selenideProxy.responseMocker().reset("selects-page-mock");
+    refresh();
+    switchTo().frame("leftFrame");
+    $("h1").shouldHave(text("Page with dynamic select"));
   }
 
   private byte[] mockedResponse() {
@@ -91,5 +88,10 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
 
   private boolean isBrowserOwnTechnicalRequest(String url) {
     return !url.startsWith(Configuration.baseUrl) || url.contains("/favicon.ico");
+  }
+
+  @AfterEach
+  void tearDown() {
+    getSelenideProxy().responseMocker().reset();
   }
 }

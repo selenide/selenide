@@ -93,6 +93,7 @@ public class SelenideProxyServer {
     }
     FileDownloadFilter downloadFilter = new FileDownloadFilter(config);
 
+    addRequestFilter("mockResponse", new MockResponseFilter());
     addRequestFilter("authentication", new AuthenticationFilter());
     addRequestFilter("requestSizeWatchdog", new RequestSizeWatchdog());
     addResponseFilter("responseSizeWatchdog", new ResponseSizeWatchdog());
@@ -221,5 +222,9 @@ public class SelenideProxyServer {
   @Nullable
   public <T extends ResponseFilter> T responseFilter(String name) {
     return (T) responseFilters.get(name);
+  }
+
+  public MockResponseFilter responseMocker() {
+    return requestFilter("mockResponse");
   }
 }
