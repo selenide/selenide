@@ -6,6 +6,9 @@ import com.browserup.bup.filters.RequestFilter;
 import com.browserup.bup.filters.ResponseFilter;
 import com.codeborne.selenide.Config;
 import org.openqa.selenium.Proxy;
+import org.openqa.selenium.net.NetworkUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -16,7 +19,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
+import static com.browserup.bup.client.ClientUtil.getConnectableAddress;
 import static java.lang.Integer.parseInt;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -27,8 +33,11 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 @ParametersAreNonnullByDefault
 public class SelenideProxyServer {
+  private static final Logger log = LoggerFactory.getLogger(SelenideProxyServer.class);
+  private static final Pattern REGEX_HOST_NAME = Pattern.compile("(.*):.*");
+  private static final Pattern REGEX_PORT = Pattern.compile(".*:(.*)");
+
   private final Config config;
-  private final InetAddressResolver inetAddressResolver;
   @Nullable
   private final Proxy outsideProxy;
   @Nullable
@@ -45,15 +54,13 @@ public class SelenideProxyServer {
    * @param outsideProxy another proxy server used by test author for his own need (can be null)
    */
   public SelenideProxyServer(Config config, @Nullable Proxy outsideProxy) {
-    this(config, outsideProxy, new InetAddressResolver(), new BrowserUpProxyServerUnlimited());
+    this(config, outsideProxy, new BrowserUpProxyServerUnlimited());
   }
 
   protected SelenideProxyServer(Config config, @Nullable Proxy outsideProxy,
-                                InetAddressResolver inetAddressResolver,
                                 BrowserUpProxy proxy) {
     this.config = config;
     this.outsideProxy = outsideProxy;
-    this.inetAddressResolver = inetAddressResolver;
     this.proxy = proxy;
   }
 
@@ -135,8 +142,8 @@ public class SelenideProxyServer {
 
   static InetSocketAddress getProxyAddress(Proxy proxy) {
     String httpProxy = proxy.getHttpProxy();
-    String host = httpProxy.replaceFirst("(.*):.*", "$1");
-    String port = httpProxy.replaceFirst(".*:(.*)", "$1");
+    String host = REGEX_HOST_NAME.matcher(httpProxy).replaceFirst("$1");
+    String port = REGEX_PORT.matcher(httpProxy).replaceFirst("$1");
     return new InetSocketAddress(host, parseInt(port));
   }
 
@@ -147,8 +154,20 @@ public class SelenideProxyServer {
   @Nonnull
   private Proxy createSeleniumProxy() {
     return isEmpty(config.proxyHost())
-      ? ClientUtil.createSeleniumProxy(this.proxy)
-      : ClientUtil.createSeleniumProxy(this.proxy, inetAddressResolver.getInetAddressByName(config.proxyHost()));
+      ? ClientUtil.createSeleniumProxy(this.proxy, guessHostName())
+      : ClientUtil.createSeleniumProxy(this.proxy, config.proxyHost());
+  }
+
+  private String guessHostName() {
+    String browserupHostName = getConnectableAddress().getHostAddress();
+    String seleniumHostName = new NetworkUtils().getNonLoopbackAddressOfThisMachine();
+    if (Objects.equals(browserupHostName, seleniumHostName)) {
+      log.info("Using proxy host: '{}'", seleniumHostName);
+    }
+    else {
+      log.info("Using proxy host resolved by Selenium: '{}' (fyi BrowserUpProxy resolved : '{}')", seleniumHostName, browserupHostName);
+    }
+    return seleniumHostName;
   }
 
   /**

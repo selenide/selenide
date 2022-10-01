@@ -2,7 +2,6 @@ package com.codeborne.selenide.proxy;
 
 import com.browserup.bup.BrowserUpProxyServer;
 import com.codeborne.selenide.Config;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 
@@ -20,12 +19,7 @@ import static org.mockito.Mockito.when;
 final class SelenideProxyServerTest {
   private final BrowserUpProxyServer bmp = mock(BrowserUpProxyServer.class);
   private final Config config = mock(Config.class);
-  private SelenideProxyServer proxyServer;
-
-  @BeforeEach
-  void setUp() {
-    proxyServer = new SelenideProxyServer(config, null, new InetAddressResolverStub(), bmp);
-  }
+  private final SelenideProxyServer proxyServer = new SelenideProxyServer(config, null, bmp);
 
   @Test
   void canInterceptResponses() {
@@ -48,7 +42,7 @@ final class SelenideProxyServerTest {
     proxy.setHttpProxy("127.0.0.1:3128");
     proxy.setNoProxy("localhost,https://example.com/");
 
-    SelenideProxyServer proxyServer = new SelenideProxyServer(config, proxy, new InetAddressResolverStub(), bmp);
+    SelenideProxyServer proxyServer = new SelenideProxyServer(config, proxy, bmp);
     proxyServer.start();
 
     verify(bmp).setChainedProxy(any(InetSocketAddress.class));
@@ -62,7 +56,7 @@ final class SelenideProxyServerTest {
     Proxy proxy = new Proxy();
     proxy.setHttpProxy("127.0.0.1:3128");
 
-    SelenideProxyServer proxyServer = new SelenideProxyServer(config, proxy, new InetAddressResolverStub(), bmp);
+    SelenideProxyServer proxyServer = new SelenideProxyServer(config, proxy, bmp);
     proxyServer.start();
 
     verify(bmp).setChainedProxy(any(InetSocketAddress.class));
