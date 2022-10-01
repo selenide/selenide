@@ -1,9 +1,11 @@
 # Changelog
 
-## 6.8.2 (released 29.09.2022)
+## 6.9.0 (planned to 05.10.2022)
 * #1967 upgrade to selenium 4.5.0 -- see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
 * #1967 remove Opera support
 * #1967 bump slf4j from 2.0.2 to 2.0.3
+* #1974 Selenide proxy now adds Authorization header only for specified domain -- see PR #1975
+* #1970 improve resolving proxy host name
 
 ## 6.8.1 (released 27.09.2022)
 * #1965 restore "opentelemetry" dependency
