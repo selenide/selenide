@@ -45,6 +45,7 @@ public class SelenideConfig implements Config {
   private String proxyHost = getProperty("selenide.proxyHost", null);
   private int proxyPort = Integer.parseInt(getProperty("selenide.proxyPort", "0"));
   private long remoteReadTimeout = Long.parseLong(getProperty("selenide.remoteReadTimeout", "90000"));
+  private long remoteConnectionTimeout = Long.parseLong(getProperty("selenide.remoteConnectionTimeout", "10000"));
 
   @Override
   public String baseUrl() {
@@ -371,6 +372,16 @@ public class SelenideConfig implements Config {
 
   public SelenideConfig remoteReadTimeout(long remoteReadTimeout) {
     this.remoteReadTimeout = remoteReadTimeout;
+    return this;
+  }
+
+  @Override
+  public long remoteConnectionTimeout() {
+    return remoteConnectionTimeout;
+  }
+
+  public SelenideConfig remoteConnectionTimeout(long remoteConnectionTimeout) {
+    this.remoteConnectionTimeout = remoteConnectionTimeout;
     return this;
   }
 }

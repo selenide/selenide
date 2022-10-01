@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.net.NetworkUtils;
 
 /**
  * Configuration settings for Selenide default browser
@@ -11,23 +12,23 @@ import org.openqa.selenium.MutableCapabilities;
  * every change will immediately reflect in all threads (if you run tests in parallel).
  *
  * <p>
- *   These system properties can be additonally used having effect on every new created browser in test.
- *   For example as -D&lt;property&gt;=&lt;value&gt; in command-line
+ * These system properties can be additonally used having effect on every new created browser in test.
+ * For example as -D&lt;property&gt;=&lt;value&gt; in command-line
  * </p>
  * <p>
- *  <b>chromeoptions.args</b> - Sets the arguments for chrome options, parameters are comma separated
- *  If comma is a part of the value, use double quotes around the argument
- *  Non-official list of parameters can be found at https://peter.sh/experiments/chromium-command-line-switches/
- *
- *  Example: --no-sandbox,--disable-3d-apis,"--user-agent=Firefox 45, Mozilla"
+ * <b>chromeoptions.args</b> - Sets the arguments for chrome options, parameters are comma separated
+ * If comma is a part of the value, use double quotes around the argument
+ * Non-official list of parameters can be found <a href="https://peter.sh/experiments/chromium-command-line-switches/">here</a>.
+ * <p>
+ * Example: --no-sandbox,--disable-3d-apis,"--user-agent=Firefox 45, Mozilla"
  * </p>
  * <p>
- *  <b>chromeoptions.prefs</b> - Sets the preferences for chrome options, which are comma separated
- *   keyX=valueX preferences. If comma is a part of the value, use double quotes around the preference
- *   List of preferences can be found at
- *   https://chromium.googlesource.com/chromium/src/+/master/chrome/common/pref_names.cc
- *
- *   Example: homepage=http://google.com,"intl.allowed_languages=en,ru,es"
+ * <b>chromeoptions.prefs</b> - Sets the preferences for chrome options, which are comma separated
+ * keyX=valueX preferences. If comma is a part of the value, use double quotes around the preference
+ * List of preferences can be found at
+ * https://chromium.googlesource.com/chromium/src/+/master/chrome/common/pref_names.cc
+ * <p>
+ * Example: homepage=http://google.com,"intl.allowed_languages=en,ru,es"
  * </p>
  */
 public class Configuration {
@@ -37,7 +38,7 @@ public class Configuration {
    * Base url for open() function calls
    * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.baseUrl=http://myhost".
    * <br>
-   * Default value: http://localhost:8080
+   * Default value: "http://localhost:8080"
    */
   public static String baseUrl = defaults.baseUrl();
 
@@ -141,7 +142,7 @@ public class Configuration {
    * In some cases `eager` can bring performance boosts for the slow tests.
    * Though, we left default value `normal` because we are afraid to break users' existing tests.
    * <br>
-   * See https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy
+   * @see <a href="https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy">documentation</a>
    *
    * @since 3.5
    */
@@ -221,7 +222,7 @@ public class Configuration {
    * Some people reported 150% speedup (because sending characters one-by-one was especially
    * slow via network to Selenium Grid on cloud).
    * <br>
-   * https://github.com/selenide/selenide/issues/135
+   * See <a href="https://github.com/selenide/selenide/issues/135">Feature request #135</a>
    * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.fastSetValue=true".
    * <br>
    * Default value: false
@@ -292,7 +293,7 @@ public class Configuration {
    * <br>
    * Default: empty (meaning that Selenide will detect current machine's ip/hostname automatically)
    *
-   * @see com.browserup.bup.client.ClientUtil#getConnectableAddress()
+   * @see NetworkUtils#getNonLoopbackAddressOfThisMachine()
    */
   public static String proxyHost = defaults.proxyHost();
 
@@ -308,11 +309,11 @@ public class Configuration {
   /**
    * Controls Selenide and WebDriverManager integration.
    * When integration is enabled you don't need to download and setup any browser driver executables.
-   * See https://github.com/bonigarcia/webdrivermanager for WebDriverManager configuration details.
+   * See <a href="https://github.com/bonigarcia/webdrivermanager">WebDriverManager configuration details</a>.
    * Can be configured either programmatically, via selenide.properties file
    * or by system property "-Dselenide.driverManagerEnabled=false"
    * <br>
-   *
+   * <p>
    * Default: true
    */
   public static boolean driverManagerEnabled = defaults.driverManagerEnabled();
@@ -360,4 +361,15 @@ public class Configuration {
    * @since 6.7.4
    */
   public static long remoteReadTimeout = defaults.remoteReadTimeout();
+
+  /**
+   * Sets connection timeout in milliseconds for remote browser connections.
+   * Applies only when remote is specified.
+   * Can be configured either programmatically, via selenide.properties file
+   * or by system property "-Dselenide.remoteConnectionTimeout=180000"
+   * <br>
+   * Default: 10000
+   * @since 6.9.0
+   */
+  public static long remoteConnectionTimeout = defaults.remoteConnectionTimeout();
 }

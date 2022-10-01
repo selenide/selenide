@@ -8,6 +8,7 @@ import org.openqa.selenium.remote.http.netty.NettyClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.codeborne.selenide.webdriver.HttpClientTimeouts.defaultLocalConnectTimeout;
 import static com.codeborne.selenide.webdriver.HttpClientTimeouts.defaultLocalReadTimeout;
 
 @AutoService(HttpClient.Factory.class)
@@ -17,8 +18,15 @@ public class SelenideNettyClientFactory extends NettyClient.Factory {
 
   @Override
   public HttpClient createClient(ClientConfig config) {
-    ClientConfig configWithShorterTimeout = config.readTimeout(defaultLocalReadTimeout);
-    logger.info("Changed readTimeout from {} to {}", config.readTimeout(), configWithShorterTimeout.readTimeout());
+    ClientConfig configWithShorterTimeout = config
+      .readTimeout(defaultLocalReadTimeout)
+      .connectionTimeout(defaultLocalConnectTimeout);
+    if (!config.readTimeout().equals(defaultLocalReadTimeout)) {
+      logger.info("Changed readTimeout from {} to {}", config.readTimeout(), configWithShorterTimeout.readTimeout());
+    }
+    if (!config.connectionTimeout().equals(defaultLocalConnectTimeout)) {
+      logger.info("Changed connectionTimeout from {} to {}", config.connectionTimeout(), configWithShorterTimeout.connectionTimeout());
+    }
     return super.createClient(configWithShorterTimeout);
   }
 }
