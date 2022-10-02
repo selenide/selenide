@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.9.0 (planned to 05.10.2022)
+## 6.9.0
 * #1967 upgrade to selenium 4.5.0 -- see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
 * #1967 remove Opera support
 * #1967 bump slf4j from 2.0.2 to 2.0.3
