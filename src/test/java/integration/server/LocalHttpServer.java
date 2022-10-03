@@ -22,7 +22,7 @@ public class LocalHttpServer {
   private final Server server;
   private final int port;
 
-  LocalHttpServer(int port, boolean ssl) {
+  LocalHttpServer(int port, boolean ssl, String friendlyOrigin) {
     this.port = port;
     server = new Server();
 
@@ -47,6 +47,7 @@ public class LocalHttpServer {
     context.addServlet(new ServletHolder(new BasicAuthHandler()), "/basic-auth/*");
     context.addServlet(new ServletHolder(new BearerTokenHandler()), "/bearer-token-auth/*");
     context.addServlet(new ServletHolder(new HeadersPrinterHandler()), "/headers/*");
+    context.addServlet(new ServletHolder(new CorsProtectedHandler(friendlyOrigin)), "/try-cors/*");
     context.addServlet(new ServletHolder(new FileRenderHandler(sessions)), "/*");
   }
 
@@ -72,11 +73,11 @@ public class LocalHttpServer {
     server.stop();
   }
 
-  public static LocalHttpServer startWithRetry(boolean ssl) throws Exception {
+  public static LocalHttpServer startWithRetry(boolean ssl, String friendlyOrigin) throws Exception {
     IOException lastError = null;
     for (int i = 0; i < 5; i++) {
       try {
-        return new LocalHttpServer(findFreePort(), ssl).start();
+        return new LocalHttpServer(findFreePort(), ssl, friendlyOrigin).start();
       }
       catch (IOException failedToStartServer) {
         if (failedToStartServer.getCause() instanceof BindException) {
@@ -96,7 +97,7 @@ public class LocalHttpServer {
    * @param args not used
    */
   public static void main(String[] args) throws Exception {
-    new LocalHttpServer(8080, false).start();
+    new LocalHttpServer(8080, false, "no-cors-allowed").start();
     Thread.currentThread().join();
   }
 }

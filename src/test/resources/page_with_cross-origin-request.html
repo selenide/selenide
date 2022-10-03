@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test::CORS</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h1>Page with dynamic select</h1>
+<h2></h2>
+<br/>
+
+<div style="width: 400px">
+  <img id="same-origin-image" alt="CORS" src=""/>
+  <img id="cross-origin-image" alt="CORS" src=""/>
+  <div id="moria">Waiting to enter...</div>
+</div>
+
+<script type="text/javascript">
+  const l = window.location;
+  const anotherPort = l.search.replace(/\?anotherPort=(.+)/, "$1")
+
+  document.getElementById('same-origin-image').src = imageOnPort(l.port, 'selenide-logo-big.png');
+  document.getElementById('cross-origin-image').src = imageOnPort(anotherPort, 'screenshot.png');
+
+  function imageOnPort(port, fileName) {
+    return `${l.protocol}//${l.hostname}:${port}/files/${fileName}`;
+  }
+
+  function tryCrossOriginFetch() {
+    let url = `${l.protocol}//${l.hostname}:${anotherPort}/try-cors/Frodo`;
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Boom': 'bah' }
+      })
+      .then(resp => resp.text())
+      .then((greeting) => document.getElementById('moria').textContent = greeting)
+      .catch((e) => document.getElementById('moria').textContent = e)
+  }
+
+  tryCrossOriginFetch();
+</script>
+
+</body>
+</html>
