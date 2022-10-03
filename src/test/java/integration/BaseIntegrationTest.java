@@ -40,7 +40,7 @@ public abstract class BaseIntegrationTest {
       synchronized (BaseIntegrationTest.class) {
         if (server == null) {
           protocol = SSL ? "https://" : "http://";
-          server = startWithRetry(SSL);
+          server = startWithRetry(SSL, "no-cors-allowed");
         }
       }
     }

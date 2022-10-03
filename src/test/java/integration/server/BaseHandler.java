@@ -24,6 +24,7 @@ import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_METHOD_NOT_ALLOWED;
 
 public abstract class BaseHandler extends HttpServlet {
+  static final String CONTENT_TYPE_PLAIN_TEXT = "text/plain";
   static final String CONTENT_TYPE_HTML_TEXT = "text/html";
   private static final String CONTENT_TYPE_IMAGE_PNG = "image/png";
   private static final Logger log = LoggerFactory.getLogger(BaseHandler.class);

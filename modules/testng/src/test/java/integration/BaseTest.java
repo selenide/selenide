@@ -27,7 +27,7 @@ abstract class BaseTest {
   final void startServer() throws Exception {
     if (server == null) {
       log.info("START {} Test NG tests", Configuration.browser);
-      server = LocalHttpServer.startWithRetry(true).start();
+      server = LocalHttpServer.startWithRetry(true, "no-cors-allowed").start();
       Configuration.baseUrl = "https://127.0.0.1:" + server.getPort();
     }
   }

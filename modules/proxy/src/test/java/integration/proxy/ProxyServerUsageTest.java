@@ -15,8 +15,8 @@ import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.refresh;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
+import static com.codeborne.selenide.proxy.RequestMatcher.HttpMethod.GET;
 import static com.codeborne.selenide.proxy.RequestMatchers.urlEndsWith;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -70,7 +70,8 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
     open();
 
     SelenideProxyServer selenideProxy = requireNonNull(getSelenideProxy());
-    selenideProxy.responseMocker().mock("selects-page-mock", urlEndsWith("page_with_dynamic_select.html"), mockedResponse());
+    selenideProxy.responseMocker().mockText("selects-page-mock",
+      GET, urlEndsWith("page_with_dynamic_select.html"), this::mockedResponse);
 
     openFile("page_with_frames.html");
     switchTo().frame("leftFrame");
@@ -82,8 +83,8 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
     $("h1").shouldHave(text("Page with dynamic select"));
   }
 
-  private byte[] mockedResponse() {
-    return "<html><body><h1>This is a fake response</h1></body></html>".getBytes(UTF_8);
+  private String mockedResponse() {
+    return "<html><body><h1>This is a fake response</h1></body></html>";
   }
 
   private boolean isBrowserOwnTechnicalRequest(String url) {
@@ -92,6 +93,6 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
 
   @AfterEach
   void tearDown() {
-    getSelenideProxy().responseMocker().reset();
+    getSelenideProxy().responseMocker().resetAll();
   }
 }
