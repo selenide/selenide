@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Browsers.CHROME;
-import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.SAFARI;
 import static integration.server.LocalHttpServer.startWithRetry;
 import static java.lang.Boolean.parseBoolean;
@@ -20,7 +19,7 @@ public abstract class BaseIntegrationTest {
   protected static volatile LocalHttpServer server;
   private static String protocol;
   protected static final String browser = System.getProperty("selenide.browser", CHROME);
-  private static final boolean SSL = !SAFARI.equalsIgnoreCase(browser) && !FIREFOX.equalsIgnoreCase(browser);
+  private static final boolean SSL = !SAFARI.equalsIgnoreCase(browser);
   static final boolean headless = parseBoolean(System.getProperty("selenide.headless", "false"));
   private static final Locale defaultLocale = Locale.getDefault();
 
