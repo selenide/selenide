@@ -24,6 +24,7 @@ class CorsProtectedHandler extends BaseHandler {
     response.addHeader("Access-Control-Allow-Headers", "Content-type, X-Boom");
     response.addHeader("Access-Control-Allow-Origin", friendlyOrigin);
     response.addHeader("Access-Control-Max-Age", "0");
+    response.addHeader("Content-Length", "0");
     response.setStatus(SC_OK);
   }
 
