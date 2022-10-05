@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
@@ -57,13 +58,15 @@ class FileDownloadHandler extends BaseHandler {
   }
 
   private String getSessionId(HttpServletRequest request) {
-    if (request.getCookies() != null) {
-      for (Cookie cookie : request.getCookies()) {
-        if ("session_id".equals(cookie.getName())) {
-          return cookie.getValue();
-        }
+    if (request.getCookies() == null) {
+      return "Request has no cookies";
+    }
+    for (Cookie cookie : request.getCookies()) {
+      if ("session_id".equals(cookie.getName())) {
+        return cookie.getValue();
       }
     }
-    throw new IllegalArgumentException("No cookie 'session_id' found: " + Arrays.toString(request.getCookies()));
+
+    return "No cookie 'session_id' found: " + Arrays.stream(request.getCookies()).map(Cookie::getName).collect(Collectors.toList());
   }
 }
