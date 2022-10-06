@@ -43,7 +43,9 @@ public class MockResponseFilter implements RequestFilter {
   /**
    * Mock server response
    *
-   * @param name           any unique string. Can be used to reset the mock.
+   * @param name           Name of this "mocker". Must be a unique string (you are not allowed to add two mockers with the same name).
+   *                       Can be used to reset the mock after the test.
+   *                       Added to every http response as header "X-Mocked-By".
    * @param requestMatcher criteria which requests to mock
    * @param mockedResponse the mocked response body (e.g. html or image)
    */
@@ -51,7 +53,7 @@ public class MockResponseFilter implements RequestFilter {
     if (mocks.containsKey(name)) {
       throw new IllegalArgumentException("Response filter already registered: " + name);
     }
-    mocks.put(name, new ResponseMock(requestMatcher, mockedResponse));
+    mocks.put(name, new ResponseMock(name, requestMatcher, mockedResponse));
   }
 
   /**
@@ -94,7 +96,8 @@ public class MockResponseFilter implements RequestFilter {
       .add("Access-Control-Allow-Methods", "*")
       .add("Access-Control-Allow-Headers", "*")
       .add("Access-Control-Allow-Origin", "*")
-      .add("Access-Control-Max-Age", "0");
+      .add("Access-Control-Max-Age", "0")
+      .add("X-Mocked-By", mock.name);
 
     return response(request, wrappedBuffer(new byte[0]), headers);
   }
@@ -105,7 +108,8 @@ public class MockResponseFilter implements RequestFilter {
     ByteBuf content = wrappedBuffer(mock.mockedResponse.get());
     HttpHeaders headers = new DefaultHttpHeaders()
       .add("Content-Length", content.readableBytes())
-      .set("Access-Control-Allow-Origin", "*");
+      .set("Access-Control-Allow-Origin", "*")
+      .add("X-Mocked-By", mock.name);
 
     return response(request, content, headers);
   }
@@ -118,10 +122,12 @@ public class MockResponseFilter implements RequestFilter {
 
   @ParametersAreNonnullByDefault
   private static final class ResponseMock {
+    private final String name;
     private final RequestMatcher requestMatcher;
     private final Supplier<byte[]> mockedResponse;
 
-    private ResponseMock(RequestMatcher requestMatcher, Supplier<byte[]> mockedResponse) {
+    private ResponseMock(String name, RequestMatcher requestMatcher, Supplier<byte[]> mockedResponse) {
+      this.name = name;
       this.requestMatcher = requestMatcher;
       this.mockedResponse = mockedResponse;
     }
