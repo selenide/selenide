@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static com.codeborne.selenide.proxy.RequestMatcher.HttpMethod.POST;
-import static com.codeborne.selenide.proxy.RequestMatchers.urlStartsWith;
+import static com.codeborne.selenide.proxy.RequestMatchers.urlContains;
 import static java.util.Objects.requireNonNull;
 
 final class MockResponseWithCorsTest extends ProxyIntegrationTest {
@@ -41,7 +41,7 @@ final class MockResponseWithCorsTest extends ProxyIntegrationTest {
   @Test
   void canMockServerResponse() {
     open();
-    proxyMocker().mockText("cors-mock", POST, urlStartsWith("/try-cors/Frodo"), this::mockedResponse);
+    proxyMocker().mockText("cors-mock", urlContains(POST, "/try-cors/Frodo"), this::mockedResponse);
     open("/page_with_cross-origin-request.html?anotherPort=" + corsProtectedService.getPort());
     $("#moria").shouldHave(text("You hacked the CORS, Frodo!"));
   }

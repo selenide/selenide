@@ -15,4 +15,9 @@ public interface RequestMatcher {
   }
 
   boolean match(HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo);
+
+  static boolean methodMatches(HttpRequest request, HttpMethod method) {
+    return request.method().name().equalsIgnoreCase(method.name()) ||
+      request.method().name().equalsIgnoreCase(HttpMethod.OPTIONS.name());
+  }
 }
