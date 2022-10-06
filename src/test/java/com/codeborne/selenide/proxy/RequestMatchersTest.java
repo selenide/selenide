@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import static io.netty.handler.codec.http.HttpMethod.DELETE;
 import static io.netty.handler.codec.http.HttpMethod.GET;
 import static io.netty.handler.codec.http.HttpMethod.OPTIONS;
+import static io.netty.handler.codec.http.HttpMethod.PATCH;
 import static io.netty.handler.codec.http.HttpMethod.POST;
 import static io.netty.handler.codec.http.HttpMethod.PUT;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,6 +54,17 @@ class RequestMatchersTest {
     assertThat(matcher.match(request(OPTIONS), null, info("https://auth.ee/user/123"))).isTrue();
     assertThat(matcher.match(request(GET), null, info("https://auth.ee/user/123"))).isFalse();
     assertThat(matcher.match(request(DELETE), null, info("https://auth.ee/uzer/123"))).isFalse();
+  }
+
+  @Test
+  void urlMatches() {
+    RequestMatcher matcher = RequestMatchers.urlMatches(RequestMatcher.HttpMethod.PATCH, ".*/(\\w+)/(\\d+).*");
+    assertThat(matcher.match(request(PATCH), null, info("https://auth.ee/user/123"))).isTrue();
+    assertThat(matcher.match(request(PATCH), null, info("/user/123"))).isTrue();
+    assertThat(matcher.match(request(PATCH), null, info("/user/123/"))).isTrue();
+    assertThat(matcher.match(request(PATCH), null, info("/user/"))).isFalse();
+    assertThat(matcher.match(request(PATCH), null, info("https://auth.ee/user/john"))).isFalse();
+    assertThat(matcher.match(request(PATCH), null, info("https://auth.ee//456"))).isFalse();
   }
 
   private HttpRequest request(HttpMethod method) {
