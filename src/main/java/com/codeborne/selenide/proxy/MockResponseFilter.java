@@ -3,7 +3,6 @@ package com.codeborne.selenide.proxy;
 import com.browserup.bup.filters.RequestFilter;
 import com.browserup.bup.util.HttpMessageContents;
 import com.browserup.bup.util.HttpMessageInfo;
-import com.codeborne.selenide.proxy.RequestMatcher.HttpMethod;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
@@ -35,10 +34,10 @@ public class MockResponseFilter implements RequestFilter {
   private final Map<String, ResponseMock> mocks = new LinkedHashMap<>();
 
   /**
-   * See {@link #mockBytes(String, HttpMethod, RequestMatcher, Supplier)}
+   * See {@link #mockBytes(String, RequestMatcher, Supplier)}
    */
-  public void mockText(String name, HttpMethod method, RequestMatcher requestMatcher, Supplier<String> mockedResponse) {
-    mockBytes(name, method, requestMatcher, () -> mockedResponse.get().getBytes(UTF_8));
+  public void mockText(String name, RequestMatcher requestMatcher, Supplier<String> mockedResponse) {
+    mockBytes(name, requestMatcher, () -> mockedResponse.get().getBytes(UTF_8));
   }
 
   /**
@@ -48,11 +47,11 @@ public class MockResponseFilter implements RequestFilter {
    * @param requestMatcher criteria which requests to mock
    * @param mockedResponse the mocked response body (e.g. html or image)
    */
-  public void mockBytes(String name, HttpMethod method, RequestMatcher requestMatcher, Supplier<byte[]> mockedResponse) {
+  public void mockBytes(String name, RequestMatcher requestMatcher, Supplier<byte[]> mockedResponse) {
     if (mocks.containsKey(name)) {
       throw new IllegalArgumentException("Response filter already registered: " + name);
     }
-    mocks.put(name, new ResponseMock(method, requestMatcher, mockedResponse));
+    mocks.put(name, new ResponseMock(requestMatcher, mockedResponse));
   }
 
   /**
@@ -78,14 +77,9 @@ public class MockResponseFilter implements RequestFilter {
   public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo) {
     for (ResponseMock mock : mocks.values()) {
       if (mock.requestMatcher.match(request, contents, messageInfo)) {
-
-        if (request.method().equals(OPTIONS)) {
-          return mockOptionsRequest(request, mock);
-        }
-
-        if (request.method().name().equalsIgnoreCase(mock.method.name())) {
-          return mockRequest(request, mock);
-        }
+        return request.method().equals(OPTIONS) ?
+          mockOptionsRequest(request, mock) :
+          mockRequest(request, mock);
       }
     }
 
@@ -97,7 +91,7 @@ public class MockResponseFilter implements RequestFilter {
   private DefaultFullHttpResponse mockOptionsRequest(HttpRequest request, ResponseMock mock) {
     HttpHeaders headers = new DefaultHttpHeaders()
       .add("Content-Length", "0")
-      .add("Access-Control-Allow-Methods", mock.method)
+      .add("Access-Control-Allow-Methods", "*")
       .add("Access-Control-Allow-Headers", "*")
       .add("Access-Control-Allow-Origin", "*")
       .add("Access-Control-Max-Age", "0");
@@ -124,12 +118,10 @@ public class MockResponseFilter implements RequestFilter {
 
   @ParametersAreNonnullByDefault
   private static final class ResponseMock {
-    private final HttpMethod method;
     private final RequestMatcher requestMatcher;
     private final Supplier<byte[]> mockedResponse;
 
-    private ResponseMock(HttpMethod method, RequestMatcher requestMatcher, Supplier<byte[]> mockedResponse) {
-      this.method = method;
+    private ResponseMock(RequestMatcher requestMatcher, Supplier<byte[]> mockedResponse) {
       this.requestMatcher = requestMatcher;
       this.mockedResponse = mockedResponse;
     }

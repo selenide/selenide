@@ -71,7 +71,7 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
 
     SelenideProxyServer selenideProxy = requireNonNull(getSelenideProxy());
     selenideProxy.responseMocker().mockText("selects-page-mock",
-      GET, urlEndsWith("page_with_dynamic_select.html"), this::mockedResponse);
+      urlEndsWith(GET, "page_with_dynamic_select.html"), this::mockedResponse);
 
     openFile("page_with_frames.html");
     switchTo().frame("leftFrame");
