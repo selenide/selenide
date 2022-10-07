@@ -1,11 +1,15 @@
 # Changelog
 
-## 6.9.0
-* #1967 upgrade to selenium 4.5.0 -- see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
-* #1967 remove Opera support
-* #1967 bump slf4j from 2.0.2 to 2.0.3
+## 6.9.0 (released 07.10.2022)
+* #1254 add methods to mock any server response in Selenide proxy  --  see PR #1978
 * #1974 Selenide proxy now adds Authorization header only for specified domain -- see PR #1975
 * #1970 improve resolving proxy host name
+* #1967 upgrade to selenium 4.5.0 -- see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* #1967 remove Opera support
+* #1971 Disable logging for getAlias method  --  thanks to Reserved Word for the pull request
+* #1977 add setting "connection timeout" in addition to "read timeout"
+* #1969 bump slf4j from 2.0.2 to 2.0.3
+* #1254 bump littleproxy from 2.0.12 to 2.0.13
 
 ## 6.8.1 (released 27.09.2022)
 * #1965 restore "opentelemetry" dependency
