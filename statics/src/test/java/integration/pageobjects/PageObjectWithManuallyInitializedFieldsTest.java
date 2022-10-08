@@ -26,7 +26,7 @@ final class PageObjectWithManuallyInitializedFieldsTest extends IntegrationTest 
     MyPage page = page(MyPage.class);
 
     page.h1.shouldHave(Condition.text("Page with selects"));
-    assertThat(page.h2s).hasSize(3);
+    assertThat(page.h2s).hasSize(4);
     page.h2s.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
     page.h2First.shouldBe(visible).shouldHave(text("Dropdown list"));
   }

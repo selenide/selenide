@@ -59,7 +59,7 @@ public class PageObjectWithAliasesTest extends IntegrationTest {
     )
       .isInstanceOf(ListSizeMismatch.class)
       .hasMessageStartingWith("""
-          List size mismatch: expected: = 666, actual: 3, collection: Middle headers {By.tagName: h2}
+          List size mismatch: expected: = 666, actual: 4, collection: Middle headers {By.tagName: h2}
           """.trim()
       );
   }
