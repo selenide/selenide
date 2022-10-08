@@ -76,10 +76,11 @@ final class PageObjectTest extends IntegrationTest {
     pageWithSelects.h1.shouldHave(Condition.text("Page with selects"));
 
     assertThat(pageWithSelects.h2s)
-      .hasSize(3);
+      .hasSize(4);
     pageWithSelects.h2s.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
     pageWithSelects.h2s.get(1).shouldBe(visible).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
     pageWithSelects.h2s.get(2).shouldBe(visible).shouldHave(text("Radio buttons"));
+    pageWithSelects.h2s.get(3).shouldBe(visible).shouldHave(text("Disabled select"));
   }
 
   @Test
@@ -87,7 +88,7 @@ final class PageObjectTest extends IntegrationTest {
     pageWithSelects.h1.shouldHave(Condition.text("Page with selects"));
 
     assertThat(pageWithSelects.h2sElementsCollection)
-      .hasSize(3);
+      .hasSize(4);
     pageWithSelects.h2sElementsCollection.get(0)
       .shouldBe(visible)
       .shouldHave(text("Dropdown list"));
@@ -99,6 +100,9 @@ final class PageObjectTest extends IntegrationTest {
     pageWithSelects.h2sElementsCollection.get(2)
       .shouldBe(visible)
       .shouldHave(text("Radio buttons"));
+    pageWithSelects.h2sElementsCollection.get(3)
+      .shouldBe(visible)
+      .shouldHave(text("Disabled select"));
   }
 
   @Test

@@ -66,8 +66,8 @@ final class UnopenedBrowserTest extends IntegrationTest {
     ElementsCollection headers = $$("h2");
     openFile("page_with_selects_without_jquery.html");
     headers
-      .shouldHave(size(3))
-      .shouldHave(texts("Dropdown list", "Options with 'apostrophes' and \"quotes\"", "Radio buttons"));
+      .shouldHave(size(4))
+      .shouldHave(texts("Dropdown list", "Options with 'apostrophes' and \"quotes\"", "Radio buttons", "Disabled select"));
   }
 
   @Test

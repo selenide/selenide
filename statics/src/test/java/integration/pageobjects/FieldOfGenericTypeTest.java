@@ -28,19 +28,20 @@ public class FieldOfGenericTypeTest extends IntegrationTest {
     assertThat(page.body).isInstanceOf(DummyTypedElement.class);
     assertThat(page.body.names).isNull();
     assertThat(page.body.selects).isInstanceOf(List.class);
-    assertThat(page.body.selects).hasSize(5);
+    assertThat(page.body.selects).hasSize(6);
     assertThat(page.body.getSelf()).isEqualTo($("body"));
     assertThat(page.body.selects.get(0)).isEqualTo($("select[name=domain]"));
     assertThat(page.body.selects.get(1)).isEqualTo($("select#hero"));
     assertThat(page.body.selects.get(2)).isEqualTo($("select#gender"));
     assertThat(page.body.selects.get(3)).isEqualTo($("select#cars"));
     assertThat(page.body.selects.get(4)).isEqualTo($("select#empty-select"));
+    assertThat(page.body.selects.get(5)).isEqualTo($("select#disabled-select"));
   }
 
   @Test
   void injectsFoundSelenideElementAsSelf2() {
     AnotherPage page = page(AnotherPage.class);
-    assertThat(page.body.selects).hasSize(5);
+    assertThat(page.body.selects).hasSize(6);
     assertThat(page.body).isInstanceOf(ElementsContainer.class);
     assertThat(page.body.getSelf()).isEqualTo($("body"));
     assertThat(page.body.selects.get(0)).isInstanceOf(WebElement.class);
@@ -49,13 +50,14 @@ public class FieldOfGenericTypeTest extends IntegrationTest {
     assertThat(page.body.selects.get(2)).isEqualTo($("select#gender"));
     assertThat(page.body.selects.get(3)).isEqualTo($("select#cars"));
     assertThat(page.body.selects.get(4)).isEqualTo($("select#empty-select"));
+    assertThat(page.body.selects.get(5)).isEqualTo($("select#disabled-select"));
   }
 
   @Test
   void injectsFoundSelenideElementAsSelf3() {
     YetAnotherPage page = page(YetAnotherPage.class);
     assertThat(page.body).isNotNull();
-    assertThat(page.body.selects).hasSize(5);
+    assertThat(page.body.selects).hasSize(6);
 
     assertThatThrownBy(() -> page.body.selects.get(0))
       .isInstanceOf(RuntimeException.class)
