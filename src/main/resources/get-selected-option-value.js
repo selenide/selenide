@@ -5,8 +5,6 @@
   if (!select.options) {
     return ['', 'Select has no options']
   }
-  let option = select.options[select.selectedIndex];
-  let value = !option ? null : option.value;
-  return [value, null]
+  return [Array.from(select.selectedOptions).map(option => option.value).join(''), null]
 })(arguments[0]);
 

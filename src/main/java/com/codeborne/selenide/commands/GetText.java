@@ -18,8 +18,8 @@ public class GetText implements Command<String> {
     this(new GetSelectedOptionText());
   }
 
-  GetText(GetSelectedOptionText getSelectedtextOption) {
-    this.getSelectedOptionText = getSelectedtextOption;
+  GetText(GetSelectedOptionText getSelectedOptionText) {
+    this.getSelectedOptionText = getSelectedOptionText;
   }
 
   @Override

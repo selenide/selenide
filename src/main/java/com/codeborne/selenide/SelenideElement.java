@@ -924,7 +924,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return ElementsCollection for selected &lt;option&gt; elements (empty list if no options are selected)
    * @see com.codeborne.selenide.commands.GetSelectedOptions
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull

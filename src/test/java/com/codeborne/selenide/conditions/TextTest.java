@@ -5,19 +5,25 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.commands.GetSelectedOptionText;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
+
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static com.codeborne.selenide.Mocks.mockSelect;
-import static com.codeborne.selenide.Mocks.option;
 import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 final class TextTest {
   private final Driver driver = new DriverStub(new SelenideConfig().textCheck(PARTIAL_TEXT));
@@ -36,18 +42,21 @@ final class TextTest {
 
   @Test
   void check_select() {
-    Text condition = new Text("Hello World");
-    SelenideElement selectWithoutSpace = mockSelect(option("Hello", true), option("World", true));
-    SelenideElement selectWithSpace = mockSelect(option("Hello", true), option(" World", true));
+    Text condition = new Text("Hello World", mockSelectedTextExtractor("Hello from js underworld"));
+    SelenideElement select = mockSelect();
 
-    assertThat(condition.check(driver, selectWithoutSpace))
+    assertThat(condition.check(driver, select))
       .usingRecursiveComparison()
       .ignoringFields("timestamp")
-      .isEqualTo(new CheckResult(REJECT, "text=\"HelloWorld\""));
-    assertThat(condition.check(driver, selectWithSpace))
-      .usingRecursiveComparison()
-      .ignoringFields("timestamp")
-      .isEqualTo(new CheckResult(ACCEPT, "text=\"Hello World\""));
+      .isEqualTo(new CheckResult(REJECT, "text=\"Hello from js underworld\""));
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  private GetSelectedOptionText mockSelectedTextExtractor(String selectedText) {
+    GetSelectedOptionText command = mock(GetSelectedOptionText.class);
+    when(command.execute(any(), any())).thenReturn(selectedText);
+    return command;
   }
 
   @Test
@@ -68,12 +77,10 @@ final class TextTest {
 
   @Test
   void apply_for_select_caseInsensitive() {
-    WebElement element = mockSelect(
-      option("John", true),
-      option(" Malkovich", true),
-      option(" The First", true)
-    );
-    assertThat(new Text("john malkovich").check(driver, element).verdict()).isEqualTo(ACCEPT);
+    WebElement element = mockSelect();
+    GetSelectedOptionText givenSelectedText = mockSelectedTextExtractor("John Malkovich The First");
+    assertThat(new Text("john malkovich", givenSelectedText)
+      .check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
@@ -101,12 +108,11 @@ final class TextTest {
 
   @Test
   void shouldHaveCorrectActualValueAfterSelectMatching() {
-    Text condition = new Text("Hello");
-    WebElement element = mockSelect(option("Hello", true), option(" World", true));
+    Text condition = new Text("Hello", mockSelectedTextExtractor("Hello World"));
+    WebElement element = mockSelect();
     CheckResult checkResult = condition.check(driver, element);
 
     assertThat(checkResult.actualValue()).isEqualTo("text=\"Hello World\"");
-    // One time in Text condition, second in selenium Select
-    verify(element, times(2)).getTagName();
+    verify(element, times(1)).getTagName();
   }
 }
