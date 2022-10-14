@@ -7,8 +7,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.empty;
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exactValue;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.partialTextCaseSensitive;
@@ -16,6 +20,7 @@ import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,7 +77,7 @@ final class SelectsTest extends IntegrationTest {
 
   @Test
   void userCanGetSelectedOptionValue_selectHasNoOptions() {
-    assertThat($("select#empty-select").getSelectedOptionValue()).isNull();
+    assertThat($("select#empty-select").getSelectedOptionValue()).isEqualTo("");
   }
 
   @Test
@@ -90,7 +95,7 @@ final class SelectsTest extends IntegrationTest {
 
   @Test
   void userCanGetSelectedOptionText_selectHasNoOptions() {
-    assertThat($("select#empty-select").getSelectedOptionText()).isNull();
+    assertThat($("select#empty-select").getSelectedOptionText()).isEqualTo("");
   }
 
   @Test
@@ -390,5 +395,27 @@ final class SelectsTest extends IntegrationTest {
     assertThatThrownBy(() -> $("#cars").selectOptionByValue("opel", "zhiguli", "audi"))
       .isInstanceOf(InvalidStateException.class)
       .hasMessageContaining("Invalid element state [#cars/option[value:zhiguli]]: Cannot select a disabled option");
+  }
+
+  @Test
+  void canCheckOptionsOfDisabledSelect() {
+    $("#disabled-select").getSelectedOptions().shouldHave(size(1));
+    $("#disabled-select").getSelectedOption().shouldHave(exactValue(""));
+    $("#disabled-select").getSelectedOption().shouldHave(text("-- Select the frozen --"));
+  }
+
+  @Test
+  void canCheckTextOfDisabledSelect() {
+    $("#disabled-select").shouldHave(text("-- Select the frozen --"));
+  }
+
+  @Test
+  void canWaitUntilSelectsGetsEnabled() {
+    timeout = 1000;
+    $("#disabled-select").shouldBe(disabled);
+    $("#unfroze-me").click();
+    $("#disabled-select").selectOption("Anna");
+    $("#disabled-select").getSelectedOption().shouldHave(text("Anna"));
+    $("#disabled-select").shouldBe(enabled);
   }
 }
