@@ -28,6 +28,14 @@ public class DriverStub implements Driver {
     this("netscape navigator");
   }
 
+  public DriverStub(WebDriver webDriver) {
+    this(new SelenideConfig(), webDriver);
+  }
+
+  public DriverStub(Config config, WebDriver webDriver) {
+    this(config, new Browser("netscape navigator", false), webDriver, null);
+  }
+
   public DriverStub(String browser) {
     this(new SelenideConfig(), browser);
   }

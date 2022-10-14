@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.commands.GetSelectedOptionText;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -60,6 +61,10 @@ public class Mocks {
     WebElement option = mockElement("option", text);
     when(option.isSelected()).thenReturn(selected);
     return option;
+  }
+
+  public static GetSelectedOptionText selectWithSelectedText(String text) {
+    return new DummyGetSelectedOptionText(text);
   }
 
   @Nonnull

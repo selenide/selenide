@@ -1,6 +1,7 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.commands.GetSelectedOptionText;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
@@ -30,7 +31,7 @@ public class PartialTextCaseSensitive extends TextCondition {
   @Override
   protected String getText(Driver driver, WebElement element) {
     return "select".equalsIgnoreCase(element.getTagName()) ?
-      getSelectedOptionsTexts(element) :
+      new GetSelectedOptionText().execute(driver, element) :
       element.getText();
   }
 }

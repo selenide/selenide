@@ -6,9 +6,11 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WrapsDriver;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.Optional;
 
 @ParametersAreNonnullByDefault
@@ -29,6 +31,17 @@ public class JavaScript {
   @Nonnull
   public <T> T execute(Driver driver, Object... arguments) {
     return execute(driver.getWebDriver(), arguments);
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  @SuppressWarnings("unchecked")
+  public <T> T executeOrFail(Driver driver, Object... arguments) {
+    List<Object> result = execute(driver, arguments);
+    if (result.get(1) != null) {
+      throw new IllegalArgumentException((String) result.get(1));
+    }
+    return (T) result.get(0);
   }
 
   public static JavascriptExecutor jsExecutor(SearchContext context) {

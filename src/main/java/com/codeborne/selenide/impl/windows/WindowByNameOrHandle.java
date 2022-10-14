@@ -8,8 +8,9 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Objects;
 import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
 
 @ParametersAreNonnullByDefault
 public class WindowByNameOrHandle implements ExpectedCondition<WebDriver> {
@@ -21,9 +22,9 @@ public class WindowByNameOrHandle implements ExpectedCondition<WebDriver> {
 
   @Override
   @Nullable
-  public WebDriver apply(@SuppressWarnings("NullableProblems") WebDriver driver) {
+  public WebDriver apply(WebDriver driver) {
     try {
-      return Objects.requireNonNull(driver).switchTo().window(nameOrHandleOrTitle);
+      return requireNonNull(driver).switchTo().window(nameOrHandleOrTitle);
     } catch (NoSuchWindowException windowWithNameOrHandleNotFound) {
       try {
         return windowByTitle(driver, nameOrHandleOrTitle);
