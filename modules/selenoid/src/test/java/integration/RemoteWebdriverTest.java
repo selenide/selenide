@@ -1,6 +1,9 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -20,6 +23,12 @@ import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RemoteWebdriverTest {
+
+  @BeforeEach
+  void setUp() {
+    Selenide.closeWebDriver();
+    Configuration.proxyEnabled = false;
+  }
 
   @Test
   void canStartRemoteWebDriver() throws IOException {

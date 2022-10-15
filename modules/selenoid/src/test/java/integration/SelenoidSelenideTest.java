@@ -3,7 +3,6 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.net.NetworkUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +44,6 @@ public class SelenoidSelenideTest {
   @Test
   void downloadViaProxy() throws IOException {
     Configuration.proxyEnabled = true;
-    Configuration.proxyHost = new NetworkUtils().getNonLoopbackAddressOfThisMachine();
     Configuration.fileDownload = PROXY;
     checkDownload();
   }
