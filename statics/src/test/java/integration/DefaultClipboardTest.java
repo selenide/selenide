@@ -2,26 +2,26 @@ package integration;
 
 import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.awt.*;
 
 import static com.codeborne.selenide.ClipboardConditions.content;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.clipboard;
-import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
-@Disabled("Need configure X11 for github actions, not sure that it needs")
 public class DefaultClipboardTest extends IntegrationTest {
 
   @BeforeEach
   public void openTestPage() {
+    assumeThat(GraphicsEnvironment.isHeadless()).isFalse();
     openFile("clipboard.html");
   }
 
@@ -67,10 +67,5 @@ public class DefaultClipboardTest extends IntegrationTest {
   public void checkSetValue() {
     clipboard().setText("111");
     assertThat(clipboard().getText()).isEqualTo("111");
-  }
-
-  @AfterAll
-  public static void tearDown() {
-    closeWebDriver();
   }
 }

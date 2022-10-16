@@ -1,7 +1,6 @@
 package integration;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
@@ -50,11 +49,15 @@ final class ReplacingElementTest extends ITest {
   }
 
   @Test
-  @Disabled
   void tryToCatchStaleElementException() {
-    driver().executeJavaScript("startRegularReplacement()");
+    setTimeout(2000);
+    $("#dynamic-element").shouldHave(value("I will be replaced soon"));
+
+    $("#start-regular-replacement").click();
     for (int i = 0; i < 10; i++) {
-      $("#dynamic-element").shouldHave(value("I am back"), cssClass("reloaded")).setValue("New value from test");
+      $("#dynamic-element")
+        .shouldHave(value("I am back"), cssClass("reloaded"))
+        .setValue("New value from test");
     }
   }
 }
