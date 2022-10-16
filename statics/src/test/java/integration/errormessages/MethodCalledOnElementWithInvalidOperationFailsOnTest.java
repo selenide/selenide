@@ -4,7 +4,6 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.UIAssertionError;
 import integration.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -12,7 +11,6 @@ import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-@Disabled
 final class MethodCalledOnElementWithInvalidOperationFailsOnTest extends IntegrationTest {
   @BeforeEach
   void openPage() {

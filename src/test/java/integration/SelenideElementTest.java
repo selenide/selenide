@@ -1,7 +1,6 @@
 package integration;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,16 +32,8 @@ final class SelenideElementTest extends ITest {
   }
 
   @Test
-    // @Ignore(value = "probably a bug in Selenide")
   void selenideElementChainedWithByTextSelector() {
     $("#status").$(withText("Smith")).shouldBe(visible);
     $("#status").$(byText("Bob Smith")).shouldBe(visible);
-  }
-
-  @Test
-  @Disabled(value = "It fails, please check if it is right")
-  void selenideElementChainedElementByTextWhenTextIsDirectContentOfTheParent() {
-    // e.g. <div id="radioButton><img/>Мастер<div/></div>
-    $("#radioButtons").$(withText("Мастер")).shouldBe(visible); //Fails
   }
 }
