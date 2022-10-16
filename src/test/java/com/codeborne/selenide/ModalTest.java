@@ -16,7 +16,7 @@ import java.util.UUID;
 import static com.codeborne.selenide.ModalOptions.withExpectedText;
 import static org.apache.commons.io.IOUtils.resourceToByteArray;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -60,14 +60,12 @@ final class ModalTest {
 
   @Test
   void confirmWithIncorrectExpectedTextAcceptsDialogAndThrowsException() {
-    DialogTextMismatch exception = assertThrows(
-      DialogTextMismatch.class,
-      () -> new Modal(driver).confirm(withExpectedText("Are you sure?")));
+    assertThatThrownBy(() -> new Modal(driver).confirm(withExpectedText("Are you sure?")))
+      .isInstanceOf(DialogTextMismatch.class)
+      .hasMessageContaining(String.format("Actual: %s%nExpected: Are you sure?%n", ALERT_TEXT))
+      .hasMessageContaining(String.format("Screenshot: %s", reportsBaseUri));
 
     verify(alert).accept();
-    assertThat(exception.getMessage())
-      .contains(String.format("Actual: %s%nExpected: Are you sure?%n", ALERT_TEXT))
-      .contains("Screenshot: " + reportsBaseUri);
   }
 
   @Test
@@ -98,15 +96,13 @@ final class ModalTest {
 
   @Test
   void promptWithIncorrectExpectedTextAndInputAcceptsDialogAndReturnsText() {
-    DialogTextMismatch exception = assertThrows(
-      DialogTextMismatch.class,
-      () -> new Modal(driver).prompt("Are you sure?", "Sure do"));
+    assertThatThrownBy(() -> new Modal(driver).prompt("Are you sure?", "Sure do"))
+      .isInstanceOf(DialogTextMismatch.class)
+      .hasMessageContaining(String.format("Actual: %s%nExpected: Are you sure?%n", ALERT_TEXT))
+      .hasMessageContaining(String.format("Screenshot: %s", reportsPath()));
 
     verify(alert).sendKeys("Sure do");
     verify(alert).accept();
-    assertThat(exception.getMessage())
-      .contains(String.format("Actual: %s%nExpected: Are you sure?%n", ALERT_TEXT))
-      .contains("Screenshot: " + convertFilePath(System.getProperty("user.dir") + "/" + config.reportsFolder() + "/"));
   }
 
   @Test
@@ -127,14 +123,16 @@ final class ModalTest {
 
   @Test
   void dismissWithIncorrectExpectedTextAcceptsDialogAndThrowsException() {
-    DialogTextMismatch exception = assertThrows(
-      DialogTextMismatch.class,
-      () -> new Modal(driver).dismiss("Are you sure?"));
+    assertThatThrownBy(() -> new Modal(driver).dismiss("Are you sure?"))
+      .isInstanceOf(DialogTextMismatch.class)
+      .hasMessageContaining(String.format("Actual: %s%nExpected: Are you sure?%n", ALERT_TEXT))
+      .hasMessageContaining(String.format("Screenshot: %s", reportsPath()));
 
     verify(alert).dismiss();
-    assertThat(exception.getMessage())
-      .contains(String.format("Actual: %s%nExpected: Are you sure?%n", ALERT_TEXT))
-      .contains("Screenshot: " + convertFilePath(System.getProperty("user.dir") + "/" + config.reportsFolder() + "/"));
+  }
+
+  private String reportsPath() {
+    return convertFilePath(String.format("%s/%s/", System.getProperty("user.dir"), config.reportsFolder()));
   }
 
   private String convertFilePath(String path) {

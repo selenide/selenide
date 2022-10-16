@@ -13,9 +13,6 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 final class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   @BeforeEach
@@ -40,14 +37,14 @@ final class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   void actionWithoutWaiting__When$Element() {
     SelenideElement element = $("ul li");
 
-    assertTrue(element.isDisplayed());
+    assertThat(element.isDisplayed()).isTrue();
   }
 
   @Test
   void actionWithoutWaiting_When$Element_WithNonExistentWebElement() {
     SelenideElement element = $("ul .nonexistent");
 
-    assertFalse(element.exists());
+    assertThat(element.exists()).isFalse();
   }
 
   @Test
@@ -61,42 +58,42 @@ final class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   void actionWithoutWaiting_Exists_WhenCollectionElement_WithNonExistentWebElement() {
     SelenideElement element = $$("ul li").findBy(cssClass("nonexistent"));
 
-    assertFalse(element.exists());
+    assertThat(element.exists()).isFalse();
   }
 
   @Test
   void actionWithoutWaiting_Exists_WhenCollectionElement_WithExistentWebElement() {
     SelenideElement element = $$("ul li").findBy(cssClass("detective"));
 
-    assertTrue(element.exists());
+    assertThat(element.exists()).isTrue();
   }
 
   @Test
   void actionWithoutWaiting_IsDisplayed_WhenCollectionElement_WithNonExistentWebElement() {
     SelenideElement element = $$("ul li").findBy(cssClass("nonexistent"));
 
-    assertFalse(element.isDisplayed());
+    assertThat(element.isDisplayed()).isFalse();
   }
 
   @Test
   void actionWithoutWaiting_IsDisplayed_WhenCollectionElement_WithExistentWebElement() {
     SelenideElement element = $$("ul li").findBy(cssClass("detective"));
 
-    assertTrue(element.isDisplayed());
+    assertThat(element.isDisplayed()).isTrue();
   }
 
   @Test
   void actionWithoutWaiting_Is_WhenCollectionElement_WithNonExistentWebElement() {
     SelenideElement element = $$("ul li").findBy(cssClass("nonexistent"));
 
-    assertFalse(element.is(visible));
+    assertThat(element.is(visible)).isFalse();
   }
 
   @Test
   void actionWithoutWaiting_Is_WhenCollectionElement_WithExistentWebElement() {
     SelenideElement element = $$("ul li").findBy(cssClass("detective"));
 
-    assertTrue(element.is(visible));
+    assertThat(element.is(visible)).isTrue();
   }
 
   @Test
@@ -111,7 +108,7 @@ final class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   void actionWithoutWaiting_ToString_WhenCollectionElement_WithExistentWebElement() {
     SelenideElement element = $$("ul li").findBy(cssClass("detective"));
 
-    assertTrue(element.toString().contains("Miller"));
+    assertThat(element.toString().contains("Miller")).isTrue();
   }
 
   @Test
@@ -132,7 +129,7 @@ final class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   void actionWithExistenceWaiting_WhenCollectionElementByCondition() {
     SelenideElement element = $$("li").findBy(cssClass("the-expanse"));
 
-    assertEquals("Miller detective", element.text());
+    assertThat(element.text()).isEqualTo("Miller detective");
   }
 
   @Test

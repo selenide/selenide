@@ -11,6 +11,7 @@ ext {
   commonsFileuploadVersion = '1.4'
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.12.18'
+  archunitVersion = '1.0.0'
 }
 
 subprojects {
@@ -41,6 +42,7 @@ subprojects {
     testImplementation("io.netty:netty-codec:$nettyVersion")
     testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
     testImplementation("commons-fileupload:commons-fileupload:${commonsFileuploadVersion}")
+    testImplementation("com.tngtech.archunit:archunit-junit5:${archunitVersion}")
     api("org.slf4j:slf4j-api:$slf4jVersion")
     testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
   }
