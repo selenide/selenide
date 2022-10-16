@@ -1,6 +1,5 @@
 package integration;
 
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Cookie;
@@ -13,6 +12,7 @@ import static com.codeborne.selenide.Selenide.clearBrowserCookies;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ClearCookiesTest extends IntegrationTest {
   @BeforeEach
@@ -22,7 +22,7 @@ final class ClearCookiesTest extends IntegrationTest {
     String domain = new URL(getWebDriver().getCurrentUrl()).getHost();
     getWebDriver().manage().addCookie(new Cookie("username", "John Doe", domain, "/", null));
     Set<Cookie> cookieSet = getWebDriver().manage().getCookies();
-    Assumptions.assumeFalse(cookieSet.isEmpty());
+    assumeThat(cookieSet.isEmpty()).isFalse();
   }
 
   @Test

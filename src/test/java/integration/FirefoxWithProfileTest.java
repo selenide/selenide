@@ -16,14 +16,14 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.TestResources.toFile;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class FirefoxWithProfileTest extends BaseIntegrationTest {
   private SelenideDriver customFirefox;
 
   @BeforeEach
   void setUp() {
-    assumeTrue(browser().isFirefox());
+    assumeThat(browser().isFirefox()).isTrue();
     WebDriverManager.firefoxdriver().setup();
   }
 

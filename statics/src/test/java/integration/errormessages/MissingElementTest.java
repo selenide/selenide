@@ -2,7 +2,6 @@ package integration.errormessages;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -24,11 +23,12 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.element;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static integration.errormessages.Helper.getReportsFolder;
 import static integration.errormessages.Helper.screenshot;
 import static integration.errormessages.Helper.webElementNotFound;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class MissingElementTest extends IntegrationTest {
   private PageObject pageObject;
@@ -218,7 +218,7 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void clickingNonClickableElement() {
-    assumeTrue(WebDriverRunner.isChrome());
+    assumeThat(isChrome()).isTrue();
 
     assertThatThrownBy(() ->
       $("#non-clickable-element a").shouldBe(visible).click()
@@ -238,10 +238,6 @@ final class MissingElementTest extends IntegrationTest {
 
   private String html() {
     return "/\\d+\\.\\d+\\.html";
-  }
-
-  private String pngOrHtml() {
-    return "/\\d+\\.\\d+\\.(png|html)";
   }
 
   static class PageObject {

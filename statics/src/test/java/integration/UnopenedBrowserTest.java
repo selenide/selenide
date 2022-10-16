@@ -19,7 +19,7 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class UnopenedBrowserTest extends IntegrationTest {
   @BeforeEach
@@ -72,7 +72,7 @@ final class UnopenedBrowserTest extends IntegrationTest {
 
   @Test
   void canDeclareSelenideElements_beforeOpeningBrowsers_evenIfUsingCustomWebdriver() {
-    assumeTrue(browser().isChrome());
+    assumeThat(browser().isChrome()).isTrue();
     useProxy(false);
 
     SelenideElement header = $("h1");

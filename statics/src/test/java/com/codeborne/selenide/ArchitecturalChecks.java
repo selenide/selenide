@@ -30,6 +30,13 @@ public class ArchitecturalChecks {
   }
 
   @Test
+  void noJunitAssumptions() {
+    noClasses()
+      .should().accessClassesThat().areAssignableTo("org.junit.jupiter.api.Assumptions")
+      .check(selenideClasses);
+  }
+
+  @Test
   void noJunit4DisabledTests() {
     noClasses()
       .should().beAnnotatedWith("org.junit.Ignore")
