@@ -10,13 +10,13 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class BrowserPositionTest extends IntegrationTest {
   @BeforeEach
   @AfterEach
   void closeBrowser() {
-    assumeFalse(isHeadless());
+    assumeThat(isHeadless()).isFalse();
     closeWebDriver();
   }
 

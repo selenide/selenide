@@ -18,12 +18,12 @@ import javax.annotation.Nonnull;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class CustomWebDriverProviderTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
-    assumeTrue("chrome".equalsIgnoreCase(browser));
+    assumeThat("chrome".equalsIgnoreCase(browser)).isTrue();
     Configuration.browser = CustomWebDriverProvider.class.getName();
     closeWebDriver();
   }

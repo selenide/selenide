@@ -9,12 +9,12 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import java.io.IOException;
 
 import static com.codeborne.selenide.Condition.visible;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class FirefoxWithSystemPropertiesTest extends ITest {
   @BeforeEach
   void setUp() throws IOException {
-    assumeTrue(browser().isFirefox());
+    assumeThat(browser().isFirefox()).isTrue();
     driver().close();
   }
 

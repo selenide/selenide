@@ -10,7 +10,7 @@ import static com.codeborne.selenide.WebDriverConditions.currentFrameUrl;
 import static com.codeborne.selenide.WebDriverConditions.urlContaining;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class FramesTest extends ITest {
   @BeforeEach
@@ -65,7 +65,7 @@ final class FramesTest extends ITest {
 
   @Test
   void canSwitchBetweenFramesByIndex() {
-    assumeFalse(browser().isChrome());
+    assumeThat(browser().isChrome()).isFalse();
     assertThat(driver().title()).isEqualTo("Test::frames");
 
     switchTo().frame(0);

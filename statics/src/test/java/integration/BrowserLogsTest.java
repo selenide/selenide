@@ -12,15 +12,15 @@ import static com.codeborne.selenide.Selenide.getWebDriverLogs;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.openqa.selenium.logging.LogType.BROWSER;
 
 final class BrowserLogsTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
-    assumeFalse(isFirefox(),
-      "Firefox says `UnsupportedCommandException: POST /session/b493bc56.../log did not match a known command`"
-    );
+    assumeThat(isFirefox())
+      .as("Firefox says `UnsupportedCommandException: POST /session/b493bc56.../log did not match a known command`")
+      .isFalse();
 
     if (hasWebDriverStarted()) {
       getWebDriverLogs(BROWSER); // clear logs

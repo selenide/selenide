@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Selectors.shadowCss;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ShadowDomInsideIFrameTest extends IntegrationTest {
   @BeforeEach
@@ -28,7 +28,7 @@ final class ShadowDomInsideIFrameTest extends IntegrationTest {
   @Test
   void setValueViaShadowDomInsideIFrame() {
     // Firefox says that the input is "not reachable by keyboard" (inside shadow-dom)
-    assumeFalse(isFirefox());
+    assumeThat(isFirefox()).isFalse();
     switchTo().frame("iframe_page");
     Configuration.fastSetValue = false;
     $(shadowCss("input", "#shadow-host")).setValue("test").shouldHave(value("test"));
