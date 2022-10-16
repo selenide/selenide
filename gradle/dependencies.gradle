@@ -9,7 +9,7 @@ ext {
   browserupProxyVersion = '2.2.3'
   littleProxyVersion = '2.0.13'
   commonsFileuploadVersion = '1.4'
-  jabelVersion = '0.4.2'
+  jabelVersion = '1.0.0'
   byteBuddyVersion = '1.12.18'
 }
 
