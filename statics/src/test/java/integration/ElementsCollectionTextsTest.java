@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.exactTextsCaseSensitiveInAnyOrder;
 import static com.codeborne.selenide.Selenide.$$;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ElementsCollectionTextsTest extends IntegrationTest {
 
@@ -33,7 +33,11 @@ class ElementsCollectionTextsTest extends IntegrationTest {
   @Test
   void shouldFailWithExpectedTextsWithDifferentCase() {
     List<String> expectedTexts = Arrays.asList("one", "Three", "Two");
-    assertThrows(TextsMismatch.class, () ->
-      $$(".element").shouldHave(exactTextsCaseSensitiveInAnyOrder(expectedTexts)));
+    assertThatThrownBy(() ->
+      $$(".element").shouldHave(exactTextsCaseSensitiveInAnyOrder(expectedTexts)))
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("Texts mismatch")
+      .hasMessageContaining("Actual: [One, Two, Three]")
+      .hasMessageContaining("Expected: [one, Three, Two]");
   }
 }

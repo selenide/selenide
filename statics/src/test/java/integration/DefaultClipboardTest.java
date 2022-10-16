@@ -14,8 +14,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.clipboard;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static java.time.Duration.ofMillis;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Disabled("Need configure X11 for github actions, not sure that it needs")
 public class DefaultClipboardTest extends IntegrationTest {
@@ -29,7 +29,7 @@ public class DefaultClipboardTest extends IntegrationTest {
   public void getClipboard() {
     $("#text-to-copy").shouldHave(attribute("value", "Hello World"));
     $("#button-copy-text").shouldBe(visible).click();
-    assertEquals("Hello World", clipboard().getText(), "Clipboard data doesn't match");
+    assertThat(clipboard().getText()).isEqualTo("Hello World");
   }
 
   @Test
@@ -41,14 +41,14 @@ public class DefaultClipboardTest extends IntegrationTest {
 
   @Test
   public void errorMessage() {
-    $("#button-copy-text-slowly").click();
+    $("#button-copy-text").shouldBe(visible).click();
     assertThatThrownBy(() ->
-      clipboard().shouldHave(content("Goodbye World"), ofMillis(1500))
+      clipboard().shouldHave(content("Goodbye World"), ofMillis(22))
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("clipboard should have content 'Goodbye World'")
       .hasMessageContaining("Actual value: Hello World")
-      .hasMessageContaining("Timeout: 1.500 s.");
+      .hasMessageContaining("Timeout: 22 ms.");
   }
 
   @Test
@@ -66,12 +66,11 @@ public class DefaultClipboardTest extends IntegrationTest {
   @Test
   public void checkSetValue() {
     clipboard().setText("111");
-    assertEquals("111", clipboard().getText(), "Clipboard data doesn't match");
+    assertThat(clipboard().getText()).isEqualTo("111");
   }
 
   @AfterAll
   public static void tearDown() {
     closeWebDriver();
   }
-
 }

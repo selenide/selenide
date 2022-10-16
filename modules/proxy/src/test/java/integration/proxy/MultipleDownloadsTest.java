@@ -12,7 +12,7 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.files.FileFilters.withName;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MultipleDownloadsTest extends ProxyIntegrationTest {
   @Test
@@ -23,7 +23,7 @@ public class MultipleDownloadsTest extends ProxyIntegrationTest {
       using(PROXY).withTimeout(4000).withFilter(withName("empty.html"))
     );
 
-    assertEquals("empty.html", text.getName());
-    assertEquals(new FileContent("empty.html").content().length(), text.length());
+    assertThat(text.getName()).isEqualTo("empty.html");
+    assertThat(text.length()).isEqualTo(new FileContent("empty.html").content().length());
   }
 }
