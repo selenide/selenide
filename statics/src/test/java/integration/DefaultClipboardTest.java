@@ -4,8 +4,12 @@ import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.TestAbortedException;
 
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 
 import static com.codeborne.selenide.ClipboardConditions.content;
 import static com.codeborne.selenide.Condition.attribute;
@@ -21,7 +25,7 @@ public class DefaultClipboardTest extends IntegrationTest {
 
   @BeforeEach
   public void openTestPage() {
-    assumeThat(GraphicsEnvironment.isHeadless()).isFalse();
+    assumeClipboardSupported();
     openFile("clipboard.html");
   }
 
@@ -67,5 +71,16 @@ public class DefaultClipboardTest extends IntegrationTest {
   public void checkSetValue() {
     clipboard().setText("111");
     assertThat(clipboard().getText()).isEqualTo("111");
+  }
+
+  private void assumeClipboardSupported() {
+    assumeThat(GraphicsEnvironment.isHeadless()).isFalse();
+
+    try {
+      Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+    }
+    catch (UnsupportedFlavorException | IOException e) {
+      throw new TestAbortedException("Clipboard not supported in current environment", e);
+    }
   }
 }
