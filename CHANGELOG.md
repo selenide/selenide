@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.10.0 (planned to xx.10.2022)
+* make ClickOptions overridable (to be used in selenide-appium)
+* bump Selenium from 4.5.0 to 4.5.3, see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* Bump browserup-proxy-core from 2.2.3 to 2.2.4, see https://github.com/valfirst/browserup-proxy/blob/master/CHANGELOG.md
+* Bump nettyVersion from 4.1.82.Final to 4.1.84.Final
+
 ## 6.9.0 (released 07.10.2022)
 * #1254 add methods to mock any server response in Selenide proxy  --  see PR #1978
 * #1974 Selenide proxy now adds Authorization header only for specified domain -- see PR #1975
