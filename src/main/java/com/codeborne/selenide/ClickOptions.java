@@ -19,7 +19,7 @@ public class ClickOptions implements HasTimeout {
   @Nullable
   private final Duration timeout;
 
-  private ClickOptions(ClickMethod clickMethod, int offsetX, int offsetY, @Nullable Duration timeout) {
+  protected ClickOptions(ClickMethod clickMethod, int offsetX, int offsetY, @Nullable Duration timeout) {
     this.clickMethod = clickMethod;
     this.offsetX = offsetX;
     this.offsetY = offsetY;
