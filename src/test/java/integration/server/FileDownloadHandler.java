@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.lang.Long.parseLong;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
@@ -35,16 +36,6 @@ class FileDownloadHandler extends BaseHandler {
       return new Result(SC_NOT_FOUND, CONTENT_TYPE_HTML_TEXT, "NOT_FOUND: " + fileName);
     }
 
-    if (request.getParameter("pause") != null) {
-      try {
-        Thread.sleep(Long.parseLong(request.getParameter("pause")));
-      }
-      catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-        throw new RuntimeException(e);
-      }
-    }
-
     String contentType = getContentType(fileName);
     if ("файл-с-запрещёнными-символами.txt".equals(fileName)) {
       fileName = "имя с #pound,%percent,&ampersand,{left,}right,\\backslash," +
@@ -54,7 +45,12 @@ class FileDownloadHandler extends BaseHandler {
     }
     Map<String, String> map = new HashMap<>();
     map.put("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
-    return new Result(SC_OK, contentType, fileContent, map);
+    return new Result(SC_OK, contentType, fileContent, map, longParam(request, "pause"), longParam(request, "duration"));
+  }
+
+  private long longParam(HttpServletRequest request, String name) {
+    String param = request.getParameter(name);
+    return param == null ? 0 : parseLong(param);
   }
 
   private String getSessionId(HttpServletRequest request) {
