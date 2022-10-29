@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static integration.server.Delayer.writeSlowly;
+import static integration.server.Delayer.pause;
 import static java.lang.Thread.currentThread;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.joining;
@@ -50,6 +52,10 @@ public abstract class BaseHandler extends HttpServlet {
   }
 
   private void result(HttpServletRequest request, HttpServletResponse response, long start, Result result) throws IOException {
+    if (result.pause > 0) {
+      log.debug("sleep before [{}] for {} ms", request.getPathInfo(), result.pause);
+      pause(result.pause);
+    }
     response.setStatus(result.httpStatus);
     response.setContentLength(result.content.length);
     response.setContentType(result.contentType);
@@ -57,7 +63,12 @@ public abstract class BaseHandler extends HttpServlet {
       response.setHeader(httpHeader.getKey(), httpHeader.getValue());
     }
     try (OutputStream os = response.getOutputStream()) {
-      os.write(result.content);
+      if (result.duration == 0) {
+        os.write(result.content);
+      }
+      else {
+        writeSlowly(os, result.content, result.duration);
+      }
     }
     logRequest(request, result.httpStatus, start);
     if (result.httpStatus >= SC_BAD_REQUEST) {
