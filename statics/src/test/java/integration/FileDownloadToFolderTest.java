@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -26,9 +25,7 @@ import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createTempDirectory;
-import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -40,19 +37,16 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   void setUp() {
     Configuration.fileDownload = FOLDER;
     openFile("page_with_uploads.html");
-    timeout = 4000;
+    timeout = 100;
   }
 
   @Test
   void downloadsFiles() throws IOException {
     File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
-    assertThat(downloadedFile.getName())
-      .matches("hello_world.*\\.txt");
-    assertThat(readFileToString(downloadedFile, "UTF-8"))
-      .isEqualTo("Hello, WinRar!");
-    assertThat(downloadedFile.getAbsolutePath())
-      .startsWith(folder.getAbsolutePath());
+    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
   @Test
@@ -64,12 +58,9 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     );
     log.info("Downloaded file {}", downloadedFile.getAbsolutePath());
 
-    assertThat(downloadedFile.getName())
-      .matches("hello_world.*\\.txt");
-    assertThat(readFileToString(downloadedFile, "UTF-8"))
-      .isEqualTo("Hello, WinRar!");
-    assertThat(downloadedFile.getAbsolutePath())
-      .startsWith(folder.getAbsolutePath());
+    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
   @Test
@@ -78,8 +69,8 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
     assertThat(downloadedFile.getName())
       .isEqualTo("файл-с-русским-названием.txt");
-    assertThat(readFileToString(downloadedFile, "UTF-8"))
-      .isEqualTo("Превед медвед!");
+    assertThat(downloadedFile).content()
+      .isEqualToIgnoringNewLines("Превед медвед!");
     assertThat(downloadedFile.getAbsolutePath())
       .startsWith(folder.getAbsolutePath());
   }
@@ -110,23 +101,26 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   public void download_byName() throws FileNotFoundException {
-    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(withName("hello_world.txt"));
+    File downloadedFile = $(byText("Download me")).download(withName("hello_world.txt"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
+    assertThat(downloadedFile).hasName("hello_world.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
   public void download_byNameRegex() throws FileNotFoundException {
-    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(withNameMatching("hello_.+\\.txt"));
+    File downloadedFile = $(byText("Download me")).download(withNameMatching("hello_.+\\.txt"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
+    assertThat(downloadedFile).hasName("hello_world.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
   public void download_byExtension() throws FileNotFoundException {
-    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(timeout, withExtension("txt"));
+    File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
+    assertThat(downloadedFile).hasName("hello_world.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -141,6 +135,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
       assertThat(downloadedFile.getAbsolutePath())
         .startsWith(new File(customDownloadsFolder).getAbsolutePath());
+      assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
     }
     finally {
       closeWebDriver();
@@ -152,6 +147,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).matches("minimal.*.pdf");
+    assertThat(downloadedFile).content().startsWith("%PDF-1.1");
   }
 
   @Test
@@ -160,8 +156,8 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
     assertThat(downloadedFile.getName()).startsWith("tiny.exe");
     assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
-    assertThat(FileUtils.readFileToString(downloadedFile, UTF_8).trim())
-      .isEqualTo("Here might be potentially harmful exe file");
+    assertThat(downloadedFile).content()
+      .isEqualToIgnoringNewLines("Here might be potentially harmful exe file");
   }
 
   @Test
@@ -183,7 +179,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     );
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(readFileToString(downloadedFile, "UTF-8")).isEqualTo("Hello, WinRar!");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -192,7 +188,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     File downloadedFile = $(byText("Download empty file")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName()).matches("empty-file.*\\.txt");
-    assertThat(readFileToString(downloadedFile, "UTF-8")).isEqualTo("");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -202,8 +198,8 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
     assertThat(downloadedFile.getName())
       .matches("hello_world.*\\.part");
-    assertThat(readFileToString(downloadedFile, "UTF-8").trim())
-      .isEqualTo("Hello, part WinRar!");
+    assertThat(downloadedFile).content()
+      .isEqualToIgnoringNewLines("Hello, part WinRar!");
     assertThat(downloadedFile.getAbsolutePath())
       .startsWith(folder.getAbsolutePath());
   }
@@ -214,8 +210,8 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
     assertThat(downloadedFile.getName())
       .matches("hello_world.*\\.crdownload");
-    assertThat(readFileToString(downloadedFile, "UTF-8").trim())
-      .isEqualTo("Hello, crdownload WinRar!");
+    assertThat(downloadedFile).content()
+      .isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
     assertThat(downloadedFile.getAbsolutePath())
       .startsWith(folder.getAbsolutePath());
   }
