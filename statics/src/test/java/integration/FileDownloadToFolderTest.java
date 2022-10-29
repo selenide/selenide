@@ -215,4 +215,21 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThat(downloadedFile.getAbsolutePath())
       .startsWith(folder.getAbsolutePath());
   }
+
+  @Test
+  public void download_super_slowly() throws FileNotFoundException {
+    File downloadedFile = $(byText("Download me super slowly"))
+      .download(4000, withName("hello_world.txt"));
+
+    assertThat(downloadedFile).hasName("hello_world.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+  }
+
+  @Test
+  public void download_super_slowly_without_filter() throws FileNotFoundException {
+    File downloadedFile = $(byText("Download me super slowly")).download(4000);
+
+    assertThat(downloadedFile).hasName("hello_world.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+  }
 }
