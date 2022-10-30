@@ -78,8 +78,8 @@ public class DownloadFileWithProxyServer {
       waiter.wait(filter, new HasDownloads(fileFilter), timeout, pollingInterval);
 
       if (log.isInfoEnabled()) {
-        log.info(filter.downloads().filesAsString());
-        log.info("Just in case, all intercepted responses: {}", filter.responsesAsString());
+        log.info("Downloaded {}", filter.downloads().filesAsString());
+        log.info("Just in case, intercepted {}", filter.responsesAsString());
       }
       return filter.downloads().firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
     }
