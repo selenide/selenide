@@ -79,7 +79,7 @@ final class FileDownloadFilterTest {
     filter.filterResponse(response, contents, messageInfo);
 
     assertThat(filter.responsesAsString())
-      .isEqualTo("Intercepted 1 responses:\n  #1  null -> 199 \"below 200\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
+      .isEqualTo("1 responses:\n  #1  null -> 199 \"below 200\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
   }
 
   private void mockStatusCode(int code, String reason) {
@@ -97,7 +97,7 @@ final class FileDownloadFilterTest {
     filter.filterResponse(response, contents, messageInfo);
 
     assertThat(filter.responsesAsString())
-      .isEqualTo("Intercepted 1 responses:\n  #1  null -> 300 \"300 or above\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
+      .isEqualTo("1 responses:\n  #1  null -> 300 \"300 or above\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
   }
 
   @Test
@@ -128,7 +128,7 @@ final class FileDownloadFilterTest {
     filter.filterResponse(response, contents, messageInfo);
 
     assertThat(filter.responsesAsString())
-      .isEqualTo("Intercepted 1 responses:\n  #1  /foo/bar/cv.pdf?42 -> 200 \"200=success\" {} app/json  (7 bytes)\n");
+      .isEqualTo("1 responses:\n  #1  /foo/bar/cv.pdf?42 -> 200 \"200=success\" {} app/json  (7 bytes)\n");
     File file = filter.downloads().files().get(0).getFile();
     File expectedFile = new File("build/downloads/random-text/cv.pdf");
     assertThat(file.getName()).isEqualTo("cv.pdf");

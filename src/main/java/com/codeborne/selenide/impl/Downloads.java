@@ -55,7 +55,7 @@ public class Downloads {
   @Nonnull
   public String filesAsString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("Downloaded ").append(files.size()).append(" files:\n");
+    sb.append(files.size()).append(" files:\n");
 
     int i = 0;
     for (DownloadedFile file : files) {

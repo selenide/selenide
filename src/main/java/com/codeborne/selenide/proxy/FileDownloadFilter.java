@@ -146,7 +146,7 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
   @Nonnull
   public String responsesAsString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("Intercepted ").append(responses.size()).append(" responses:\n");
+    sb.append(responses.size()).append(" responses:\n");
 
     int i = 0;
     for (Response response : responses) {
