@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.commands.Util.arrayToString;
+import static com.codeborne.selenide.commands.Util.cast;
 
 @ParametersAreNonnullByDefault
 public class SelectOptionByValue implements Command<Void> {
@@ -33,13 +35,15 @@ public class SelectOptionByValue implements Command<Void> {
     if (error.containsKey("disabledSelect")) {
       throw new InvalidStateException(selectField.description(), "Cannot select option in a disabled select");
     }
-    if (error.containsKey("disabledOption")) {
-      String value = error.get("disabledOption");
-      throw new InvalidStateException(selectField.description() + "/option[value:" + value + ']', "Cannot select a disabled option");
+    if (error.containsKey("disabledOptions")) {
+      List<String> value = cast(error.get("disabledOptions"));
+      String elementDescription = String.format("%s/option[value:%s]", selectField.description(), arrayToString(value));
+      throw new InvalidStateException(elementDescription, "Cannot select a disabled option");
     }
-    if (error.containsKey("optionNotFound")) {
-      String value = error.get("optionNotFound");
-      throw new ElementNotFound(selectField.getAlias(), selectField.getSearchCriteria() + "/option[value:" + value + ']', exist);
+    if (error.containsKey("optionsNotFound")) {
+      List<String> value = cast(error.get("optionsNotFound"));
+      String elementDescription = String.format("%s/option[value:%s]", selectField.getSearchCriteria(), arrayToString(value));
+      throw new ElementNotFound(selectField.getAlias(), elementDescription, exist);
     }
   }
 }

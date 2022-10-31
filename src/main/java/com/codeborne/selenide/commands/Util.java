@@ -9,11 +9,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
 class Util {
@@ -61,5 +63,14 @@ class Util {
     result.add(first);
     IntStream.of(others).forEach(i -> result.add(i));
     return unmodifiableList(result);
+  }
+
+  @SuppressWarnings("unchecked")
+  static <T> T cast(Object value) {
+    return (T) value;
+  }
+
+  static  <T> String arrayToString(List<T> values) {
+    return values.stream().map(Objects::toString).collect(joining(","));
   }
 }

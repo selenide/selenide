@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.commands.Util.arrayToString;
+import static com.codeborne.selenide.commands.Util.cast;
 import static com.codeborne.selenide.commands.Util.merge;
 
 @ParametersAreNonnullByDefault
@@ -29,15 +31,15 @@ public class SelectOptionContainingText implements Command<Void> {
     if (error.containsKey("disabledSelect")) {
       throw new InvalidStateException(selectField.description(), "Cannot select option in a disabled select");
     }
-    if (error.containsKey("disabledOption")) {
-      String text = error.get("disabledOption");
-      throw new InvalidStateException(selectField.description() + "/option[text containing:" + text + ']',
-        "Cannot select a disabled option");
+    if (error.containsKey("disabledOptions")) {
+      List<String> text = cast(error.get("disabledOptions"));
+      String elementDescription = String.format("%s/option[text containing:%s]", selectField.description(), arrayToString(text));
+      throw new InvalidStateException(elementDescription, "Cannot select a disabled option");
     }
-    if (error.containsKey("optionNotFound")) {
-      String text = error.get("optionNotFound");
-      throw new ElementNotFound(selectField.getAlias(),
-        selectField.getSearchCriteria() + "/option[text containing:" + text + ']', exist);
+    if (error.containsKey("optionsNotFound")) {
+      List<String> text = cast(error.get("optionsNotFound"));
+      String elementDescription = String.format("%s/option[text containing:%s]", selectField.getSearchCriteria(), arrayToString(text));
+      throw new ElementNotFound(selectField.getAlias(), elementDescription, exist);
     }
     return null;
   }
