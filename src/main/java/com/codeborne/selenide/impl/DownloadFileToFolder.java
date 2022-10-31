@@ -18,6 +18,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
@@ -30,6 +31,8 @@ import static java.util.stream.Collectors.toList;
 @ParametersAreNonnullByDefault
 public class DownloadFileToFolder {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolder.class);
+  private static final String CHROME_TEMPORARY_FILE = "crdownload";
+  private static final String FIREFOX_TEMPORARY_FILE = "part";
 
   private final Downloader downloader;
   private final Waiter waiter;
@@ -78,8 +81,14 @@ public class DownloadFileToFolder {
 
     action.perform(driver, clickable);
 
-    waitUntilDownloadsCompleted(driver.browser(), timeout, pollingInterval, folder);
-    Downloads newDownloads = waitForNewFiles(timeout, fileFilter, config, folder, downloadStartedAt);
+    waitForNewFiles(timeout, fileFilter, config, folder, downloadStartedAt);
+    waitUntilDownloadsCompleted(driver.browser(), folder, timeout, pollingInterval);
+    Downloads newDownloads = new Downloads(newFiles(folder, downloadStartedAt));
+
+    if (log.isInfoEnabled()) {
+      log.info("Downloaded {}", newDownloads.filesAsString());
+    }
+
     File downloadedFile = newDownloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
 
     if (log.isDebugEnabled()) {
@@ -88,40 +97,56 @@ public class DownloadFileToFolder {
     return archiveFile(config, downloadedFile);
   }
 
-  private void waitUntilDownloadsCompleted(Browser browser, long timeout, long pollingInterval, DownloadsFolder folder) {
-    pause(pollingInterval);
+  private void waitUntilDownloadsCompleted(Browser browser, DownloadsFolder folder,
+                                           long timeout, long pollingInterval) {
     if (browser.isChrome() || browser.isEdge()) {
-      waitUntilFileDisappears(folder, "crdownload", timeout, pollingInterval);
+      waitUntilFileDisappears(folder, CHROME_TEMPORARY_FILE, timeout, pollingInterval);
     }
     else if (browser.isFirefox()) {
-      waitUntilFileDisappears(folder, "part", timeout, pollingInterval);
+      waitUntilFileDisappears(folder, FIREFOX_TEMPORARY_FILE, timeout, pollingInterval);
+    }
+    else {
+      waitWhileFilesAreBeingModified(folder, timeout, pollingInterval);
     }
   }
 
   private void waitUntilFileDisappears(DownloadsFolder folder, String extension, long timeout, long pollingInterval) {
     for (long start = currentTimeMillis(); currentTimeMillis() - start < timeout && folder.hasFiles(extension); ) {
-      log.info("Found {} files in {}, waiting...", extension, folder);
+      log.debug("Found {} files in {}, waiting for {} ms...", extension, folder, pollingInterval);
       pause(pollingInterval);
     }
 
     if (folder.hasFiles(extension)) {
-      log.warn("Folder {} still contains files {}", folder, extension);
+      log.warn("Folder {} still contains files {} after {} ms.", folder, extension, timeout);
     }
   }
 
-  @Nonnull
-  private Downloads waitForNewFiles(long timeout, FileFilter fileFilter, Config config,
+  private void waitWhileFilesAreBeingModified(DownloadsFolder folder, long timeout, long pollingInterval) {
+    Map<String, Long> times = folder.modificationTimes();
+    long lastModifiedAt = currentTimeMillis();
+
+    for (long start = currentTimeMillis(); currentTimeMillis() - start < timeout; pause(pollingInterval)) {
+      var newTimes = folder.modificationTimes();
+      if (!newTimes.equals(times)) {
+        log.debug("Files has been modified - old: {}, new: {}", times, newTimes);
+        lastModifiedAt = currentTimeMillis();
+        times = newTimes;
+      }
+      else {
+        log.debug("Files has not been modified in last {} ms: {}", pollingInterval, times);
+        if (currentTimeMillis() - lastModifiedAt > 1000) {
+          log.debug("Files has not been modified during last {} ms.", currentTimeMillis() - lastModifiedAt);
+          return;
+        }
+      }
+    }
+    log.warn("Files are still being modified during last {} ms.", currentTimeMillis() - lastModifiedAt);
+  }
+
+  private void waitForNewFiles(long timeout, FileFilter fileFilter, Config config,
                                     DownloadsFolder folder, long clickMoment) {
     HasDownloads hasDownloads = new HasDownloads(fileFilter, clickMoment);
     waiter.wait(folder, hasDownloads, timeout, config.pollingInterval());
-
-    if (log.isInfoEnabled()) {
-      log.info(hasDownloads.downloads.filesAsString());
-    }
-    if (log.isDebugEnabled()) {
-      log.debug("All downloaded files in {}: {}", folder, folder.files().stream().map(f -> f.getName()).collect(joining("\n")));
-    }
-    return hasDownloads.downloads;
   }
 
   private void pause(long milliseconds) {
@@ -155,17 +180,17 @@ public class DownloadFileToFolder {
 
     @Override
     public boolean test(DownloadsFolder folder) {
-      downloads = new Downloads(newFiles(folder));
+      downloads = new Downloads(newFiles(folder, downloadStartedAt));
       return !downloads.files(fileFilter).isEmpty();
     }
+  }
 
-    private List<DownloadedFile> newFiles(DownloadsFolder folder) {
-      return folder.files().stream()
-        .filter(File::isFile)
-        .filter(file -> isFileModifiedLaterThan(file, downloadStartedAt))
-        .map(file -> new DownloadedFile(file, emptyMap()))
-        .collect(toList());
-    }
+  private static List<DownloadedFile> newFiles(DownloadsFolder folder, long modifiedAfterTs) {
+    return folder.files().stream()
+      .filter(File::isFile)
+      .filter(file -> isFileModifiedLaterThan(file, modifiedAfterTs))
+      .map(file -> new DownloadedFile(file, emptyMap()))
+      .collect(toList());
   }
 
   /**
