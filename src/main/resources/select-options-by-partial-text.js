@@ -3,20 +3,22 @@
     return {disabledSelect: 'Cannot select option in a disabled select'};
   }
 
+  function optionByText(requestedText) {
+    return Array.from(select.options).find(option => option.text.includes(requestedText))
+  }
+
+  const missingOptionsTexts = texts.filter(text => !optionByText(text));
+  if (missingOptionsTexts.length > 0) {
+    return {optionsNotFound: missingOptionsTexts};
+  }
+
+  const disabledOptionsTexts = texts.filter(text => optionByText(text).disabled);
+  if (disabledOptionsTexts.length > 0) {
+    return {disabledOptions: disabledOptionsTexts};
+  }
+
   for (let requestedPartialText of texts) {
-    let optionFound = false
-    for (let option of select.options) {
-      if (option.text.includes(requestedPartialText)) {
-        if (option.disabled) {
-          return {disabledOption: requestedPartialText};
-        }
-        optionFound = true
-        option.selected = 'selected';
-      }
-    }
-    if (!optionFound) {
-      return {optionNotFound: requestedPartialText};
-    }
+    optionByText(requestedPartialText).selected = 'selected';
   }
 
   const event = document.createEvent('HTMLEvents');

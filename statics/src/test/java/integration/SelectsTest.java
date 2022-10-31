@@ -127,6 +127,17 @@ final class SelectsTest extends IntegrationTest {
   }
 
   @Test
+  void selectMultipleOptionsByText_optionsNotFound() {
+    assertThatThrownBy(() -> {
+      SelenideElement select = $(By.xpath("//select[@name='domain']"));
+      select.selectOption("wrong-text", "@livemail.ru", "another-wrong");
+    })
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {By.xpath: //select[@name='domain']/option[text:wrong-text,another-wrong]}")
+      .hasMessageContaining("Expected: exist");
+  }
+
+  @Test
   void userCanSelectOptionByIndex() {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
 
@@ -147,7 +158,7 @@ final class SelectsTest extends IntegrationTest {
       .isEqualTo("@мыло.ру");
   }
 
-  @Test()
+  @Test
   void throwsElementNotFoundWithOptionsIndex() {
     assertThatThrownBy(() -> $x("//select[@name='domain']").selectOption(999))
       .isInstanceOf(ElementNotFound.class)
@@ -243,7 +254,7 @@ final class SelectsTest extends IntegrationTest {
     $("#cars").shouldHave(partialTextCaseSensitive("Saab").because("Option with text `Saab` is selected"));
   }
 
-  @Test()
+  @Test
   void throwsAssertionErrorForSelectedElementsWithDifferentTextOrCase() {
     $("#hero").selectOptionByValue("john mc'lain");
     assertThatThrownBy(() -> $("#hero").shouldHave(text("Denzel Washington")))
@@ -331,7 +342,7 @@ final class SelectsTest extends IntegrationTest {
   void selectOptionContainingText_notFound() {
     assertThatThrownBy(() -> $("select#gender").selectOptionContainingText("ale", "emale", "third", "fourth"))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {select#gender/option[text containing:third]}");
+      .hasMessageContaining("Element not found {select#gender/option[text containing:third,fourth]}");
   }
 
   @Test
@@ -363,6 +374,13 @@ final class SelectsTest extends IntegrationTest {
   }
 
   @Test
+  void selectMultipleOptionsByText_disabledOptions() {
+    assertThatThrownBy(() -> $("#cars").selectOption("Lada", "Volvo", "Audi", "Zhiguli", "Saab"))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Invalid element state [#cars/option[text:Lada,Zhiguli]]: Cannot select a disabled option");
+  }
+
+  @Test
   void selectOptionByIndex_disabledOption() {
     assertThatThrownBy(() -> $("#cars").selectOption(4))
       .isInstanceOf(InvalidStateException.class)
@@ -377,10 +395,24 @@ final class SelectsTest extends IntegrationTest {
   }
 
   @Test
+  void selectMultipleOptionsByIndex_disabledOptions() {
+    assertThatThrownBy(() -> $("#cars").selectOption(1, 2, 4, 5))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Invalid element state [#cars/option[index:4,5]]: Cannot select a disabled option");
+  }
+
+  @Test
   void selectOptionContainingText_disabledOption() {
     assertThatThrownBy(() -> $("#cars").selectOptionContainingText("higul"))
       .isInstanceOf(InvalidStateException.class)
       .hasMessageContaining("Invalid element state [#cars/option[text containing:higul]]: Cannot select a disabled option");
+  }
+
+  @Test
+  void selectMultipleOptionsContainingText_disabledOptions() {
+    assertThatThrownBy(() -> $("#cars").selectOptionContainingText("higul", "ada"))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Invalid element state [#cars/option[text containing:higul,ada]]: Cannot select a disabled option");
   }
 
   @Test
@@ -395,6 +427,13 @@ final class SelectsTest extends IntegrationTest {
     assertThatThrownBy(() -> $("#cars").selectOptionByValue("opel", "zhiguli", "audi"))
       .isInstanceOf(InvalidStateException.class)
       .hasMessageContaining("Invalid element state [#cars/option[value:zhiguli]]: Cannot select a disabled option");
+  }
+
+  @Test
+  void selectMultipleOptionsByValue_disabledOptions() {
+    assertThatThrownBy(() -> $("#cars").selectOptionByValue("opel", "zhiguli", "audi", "lada"))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Invalid element state [#cars/option[value:zhiguli,lada]]: Cannot select a disabled option");
   }
 
   @Test

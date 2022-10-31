@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.commands.Util.arrayToString;
+import static com.codeborne.selenide.commands.Util.cast;
 import static com.codeborne.selenide.commands.Util.merge;
 
 @ParametersAreNonnullByDefault
@@ -50,13 +52,15 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
     if (error.containsKey("disabledSelect")) {
       throw new InvalidStateException(selectField.description(), "Cannot select option in a disabled select");
     }
-    if (error.containsKey("disabledOption")) {
-      String text = error.get("disabledOption");
-      throw new InvalidStateException(selectField.description() + "/option[text:" + text + ']', "Cannot select a disabled option");
+    if (error.containsKey("disabledOptions")) {
+      List<String> optionsTexts = cast(error.get("disabledOptions"));
+      String elementDescription = String.format("%s/option[text:%s]", selectField.description(), arrayToString(optionsTexts));
+      throw new InvalidStateException(elementDescription, "Cannot select a disabled option");
     }
-    if (error.containsKey("optionNotFound")) {
-      String text = error.get("optionNotFound");
-      throw new ElementNotFound(selectField.getAlias(), selectField.getSearchCriteria() + "/option[text:" + text + ']', exist);
+    if (error.containsKey("optionsNotFound")) {
+      List<String> optionsTexts = cast(error.get("optionsNotFound"));
+      String elementDescription = String.format("%s/option[text:%s]", selectField.getSearchCriteria(), arrayToString(optionsTexts));
+      throw new ElementNotFound(selectField.getAlias(), elementDescription, exist);
     }
   }
 
@@ -65,13 +69,15 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
     if (error.containsKey("disabledSelect")) {
       throw new InvalidStateException(selectField.description(), "Cannot select option in a disabled select");
     }
-    if (error.containsKey("disabledOption")) {
-      Number index = (Number) error.get("disabledOption");
-      throw new InvalidStateException(selectField.description() + "/option[index:" + index + ']', "Cannot select a disabled option");
+    if (error.containsKey("disabledOptions")) {
+      List<Integer> index = cast(error.get("disabledOptions"));
+      String elementDescription = String.format("%s/option[index:%s]", selectField.description(), arrayToString(index));
+      throw new InvalidStateException(elementDescription, "Cannot select a disabled option");
     }
-    if (error.containsKey("optionNotFound")) {
-      Number index = (Number) error.get("optionNotFound");
-      throw new ElementNotFound(selectField.getAlias(), selectField.getSearchCriteria() + "/option[index:" + index + ']', exist);
+    if (error.containsKey("optionsNotFound")) {
+      List<Integer> index = cast(error.get("optionsNotFound"));
+      String elementDescription = String.format("%s/option[index:%s]", selectField.getSearchCriteria(), arrayToString(index));
+      throw new ElementNotFound(selectField.getAlias(), elementDescription, exist);
     }
   }
 }

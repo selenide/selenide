@@ -2,15 +2,19 @@
   if (select.disabled) {
     return {disabledSelect: 'Cannot select option in a disabled select'};
   }
+
+  const missingOptionsIndexes = indexes.filter(index => !select.options[index]);
+  if (missingOptionsIndexes.length > 0) {
+    return {optionsNotFound: missingOptionsIndexes};
+  }
+
+  const disabledOptionsIndexes = indexes.filter(index => select.options[index].disabled);
+  if (disabledOptionsIndexes.length > 0) {
+    return {disabledOptions: disabledOptionsIndexes};
+  }
+
   for (let index of indexes) {
-    const option = select.options[index];
-    if (!option) {
-      return {optionNotFound: index};
-    }
-    if (option.disabled) {
-      return {disabledOption: index};
-    }
-    option.selected = 'selected';
+    select.options[index].selected = 'selected';
   }
 
   const event = document.createEvent('HTMLEvents');
