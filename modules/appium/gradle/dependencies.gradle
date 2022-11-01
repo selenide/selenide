@@ -22,7 +22,6 @@ repositories {
       snapshotsOnly()
     }
   }
-
 }
 
 configurations.all {
