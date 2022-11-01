@@ -85,7 +85,8 @@ public class AppiumClick extends Click {
 
   private void performTapWithOffset(Driver driver, WebElement webElement, int offsetX, int offsetY) {
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
-    Point size = webElement.getLocation();
+    Point size = getCenter(webElement);
+
     Sequence tapSequence = getSequenceToPerformTap(finger, size, offsetX, offsetY);
     perform(driver, tapSequence);
   }
@@ -99,10 +100,16 @@ public class AppiumClick extends Click {
   private Sequence getSequenceToPerformTap(PointerInput finger, Point size, int offsetX, int offsetY){
     return new Sequence(finger, 1)
       .addAction(finger.createPointerMove(ofMillis(0),
-        PointerInput.Origin.viewport(), size.getX() / 2 + offsetX,  size.getY() / 2 + offsetY))
+        PointerInput.Origin.viewport(), size.getX() + offsetX,  size.getY() + offsetY))
       .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
       .addAction(new Pause(finger, ofMillis(200)))
       .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+  }
+
+  public Point getCenter(WebElement element){
+    int x = element.getLocation().getX() + element.getSize().getWidth() / 2;
+    int y = element.getLocation().getY() + element.getSize().getHeight() / 2;
+    return new Point(x,y);
   }
 
   @Override
