@@ -10,12 +10,14 @@ subprojects {
     exclude '**/AlertText.*'
     exclude '**/ConfirmTest.*'
     exclude 'com/codeborne/selenide/**/*'
+    outputs.upToDateWhen {false}
   }
 
   task edge(type: Test) {
     systemProperties['selenide.browser'] = 'edge'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    outputs.upToDateWhen {false}
   }
 
   task edge_headless(type: Test) {
@@ -23,12 +25,14 @@ subprojects {
     systemProperties['selenide.headless'] = 'true'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    outputs.upToDateWhen {false}
   }
 
   task chrome(type: Test) {
     systemProperties['selenide.browser'] = 'chrome'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    outputs.upToDateWhen {false}
   }
 
   task chrome_headless(type: Test) {
@@ -36,6 +40,7 @@ subprojects {
     systemProperties['selenide.headless'] = 'true'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    outputs.upToDateWhen {false}
   }
 
   task chrome_remote(type: Test) {
@@ -43,12 +48,14 @@ subprojects {
     systemProperties['selenide.browser'] = 'chrome'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    outputs.upToDateWhen {false}
   }
 
   task firefox(type: Test) {
     systemProperties['selenide.browser'] = 'firefox'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    outputs.upToDateWhen {false}
   }
 
   task firefox_headless(type: Test) {
@@ -56,6 +63,7 @@ subprojects {
     systemProperties['selenide.headless'] = 'true'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    outputs.upToDateWhen {false}
   }
 
   task safari(type: Test) {
@@ -63,6 +71,7 @@ subprojects {
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
     maxParallelForks = 1
+    outputs.upToDateWhen {false}
   }
 
   task firefox_remote(type: Test) {
@@ -70,6 +79,7 @@ subprojects {
     systemProperties['selenide.browser'] = 'firefox'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    outputs.upToDateWhen {false}
   }
 
   tasks.withType(Test) {
