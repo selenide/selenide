@@ -1,14 +1,17 @@
 package com.codeborne.selenide.appium;
 
+import com.codeborne.selenide.ClickMethod;
+import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.appium.commands.AppiumClickMethod;
 
-public class AppiumClickOptions {
+public class AppiumClickOptions extends ClickOptions {
 
   private final AppiumClickMethod appiumClickMethod;
   private final int xOffset;
   private final int yOffset;
 
   private AppiumClickOptions(AppiumClickMethod appiumClickMethod, int xOffSet, int yOffset){
+    super(ClickMethod.DEFAULT, 0, 0, null);
     this.appiumClickMethod = appiumClickMethod;
     this.xOffset = xOffSet;
     this.yOffset = yOffset;
@@ -34,10 +37,12 @@ public class AppiumClickOptions {
     return appiumClickMethod;
   }
 
+  @Override
   public int offsetX(){
     return xOffset;
   }
 
+  @Override
   public int offsetY(){
     return yOffset;
   }

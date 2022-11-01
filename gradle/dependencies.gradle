@@ -1,5 +1,5 @@
 dependencies {
-  api('com.codeborne:selenide:6.8.0')
+  api('com.codeborne:selenide:6.10.0-SNAPSHOT')
   api('io.appium:java-client:8.2.0') {
     exclude group: 'io.opentelemetry'
     exclude group: 'org.slf4j'
@@ -17,11 +17,12 @@ repositories {
   mavenCentral()
   mavenLocal()
   maven {
-    url "https://oss.sonatype.org/content/repositories/snapshots"
+    url uri('https://oss.sonatype.org/content/repositories/snapshots/')
     mavenContent {
       snapshotsOnly()
     }
   }
+
 }
 
 configurations.all {

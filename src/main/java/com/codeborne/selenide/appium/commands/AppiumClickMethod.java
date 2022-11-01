@@ -7,5 +7,4 @@ public enum AppiumClickMethod {
   DOUBLE_TAP,
   LONG_PRESS
 
-
 }
