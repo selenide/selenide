@@ -84,10 +84,16 @@ subprojects {
 
   tasks.withType(Test) {
     useJUnitPlatform()
-    systemProperty('file.encoding', encoding)
-    systemProperty('BUILD_URL', System.getenv()['BUILD_URL'])
+    systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
     systemProperties['selenide.reportsFolder'] = "${reportsDir}/tests/${name}"
     systemProperties['selenide.downloadsFolder'] = "${buildDir}/tests/downloads"
+
+    System.properties.stringPropertyNames()
+      .findAll { it.startsWith("selenide.") }
+      .forEach {
+        println " set ${it} to ${System.getProperty(it)}"
+        systemProperties[it] = System.getProperty(it)
+      }
 
     if (System.getenv('CI')) {
       maxParallelForks = 1
@@ -95,7 +101,7 @@ subprojects {
       maxParallelForks = (int) Runtime.runtime.availableProcessors().intdiv(2) ?: 1
     }
     jvmArgs = ['-ea', '-Xmx512m']
-    systemProperties += System.properties
+    systemProperties['file.encoding'] = encoding
     systemProperties['user.country'] = 'TR'
     systemProperties['user.language'] = 'tr'
   }
