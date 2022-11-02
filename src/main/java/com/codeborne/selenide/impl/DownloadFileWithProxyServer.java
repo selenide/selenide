@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 public class DownloadFileWithProxyServer {
@@ -70,12 +70,12 @@ public class DownloadFileWithProxyServer {
     filter.activate();
     try {
       long pollingInterval = Math.max(config.pollingInterval(), 50);
-      waiter.wait(filter, new PreviousDownloadsCompleted(), timeout, pollingInterval);
+      waitForPreviousDownloadsCompletion(filter, timeout, pollingInterval);
 
       filter.reset();
       action.perform(driver, clickable);
 
-      waiter.wait(filter, new HasDownloads(fileFilter), timeout, pollingInterval);
+      waitForNewDownloads(filter, fileFilter, timeout, pollingInterval);
 
       if (log.isInfoEnabled()) {
         log.info("Downloaded {}", filter.downloads().filesAsString());
@@ -88,32 +88,28 @@ public class DownloadFileWithProxyServer {
     }
   }
 
-  @ParametersAreNonnullByDefault
-  private static class HasDownloads implements Predicate<FileDownloadFilter> {
-    private final FileFilter fileFilter;
+  private void waitForNewDownloads(FileDownloadFilter filter, FileFilter fileFilter, long timeout, long pollingInterval) {
+    waiter.wait(timeout, pollingInterval, () -> !filter.downloads().files(fileFilter).isEmpty());
+  }
 
-    private HasDownloads(FileFilter fileFilter) {
-      this.fileFilter = fileFilter;
-    }
-
-    @Override
-    public boolean test(FileDownloadFilter filter) {
-      return !filter.downloads().files(fileFilter).isEmpty();
-    }
+  private void waitForPreviousDownloadsCompletion(FileDownloadFilter filter, long timeout, long pollingInterval) {
+    waiter.wait(timeout, pollingInterval, new PreviousDownloadsCompleted(filter));
   }
 
   @ParametersAreNonnullByDefault
-  private static class PreviousDownloadsCompleted implements Predicate<FileDownloadFilter> {
+  private static class PreviousDownloadsCompleted implements Supplier<Boolean> {
+    private final FileDownloadFilter filter;
     private int downloadsCount = -1;
 
+    PreviousDownloadsCompleted(FileDownloadFilter filter) {
+      this.filter = filter;
+    }
+
     @Override
-    public boolean test(FileDownloadFilter filter) {
-      try {
-        return downloadsCount == filter.downloads().size();
-      }
-      finally {
-        downloadsCount = filter.downloads().size();
-      }
+    public Boolean get() {
+      int previousCount = downloadsCount;
+      downloadsCount = filter.downloads().size();
+      return downloadsCount == previousCount;
     }
   }
 }

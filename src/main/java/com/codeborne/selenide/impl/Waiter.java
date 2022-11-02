@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
-import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.lang.System.currentTimeMillis;
@@ -23,10 +23,10 @@ public class Waiter {
   private static final Logger logger = LoggerFactory.getLogger(Waiter.class);
 
   @CheckReturnValue
-  public <T> void wait(T subject, Predicate<T> condition, long timeout, long pollingInterval) {
+  public void wait(long timeout, long pollingInterval, Supplier<Boolean> condition) {
     sleep(pollingInterval);
     for (long start = currentTimeMillis();
-         !isTimeoutExceeded(timeout, start) && !condition.test(subject); ) {
+         !isTimeoutExceeded(timeout, start) && !condition.get(); ) {
       sleep(pollingInterval);
     }
   }

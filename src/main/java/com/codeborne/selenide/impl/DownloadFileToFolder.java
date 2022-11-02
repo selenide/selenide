@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
@@ -111,10 +110,10 @@ public class DownloadFileToFolder {
   }
 
   private void waitUntilFileDisappears(DownloadsFolder folder, String extension, long timeout, long pollingInterval) {
-    for (long start = currentTimeMillis(); currentTimeMillis() - start < timeout && folder.hasFiles(extension); ) {
+    waiter.wait(timeout, pollingInterval, () -> {
       log.debug("Found {} files in {}, waiting for {} ms...", extension, folder, pollingInterval);
-      pause(pollingInterval);
-    }
+      return !folder.hasFiles(extension);
+    });
 
     if (folder.hasFiles(extension)) {
       log.warn("Folder {} still contains files {} after {} ms.", folder, extension, timeout);
@@ -145,8 +144,10 @@ public class DownloadFileToFolder {
 
   private void waitForNewFiles(long timeout, FileFilter fileFilter, Config config,
                                     DownloadsFolder folder, long clickMoment) {
-    HasDownloads hasDownloads = new HasDownloads(fileFilter, clickMoment);
-    waiter.wait(folder, hasDownloads, timeout, config.pollingInterval());
+    waiter.wait(timeout, config.pollingInterval(), () -> {
+      Downloads downloads = new Downloads(newFiles(folder, clickMoment));
+      return !downloads.files(fileFilter).isEmpty();
+    });
   }
 
   private void pause(long milliseconds) {
@@ -165,24 +166,6 @@ public class DownloadFileToFolder {
     File archivedFile = new File(uniqueFolder, downloadedFile.getName());
     moveFile(downloadedFile, archivedFile);
     return archivedFile;
-  }
-
-  @ParametersAreNonnullByDefault
-  private static class HasDownloads implements Predicate<DownloadsFolder> {
-    private final FileFilter fileFilter;
-    private final long downloadStartedAt;
-    Downloads downloads;
-
-    private HasDownloads(FileFilter fileFilter, long downloadStartedAt) {
-      this.fileFilter = fileFilter;
-      this.downloadStartedAt = downloadStartedAt;
-    }
-
-    @Override
-    public boolean test(DownloadsFolder folder) {
-      downloads = new Downloads(newFiles(folder, downloadStartedAt));
-      return !downloads.files(fileFilter).isEmpty();
-    }
   }
 
   private static List<DownloadedFile> newFiles(DownloadsFolder folder, long modifiedAfterTs) {
