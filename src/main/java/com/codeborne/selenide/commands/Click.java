@@ -19,12 +19,12 @@ import java.util.Arrays;
 import static com.codeborne.selenide.commands.Util.firstOf;
 
 @ParametersAreNonnullByDefault
-public class Click implements Command<Void> {
+public class Click implements Command<SelenideElement> {
   private final JavaScript jsSource = new JavaScript("click.js");
 
   @Override
   @Nullable
-  public Void execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     WebElement webElement = findElement(locator);
 
     if (args == null || args.length == 0) {
@@ -37,7 +37,7 @@ public class Click implements Command<Void> {
     else {
       throw new IllegalArgumentException("Unsupported click arguments: " + Arrays.toString(args));
     }
-    return null;
+    return proxy;
   }
 
   @Nonnull

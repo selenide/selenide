@@ -1132,7 +1132,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.Click
    */
-  void click(ClickOptions clickOption);
+  SelenideElement click(ClickOptions clickOption);
 
   /**
    * Click the element
