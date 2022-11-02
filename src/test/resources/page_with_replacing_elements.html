@@ -1,36 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
-<h1>Page with replacing elements</h1>
-<button id="start-regular-replacement">Start replacement</button>
-<input id="dynamic-element" type="text" value="I will be replaced soon"/>
-
-<script type="text/javascript">
-  const commandDuration = 100;
-
-  function replaceElement() {
-    $('#dynamic-element').remove();
-    setTimeout(createElement, commandDuration * 1.5); // a little longer than average Selenium command like "isDisplayed()".
-  }
-  function createElement() {
-    $('body').append($('<input id="dynamic-element" value="Hello, I am back"/>'));
-    setTimeout(addCssClass, commandDuration * 1.5);
-  }
-  function addCssClass() {
-    $('#dynamic-element').addClass('reloaded');
-  }
-  function startRegularReplacement() {
-    setInterval(replaceElement, commandDuration*4);
-  }
-
-  document.getElementById('start-regular-replacement').addEventListener('click', startRegularReplacement, false);
-</script>
-
-</body>
 <head>
   <title>long ajax request</title>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <script type="text/javascript" src="jquery.min.js"></script>
+  <style>
+    .reloaded {
+      border-color: cyan;
+    }
+  </style>
 </head>
+<body>
+<h1>Page with replacing elements</h1>
+<button id="start-regular-replacement" style="display: none;">Start replacement</button>
+<input id="dynamic-element" type="text" value="I will be replaced soon"/>
+
+<script type="text/javascript">
+  let counter = 0;
+  const commandDuration = 50; // a little longer than average Selenium command like "isDisplayed()".
+
+  function replaceElement() {
+    $('#dynamic-element').remove();
+    setTimeout(createElement, commandDuration);
+  }
+  function createElement() {
+    counter++;
+    $('body').append($(`<input id="dynamic-element" value="Hello, I am back #${counter}"/>`));
+    setTimeout(addCssClass, commandDuration);
+  }
+  function addCssClass() {
+    $('#dynamic-element').addClass('reloaded').addClass(`reloaded-${counter}`);
+  }
+  function startRegularReplacement() {
+    setInterval(replaceElement, commandDuration*3);
+  }
+
+  const startButton = document.getElementById('start-regular-replacement');
+  startButton.addEventListener('click', startRegularReplacement, false);
+  startButton.style.display = 'block';
+</script>
+
+</body>
 </html>

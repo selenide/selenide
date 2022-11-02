@@ -1,10 +1,13 @@
 package integration;
 
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.partialValue;
 import static com.codeborne.selenide.Condition.value;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,15 +51,16 @@ final class ReplacingElementTest extends ITest {
       .hasToString("<input id=\"dynamic-element\" type=\"text\" value=\"I will be replaced soon\"></input>");
   }
 
-  @Test
+  @RepeatedTest(100)
   void tryToCatchStaleElementException() {
     setTimeout(2000);
-    $("#dynamic-element").shouldHave(value("I will be replaced soon"));
+    SelenideElement dynamicElement = $("#dynamic-element");
+    dynamicElement.shouldHave(value("I will be replaced soon"));
 
     $("#start-regular-replacement").click();
-    for (int i = 0; i < 10; i++) {
-      $("#dynamic-element")
-        .shouldHave(value("I am back"), cssClass("reloaded"))
+    for (int i = 0; i < 30; i++) {
+      dynamicElement
+        .shouldHave(partialValue("I am back"), cssClass("reloaded"))
         .setValue("New value from test");
     }
   }
