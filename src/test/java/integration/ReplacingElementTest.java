@@ -53,7 +53,7 @@ final class ReplacingElementTest extends ITest {
 
   @RepeatedTest(100)
   void tryToCatchStaleElementException() {
-    setTimeout(2000);
+    setTimeout(3000);
     SelenideElement dynamicElement = $("#dynamic-element");
     dynamicElement.shouldHave(value("I will be replaced soon"));
 
