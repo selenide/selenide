@@ -3,6 +3,7 @@
 ## 6.10.0 (planned to xx.10.2022)
 * make ClickOptions overridable (to be used in selenide-appium)
 * bump Selenium from 4.5.0 to 4.5.3, see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* bump WebDriverManager from 5.3.0 to 5.3.1, see https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md#531---2022-11-04
 * Bump browserup-proxy-core from 2.2.3 to 2.2.4, see https://github.com/valfirst/browserup-proxy/blob/master/CHANGELOG.md
 * Bump nettyVersion from 4.1.82.Final to 4.1.84.Final
 
