@@ -22,7 +22,7 @@ class Util {
   @SuppressWarnings("unchecked")
   @CheckReturnValue
   @Nonnull
-  static <T> T firstOf(@Nullable Object[] args) {
+  public static <T> T firstOf(@Nullable Object[] args) {
     if (args == null || args.length == 0) {
       throw new IllegalArgumentException("Missing arguments");
     }
@@ -31,7 +31,7 @@ class Util {
 
   @CheckReturnValue
   @Nonnull
-  static List<Condition> argsToConditions(@Nullable Object[] args) {
+  public static List<Condition> argsToConditions(@Nullable Object[] args) {
     if (args == null) return emptyList();
 
     List<Condition> conditions = new ArrayList<>(args.length);
@@ -66,11 +66,11 @@ class Util {
   }
 
   @SuppressWarnings("unchecked")
-  static <T> T cast(Object value) {
+  public static <T> T cast(Object value) {
     return (T) value;
   }
 
-  static  <T> String arrayToString(List<T> values) {
+  public static <T> String arrayToString(List<T> values) {
     return values.stream().map(Objects::toString).collect(joining(","));
   }
 }
