@@ -33,7 +33,9 @@ import static java.util.regex.Pattern.compile;
  * Sample output:
  * <p>
  * Element should have text '666' {By.id: result}
- * Element: '<TextView class="android.widget.TextView" id="com.android.calculator2:id/result" name="6" displayed="true" checked="false" enabled="true" focused="false" bounds="[0,183][1080,584]" contentDescription="null" package="com.android.calculator2">6</TextView>'
+ * Element: '<TextView class="android.widget.TextView" id="com.android.calculator2:id/result" name="6" displayed="true"
+ * checked="false" enabled="true" focused="false" bounds="[0,183][1080,584]"
+ * contentDescription="null" package="com.android.calculator2">6</TextView>'
  * Screenshot: file:/Users/andrei/projects/selenide-appium/build/reports/tests/1599256941895.0.png
  * Page source: file:/Users/andrei/projects/selenide-appium/build/reports/tests/1599256941895.0.html
  */
@@ -124,14 +126,12 @@ public class AppiumElementDescriber implements ElementDescriber {
 
     private Builder appendTagName() {
       if (instanceOf(webDriver, AndroidDriver.class)) {
-        getAttribute("class", (className) -> {
+        getAttribute("class", className -> {
           tagName = className.replaceFirst(".+\\.(.+)", "$1");
         });
       }
       if ("?".equals(tagName)) {
-        safeCall(element::getTagName, () -> "Failed to get tag name", (tagName) -> {
-          this.tagName = tagName;
-        });
+        safeCall(element::getTagName, () -> "Failed to get tag name", tagName -> this.tagName = tagName);
       }
       sb.append("<").append(tagName);
       return this;
@@ -143,7 +143,7 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
 
     private Builder appendAttribute(String name) {
-      getAttribute(name, (value) -> {
+      getAttribute(name, value -> {
         sb.append(" ").append(name).append("=\"").append(value).append("\"");
       });
       return this;
@@ -196,15 +196,15 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
 
     private void appendText() {
-      safeCall(element::getText, () -> "Failed to get text", (text) -> this.text = text);
+      safeCall(element::getText, () -> "Failed to get text", text -> this.text = text);
       if ("?".equals(text)) {
-        getAttribute("text", (text) -> this.text = text);
+        getAttribute("text", text -> this.text = text);
       }
       if ("?".equals(text)) {
-        getAttribute("label", (text) -> this.text = text);
+        getAttribute("label", text -> this.text = text);
       }
       if ("?".equals(text)) {
-        getAttribute("value", (text) -> this.text = text);
+        getAttribute("value", text -> this.text = text);
       }
       sb.append(text);
     }

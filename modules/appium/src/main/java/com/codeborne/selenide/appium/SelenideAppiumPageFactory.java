@@ -13,6 +13,8 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ByIdOrName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -27,6 +29,8 @@ import static io.appium.java_client.remote.options.SupportsAutomationNameOption.
 
 @ParametersAreNonnullByDefault
 public class SelenideAppiumPageFactory extends SelenidePageFactory {
+  private static final Logger logger = LoggerFactory.getLogger(SelenideAppiumPageFactory.class);
+
   @Override
   @Nonnull
   protected By findSelector(Driver driver, Field field) {
@@ -56,7 +60,14 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   @CheckReturnValue
   @Nullable
   @Override
-  public Object decorate(ClassLoader loader, Driver driver, @Nullable WebElementSource searchContext, Field field, By selector, Type[] genericTypes) {
+  public Object decorate(
+    ClassLoader loader,
+    Driver driver,
+    @Nullable WebElementSource searchContext,
+    Field field,
+    By selector,
+    Type[] genericTypes
+  ) {
     if (selector instanceof ByIdOrName) {
       return decorateWithAppium(loader, searchContext, field);
     }
@@ -64,6 +75,10 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   }
 
   private Object decorateWithAppium(ClassLoader loader, @Nullable WebElementSource searchContext, Field field) {
+    if (searchContext == null) {
+      logger.warn("Cannot initialize field {}", field);
+      return null;
+    }
     AppiumFieldDecorator defaultAppiumFieldDecorator = new AppiumFieldDecorator(searchContext.getWebElement());
     Object appiumElement = defaultAppiumFieldDecorator.decorate(loader, field);
     if (appiumElement instanceof WebElement) {
