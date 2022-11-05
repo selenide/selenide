@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.10.0 (planned to xx.10.2022)
+## 6.10.0 (planned to xx.11.2022)
 * make ClickOptions overridable (to be used in selenide-appium)
 * bump Selenium from 4.5.0 to 4.6.0, see https://www.selenium.dev/blog/2022/selenium-4-6-0-released/
 * bump WebDriverManager from 5.3.0 to 5.3.1, see https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md#531---2022-11-04

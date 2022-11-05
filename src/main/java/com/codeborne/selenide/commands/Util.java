@@ -18,7 +18,7 @@ import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
-class Util {
+public class Util {
   @SuppressWarnings("unchecked")
   @CheckReturnValue
   @Nonnull
