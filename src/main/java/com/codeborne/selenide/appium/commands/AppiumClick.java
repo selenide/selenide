@@ -20,6 +20,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
 import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
+import static com.codeborne.selenide.commands.Util.firstOf;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
@@ -28,7 +29,7 @@ public class AppiumClick extends Click {
 
   @Override
   @Nullable
-  public Void execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     WebElement webElement = findElement(locator);
 
     if (args == null || args.length == 0) {
@@ -41,7 +42,7 @@ public class AppiumClick extends Click {
     else {
       throw new IllegalArgumentException("Unsupported click arguments: " + Arrays.toString(args));
     }
-    return null;
+    return proxy;
   }
 
   protected void click(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
@@ -122,12 +123,5 @@ public class AppiumClick extends Click {
     else {
       return super.findElement(locator);
     }
-  }
-
-  static <T> T firstOf(@Nullable Object[] args) {
-    if (args == null || args.length == 0) {
-      throw new IllegalArgumentException("Missing arguments");
-    }
-    return (T) args[0];
   }
 }
