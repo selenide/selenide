@@ -1,4 +1,8 @@
-apply plugin: 'java-library'
+plugins {
+  id 'java-library'
+  id 'checkstyle'
+  id 'com.github.spotbugs' version '5.0.13'
+}
 
 defaultTasks 'check', 'test', 'publishToMavenLocal'
 
@@ -10,6 +14,7 @@ tasks.withType(Test) {
   useJUnitPlatform()
 }
 
+apply from: file('gradle/code-analysis.gradle')
 apply from: file('gradle/compilation.gradle')
 apply from: file('gradle/dependencies.gradle')
 apply from: file('gradle/deploy.gradle')
