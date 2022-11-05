@@ -1,4 +1,4 @@
-package com.codeborne.selenide.appium.ios_test_app;
+package com.codeborne.selenide.appium.ios;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;

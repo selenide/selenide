@@ -1,4 +1,4 @@
-package com.codeborne.selenide.appium.ios_test_app;
+package com.codeborne.selenide.appium.ios;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
@@ -23,7 +23,12 @@ class IosTestAppDriverFactory implements DriverFactory {
 
   @Nonnull
   @Override
-  public XCUITestOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
+  public XCUITestOptions createCapabilities(
+    Config config,
+    Browser browser,
+    @Nullable Proxy proxy,
+    @Nullable File browserDownloadsFolder
+  ) {
     File app = downloadIosApp();
     XCUITestOptions options = new XCUITestOptions();
     options.setDeviceName("iPhone 12");
