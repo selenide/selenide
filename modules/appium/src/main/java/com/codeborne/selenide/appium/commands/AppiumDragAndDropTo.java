@@ -52,7 +52,7 @@ public class AppiumDragAndDropTo extends DragAndDropTo {
       .addAction(finger.createPointerUp(PointerInput.MouseButton.MIDDLE.asArg()));
   }
 
-  public Point getCenter(WebElement element){
+  private Point getCenter(WebElement element){
     int x = element.getLocation().getX() + element.getSize().getWidth() / 2;
     int y = element.getLocation().getY() + element.getSize().getHeight() / 2;
     return new Point(x,y);
