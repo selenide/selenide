@@ -7,14 +7,10 @@ import com.codeborne.selenide.appium.commands.AppiumClickMethod;
 public class AppiumClickOptions extends ClickOptions {
 
   private final AppiumClickMethod appiumClickMethod;
-  private final int xOffset;
-  private final int yOffset;
 
-  private AppiumClickOptions(AppiumClickMethod appiumClickMethod, int xOffSet, int yOffset){
-    super(ClickMethod.DEFAULT, 0, 0, null);
+  private AppiumClickOptions(AppiumClickMethod appiumClickMethod, int offsetX, int offsetY){
+    super(ClickMethod.DEFAULT, offsetX, offsetY, null);
     this.appiumClickMethod = appiumClickMethod;
-    this.xOffset = xOffSet;
-    this.yOffset = yOffset;
   }
 
   public static AppiumClickOptions tap(){
@@ -35,16 +31,6 @@ public class AppiumClickOptions extends ClickOptions {
 
   public AppiumClickMethod appiumClickMethod(){
     return appiumClickMethod;
-  }
-
-  @Override
-  public int offsetX(){
-    return xOffset;
-  }
-
-  @Override
-  public int offsetY(){
-    return yOffset;
   }
 
 }
