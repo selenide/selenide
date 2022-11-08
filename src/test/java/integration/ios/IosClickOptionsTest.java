@@ -2,7 +2,6 @@ package integration.ios;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.appium.AppiumClickOptions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 

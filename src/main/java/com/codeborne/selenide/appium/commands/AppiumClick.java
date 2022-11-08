@@ -3,6 +3,7 @@ package com.codeborne.selenide.appium.commands;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.appium.AppiumClickOptions;
+import com.codeborne.selenide.appium.WebdriverUnwrapper;
 import com.codeborne.selenide.commands.Click;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.AppiumDriver;
@@ -18,6 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
+import java.util.Optional;
 
 import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
 import static com.codeborne.selenide.commands.Util.firstOf;
@@ -91,8 +93,13 @@ public class AppiumClick extends Click {
   }
 
   private void perform(Driver driver, Sequence sequence) {
+    // TODO WTF? Why we do nothing if it is not AppiumDriver
     if (instanceOf(driver, AppiumDriver.class)) {
-      ((AppiumDriver) driver.getWebDriver()).perform(singletonList(sequence));
+      Optional<AppiumDriver> cast = WebdriverUnwrapper.cast(driver.getWebDriver(), AppiumDriver.class);
+      if (cast.isPresent()) {
+        AppiumDriver appiumDriver = cast.get();
+        appiumDriver.perform(singletonList(sequence));
+      }
     }
   }
 
