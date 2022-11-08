@@ -1,4 +1,4 @@
-package com.codeborne.selenide.appium;
+package integration.android;
 
 import org.junit.jupiter.api.Test;
 
@@ -6,7 +6,7 @@ import static com.codeborne.selenide.ClipboardConditions.content;
 import static com.codeborne.selenide.Selenide.clipboard;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClipboardTest extends BaseTest {
+public class ClipboardTest extends BaseAndroidTest {
   @Test
   public void canAccessClipboardInMobile() {
     clipboard().setText("This is Appium, Виталик&");

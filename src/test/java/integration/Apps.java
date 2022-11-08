@@ -1,4 +1,4 @@
-package com.codeborne.selenide.appium;
+package integration;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.net.URL;
 
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 
-public class SampleApp {
+public class Apps {
   public static File downloadAndroidApp() {
     return downloadSampleApp("ApiDemos-debug.apk");
   }

@@ -1,4 +1,4 @@
-package com.codeborne.selenide.appium;
+package integration.android;
 
 import com.codeborne.selenide.ElementsCollection;
 import io.appium.java_client.pagefactory.AndroidFindBy;

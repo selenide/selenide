@@ -1,4 +1,4 @@
-package com.codeborne.selenide.appium.demos;
+package integration.android;
 
 import com.codeborne.selenide.Condition;
 import io.appium.java_client.AppiumBy;
@@ -11,7 +11,7 @@ import static com.codeborne.selenide.appium.AppiumClickOptions.tap;
 import static com.codeborne.selenide.appium.AppiumClickOptions.tapWithOffset;
 import static com.codeborne.selenide.appium.AppiumClickOptions.longPress;
 
-class AndroidClickOptionsTest extends AbstractApiDemosTest {
+class AndroidClickOptionsTest extends BaseApiDemosTest {
 
   @Test
   void testAndroidTap()  {

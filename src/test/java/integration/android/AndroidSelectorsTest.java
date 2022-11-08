@@ -1,4 +1,4 @@
-package com.codeborne.selenide.appium.demos;
+package integration.android;
 
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.Test;
@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.appium.AppiumSelectors.*;
 
-class AndroidSelectorsTest extends AbstractApiDemosTest {
+class AndroidSelectorsTest extends BaseApiDemosTest {
 
   private static final String VIEWS = "Views";
   private static final String GRAPHICS_PARTIAL_STRING = "Graphi";
