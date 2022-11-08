@@ -77,6 +77,9 @@ public class WebDriverFactory {
   }
 
   private void setLoadTimeout(Config config, WebDriver webdriver) {
+    if (config.pageLoadTimeout() < 0) {
+      return;
+    }
     try {
       webdriver.manage().timeouts().pageLoadTimeout(Duration.ofMillis(config.pageLoadTimeout()));
     }
