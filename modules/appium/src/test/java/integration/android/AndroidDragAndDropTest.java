@@ -1,4 +1,4 @@
-package com.codeborne.selenide.appium.demos;
+package integration.android;
 
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
  * Copied from <a href="https://bit.ly/3NE6QsD">Appium repository</a>
  * and modified to use Selenide framework.
  */
-class AndroidDragAndDropTest extends AbstractApiDemosTest {
+class AndroidDragAndDropTest extends BaseApiDemosTest {
   @Test
   void dragAndDrop() {
     $(By.xpath(".//*[@text='Views']")).click();

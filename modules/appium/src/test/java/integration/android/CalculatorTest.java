@@ -1,5 +1,6 @@
-package com.codeborne.selenide.appium;
+package integration.android;
 
+import com.codeborne.selenide.appium.ScreenObject;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
@@ -8,7 +9,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.appium.ScreenObject.screen;
 
-public class CalculatorTest extends BaseTest {
+public class CalculatorTest extends BaseAndroidTest {
   @Test
   public void plain() {
     $(By.id("digit_2")).click();
@@ -30,7 +31,7 @@ public class CalculatorTest extends BaseTest {
 
   @Test
   public void pageObjectWithCollection() {
-    CalculatorPageWithCollection calculatorPage = screen(CalculatorPageWithCollection.class);
+    CalculatorPageWithCollection calculatorPage = ScreenObject.screen(CalculatorPageWithCollection.class);
     calculatorPage.selectDigit2();
     calculatorPage.plus.shouldHave(size(1)).get(0).click();
     calculatorPage.number4.shouldHave(size(1)).get(0).click();

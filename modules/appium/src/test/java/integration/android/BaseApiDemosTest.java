@@ -1,9 +1,11 @@
-package com.codeborne.selenide.appium.demos;
+package integration.android;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.remote.AutomationName;
+import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 
@@ -13,10 +15,21 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static com.codeborne.selenide.appium.SampleApp.downloadAndroidApp;
-import static org.openqa.selenium.remote.CapabilityType.APPLICATION_NAME;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.Selenide.open;
+import static integration.Apps.downloadAndroidApp;
 
-public class AndroidDriverWithDemos implements WebDriverProvider {
+public abstract class BaseApiDemosTest {
+  @BeforeEach
+  public void setUp() {
+    closeWebDriver();
+    Configuration.browserSize = null;
+    Configuration.browser = AndroidDriverWithDemos.class.getName();
+    open();
+  }
+}
+
+class AndroidDriverWithDemos implements WebDriverProvider {
   @CheckReturnValue
   @Nonnull
   @Override
@@ -28,7 +41,6 @@ public class AndroidDriverWithDemos implements WebDriverProvider {
     options.setAutomationName(AutomationName.ANDROID_UIAUTOMATOR2);
     options.setPlatformName("Android");
     options.setDeviceName("Android Emulator");
-    options.setCapability(APPLICATION_NAME, "Appium");
     options.setApp(app.getAbsolutePath());
     options.setAppPackage("io.appium.android.apis");
     options.setAppActivity(".ApiDemos");

@@ -1,8 +1,9 @@
-package com.codeborne.selenide.appium.ios;
+package integration.ios;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.webdriver.DriverFactory;
+import com.codeborne.selenide.webdriver.HttpClientTimeouts;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
 import org.openqa.selenium.Proxy;
@@ -13,8 +14,9 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 
-import static com.codeborne.selenide.appium.SampleApp.downloadIosApp;
+import static integration.Apps.downloadIosApp;
 
 class IosTestAppDriverFactory implements DriverFactory {
   @Override
@@ -31,9 +33,11 @@ class IosTestAppDriverFactory implements DriverFactory {
   ) {
     File app = downloadIosApp();
     XCUITestOptions options = new XCUITestOptions();
-    options.setDeviceName("iPhone 12");
+    options.setWdaLaunchTimeout(Duration.ofMinutes(10));
+    options.setDeviceName("iPhone 8");
     options.setApp(app.getAbsolutePath());
     options.setFullReset(false);
+    HttpClientTimeouts.defaultLocalReadTimeout = Duration.ofMinutes(10);
     return options;
   }
 

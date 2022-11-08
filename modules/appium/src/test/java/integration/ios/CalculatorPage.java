@@ -1,4 +1,4 @@
-package com.codeborne.selenide.appium.ios;
+package integration.ios;
 
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
