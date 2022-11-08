@@ -34,12 +34,10 @@ public class AppiumClick extends Click {
 
     if (args == null || args.length == 0) {
       click(locator.driver(), webElement);
-    }
-    else if (args.length == 1) {
+    } else if (args.length == 1) {
       AppiumClickOptions appiumClickOptions = firstOf(args);
       click(locator.driver(), webElement, appiumClickOptions);
-    }
-    else {
+    } else {
       throw new IllegalArgumentException("Unsupported click arguments: " + Arrays.toString(args));
     }
     return proxy;
@@ -55,11 +53,11 @@ public class AppiumClick extends Click {
         performTapWithOffset(driver, webElement, 0, 0);
         break;
       }
-      case DOUBLE_TAP:{
+      case DOUBLE_TAP: {
         performDoubleTap(driver, webElement);
         break;
       }
-      case LONG_PRESS:{
+      case LONG_PRESS: {
         performLongPress(driver, webElement);
         break;
       }
@@ -77,10 +75,10 @@ public class AppiumClick extends Click {
     Point size = webElement.getLocation();
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
     Sequence doubleTapSequence = getSequenceToPerformTap(finger, size, 0, 0)
-    .addAction(new Pause(finger, ofMillis(40)))
-    .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
-    .addAction(new Pause(finger, ofMillis(200)))
-    .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+      .addAction(new Pause(finger, ofMillis(40)))
+      .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
+      .addAction(new Pause(finger, ofMillis(200)))
+      .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
     perform(driver, doubleTapSequence);
   }
 
@@ -92,25 +90,25 @@ public class AppiumClick extends Click {
     perform(driver, tapSequence);
   }
 
-  private void perform(Driver driver, Sequence sequence){
-    if(instanceOf(driver, AppiumDriver.class)){
-      ((AppiumDriver)driver.getWebDriver()).perform(singletonList(sequence));
+  private void perform(Driver driver, Sequence sequence) {
+    if (instanceOf(driver, AppiumDriver.class)) {
+      ((AppiumDriver) driver.getWebDriver()).perform(singletonList(sequence));
     }
   }
 
-  private Sequence getSequenceToPerformTap(PointerInput finger, Point size, int offsetX, int offsetY){
+  private Sequence getSequenceToPerformTap(PointerInput finger, Point size, int offsetX, int offsetY) {
     return new Sequence(finger, 1)
       .addAction(finger.createPointerMove(ofMillis(0),
-        PointerInput.Origin.viewport(), size.getX() + offsetX,  size.getY() + offsetY))
+        PointerInput.Origin.viewport(), size.getX() + offsetX, size.getY() + offsetY))
       .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
       .addAction(new Pause(finger, ofMillis(200)))
       .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
   }
 
-  public Point getCenter(WebElement element){
+  public Point getCenter(WebElement element) {
     int x = element.getLocation().getX() + element.getSize().getWidth() / 2;
     int y = element.getLocation().getY() + element.getSize().getHeight() / 2;
-    return new Point(x,y);
+    return new Point(x, y);
   }
 
   @Override
@@ -119,8 +117,7 @@ public class AppiumClick extends Click {
   protected WebElement findElement(WebElementSource locator) {
     if (instanceOf(locator.driver(), AppiumDriver.class)) {
       return locator.getWebElement();
-    }
-    else {
+    } else {
       return super.findElement(locator);
     }
   }

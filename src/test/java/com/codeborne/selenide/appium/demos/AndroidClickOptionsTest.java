@@ -6,9 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.appium.AppiumClickOptions.*;
+import static com.codeborne.selenide.appium.AppiumClickOptions.doubleTap;
+import static com.codeborne.selenide.appium.AppiumClickOptions.tap;
+import static com.codeborne.selenide.appium.AppiumClickOptions.tapWithOffset;
+import static com.codeborne.selenide.appium.AppiumClickOptions.longPress;
 
-class AndroidClickOptionsTest extends AbstractApiDemosTest{
+class AndroidClickOptionsTest extends AbstractApiDemosTest {
 
   @Test
   void testAndroidTap()  {
@@ -18,7 +21,7 @@ class AndroidClickOptionsTest extends AbstractApiDemosTest{
 
   @Test
   void testAndroidTapWithOffset()  {
-    $(AppiumBy.xpath(".//*[@text='Views']")).click(tapWithOffset(0,-200)); //Find view but click Text
+    $(AppiumBy.xpath(".//*[@text='Views']")).click(tapWithOffset(0, -200)); //Find view but click Text
     $(AppiumBy.xpath(".//*[@text='KeyEventText']")).shouldHave(visible);
   }
 
@@ -32,12 +35,12 @@ class AndroidClickOptionsTest extends AbstractApiDemosTest{
   }
 
   @Test
-  void testAndroidDoubleTap(){
+  void testAndroidDoubleTap() {
     $(AppiumBy.xpath(".//*[@text='Preference']")).click();
     $(AppiumBy.xpath(".//*[@text='1. Preferences from XML']")).click();
     $(AppiumBy.xpath(".//android.widget.CheckBox")).click(doubleTap());
     $(AppiumBy.xpath(".//android.widget.CheckBox"))
-      .shouldHave(Condition.attribute("checked","false"));
+      .shouldHave(Condition.attribute("checked", "false"));
   }
 
 }
