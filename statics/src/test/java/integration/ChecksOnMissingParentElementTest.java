@@ -29,7 +29,7 @@ final class ChecksOnMissingParentElementTest extends IntegrationTest {
   }
 
   @Test
-  void should_not_have_text_is_nok() {
+  void should_not_have_text_is_not_ok() {
     assertThatThrownBy(() ->
       $("#abracadabra").find(".magic").shouldNotHave(text("Search"))
     ).isInstanceOf(ElementNotFound.class)
