@@ -33,7 +33,7 @@ subprojects {
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
       exclude group: 'org.slf4j'
     }
-    implementation 'org.seleniumhq.selenium:selenium-http-jdk-client:4.5.0'
+    implementation("org.seleniumhq.selenium:selenium-http-jdk-client:$seleniumVersion")
     implementation("com.google.guava:guava:31.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("commons-io:commons-io:2.11.0")
