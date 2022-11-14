@@ -1,5 +1,12 @@
 == Changelog
 
+=== 2.3.0 (planned to xx.11.2022)
+* #81 Add new locators for appium  --  thanks to Amuthan Sakthivel
+* #82 added click options to perform tap, doubletap, longpress, tap with offset  --  thanks to Amuthan Sakthivel
+* #83 removed the deprecated touchaction implementation and replaced with sequence  --  thanks to Amuthan Sakthivel
+* #84 Add checkstyle and spotbugs plugins. Fix code analysis issues.  --  thanks to Boris Osipov
+* upgrade to Selenide 6.9.0
+
 === 2.2.0 (released 26.09.2022)
 * upgrade to Selenide 6.8.0 and Appium 8.2.0
 
