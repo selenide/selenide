@@ -5,4 +5,5 @@
         "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
 <suppressions>
+  <suppress checks="AvoidStarImport" files="src[/\\]test[/\\]java[/\\].*"/>
 </suppressions>

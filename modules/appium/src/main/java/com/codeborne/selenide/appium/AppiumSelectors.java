@@ -1,6 +1,21 @@
 package com.codeborne.selenide.appium;
 
-import com.codeborne.selenide.appium.selector.*;
+import com.codeborne.selenide.appium.selector.ByTagAndAttribute;
+import com.codeborne.selenide.appium.selector.ByTagAndText;
+import com.codeborne.selenide.appium.selector.ByText;
+import com.codeborne.selenide.appium.selector.WithTagAndText;
+import com.codeborne.selenide.appium.selector.WithText;
+import com.codeborne.selenide.appium.selector.ByTagAndName;
+import com.codeborne.selenide.appium.selector.ByName;
+import com.codeborne.selenide.appium.selector.WithName;
+import com.codeborne.selenide.appium.selector.WithTagAndName;
+import com.codeborne.selenide.appium.selector.ByAttribute;
+import com.codeborne.selenide.appium.selector.WithTagAndAttribute;
+import com.codeborne.selenide.appium.selector.WithAttribute;
+import com.codeborne.selenide.appium.selector.ByTagAndContentDescription;
+import com.codeborne.selenide.appium.selector.WithTagAndContentDescription;
+import com.codeborne.selenide.appium.selector.ByContentDescription;
+import com.codeborne.selenide.appium.selector.WithContentDescription;
 import org.openqa.selenium.By;
 
 import javax.annotation.CheckReturnValue;
@@ -8,7 +23,7 @@ import javax.annotation.Nonnull;
 
 public class AppiumSelectors {
 
-  private AppiumSelectors(){
+  private AppiumSelectors() {
   }
 
   @CheckReturnValue
