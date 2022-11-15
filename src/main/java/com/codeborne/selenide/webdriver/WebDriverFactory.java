@@ -65,8 +65,9 @@ public class WebDriverFactory {
 
     Browser browser = new Browser(config.browser(), config.headless());
     WebDriver webdriver = createWebDriverInstance(config, browser, proxy, browserDownloadsFolder);
-
-    browserResizer.adjustBrowserSize(config, webdriver);
+    if (needBrowserResize(webdriver)) {
+      browserResizer.adjustBrowserSize(config, webdriver);
+    }
     browserResizer.adjustBrowserPosition(config, webdriver);
     setLoadTimeout(config, webdriver);
 
@@ -75,7 +76,15 @@ public class WebDriverFactory {
     logSeleniumInfo();
     return webdriver;
   }
-
+  private boolean needBrowserResize(WebDriver webdriver) {
+    String browserName = "";
+    if (webdriver instanceof HasCapabilities) {
+      Capabilities capabilities = ((HasCapabilities) webdriver).getCapabilities();
+      browserName = capabilities.getBrowserName();
+    }
+    Browser browser = new Browser(browserName, false);
+    return !browser.isChromium();
+  }
   private void setLoadTimeout(Config config, WebDriver webdriver) {
     try {
       webdriver.manage().timeouts().pageLoadTimeout(Duration.ofMillis(config.pageLoadTimeout()));
