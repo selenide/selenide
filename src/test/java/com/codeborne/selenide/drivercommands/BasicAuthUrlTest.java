@@ -29,7 +29,7 @@ final class BasicAuthUrlTest {
   void appendBasicAuthToURL_emptyDomain() {
     assertThat(basicAuthUrl.appendBasicAuthToURL(
       "https://company.com/login",
-      new BasicAuthCredentials("login-01", "password-01")))
+      new BasicAuthCredentials("", "login-01", "password-01")))
       .isEqualTo("https://login-01:password-01@company.com/login");
   }
 }
