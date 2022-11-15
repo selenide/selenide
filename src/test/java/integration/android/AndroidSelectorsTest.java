@@ -14,33 +14,33 @@ class AndroidSelectorsTest extends BaseApiDemosTest {
 
   @Test
   void testAppiumSelectorsInAndroidApp() {
-    $(byAttribute("content-desc",VIEWS)).click();
+    $(byAttribute("content-desc", VIEWS)).click();
     pressBack();
     $(byContentDescription(VIEWS)).click();
     pressBack();
-    $(byTagAndAttribute("*","text",VIEWS)).click();
+    $(byTagAndAttribute("*", "text", VIEWS)).click();
     pressBack();
-    $(byTagAndContentDescription("*",VIEWS)).click();
+    $(byTagAndContentDescription("*", VIEWS)).click();
     pressBack();
-    $(byTagAndText("*",VIEWS)).click();
+    $(byTagAndText("*", VIEWS)).click();
     pressBack();
     $(byText(VIEWS)).click();
     pressBack();
-    $(withAttribute("text",GRAPHICS_PARTIAL_STRING)).click();
+    $(withAttribute("text", GRAPHICS_PARTIAL_STRING)).click();
     pressBack();
     $(withContentDescription(GRAPHICS_PARTIAL_STRING)).click();
     pressBack();
-    $(withTagAndAttribute("*","text",GRAPHICS_PARTIAL_STRING)).click();
+    $(withTagAndAttribute("*", "text", GRAPHICS_PARTIAL_STRING)).click();
     pressBack();
-    $(withTagAndContentDescription("*",GRAPHICS_PARTIAL_STRING)).click();
+    $(withTagAndContentDescription("*", GRAPHICS_PARTIAL_STRING)).click();
     pressBack();
-    $(withTagAndText("android.widget.TextView",GRAPHICS_PARTIAL_STRING)).click();
+    $(withTagAndText("android.widget.TextView", GRAPHICS_PARTIAL_STRING)).click();
     pressBack();
     $(withText(GRAPHICS_PARTIAL_STRING))
       .shouldHave(text("Graphics"));
   }
 
-  private void pressBack(){
+  private void pressBack() {
     WebDriverRunner.getWebDriver().navigate().back();
   }
 }

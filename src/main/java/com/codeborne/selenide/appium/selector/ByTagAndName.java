@@ -5,5 +5,5 @@ public class ByTagAndName extends ByTagAndAttribute {
   public ByTagAndName(String tag, String attributeValue) {
     super(tag, "name", attributeValue);
   }
-  
+
 }

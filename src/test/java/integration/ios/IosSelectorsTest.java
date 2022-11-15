@@ -10,10 +10,9 @@ class IosSelectorsTest extends BaseIOSTest {
 
   @Test
   void testAppiumSelectorsInIosApp() {
-    $(byTagAndName("*","IntegerA")).setValue("2");
+    $(byTagAndName("*", "IntegerA")).setValue("2");
     $(byName("IntegerB")).setValue("4");
     $(withName("ComputeSum")).click();
-    $(withTagAndName("*","Answ"))
-      .shouldHave(text("6"));
+    $(withTagAndName("*", "Answ")).shouldHave(text("6"));
   }
 }
