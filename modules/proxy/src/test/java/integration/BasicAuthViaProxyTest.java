@@ -13,31 +13,31 @@ import static com.codeborne.selenide.Selenide.open;
 public class BasicAuthViaProxyTest extends ProxyIntegrationTest {
   @Test
   void canPassBasicAuth_via_proxy() {
-    open("/basic-auth/hello", domain(), "scott", "tiger");
-    $("#greeting").shouldHave(text("Hello, scott:tiger!"));
+    open("/basic-auth/hello", domain(), "scott", basicAuthPassword());
+    $("#greeting").shouldHave(text("Hello, scott:" + basicAuthPassword() + "!"));
   }
 
   @Test
   void canAuthUsingProxyWithCredentials() {
-    Credentials credentials = new BasicAuthCredentials(domain(), "scott", "tiger");
+    Credentials credentials = new BasicAuthCredentials(domain(), "scott", basicAuthPassword());
     open("/basic-auth/hello", BASIC, credentials);
-    $("#greeting").shouldHave(text("Hello, scott:tiger!"));
+    $("#greeting").shouldHave(text("Hello, scott:" + basicAuthPassword() + '!'));
     $("#bye").click();
-    $("#greeting").shouldHave(text("bye, scott:tiger!"));
+    $("#greeting").shouldHave(text("bye, scott:" + basicAuthPassword() + '!'));
   }
 
   @Test
   void canSwitchToAnotherBasicAuth() {
-    open("/basic-auth/hello", BASIC, new BasicAuthCredentials(domain(), "scott", "tiger"));
-    $("#greeting").shouldHave(text("Hello, scott:tiger!"));
+    open("/basic-auth/hello", BASIC, new BasicAuthCredentials(domain(), "scott", basicAuthPassword()));
+    $("#greeting").shouldHave(text("Hello, scott:" + basicAuthPassword() + '!'));
     open("/basic-auth/hello2", BASIC, new BasicAuthCredentials(domain(), "scott2", "tiger2"));
     $("#greeting").shouldHave(text("Hello2, scott2:tiger2!"));
   }
 
   @Test
   void removesPreviousBasicAuthHeaders() {
-    open("/basic-auth/hello", BASIC, new BasicAuthCredentials(domain(), "scott", "tiger"));
-    $("#greeting").shouldHave(text("Hello, scott:tiger!"));
+    open("/basic-auth/hello", BASIC, new BasicAuthCredentials(domain(), "scott", basicAuthPassword()));
+    $("#greeting").shouldHave(text("Hello, scott:" + basicAuthPassword() + '!'));
     open("/headers/hello3");
     $("body")
       .shouldHave(partialText("Hello3"), partialText("Accept="), partialText("User-Agent="))

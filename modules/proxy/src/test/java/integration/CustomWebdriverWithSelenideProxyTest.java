@@ -40,8 +40,8 @@ final class CustomWebdriverWithSelenideProxyTest extends ProxyIntegrationTest {
       try {
         WebDriverRunner.setWebDriver(webDriver, proxy);
 
-        open("/basic-auth/hello", BASIC, new BasicAuthCredentials(domain(), "scott", "tiger"));
-        $("body").shouldHave(partialText("Hello, scott:tiger!"));
+        open("/basic-auth/hello", BASIC, new BasicAuthCredentials(domain(), "scott", basicAuthPassword()));
+        $("body").shouldHave(partialText("Hello, scott:" + basicAuthPassword() + '!'));
       }
       finally {
         closeWebDriver();

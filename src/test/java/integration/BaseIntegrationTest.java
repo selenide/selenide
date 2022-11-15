@@ -49,6 +49,10 @@ public abstract class BaseIntegrationTest {
     return "127.0.0.1";
   }
 
+  protected static String basicAuthPassword() {
+    return LocalHttpServer.BASIC_AUTH_PASSWORD;
+  }
+
   protected static String getBaseUrl() {
     return protocol + domain() + ":" + server.getPort();
   }

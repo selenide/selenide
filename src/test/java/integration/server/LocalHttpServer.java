@@ -17,6 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 public class LocalHttpServer {
+  public static final String BASIC_AUTH_PASSWORD = "tiger://<script>alert(1)</script>&\\";
   private final List<FileItem> uploadedFiles = new CopyOnWriteArrayList<>();
   private final Set<String> sessions = new ConcurrentSkipListSet<>();
   private final Server server;
@@ -37,7 +38,7 @@ public class LocalHttpServer {
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
     context.setContextPath("/");
     BasicAuthSecurityHandler basicAuthSecurityHandler = new BasicAuthSecurityHandler("/basic-auth/*", "Private!");
-    basicAuthSecurityHandler.addUser("scott", "tiger");
+    basicAuthSecurityHandler.addUser("scott", BASIC_AUTH_PASSWORD);
     basicAuthSecurityHandler.addUser("scott2", "tiger2");
     context.setSecurityHandler(basicAuthSecurityHandler);
     server.setHandler(context);

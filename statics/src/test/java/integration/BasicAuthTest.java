@@ -10,7 +10,7 @@ final class BasicAuthTest extends IntegrationTest {
   @Test
   void canPassBasicAuth_via_URL() {
     useProxy(false);
-    open("/basic-auth/hello", "", "scott", "tiger");
-    $("#greeting").shouldHave(text("Hello, scott:tiger!"));
+    open("/basic-auth/hello", "", "scott", basicAuthPassword());
+    $("#greeting").shouldHave(text("Hello, scott:" + basicAuthPassword() + '!'));
   }
 }
