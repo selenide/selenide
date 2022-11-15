@@ -10,15 +10,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 class BasicAuthUrl {
   @Nonnull
   String appendBasicAuthToURL(String url, @Nullable BasicAuthCredentials credentials) {
-    String login = "";
-    String password = "";
-    String domain = "";
-
-    if (credentials != null) {
-      if (!credentials.domain.isEmpty()) domain = credentials.domain + "%5C";
-      if (!credentials.login.isEmpty()) login = credentials.login + ":";
-      if (!credentials.password.isEmpty()) password = credentials.password + "@";
+    if (credentials == null) {
+      return url;
     }
+
+    String domain = credentials.domain.isEmpty() ? "" : credentials.domain + "%5C";
+    String login = credentials.login.isEmpty() ? "" : credentials.login + ':';
+    String password = credentials.password.isEmpty() ? "" : credentials.password + "@";
+
     int index = url.indexOf("://") + 3;
     if (index < 3) {
       return domain + login + password + url;
