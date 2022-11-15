@@ -19,6 +19,15 @@ final class BrowserTest {
   }
 
   @Test
+  void chromiumBrowserTest() {
+    assertThat(new Browser(CHROME, false).isChromium()).isTrue();
+    assertThat(new Browser(EDGE, false).isChromium()).isTrue();
+    assertThat(new Browser(FIREFOX, false).isChromium()).isFalse();
+    assertThat(new Browser(IE, false).isChromium()).isFalse();
+    assertThat(new Browser(INTERNET_EXPLORER, false).isChromium()).isFalse();
+  }
+
+  @Test
   void mostBrowsersSupportInsecureCerts() {
     assertThat(new Browser(CHROME, false).supportsInsecureCerts()).isTrue();
     assertThat(new Browser(FIREFOX, false).supportsInsecureCerts()).isTrue();

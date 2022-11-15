@@ -31,6 +31,10 @@ public class Browser {
   }
 
   @CheckReturnValue
+  public boolean isChromium() {
+    return isChrome() || isEdge();
+  }
+  @CheckReturnValue
   public boolean isFirefox() {
     return FIREFOX.equalsIgnoreCase(name);
   }
