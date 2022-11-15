@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.junit5.TextReportExtension;
+import com.google.common.collect.ImmutableMap;
 import integration.server.LocalHttpServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +40,7 @@ public abstract class BaseIntegrationTest {
       synchronized (BaseIntegrationTest.class) {
         if (server == null) {
           protocol = SSL ? "https://" : "http://";
-          server = startWithRetry(SSL, "no-cors-allowed");
+          server = startWithRetry(SSL, "no-cors-allowed", ImmutableMap.of("scott", scottPassword(), "john", johnPassword()));
         }
       }
     }
@@ -47,6 +48,14 @@ public abstract class BaseIntegrationTest {
 
   protected static String domain() {
     return "127.0.0.1";
+  }
+
+  protected static String scottPassword() {
+    return "tiger://<script>alert(1)</script>&\\";
+  }
+
+  protected static String johnPassword() {
+    return "mcclane://<script>console.log(2);&amp;-</script>&";
   }
 
   protected static String getBaseUrl() {

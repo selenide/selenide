@@ -44,8 +44,8 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends ProxyIntegratio
   public void userCanUserCustomWebdriverWithSelenideProxy() {
     Configuration.browser = MyWebDriverProvider.class.getName();
 
-    open("/basic-auth/hello", BASIC, new BasicAuthCredentials(domain(), "scott", "tiger"));
-    $("#greeting").shouldHave(text("Hello, scott:tiger!"));
+    open("/basic-auth/hello", BASIC, new BasicAuthCredentials(domain(), "scott", scottPassword()));
+    $("#greeting").shouldHave(text("Hello, scott:" + scottPassword()));
   }
 
   @ParametersAreNonnullByDefault
