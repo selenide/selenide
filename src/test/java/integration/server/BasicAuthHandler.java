@@ -8,6 +8,7 @@ import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 import static org.apache.hc.core5.http.HttpStatus.SC_UNAUTHORIZED;
 
 class BasicAuthHandler extends BaseHandler {
@@ -27,10 +28,10 @@ class BasicAuthHandler extends BaseHandler {
     String userPassword = new String(userPasswordBytes, UTF_8);
     String path = request.getPathInfo().replace("/", "");
     String html = String.format("<html><body>" +
-      "<div id=\"greeting\">%s, %s!</div>" +
+      "<div id=\"greeting\">%s, %s</div>" +
       "<br>" +
       "<br>" +
-      "<a id=\"bye\" href=\"/basic-auth/bye\">bye!</a></body></html>", path, userPassword);
+      "<a id=\"bye\" href=\"/basic-auth/bye\">bye!</a></body></html>", escapeHtml4(path), escapeHtml4(userPassword));
 
     return new Result(SC_OK, CONTENT_TYPE_HTML_TEXT, html);
   }

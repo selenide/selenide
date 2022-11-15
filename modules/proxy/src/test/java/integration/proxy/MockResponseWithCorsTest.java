@@ -16,6 +16,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static com.codeborne.selenide.proxy.RequestMatcher.HttpMethod.POST;
 import static com.codeborne.selenide.proxy.RequestMatchers.urlContains;
+import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 
 final class MockResponseWithCorsTest extends ProxyIntegrationTest {
@@ -25,7 +26,7 @@ final class MockResponseWithCorsTest extends ProxyIntegrationTest {
   @BeforeEach
   void setUp() throws Exception {
     String allowedOrigin = Configuration.baseUrl;
-    corsProtectedService = LocalHttpServer.startWithRetry(true, allowedOrigin).start();
+    corsProtectedService = LocalHttpServer.startWithRetry(true, allowedOrigin, emptyMap()).start();
     Configuration.timeout = 2000;
 
     log.info("Started AUT on {}", getBaseUrl());

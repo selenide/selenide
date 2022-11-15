@@ -1,5 +1,6 @@
 package integration.server;
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.fileupload.FileItem;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
@@ -10,6 +11,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import java.io.IOException;
 import java.net.BindException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -22,7 +24,7 @@ public class LocalHttpServer {
   private final Server server;
   private final int port;
 
-  LocalHttpServer(int port, boolean ssl, String friendlyOrigin) {
+  LocalHttpServer(int port, boolean ssl, String friendlyOrigin, Map<String, String> basicAuthUsers) {
     this.port = port;
     server = new Server();
 
@@ -37,8 +39,9 @@ public class LocalHttpServer {
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
     context.setContextPath("/");
     BasicAuthSecurityHandler basicAuthSecurityHandler = new BasicAuthSecurityHandler("/basic-auth/*", "Private!");
-    basicAuthSecurityHandler.addUser("scott", "tiger");
-    basicAuthSecurityHandler.addUser("scott2", "tiger2");
+    for (Map.Entry<String, String> user : basicAuthUsers.entrySet()) {
+      basicAuthSecurityHandler.addUser(user.getKey(), user.getValue());
+    }
     context.setSecurityHandler(basicAuthSecurityHandler);
     server.setHandler(context);
 
@@ -73,11 +76,12 @@ public class LocalHttpServer {
     server.stop();
   }
 
-  public static LocalHttpServer startWithRetry(boolean ssl, String friendlyOrigin) throws Exception {
+  public static LocalHttpServer startWithRetry(boolean ssl, String friendlyOrigin,
+                                               Map<String, String> basicAuthUsers) throws Exception {
     IOException lastError = null;
     for (int i = 0; i < 5; i++) {
       try {
-        return new LocalHttpServer(findFreePort(), ssl, friendlyOrigin).start();
+        return new LocalHttpServer(findFreePort(), ssl, friendlyOrigin, basicAuthUsers).start();
       }
       catch (IOException failedToStartServer) {
         if (failedToStartServer.getCause() instanceof BindException) {
@@ -97,7 +101,7 @@ public class LocalHttpServer {
    * @param args not used
    */
   public static void main(String[] args) throws Exception {
-    new LocalHttpServer(8080, false, "no-cors-allowed").start();
+    new LocalHttpServer(8080, false, "no-cors-allowed", ImmutableMap.of("scott", "tiger")).start();
     Thread.currentThread().join();
   }
 }
