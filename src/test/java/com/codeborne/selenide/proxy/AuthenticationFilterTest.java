@@ -3,6 +3,7 @@ package com.codeborne.selenide.proxy;
 import com.browserup.bup.util.HttpMessageContents;
 import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.BasicAuthCredentials;
+import com.codeborne.selenide.BearerTokenCredentials;
 import io.netty.handler.codec.http.DefaultHttpRequest;
 import org.junit.jupiter.api.Test;
 
@@ -87,7 +88,7 @@ final class AuthenticationFilterTest {
 
   @Test
   void shouldAddHeaderIfDomainIsEmpty_legacyMode() {
-    filter.setAuthentication(BEARER, new BasicAuthCredentials("username", "password"));
+    filter.setAuthentication(BEARER, new BearerTokenCredentials("", "password"));
     assertThat(filter.needsHeader("https://burger-queen.com")).isTrue();
     assertThat(filter.needsHeader("https://s3.aws.com")).isTrue();
     assertThat(filter.needsHeader("file:///foo/bar")).isTrue();
@@ -103,8 +104,8 @@ final class AuthenticationFilterTest {
   }
 
   private HttpMessageInfo info(String url) {
-    HttpMessageInfo info = mock(HttpMessageInfo.class);
-    when(info.getUrl()).thenReturn(url);
-    return info;
+    HttpMessageInfo messageInfo = mock(HttpMessageInfo.class);
+    when(messageInfo.getUrl()).thenReturn(url);
+    return messageInfo;
   }
 }
