@@ -14,9 +14,13 @@ public class BasicAuthCredentials implements Credentials {
   public final String password;
 
   /**
-   * @deprecated Use constructor with domain, login and password
+   * Security warning:
+   * If you are using Selenide proxy, use another constructor (with domain parameter).
+   * This constructor is dangerous: without domain specified, Selenide proxy will send your credentials to ALL
+   * domains, including 3rd party services that your AUT or browser might call.
+   *
+   * If proxy is disabled, it's totally ok to use this constructor.
    */
-  @Deprecated
   public BasicAuthCredentials(String login, String password) {
     this("", login, password);
   }
