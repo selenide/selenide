@@ -1,5 +1,6 @@
 package com.codeborne.selenide.files;
 
+import java.io.File;
 import java.util.regex.Pattern;
 
 class FilenameRegexFilter implements FileFilter {
@@ -9,8 +10,8 @@ class FilenameRegexFilter implements FileFilter {
     this.fileNameRegex = Pattern.compile(fileNameRegex);
   }
 
-  @Override public boolean match(DownloadedFile file) {
-    return fileNameRegex.matcher(file.getFile().getName()).matches();
+  @Override public boolean match(File file) {
+    return fileNameRegex.matcher(file.getName()).matches();
   }
 
   @Override public String description() {

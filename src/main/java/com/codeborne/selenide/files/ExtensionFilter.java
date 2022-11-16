@@ -1,5 +1,7 @@
 package com.codeborne.selenide.files;
 
+import java.io.File;
+
 import static org.apache.commons.io.FilenameUtils.isExtension;
 
 class ExtensionFilter implements FileFilter {
@@ -12,8 +14,8 @@ class ExtensionFilter implements FileFilter {
     this.extension = extension;
   }
 
-  @Override public boolean match(DownloadedFile file) {
-    return isExtension(file.getFile().getName(), extension);
+  @Override public boolean match(File file) {
+    return isExtension(file.getName(), extension);
   }
 
   @Override public String description() {
