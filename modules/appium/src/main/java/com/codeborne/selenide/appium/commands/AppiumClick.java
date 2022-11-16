@@ -19,7 +19,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
-import java.util.Optional;
 
 import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
 import static com.codeborne.selenide.commands.Util.firstOf;
@@ -94,13 +93,8 @@ public class AppiumClick extends Click {
 
   private void perform(Driver driver, Sequence sequence) {
     // TODO WTF? Why we do nothing if it is not AppiumDriver
-    if (instanceOf(driver, AppiumDriver.class)) {
-      Optional<AppiumDriver> cast = WebdriverUnwrapper.cast(driver.getWebDriver(), AppiumDriver.class);
-      if (cast.isPresent()) {
-        AppiumDriver appiumDriver = cast.get();
-        appiumDriver.perform(singletonList(sequence));
-      }
-    }
+    WebdriverUnwrapper.cast(driver.getWebDriver(), AppiumDriver.class)
+      .ifPresent(it -> it.perform(singletonList(sequence)));
   }
 
   private Sequence getSequenceToPerformTap(PointerInput finger, Point size, int offsetX, int offsetY) {
