@@ -18,12 +18,16 @@ public class DownloadOptions implements HasTimeout {
   private final FileDownloadMode method;
   @Nullable
   private final Duration timeout;
+  @Nullable
+  private final Duration incrementTimeout;
   private final FileFilter filter;
   private final DownloadAction action;
 
-  private DownloadOptions(FileDownloadMode method, @Nullable Duration timeout, FileFilter filter, DownloadAction action) {
+  private DownloadOptions(FileDownloadMode method, @Nullable Duration timeout, @Nullable Duration incrementTimeout,
+                          FileFilter filter, DownloadAction action) {
     this.method = method;
     this.timeout = timeout;
+    this.incrementTimeout = incrementTimeout;
     this.filter = filter;
     this.action = action;
   }
@@ -41,6 +45,11 @@ public class DownloadOptions implements HasTimeout {
   }
 
   @CheckReturnValue
+  public Duration incrementTimeout() {
+    return incrementTimeout;
+  }
+
+  @CheckReturnValue
   @Nonnull
   public FileFilter getFilter() {
     return filter;
@@ -55,19 +64,39 @@ public class DownloadOptions implements HasTimeout {
   @CheckReturnValue
   @Nonnull
   public DownloadOptions withTimeout(long timeoutMs) {
-    return new DownloadOptions(method, Duration.ofMillis(timeoutMs), filter, action);
+    return new DownloadOptions(method, Duration.ofMillis(timeoutMs), incrementTimeout, filter, action);
   }
 
   @CheckReturnValue
   @Nonnull
   public DownloadOptions withTimeout(Duration timeout) {
-    return new DownloadOptions(method, timeout, filter, action);
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action);
+  }
+
+  /**
+   * Set increment timeout for downloading.
+   * If no changes in files will be detected during this period of time, the download will be concluded as failed.
+   *
+   * <p>
+   * Currently, it's used only for FOLDER download method. It's reasonable to set increment timeout when
+   * 1. the download timeout is quite large (download might be very slow), and
+   * 2. there is a risk that the downloading process hasn't even started (click missed the link etc.)
+   *
+   * Then setting a shorter increment timeout allows you to fail faster.
+   * </p>
+   *
+   * @param incrementTimeout should be lesser than download timeout
+   */
+  @CheckReturnValue
+  @Nonnull
+  public DownloadOptions withIncrementTimeout(Duration incrementTimeout) {
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action);
   }
 
   @CheckReturnValue
   @Nonnull
   public DownloadOptions withFilter(FileFilter filter) {
-    return new DownloadOptions(method, timeout, filter, action);
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action);
   }
 
   /**
@@ -81,7 +110,7 @@ public class DownloadOptions implements HasTimeout {
    * @since 5.22.0
    */
   public DownloadOptions withAction(DownloadAction action) {
-    return new DownloadOptions(method, timeout, filter, action);
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action);
   }
 
   @Override
@@ -99,6 +128,6 @@ public class DownloadOptions implements HasTimeout {
   @CheckReturnValue
   @Nonnull
   public static DownloadOptions using(FileDownloadMode method) {
-    return new DownloadOptions(method, null, none(), click());
+    return new DownloadOptions(method, null, null, none(), click());
   }
 }

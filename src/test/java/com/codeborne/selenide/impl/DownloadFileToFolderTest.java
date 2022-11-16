@@ -29,9 +29,8 @@ import static org.mockito.Mockito.when;
 
 final class DownloadFileToFolderTest {
   private final Downloader downloader = new Downloader();
-  private final Waiter waiter = new DummyWaiter();
   private final WindowsCloser windowsCloser = spy(new DummyWindowsCloser());
-  private final DownloadFileToFolder command = new DownloadFileToFolder(downloader, waiter, windowsCloser);
+  private final DownloadFileToFolder command = new DownloadFileToFolder(downloader, windowsCloser);
   private final SelenideConfig config = new SelenideConfig();
   private final WebDriver webdriver = new DummyWebDriver();
   private final WebElementSource linkWithHref = mock(WebElementSource.class);
@@ -53,7 +52,7 @@ final class DownloadFileToFolderTest {
       return null;
     }).when(link).click();
 
-    File downloadedFile = command.download(linkWithHref, link, 3000, FileFilters.none(), click());
+    File downloadedFile = command.download(linkWithHref, link, 3000, 300, FileFilters.none(), click());
 
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);
     assertThat(downloadedFile.getParentFile()).isNotEqualTo(driver.browserDownloadsFolder().toFile());

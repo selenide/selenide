@@ -52,6 +52,7 @@ public class DownloadFile implements Command<File> {
     Config config = linkWithHref.driver().config();
     DownloadOptions options = getDownloadOptions(config, args);
     long timeout = ofNullable(options.timeout()).map(Duration::toMillis).orElse(config.timeout());
+    long incrementTimeout = ofNullable(options.incrementTimeout()).map(Duration::toMillis).orElse(timeout);
 
     log.debug("Download file: {}", options);
 
@@ -63,7 +64,7 @@ public class DownloadFile implements Command<File> {
         return downloadFileWithProxyServer.download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
       }
       case FOLDER: {
-        return downloadFileToFolder.download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
+        return downloadFileToFolder.download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
       }
       default: {
         throw new IllegalArgumentException("Unknown file download mode: " + options.getMethod());

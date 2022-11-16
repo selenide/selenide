@@ -25,7 +25,10 @@ import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createTempDirectory;
+import static java.time.Duration.ofMillis;
+import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -67,12 +70,9 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   void downloadsFileWithCyrillicName() throws IOException {
     File downloadedFile = $(byText("Download file with cyrillic name")).download(withExtension("txt"));
 
-    assertThat(downloadedFile.getName())
-      .isEqualTo("файл-с-русским-названием.txt");
-    assertThat(downloadedFile).content()
-      .isEqualToIgnoringNewLines("Превед медвед!");
-    assertThat(downloadedFile.getAbsolutePath())
-      .startsWith(folder.getAbsolutePath());
+    assertThat(downloadedFile.getName()).isEqualTo("файл-с-русским-названием.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед медвед!");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
   @Test
@@ -196,24 +196,46 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   void downloadsFileWithPartExtension() throws IOException {
     File downloadedFile = $(byText("Download file *part")).download(withExtension("part"));
 
-    assertThat(downloadedFile.getName())
-      .matches("hello_world.*\\.part");
-    assertThat(downloadedFile).content()
-      .isEqualToIgnoringNewLines("Hello, part WinRar!");
-    assertThat(downloadedFile.getAbsolutePath())
-      .startsWith(folder.getAbsolutePath());
+    assertThat(downloadedFile.getName()).matches("hello_world.*\\.part");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, part WinRar!");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
   @Test
   void downloadsFileWithCrdownloadExtension() throws IOException {
-    File downloadedFile = $(byText("Download file *crdownload")).download(withName("hello_world.crdownload"));
+    File downloadedFile = $(byText("Download file *crdownload")).download(300, withName("hello_world.crdownload"));
 
-    assertThat(downloadedFile.getName())
-      .matches("hello_world.*\\.crdownload");
-    assertThat(downloadedFile).content()
-      .isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
-    assertThat(downloadedFile.getAbsolutePath())
-      .startsWith(folder.getAbsolutePath());
+    assertThat(downloadedFile.getName()).matches("hello_world.*\\.crdownload");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
+  public void canSpecifyTimeoutForFileIncrement_downloadNotEvenStarted() {
+    var shortIncrementTimeout = using(FOLDER)
+      .withTimeout(ofSeconds(10))
+      .withIncrementTimeout(ofMillis(100))
+      .withFilter(withName("hello_world.txt"));
+    assertThatThrownBy(() -> $("h1")
+      .download(shortIncrementTimeout))
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessageStartingWith("Failed to download file with file name \"hello_world.txt\" in 10000 ms")
+      .hasMessageMatching(".+files in .+ haven't been modified for \\d+ ms.");
+  }
+
+  @Test
+  public void canSpecifyTimeoutForFileIncrement_filesHasNotBeenModifiedForNms() {
+    var shortIncrementTimeout = using(FOLDER)
+      .withTimeout(ofSeconds(10))
+      .withIncrementTimeout(ofMillis(100))
+      .withFilter(withName("hello_world.txt"));
+    assertThatThrownBy(() -> {
+      File file = $(byText("Download me super slowly")).download(shortIncrementTimeout);
+      assertThat(file).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
+    })
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessageStartingWith("Failed to download file with file name \"hello_world.txt\" in 10000 ms")
+      .hasMessageMatching(".+files in .+ haven't been modified for \\d+ ms.");
   }
 
   @Test
