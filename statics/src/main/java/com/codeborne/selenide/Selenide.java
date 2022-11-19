@@ -712,6 +712,27 @@ public class Selenide {
   }
 
   /**
+   * Returns selected text or empty string if no text is selected.
+   *
+   * @return selected text
+   */
+  @CheckReturnValue
+  @Nonnull
+  public String getSelectedText() {
+    return getSelenideDriver().getSelectedText();
+  }
+
+  /**
+   * Copy selected text or empty string if no text is selected to clipboard.
+   *
+   * @see #clipboard()
+   * @see Clipboard
+   */
+  public void copy() {
+    getSelenideDriver().copy();
+  }
+
+  /**
    * Create a Page Object instance
    */
   @CheckReturnValue

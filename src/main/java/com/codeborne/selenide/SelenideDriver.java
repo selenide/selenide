@@ -244,6 +244,27 @@ public class SelenideDriver {
     return executeJavaScript("return document.activeElement");
   }
 
+  /**
+   * Returns selected text or empty string if no text is selected.
+   *
+   * @return selected text
+   */
+  @CheckReturnValue
+  @Nonnull
+  public String getSelectedText() {
+    return this.executeJavaScript("return window.getSelection.toString()");
+  }
+
+  /**
+   * Copy selected text or empty string if no text is selected to clipboard.
+   *
+   * @see #getClipboard()
+   * @see Clipboard
+   */
+  public void copy() {
+    this.getClipboard().setText(this.getSelectedText());
+  }
+
   @CheckReturnValue
   @Nonnull
   public SelenideWait Wait() {
