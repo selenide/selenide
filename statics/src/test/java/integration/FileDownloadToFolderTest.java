@@ -40,7 +40,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   void setUp() {
     Configuration.fileDownload = FOLDER;
     openFile("page_with_uploads.html");
-    timeout = 100;
+    timeout = 500;
   }
 
   @Test
