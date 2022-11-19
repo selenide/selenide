@@ -25,6 +25,6 @@ class EmptyFileFilter implements FileFilter {
 
   @Override
   public String toString() {
-    return description();
+    return description().trim();
   }
 }

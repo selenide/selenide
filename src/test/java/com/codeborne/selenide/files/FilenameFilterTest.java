@@ -8,7 +8,7 @@ import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class FilenameFilterTest {
-  private static final String FILTER_DESCRIPTION = "with file name \"cv.pdf\"";
+  private static final String FILTER_DESCRIPTION = "with name \"cv.pdf\"";
   private final FileFilter filter = new FilenameFilter("cv.pdf");
 
   @Test
@@ -21,7 +21,7 @@ final class FilenameFilterTest {
 
   @Test
   void description() {
-    assertThat(filter.description()).isEqualTo(FILTER_DESCRIPTION);
+    assertThat(filter.description()).isEqualTo(' ' + FILTER_DESCRIPTION);
   }
 
   @Test

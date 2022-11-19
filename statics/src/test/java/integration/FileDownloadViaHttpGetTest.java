@@ -114,12 +114,12 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     assertThatThrownBy(() -> $(byText("Download me")).download(withName("good_bye_world.txt")))
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageMatching("Failed to download file from http.+/files/hello_world.txt in 1000 ms." +
-        " with file name \"good_bye_world.txt\";" + System.lineSeparator() + " actually downloaded: .+hello_world.txt");
+        " with name \"good_bye_world.txt\";" + System.lineSeparator() + " actually downloaded: .+hello_world.txt");
 
     assertThat(collector.events()).hasSize(1);
 
     LogEvent logEvent = collector.events().get(0);
-    assertThat(logEvent).hasToString("$(\"by text: Download me\") download(with file name \"good_bye_world.txt\")");
+    assertThat(logEvent).hasToString("$(\"by text: Download me\") download(with name \"good_bye_world.txt\")");
     assertThat(logEvent.getElement()).isEqualTo("by text: Download me");
     assertThat(logEvent.getStatus()).isEqualTo(FAIL);
   }
