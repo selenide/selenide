@@ -86,7 +86,7 @@ public class DownloadFileToFolder {
       log.info("Downloaded {}", newDownloads.filesAsString());
     }
 
-    File downloadedFile = newDownloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
+    File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
 
     if (log.isDebugEnabled()) {
       log.debug("All downloaded files in {}: {}", folder, folder.files().stream().map(f -> f.getName()).collect(joining("\n")));
@@ -162,7 +162,7 @@ public class DownloadFileToFolder {
     long lastFileUpdate = folder.lastModificationTime().orElse(start);
     long filesHasNotBeenUpdatedForMs = currentTimeMillis() - lastFileUpdate;
     if (filesHasNotBeenUpdatedForMs > incrementTimeout) {
-      String message = String.format("Failed to download file %s in %d ms: files in %s haven't been modified for %s ms.",
+      String message = String.format("Failed to download file%s in %d ms: files in %s haven't been modified for %s ms.",
         filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs);
       throw new FileNotFoundException(message);
     }

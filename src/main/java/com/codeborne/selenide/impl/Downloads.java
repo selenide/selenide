@@ -70,10 +70,10 @@ public class Downloads {
 
   @CheckReturnValue
   @Nonnull
-  public File firstDownloadedFile(String context, long timeout, FileFilter fileFilter) throws FileNotFoundException {
+  public File firstDownloadedFile(long timeout, FileFilter fileFilter) throws FileNotFoundException {
     return firstMatchingFile(fileFilter)
-      .orElseThrow(() -> new FileNotFoundException(String.format("Failed to download file %s in %d ms. %s",
-        context, timeout, fileFilter.description()).trim()
+      .orElseThrow(() -> new FileNotFoundException(String.format("Failed to download file%s in %d ms.",
+          fileFilter.description(), timeout).trim()
         )
       ).getFile();
   }

@@ -14,10 +14,11 @@ class FilenameFilter implements FileFilter {
   }
 
   @Override public String description() {
-    return "with file name \"" + fileName + "\"";
+    return " with name \"" + fileName + "\"";
   }
 
-  @Override public String toString() {
-    return description();
+  @Override
+  public String toString() {
+    return description().trim();
   }
 }

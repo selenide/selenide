@@ -33,7 +33,7 @@ final class ExtensionFilterTest {
 
   @Test
   void description() {
-    assertThat(filter.description()).isEqualTo(FILTER_DESCRIPTION);
+    assertThat(filter.description()).isEqualTo(' ' + FILTER_DESCRIPTION);
   }
 
   @Test

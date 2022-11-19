@@ -116,11 +116,11 @@ public class DownloadOptions implements HasTimeout {
   @Override
   public String toString() {
     if (timeout != null && !filter.isEmpty())
-      return String.format("method: %s, timeout: %s ms, filter: %s", method, timeout.toMillis(), filter.description());
+      return String.format("method: %s, timeout: %s ms, filter:%s", method, timeout.toMillis(), filter.description());
     else if (timeout != null)
       return String.format("method: %s, timeout: %s ms", method, timeout.toMillis());
     else if (!filter.isEmpty())
-      return String.format("method: %s, filter: %s", method, filter.description());
+      return String.format("method: %s, filter:%s", method, filter.description());
     else
       return String.format("method: %s", method);
   }

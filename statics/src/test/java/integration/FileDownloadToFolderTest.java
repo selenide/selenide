@@ -88,7 +88,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     timeout = 100;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessage("Failed to download file {by text: Download missing file} in 100 ms. with extension \"txt\"");
+      .hasMessage("Failed to download file with extension \"txt\" in 100 ms.");
   }
 
   @Test
@@ -96,7 +96,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     timeout = 80;
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessage("Failed to download file {by text: Download me} in 80 ms. with extension \"pdf\"");
+      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 80 ms");
   }
 
   @Test
@@ -219,7 +219,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThatThrownBy(() -> $("h1")
       .download(shortIncrementTimeout))
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessageStartingWith("Failed to download file with file name \"hello_world.txt\" in 10000 ms")
+      .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
       .hasMessageMatching(".+files in .+ haven't been modified for \\d+ ms.");
   }
 
@@ -234,8 +234,17 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       assertThat(file).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     })
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessageStartingWith("Failed to download file with file name \"hello_world.txt\" in 10000 ms")
+      .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
       .hasMessageMatching(".+files in .+ haven't been modified for \\d+ ms.");
+  }
+
+  @Test
+  public void download_slowly() throws FileNotFoundException {
+    File downloadedFile = $(byText("Download me slowly"))
+      .download(4000, withName("hello_world.txt"));
+
+    assertThat(downloadedFile).hasName("hello_world.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test

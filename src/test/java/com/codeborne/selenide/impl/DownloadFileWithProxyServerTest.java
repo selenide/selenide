@@ -81,7 +81,7 @@ final class DownloadFileWithProxyServerTest {
 
     assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), click()))
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessageStartingWith("Failed to download file <a href='report.pdf'>report</a>");
+      .hasMessageStartingWith("Failed to download file in 3000 ms.");
   }
 
   @Test
