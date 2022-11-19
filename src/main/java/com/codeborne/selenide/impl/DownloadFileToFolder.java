@@ -53,8 +53,9 @@ public class DownloadFileToFolder {
                        DownloadAction action) throws FileNotFoundException {
 
     WebDriver webDriver = anyClickableElement.driver().getWebDriver();
+    long minimalIncrementTimeout = Math.max(incrementTimeout, 1000);
     return windowsCloser.runAndCloseArisedWindows(webDriver, () ->
-      clickAndWaitForNewFilesInDownloadsFolder(anyClickableElement, clickable, timeout, incrementTimeout, fileFilter, action)
+      clickAndWaitForNewFilesInDownloadsFolder(anyClickableElement, clickable, timeout, minimalIncrementTimeout, fileFilter, action)
     );
   }
 
