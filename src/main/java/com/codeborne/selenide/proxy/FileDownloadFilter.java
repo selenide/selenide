@@ -92,6 +92,7 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
       contents.getTextContents()
     );
     responses.add(r);
+    log.debug("Intercepted response #{}: {}", responses.size(), r);
 
     if (response.status().code() < 200 || response.status().code() >= 300) return;
 
