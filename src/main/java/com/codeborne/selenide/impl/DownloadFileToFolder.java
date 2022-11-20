@@ -86,12 +86,11 @@ public class DownloadFileToFolder {
     if (log.isInfoEnabled()) {
       log.info("Downloaded {}", newDownloads.filesAsString());
     }
-
-    File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
-
     if (log.isDebugEnabled()) {
       log.debug("All downloaded files in {}: {}", folder, folder.files().stream().map(f -> f.getName()).collect(joining("\n")));
     }
+
+    File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
     return archiveFile(config, downloadedFile);
   }
 
@@ -110,13 +109,13 @@ public class DownloadFileToFolder {
 
   private void waitUntilFileDisappears(DownloadsFolder folder, String extension, FileFilter filter,
                                        long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
-    for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; ) {
+    for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       if (!folder.hasFiles(extension, filter)) {
-        break;
+        log.debug("No {} files found in {}, conclude download is completed", extension, folder);
+        return;
       }
       log.debug("Found {} files in {}, waiting for {} ms...", extension, folder, pollingInterval);
       failFastIfNoChanges(folder, filter, start, timeout, incrementTimeout);
-      pause(pollingInterval);
     }
 
     if (folder.hasFiles(extension, filter)) {
@@ -148,13 +147,12 @@ public class DownloadFileToFolder {
 
   private void waitForNewFiles(FileFilter fileFilter, DownloadsFolder folder, long clickMoment,
                                long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
-    for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; ) {
+    for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       Downloads downloads = new Downloads(newFiles(folder, clickMoment));
       if (!downloads.files(fileFilter).isEmpty()) {
         break;
       }
       failFastIfNoChanges(folder, fileFilter, start, timeout, incrementTimeout);
-      pause(pollingInterval);
     }
   }
 
