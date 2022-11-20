@@ -14,11 +14,6 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Browsers.CHROME;
-import static com.codeborne.selenide.Configuration.browserSize;
-import static com.codeborne.selenide.Configuration.clickViaJs;
-import static com.codeborne.selenide.Configuration.downloadsFolder;
-import static com.codeborne.selenide.Configuration.fastSetValue;
-import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
@@ -45,14 +40,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   @BeforeEach
-  @AfterEach
-  final void restoreDefaultProperties() {
-    timeout = 1;
-    clickViaJs = false;
-    downloadsFolder = "build/downloads";
-  }
-
-  @BeforeEach
   final void openBlankPage() {
     if (hasWebDriverStarted()) {
       open("about:blank");
@@ -68,14 +55,16 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
 
   protected static void resetSettings() {
     timeout = 1;
-    pollingInterval = 0;
+    Configuration.pollingInterval = 0;
+    Configuration.clickViaJs = false;
+    Configuration.downloadsFolder = "build/downloads";
     Configuration.pageLoadTimeout = Long.parseLong(System.getProperty("selenide.pageLoadTimeout", "30000"));
     Configuration.browser = System.getProperty("selenide.browser", CHROME);
     Configuration.baseUrl = getBaseUrl();
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
     Configuration.reportsFolder = System.getProperty("selenide.reportsFolder", "build/reports/tests");
-    fastSetValue = false;
-    browserSize = System.getProperty("selenide.browserSize", "1200x960");
+    Configuration.fastSetValue = false;
+    Configuration.browserSize = System.getProperty("selenide.browserSize", "1200x960");
     Configuration.assertionMode = STRICT;
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
