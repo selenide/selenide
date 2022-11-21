@@ -1,16 +1,23 @@
 # Changelog
 
-## 6.10.0 (planned to xx.11.2022), see https://github.com/selenide/selenide/milestone/167?closed=1
+## 6.10.0 (released 21.11.2022)
+see https://github.com/selenide/selenide/milestone/167?closed=1
 * #1989 support very slow downloading in Firefox  --  see PR #2003
+* #1990 fail download process faster than timeout if no any bytes received  --  see #2023
 * #1553 select options using JavaScript  -- see PR #1876;  thanks to Oleg Berezhnoy for PR #1553 (in the end, it affected Selenium)
 * #2007 make $.click(options) chainable  --  see PR #2008
 * make ClickOptions overridable (to be used in selenide-appium)
-* #2010 Don't change pageLoadTimeout if it is negative  --  thanks Boris Osipov for PR 
+* #2010 Don't change pageLoadTimeout if it is negative  --  thanks Boris Osipov for PR
+* #2017 Fix an issue when a new tab size in headless chrome has incorrect size  --  thanks Boris Osipov for PR
+* #2020 encode BasicAuth credentials added to URL  --  see PR #2021
+* #2015 un-deprecate BasicAuthCredentials constructor without domain  --  see PR #2022
 * bump Selenium from 4.5.0 to 4.6.0, see https://www.selenium.dev/blog/2022/selenium-4-6-0-released/
 * bump WebDriverManager from 5.3.0 to 5.3.1, see https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md#531---2022-11-04
 * Bump browserup-proxy-core from 2.2.3 to 2.2.5, see https://github.com/valfirst/browserup-proxy/blob/master/CHANGELOG.md
 * Bump nettyVersion from 4.1.82.Final to 4.1.85.Final
+* bump LittleProxy from 2.0.13 to 2.0.14
 * #2014 Bump httpclient5 from 5.1.3 to 5.2
+* #2025 bump slf4j from 2.0.3 to 2.0.4
 
 ## 6.9.0 (released 07.10.2022)
 * #1254 add methods to mock any server response in Selenide proxy  --  see PR #1978
