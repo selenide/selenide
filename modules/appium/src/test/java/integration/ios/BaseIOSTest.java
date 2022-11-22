@@ -26,6 +26,7 @@ public class BaseIOSTest {
   public void setUp() {
     closeWebDriver();
     Configuration.browser = IOSDriverProvider.class.getName();
+    Configuration.pageLoadTimeout = 0;
     Configuration.browserSize = null;
     Configuration.remoteConnectionTimeout = Duration.ofMinutes(5).toMillis();
     Configuration.remoteReadTimeout = Duration.ofMinutes(5).toMillis();

@@ -26,6 +26,7 @@ public class BaseAndroidTest {
   @BeforeEach
   public void setUp() {
     closeWebDriver();
+    Configuration.pageLoadTimeout = 0;
     Configuration.browserSize = null;
     Configuration.browser = AndroidDriverProvider.class.getName();
 //    TODO support these listeners as well
