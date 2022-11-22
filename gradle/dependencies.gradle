@@ -11,7 +11,7 @@ ext {
   commonsFileuploadVersion = '1.4'
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.12.19'
-  archunitVersion = '1.0.0'
+  archunitVersion = '1.0.1'
 }
 
 subprojects {
