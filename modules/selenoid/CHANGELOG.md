@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.3.2
+* upgrade to Selenide 6.10.0
+
 ## 2.3.1
 * upgrade to Selenide 6.9.0
 

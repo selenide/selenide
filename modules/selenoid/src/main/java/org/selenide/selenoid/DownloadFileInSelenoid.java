@@ -43,7 +43,7 @@ public class DownloadFileInSelenoid extends com.codeborne.selenide.impl.Download
   @Nonnull
   @Override
   public File download(WebElementSource anyClickableElement,
-                       WebElement clickable, long timeout,
+                       WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) throws FileNotFoundException {
 
@@ -51,7 +51,7 @@ public class DownloadFileInSelenoid extends com.codeborne.selenide.impl.Download
     Config config = driver.config();
     if (config.remote() == null) {
       log.debug("Working in local browser. Switching to a default FOLDER implementation.");
-      return super.download(anyClickableElement, clickable, timeout, fileFilter, action);
+      return super.download(anyClickableElement, clickable, timeout, incrementTimeout, fileFilter, action);
     }
 
     SelenoidClient selenoidClient = new SelenoidClient(config.remote(), driver.getSessionId().toString());
