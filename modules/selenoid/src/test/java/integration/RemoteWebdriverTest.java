@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
@@ -28,6 +29,7 @@ public class RemoteWebdriverTest {
   void setUp() {
     Selenide.closeWebDriver();
     Configuration.proxyEnabled = false;
+    Configuration.fileDownload = HTTPGET;
   }
 
   @Test
