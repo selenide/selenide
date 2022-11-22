@@ -23,6 +23,7 @@ public abstract class BaseApiDemosTest {
   @BeforeEach
   public void setUp() {
     closeWebDriver();
+    Configuration.pageLoadTimeout = 0;
     Configuration.browserSize = null;
     Configuration.browser = AndroidDriverWithDemos.class.getName();
     open();
