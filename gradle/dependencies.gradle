@@ -1,5 +1,5 @@
 dependencies {
-  api('com.codeborne:selenide:6.10.0-SNAPSHOT')
+  api('com.codeborne:selenide:6.10.0')
   api('io.appium:java-client:8.2.0') {
     exclude group: 'io.opentelemetry'
     exclude group: 'org.slf4j'
