@@ -14,7 +14,6 @@ final class ChromiumHeadlessBrowserSizeTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     assumeThat(isChrome() || isEdge()).isTrue();
-    assumeThat(Configuration.headless).isTrue();
     closeWebDriver();
     Configuration.browserSize = "1200x1000";
     openFile("page_with_uploads.html");
