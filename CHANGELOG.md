@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.10.1 (released 23.11.2022)
+* #2029 fix `Configuration.browserSize` setting in Chrome, thanks to Boris Osipov for PR #2030
+* #2031 downgrade browserup-proxy-core from 2.2.5 to 2.2.3 (because of bug https://github.com/valfirst/browserup-proxy/issues/177)
+* #2028 Bump archunit-junit5 from 1.0.0 to 1.0.1
+
 ## 6.10.0 (released 21.11.2022)
 see https://github.com/selenide/selenide/milestone/167?closed=1
 * #1989 support very slow downloading in Firefox  --  see PR #2003
