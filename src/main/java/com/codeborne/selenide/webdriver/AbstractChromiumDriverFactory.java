@@ -41,7 +41,7 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     arguments.add("--no-sandbox");
     arguments.addAll(parseArguments(externalArguments));
     arguments.addAll(createHeadlessArguments(config));
-    if (config.headless() && config.browserSize() != null && BrowserResizer.isValidDimension(config.browserSize())) {
+    if (config.browserSize() != null && BrowserResizer.isValidDimension(config.browserSize())) {
       arguments.add(convertBrowserSizeToChromeFormat(config.browserSize()));
     }
     return arguments;

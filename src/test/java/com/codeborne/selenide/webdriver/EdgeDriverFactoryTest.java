@@ -25,7 +25,13 @@ class EdgeDriverFactoryTest {
     Map<String, Object> options = edgeOptions(edgeOptions);
 
     List<String> args = args(options);
-    assertThat(args).contains("--headless", "--proxy-bypass-list=<-loopback>", "--disable-background-networking", "--disable-sync");
+    assertThat(args).contains(
+      "--headless",
+      "--proxy-bypass-list=<-loopback>",
+      "--disable-background-networking",
+      "--disable-sync",
+      "--window-size=1366,768"
+    );
     assertThat(options.get("extensions")).isEqualTo(emptyList());
 
     Map<String, Object> prefs = prefs(options);
@@ -44,7 +50,12 @@ class EdgeDriverFactoryTest {
     EdgeOptions edgeOptions = factory.createCapabilities(config, browser, null, new File("/tmp/downloads-folder-456789"));
 
     Map<String, Object> options = edgeOptions(edgeOptions);
-    assertThat(args(options)).containsExactly("--proxy-bypass-list=<-loopback>", "--disable-dev-shm-usage", "--no-sandbox");
+    assertThat(args(options)).containsExactly(
+      "--proxy-bypass-list=<-loopback>",
+      "--disable-dev-shm-usage",
+      "--no-sandbox",
+      "--window-size=1366,768"
+    );
 
     Map<String, Object> prefs = prefs(options);
     assertThat(prefs).hasSize(5);
