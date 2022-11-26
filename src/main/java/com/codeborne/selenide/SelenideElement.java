@@ -136,7 +136,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Press ARROW_DOWN. Useful for auto-suggestion dropdown: <pre>
-   *  $(".edit").click().pressDownArrow().pressEnter();</pre>
+   *  $(".edit").pressDownArrow().pressEnter();</pre>
    * <p>
    * Implementation details:
    * Check that element is displayed and execute <pre>
