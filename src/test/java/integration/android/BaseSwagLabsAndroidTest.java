@@ -2,6 +2,7 @@ package integration.android;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
+import com.codeborne.selenide.WebDriverRunner;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.remote.AutomationName;
@@ -14,6 +15,7 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
@@ -25,6 +27,8 @@ public abstract class BaseSwagLabsAndroidTest {
     closeWebDriver();
     Configuration.browserSize = null;
     Configuration.browser = AndroidDriverWithSwagLabs.class.getName();
+    WebDriverRunner.addListener(new AbstractWebDriverEventListener() {
+    });
     open();
   }
 }
