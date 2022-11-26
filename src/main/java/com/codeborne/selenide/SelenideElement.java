@@ -135,6 +135,20 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement pressEscape();
 
   /**
+   * Press ARROW_DOWN. Useful for auto-suggestion dropdown: <pre>
+   *  $(".edit").click().pressDownArrow().pressEnter();</pre>
+   * <p>
+   * Implementation details:
+   * Check that element is displayed and execute <pre>
+   *  WebElement.sendKeys(Keys.DOWN)</pre>
+   *
+   * @see com.codeborne.selenide.commands.PressEscape
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement pressDownArrow();
+
+  /**
    * Get the visible text of this element, including sub-elements without leading/trailing whitespace.
    * NB! For "select", returns text(s) of selected option(s).
    *
