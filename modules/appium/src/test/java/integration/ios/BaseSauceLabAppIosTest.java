@@ -2,6 +2,7 @@ package integration.ios;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.webdriver.HttpClientTimeouts;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
@@ -28,6 +30,8 @@ class BaseSauceLabAppIosTest {
     Configuration.browserSize = null;
     Configuration.remoteConnectionTimeout = Duration.ofMinutes(5).toMillis();
     Configuration.remoteReadTimeout = Duration.ofMinutes(5).toMillis();
+    WebDriverRunner.addListener(new AbstractWebDriverEventListener() {
+    });
     open();
   }
 }
