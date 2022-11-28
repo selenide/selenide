@@ -48,8 +48,8 @@ class WebdriverUnwrapperTest {
     assertThat(WebdriverUnwrapper.instanceOf(wrappedDriver, IOSDriver.class)).isTrue();
     assertThat(WebdriverUnwrapper.cast(wrappedDriver, IOSDriver.class).get()).isInstanceOf(IOSDriver.class);
 
-    assertThat(WebdriverUnwrapper.instanceOf(wrappedDriver, IOSDriver.class)).isTrue();
-    assertThat(WebdriverUnwrapper.cast(wrappedDriver, IOSDriver.class).get()).isInstanceOf(IOSDriver.class);
+    assertThat(WebdriverUnwrapper.instanceOf(driver, IOSDriver.class)).isTrue();
+    assertThat(WebdriverUnwrapper.cast(driver, IOSDriver.class).get()).isInstanceOf(IOSDriver.class);
   }
 
   @Test
