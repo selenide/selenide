@@ -25,7 +25,7 @@ Selenide has a very simple branching strategy
 - When we make a release, we make it from `master` branches
 
 ## How to send a pull request?
-- Create a github account
+- Create a GitHub account
 - Fork Selenide repo  
   - go to https://github.com/selenide/selenide
   - click "Fork" link in the right upper corner
@@ -43,7 +43,7 @@ Selenide has a very simple branching strategy
   - also read a [commit message tutorial](https://chris.beams.io/posts/git-commit/)
   - prefer small independent commits to one big commit with many changes
 - go to http://github.com/username/selenide/
-  - you will see a automatic suggestion to create a pull request
+  - you will see an automatic suggestion to create a pull request
   - accept it, fill all the required fields.
   - wait. Don't worry, we review pull requests often. We will contact you.  
 
@@ -54,7 +54,7 @@ Selenide has a very simple branching strategy
     cd selenide
     ./gradlew    (or `gradlew.bat` on Windows)
 
-After build you'll find Selenide's .jar file under `build/libs/` directory as well as in local maven repository at `~/.m2/repository/com/codeborne/selenide/<version>/selenide-<version>.jar`.
+After build, you'll find Selenide's .jar file under `build/libs/` directory as well as in local maven repository at `~/.m2/repository/com/codeborne/selenide/<version>/selenide-<version>.jar`.
 
 
 ### How to run tests?
@@ -86,7 +86,7 @@ The following is a short instruction how to do it.
      
 - Start selenoid container
   - Install [docker](https://www.docker.com/products/docker-desktop)
-  - Based on your operation system execute script. Check official [document](https://aerokube.com/selenoid/latest/#_option_2_start_selenoid_container) for correct script.
+  - Based on your operating system execute script. Check official [document](https://aerokube.com/selenoid/latest/#_option_2_start_selenoid_container) for correct script.
 - Start tests passing `selenide.remote` configuration variable with `http://localhost:4444/wd/hub` value
 
 
