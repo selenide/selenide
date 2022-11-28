@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.10.2 (planned to ??.11.2022)
+* bump slf4j from 2.0.4 to 2.0.5
+
 ## 6.10.1 (released 23.11.2022)
 * #2029 fix `Configuration.browserSize` setting in Chrome, thanks to Boris Osipov for PR #2030
 * #2031 downgrade browserup-proxy-core from 2.2.5 to 2.2.3 (because of bug https://github.com/valfirst/browserup-proxy/issues/177)
