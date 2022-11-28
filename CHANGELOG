@@ -1,5 +1,12 @@
 == Changelog
 
+=== 2.3.1 (released 29.11.2022)
+* Renamed primary branch to `main`
+* #92 Disable build-in Appium pagefactory timeout  --  thanks to Boris Osipov
+* #95 Don't try to describe element when NoSuchElementException  --  thanks to Boris Osipov
+* bump appium from 8.2.0 to 8.2.1  --  see https://github.com/appium/java-client/blob/master/README.md#changelog
+* bump selenide from 6.10.0 to 6.10.1
+
 === 2.3.0 (released 22.11.2022)
 * #81 Add new locators for appium  --  thanks to Amuthan Sakthivel
 * #82 added click options to perform tap, doubletap, longpress, tap with offset  --  thanks to Amuthan Sakthivel
