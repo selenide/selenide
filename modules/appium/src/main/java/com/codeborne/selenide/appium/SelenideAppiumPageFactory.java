@@ -8,6 +8,7 @@ import io.appium.java_client.HasBrowserCheck;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.DefaultElementByBuilder;
 import io.appium.java_client.pagefactory.bys.builder.AppiumByBuilder;
+import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
@@ -79,7 +80,7 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
       logger.warn("Cannot initialize field {}", field);
       return null;
     }
-    AppiumFieldDecorator defaultAppiumFieldDecorator = new AppiumFieldDecorator(searchContext.getWebElement());
+    AppiumFieldDecorator defaultAppiumFieldDecorator = new AppiumFieldDecorator(searchContext.getWebElement(), Duration.ZERO);
     Object appiumElement = defaultAppiumFieldDecorator.decorate(loader, field);
     if (appiumElement instanceof WebElement) {
       // TODO Make appiumElement lazy-loaded
