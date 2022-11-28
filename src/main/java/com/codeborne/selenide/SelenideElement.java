@@ -87,7 +87,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Clear the input field
    *
    * <p>Basically it's the same as {@link WebElement#clear()}, but it works. :) </p>
-   *
    * @see com.codeborne.selenide.commands.Clear
    */
   @CanIgnoreReturnValue
@@ -202,7 +201,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <p>
    * Short form of getAttribute("textContent") or getAttribute("innerText") depending on browser.
    * <p>
-   *
    * @see com.codeborne.selenide.commands.GetInnerText
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
@@ -217,7 +215,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <p>
    * Short form of getAttribute("innerHTML")
    * <p>
-   *
    * @see com.codeborne.selenide.commands.GetInnerHtml
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
@@ -264,8 +261,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return attribute "value" value or null if attribute is missing
    * @see com.codeborne.selenide.commands.GetValue
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * @since 3.1
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nullable
@@ -320,7 +317,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * {@inheritDoc}
-   *
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
@@ -330,7 +326,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * {@inheritDoc}
-   *
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
@@ -361,7 +356,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * immediately returns true if element matches given condition
    * Method doesn't wait!
-   * <p>
+   *
    * WARNING: This method can help implementing crooks, but it is not needed for typical ui tests.
    *
    * @see #has
@@ -546,7 +541,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Give this element a human-readable name
-   * <p>
+   *
    * Caution: you probably don't need this method.
    * It's always a good idea to have the actual selector instead of "nice" description (which might be misleading or even lying).
    *
@@ -561,7 +556,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get parent element of this element (lazy evaluation)
-   * <p>
+   *
    * For example, $("td").parent() could give some "tr".
    *
    * @return Parent element
@@ -574,7 +569,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get the following sibling element of this element
-   * <p>
+   *
    * For example, $("td").sibling(0) will give the first following sibling element of "td"
    *
    * @param index the index of sibling element
@@ -588,7 +583,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get the preceding sibling element of this element
-   * <p>
+   *
    * For example, $("td").preceding(0) will give the first preceding sibling element of "td"
    *
    * @param index the index of sibling element
@@ -602,7 +597,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get last child element of this element
-   * <p>
+   *
    * For example, $("tr").lastChild(); could give the last "td".
    *
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
@@ -617,7 +612,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * For example, $("td").ancestor("table") returns the closest "table" element above "td".
    * <br/>
    * Same as {@code closest("selector", 0)} or {@code closest("selector")}.
-   * <p>
+   *
    * Examples:
    * <br>
    * {@code $("td").ancestor("table")} will find the closest ancestor with tag {@code table}
@@ -628,8 +623,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <br>
    * {@code $("td").ancestor("[data-testid=test-value]")} will find the closest ancestor with attribute and
    * attribute's value {@code data-testid=test-value}
-   * <br>
-   *
+   *<br>
    * @param selector Either HTML tag, CSS class, attribute or attribute with value.<br>
    *                 E.g. {@code form}, {@code .active}, {@code [data-testid]}, {@code [data-testid=test-value]}
    * @return Matching ancestor element
@@ -643,7 +637,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Locates the Nth ancestor element matching given criteria.
    * <br/>
-   * <p>
+   *
    * Examples:
    * <br>
    * {@code $("td").ancestor("table", 1)} will find the 2nd ancestor with tag {@code table}
@@ -654,8 +648,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <br>
    * {@code $("td").ancestor("[data-testid=test-value]", 1)} will find the 2nd ancestor with attribute and
    * attribute's value {@code data-testid=test-value}
-   * <br>
-   *
+   *<br>
    * @param selector Either HTML tag, CSS class, attribute or attribute with value.<br>
    *                 E.g. {@code form}, {@code .active}, {@code [data-testid]}, {@code [data-testid=test-value]}
    * @param index    0...N index of the ancestor. 0 is the closest, 1 is higher up the hierarchy, etc...
@@ -669,13 +662,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Same as {@link #ancestor(String)}.
-   * <p>
+   *
    * Locates the closest ancestor element matching given criteria.
    * <br/>
    * For example, $("td").closest("table") returns the closest "table" element above "td".
    * <br/>
    * Same as {@code ancestor("selector", 0)}.
-   * <p>
+   *
    * Examples:
    * <br>
    * {@code $("td").closest("table")} will find the closest ancestor with tag {@code table}
@@ -686,8 +679,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <br>
    * {@code $("td").closest("[data-testid=test-value]")} will find the closest ancestor with attribute and
    * attribute's value {@code data-testid=test-value}
-   * <br>
-   *
+   *<br>
    * @param selector Either HTML tag, CSS class, attribute or attribute with value.<br>
    *                 E.g. {@code form}, {@code .active}, {@code [data-testid]}, {@code [data-testid=test-value]}
    * @return Matching ancestor element
@@ -838,7 +830,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Same as {@link #findAll(String)}
-   *
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
@@ -900,7 +891,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Select an option from dropdown list (by index)
    *
-   * @param index        0..N (0 means first option)
+   * @param index 0..N (0 means first option)
    * @param otherIndexes other indexes (if you need to select multiple options)
    * @see com.codeborne.selenide.commands.SelectOptionByTextOrIndex
    */
@@ -909,7 +900,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Select an option from dropdown list (by text)
    *
-   * @param text       visible text of option
+   * @param text visible text of option
    * @param otherTexts other texts (if you need to select multiple options)
    * @see com.codeborne.selenide.commands.SelectOptionByTextOrIndex
    */
@@ -918,7 +909,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Select an option from dropdown list that contains given text
    *
-   * @param text       substring of visible text of option
+   * @param text substring of visible text of option
    * @param otherTexts other texts (if you need to select multiple options)
    * @see com.codeborne.selenide.commands.SelectOptionContainingText
    */
@@ -927,7 +918,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Select an option from dropdown list (by value)
    *
-   * @param value       "value" attribute of option
+   * @param value "value" attribute of option
    * @param otherValues other values (if you need to select multiple options)
    * @see com.codeborne.selenide.commands.SelectOptionByValue
    */
@@ -956,8 +947,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Get value of selected option in select field
    *
-   * @return null if the selected option doesn't have "value" attribute (or the select doesn't have options at all)
    * @see GetSelectedOptionValue
+   * @return null if the selected option doesn't have "value" attribute (or the select doesn't have options at all)
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
@@ -974,7 +965,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get text of selected option in select field
-   *
    * @return null if there is no selected options (or the select doesn't have options at all)
    * @throws IllegalArgumentException if the element type is not {@code <select/>}
    * @see GetSelectedOptionText
@@ -1246,14 +1236,15 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement dragAndDropTo(WebElement target);
 
   /**
-   * Drag and drop this element to the target via JS script
+   Drag and drop this element to the target via JS script
    * see resources/drag_and_drop_script
    *
    * <p>
    * Before dropping, waits until target element gets visible.
    *
    * @param targetCssSelector target css selector
-   * @param options           drag and drop options to define which way it will be executed
+   * @param options drag and drop options to define which way it will be executed
+   *
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDropTo
    */
@@ -1292,8 +1283,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @throws IllegalArgumentException if argument is not an "img" element
    * @see com.codeborne.selenide.commands.IsImage
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * @since 2.13
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   boolean isImage();
 
