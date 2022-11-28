@@ -114,7 +114,7 @@ public class Commands {
     add("pressEnter", new PressEnter());
     add("pressEscape", new PressEscape());
     add("pressTab", new PressTab());
-    add("pressDownArrow", new PressDownArrow());
+    add("press", new Press());
   }
 
   private void addSelectCommands() {

@@ -10,11 +10,16 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class PressDownArrow implements Command<SelenideElement> {
+public class Press implements Command<SelenideElement> {
   @Override
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    locator.findAndAssertElementIsInteractable().sendKeys(Keys.ARROW_DOWN);
+
+    if(args == null || args.length == 0){
+      throw new IllegalArgumentException("Please pass one Keys type to press");
+    }
+    Keys key = ((Keys) args[0]);
+    locator.findAndAssertElementIsInteractable().sendKeys(key);
     return proxy;
   }
 }
