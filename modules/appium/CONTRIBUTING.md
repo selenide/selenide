@@ -3,10 +3,10 @@ Welcome to `selenide-appium` internals!
 Any contributions to `selenide-appium` are appreciated.  
 
 ## Branches
-- The latest state is always in `master` branch
-- Every bugfix/feature is developed in a separate branches created from `master` branch
-- Once bugfix/feature is accepted, someone of maintainers merges it to `master` branch
-- When we make a release, we make it from `master` branches
+- The latest state is always in `main` branch
+- Every bugfix/feature is developed in a separate branches created from `main` branch
+- Once bugfix/feature is accepted, someone of maintainers merges it to `main` branch
+- When we make a release, we make it from `main` branches
 
 ## How to send a pull request?
 - Create a github account
@@ -15,7 +15,7 @@ Any contributions to `selenide-appium` are appreciated.
   - click "Fork" link in the right upper corner
 - Check out your `selenide-appium` copy:  
   - `git clone https://github.com/username/selenide-appium`
-- Create a new branch from `master` branch
+- Create a new branch from `main` branch
   - `git checkout -b remove-duplicate-screenshots-in-allure`   (choose any reasonable branch name)
 - Make your changes
 - Run tests (see below)
