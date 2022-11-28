@@ -6,7 +6,7 @@ import static com.codeborne.selenide.ClipboardConditions.content;
 import static com.codeborne.selenide.Selenide.clipboard;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClipboardTest extends BaseAndroidTest {
+public class ClipboardTest extends BaseSwagLabsAndroidTest {
   @Test
   public void canAccessClipboardInMobile() {
     clipboard().setText("This is Appium, Виталик&");
