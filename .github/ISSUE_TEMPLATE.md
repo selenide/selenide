@@ -1,7 +1,7 @@
 <!--
     This template is for issue report\feature request. 
     If you have any questions, please stop by our chatroom: https://gitter.im/codeborne/selenide
-    Note that leaving sections blank will make it difficult for us to troubleshoot and we may have to close the issue.
+    Note that leaving sections blank will make it difficult for us to troubleshoot, and we may have to close the issue.
 -->
 ## The problem
 Briefly describe the issue you are experiencing (or the feature you want to see added to Selenide).

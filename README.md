@@ -59,7 +59,7 @@ Look for [Quick Start](https://github.com/selenide/selenide/wiki/Quick-Start) fo
 See [Frequently asked questions](http://selenide.org/faq.html)
 
 ## Posts
-- Set-up environment with gradle, junit5, allure and selenide -- read a [post](https://medium.com/@rosolko/simple-allure-2-configuration-for-gradle-8cd3810658dd) on medium, grab from [github](https://github.com/rosolko/allure-gradle-configuration)
+- Set-up environment with gradle, junit5, allure and selenide -- read a [post](https://medium.com/@rosolko/simple-allure-2-configuration-for-gradle-8cd3810658dd) on medium, grab from [GitHub](https://github.com/rosolko/allure-gradle-configuration)
 - Small step do dramatically improve your tests speed -- read a [post](https://medium.com/@rosolko/boost-you-autotests-with-fast-authorization-b3eee52ecc19) on medium
 - Another way to improve tests speed -- read a [post](https://medium.com/@rosolko/fast-authorization-level-local-storage-6c84e9b3cef1) on medium
 - [Configure Selenide to work with Selenoid](https://medium.com/@rosolko/configure-selenide-to-work-with-selenoid-8835cd6dc7d2)
@@ -79,7 +79,7 @@ Selenide was originally designed and developed by [Andrei Solntsev](http://asoln
 
 ## Thanks
 
-Many thanks to these incredible tools that help us creating open-source software:
+Many thanks to these incredible tools that help us create open-source software:
 
 [![Intellij IDEA](https://cloud.google.com/tools/images/icon_IntelliJIDEA.png)](http://www.jetbrains.com/idea)
 [![YourKit Java profiler](http://selenide.org/images/yourkit.png)](https://www.yourkit.com/features/)
