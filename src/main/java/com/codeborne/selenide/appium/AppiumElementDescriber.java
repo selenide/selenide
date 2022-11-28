@@ -5,6 +5,7 @@ import com.codeborne.selenide.impl.ElementDescriber;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriver;
@@ -116,7 +117,7 @@ public class AppiumElementDescriber implements ElementDescriber {
     private String tagName = "?";
     private String text = "?";
     private final StringBuilder sb = new StringBuilder();
-    private StaleElementReferenceException staleElementException;
+    private WebDriverException unforgivableException;
 
     private Builder(WebElement element, WebDriver webDriver, List<String> supportedAttributes) {
       this.element = element;
@@ -156,7 +157,7 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
 
     private void safeCall(Supplier<String> method, Supplier<String> errorMessage, Consumer<String> resultHandler) {
-      if (staleElementException != null) return;
+      if (unforgivableException != null) return;
 
       try {
         String value = method.get();
@@ -164,8 +165,8 @@ public class AppiumElementDescriber implements ElementDescriber {
           resultHandler.accept(value);
         }
       }
-      catch (StaleElementReferenceException e) {
-        staleElementException = e;
+      catch (StaleElementReferenceException | NoSuchElementException e) {
+        unforgivableException = e;
         logger.debug("{}: {}", errorMessage.get(), e.toString());
       }
       catch (WebDriverException e) {
@@ -184,8 +185,8 @@ public class AppiumElementDescriber implements ElementDescriber {
     public Builder finish() {
       sb.append(">");
 
-      if (staleElementException != null) {
-        sb.append(staleElementException);
+      if (unforgivableException != null) {
+        sb.append(unforgivableException);
       }
       else {
         appendText();
