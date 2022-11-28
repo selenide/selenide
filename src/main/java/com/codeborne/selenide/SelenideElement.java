@@ -136,7 +136,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement pressEscape();
 
   /**
-   * Press Keys. Useful for auto-suggestion dropdown: <pre>
+   * Press a Key in Keyboard. Useful for auto-suggestion dropdown: <pre>
    *  $(".edit").press(Keys.DOWN).pressEnter();</pre>
    * <p>
    * Implementation details:
@@ -147,7 +147,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement press(Keys key);
+  SelenideElement press(Keys keyToPress);
 
   /**
    * Get the visible text of this element, including sub-elements without leading/trailing whitespace.
