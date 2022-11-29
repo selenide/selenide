@@ -102,3 +102,11 @@ if (project.hasProperty("signing.keyId")) {
   }
 }
 
+task debug {
+  println("===================================")
+  println("[" + System.getenv("OSSRH_USERNAME") + "]")
+  if (project.hasProperty("OSSRH_USERNAME")) {
+    println("[" + OSSRH_USERNAME + "]")
+  }
+  println("===================================")
+}
