@@ -25,9 +25,9 @@ jobs:
         if: ${{ matrix.gradle-task == 'edge_headless' }}
         uses: browser-actions/setup-edge@latest
       - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i -P OSSRH_USERNAME=${{ secrets.OSSRH_USERNAME }}
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
