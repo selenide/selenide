@@ -6,33 +6,6 @@ on:
   pull_request:
 
 jobs:
-  run-tests-on-windows:
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        gradle-task: [ 'debug' ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          cache: 'gradle'
-          java-version: '17'
-      - name: Setup Edge
-        if: ${{ matrix.gradle-task == 'edge_headless' }}
-        uses: browser-actions/setup-edge@latest
-      - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i -P OSSRH_USERNAME=${{ secrets.OSSRH_USERNAME }}
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-      - uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: test-report-win
-          path: ./**/build/reports
   run-tests-on-linux:
     runs-on: ubuntu-latest
     strategy:
@@ -59,6 +32,14 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - name: extract GPG secring
+        env:
+          GPG_SECRING_BASE64: ${{ secrets.GPG_SECRING_BASE64 }}
+        run: |
+          echo $GPG_SECRING_BASE64 | base64 --decode > ~/secring.gpg
+      - name: Show certificate information
+        run: |
+          file ~/secring.gpg
       - name: Build with Gradle
         run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
         env:
