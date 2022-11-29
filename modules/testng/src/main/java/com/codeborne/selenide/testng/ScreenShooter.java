@@ -19,7 +19,11 @@ public class ScreenShooter extends ExitCodeListener {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooter.class);
 
   public static boolean captureSuccessfulTests;
-  public static String folder = "";
+  private static String folder = "";
+
+  public static void setFolder(String folder) {
+    ScreenShooter.folder = folder;
+  }
 
   @Override
   public void onTestStart(ITestResult result) {
