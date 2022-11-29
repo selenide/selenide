@@ -9,6 +9,8 @@ import org.testng.reporters.ExitCodeListener;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static java.io.File.separator;
+
 /**
  * Annotate your test class with {@code @Listeners({ ScreenShooter.class})}
  */
@@ -17,14 +19,18 @@ public class ScreenShooter extends ExitCodeListener {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooter.class);
 
   public static boolean captureSuccessfulTests;
+  public static String folder = "";
 
   @Override
   public void onTestStart(ITestResult result) {
     super.onTestStart(result);
-
-    String className = result.getMethod().getTestClass().getName();
-    String methodName = result.getMethod().getMethodName();
-    Screenshots.startContext(className, methodName);
+    if (!folder.isEmpty()) {
+      Screenshots.screenshots.startContext(folder + separator);
+    } else {
+      String className = result.getMethod().getTestClass().getName();
+      String methodName = result.getMethod().getMethodName();
+      Screenshots.startContext(className, methodName);
+    }
   }
 
   @Override
