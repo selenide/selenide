@@ -2,6 +2,7 @@
 
 ## 6.10.2 (planned to ??.11.2022)
 * bump slf4j from 2.0.4 to 2.0.5
+* #2034 ScreenShoot folder for TestNG
 
 ## 6.10.1 (released 23.11.2022)
 * #2029 fix `Configuration.browserSize` setting in Chrome, thanks to Boris Osipov for PR #2030
