@@ -18,7 +18,7 @@ public class Press implements Command<SelenideElement> {
     if (args == null || args.length == 0) {
       throw new IllegalArgumentException("Please pass one Keys type to press");
     }
-    Keys key = ((Keys) args[0]);
+    Keys key = (Keys) args[0];
     locator.findAndAssertElementIsInteractable().sendKeys(key);
     return proxy;
   }
