@@ -15,7 +15,7 @@ import org.openqa.selenium.WebElement;
 public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
   @BeforeEach
   void openLoginScreen() {
-    SelenideAppium.launchDeepLink("mydemoapprn://login", "com.saucelabs.mydemoapp.rn");
+    SelenideAppium.openAndroidDeepLink("mydemoapprn://login", "com.saucelabs.mydemoapp.rn");
   }
 
   @Test

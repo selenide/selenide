@@ -3,36 +3,36 @@ package integration.ios;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.junit5.TextReportExtension;
 import com.codeborne.selenide.webdriver.HttpClientTimeouts;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
-import org.junit.jupiter.api.BeforeEach;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
-
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import javax.annotation.Nonnull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.appium.SelenideAppium.launchApp;
 import static integration.Apps.downloadIosApp;
 
+@ExtendWith(TextReportExtension.class)
 public class BaseIOSTest {
   @BeforeEach
   public void setUp() {
     closeWebDriver();
     Configuration.browser = IOSDriverProvider.class.getName();
-    Configuration.pageLoadTimeout = 0;
-    Configuration.browserSize = null;
     Configuration.remoteConnectionTimeout = Duration.ofMinutes(5).toMillis();
     Configuration.remoteReadTimeout = Duration.ofMinutes(5).toMillis();
     WebDriverRunner.addListener(new AbstractWebDriverEventListener() {
     });
-    open();
+    launchApp();
   }
 }
 
@@ -50,8 +50,7 @@ class IOSDriverProvider implements WebDriverProvider {
     options.setFullReset(false);
     try {
       return new IOSDriver(new URL("http://127.0.0.1:4723/wd/hub"), options);
-    }
-    catch (MalformedURLException e) {
+    } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
   }

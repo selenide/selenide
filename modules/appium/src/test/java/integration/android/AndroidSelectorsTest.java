@@ -1,11 +1,11 @@
 package integration.android;
 
-import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.appium.AppiumSelectors.*;
+import static com.codeborne.selenide.appium.SelenideAppium.back;
 
 class AndroidSelectorsTest extends BaseApiDemosTest {
 
@@ -15,32 +15,28 @@ class AndroidSelectorsTest extends BaseApiDemosTest {
   @Test
   void testAppiumSelectorsInAndroidApp() {
     $(byAttribute("content-desc", VIEWS)).click();
-    pressBack();
+    back();
     $(byContentDescription(VIEWS)).click();
-    pressBack();
+    back();
     $(byTagAndAttribute("*", "text", VIEWS)).click();
-    pressBack();
+    back();
     $(byTagAndContentDescription("*", VIEWS)).click();
-    pressBack();
+    back();
     $(byTagAndText("*", VIEWS)).click();
-    pressBack();
+    back();
     $(byText(VIEWS)).click();
-    pressBack();
+    back();
     $(withAttribute("text", GRAPHICS_PARTIAL_STRING)).click();
-    pressBack();
+    back();
     $(withContentDescription(GRAPHICS_PARTIAL_STRING)).click();
-    pressBack();
+    back();
     $(withTagAndAttribute("*", "text", GRAPHICS_PARTIAL_STRING)).click();
-    pressBack();
+    back();
     $(withTagAndContentDescription("*", GRAPHICS_PARTIAL_STRING)).click();
-    pressBack();
+    back();
     $(withTagAndText("android.widget.TextView", GRAPHICS_PARTIAL_STRING)).click();
-    pressBack();
+    back();
     $(withText(GRAPHICS_PARTIAL_STRING))
       .shouldHave(text("Graphics"));
-  }
-
-  private void pressBack() {
-    WebDriverRunner.getWebDriver().navigate().back();
   }
 }
