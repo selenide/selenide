@@ -92,7 +92,6 @@ public class AppiumElementDescriber implements ElementDescriber {
   public String briefly(Driver driver, @Nonnull WebElement element) {
     return new Builder(element, driver.getWebDriver(), supportedAttributes(driver))
       .appendTagName()
-      .appendAttribute("resource-id")
       .finish()
       .build();
   }
