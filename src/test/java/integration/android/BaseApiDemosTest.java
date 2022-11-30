@@ -2,10 +2,13 @@ package integration.android;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
+import com.codeborne.selenide.appium.SelenideAppium;
+import com.codeborne.selenide.junit5.TextReportExtension;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.remote.AutomationName;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 
@@ -16,17 +19,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
-import static com.codeborne.selenide.Selenide.open;
 import static integration.Apps.downloadAndroidApp;
 
+@ExtendWith(TextReportExtension.class)
 public abstract class BaseApiDemosTest {
   @BeforeEach
   public void setUp() {
     closeWebDriver();
-    Configuration.pageLoadTimeout = 0;
-    Configuration.browserSize = null;
     Configuration.browser = AndroidDriverWithDemos.class.getName();
-    open();
+    SelenideAppium.launchApp();
   }
 }
 

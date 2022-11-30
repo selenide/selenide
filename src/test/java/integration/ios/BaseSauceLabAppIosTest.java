@@ -3,10 +3,12 @@ package integration.ios;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.junit5.TextReportExtension;
 import com.codeborne.selenide.webdriver.HttpClientTimeouts;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 
@@ -18,21 +20,22 @@ import java.time.Duration;
 import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.appium.SelenideAppium.launchApp;
 import static integration.Apps.downloadSauceLabIosApp;
 
+@ExtendWith(TextReportExtension.class)
 class BaseSauceLabAppIosTest {
 
   @BeforeEach
   public void setUp() {
     closeWebDriver();
+    Configuration.timeout = 10_000;
     Configuration.browser = IosDriverWithSwagLabs.class.getName();
-    Configuration.browserSize = null;
     Configuration.remoteConnectionTimeout = Duration.ofMinutes(5).toMillis();
     Configuration.remoteReadTimeout = Duration.ofMinutes(5).toMillis();
     WebDriverRunner.addListener(new AbstractWebDriverEventListener() {
     });
-    open();
+    launchApp();
   }
 }
 
