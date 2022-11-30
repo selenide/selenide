@@ -10,6 +10,7 @@ import io.appium.java_client.ios.options.XCUITestOptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 
 import javax.annotation.Nonnull;
@@ -52,9 +53,18 @@ class IosDriverWithSwagLabs implements WebDriverProvider {
     options.setApp(app.getAbsolutePath());
     options.setFullReset(false);
     try {
-      return new IOSDriver(new URL("http://127.0.0.1:4723/wd/hub"), options);
+      return new IOSDriver(url(), options);
+    } catch (SessionNotCreatedException e) {
+      // Sometimes WDA session creation freezes unexpectedly on CI
+      options.useNewWDA();
+      return new IOSDriver(url(), options);
     }
-    catch (MalformedURLException e) {
+  }
+
+  private static URL url()  {
+    try {
+      return new URL("http://127.0.0.1:4723/wd/hub");
+    } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
   }

@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 
@@ -49,7 +50,17 @@ class IOSDriverProvider implements WebDriverProvider {
     options.setApp(app.getAbsolutePath());
     options.setFullReset(false);
     try {
-      return new IOSDriver(new URL("http://127.0.0.1:4723/wd/hub"), options);
+      return new IOSDriver(url(), options);
+    } catch (SessionNotCreatedException e) {
+      // Sometimes WDA session creation freezes unexpectedly on CI
+      options.useNewWDA();
+      return new IOSDriver(url(), options);
+    }
+  }
+
+  private static URL url()  {
+    try {
+      return new URL("http://127.0.0.1:4723/wd/hub");
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
