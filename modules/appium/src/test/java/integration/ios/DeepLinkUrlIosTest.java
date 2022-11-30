@@ -1,6 +1,7 @@
 package integration.ios;
 
 import com.codeborne.selenide.appium.SelenideAppium;
+import java.time.Duration;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -12,10 +13,6 @@ class DeepLinkUrlIosTest extends BaseSauceLabAppIosTest {
   @Test
   void testDeepLinkInIos() {
     SelenideAppium.openIOSDeepLink("mydemoapprn://product-details/1");
-    $(byAttribute("label", "Sauce Labs Backpack")).shouldBe(visible);
-
-    SelenideAppium.terminateApp("com.saucelabs.mydemoapp.rn");
-    SelenideAppium.openIOSDeepLink("mydemoapprn://product-details/1");
-    $(byAttribute("label", "Sauce Labs Bike Light")).shouldBe(visible);
+    $(byAttribute("label", "Sauce Labs Backpack")).shouldBe(visible, Duration.ofSeconds(60));
   }
 }
