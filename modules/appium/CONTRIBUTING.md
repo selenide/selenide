@@ -45,21 +45,11 @@ Selenide-appium project has three types of tests: unit tests, Android tests and 
 
 #### 1. Run the emulator:
 
-> emulator -avd Pixel_4_API_28
-
-Here "Pixel_4_API_28" is name of Android emulator.
-It can be any other name you have on your machine.
-
-NB! Currently, `selenide-appium` tests need an emulator running on Android SDK 28 (not later).
-Because newer SDKs do not contain built-in Calculator app. :) 
-
-To see all emulators you have:
-> emulator -list-avds
-
 To create a new emulator:
 > open Android Studio -> "Android Virtual Device Manager"
- 
 
+NB! Use Pixel_3_XL device profile to match your local environment and our CI setup.
+For more details please read [official docs](https://developer.android.com/studio/run/managing-avds).
 #### 2. Run appium server:
 ```
 > appium
