@@ -96,18 +96,6 @@ public class AppiumElementDescriberTest {
   }
 
   @Test
-  public void addsElementId() {
-    givenAndroidDriver();
-    when(element.getAttribute("class")).thenReturn("android.widget.TextView");
-    when(element.getAttribute("className")).thenReturn("android.widget.TextView");
-    when(element.getAttribute("text")).thenReturn("Hello, world");
-    when(element.getAttribute("resource-id")).thenReturn("submitPaymentButton");
-
-    assertThat(describer.briefly(driver, element))
-      .isEqualTo("<TextView resource-id=\"submitPaymentButton\">Hello, world</TextView>");
-  }
-
-  @Test
   public void fully() {
     givenAndroidDriver();
     when(element.getAttribute("class")).thenReturn("android.widget.TextView");
