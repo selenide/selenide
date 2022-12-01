@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
  * Inspired by <a href="https://applitools.com/blog/how-to-write-appium-ios-test/">...</a>
  * but migrated to Selenide.
  */
-public class CalculatorTest extends BaseIOSTest {
+public class CalculatorTest extends BaseIosCalculatorTest {
   @Test
   void addNumbers() {
     CalculatorPage page = new CalculatorPage();

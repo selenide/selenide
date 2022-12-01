@@ -7,7 +7,7 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
 
-class IosClickOptionsTest extends BaseIOSTest {
+class IosClickOptionsTest extends BaseIosCalculatorTest {
   @Test
   void testIosTap() {
     $(By.name("IntegerA")).sendKeys("3");

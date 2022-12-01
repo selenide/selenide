@@ -12,7 +12,7 @@ public class Apps {
   private static final String APPIUM_APPS_URL = "https://github.com/appium/appium/raw/master/packages/appium/sample-code/apps/";
   private static final String SAUCE_LAB_APPS_URL = "https://github.com/saucelabs/my-demo-app-rn/releases/download/v1.3.0/";
 
-  public static File downloadAndroidApp() {
+  public static File downloadApiDemosAndroidApp() {
     return downloadSampleApp(APPIUM_APPS_URL, "ApiDemos-debug.apk");
   }
 
@@ -21,11 +21,11 @@ public class Apps {
   }
 
   //can be used later if needed
-  public static File downloadSauceLabAndroidApp() {
+  public static File downloadSwagLabsAndroidApp() {
     return downloadSampleApp(SAUCE_LAB_APPS_URL, "Android-MyDemoAppRN.1.3.0.build-244.apk");
   }
 
-  public static File downloadSauceLabIosApp() {
+  public static File downloadSwagLabsIosApp() {
     return downloadSampleApp(SAUCE_LAB_APPS_URL, "iOS-Simulator-MyRNDemoApp.1.3.0-162.zip");
   }
 
