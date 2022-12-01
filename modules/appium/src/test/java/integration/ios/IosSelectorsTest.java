@@ -6,8 +6,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.appium.AppiumSelectors.*;
 
-class IosSelectorsTest extends BaseIOSTest {
-
+class IosSelectorsTest extends BaseIosCalculatorTest {
   @Test
   void testAppiumSelectorsInIosApp() {
     $(byTagAndName("*", "IntegerA")).setValue("2");

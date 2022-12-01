@@ -3,6 +3,7 @@ package integration.android;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.appium.ScreenObject.screen;
 import static io.appium.java_client.AppiumBy.accessibilityId;
 
@@ -16,6 +17,7 @@ import org.openqa.selenium.WebElement;
 public class LoginTest extends BaseSwagLabsAndroidTest {
   @BeforeEach
   void openLoginScreen() {
+    closeWebDriver();
     SelenideAppium.openAndroidDeepLink("mydemoapprn://login", "com.saucelabs.mydemoapp.rn");
   }
 

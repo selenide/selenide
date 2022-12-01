@@ -1,17 +1,25 @@
 package integration.android;
 
-import com.codeborne.selenide.Condition;
-import io.appium.java_client.AppiumBy;
-import org.junit.jupiter.api.Test;
-
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.appium.AppiumClickOptions.doubleTap;
+import static com.codeborne.selenide.appium.AppiumClickOptions.longPress;
 import static com.codeborne.selenide.appium.AppiumClickOptions.tap;
 import static com.codeborne.selenide.appium.AppiumClickOptions.tapWithOffset;
-import static com.codeborne.selenide.appium.AppiumClickOptions.longPress;
+
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.appium.SelenideAppium;
+import io.appium.java_client.AppiumBy;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class AndroidClickOptionsTest extends BaseApiDemosTest {
+  @BeforeEach
+  void setUp() {
+    closeWebDriver();
+    SelenideAppium.launchApp();
+  }
 
   @Test
   void testAndroidTap()  {
