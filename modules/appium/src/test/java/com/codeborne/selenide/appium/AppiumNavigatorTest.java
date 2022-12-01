@@ -34,7 +34,7 @@ class AppiumNavigatorTest {
   }
 
   @Test
-  void shouldSendAppIdForAndroid() {
+  void terminateApp_shouldSendAppIdForAndroid() {
     AndroidDriver androidDriver = mock(AndroidDriver.class);
     ArgumentCaptor<Map<String, String>> params = ArgumentCaptor.forClass(Map.class);
     ArgumentCaptor<String> script = ArgumentCaptor.forClass(String.class);
@@ -48,7 +48,7 @@ class AppiumNavigatorTest {
   }
 
   @Test
-  void shouldSendBundleIdForIOS() {
+  void terminateApp_shouldSendBundleIdForIOS() {
     IOSDriver androidDriver = mock(IOSDriver.class);
     ArgumentCaptor<Map<String, String>> params = ArgumentCaptor.forClass(Map.class);
     ArgumentCaptor<String> script = ArgumentCaptor.forClass(String.class);
