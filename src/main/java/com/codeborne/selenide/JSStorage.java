@@ -67,6 +67,11 @@ abstract class JSStorage {
     return size() == 0;
   }
 
+  @Override
+  public String toString() {
+    return storage;
+  }
+
   /**
    * @return all items in this storage
    * @since 5.23.0
@@ -74,10 +79,11 @@ abstract class JSStorage {
   @CheckReturnValue
   @Nonnull
   public Map<String, String> getItems() {
-    return driver.executeJavaScript(js("return Object.keys(%1$s).reduce((items, key) => {\n" +
-      "   items[key] = %1$s.getItem(key);\n" +
-      "   return items\n" +
-      "}, {});"));
+    return driver.executeJavaScript(js("""
+      return Object.keys(%1$s).reduce((items, key) => {
+         items[key] = %1$s.getItem(key);
+         return items;
+      }, {});"""));
   }
 
   private String js(String jsCodeTemplate) {
