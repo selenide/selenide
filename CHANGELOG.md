@@ -1,6 +1,9 @@
 # Changelog
 
-## 6.10.2 (planned to ??.11.2022)
+## 6.10.2 (planned to 0x.12.2022)
+* #2045 show sessionStorage and localStorage in reports friendly  --  see PR #2046
+* #2044 bump Selenium from 4.6.0 to 4.7.0
+* #2036 Bump browserup-proxy-core from 2.2.5 to 2.2.6
 * bump slf4j from 2.0.4 to 2.0.5
 
 ## 6.10.1 (released 23.11.2022)
