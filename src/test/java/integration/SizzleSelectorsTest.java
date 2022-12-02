@@ -66,13 +66,19 @@ final class SizzleSelectorsTest extends BaseIntegrationTest {
 
   @Test
   void canUseSizzleSelectors_onTodoList_jquery() {
-    driver.open("https://todomvc4tasj.herokuapp.com/");
+    driver.open("https://todomvc.com/examples/jquery/#/all/");
     driver.$$(":header").shouldHave(sizeGreaterThanOrEqual(1));
   }
 
   @Test
-  void canUseSizzleSelectors_onTodoList_troopjs() {
-    driver.open("https://todomvc.com/examples/troopjs_require//");
+  void canUseSizzleSelectors_onTodoList_angular() {
+    driver.open("https://todomvc.com/examples/angularjs/#/");
+    driver.$$(":header").shouldHave(sizeGreaterThanOrEqual(1));
+  }
+
+  @Test
+  void canUseSizzleSelectors_onTodoList_knockback() {
+    driver.open("https://todomvc.com/examples/knockback/");
     driver.$$(":header").shouldHave(sizeGreaterThanOrEqual(1));
   }
 }
