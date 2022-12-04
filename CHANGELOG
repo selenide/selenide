@@ -1,5 +1,14 @@
 == Changelog
 
+=== 2.4.0 (planned to 0x.12.2022)
+* #78 Added wrappers over AndroidDriver commands in Selenide-Appium  --  thanks to Boris Osipov for PR #100
+* #99 Deeplink support  --  thanks to Boris Osipov for PR #100 and Amuthan Sakthivel for PR #90
+* Terminate app support  --  thanks to Boris Osipov for PR #100
+* #88 Remove unsupported xcuitest resource-id attribute.  --  thanks to Boris Osipov for PR #97
+* Get rid of Calculator app tests  --  thanks to Boris Osipov for PR #100
+* #109 bump appium from 8.2.1 to 8.3.0
+* #109 bump selenide from 6.10.1 to 6.10.2-SNAPSHOT
+
 === 2.3.1 (released 29.11.2022)
 * Renamed primary branch to `main`
 * #92 Disable build-in Appium pagefactory timeout  --  thanks to Boris Osipov
