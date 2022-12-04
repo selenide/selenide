@@ -2,6 +2,7 @@
   if (select.disabled) {
     return {disabledSelect: 'Cannot select option in a disabled select'};
   }
+  select.focus();
 
   function optionByText(requestedText) {
     return Array.from(select.options).find(option => option.text === requestedText)
@@ -23,6 +24,8 @@
 
   const event = document.createEvent('HTMLEvents');
   event.initEvent('change', true, true);
+  select.dispatchEvent(event);
+  event.initEvent('click', true, true);
   select.dispatchEvent(event);
 
   return {};
