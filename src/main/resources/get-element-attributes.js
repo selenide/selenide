@@ -1,9 +1,9 @@
 (function(element) {
-  const attributesMap = {};
+  let attributesMap = {};
 
-  const attrs = element.attributes;
+  let attrs = element.attributes;
   for (let i = 0; i < attrs.length; i++) {
-    const a = attrs[i];
+    let a = attrs[i];
     if (a.name !== 'style') {
       attributesMap[a.name] = a.value;
     }

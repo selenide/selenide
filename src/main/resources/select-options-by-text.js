@@ -1,28 +1,37 @@
 (function(select, texts) {
+  function arrayFrom(array) {
+    //if (String.prototype.contains) { return Array.from(array) }
+    var result = [];
+    for (var i = 0; i < array.length; i++) {
+      result.push(array[i]);
+    }
+    return result;
+  }
+
   if (select.disabled) {
     return {disabledSelect: 'Cannot select option in a disabled select'};
   }
   select.focus();
 
   function optionByText(requestedText) {
-    return Array.from(select.options).find(option => option.text === requestedText)
+    return arrayFrom(select.options).find(function(option) { return option.text === requestedText })
   }
 
-  const missingOptionsTexts = texts.filter(text => !optionByText(text));
+  let missingOptionsTexts = texts.filter(function(text) { return !optionByText(text) });
   if (missingOptionsTexts.length > 0) {
     return {optionsNotFound: missingOptionsTexts};
   }
 
-  const disabledOptionsTexts = texts.filter(text => optionByText(text).disabled);
+  let disabledOptionsTexts = texts.filter(function(text) { return optionByText(text).disabled });
   if (disabledOptionsTexts.length > 0) {
     return {disabledOptions: disabledOptionsTexts};
   }
 
-  for (let requestedText of texts) {
+  texts.forEach(function (requestedText) {
     optionByText(requestedText).selected = 'selected';
-  }
+  });
 
-  const event = document.createEvent('HTMLEvents');
+  let event = document.createEvent('HTMLEvents');
   event.initEvent('click', true, true);
   select.dispatchEvent(event);
   event.initEvent('change', true, true);

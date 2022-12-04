@@ -4,21 +4,21 @@
   }
   select.focus();
 
-  const missingOptionsIndexes = indexes.filter(index => !select.options[index]);
+  let missingOptionsIndexes = indexes.filter(function(index) { return !select.options[index] });
   if (missingOptionsIndexes.length > 0) {
     return {optionsNotFound: missingOptionsIndexes};
   }
 
-  const disabledOptionsIndexes = indexes.filter(index => select.options[index].disabled);
+  let disabledOptionsIndexes = indexes.filter(function(index) { select.options[index].disabled });
   if (disabledOptionsIndexes.length > 0) {
     return {disabledOptions: disabledOptionsIndexes};
   }
 
-  for (let index of indexes) {
+  indexes.forEach(function(index) {
     select.options[index].selected = 'selected';
-  }
+  });
 
-  const event = document.createEvent('HTMLEvents');
+  let event = document.createEvent('HTMLEvents');
   event.initEvent('click', true, true);
   select.dispatchEvent(event);
   event.initEvent('change', true, true);
