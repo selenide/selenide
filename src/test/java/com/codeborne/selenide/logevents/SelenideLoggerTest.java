@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.ArgumentCaptor;
-import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
 
@@ -23,10 +22,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 final class SelenideLoggerTest {
-  private final WebDriver webdriver = mock(WebDriver.class);
-
   @RegisterExtension
-  static UseLocaleExtension useLocale = new UseLocaleExtension("en");
+  private static final UseLocaleExtension useLocale = new UseLocaleExtension("en");
   private static final Object[] NO_ARGS = null;
 
   @BeforeEach
@@ -68,6 +65,26 @@ final class SelenideLoggerTest {
     assertThat(readableArguments(visible, Duration.ofMillis(8500))).isEqualTo("[visible, 8.500 s.]");
     assertThat(readableArguments(visible, Duration.ofMillis(900))).isEqualTo("[visible, 900 ms.]");
     assertThat(readableArguments(visible, Duration.ofNanos(0))).isEqualTo("[visible, 0 ms.]");
+  }
+
+  @Test
+  @SuppressWarnings("ConfusingArgumentToVarargsMethod")
+  void ignoresEmptyVararg() {
+    assertThat(readableArguments("Option value")).isEqualTo("Option value");
+    assertThat(readableArguments("Option value", new String[0])).isEqualTo("Option value");
+    assertThat(readableArguments("Option value", new String[] {"Another option"})).isEqualTo("[Option value, Another option]");
+    assertThat(readableArguments((String[]) null)).isEqualTo("");
+    assertThat(readableArguments(new String[] {""})).isEqualTo("");
+    assertThat(readableArguments(new String[] {null})).isEqualTo("null");
+  }
+
+  @Test
+  @SuppressWarnings("ConfusingArgumentToVarargsMethod")
+  void joinVarargWithPreviousArgOfSameType() {
+    assertThat(readableArguments("1st", new String[] {"2nd", "3rd"})).isEqualTo("[1st, 2nd, 3rd]");
+    assertThat(readableArguments(1, new String[] {"2", "3"})).isEqualTo("[1, [2, 3]]");
+    assertThat(readableArguments(new String[] {"3"})).isEqualTo("3");
+    assertThat(readableArguments(new String[] {"2", "3"})).isEqualTo("[2, 3]");
   }
 
   @Test
