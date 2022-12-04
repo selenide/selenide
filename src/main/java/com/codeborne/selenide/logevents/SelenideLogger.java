@@ -1,6 +1,5 @@
 package com.codeborne.selenide.logevents;
 
-import com.codeborne.selenide.impl.DurationFormat;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,19 +8,16 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
+import static com.codeborne.selenide.logevents.ArgumentsPrinter.readableArguments;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Locale.ROOT;
-import static java.util.stream.Collectors.joining;
 
 /**
  * Logs Selenide test steps and notifies all registered LogEventListener about it
@@ -29,10 +25,7 @@ import static java.util.stream.Collectors.joining;
 @ParametersAreNonnullByDefault
 public class SelenideLogger {
   private static final Logger LOG = LoggerFactory.getLogger(SelenideLogger.class);
-
-  protected static final ThreadLocal<Map<String, LogEventListener>> listeners = new ThreadLocal<>();
-
-  private static final DurationFormat df = new DurationFormat();
+  private static final ThreadLocal<Map<String, LogEventListener>> listeners = new ThreadLocal<>();
   private static final Pattern REGEX_UPPER_CASE = Pattern.compile("([A-Z])");
 
   /**
@@ -68,74 +61,6 @@ public class SelenideLogger {
   @Nonnull
   static String readableMethodName(String methodName) {
     return REGEX_UPPER_CASE.matcher(methodName).replaceAll(" $1").toLowerCase(ROOT);
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  @SuppressWarnings("ChainOfInstanceofChecks")
-  static String readableArguments(@Nullable Object... args) {
-    if (args == null || args.length == 0) {
-      return "";
-    }
-
-    if (args[0] instanceof Object[]) {
-      return arrayToString((Object[]) args[0]);
-    }
-
-    if (args[0] instanceof int[]) {
-      return arrayToString((int[]) args[0]);
-    }
-
-    return arrayToString(args);
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private static String arrayToString(Object[] args) {
-    Object[] argsWithoutEmptyVarargs = argsWithoutEmptyVarargs(args);
-    return switch (argsWithoutEmptyVarargs.length) {
-      case 0 -> "";
-      case 1 -> argToString(argsWithoutEmptyVarargs[0]);
-      default -> '[' + Stream.of(argsWithoutEmptyVarargs).map(SelenideLogger::argToString).collect(joining(", ")) + ']';
-    };
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private static Object[] argsWithoutEmptyVarargs(Object[] args) {
-    if (args.length == 0) return args;
-    Object last = args[args.length - 1];
-    if (last == null || !last.getClass().isArray()) return args;
-
-    Object[] vararg = ((Object[]) last);
-    if (vararg.length == 0) {
-      return Arrays.copyOf(args, args.length - 1);
-    }
-    if (args.length < 2 || args[args.length - 2].getClass() == vararg.getClass().getComponentType()) {
-      Object[] mergedArgs = new Object[args.length - 1 + vararg.length];
-      System.arraycopy(args, 0, mergedArgs, 0, args.length - 1);
-      System.arraycopy(vararg, 0, mergedArgs, args.length - 1, vararg.length);
-      return mergedArgs;
-    }
-    return args;
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private static String argToString(Object arg) {
-    if (arg instanceof Duration) {
-      return df.format((Duration) arg);
-    }
-    if (arg instanceof Object[] array) {
-      return Arrays.toString(array);
-    }
-    return String.valueOf(arg);
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private static String arrayToString(int[] args) {
-    return args.length == 1 ? String.valueOf(args[0]) : Arrays.toString(args);
   }
 
   @CheckReturnValue
