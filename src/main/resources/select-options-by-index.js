@@ -23,8 +23,7 @@
   select.dispatchEvent(event);
   event.initEvent('change', true, true);
   select.dispatchEvent(event);
-  event.initEvent('click', true, true);
-  select.dispatchEvent(event);
+
   return {};
 })(arguments[0], arguments[1])
 
