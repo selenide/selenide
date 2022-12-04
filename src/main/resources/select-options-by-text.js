@@ -28,6 +28,8 @@
   }
 
   const event = document.createEvent('HTMLEvents');
+  event.initEvent('change', true, true);
+  select.dispatchEvent(event);
   event.initEvent('click', true, true);
   select.dispatchEvent(event);
   if (getSelectedOptionsString(select) !== previousSelectedOptions) {
