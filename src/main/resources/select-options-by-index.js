@@ -2,6 +2,7 @@
   if (select.disabled) {
     return {disabledSelect: 'Cannot select option in a disabled select'};
   }
+  select.focus();
 
   const missingOptionsIndexes = indexes.filter(index => !select.options[index]);
   if (missingOptionsIndexes.length > 0) {
@@ -18,6 +19,8 @@
   }
 
   const event = document.createEvent('HTMLEvents');
+  event.initEvent('click', true, true);
+  select.dispatchEvent(event);
   event.initEvent('change', true, true);
   select.dispatchEvent(event);
 

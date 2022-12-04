@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<select onblur="doOnblur()" onchange="doOnchange()" onclick="doOnclick()">
+  <option value="1">1</option>
+  <option value="2">2</option>
+</select>
+
+<p id="onblur">before blur</p>
+<p id="onchange">before change</p>
+<p id="onclick">before click</p>
+
+<script>
+  function doOnblur() {
+    let x = document.getElementById("onblur");
+    x.innerHTML = "after blur";
+  }
+
+  function doOnchange() {
+    let x = document.getElementById("onchange");
+    x.innerHTML = "after change";
+  }
+
+  function doOnclick() {
+    let x = document.getElementById("onclick");
+    x.innerHTML = "after click";
+  }
+
+</script>
+
+</body>
+</html>
