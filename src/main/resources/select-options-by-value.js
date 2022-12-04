@@ -4,24 +4,24 @@
   }
 
   function optionByValue(requestedValue) {
-    return Array.from(select.options).find(option => option.value === requestedValue)
+    return Array.from(select.options).find(function(option) { return option.value === requestedValue })
   }
 
-  const missingOptionsValues = values.filter(value => !optionByValue(value));
+  let missingOptionsValues = values.filter(function(value) { return !optionByValue(value) });
   if (missingOptionsValues.length > 0) {
     return {optionsNotFound: missingOptionsValues};
   }
 
-  const disabledOptionsValues = values.filter(value => optionByValue(value).disabled);
+  let disabledOptionsValues = values.filter(function(value) { return optionByValue(value).disabled });
   if (disabledOptionsValues.length > 0) {
     return {disabledOptions: disabledOptionsValues};
   }
 
-  for (let requestedValue of values) {
+  values.forEach(function (requestedValue) {
     optionByValue(requestedValue).selected = 'selected';
-  }
+  });
 
-  const event = document.createEvent('HTMLEvents');
+  let event = document.createEvent('HTMLEvents');
   event.initEvent('change', true, true);
   select.dispatchEvent(event);
 

@@ -5,6 +5,6 @@
   if (!select.options) {
     return ['', 'Select has no options']
   }
-  return [Array.from(select.selectedOptions).map(option => option.value).join(''), null]
+  return [Array.from(select.selectedOptions).map(function(option) { return option.value} ).join(''), null]
 })(arguments[0]);
 
