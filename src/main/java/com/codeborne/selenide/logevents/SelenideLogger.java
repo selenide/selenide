@@ -72,6 +72,7 @@ public class SelenideLogger {
 
   @CheckReturnValue
   @Nonnull
+  @SuppressWarnings("ChainOfInstanceofChecks")
   static String readableArguments(@Nullable Object... args) {
     if (args == null || args.length == 0) {
       return "";
@@ -91,9 +92,32 @@ public class SelenideLogger {
   @CheckReturnValue
   @Nonnull
   private static String arrayToString(Object[] args) {
-    return args.length == 1 ?
-      argToString(args[0]) :
-      '[' + Stream.of(args).map(SelenideLogger::argToString).collect(joining(", ")) + ']';
+    Object[] argsWithoutEmptyVarargs = argsWithoutEmptyVarargs(args);
+    return switch (argsWithoutEmptyVarargs.length) {
+      case 0 -> "";
+      case 1 -> argToString(argsWithoutEmptyVarargs[0]);
+      default -> '[' + Stream.of(argsWithoutEmptyVarargs).map(SelenideLogger::argToString).collect(joining(", ")) + ']';
+    };
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  private static Object[] argsWithoutEmptyVarargs(Object[] args) {
+    if (args.length == 0) return args;
+    Object last = args[args.length - 1];
+    if (last == null || !last.getClass().isArray()) return args;
+
+    Object[] vararg = ((Object[]) last);
+    if (vararg.length == 0) {
+      return Arrays.copyOf(args, args.length - 1);
+    }
+    if (args.length < 2 || args[args.length - 2].getClass() == vararg.getClass().getComponentType()) {
+      Object[] mergedArgs = new Object[args.length - 1 + vararg.length];
+      System.arraycopy(args, 0, mergedArgs, 0, args.length - 1);
+      System.arraycopy(vararg, 0, mergedArgs, args.length - 1, vararg.length);
+      return mergedArgs;
+    }
+    return args;
   }
 
   @CheckReturnValue
@@ -101,6 +125,9 @@ public class SelenideLogger {
   private static String argToString(Object arg) {
     if (arg instanceof Duration) {
       return df.format((Duration) arg);
+    }
+    if (arg instanceof Object[] array) {
+      return Arrays.toString(array);
     }
     return String.valueOf(arg);
   }
