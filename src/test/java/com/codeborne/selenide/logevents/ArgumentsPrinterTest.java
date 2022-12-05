@@ -15,6 +15,8 @@ class ArgumentsPrinterTest {
     assertThat(readableArguments((Object[]) null)).isEqualTo("");
     assertThat(readableArguments(111)).isEqualTo("111");
     assertThat(readableArguments(1, 2, 3)).isEqualTo("[1, 2, 3]");
+    assertThat(readableArguments(1, new Integer[] {2, 3})).isEqualTo("[1, 2, 3]");
+    assertThat(readableArguments(1, new int[] {2, 3})).isEqualTo("[1, 2, 3]");
     assertThat(readableArguments((Object[]) new String[]{"a"})).isEqualTo("a");
     assertThat(readableArguments((Object[]) new String[]{"a", "bb"})).isEqualTo("[a, bb]");
     assertThat(readableArguments((Object[]) new String[]{null})).isEqualTo("null");
