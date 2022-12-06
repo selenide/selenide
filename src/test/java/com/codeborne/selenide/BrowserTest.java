@@ -22,7 +22,7 @@ final class BrowserTest {
   @Test
   void chromiumBrowserTest() {
     assertAll(
-      "Browser is Chromium",
+      "Test if browser is Chromium",
       () -> assertTrue(new Browser(CHROME, false).isChromium(), CHROME),
       () -> assertTrue(new Browser(EDGE, false).isChromium(), EDGE),
       () -> assertFalse(new Browser(FIREFOX, false).isChromium(), FIREFOX),
