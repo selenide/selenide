@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import org.eclipse.jetty.server.Authentication;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Browsers.CHROME;
@@ -8,6 +9,7 @@ import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 final class BrowserTest {
   @Test
@@ -20,11 +22,14 @@ final class BrowserTest {
 
   @Test
   void chromiumBrowserTest() {
-    assertThat(new Browser(CHROME, false).isChromium()).isTrue();
-    assertThat(new Browser(EDGE, false).isChromium()).isTrue();
-    assertThat(new Browser(FIREFOX, false).isChromium()).isFalse();
-    assertThat(new Browser(IE, false).isChromium()).isFalse();
-    assertThat(new Browser(INTERNET_EXPLORER, false).isChromium()).isFalse();
+    assertAll(
+      "Browser is Chromium",
+      () -> assertTrue(new Browser(CHROME, false).isChromium(), CHROME),
+      () -> assertTrue(new Browser(EDGE, false).isChromium(), EDGE),
+      () -> assertFalse(new Browser(FIREFOX, false).isChromium(), FIREFOX),
+      () -> assertFalse(new Browser(IE, false).isChromium(), IE),
+      () -> assertFalse(new Browser(INTERNET_EXPLORER, false).isChromium(), INTERNET_EXPLORER)
+    );
   }
 
   @Test
