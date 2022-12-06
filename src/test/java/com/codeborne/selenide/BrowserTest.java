@@ -1,6 +1,5 @@
 package com.codeborne.selenide;
 
-import org.eclipse.jetty.server.Authentication;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Browsers.CHROME;
