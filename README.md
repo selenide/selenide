@@ -19,13 +19,15 @@ It defines concise fluent API, natural language assertions and does some magic f
 
 Selenide is based on and is compatible to Selenium WebDriver 4.0+
 
-    @Test
-    public void login() {
-      open("/login");
-      $(By.name("user.name")).setValue("johny");
-      $("#submit").click();
-      $("#username").shouldHave(text("Hello, Johny!"));
-    }
+```java
+@Test
+public void login() {
+  open("/login");
+  $(By.name("user.name")).setValue("johny");
+  $("#submit").click();
+  $("#username").shouldHave(text("Hello, Johny!"));
+}
+```
 
 Look for [detailed comparison of Selenide and Selenium WebDriver API](https://github.com/selenide/selenide/wiki/Selenide-vs-Selenium).
 
