@@ -36,10 +36,10 @@ public class Util {
 
     List<Condition> conditions = new ArrayList<>(args.length);
     for (Object arg : args) {
-      if (arg instanceof Condition)
-        conditions.add((Condition) arg);
-      else if (arg instanceof Condition[])
-        conditions.addAll(asList((Condition[]) arg));
+      if (arg instanceof Condition conditionArgument)
+        conditions.add(conditionArgument);
+      else if (arg instanceof Condition[] conditionsArray)
+        conditions.addAll(asList(conditionsArray));
       else if (!(arg instanceof String || arg instanceof Long || arg instanceof Duration))
         throw new IllegalArgumentException("Unknown parameter: " + arg);
     }

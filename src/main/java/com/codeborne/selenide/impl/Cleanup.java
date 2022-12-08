@@ -49,11 +49,19 @@ public class Cleanup {
     if (error instanceof AssertionError) return false;
 
     String message = error.getMessage();
-    if (message == null) return false;
-
-    return error instanceof InvalidSelectorException && !message.contains("\"Element is not selectable\"") ||
-      isInvalidSelectorMessage(message) ||
-      error.getCause() != null && error.getCause() != error && isInvalidSelectorError(error.getCause());
+    if (message == null) {
+      return false;
+    }
+    if (error instanceof InvalidSelectorException && !message.contains("\"Element is not selectable\"")) {
+      return true;
+    }
+    if (isInvalidSelectorMessage(message)) {
+      return true;
+    }
+    if (error.getCause() != null && error.getCause() != error) {
+      return isInvalidSelectorError(error.getCause());
+    }
+    return false;
   }
 
   private boolean isInvalidSelectorMessage(String message) {
@@ -66,8 +74,8 @@ public class Cleanup {
   }
 
   public InvalidSelectorException wrapInvalidSelectorException(Throwable error) {
-    return (error instanceof InvalidSelectorException) ?
-      (InvalidSelectorException) error :
+    return (error instanceof InvalidSelectorException invalidSelectorException) ?
+      invalidSelectorException :
       new InvalidSelectorException("Invalid selector", error);
   }
 }

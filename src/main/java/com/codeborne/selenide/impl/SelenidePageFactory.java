@@ -145,8 +145,8 @@ public class SelenidePageFactory implements PageObjectFactory {
   @CheckReturnValue
   @Nonnull
   ElementsContainer initElementsContainer(Driver driver, Field field, WebElementSource self) throws ReflectiveOperationException {
-    Type[] genericTypes = field.getGenericType() instanceof ParameterizedType ?
-      ((ParameterizedType) field.getGenericType()).getActualTypeArguments() : new Type[0];
+    Type[] genericTypes = field.getGenericType() instanceof ParameterizedType parameterizedType ?
+      parameterizedType.getActualTypeArguments() : new Type[0];
     return initElementsContainer(driver, field, self, field.getType(), genericTypes);
   }
 
@@ -287,8 +287,8 @@ public class SelenidePageFactory implements PageObjectFactory {
       int indexOfType = indexOf(field.getDeclaringClass(), firstType);
       return (Class<?>) genericTypes[indexOfType];
     }
-    else if (firstType instanceof Class) {
-      return (Class<?>) firstType;
+    else if (firstType instanceof Class<?> classType) {
+      return classType;
     }
     throw new IllegalArgumentException("Cannot detect list type of " + field);
   }

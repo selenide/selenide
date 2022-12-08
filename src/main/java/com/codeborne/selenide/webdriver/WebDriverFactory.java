@@ -78,8 +78,8 @@ public class WebDriverFactory {
   }
   private boolean needBrowserResize(WebDriver webdriver) {
     String browserName = "";
-    if (webdriver instanceof HasCapabilities) {
-      Capabilities capabilities = ((HasCapabilities) webdriver).getCapabilities();
+    if (webdriver instanceof HasCapabilities hasCapabilities) {
+      Capabilities capabilities = hasCapabilities.getCapabilities();
       browserName = capabilities.getBrowserName();
     }
     Browser browser = new Browser(browserName, false);
@@ -139,8 +139,8 @@ public class WebDriverFactory {
   }
 
   private void logBrowserVersion(WebDriver webdriver) {
-    if (webdriver instanceof HasCapabilities) {
-      Capabilities capabilities = ((HasCapabilities) webdriver).getCapabilities();
+    if (webdriver instanceof HasCapabilities hasCapabilities) {
+      Capabilities capabilities = hasCapabilities.getCapabilities();
       log.info("BrowserName={} Version={} Platform={}",
         capabilities.getBrowserName(), capabilities.getBrowserVersion(), capabilities.getPlatformName());
     } else {

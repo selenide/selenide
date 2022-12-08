@@ -80,8 +80,8 @@ public class FullSizePhotographer implements Photographer {
 
   private WebDriver unwrap(Driver driver) {
     WebDriver webDriver = driver.getWebDriver();
-    if (webDriver instanceof WrapsDriver) {
-      webDriver = ((WrapsDriver) webDriver).getWrappedDriver();
+    if (webDriver instanceof WrapsDriver wrapper) {
+      webDriver = wrapper.getWrappedDriver();
     }
     if (webDriver instanceof RemoteWebDriver remoteWebDriver) {
       webDriver = new Augmenter().augment(remoteWebDriver);

@@ -22,12 +22,12 @@ public class ArgumentsPrinter {
       return "";
     }
 
-    if (args.length == 1 && args[0] instanceof Object[]) {
-      return arrayToString((Object[]) args[0]);
+    if (args.length == 1 && args[0] instanceof Object[] objectArray) {
+      return arrayToString(objectArray);
     }
 
-    if (args.length == 1 && args[0] instanceof int[]) {
-      return arrayToString((int[]) args[0]);
+    if (args.length == 1 && args[0] instanceof int[] intArray) {
+      return arrayToString(intArray);
     }
 
     return arrayToString(args);
@@ -99,8 +99,8 @@ public class ArgumentsPrinter {
   @Nonnull
   @SuppressWarnings("ChainOfInstanceofChecks")
   private static String argToString(Object arg) {
-    if (arg instanceof Duration) {
-      return df.format((Duration) arg);
+    if (arg instanceof Duration duration) {
+      return df.format(duration);
     }
     if (arg instanceof Object[] array) {
       return Arrays.toString(array);
