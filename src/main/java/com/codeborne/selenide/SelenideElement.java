@@ -6,6 +6,7 @@ import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.WebElementSource;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
@@ -133,6 +134,20 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @Nonnull
   @CanIgnoreReturnValue
   SelenideElement pressEscape();
+
+  /**
+   * Press a Key in Keyboard. Useful for auto-suggestion dropdown: <pre>
+   *  $(".edit").press(Keys.DOWN).pressEnter();</pre>
+   * <p>
+   * Implementation details:
+   * Check that element is displayed and execute <pre>
+   *  WebElement.sendKeys(Keys.DOWN)</pre>
+   *
+   * @see com.codeborne.selenide.commands.PressEscape
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement press(Keys keyToPress);
 
   /**
    * Get the visible text of this element, including sub-elements without leading/trailing whitespace.
