@@ -136,18 +136,22 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement pressEscape();
 
   /**
-   * Press a Key in Keyboard. Useful for auto-suggestion dropdown: <pre>
-   *  $(".edit").press(Keys.DOWN).pressEnter();</pre>
+   * Press a Key(s) on Keyboard: <pre>
+   *  $(".edit").press(Keys.DOWN).click();</pre>
    * <p>
    * Implementation details:
-   * Check that element is displayed and execute <pre>
-   *  WebElement.sendKeys(Keys.DOWN)</pre>
+   * Checks that element is displayed and executes <pre>
+   *  WebElement.sendKeys(keysToPress)</pre>
    *
-   * @see com.codeborne.selenide.commands.PressEscape
+   * Compared to {@link WebElement#sendKeys(CharSequence...)}, this method is chainable.
+   *
+   * @see com.codeborne.selenide.commands.Press
+   * @see Keys
+   * @since 6.10.2
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement press(Keys keyToPress);
+  SelenideElement press(CharSequence... keysToPress);
 
   /**
    * Get the visible text of this element, including sub-elements without leading/trailing whitespace.

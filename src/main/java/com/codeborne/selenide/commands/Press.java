@@ -9,6 +9,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.commands.Util.firstOf;
+
 @ParametersAreNonnullByDefault
 public class Press implements Command<SelenideElement> {
   @Override
@@ -18,7 +20,7 @@ public class Press implements Command<SelenideElement> {
     if (args == null || args.length == 0) {
       throw new IllegalArgumentException("Please pass one Keys type to press");
     }
-    Keys key = (Keys) args[0];
+    CharSequence[] key = firstOf(args);
     locator.findAndAssertElementIsInteractable().sendKeys(key);
     return proxy;
   }

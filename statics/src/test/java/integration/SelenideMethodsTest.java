@@ -56,6 +56,10 @@ import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
+import static org.openqa.selenium.Keys.ALT;
+import static org.openqa.selenium.Keys.CONTROL;
+import static org.openqa.selenium.Keys.ENTER;
+import static org.openqa.selenium.Keys.TAB;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 final class SelenideMethodsTest extends IntegrationTest {
@@ -196,6 +200,14 @@ final class SelenideMethodsTest extends IntegrationTest {
     $("#password").shouldBe(focused);
     $("#username-mirror").shouldHave(text("x (1)"));
     $("#username-blur-counter").shouldHave(text("blur: 1"));
+  }
+
+  @Test
+  void userCanPressAnyKeys() {
+    $("#username")
+      .press(" method $.press() is chainable ")
+      .press(TAB, CONTROL, ALT, ENTER);
+    $("#username-mirror").shouldHave(text(" method $.press() is chainable (1)"));
   }
 
   @Test
