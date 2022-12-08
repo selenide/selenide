@@ -1,4 +1,4 @@
-(function(select, values) {
+(function (select, values) {
   if (select.disabled) {
     return {disabledSelect: 'Cannot select option in a disabled select'};
   }
@@ -18,15 +18,20 @@
     return {disabledOptions: disabledOptionsValues};
   }
 
+  const previousSelectedIndex = select.selectedIndex;
+  var fireChangeEvent = false;
   for (let requestedValue of values) {
     optionByValue(requestedValue).selected = 'selected';
+    fireChangeEvent = fireChangeEvent || previousSelectedIndex !== select.selectedIndex;
   }
 
   const event = document.createEvent('HTMLEvents');
   event.initEvent('click', true, true);
   select.dispatchEvent(event);
-  event.initEvent('change', true, true);
-  select.dispatchEvent(event);
+  if (fireChangeEvent) {
+    event.initEvent('change', true, true);
+    select.dispatchEvent(event);
+  }
 
   return {};
 })(arguments[0], arguments[1])

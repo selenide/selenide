@@ -14,15 +14,20 @@
     return {disabledOptions: disabledOptionsIndexes};
   }
 
+  const previousSelectedIndex = select.selectedIndex;
+  var fireChangeEvent = false;
   for (let index of indexes) {
     select.options[index].selected = 'selected';
+    fireChangeEvent = fireChangeEvent || previousSelectedIndex !== select.selectedIndex;
   }
 
   const event = document.createEvent('HTMLEvents');
   event.initEvent('click', true, true);
   select.dispatchEvent(event);
-  event.initEvent('change', true, true);
-  select.dispatchEvent(event);
+  if (fireChangeEvent) {
+    event.initEvent('change', true, true);
+    select.dispatchEvent(event);
+  }
 
   return {};
 })(arguments[0], arguments[1])
