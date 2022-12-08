@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.3.3 (released 08.12.2022)
+* upgrade to Selenide 6.10.2
+
 ## 2.3.2
 * upgrade to Selenide 6.10.0
 
