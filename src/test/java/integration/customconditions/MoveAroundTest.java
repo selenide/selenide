@@ -44,12 +44,12 @@ final class MoveAroundTest extends ITest {
       @Nonnull
       @Override
       public CheckResult check(Driver driver, WebElement element) {
-        if (!(element instanceof Locatable)) {
+        if (!(element instanceof Locatable locatable)) {
           throw new RuntimeException("Provided WebElement is not Locatable, cannot understand if it moving or not");
         }
-        Point initialLocation = ((Locatable) element).getCoordinates().inViewPort();
+        Point initialLocation = locatable.getCoordinates().inViewPort();
         sleepAtLeast(movePeriodMs);
-        Point finalLocation = ((Locatable) element).getCoordinates().inViewPort();
+        Point finalLocation = locatable.getCoordinates().inViewPort();
         return new CheckResult(!initialLocation.equals(finalLocation), "Location: " + finalLocation);
       }
     };

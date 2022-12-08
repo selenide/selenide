@@ -15,8 +15,8 @@ public class WebdriverPhotographer implements Photographer {
   @CheckReturnValue
   @Override
   public <T> Optional<T> takeScreenshot(Driver driver, OutputType<T> outputType) {
-    if (driver.getWebDriver() instanceof TakesScreenshot) {
-      T screenshot = ((TakesScreenshot) driver.getWebDriver()).getScreenshotAs(outputType);
+    if (driver.getWebDriver() instanceof TakesScreenshot takesScreenshot) {
+      T screenshot = takesScreenshot.getScreenshotAs(outputType);
       return Optional.of(screenshot);
     }
     return Optional.empty();

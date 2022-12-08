@@ -45,8 +45,8 @@ public class SetValue implements Command<SelenideElement> {
   }
 
   private SetValueOptions extractOptions(Config config, Object[] args) {
-    if (args[0] instanceof SetValueOptions) {
-      return firstOf(args);
+    if (args[0] instanceof SetValueOptions options) {
+      return options;
     }
     else {
       CharSequence text = firstOf(args);

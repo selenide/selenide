@@ -14,8 +14,8 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 @ParametersAreNonnullByDefault
 public class WebElementWrapper extends WebElementSource {
   public static SelenideElement wrap(Driver driver, WebElement element) {
-    return element instanceof SelenideElement ?
-        (SelenideElement) element :
+    return element instanceof SelenideElement selenideElement ?
+        selenideElement :
         (SelenideElement) Proxy.newProxyInstance(
             element.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
             new SelenideElementProxy(new WebElementWrapper(driver, element)));

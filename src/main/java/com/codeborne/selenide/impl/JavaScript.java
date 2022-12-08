@@ -50,12 +50,11 @@ public class JavaScript {
   }
 
   public static Optional<JavascriptExecutor> asJsExecutor(SearchContext context) {
-    if (context instanceof WrapsDriver wrapsDriver) {
-      context = wrapsDriver.getWrappedDriver();
-    }
+    SearchContext unwrappedContext = context instanceof WrapsDriver wrapsDriver ?
+      wrapsDriver.getWrappedDriver() : context;
 
-    return context instanceof JavascriptExecutor ?
-      Optional.of((JavascriptExecutor) context) :
+    return unwrappedContext instanceof JavascriptExecutor jsExecutor ?
+      Optional.of(jsExecutor) :
       Optional.empty();
   }
 

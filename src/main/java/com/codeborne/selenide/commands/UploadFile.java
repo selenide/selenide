@@ -57,11 +57,10 @@ public class UploadFile implements Command<File> {
     }
   }
 
-  @SuppressWarnings("SuspiciousArrayCast")
   @CheckReturnValue
   @Nonnull
   private File[] getFiles(@Nullable Object[] args) {
-    return args instanceof File[] ? (File[]) args : firstOf(args);
+    return args instanceof File[] multipleFiles ? multipleFiles : firstOf(args);
   }
 
   private String canonicalPath(File file) {

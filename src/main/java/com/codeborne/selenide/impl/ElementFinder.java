@@ -99,9 +99,13 @@ public class ElementFinder extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
-    return arg instanceof By ?
-      wrap(driver, this, (By) arg, index) :
-      wrap(driver, this, By.cssSelector((String) arg), index);
+    if (arg instanceof By by) {
+      return wrap(driver, this, by, index);
+    }
+    if (arg instanceof String cssLocator) {
+      return wrap(driver, this, By.cssSelector(cssLocator), index);
+    }
+    throw new IllegalArgumentException("Unsupported locator type: " + arg);
   }
 
   @Override

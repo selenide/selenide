@@ -42,8 +42,8 @@ public class SelenideElementDescriber implements ElementDescriber {
       if (element == null) {
         return "null";
       }
-      if (element instanceof SelenideElement) {
-        return briefly(driver, ((SelenideElement) element).toWebElement());
+      if (element instanceof SelenideElement selenideElement) {
+        return briefly(driver, selenideElement.toWebElement());
       }
       return new Describe(driver, element).attr("id").attr("name").flush();
     } catch (WebDriverException elementDoesNotExist) {

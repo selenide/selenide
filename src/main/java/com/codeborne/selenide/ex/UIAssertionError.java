@@ -82,8 +82,8 @@ public class UIAssertionError extends AssertionFailedError {
 
   @CheckReturnValue
   private static UIAssertionError wrapThrowable(Driver driver, Throwable error, long timeoutMs) {
-    UIAssertionError uiError = error instanceof UIAssertionError ?
-      (UIAssertionError) error : wrapToUIAssertionError(error);
+    UIAssertionError uiError = error instanceof UIAssertionError uiAssertionError ?
+      uiAssertionError : wrapToUIAssertionError(error);
     uiError.timeoutMs = timeoutMs;
     if (uiError.screenshot.isPresent()) {
       log.warn("UIAssertionError already has screenshot: {} {} -> {}",
