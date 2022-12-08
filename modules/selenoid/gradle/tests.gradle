@@ -2,11 +2,15 @@ test {
   include 'org/selenide/selenoid/**/*'
 }
 
-tasks.withType(Test) {
+tasks.register('test-chrome', Test) {
+  systemProperties['selenide.browser'] = 'chrome'
+  include 'integration/**/*'
+  exclude 'org/selenide/selenoid/**/*'
+}
+
+tasks.withType(Test).configureEach {
   useJUnitPlatform()
   systemProperty('file.encoding', encoding)
-  systemProperty('BUILD_URL', System.getenv()['BUILD_URL'])
-  systemProperties += System.properties
   outputs.upToDateWhen {
     false
   }
