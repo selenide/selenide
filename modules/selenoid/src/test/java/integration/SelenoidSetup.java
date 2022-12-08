@@ -47,7 +47,7 @@ public class SelenoidSetup implements BeforeEachCallback, AfterEachCallback  {
   static DesiredCapabilities capabilities() {
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setBrowserName("chrome");
-    capabilities.setVersion("91.0");
+    capabilities.setVersion("100.0");
     capabilities.setCapability("selenoid:options", ImmutableMap.of(
       "enableVNC", true,
       "enableVideo", true

@@ -14,8 +14,8 @@ Also, we assume you have file `~/.aerokube/selenoid/browsers.json` with such a b
   "chrome": {
     "default": "chrome",
     "versions": {
-      "91.0": {
-        "image": "dumbdumbych/selenium_vnc_chrome_arm64:91.0.b",
+      "100.0": {
+        "image": "sskorol/selenoid_chromium_vnc:100.0",
         "port": "4444",
         "path": "/",
         "privileged": true
