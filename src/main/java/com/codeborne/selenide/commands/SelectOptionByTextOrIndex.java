@@ -31,15 +31,14 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
     if (args == null || args.length == 0) {
       throw new IllegalArgumentException("Missing arguments");
     }
-    else if (args[0] instanceof String) {
-      List<String> texts = merge(arguments.nth(0), arguments.nth(1));
+    else if (args[0] instanceof String firstOptionText) {
+      List<String> texts = merge(firstOptionText, arguments.nth(1));
       selectOptionsByTexts(selectField, texts);
       return null;
     }
-    else if (args[0] instanceof Integer) {
-      Integer index = arguments.nth(0);
+    else if (args[0] instanceof Integer firstOptionIndex) {
       int[] otherIndexes = arguments.nth(1);
-      selectOptionsByIndexes(selectField, merge(index, otherIndexes));
+      selectOptionsByIndexes(selectField, merge(firstOptionIndex, otherIndexes));
       return null;
     }
     else {

@@ -191,8 +191,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     if (lastError instanceof IndexOutOfBoundsException) {
       throw new ElementNotFound(collection.getAlias(), collection.description(), exist, lastError);
     }
-    else if (lastError instanceof UIAssertionError) {
-      throw (UIAssertionError) lastError;
+    else if (lastError instanceof UIAssertionError uiAssertionError) {
+      throw uiAssertionError;
     }
     else {
       condition.fail(collection, actualElements, (Exception) lastError, timeout.toMillis());
@@ -298,8 +298,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Gets all the texts in elements collection
-   *
-   * @return array of texts
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
@@ -312,7 +310,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * Fail-safe method for retrieving texts of given elements.
    *
    * @param elements Any collection of WebElements
-   * @return Array of texts (or exceptions in case of any WebDriverExceptions)
+   * @return Texts (or exceptions in case of any WebDriverExceptions)
    */
   @CheckReturnValue
   @Nonnull

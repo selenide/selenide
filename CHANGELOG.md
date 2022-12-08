@@ -1,10 +1,14 @@
 # Changelog
 
-## 6.10.2 (planned to 0x.12.2022)
+## 6.10.2 (released 08.12.2022)
+* #2032 added chainable method $.press()  --  thanks to Amuthan Sakthivel for PR
+* #2050 fore change events by `$.select*` methods  --  thanks to Vicente Rossello Jaume for PR #2051
+* #2047 show $.selectOption() in reports friendly  --  see PR #2052
 * #2045 show sessionStorage and localStorage in reports friendly  --  see PR #2046
-* #2044 bump Selenium from 4.6.0 to 4.7.0
+* #2044 #2057 bump Selenium from 4.6.0 to 4.7.1
 * #2036 Bump browserup-proxy-core from 2.2.5 to 2.2.6
 * bump slf4j from 2.0.4 to 2.0.5
+* #2058 bump httpclient5 from 5.2 to 5.2.1 
 
 ## 6.10.1 (released 23.11.2022)
 * #2029 fix `Configuration.browserSize` setting in Chrome, thanks to Boris Osipov for PR #2030

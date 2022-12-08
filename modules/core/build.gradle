@@ -24,7 +24,7 @@ dependencies {
     exclude group: 'org.slf4j'
   }
   implementation('org.apache.commons:commons-compress:1.22') {because 'used by webdrivermanager'}
-  implementation('org.apache.httpcomponents.client5:httpclient5:5.2')
+  implementation('org.apache.httpcomponents.client5:httpclient5:5.2.1')
 
   compileOnly("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
   compileOnly("xyz.rogfam:littleproxy:$littleProxyVersion")
@@ -33,7 +33,7 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
 
-  testImplementation("org.mockito:mockito-core:$mockitoVersion")
+  testImplementation("org.mockito:mockito-inline:$mockitoVersion")
   testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}
 }
 

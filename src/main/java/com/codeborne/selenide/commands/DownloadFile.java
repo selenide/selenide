@@ -75,8 +75,8 @@ public class DownloadFile implements Command<File> {
   @CheckReturnValue
   @Nonnull
   private DownloadOptions getDownloadOptions(Config config, @Nullable Object[] args) {
-    if (args != null && args.length > 0 && args[0] instanceof DownloadOptions) {
-      return (DownloadOptions) args[0];
+    if (args != null && args.length > 0 && args[0] instanceof DownloadOptions downloadOptions) {
+      return downloadOptions;
     }
     return using(config.fileDownload())
       .withFilter(getFileFilter(args))
@@ -85,8 +85,8 @@ public class DownloadFile implements Command<File> {
 
   @CheckReturnValue
   long getTimeout(Config config, @Nullable Object[] args) {
-    if (args != null && args.length > 0 && args[0] instanceof Long) {
-      return (long) args[0];
+    if (args != null && args.length > 0 && args[0] instanceof Long timeoutArgument) {
+      return timeoutArgument;
     }
     else {
       return config.timeout();
@@ -96,11 +96,11 @@ public class DownloadFile implements Command<File> {
   @CheckReturnValue
   @Nonnull
   FileFilter getFileFilter(@Nullable Object[] args) {
-    if (args != null && args.length > 0 && args[0] instanceof FileFilter) {
-      return (FileFilter) args[0];
+    if (args != null && args.length > 0 && args[0] instanceof FileFilter fileFilter) {
+      return fileFilter;
     }
-    if (args != null && args.length > 1 && args[1] instanceof FileFilter) {
-      return (FileFilter) args[1];
+    if (args != null && args.length > 1 && args[1] instanceof FileFilter fileFilter) {
+      return fileFilter;
     }
     else {
       return FileFilters.none();

@@ -73,11 +73,11 @@ final class CommonCapabilitiesTest {
 
   private boolean asBool(Object raw) {
     if (raw != null) {
-      if (raw instanceof String) {
-        return Boolean.parseBoolean((String) raw);
+      if (raw instanceof String stringValue) {
+        return Boolean.parseBoolean(stringValue);
       }
-      else if (raw instanceof Boolean) {
-        return (Boolean) raw;
+      else if (raw instanceof Boolean booleanValue) {
+        return booleanValue;
       }
     }
     return false;

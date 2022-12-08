@@ -22,6 +22,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * or
  * <pre>  {@literal @}Rule
  * public ScreenShooter makeScreenshotOnEveryTest = ScreenShooter.failedTests().to("test-results/img/");</pre>
+ *
+ * <p>
+ *   Restrictions:
+ * </p>
+ * <p>
+ *   This rule can only take screenshots for "static" webdriver managed by Selenide.
+ *   It doesn't take screenshots for webdrivers created by your code, e.g. using {@code new SelenideDriver()}.
+ * </p>
  */
 @ParametersAreNonnullByDefault
 public class ScreenShooter extends TestWatcher {

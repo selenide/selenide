@@ -10,7 +10,17 @@ import org.testng.reporters.ExitCodeListener;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
+ * <p>
  * Annotate your test class with {@code @Listeners({ ScreenShooter.class})}
+ * </p>
+ *
+ * <p>
+ *   Restrictions:
+ * </p>
+ * <p>
+ *   This listener can only take screenshots for "static" webdriver managed by Selenide.
+ *   It doesn't take screenshots for webdrivers created by your code, e.g. using {@code new SelenideDriver()}.
+ * </p>
  */
 @ParametersAreNonnullByDefault
 public class ScreenShooter extends ExitCodeListener {

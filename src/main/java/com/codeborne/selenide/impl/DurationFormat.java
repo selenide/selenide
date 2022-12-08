@@ -4,6 +4,8 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 
+import static java.util.Locale.ROOT;
+
 @ParametersAreNonnullByDefault
 public class DurationFormat {
   @CheckReturnValue
@@ -20,6 +22,6 @@ public class DurationFormat {
       return String.format("%d s.", milliseconds / 1000);
     }
 
-    return String.format("%.3f s.", milliseconds / 1000.0);
+    return String.format(ROOT, "%.3f s.", milliseconds / 1000.0);
   }
 }

@@ -20,7 +20,7 @@ public class Ancestor implements Command<SelenideElement> {
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     String selector = firstOf(args);
     int indexPredicate = args.length > 1 ?
-      (args[1] instanceof Integer ? (int) args[1] + 1 : 1) :
+      (args[1] instanceof Integer indexArgument ? indexArgument + 1 : 1) :
       1;
 
     AncestorRuleEngine ruleEngine = new AncestorRuleEngine();

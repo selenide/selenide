@@ -52,6 +52,14 @@ import java.util.Optional;
  *   }
  * </pre>
  *
+ * <p>
+ *   Restrictions:
+ * </p>
+ * <p>
+ *   This extension can only take screenshots for "static" webdriver managed by Selenide.
+ *   It doesn't take screenshots for webdrivers created by your code, e.g. using {@code new SelenideDriver()}.
+ * </p>
+ *
  * @author Aliaksandr Rasolka
  * @since 4.12.2
  */
@@ -66,7 +74,7 @@ public class ScreenShooterExtension implements BeforeEachCallback, AfterEachCall
   }
 
   /**
-   * @param captureSuccessfulTests param that indicate if need to capture successful tests
+   * @param captureSuccessfulTests param that indicate if you need to capture successful tests
    */
   public ScreenShooterExtension(final boolean captureSuccessfulTests) {
     this.captureSuccessfulTests = captureSuccessfulTests;

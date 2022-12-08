@@ -90,7 +90,9 @@ public abstract class WebElementSource {
   @CheckReturnValue
   @Nonnull
   public static By getSelector(Object arg) {
-    return arg instanceof By ? (By) arg : By.cssSelector((String) arg);
+    if (arg instanceof By by) return by;
+    if (arg instanceof String cssSelector) return By.cssSelector(cssSelector);
+    throw new IllegalArgumentException("Unsupported selector type: " + arg);
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")

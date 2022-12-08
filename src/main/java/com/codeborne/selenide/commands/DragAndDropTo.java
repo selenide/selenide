@@ -43,11 +43,11 @@ public class DragAndDropTo implements Command<SelenideElement> {
     if (args == null || args.length == 0) {
       throw new IllegalArgumentException("Missing target argument");
     }
-    else if (args[0] instanceof String) {
-      return ElementFinder.wrap(driver, By.cssSelector((String) args[0]));
+    else if (args[0] instanceof String cssSelector) {
+      return ElementFinder.wrap(driver, By.cssSelector(cssSelector));
     }
-    else if (args[0] instanceof WebElement) {
-      return WebElementWrapper.wrap(driver, (WebElement) args[0]);
+    else if (args[0] instanceof WebElement webElement) {
+      return WebElementWrapper.wrap(driver, webElement);
     }
     else {
       throw new IllegalArgumentException("Unknown target type: " + args[0] +

@@ -56,8 +56,8 @@ public class ErrorsCollector implements LogEventListener {
     }
     this.errors.clear();
 
-    if (errors.size() == 1 && errors.get(0) instanceof AssertionError) {
-      return (AssertionError) errors.get(0);
+    if (errors.size() == 1 && errors.get(0) instanceof AssertionError assertionError) {
+      return assertionError;
     }
     if (!errors.isEmpty()) {
       String message = String.format("Test %s failed", testName);

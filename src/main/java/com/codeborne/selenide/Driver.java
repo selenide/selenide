@@ -107,8 +107,8 @@ public interface Driver {
   @Nonnull
   default SessionId getSessionId() {
     WebDriver driver = getWebDriver();
-    if (driver instanceof WrapsDriver) {
-      driver = ((WrapsDriver) driver).getWrappedDriver();
+    if (driver instanceof WrapsDriver wrapper) {
+      driver = wrapper.getWrappedDriver();
     }
     return ((RemoteWebDriver) driver).getSessionId();
   }
