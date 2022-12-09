@@ -62,6 +62,8 @@ public class ScreenShotLaboratory {
   private final Clock clock;
   protected final List<File> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
+
+  protected ThreadLocal<Screenshot> lastScreenShot = new ThreadLocal<>();
   protected ThreadLocal<String> currentContext = withInitial(() -> "");
   protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
   protected ThreadLocal<List<File>> threadScreenshots = withInitial(ArrayList::new);
@@ -133,7 +135,9 @@ public class ScreenShotLaboratory {
     if (image != null) {
       addToHistory(image);
     }
-    return new Screenshot(toUrl(config, image), toUrl(config, source));
+    Screenshot screenshot = new Screenshot(toUrl(config, image), toUrl(config, source));
+    lastScreenShot.set(screenshot);
+    return screenshot;
   }
 
   @CheckReturnValue
@@ -338,6 +342,12 @@ public class ScreenShotLaboratory {
     synchronized (allScreenshots) {
       return allScreenshots.isEmpty() ? null : allScreenshots.get(allScreenshots.size() - 1);
     }
+  }
+
+  @CheckReturnValue
+  @Nullable
+  public Screenshot getLastScreenShot() {
+    return lastScreenShot.get();
   }
 
   @CheckReturnValue

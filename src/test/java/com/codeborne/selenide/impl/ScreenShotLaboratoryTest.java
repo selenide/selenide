@@ -307,6 +307,14 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
+  void gettingLastScreenshotReturnsNotNull() {
+    config.screenshots(true);
+    screenshots.takeScreenshot(driver, true, true);
+
+    assertThat(ScreenShotLaboratory.getInstance().getLastScreenShot()).isNotNull();
+  }
+
+  @Test
   void printHtmlPath_if_savePageSourceIsEnabled() throws IOException {
     config.savePageSource(false);
     config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
