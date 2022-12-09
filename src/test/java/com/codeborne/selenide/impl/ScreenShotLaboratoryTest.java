@@ -311,7 +311,7 @@ final class ScreenShotLaboratoryTest {
     config.screenshots(true);
     screenshots.takeScreenshot(driver, true, true);
 
-    assertThat(ScreenShotLaboratory.getInstance().getLastScreenShot()).isNotNull();
+    assertThat(ScreenShotLaboratory.getInstance().getLastScreenShotAndPageSource()).isNotNull();
   }
 
   @Test

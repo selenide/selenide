@@ -346,7 +346,7 @@ public class ScreenShotLaboratory {
 
   @CheckReturnValue
   @Nullable
-  public Screenshot getLastScreenShot() {
+  public Screenshot getLastScreenShotAndPageSource() {
     return lastScreenShot.get();
   }
 
