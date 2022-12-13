@@ -4,14 +4,13 @@ import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.SetValue;
 import com.codeborne.selenide.impl.WebElementSource;
-import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
+import static com.codeborne.selenide.appium.WebdriverUnwrapper.isMobile;
 import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Objects.requireNonNull;
 
@@ -22,7 +21,7 @@ public class AppiumSetValue implements Command<SelenideElement> {
   @Nonnull
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    if (instanceOf(locator.driver(), AppiumDriver.class)) {
+    if (isMobile(locator.driver())) {
       WebElement element = locator.findAndAssertElementIsInteractable();
       CharSequence text = firstNonNull((CharSequence) requireNonNull(args)[0], "");
       element.clear();
