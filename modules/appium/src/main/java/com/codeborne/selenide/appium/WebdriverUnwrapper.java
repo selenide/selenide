@@ -1,6 +1,7 @@
 package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
+import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
@@ -13,6 +14,10 @@ import java.util.Optional;
  * Will be replaced by a better solution in Selenide.
  */
 public class WebdriverUnwrapper {
+  public static boolean isMobile(Driver driver) {
+    return instanceOf(driver, AppiumDriver.class);
+  }
+
   public static <T> boolean instanceOf(Driver driver, Class<T> klass) {
     return cast(driver, klass).isPresent();
   }

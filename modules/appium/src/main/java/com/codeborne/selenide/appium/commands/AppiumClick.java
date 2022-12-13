@@ -8,6 +8,7 @@ import com.codeborne.selenide.commands.Click;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Pause;
@@ -20,7 +21,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
+import static com.codeborne.selenide.appium.WebdriverUnwrapper.isMobile;
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
@@ -31,6 +32,10 @@ public class AppiumClick extends Click {
   @Override
   @Nullable
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+    if (!isMobile(locator.driver())) {
+      return super.execute(proxy, locator, args);
+    }
+
     WebElement webElement = findElement(locator);
 
     if (args == null || args.length == 0) {
@@ -92,9 +97,10 @@ public class AppiumClick extends Click {
   }
 
   private void perform(Driver driver, Sequence sequence) {
-    // TODO WTF? Why we do nothing if it is not AppiumDriver
-    WebdriverUnwrapper.cast(driver.getWebDriver(), AppiumDriver.class)
-      .ifPresent(it -> it.perform(singletonList(sequence)));
+    WebDriver webDriver = driver.getWebDriver();
+    AppiumDriver appiumDriver = WebdriverUnwrapper.cast(webDriver, AppiumDriver.class)
+      .orElseThrow(() -> new IllegalStateException("Not a mobile webdriver: " + webDriver));
+    appiumDriver.perform(singletonList(sequence));
   }
 
   private Sequence getSequenceToPerformTap(PointerInput finger, Point size, int offsetX, int offsetY) {
@@ -116,7 +122,7 @@ public class AppiumClick extends Click {
   @Nonnull
   @CheckReturnValue
   protected WebElement findElement(WebElementSource locator) {
-    if (instanceOf(locator.driver(), AppiumDriver.class)) {
+    if (isMobile(locator.driver())) {
       return locator.getWebElement();
     } else {
       return super.findElement(locator);
