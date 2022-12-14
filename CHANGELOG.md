@@ -1,7 +1,11 @@
 # Changelog
 
-## 6.10.3 (planned to 1x.12.2022)
-* 
+## 6.10.3 (released 14.12.2022)
+* #2062 don't trigger "change" event from `$.select*` if value is unchanged  --  thanks to Vicente Rossello Jaume for PR #2063
+* #2068 bump Selenium from 4.7.1 to 4.7.2
+* #2069 Bump LittleProxy from 2.0.14 to 2.0.15
+* #2066 Bump Netty from 4.1.85.Final to 4.1.86.Final
+* #2067 Bump slf4j from 2.0.5 to 2.0.6
 
 ## 6.10.2 (released 08.12.2022)
 * #2032 added chainable method $.press()  --  thanks to Amuthan Sakthivel for PR
