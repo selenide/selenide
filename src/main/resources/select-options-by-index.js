@@ -14,17 +14,11 @@
     return {disabledOptions: disabledOptionsIndexes};
   }
 
-  function getSelectedOptions(select) {
-    var result = []
-    for (var i = 0; i < select.options.length; i++) {
-      if (select.options[i].selected) {
-        result.push(i);
-      }
-    }
-    return result;
+  function getSelectedOptionsString(select) {
+    return Array.from(select.options).map(option => option.selected).join(",");
   }
 
-  var previousSelectedOptions = getSelectedOptions(select);
+  let previousSelectedOptions = getSelectedOptionsString(select);
   for (let index of indexes) {
     select.options[index].selected = 'selected';
   }
@@ -32,7 +26,7 @@
   const event = document.createEvent('HTMLEvents');
   event.initEvent('click', true, true);
   select.dispatchEvent(event);
-  if (JSON.stringify(getSelectedOptions(select)) != JSON.stringify(previousSelectedOptions)) {
+  if (getSelectedOptionsString(select) !== previousSelectedOptions) {
     event.initEvent('change', true, true);
     select.dispatchEvent(event);
   }
