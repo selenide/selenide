@@ -18,17 +18,25 @@
     return {disabledOptions: disabledOptionsValues};
   }
 
-  const previousSelectedIndex = select.selectedIndex;
-  var fireChangeEvent = false;
+  function getSelectedOptions(select) {
+    var result = []
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].selected) {
+        result.push(i);
+      }
+    }
+    return result;
+  }
+
+  var previousSelectedOptions = getSelectedOptions(select);
   for (let requestedValue of values) {
     optionByValue(requestedValue).selected = 'selected';
-    fireChangeEvent = fireChangeEvent || previousSelectedIndex !== select.selectedIndex;
   }
 
   const event = document.createEvent('HTMLEvents');
   event.initEvent('click', true, true);
   select.dispatchEvent(event);
-  if (fireChangeEvent) {
+  if (JSON.stringify(getSelectedOptions(select)) != JSON.stringify(previousSelectedOptions)) {
     event.initEvent('change', true, true);
     select.dispatchEvent(event);
   }

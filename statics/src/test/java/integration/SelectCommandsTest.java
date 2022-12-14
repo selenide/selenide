@@ -59,4 +59,16 @@ public class SelectCommandsTest extends IntegrationTest {
     $("body").click();
     $("#onblur").shouldHave(text("after blur"));
   }
+
+
+  @Test
+  void multipleSelectByIndexEventsTest() {
+    openFile("select_events_multiple.html");
+    $("select").selectOption(0, 1);
+    $("#onchange").shouldNotHave(text("after change"));
+
+    $("select").selectOption(1, 2);
+    $("#onchange").shouldHave(text("after change"));
+  }
+
 }
