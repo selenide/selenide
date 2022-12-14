@@ -1,8 +1,11 @@
 # Changelog
 
+## 6.10.3 (planned to 1x.12.2022)
+* 
+
 ## 6.10.2 (released 08.12.2022)
 * #2032 added chainable method $.press()  --  thanks to Amuthan Sakthivel for PR
-* #2050 fore change events by `$.select*` methods  --  thanks to Vicente Rossello Jaume for PR #2051
+* #2050 trigger change events by `$.select*` methods  --  thanks to Vicente Rossello Jaume for PR #2051
 * #2047 show $.selectOption() in reports friendly  --  see PR #2052
 * #2045 show sessionStorage and localStorage in reports friendly  --  see PR #2046
 * #2044 #2057 bump Selenium from 4.6.0 to 4.7.1
