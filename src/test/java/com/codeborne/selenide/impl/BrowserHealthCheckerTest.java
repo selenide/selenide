@@ -14,7 +14,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
 final class BrowserHealthCheckerTest {
-  private final WebDriver webdriver = mock(WebDriver.class);
+  private final WebDriver webdriver = mock();
   private final BrowserHealthChecker checker = new BrowserHealthChecker();
 
   @Test

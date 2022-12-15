@@ -54,7 +54,7 @@ final class TextTest {
   @Nonnull
   @CheckReturnValue
   private GetSelectedOptionText mockSelectedTextExtractor(String selectedText) {
-    GetSelectedOptionText command = mock(GetSelectedOptionText.class);
+    GetSelectedOptionText command = mock();
     when(command.execute(any(), any())).thenReturn(selectedText);
     return command;
   }

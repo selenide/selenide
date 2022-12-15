@@ -64,14 +64,14 @@ public final class SoftAssertsTest {
   }
 
   private ITestResult mockTestResult(Class<?> testClass, String methodName) throws Exception {
-    ITestResult result = mock(ITestResult.class);
-    IClass iClass = mock(IClass.class);
+    ITestResult result = mock();
+    IClass iClass = mock();
     when(result.getTestClass()).thenReturn(iClass);
     when(iClass.getName()).thenReturn(testClass.getName());
     doReturn(testClass).when(iClass).getRealClass();
     when(result.getName()).thenReturn(methodName);
-    ConstructorOrMethod constructorOrMethod = mock(ConstructorOrMethod.class);
-    ITestNGMethod method = mock(ITestNGMethod.class);
+    ConstructorOrMethod constructorOrMethod = mock();
+    ITestNGMethod method = mock();
     when(result.getMethod()).thenReturn(method);
     when(method.getConstructorOrMethod()).thenReturn(constructorOrMethod);
     when(constructorOrMethod.getMethod()).thenReturn(testClass.getMethod(methodName));
@@ -91,7 +91,7 @@ public final class SoftAssertsTest {
   void marksTestAsFailed_withAssertionError_containingAllErrors() throws Exception {
     ITestResult result = mockTestResult(SoftTest.class, "someTestMethod");
 
-    ErrorsCollector errorsCollector = mock(ErrorsCollector.class);
+    ErrorsCollector errorsCollector = mock();
     SelenideLogger.addListener(LISTENER_SOFT_ASSERT, errorsCollector);
     AssertionError softAssertionError = new AssertionError("fail1, fail2, fail3");
     doReturn(softAssertionError).when(errorsCollector).cleanAndGetAssertionError(any(), any());
@@ -117,7 +117,7 @@ public final class SoftAssertsTest {
   void shouldNotMarkTestAsFailed_ifThereWereNoErrorsDuringMethodExecution() throws Exception {
     ITestResult result = mockTestResult(SoftTest.class, "someTestMethod");
 
-    ErrorsCollector errorsCollector = mock(ErrorsCollector.class);
+    ErrorsCollector errorsCollector = mock();
     SelenideLogger.addListener(LISTENER_SOFT_ASSERT, errorsCollector);
     doNothing().when(errorsCollector)
       .cleanAndThrowAssertionError("com.codeborne.selenide.testng.SoftAssertsTest.SoftTest.someTestMethod", null);

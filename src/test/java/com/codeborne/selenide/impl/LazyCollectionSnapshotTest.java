@@ -14,7 +14,7 @@ import static org.mockito.Mockito.when;
 
 public class LazyCollectionSnapshotTest {
 
-  private final CollectionSource collectionSource = mock(CollectionSource.class);
+  private final CollectionSource collectionSource = mock();
 
   @BeforeEach
   void setUp() {

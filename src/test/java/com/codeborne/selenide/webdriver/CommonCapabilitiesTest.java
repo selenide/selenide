@@ -28,7 +28,7 @@ import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 
 final class CommonCapabilitiesTest {
   private final AbstractDriverFactory driverFactory = new DummyDriverFactory();
-  private final Proxy proxy = mock(Proxy.class);
+  private final Proxy proxy = mock();
 
   @Test
   void transferCapabilitiesFromConfiguration() {

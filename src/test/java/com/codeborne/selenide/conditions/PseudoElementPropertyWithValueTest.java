@@ -15,8 +15,8 @@ import static org.mockito.Mockito.when;
 
 final class PseudoElementPropertyWithValueTest {
 
-  private final Driver driver = mock(Driver.class);
-  private final WebElement element = mock(WebElement.class);
+  private final Driver driver = mock();
+  private final WebElement element = mock();
 
   @BeforeEach
   void setUp() {

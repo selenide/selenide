@@ -67,7 +67,7 @@ final class MatchTextTest {
   }
 
   private WebElement element(String text) {
-    WebElement element = mock(WebElement.class);
+    WebElement element = mock();
     when(element.getText()).thenReturn(text);
     return element;
   }

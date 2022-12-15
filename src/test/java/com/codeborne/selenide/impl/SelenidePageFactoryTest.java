@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 final class SelenidePageFactoryTest {
   private final TestPage page = new TestPage();
   private final Config config = new SelenideConfig();
-  private final WebDriver webDriver = mock(WebDriver.class);
+  private final WebDriver webDriver = mock();
   private final Driver driver = new DriverStub(config, new Browser("netscape navigator", false), webDriver, null);
   private final SelenidePageFactory pageFactory = new SelenidePageFactory();
   private final ClassLoader cl = getClass().getClassLoader();
@@ -56,8 +56,8 @@ final class SelenidePageFactoryTest {
 
   @Test
   void decoratesListOfSelenideElements() throws NoSuchFieldException {
-    WebElement element1 = mock(WebElement.class);
-    WebElement element2 = mock(WebElement.class);
+    WebElement element1 = mock();
+    WebElement element2 = mock();
     when(webDriver.findElements(any(By.class))).thenReturn(asList(element1, element2));
 
     Object decoratedField = pageFactory.decorate(cl, driver, null, getField("rows"), By.cssSelector("table tbody tr"));
@@ -84,8 +84,8 @@ final class SelenidePageFactoryTest {
   @Test
   @SuppressWarnings("unchecked")
   void decoratesListOfVanillaWebElements() throws NoSuchFieldException {
-    WebElement element1 = mock(WebElement.class);
-    WebElement element2 = mock(WebElement.class);
+    WebElement element1 = mock();
+    WebElement element2 = mock();
     when(webDriver.findElements(any(By.class))).thenReturn(asList(element1, element2));
 
     List<WebElement> elements = (List<WebElement>) pageFactory.decorate(cl, driver, null,

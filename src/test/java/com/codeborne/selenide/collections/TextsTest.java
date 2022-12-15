@@ -43,7 +43,7 @@ final class TextsTest {
   }
 
   private WebElement element(String text) {
-    WebElement webElement = mock(WebElement.class);
+    WebElement webElement = mock();
     when(webElement.getText()).thenReturn(text);
     return webElement;
   }

@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 final class BySelectorCollectionTest {
-  private final Driver driver = mock(Driver.class);
+  private final Driver driver = mock();
   private final WebElementSource webElement = new ElementFinder(driver, null, By.tagName("table"), 3);
 
   @Test

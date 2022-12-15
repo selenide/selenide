@@ -5,7 +5,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.impl.Alias;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Condition.visible;
@@ -20,7 +19,7 @@ final class ElementShouldNotTest {
   void testToString() {
     CheckResult checkResult = new CheckResult(REJECT, "visible:false");
     ElementShouldNot elementShould = new ElementShouldNot(driver, Alias.NONE, "by.name: selenide", "be ", visible, checkResult,
-      mock(WebElement.class), new Throwable("Error message"));
+      mock(), new Throwable("Error message"));
     assertThat(elementShould).hasMessage("Element should not be visible {by.name: selenide}" + lineSeparator() +
       "Element: '<null displayed:false></null>'" + lineSeparator() +
       "Actual value: visible:false" + lineSeparator() +

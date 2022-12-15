@@ -16,9 +16,9 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 final class AncestorCommandTest {
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
-  private final SelenideElement mockedElement = mock(SelenideElement.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
+  private final SelenideElement mockedElement = mock();
   private final Ancestor ancestorCommand = new Ancestor();
 
   @BeforeEach

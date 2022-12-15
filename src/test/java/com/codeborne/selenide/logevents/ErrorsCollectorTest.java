@@ -16,9 +16,9 @@ import static org.mockito.Mockito.when;
 
 final class ErrorsCollectorTest {
   private final ErrorsCollector errorsCollector = new ErrorsCollector();
-  private final LogEvent mockedInProgressEvent = mock(LogEvent.class);
-  private final LogEvent mockedPassedEvent = mock(LogEvent.class);
-  private final LogEvent mockedFailedEvent = mock(LogEvent.class);
+  private final LogEvent mockedInProgressEvent = mock();
+  private final LogEvent mockedPassedEvent = mock();
+  private final LogEvent mockedFailedEvent = mock();
   private final String defaultErrorMessage = "Couldn't find an element";
   private final StaleElementReferenceException defaultError = new StaleElementReferenceException(defaultErrorMessage);
   private final String defaultTestName = "ITestName";
@@ -80,7 +80,7 @@ final class ErrorsCollectorTest {
 
   @Test
   void failIfErrorMethodWhenMoreThanOneError() {
-    LogEvent mockedFailedEvent2 = mock(LogEvent.class);
+    LogEvent mockedFailedEvent2 = mock();
     StaleElementReferenceException failedEvent2Error = new StaleElementReferenceException("Second failure");
     when(mockedFailedEvent2.getStatus()).thenReturn(LogEvent.EventStatus.FAIL);
     when(mockedFailedEvent2.getError()).thenReturn(failedEvent2Error);
@@ -101,7 +101,7 @@ final class ErrorsCollectorTest {
 
   @Test
   void failIfErrorMethodWhenMethodThrewAnotherErrorInAdditionToSoftAsserts() {
-    LogEvent mockedFailedEvent2 = mock(LogEvent.class);
+    LogEvent mockedFailedEvent2 = mock();
     StaleElementReferenceException failedEvent2Error = new StaleElementReferenceException("Second failure");
     when(mockedFailedEvent2.getStatus()).thenReturn(LogEvent.EventStatus.FAIL);
     when(mockedFailedEvent2.getError()).thenReturn(failedEvent2Error);
