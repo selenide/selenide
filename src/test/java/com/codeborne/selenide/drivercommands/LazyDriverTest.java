@@ -22,10 +22,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 final class LazyDriverTest {
-  private final Config config = mock(Config.class);
+  private final Config config = mock();
   private WebDriver webdriver;
-  private final WebDriverFactory factory = mock(WebDriverFactory.class);
-  private final BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
+  private final WebDriverFactory factory = mock();
+  private final BrowserHealthChecker browserHealthChecker = mock();
   private final CreateDriverCommand createDriverCommand = new CreateDriverCommand(new DummyFileNamer("123_456_78"));
   private LazyDriver driver;
 
@@ -134,7 +134,7 @@ final class LazyDriverTest {
   }
 
   private Proxy mockProxy(String httpProxy) {
-    Proxy mockedProxy = mock(Proxy.class);
+    Proxy mockedProxy = mock();
     when(mockedProxy.getHttpProxy()).thenReturn(httpProxy);
     return mockedProxy;
   }

@@ -13,9 +13,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 final class GetPrecedingCommandTest {
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
-  private final SelenideElement mockedElement = mock(SelenideElement.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
+  private final SelenideElement mockedElement = mock();
 
   @Test
   void findsPrecedingElementUsingXpath() {

@@ -31,7 +31,7 @@ final class ExactTextsCaseSensitiveTest {
   void applyOnWrongSizeList() {
     ExactTextsCaseSensitive exactTextsCaseSensitive = new ExactTextsCaseSensitive("One", "Two", "Three");
 
-    assertThat(exactTextsCaseSensitive.test(singletonList(mock(WebElement.class))))
+    assertThat(exactTextsCaseSensitive.test(singletonList(mock())))
       .isFalse();
   }
 
@@ -81,7 +81,7 @@ final class ExactTextsCaseSensitiveTest {
     ExactTextsCaseSensitive exactTextsCaseSensitive = new ExactTextsCaseSensitive("One");
     Exception cause = new Exception("Exception method");
 
-    WebElement mockedWebElement = mock(WebElement.class);
+    WebElement mockedWebElement = mock();
     when(mockedWebElement.getText()).thenReturn("Hello");
 
     assertThatThrownBy(() ->
@@ -99,7 +99,7 @@ final class ExactTextsCaseSensitiveTest {
     ExactTextsCaseSensitive exactTextsCaseSensitive = new ExactTextsCaseSensitive("ONE");
     Exception cause = new Exception("Exception method");
 
-    WebElement mockedWebElement = mock(WebElement.class);
+    WebElement mockedWebElement = mock();
     when(mockedWebElement.getText()).thenReturn("One");
 
     assertThatThrownBy(() ->

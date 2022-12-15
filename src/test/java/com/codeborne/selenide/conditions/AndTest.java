@@ -20,8 +20,8 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.mock;
 
 final class AndTest {
-  private final Driver driver = mock(Driver.class);
-  private final WebElement element = mock(WebElement.class);
+  private final Driver driver = mock();
+  private final WebElement element = mock();
 
   @Test
   void ctorOfEmptyConditionsListThrowsException() {

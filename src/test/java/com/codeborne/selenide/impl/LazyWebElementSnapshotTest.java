@@ -11,7 +11,7 @@ import static org.mockito.Mockito.when;
 
 public class LazyWebElementSnapshotTest {
 
-  private final WebElementSource source = mock(WebElementSource.class);
+  private final WebElementSource source = mock();
 
   @Test
   void elementShouldBeCached() {

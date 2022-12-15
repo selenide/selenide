@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 final class AuthenticationFilterTest {
   private final AuthenticationFilter filter = new AuthenticationFilter();
   private final DefaultHttpRequest request = new DefaultHttpRequest(HTTP_1_1, GET, "/secured/page");
-  private final HttpMessageContents contents = mock(HttpMessageContents.class);
+  private final HttpMessageContents contents = mock();
   private final HttpMessageInfo info = info("https://your.domain.com/secured/page");
 
   @Test
@@ -104,7 +104,7 @@ final class AuthenticationFilterTest {
   }
 
   private HttpMessageInfo info(String url) {
-    HttpMessageInfo messageInfo = mock(HttpMessageInfo.class);
+    HttpMessageInfo messageInfo = mock();
     when(messageInfo.getUrl()).thenReturn(url);
     return messageInfo;
   }

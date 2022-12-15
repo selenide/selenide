@@ -11,9 +11,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class VisibleTest {
-  private final Driver driver = mock(Driver.class);
+  private final Driver driver = mock();
   private final Visible condition = new Visible();
-  private final WebElement element = mock(WebElement.class);
+  private final WebElement element = mock();
 
   @Test
   void negate() {

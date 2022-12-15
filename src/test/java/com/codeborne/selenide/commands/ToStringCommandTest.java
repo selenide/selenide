@@ -19,10 +19,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class ToStringCommandTest {
-  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final SelenideElement proxy = mock();
   private final Driver driver = new DriverStub();
-  private final WebElementSource locator = mock(WebElementSource.class);
-  private final WebElement mockedFoundElement = mock(WebElement.class);
+  private final WebElementSource locator = mock();
+  private final WebElement mockedFoundElement = mock();
   private final ToString toStringCommand = new ToString();
 
   @BeforeEach

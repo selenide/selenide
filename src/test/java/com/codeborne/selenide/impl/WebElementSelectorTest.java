@@ -30,14 +30,14 @@ import static org.mockito.Mockito.when;
 final class WebElementSelectorTest {
   private final WebElementSelector selector = new WebElementSelector();
   private final Browser browser = new Browser("netscape navigator", false);
-  private final JSWebDriver webDriver = mock(JSWebDriver.class);
-  private final WebElementSource parent = mock(WebElementSource.class);
+  private final JSWebDriver webDriver = mock();
+  private final WebElementSource parent = mock();
 
   @Test
   void findElement_byCss() {
     Config config = new SelenideConfig().selectorMode(CSS);
     Driver driver = new DriverStub(config, browser, webDriver, null);
-    WebElement div = mock(WebElement.class);
+    WebElement div = mock();
     when(webDriver.findElement(any())).thenReturn(div);
 
     assertThat(selector.findElement(driver, null, By.cssSelector("a.active"))).isSameAs(div);
@@ -49,7 +49,7 @@ final class WebElementSelectorTest {
   void findElement_byNonCss() {
     Config config = new SelenideConfig().selectorMode(Sizzle);
     Driver driver = new DriverStub(config, browser, webDriver, null);
-    WebElement div = mock(WebElement.class);
+    WebElement div = mock();
     when(webDriver.findElement(any())).thenReturn(div);
 
     assertThat(selector.findElement(driver, null, By.xpath("/div/h1"))).isSameAs(div);
@@ -62,7 +62,7 @@ final class WebElementSelectorTest {
     Config config = new SelenideConfig().selectorMode(Sizzle);
     Driver driver = new DriverStub(config, browser, webDriver, null);
 
-    WebElement div = mock(WebElement.class);
+    WebElement div = mock();
     when(webDriver.executeScript("return typeof Sizzle != 'undefined'")).thenReturn(true);
     when(webDriver.executeScript("return Sizzle(arguments[0])", "a.active:last")).thenReturn(asList(div));
 
@@ -76,7 +76,7 @@ final class WebElementSelectorTest {
 
     SelenideElement parentElement = mockElement("div", "the parent");
     when(parent.getWebElement()).thenReturn(parentElement);
-    WebElement div = mock(WebElement.class);
+    WebElement div = mock();
     when(webDriver.executeScript(anyString())).thenReturn(true);
     when(webDriver.executeScript(anyString(), any(), any())).thenReturn(asList(div));
 
@@ -91,7 +91,7 @@ final class WebElementSelectorTest {
   void findElements_byCss() {
     Config config = new SelenideConfig().selectorMode(CSS);
     Driver driver = new DriverStub(config, browser, webDriver, null);
-    List<WebElement> divs = asList(mock(WebElement.class), mock(WebElement.class));
+    List<WebElement> divs = asList(mock(), mock());
     when(webDriver.findElements(any())).thenReturn(divs);
 
     assertThat(selector.findElements(driver, null, By.cssSelector("a.active"))).isSameAs(divs);
@@ -103,7 +103,7 @@ final class WebElementSelectorTest {
   void findElements_byNonCss() {
     Config config = new SelenideConfig().selectorMode(Sizzle);
     Driver driver = new DriverStub(config, browser, webDriver, null);
-    List<WebElement> divs = asList(mock(WebElement.class), mock(WebElement.class));
+    List<WebElement> divs = asList(mock(), mock());
     when(webDriver.findElements(any())).thenReturn(divs);
 
     assertThat(selector.findElements(driver, null, By.xpath("/div/h1"))).isSameAs(divs);

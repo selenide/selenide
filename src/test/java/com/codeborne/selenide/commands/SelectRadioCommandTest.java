@@ -21,9 +21,9 @@ import static org.mockito.Mockito.when;
 
 final class SelectRadioCommandTest {
   private final DriverStub driver = new DriverStub();
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
-  private final Click click = mock(Click.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
+  private final Click click = mock();
   private final SelectRadio command = new SelectRadio(click);
 
   @BeforeEach
@@ -62,7 +62,7 @@ final class SelectRadioCommandTest {
   }
 
   private WebElement givenRadioInput(String selector, String value, boolean readonly) {
-    WebElement input = mock(WebElement.class);
+    WebElement input = mock();
     when(input.getAttribute("value")).thenReturn(value);
     if (readonly) {
       when(input.getAttribute("readonly")).thenReturn("true");

@@ -17,8 +17,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 final class SelenideProxyServerTest {
-  private final BrowserUpProxyServer bmp = mock(BrowserUpProxyServer.class);
-  private final Config config = mock(Config.class);
+  private final BrowserUpProxyServer bmp = mock();
+  private final Config config = mock();
   private final SelenideProxyServer proxyServer = new SelenideProxyServer(config, null, bmp);
 
   @Test

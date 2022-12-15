@@ -13,10 +13,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 final class ShouldNotBeCommandTest {
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
   private final ShouldNotBe command = new ShouldNotBe();
-  private final WebElement webElement = mock(WebElement.class);
+  private final WebElement webElement = mock();
 
   @BeforeEach
   void setup() {

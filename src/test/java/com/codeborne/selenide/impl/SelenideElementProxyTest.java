@@ -51,8 +51,8 @@ import static org.mockito.Mockito.when;
 final class SelenideElementProxyTest {
   private static final Logger log = LoggerFactory.getLogger(SelenideElementProxyTest.class);
 
-  private final RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
-  private final WebElement element = mock(WebElement.class);
+  private final RemoteWebDriver webdriver = mock();
+  private final WebElement element = mock();
   private final SelenideConfig config = new SelenideConfig().screenshots(false).timeout(1);
   private final SelenideDriver driver = new SelenideDriver(config, webdriver, null, new SharedDownloadsFolder("build/downloads/123"));
 
