@@ -29,7 +29,7 @@ final class ChromeDriverFactoryTest {
   private static final String CHROME_OPTIONS_ARGS = "chromeoptions.args";
   private static final String DOWNLOADS_FOLDER = Paths.get("blah", "downloads").toString();
 
-  private final Proxy proxy = mock(Proxy.class);
+  private final Proxy proxy = mock();
   private final SelenideConfig config = new SelenideConfig().downloadsFolder("build/should-not-be-used");
   private final File browserDownloadsFolder = new File(DOWNLOADS_FOLDER).getAbsoluteFile();
   private final Browser browser = new Browser(config.browser(), config.headless());

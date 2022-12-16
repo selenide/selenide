@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 
 final class ElementsCollectionTest {
   private final DriverStub driver = new DriverStub();
-  private final CollectionSource source = mock(CollectionSource.class);
+  private final CollectionSource source = mock();
   private final WebElement element1 = element("h1");
   private final WebElement element2 = element("h2");
   private final WebElement element3 = element("h3");
@@ -223,7 +223,7 @@ final class ElementsCollectionTest {
 
   @Test
   void doesNotWait_ifConditionAlreadyMatches() {
-    CollectionSource source = mock(CollectionSource.class);
+    CollectionSource source = mock();
     when(source.driver()).thenReturn(driver);
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(asList(element1, element2));
@@ -234,7 +234,7 @@ final class ElementsCollectionTest {
 
   @Test
   void doesNotWait_ifJavascriptExceptionHappened() {
-    CollectionSource source = mock(CollectionSource.class);
+    CollectionSource source = mock();
     when(source.driver()).thenReturn(driver);
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenThrow(new JavascriptException("ReferenceError: Sizzle is not defined"));
@@ -281,7 +281,7 @@ final class ElementsCollectionTest {
   }
 
   private WebElement element(String tag) {
-    WebElement element = mock(WebElement.class);
+    WebElement element = mock();
     when(element.getTagName()).thenReturn(tag);
     when(element.isDisplayed()).thenReturn(true);
     when(element.isEnabled()).thenReturn(true);

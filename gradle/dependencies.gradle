@@ -4,13 +4,13 @@ ext {
   jettyVersion = '9.4.50.v20221201'
   nettyVersion = '4.1.86.Final'
   assertjVersion = '3.23.1'
-  mockitoVersion = '4.9.0'
+  mockitoVersion = '4.10.0'
   slf4jVersion = '2.0.6'
   browserupProxyVersion = '2.2.6'
   littleProxyVersion = '2.0.15'
   commonsFileuploadVersion = '1.4'
   jabelVersion = '1.0.0'
-  byteBuddyVersion = '1.12.19'
+  byteBuddyVersion = '1.12.20'
   archunitVersion = '1.0.1'
 }
 

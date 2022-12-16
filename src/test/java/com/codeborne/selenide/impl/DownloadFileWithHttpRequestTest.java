@@ -41,8 +41,8 @@ final class DownloadFileWithHttpRequestTest {
 
   @Test
   void addsUserAgentWhenDownloadingFile() {
-    Driver driver = mock(Driver.class);
-    HttpGet httpGet = mock(HttpGet.class);
+    Driver driver = mock();
+    HttpGet httpGet = mock();
     when(driver.hasWebDriverStarted()).thenReturn(true);
     when(driver.getUserAgent()).thenReturn("This is Chrome, baby");
 
@@ -53,8 +53,8 @@ final class DownloadFileWithHttpRequestTest {
 
   @Test
   void doesNotAddUserAgentIfBrowserNotStarted() {
-    Driver driver = mock(Driver.class);
-    HttpGet httpGet = mock(HttpGet.class);
+    Driver driver = mock();
+    HttpGet httpGet = mock();
 
     download.addHttpHeaders(driver, httpGet);
 
@@ -63,7 +63,7 @@ final class DownloadFileWithHttpRequestTest {
 
   @Test
   void shouldNotAddCookieIfBrowserIsNotOpened() {
-    Driver driver = mock(Driver.class);
+    Driver driver = mock();
 
     HttpContext httpContext = download.createHttpContext(driver);
 
@@ -74,7 +74,7 @@ final class DownloadFileWithHttpRequestTest {
   void shouldAddAllCookiesFromOpenedBrowser() {
     WebDriver webDriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
     when(webDriver.manage().getCookies()).thenReturn(new HashSet<>(singletonList(new Cookie("jsessionid", "123456789"))));
-    Driver driver = mock(Driver.class);
+    Driver driver = mock();
     when(driver.hasWebDriverStarted()).thenReturn(true);
     when(driver.getWebDriver()).thenReturn(webDriver);
 
@@ -109,7 +109,7 @@ final class DownloadFileWithHttpRequestTest {
   }
 
   private HttpResponse responseWithHeaders(Header... headers) {
-    HttpResponse response = mock(HttpResponse.class);
+    HttpResponse response = mock();
     when(response.getHeaders()).thenReturn(headers);
     return response;
   }

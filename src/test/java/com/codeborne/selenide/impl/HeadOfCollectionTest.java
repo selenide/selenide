@@ -10,10 +10,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class HeadOfCollectionTest {
-  private final WebElement element1 = mock(WebElement.class);
-  private final WebElement element2 = mock(WebElement.class);
-  private final WebElement element3 = mock(WebElement.class);
-  private final CollectionSource originalCollection = mock(CollectionSource.class);
+  private final WebElement element1 = mock();
+  private final WebElement element2 = mock();
+  private final WebElement element3 = mock();
+  private final CollectionSource originalCollection = mock();
 
   @BeforeEach
   void setUp() {

@@ -68,13 +68,13 @@ class RequestMatchersTest {
   }
 
   private HttpRequest request(HttpMethod method) {
-    HttpRequest request = mock(HttpRequest.class);
+    HttpRequest request = mock();
     when(request.method()).thenReturn(method);
     return request;
   }
 
   private HttpMessageInfo info(String url) {
-    HttpMessageInfo info = mock(HttpMessageInfo.class);
+    HttpMessageInfo info = mock();
     when(info.getUrl()).thenReturn(url);
     return info;
   }

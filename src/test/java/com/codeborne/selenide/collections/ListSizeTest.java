@@ -3,7 +3,6 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static java.util.Collections.emptyList;
@@ -21,13 +20,13 @@ final class ListSizeTest {
 
   @Test
   void applyWithWrongSizeList() {
-    assertThat(new ListSize(10).test(singletonList(mock(WebElement.class))))
+    assertThat(new ListSize(10).test(singletonList(mock())))
       .isFalse();
   }
 
   @Test
   void applyWithCorrectListSize() {
-    assertThat(new ListSize(1).test(singletonList(mock(WebElement.class))))
+    assertThat(new ListSize(1).test(singletonList(mock())))
       .isTrue();
   }
 

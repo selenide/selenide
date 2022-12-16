@@ -12,8 +12,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class MatchAttributeWithValueTest {
-  private final Driver driver = mock(Driver.class);
-  private final WebElement element = mock(WebElement.class);
+  private final Driver driver = mock();
+  private final WebElement element = mock();
 
   @BeforeEach
   void setUp() {

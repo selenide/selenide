@@ -25,7 +25,7 @@ public class Mocks {
   @Nonnull
   @CheckReturnValue
   public static SelenideElement mockElement(String tag, String text) {
-    SelenideElement element = mock(SelenideElement.class);
+    SelenideElement element = mock();
     when(element.getTagName()).thenReturn(tag);
     when(element.getText()).thenReturn(text);
     return element;
@@ -34,7 +34,7 @@ public class Mocks {
   @Nonnull
   @CheckReturnValue
   public static WebElement elementWithAttribute(String name, String value) {
-    WebElement element = mock(WebElement.class);
+    WebElement element = mock();
     when(element.getAttribute(name)).thenReturn(value);
     return element;
   }
@@ -70,7 +70,7 @@ public class Mocks {
   @Nonnull
   @CheckReturnValue
   public static WebElement mockWebElement(String tag, String text) {
-    WebElement element = mock(WebElement.class);
+    WebElement element = mock();
     when(element.getTagName()).thenReturn(tag);
     when(element.getText()).thenReturn(text);
     when(element.isDisplayed()).thenReturn(true);
@@ -81,10 +81,10 @@ public class Mocks {
   @Nonnull
   @CheckReturnValue
   public static CollectionSource mockCollection(String description, WebElement... elements) {
-    Driver driver = mock(Driver.class);
+    Driver driver = mock();
     when(driver.config()).thenReturn(new SelenideConfig());
 
-    CollectionSource collection = mock(CollectionSource.class);
+    CollectionSource collection = mock();
     when(collection.driver()).thenReturn(driver);
     when(collection.getSearchCriteria()).thenReturn(description);
     when(collection.shortDescription()).thenReturn(description);

@@ -23,23 +23,23 @@ class FrameByIdOrNameTest {
 
   @Test
   void apply_shouldIgnore_noSuchFrameException() {
-    WebDriver webdriver = mock(WebDriver.class);
+    WebDriver webdriver = mock();
     doThrow(new NoSuchFrameException("No frame element found by name or id paymentFrame")).when(webdriver).findElement(any());
     assertThat(new FrameByIdOrName("paymentFrame").apply(webdriver)).isNull();
   }
 
   @Test
   void apply_shouldIgnore_noSuchElementException() {
-    WebDriver webdriver = mock(WebDriver.class);
+    WebDriver webdriver = mock();
     doThrow(new NoSuchElementException("no such element: Unable to locate element: ...")).when(webdriver).findElement(any());
     assertThat(new FrameByIdOrName("paymentFrame").apply(webdriver)).isNull();
   }
 
   @Test
   void apply_switchesToFrame_ifFrameIsFound() {
-    WebDriver webdriver = mock(WebDriver.class);
-    WebElement frame = mock(WebElement.class);
-    TargetLocator targetLocator = mock(TargetLocator.class);
+    WebDriver webdriver = mock();
+    WebElement frame = mock();
+    TargetLocator targetLocator = mock();
     when(webdriver.switchTo()).thenReturn(targetLocator);
     when(webdriver.findElement(any())).thenReturn(frame);
     when(targetLocator.frame(any(WebElement.class))).thenReturn(webdriver);

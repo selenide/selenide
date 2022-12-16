@@ -15,9 +15,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class ExistsCommandTest {
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
-  private final WebElement element = mock(WebElement.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
+  private final WebElement element = mock();
   private final Exists existsCommand = new Exists();
 
   @Test

@@ -13,10 +13,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 final class GetParentCommandTest {
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
-  private final SelenideElement webElement = mock(SelenideElement.class);
-  private final Find find = mock(Find.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
+  private final SelenideElement webElement = mock();
+  private final Find find = mock();
 
   @Test
   void findsParentElementUsingXpath() {

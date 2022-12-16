@@ -15,10 +15,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 final class ShouldHaveCommandTest {
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
   private final ShouldHave shouldHaveCommand = new ShouldHave();
-  private final WebElement mockedFoundElement = mock(WebElement.class);
+  private final WebElement mockedFoundElement = mock();
 
   @BeforeEach
   void setup() {

@@ -11,9 +11,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class HiddenTest {
-  private final Driver driver = mock(Driver.class);
+  private final Driver driver = mock();
   private final Hidden condition = new Hidden();
-  private final WebElement element = mock(WebElement.class);
+  private final WebElement element = mock();
 
   @Test
   void negate() {

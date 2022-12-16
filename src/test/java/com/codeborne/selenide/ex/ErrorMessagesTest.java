@@ -15,7 +15,7 @@ final class ErrorMessagesTest {
   @RegisterExtension
   private static final UseLocaleExtension useLocale = new UseLocaleExtension("en");
 
-  private final ChromeDriver webDriver = mock(ChromeDriver.class);
+  private final ChromeDriver webDriver = mock();
   private final SelenideConfig config = new SelenideConfig().reportsFolder("build/reports/tests");
 
   @BeforeEach

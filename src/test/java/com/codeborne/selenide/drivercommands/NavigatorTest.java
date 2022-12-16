@@ -25,11 +25,11 @@ import static org.mockito.Mockito.mock;
 
 final class NavigatorTest {
   private final Navigator navigator = new Navigator();
-  private final SelenideDriver selenideDriver = mock(SelenideDriver.class);
-  private final WebDriver driver = mock(WebDriver.class);
-  private final WebDriver.Navigation navigation = mock(WebDriver.Navigation.class);
-  private final SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
-  private final AuthenticationFilter authenticationFilter = mock(AuthenticationFilter.class);
+  private final SelenideDriver selenideDriver = mock();
+  private final WebDriver driver = mock();
+  private final WebDriver.Navigation navigation = mock();
+  private final SelenideProxyServer selenideProxy = mock();
+  private final AuthenticationFilter authenticationFilter = mock();
   private final SelenideConfig config = new SelenideConfig().fileDownload(HTTPGET);
 
   @BeforeEach
@@ -103,7 +103,7 @@ final class NavigatorTest {
 
   @Test
   void open_addsEventToLog() {
-    LogEventListener listener = mock(LogEventListener.class);
+    LogEventListener listener = mock();
     SelenideLogger.addListener("listener-01", listener);
 
     navigator.open(selenideDriver, "https://some.com/login");
