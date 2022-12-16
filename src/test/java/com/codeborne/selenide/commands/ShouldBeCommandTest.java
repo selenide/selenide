@@ -15,10 +15,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 final class ShouldBeCommandTest {
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
   private final ShouldBe command = new ShouldBe();
-  private final WebElement webElement = mock(WebElement.class);
+  private final WebElement webElement = mock();
 
   @BeforeEach
   void setup() {

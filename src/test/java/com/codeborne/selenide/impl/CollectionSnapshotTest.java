@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 final class CollectionSnapshotTest {
 
-  private final CollectionSource originalCollection = mock(CollectionSource.class);
+  private final CollectionSource originalCollection = mock();
 
   @AfterEach
   void verifyNoMoreInteractionsOnOriginalCollection() {
@@ -28,8 +28,8 @@ final class CollectionSnapshotTest {
 
   @Test
   void getOriginalCollectionSnapshotElements() {
-    WebElement mockedWebElement1 = mock(WebElement.class);
-    WebElement mockedWebElement2 = mock(WebElement.class);
+    WebElement mockedWebElement1 = mock();
+    WebElement mockedWebElement2 = mock();
 
     List<WebElement> originalCollectionElements = asList(mockedWebElement1, mockedWebElement2);
     when(originalCollection.getElements()).thenReturn(originalCollectionElements);
@@ -48,7 +48,7 @@ final class CollectionSnapshotTest {
 
   @Test
   void getOriginalCollectionSnapshotElement() {
-    WebElement mockedWebElement = mock(WebElement.class);
+    WebElement mockedWebElement = mock();
 
     when(originalCollection.getElements()).thenReturn(singletonList(mockedWebElement));
 
@@ -58,8 +58,8 @@ final class CollectionSnapshotTest {
 
   @Test
   void description() {
-    WebElement mockedWebElement1 = mock(WebElement.class);
-    WebElement mockedWebElement2 = mock(WebElement.class);
+    WebElement mockedWebElement1 = mock();
+    WebElement mockedWebElement2 = mock();
 
     when(originalCollection.description()).thenReturn("Collection description");
     when(originalCollection.getElements()).thenReturn(asList(mockedWebElement1, mockedWebElement2));
@@ -75,7 +75,7 @@ final class CollectionSnapshotTest {
 
   @Test
   void driver() {
-    Driver driver = mock(Driver.class);
+    Driver driver = mock();
 
     when(originalCollection.driver()).thenReturn(driver);
 

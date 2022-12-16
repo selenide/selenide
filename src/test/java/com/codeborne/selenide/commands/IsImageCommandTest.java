@@ -9,9 +9,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class IsImageCommandTest {
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
-  private final SelenideElement mockedElement = mock(SelenideElement.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
+  private final SelenideElement mockedElement = mock();
   private final IsImage command = new IsImage();
 
   @Test

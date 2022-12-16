@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 class ExactTextCaseSensitiveTest {
 
   private final Driver driver = new DriverStub();
-  private final WebElement element = mock(WebElement.class);
+  private final WebElement element = mock();
 
   private final ExactTextCaseSensitive condition = new ExactTextCaseSensitive("John Malkovich");
 

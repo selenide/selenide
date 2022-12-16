@@ -25,8 +25,8 @@ final class WebElementWrapperTest {
   private final Driver driver = new DriverStub(config, new Browser("firefox", false), webDriver, null);
   private final WebElement element = createWebElement();
 
-  private WebElement createWebElement() {
-    WebElement element = mock(WebElement.class);
+  private static WebElement createWebElement() {
+    WebElement element = mock();
     when(element.getTagName()).thenReturn("h2");
     when(element.toString()).thenReturn("webElement");
     when(element.isDisplayed()).thenReturn(true);

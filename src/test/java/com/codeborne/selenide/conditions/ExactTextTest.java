@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 class ExactTextTest {
   private final Driver driver = new DriverStub();
-  private final WebElement element = mock(WebElement.class);
+  private final WebElement element = mock();
 
   private final ExactText condition = new ExactText("John Malkovich");
 

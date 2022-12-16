@@ -67,7 +67,7 @@ final class CleanupTest {
 
   @Test
   void shouldNotEvenCallGetMessageForAssertionErrors() {
-    AssertionError error = mock(AssertionError.class);
+    AssertionError error = mock();
     assertThat(Cleanup.of.isInvalidSelectorError(error)).isFalse();
     verify(error, never()).getMessage();
     verify(error, never()).getCause();

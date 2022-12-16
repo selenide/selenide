@@ -3,7 +3,6 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static java.util.Arrays.asList;
@@ -16,19 +15,19 @@ import static org.mockito.Mockito.mock;
 final class SizeLessThanOrEqualTest {
   @Test
   void applyWithWrongSizeList() {
-    assertThat(new SizeLessThanOrEqual(1).test(asList(mock(WebElement.class), mock(WebElement.class))))
+    assertThat(new SizeLessThanOrEqual(1).test(asList(mock(), mock())))
       .isFalse();
   }
 
   @Test
   void applyWithSameSize() {
-    assertThat(new SizeLessThanOrEqual(1).test(singletonList(mock(WebElement.class))))
+    assertThat(new SizeLessThanOrEqual(1).test(singletonList(mock())))
       .isTrue();
   }
 
   @Test
   void applyWithLessSize() {
-    assertThat(new SizeLessThanOrEqual(2).test(singletonList(mock(WebElement.class))))
+    assertThat(new SizeLessThanOrEqual(2).test(singletonList(mock())))
       .isTrue();
   }
 

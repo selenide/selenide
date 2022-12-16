@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 final class WebDriverThreadLocalContainerTest {
-  private final BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
+  private final BrowserHealthChecker browserHealthChecker = mock();
   private final WebDriverThreadLocalContainer container = new WebDriverThreadLocalContainer(browserHealthChecker);
 
   @BeforeEach
@@ -142,10 +142,10 @@ final class WebDriverThreadLocalContainerTest {
     @CheckReturnValue
     @Nonnull
     public WebDriver createDriver(@Nonnull Capabilities capabilities) {
-      WebDriver webdriver = mock(WebDriver.class);
-      WebDriver.Options options = mock(WebDriver.Options.class);
+      WebDriver webdriver = mock();
+      WebDriver.Options options = mock();
       when(webdriver.manage()).thenReturn(options);
-      when(options.timeouts()).thenReturn(mock(WebDriver.Timeouts.class));
+      when(options.timeouts()).thenReturn(mock());
       return webdriver;
     }
   }

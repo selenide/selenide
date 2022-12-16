@@ -32,14 +32,14 @@ import static org.mockito.Mockito.when;
 
 final class DownloadFileTest {
   private final SelenideConfig config = new SelenideConfig();
-  private final Driver driver = mock(Driver.class);
-  private final DownloadFileWithHttpRequest httpget = mock(DownloadFileWithHttpRequest.class);
-  private final DownloadFileWithProxyServer proxy = mock(DownloadFileWithProxyServer.class);
-  private final DownloadFileToFolder folder = mock(DownloadFileToFolder.class);
+  private final Driver driver = mock();
+  private final DownloadFileWithHttpRequest httpget = mock();
+  private final DownloadFileWithProxyServer proxy = mock();
+  private final DownloadFileToFolder folder = mock();
   private final DownloadFile command = new DownloadFile(httpget, proxy, folder);
-  private final SelenideElement seLink = mock(SelenideElement.class);
-  private final WebElementSource linkWithHref = mock(WebElementSource.class);
-  private final WebElement link = mock(WebElement.class);
+  private final SelenideElement seLink = mock();
+  private final WebElementSource linkWithHref = mock();
+  private final WebElement link = mock();
   private final File file = new File("some-file.yxy").getAbsoluteFile();
 
   @BeforeEach
@@ -65,7 +65,7 @@ final class DownloadFileTest {
   @Test
   void canDownloadFile_withProxyServer() throws IOException {
     config.proxyEnabled(true).fileDownload(PROXY);
-    SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
+    SelenideProxyServer selenideProxy = mock();
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, selenideProxy));
     when(proxy.download(any(), any(), anyLong(), any(), any())).thenReturn(file);
 

@@ -17,10 +17,10 @@ import static org.mockito.Mockito.when;
 
 final class SelenideTargetLocatorTest {
   private final Config config = new SelenideConfig();
-  private final WebDriver webdriver = mock(WebDriver.class);
+  private final WebDriver webdriver = mock();
   private final DriverStub driver = new DriverStub(config, new Browser("netscape navigator", true), webdriver, null);
   private final SelenideTargetLocator switchTo = new SelenideTargetLocator(driver);
-  private final TargetLocator targetLocator = mock(TargetLocator.class);
+  private final TargetLocator targetLocator = mock();
 
   @BeforeEach
   void setUp() {

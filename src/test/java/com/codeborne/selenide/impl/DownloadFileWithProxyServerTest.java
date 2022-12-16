@@ -38,9 +38,9 @@ final class DownloadFileWithProxyServerTest {
   private final DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter, windowsCloser);
   private final SelenideConfig config = new SelenideConfig();
   private final WebDriver webdriver = new DummyWebDriver();
-  private final SelenideProxyServer proxy = mock(SelenideProxyServer.class);
-  private final WebElementSource linkWithHref = mock(WebElementSource.class);
-  private final WebElement link = mock(WebElement.class);
+  private final SelenideProxyServer proxy = mock();
+  private final WebElementSource linkWithHref = mock();
+  private final WebElement link = mock();
   private final FileDownloadFilter filter = spy(new FileDownloadFilter(config));
 
   @BeforeEach
@@ -97,7 +97,7 @@ final class DownloadFileWithProxyServerTest {
   @Test
   void proxyServerShouldBeStarted() {
     SelenideConfig config = new SelenideConfig().proxyEnabled(true).fileDownload(PROXY);
-    when(linkWithHref.driver()).thenReturn(new DriverStub(config, mock(Browser.class), new DummyWebDriver(), null));
+    when(linkWithHref.driver()).thenReturn(new DriverStub(config, mock(), new DummyWebDriver(), null));
 
     assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), click()))
       .isInstanceOf(IllegalStateException.class)
