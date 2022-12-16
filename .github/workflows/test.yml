@@ -32,7 +32,7 @@ jobs:
           name: test-report-unit
           path: build/reports/
 
-  run-android-tests-job:
+  run-android-tests:
     runs-on: macOS-11
     env:
       APPIUM_TEST_SERVER_PORT: 4723
@@ -90,8 +90,7 @@ jobs:
             build/reports/
             appium.log
 
-
-  run-ios-tests-job:
+  run-ios-tests:
     runs-on: macOS-11
     env:
       APPIUM_TEST_SERVER_PORT: 4723
@@ -157,3 +156,18 @@ jobs:
           path: |
             build/reports/
             appium.log
+
+  auto-merge-dependabot:
+    name: 🤖 Auto merge dependabot PR
+    timeout-minutes: 10
+    needs: [run-unit-tests, run-ios-tests, run-android-tests]
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - name: 🤖 Merge PR from dependabot
+        uses: fastify/github-action-merge-dependabot@v3.5.3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
