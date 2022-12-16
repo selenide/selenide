@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -38,6 +39,9 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
+    if (SystemUtils.IS_OS_WINDOWS) {
+      closeWebDriver();
+    }
     Configuration.fileDownload = FOLDER;
     openFile("page_with_uploads.html");
     timeout = 500;
