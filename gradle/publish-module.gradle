@@ -80,7 +80,7 @@ publishing {
 if (project.hasProperty("signing.keyId")) {
   apply plugin: 'signing'
 
-  signing {
+  tasks.named("signing").configure {
     afterEvaluate {
       sign publishing.publications.mavenJava
     }

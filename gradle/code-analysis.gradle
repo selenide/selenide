@@ -5,17 +5,20 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.7.5"
+    classpath "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.13"
   }
 }
 
 subprojects {
+
+  apply plugin: "com.github.spotbugs"
+
   spotbugs {
     effort = 'max'
     excludeFilter = rootProject.file('config/spotbugs/excludeFilter.xml')
   }
 
-  spotbugsMain {
+  tasks.named('spotbugsMain').configure {
     reports {
       xml { required = true }
       html {
@@ -26,7 +29,7 @@ subprojects {
     }
   }
 
-  spotbugsTest {
+  tasks.named('spotbugsTest').configure {
     reports {
       xml { required = true }
       html {
@@ -37,12 +40,12 @@ subprojects {
     }
   }
 
-  tasks.withType(Checkstyle) {
+  tasks.withType(Checkstyle).configureEach {
     maxWarnings = 0
     showViolations = true
     reports {
-      xml.enabled(System.getenv('CI') != null)
-      html.enabled(System.getenv('CI') == null)
+      xml.required = System.getenv('CI') != null
+      html.required = System.getenv('CI') == null
     }
   }
 
