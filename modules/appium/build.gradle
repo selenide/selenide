@@ -14,8 +14,8 @@ tasks.withType(Test) {
   useJUnitPlatform()
 }
 
-apply from: file('gradle/code-analysis.gradle')
-apply from: file('gradle/compilation.gradle')
-apply from: file('gradle/dependencies.gradle')
-apply from: file('gradle/deploy.gradle')
-apply from: file('gradle/tests.gradle')
+apply from: 'gradle/code-analysis.gradle'
+apply from: 'gradle/compilation.gradle'
+apply from: 'gradle/dependencies.gradle'
+apply from: 'gradle/deploy.gradle'
+apply from: 'gradle/tests.gradle'
