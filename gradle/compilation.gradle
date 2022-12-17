@@ -3,13 +3,13 @@ subprojects {
     encoding = 'UTF-8'
   }
 
-  tasks.withType(JavaCompile) {
+  tasks.withType(JavaCompile).configureEach {
     options.encoding = encoding
     options.debug = true
     options.release = 8
     sourceCompatibility = 17
+    options.debugOptions.debugLevel = "source,lines,vars"
   }
-  compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 
   sourceCompatibility = '1.8'
 
@@ -19,7 +19,7 @@ subprojects {
     }
   }
 
-  tasks.withType(Javadoc) {
+  tasks.withType(Javadoc).configureEach {
     failOnError = false
   }
 }
