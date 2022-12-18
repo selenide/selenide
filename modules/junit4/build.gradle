@@ -10,7 +10,7 @@ dependencies {
   api "junit:junit:4.13.2"
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
   useJUnit()
 }
 
