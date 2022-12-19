@@ -1,7 +1,8 @@
 # Changelog
 
 ## 6.11.0 (planned to 3x.12.2022)
-* 
+see https://github.com/selenide/selenide/milestone/169?closed=1
+* #1817 add methods to copy and paste content  --  thanks to Evgenii Plugatar for PR #2027
 
 ## 6.10.3 (released 14.12.2022)
 * #2062 don't trigger "change" event from `$.select*` if value is unchanged  --  thanks to Vicente Rossello Jaume for PR #2063
