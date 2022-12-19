@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.11.0 (planned to 3x.12.2022)
+* 
+
 ## 6.10.3 (released 14.12.2022)
 * #2062 don't trigger "change" event from `$.select*` if value is unchanged  --  thanks to Vicente Rossello Jaume for PR #2063
 * #2068 bump Selenium from 4.7.1 to 4.7.2

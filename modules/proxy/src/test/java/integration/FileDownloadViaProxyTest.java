@@ -88,14 +88,6 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
   }
 
   @Test
-  void downloadExternalFile() throws FileNotFoundException {
-    open("https://the-internet.herokuapp.com/download");
-    File video = $(By.linkText("some-file.txt")).download(withExtension("txt"));
-    assertThat(video).hasName("some-file.txt");
-    assertThat(video).content().hasSizeGreaterThan(0);
-  }
-
-  @Test
   void downloadMissingFile() {
     timeout = 10;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("pdf")))

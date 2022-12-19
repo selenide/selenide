@@ -76,14 +76,6 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadExternalFile() throws FileNotFoundException {
-    open("https://the-internet.herokuapp.com/download");
-    File video = $(By.linkText("some-file.txt")).download(withExtension("txt"));
-
-    assertThat(video.getName()).isEqualTo("some-file.txt");
-  }
-
-  @Test
   void downloadMissingFile() {
     timeout = 100;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
