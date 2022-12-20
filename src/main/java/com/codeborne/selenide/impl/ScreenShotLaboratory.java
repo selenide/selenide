@@ -34,6 +34,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.impl.FileHelper.ensureParentFolderExists;
 import static com.codeborne.selenide.impl.Plugins.inject;
@@ -63,10 +64,9 @@ public class ScreenShotLaboratory {
   protected final List<File> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
 
-  protected ThreadLocal<Screenshot> lastScreenShot = new ThreadLocal<>();
   protected ThreadLocal<String> currentContext = withInitial(() -> "");
-  protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
-  protected ThreadLocal<List<File>> threadScreenshots = withInitial(ArrayList::new);
+  protected ThreadLocal<List<Screenshot>> currentContextScreenshots = new ThreadLocal<>();
+  protected ThreadLocal<List<Screenshot>> threadScreenshots = withInitial(ArrayList::new);
 
   protected ScreenShotLaboratory() {
     this(inject(Photographer.class), inject(PageSourceExtractor.class), new Clock());
@@ -122,7 +122,7 @@ public class ScreenShotLaboratory {
 
   private <T> T addToHistoryIfFile(T screenshot, OutputType<T> outputType) {
     if (outputType == OutputType.FILE) {
-      addToHistory((File) screenshot);
+      addToImageHistory((File) screenshot);
     }
     return screenshot;
   }
@@ -132,11 +132,8 @@ public class ScreenShotLaboratory {
   private Screenshot takeScreenShot(Config config, Driver driver, String fileName, boolean saveScreenshot, boolean savePageSource) {
     File source = savePageSource ? savePageSourceToFile(config, fileName, driver) : null;
     File image = saveScreenshot ? savePageImageToFile(config, fileName, driver) : null;
-    if (image != null) {
-      addToHistory(image);
-    }
     Screenshot screenshot = new Screenshot(toUrl(config, image), toUrl(config, source));
-    lastScreenShot.set(screenshot);
+    addToHistory(screenshot);
     return screenshot;
   }
 
@@ -244,7 +241,7 @@ public class ScreenShotLaboratory {
     return ifWebDriverStarted(driver, webDriver -> {
       try {
         return photographer.takeScreenshot(driver, FILE)
-          .map(this::addToHistory)
+          .map(this::addToImageHistory)
           .orElse(null);
       }
       catch (Exception e) {
@@ -255,14 +252,26 @@ public class ScreenShotLaboratory {
   }
 
   @Nonnull
-  protected File addToHistory(File screenshot) {
+  protected Optional<File> addToHistory(Screenshot screenshot) {
     if (currentContextScreenshots.get() != null) {
       currentContextScreenshots.get().add(screenshot);
     }
     synchronized (allScreenshots) {
-      allScreenshots.add(screenshot);
+      allScreenshots.add(screenshot.getImage() == null ? null : new File(screenshot.getImage()));
     }
     threadScreenshots.get().add(screenshot);
+    return screenshot.getImage() == null ? Optional.empty() : Optional.of(new File(screenshot.getImage()));
+  }
+
+  @Nonnull
+  protected File addToImageHistory(File screenshot) {
+    if (currentContextScreenshots.get() != null) {
+      currentContextScreenshots.get().add(new Screenshot(screenshot.getAbsolutePath(), null));
+    }
+    synchronized (allScreenshots) {
+      allScreenshots.add(screenshot);
+    }
+    threadScreenshots.get().add(new Screenshot(screenshot.getAbsolutePath(), null));
     return screenshot;
   }
 
@@ -308,10 +317,13 @@ public class ScreenShotLaboratory {
 
   @Nonnull
   public List<File> finishContext() {
-    List<File> result = currentContextScreenshots.get();
+    List<Screenshot> result = currentContextScreenshots.get();
     currentContext.set("");
     currentContextScreenshots.remove();
-    return result;
+    return result.stream().map(screenshot -> screenshot.getImage() != null ?
+        new File(screenshot.getImage()) :
+        null
+      ).collect(Collectors.toList());
   }
 
   @CheckReturnValue
@@ -325,14 +337,34 @@ public class ScreenShotLaboratory {
   @CheckReturnValue
   @Nonnull
   public List<File> getThreadScreenshots() {
-    List<File> screenshots = threadScreenshots.get();
+    List<File> screenshots = threadScreenshots.get()
+      .stream()
+      .map(screenshot -> screenshot.getImage() == null ? null :new File(screenshot.getImage()))
+      .collect(Collectors.toList());
+    return screenshots == null ? emptyList() : unmodifiableList(screenshots);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public List<Screenshot> threadScreenshots() {
+    List<Screenshot> screenshots = threadScreenshots.get();
     return screenshots == null ? emptyList() : unmodifiableList(screenshots);
   }
 
   @CheckReturnValue
   @Nonnull
   public List<File> getContextScreenshots() {
-    List<File> screenshots = currentContextScreenshots.get();
+    List<File> screenshots = currentContextScreenshots.get()
+      .stream()
+      .map(screenshot -> screenshot.getImage() == null ? null :new File(screenshot.getImage()))
+      .collect(Collectors.toList());
+    return screenshots == null ? emptyList() : unmodifiableList(screenshots);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public List<Screenshot> contextScreenshots() {
+    List<Screenshot> screenshots = currentContextScreenshots.get();
     return screenshots == null ? emptyList() : unmodifiableList(screenshots);
   }
 
@@ -345,28 +377,44 @@ public class ScreenShotLaboratory {
   }
 
   @CheckReturnValue
-  @Nullable
-  public Screenshot getLastScreenShotAndPageSource() {
-    return lastScreenShot.get();
+  @Nonnull
+  public Optional<File> getLastThreadScreenshot() {
+    List<File> screenshots = getThreadScreenshots();
+    return getLastScreenshot(screenshots);
   }
 
   @CheckReturnValue
   @Nonnull
-  public Optional<File> getLastThreadScreenshot() {
-    List<File> screenshots = threadScreenshots.get();
-    return getLastScreenshot(screenshots);
+  public Optional<Screenshot> lastThreadScreenshot() {
+    List<Screenshot> screenshots = threadScreenshots();
+    return lastScreenshot(screenshots);
   }
 
   @CheckReturnValue
   @Nonnull
   public Optional<File> getLastContextScreenshot() {
-    List<File> screenshots = currentContextScreenshots.get();
+    List<File> screenshots = getContextScreenshots();
     return getLastScreenshot(screenshots);
   }
 
   @CheckReturnValue
   @Nonnull
+  public Optional<Screenshot> lastContextScreenshot() {
+    List<Screenshot> screenshots = contextScreenshots();
+    return lastScreenshot(screenshots);
+  }
+
+  @CheckReturnValue
+  @Nonnull
   private Optional<File> getLastScreenshot(@Nullable List<File> screenshots) {
+    return screenshots == null || screenshots.isEmpty()
+      ? Optional.empty()
+      : Optional.of(screenshots.get(screenshots.size() - 1));
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  private Optional<Screenshot> lastScreenshot(@Nullable List<Screenshot> screenshots) {
     return screenshots == null || screenshots.isEmpty()
       ? Optional.empty()
       : Optional.of(screenshots.get(screenshots.size() - 1));

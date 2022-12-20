@@ -307,11 +307,88 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void gettingLastScreenshotReturnsNotNull() {
+  void screenshotAddedToThreadScreenshots() {
     config.screenshots(true);
     screenshots.takeScreenshot(driver, true, true);
 
-    assertThat(ScreenShotLaboratory.getInstance().getLastScreenShotAndPageSource()).isNotNull();
+    assertThat(screenshots.threadScreenshots()).size().isEqualTo(1);
+  }
+
+  @Test
+  void imageIsAccesableFromThreadScreenshots() {
+    config.screenshots(true);
+    Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
+
+    assertThat(screenshots.threadScreenshots().get(0).getImage()).isEqualTo(screenshot.getImage());
+  }
+
+  @Test
+  void inThreadScreenshotsImageValueIsNullIfFlagWasDisabledF() {
+    config.screenshots(true);
+    screenshots.takeScreenshot(driver, false, true);
+
+    assertThat(screenshots.threadScreenshots().get(0).getImage()).isNull();
+  }
+
+  @Test
+  void inThreadScreenshotsSourceValueIsNullIfFlagWasDisabledF() {
+    config.screenshots(true);
+    screenshots.takeScreenshot(driver, true, false);
+
+    assertThat(screenshots.threadScreenshots().get(0).getSource()).isNull();
+  }
+
+  @Test
+  void sourceIsAccesableFromThreadScreenshots() {
+    config.screenshots(true);
+    Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
+
+    assertThat(screenshots.threadScreenshots().get(0).getSource()).isEqualTo(screenshot.getSource());
+  }
+
+  @Test
+  void imageIsAccesableFromCurrentContextScreenshots() {
+    config.screenshots(true);
+    screenshots.startContext("ui/MyTest/test_some_method/");
+    Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
+
+    assertThat(screenshots.contextScreenshots().get(0).getImage()).isEqualTo(screenshot.getImage());
+  }
+
+  @Test
+  void inCurrentContextScreenshotsImageValueIsNullIfFlagWasDisabledF() {
+    config.screenshots(true);
+    screenshots.startContext("ui/MyTest/test_some_method/");
+    screenshots.takeScreenshot(driver, false, true);
+
+    assertThat(screenshots.contextScreenshots().get(0).getImage()).isNull();
+  }
+
+  @Test
+  void inCurrentContextScreenshotsSourceValueIsNullIfFlagWasDisabledF() {
+    config.screenshots(true);
+    screenshots.startContext("ui/MyTest/test_some_method/");
+    screenshots.takeScreenshot(driver, true, false);
+
+    assertThat(screenshots.contextScreenshots().get(0).getSource()).isNull();
+  }
+
+  @Test
+  void sourceIsAccesableFromCurrentContextScreenshots() {
+    config.screenshots(true);
+    screenshots.startContext("ui/MyTest/test_some_method/");
+    Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
+
+    assertThat(screenshots.contextScreenshots().get(0).getSource()).isEqualTo(screenshot.getSource());
+  }
+
+  @Test
+  void screenshotAddedToCurrentContextScreenshots() {
+    config.screenshots(true);
+    screenshots.startContext("ui/MyTest/test_some_method/");
+    screenshots.takeScreenshot(driver, true, true);
+
+    assertThat(screenshots.contextScreenshots()).size().isEqualTo(1);
   }
 
   @Test
