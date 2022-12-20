@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<select onchange="doOnchange()" multiple="multiple">
+  <option value="1" selected="selected">1</option>
+  <option value="2" selected="selected">2</option>
+  <option value="3">1</option>
+  <option value="4">2</option>
+</select>
+
+<p id="onchange">before change</p>
+
+<script>
+  function doOnchange() {
+    let x = document.getElementById("onchange");
+    x.innerHTML = "after change";
+  }
+
+</script>
+
+</body>
+</html>

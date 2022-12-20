@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class NotTest {
-  Condition originalCondition = mock(Condition.class);
+  Condition originalCondition = mock();
   Not notCondition;
 
   @BeforeEach
@@ -44,8 +44,8 @@ class NotTest {
 
   @Test
   void actualValue() {
-    Driver driver = mock(Driver.class);
-    WebElement webElement = mock(WebElement.class);
+    Driver driver = mock();
+    WebElement webElement = mock();
     when(originalCondition.check(any(Driver.class), any(WebElement.class)))
       .thenReturn(new CheckResult(REJECT, "original condition actual value"));
 
@@ -57,8 +57,8 @@ class NotTest {
 
   @Test
   void applyFalse() {
-    Driver driver = mock(Driver.class);
-    WebElement webElement = mock(WebElement.class);
+    Driver driver = mock();
+    WebElement webElement = mock();
     LocalDateTime timestamp = LocalDateTime.parse("2020-12-31T23:58:59");
     when(originalCondition.check(any(Driver.class), any(WebElement.class))).thenReturn(new CheckResult(ACCEPT, "displayed", timestamp));
 
@@ -68,8 +68,8 @@ class NotTest {
 
   @Test
   void applyTrue() {
-    Driver driver = mock(Driver.class);
-    WebElement webElement = mock(WebElement.class);
+    Driver driver = mock();
+    WebElement webElement = mock();
     LocalDateTime timestamp = LocalDateTime.parse("2020-12-31T23:58:59");
     when(originalCondition.check(any(Driver.class), any(WebElement.class))).thenReturn(new CheckResult(REJECT, "hidden", timestamp));
 

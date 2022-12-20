@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 final class ElementFinderTest {
-  private final Driver driver = mock(Driver.class);
+  private final Driver driver = mock();
 
   @Test
   void toStringForFinderByCssSelectors() {

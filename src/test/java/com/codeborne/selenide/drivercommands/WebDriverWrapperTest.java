@@ -13,7 +13,7 @@ final class WebDriverWrapperTest {
 
   @Test
   void close_closesTheBrowser() {
-    WebDriver webDriver = mock(WebDriver.class);
+    WebDriver webDriver = mock();
     WebDriverWrapper driver = new WebDriverWrapper(new SelenideConfig(), webDriver, null,
       new SharedDownloadsFolder("build/downloads/135"));
 

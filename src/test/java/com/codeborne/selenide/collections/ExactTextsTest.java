@@ -31,7 +31,7 @@ final class ExactTextsTest {
   void applyOnWrongSizeList() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
 
-    assertThat(exactTexts.test(singletonList(mock(WebElement.class))))
+    assertThat(exactTexts.test(singletonList(mock())))
       .isFalse();
   }
 
@@ -81,7 +81,7 @@ final class ExactTextsTest {
     ExactTexts exactTexts = new ExactTexts("One");
     Exception cause = new Exception("Exception method");
 
-    WebElement mockedWebElement = mock(WebElement.class);
+    WebElement mockedWebElement = mock();
     when(mockedWebElement.getText()).thenReturn("Hello");
 
     assertThatThrownBy(() ->

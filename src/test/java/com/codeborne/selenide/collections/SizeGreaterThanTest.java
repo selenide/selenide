@@ -4,7 +4,6 @@ import com.codeborne.selenide.Mocks;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebElement;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -22,13 +21,13 @@ final class SizeGreaterThanTest {
 
   @Test
   void applyWithWrongSizeList() {
-    assertThat(new SizeGreaterThan(10).test(singletonList(mock(WebElement.class))))
+    assertThat(new SizeGreaterThan(10).test(singletonList(mock())))
       .isFalse();
   }
 
   @Test
   void applyWithCorrectSizeGreaterThan() {
-    assertThat(new SizeGreaterThan(1).test(asList(mock(WebElement.class), mock(WebElement.class))))
+    assertThat(new SizeGreaterThan(1).test(asList(mock(), mock())))
       .isTrue();
   }
 

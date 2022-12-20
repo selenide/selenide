@@ -4,7 +4,6 @@ import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +16,6 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
-import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
@@ -85,14 +83,6 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
 
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед \"короед\"! Амперсанды &everywhere&&;$#`");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
-  }
-
-  @Test
-  void downloadExternalFile() throws FileNotFoundException {
-    open("https://the-internet.herokuapp.com/download");
-    File video = $(By.linkText("some-file.txt")).download(withExtension("txt"));
-    assertThat(video).hasName("some-file.txt");
-    assertThat(video).content().hasSizeGreaterThan(0);
   }
 
   @Test

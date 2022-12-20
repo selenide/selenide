@@ -52,28 +52,28 @@ final class OrTest {
       new Or("", asList(
         new SimpleCondition(true),
         new SimpleCondition(true)
-      )).check(mock(Driver.class), mock(WebElement.class)).verdict()
+      )).check(mock(), mock()).verdict()
     ).isEqualTo(ACCEPT);
 
     assertThat(
       new Or("", asList(
         new SimpleCondition(true),
         new SimpleCondition(false)
-      )).check(mock(Driver.class), mock(WebElement.class)).verdict()
+      )).check(mock(), mock()).verdict()
     ).isEqualTo(ACCEPT);
 
     assertThat(
       new Or("", asList(
         new SimpleCondition(false),
         new SimpleCondition(true)
-      )).check(mock(Driver.class), mock(WebElement.class)).verdict()
+      )).check(mock(), mock()).verdict()
     ).isEqualTo(ACCEPT);
 
     assertThat(
       new Or("", asList(
         new SimpleCondition(false),
         new SimpleCondition(false)
-      )).check(mock(Driver.class), mock(WebElement.class)).verdict()
+      )).check(mock(), mock()).verdict()
     ).isEqualTo(REJECT);
   }
 
@@ -83,28 +83,28 @@ final class OrTest {
       new Or("", asList(
         new SimpleCondition(true),
         new SimpleCondition(true)
-      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict()
+      )).negate().check(mock(), mock()).verdict()
     ).isEqualTo(REJECT);
 
     assertThat(
       new Or("", asList(
         new SimpleCondition(true),
         new SimpleCondition(false)
-      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict()
+      )).negate().check(mock(), mock()).verdict()
     ).isEqualTo(REJECT);
 
     assertThat(
       new Or("", asList(
         new SimpleCondition(false),
         new SimpleCondition(true)
-      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict()
+      )).negate().check(mock(), mock()).verdict()
     ).isEqualTo(REJECT);
 
     assertThat(
       new Or("", asList(
         new SimpleCondition(false),
         new SimpleCondition(false)
-      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict()
+      )).negate().check(mock(), mock()).verdict()
     ).isEqualTo(ACCEPT);
   }
 

@@ -12,9 +12,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class ExistTest {
-  private final Driver driver = mock(Driver.class);
+  private final Driver driver = mock();
   private final Exist condition = new Exist();
-  private final WebElement element = mock(WebElement.class);
+  private final WebElement element = mock();
 
   @Test
   void negate() {

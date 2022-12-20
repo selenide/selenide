@@ -64,7 +64,7 @@ final class WebDriverRunnerTest {
 
   @Test
   void allowsToSpecifyCustomWebDriverProgrammatically() {
-    RemoteWebDriver myDriver = mock(RemoteWebDriver.class);
+    RemoteWebDriver myDriver = mock();
     doReturn(mock(Navigation.class)).when(myDriver).navigate();
     WebDriverRunner.setWebDriver(myDriver);
 
@@ -75,7 +75,7 @@ final class WebDriverRunnerTest {
 
   @Test
   void userCanAddWebDriverListeners() {
-    WebDriverListener listener = mock(WebDriverListener.class);
+    WebDriverListener listener = mock();
     WebDriverRunner.addListener(listener);
     Configuration.browser = CustomWebDriverProvider.class.getName();
     open(url);

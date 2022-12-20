@@ -11,7 +11,7 @@ java {
   withSourcesJar()
 }
 
-jar {
+tasks.withType(Jar).configureEach {
   manifest {
     attributes(
       "Automatic-Module-Name": project.groupId + '.' + project.artifactId.replace('-', '.'),
@@ -19,12 +19,6 @@ jar {
       "Implementation-Version": archiveVersion,
       "Implementation-Vendor": "selenide.org")
   }
-}
-
-artifacts {
-  archives jar
-  archives sourcesJar
-  archives javadocJar
 }
 
 publishing {
@@ -80,7 +74,7 @@ publishing {
 if (project.hasProperty("signing.keyId")) {
   apply plugin: 'signing'
 
-  signing {
+  tasks.withType(Sign).configureEach {
     afterEvaluate {
       sign publishing.publications.mavenJava
     }

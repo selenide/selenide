@@ -19,12 +19,12 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 final class WindowsCloserTest {
-  private final WebDriver webdriver = mock(WebDriver.class);
+  private final WebDriver webdriver = mock();
   private final WindowsCloser windowsCloser = new WindowsCloser();
 
   @BeforeEach
   void setUp() {
-    when(webdriver.switchTo()).thenReturn(mock(WebDriver.TargetLocator.class));
+    when(webdriver.switchTo()).thenReturn(mock());
   }
 
   @Test
@@ -45,7 +45,7 @@ final class WindowsCloserTest {
 
   @Test
   void ignoresErrorIfWindowHasAlreadyBeenClosedMeanwhile() throws IOException {
-    WebDriver.TargetLocator targetLocator = mock(WebDriver.TargetLocator.class);
+    WebDriver.TargetLocator targetLocator = mock();
     doReturn(targetLocator).when(webdriver).switchTo();
     doThrow(new NoSuchWindowException("no window: tab-with-pdf")).when(targetLocator).window("tab-with-pdf");
 

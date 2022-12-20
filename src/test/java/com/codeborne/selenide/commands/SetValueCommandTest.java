@@ -15,11 +15,11 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 final class SetValueCommandTest {
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
-  private final Clear clear = mock(Clear.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
+  private final Clear clear = mock();
   private final SetValue command = new SetValue(clear);
-  private final WebElement mockedFoundElement = mock(WebElement.class);
+  private final WebElement mockedFoundElement = mock();
   private final DriverStub driver = new DriverStub();
 
   @BeforeEach

@@ -39,7 +39,7 @@ import static org.mockito.Mockito.when;
 
 final class ConditionTest {
   private final WebDriver webDriver = new DummyWebDriver();
-  private final SelenideProxyServer proxy = mock(SelenideProxyServer.class);
+  private final SelenideProxyServer proxy = mock();
   private final SelenideConfig config = new SelenideConfig().textCheck(PARTIAL_TEXT);
   private final Driver driver = new DriverStub(config, new Browser("opera", false), webDriver, proxy);
 
@@ -74,7 +74,7 @@ final class ConditionTest {
   }
 
   private WebElement elementWithVisibility(boolean isVisible) {
-    WebElement element = mock(WebElement.class);
+    WebElement element = mock();
     when(element.isDisplayed()).thenReturn(isVisible);
     return element;
   }
@@ -87,7 +87,7 @@ final class ConditionTest {
 
   @Test
   void elementExists_returnsFalse_ifItThrowsException() {
-    WebElement element = mock(WebElement.class);
+    WebElement element = mock();
     when(element.isDisplayed()).thenThrow(new StaleElementReferenceException("ups"));
     assertThat(exist.check(driver, element).verdict()).isEqualTo(REJECT);
   }
@@ -100,7 +100,7 @@ final class ConditionTest {
 
   @Test
   void elementIsHiddenWithStaleElementException() {
-    WebElement element = mock(WebElement.class);
+    WebElement element = mock();
     doThrow(new StaleElementReferenceException("Oooops")).when(element).isDisplayed();
     assertThat(hidden.check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
@@ -170,7 +170,7 @@ final class ConditionTest {
   }
 
   private WebElement elementWithCssStyle(String propertyName, String value) {
-    WebElement element = mock(WebElement.class);
+    WebElement element = mock();
     when(element.getCssValue(propertyName)).thenReturn(value);
     return element;
   }
@@ -187,7 +187,7 @@ final class ConditionTest {
   }
 
   private WebElement elementWithEnabled(boolean isEnabled) {
-    WebElement element = mock(WebElement.class);
+    WebElement element = mock();
     when(element.isEnabled()).thenReturn(isEnabled);
     return element;
   }
@@ -217,7 +217,7 @@ final class ConditionTest {
   }
 
   private WebElement elementWithSelected(boolean isSelected) {
-    WebElement element = mock(WebElement.class);
+    WebElement element = mock();
     when(element.isSelected()).thenReturn(isSelected);
     return element;
   }
@@ -349,7 +349,7 @@ final class ConditionTest {
   }
 
   private WebElement mockElement(boolean isSelected, String text) {
-    WebElement element = mock(WebElement.class);
+    WebElement element = mock();
     when(element.isSelected()).thenReturn(isSelected);
     when(element.getText()).thenReturn(text);
     return element;

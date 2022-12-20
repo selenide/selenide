@@ -15,7 +15,7 @@ import static org.mockito.Mockito.mock;
 final class TransferBrowserCapabilitiesFromConfigurationTest {
   private static final String SOME_CAP = "some.cap";
   private final AbstractDriverFactory driverFactory = new ChromeDriverFactory();
-  private final Proxy proxy = mock(Proxy.class);
+  private final Proxy proxy = mock();
   private final SelenideConfig config = new SelenideConfig();
   private final Browser browser = new Browser(config.browser(), config.headless());
 

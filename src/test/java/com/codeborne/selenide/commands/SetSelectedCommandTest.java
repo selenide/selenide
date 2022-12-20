@@ -16,11 +16,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class SetSelectedCommandTest {
-  private final Click mockedClick = mock(Click.class);
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
+  private final Click mockedClick = mock();
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
   private final SetSelected setSelectedCommand = new SetSelected(mockedClick);
-  private final WebElement mockedFoundElement = mock(WebElement.class);
+  private final WebElement mockedFoundElement = mock();
 
   @BeforeEach
   void setup() {

@@ -12,8 +12,8 @@ import static org.mockito.Mockito.when;
 
 public class GetAliasCommandTest {
 
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
   private final GetAlias getAlias = new GetAlias();
 
   @Test

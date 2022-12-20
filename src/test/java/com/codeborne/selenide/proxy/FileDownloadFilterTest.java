@@ -5,7 +5,12 @@ import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.DummyRandomizer;
-import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.DefaultHttpHeaders;
+import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.HttpMessage;
+import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,10 +30,10 @@ final class FileDownloadFilterTest {
   private final FileDownloadFilter filter = new FileDownloadFilter(
     new SelenideConfig().downloadsFolder("build/downloads"), new Downloader(new DummyRandomizer("random-text"))
   );
-  private final HttpRequest request = mock(HttpRequest.class);
-  private final HttpResponse response = mock(HttpResponse.class);
-  private final HttpMessageContents contents = mock(HttpMessageContents.class);
-  private final HttpMessageInfo messageInfo = mock(HttpMessageInfo.class);
+  private final HttpRequest request = mock();
+  private final HttpResponse response = mock();
+  private final HttpMessageContents contents = mock();
+  private final HttpMessageInfo messageInfo = mock();
 
   @BeforeEach
   void setUp() throws IOException {

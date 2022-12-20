@@ -3,7 +3,6 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,6 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
-import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
@@ -73,14 +71,6 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThat(downloadedFile.getName()).isEqualTo("файл-с-русским-названием.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед медвед!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
-  }
-
-  @Test
-  void downloadExternalFile() throws FileNotFoundException {
-    open("https://the-internet.herokuapp.com/download");
-    File video = $(By.linkText("some-file.txt")).download(withExtension("txt"));
-
-    assertThat(video.getName()).isEqualTo("some-file.txt");
   }
 
   @Test

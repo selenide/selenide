@@ -1,7 +1,7 @@
-tasks.withType(JacocoReport) {
-  reports {
-    xml.enabled = true
-    csv.enabled = false
-    html.enabled = true
-  }
+tasks.withType(JacocoReport).configureEach {
+    reports {
+      xml.required = true
+      csv.required = false
+      html.required = true
+    }
 }

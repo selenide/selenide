@@ -33,11 +33,11 @@ import static org.openqa.selenium.OutputType.FILE;
 final class ScreenShotLaboratoryTest {
   private final String dir = System.getProperty("user.dir");
   private final String workingDirectory = new File(dir).toURI().toString().replaceAll("/$", "");
-  private final ChromeDriver webDriver = mock(ChromeDriver.class);
+  private final ChromeDriver webDriver = mock();
   private final SelenideConfig config = new SelenideConfig().savePageSource(false).reportsFolder("build/reports/tests");
   private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);
-  private final Photographer photographer = mock(Photographer.class);
-  private final PageSourceExtractor extractor = mock(PageSourceExtractor.class);
+  private final Photographer photographer = mock();
+  private final PageSourceExtractor extractor = mock();
   private final long ts = System.currentTimeMillis();
   private final Clock clock = new DummyClock(ts);
   private final ScreenShotLaboratory screenshots = new ScreenShotLaboratory(photographer, extractor, clock);

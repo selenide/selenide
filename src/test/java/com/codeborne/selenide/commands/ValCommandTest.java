@@ -12,10 +12,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 final class ValCommandTest {
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
-  private final GetValue getValue = mock(GetValue.class);
-  private final SetValue setValue = mock(SetValue.class);
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
+  private final GetValue getValue = mock();
+  private final SetValue setValue = mock();
   private final Val command = new Val(getValue, setValue);
 
   @Test

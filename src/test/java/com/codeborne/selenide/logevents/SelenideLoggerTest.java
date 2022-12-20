@@ -42,9 +42,9 @@ final class SelenideLoggerTest {
 
   @Test
   void canAddManyListenersPerThread() {
-    LogEventListener listener1 = mock(LogEventListener.class);
-    LogEventListener listener2 = mock(LogEventListener.class);
-    LogEventListener listener3 = mock(LogEventListener.class);
+    LogEventListener listener1 = mock();
+    LogEventListener listener2 = mock();
+    LogEventListener listener3 = mock();
 
     SelenideLogger.addListener("simpleReport", listener1);
     SelenideLogger.addListener("softAsserts", listener2);
@@ -70,7 +70,7 @@ final class SelenideLoggerTest {
 
   @Test
   void doesNotFail_ifSomeOfListeners_before_throwsException() {
-    LogEventListener listener1 = mock(LogEventListener.class);
+    LogEventListener listener1 = mock();
     doThrow(new IllegalStateException("Failed to take screenshot because browser is not opened yet"))
       .when(listener1).beforeEvent(any());
     SelenideLogger.addListener("allureListener", listener1);
@@ -83,7 +83,7 @@ final class SelenideLoggerTest {
 
   @Test
   void doesNotFail_ifSomeOfListeners_after_throwsException() {
-    LogEventListener listener1 = mock(LogEventListener.class);
+    LogEventListener listener1 = mock();
     doThrow(new IllegalStateException("Failed to take screenshot because browser is not opened yet"))
       .when(listener1).afterEvent(any());
     SelenideLogger.addListener("allureListener", listener1);
