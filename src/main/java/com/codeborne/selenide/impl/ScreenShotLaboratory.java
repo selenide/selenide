@@ -257,10 +257,10 @@ public class ScreenShotLaboratory {
       currentContextScreenshots.get().add(screenshot);
     }
     synchronized (allScreenshots) {
-      allScreenshots.add(screenshot.getImage() == null ? null : new File(screenshot.getImage()));
+      allScreenshots.add(screenshot.getImage() == null ? null : fileFromUrl(screenshot.getImage()));
     }
     threadScreenshots.get().add(screenshot);
-    return screenshot.getImage() == null ? Optional.empty() : Optional.of(new File(screenshot.getImage()));
+    return screenshot.getImage() == null ? Optional.empty() : Optional.of(fileFromUrl(screenshot.getImage()));
   }
 
   @Nonnull
@@ -321,9 +321,9 @@ public class ScreenShotLaboratory {
     currentContext.set("");
     currentContextScreenshots.remove();
     return result.stream().map(screenshot -> screenshot.getImage() != null ?
-        new File(screenshot.getImage()) :
-        null
-      ).collect(Collectors.toList());
+      fileFromUrl(screenshot.getImage()) :
+      null
+    ).collect(Collectors.toList());
   }
 
   @CheckReturnValue
@@ -337,35 +337,43 @@ public class ScreenShotLaboratory {
   @CheckReturnValue
   @Nonnull
   public List<File> getThreadScreenshots() {
-    List<File> screenshots = threadScreenshots.get()
-      .stream()
-      .map(screenshot -> screenshot.getImage() == null ? null :new File(screenshot.getImage()))
-      .collect(Collectors.toList());
-    return screenshots == null ? emptyList() : unmodifiableList(screenshots);
+    List<Screenshot> screenshots = threadScreenshots.get();
+    if (screenshots == null) {
+      return emptyList();
+    } else {
+      return screenshots
+        .stream()
+        .map(screenshot -> screenshot.getImage() == null ? null : fileFromUrl(screenshot.getImage()))
+        .collect(Collectors.toList());
+    }
   }
 
   @CheckReturnValue
   @Nonnull
   public List<Screenshot> threadScreenshots() {
     List<Screenshot> screenshots = threadScreenshots.get();
-    return screenshots == null ? emptyList() : unmodifiableList(screenshots);
+    return screenshots == null ? emptyList() : screenshots;
   }
 
   @CheckReturnValue
   @Nonnull
   public List<File> getContextScreenshots() {
-    List<File> screenshots = currentContextScreenshots.get()
-      .stream()
-      .map(screenshot -> screenshot.getImage() == null ? null :new File(screenshot.getImage()))
-      .collect(Collectors.toList());
-    return screenshots == null ? emptyList() : unmodifiableList(screenshots);
+    List<Screenshot> screenshots = currentContextScreenshots.get();
+    if (screenshots == null) {
+      return emptyList();
+    } else {
+      return screenshots
+        .stream()
+        .map(screenshot -> screenshot.getImage() == null ? null : fileFromUrl(screenshot.getImage()))
+        .collect(Collectors.toList());
+    }
   }
 
   @CheckReturnValue
   @Nonnull
   public List<Screenshot> contextScreenshots() {
     List<Screenshot> screenshots = currentContextScreenshots.get();
-    return screenshots == null ? emptyList() : unmodifiableList(screenshots);
+    return screenshots == null ? emptyList() : screenshots;
   }
 
   @CheckReturnValue
@@ -447,6 +455,19 @@ public class ScreenShotLaboratory {
   }
 
   @CheckReturnValue
+  @Nullable
+  /**
+   * @param file need to be path with external form (containing protocol on start),
+   * @return instance of {@link File} without external form
+   */
+  private File fileFromUrl(String file) {
+    if (file == null) {
+      return null;
+    }
+    return new File(file.substring(file.indexOf("/")));
+  }
+
+  @CheckReturnValue
   @Nonnull
   private String formatScreenShotURL(String reportsURL, String screenshot) {
     Path current = Paths.get(System.getProperty("user.dir"));
@@ -486,8 +507,7 @@ public class ScreenShotLaboratory {
   private String encode(String str) {
     try {
       return URLEncoder.encode(str, StandardCharsets.UTF_8.name());
-    }
-    catch (UnsupportedEncodingException e) {
+    } catch (UnsupportedEncodingException e) {
       log.debug("Cannot encode path segment: {}", str, e);
       return str;
     }

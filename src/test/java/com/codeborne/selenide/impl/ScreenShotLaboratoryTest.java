@@ -200,6 +200,49 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
+  void canGetLastThreadFullScreenshot() {
+    assertThat(screenshots.lastThreadScreenshot()).isEmpty();
+
+    Screenshot screenshot1 = screenshots.takeScreenshot(driver, true, true);
+    assertThat(screenshots.lastThreadScreenshot())
+      .map(Screenshot::summary)
+      .hasValue(screenshot1.summary());
+
+    Screenshot screenshot2 = screenshots.takeScreenshot(driver, true, true);
+    assertThat(screenshots.lastThreadScreenshot())
+      .map(Screenshot::summary)
+      .hasValue(screenshot2.summary());
+
+    Screenshot screenshot3 = screenshots.takeScreenshot(driver, true, true);
+    assertThat(screenshots.lastThreadScreenshot())
+      .map(Screenshot::summary)
+      .hasValue(screenshot3.summary());
+  }
+
+  @Test
+  void canGetLastContextFullScreenshot() {
+    assertThat(screenshots.lastContextScreenshot()).isEmpty();
+
+    screenshots.startContext("ui/MyTest/test_some_method/");
+    assertThat(screenshots.lastContextScreenshot()).isEmpty();
+
+    Screenshot screenshot1 = screenshots.takeScreenshot(driver, true, true);
+    assertThat(screenshots.lastContextScreenshot())
+      .map(Screenshot::summary)
+      .hasValue(screenshot1.summary());
+
+    Screenshot screenshot2 = screenshots.takeScreenshot(driver, true, true);
+    assertThat(screenshots.lastContextScreenshot())
+      .map(Screenshot::summary)
+      .hasValue(screenshot2.summary());
+
+    Screenshot screenshot3 = screenshots.takeScreenshot(driver, true, true);
+    assertThat(screenshots.lastContextScreenshot())
+      .map(Screenshot::summary)
+      .hasValue(screenshot3.summary());
+  }
+
+  @Test
   void canGetLastContextScreenshot() {
     assertThat(screenshots.getLastContextScreenshot())
       .isEmpty();
