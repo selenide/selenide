@@ -33,8 +33,8 @@ final class DownloadFileToFolderTest {
   private final DownloadFileToFolder command = new DownloadFileToFolder(downloader, windowsCloser);
   private final SelenideConfig config = new SelenideConfig();
   private final WebDriver webdriver = new DummyWebDriver();
-  private final WebElementSource linkWithHref = mock(WebElementSource.class);
-  private final WebElement link = mock(WebElement.class);
+  private final WebElementSource linkWithHref = mock();
+  private final WebElement link = mock();
   private final DriverStub driver = new DriverStub(config, new Browser("opera", false), webdriver, null);
 
   @BeforeEach

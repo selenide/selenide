@@ -25,7 +25,7 @@ import static org.openqa.selenium.OutputType.FILE;
 
 final class ModalTest {
   private static final String ALERT_TEXT = "You really want it?";
-  private final Alert alert = mock(Alert.class);
+  private final Alert alert = mock();
   private final ChromeDriver webDriver = mock(ChromeDriver.class, RETURNS_DEEP_STUBS);
   private final SelenideConfig config = new SelenideConfig();
   private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);

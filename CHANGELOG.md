@@ -1,8 +1,19 @@
 # Changelog
 
+## 6.11.0 (planned to 3x.12.2022)
+see https://github.com/selenide/selenide/milestone/169?closed=1
+* #1817 add methods to copy and paste content  --  thanks to Evgenii Plugatar for PR #2027
+
+## 6.10.3 (released 14.12.2022)
+* #2062 don't trigger "change" event from `$.select*` if value is unchanged  --  thanks to Vicente Rossello Jaume for PR #2063
+* #2068 bump Selenium from 4.7.1 to 4.7.2
+* #2069 Bump LittleProxy from 2.0.14 to 2.0.15
+* #2066 Bump Netty from 4.1.85.Final to 4.1.86.Final
+* #2067 Bump slf4j from 2.0.5 to 2.0.6
+
 ## 6.10.2 (released 08.12.2022)
 * #2032 added chainable method $.press()  --  thanks to Amuthan Sakthivel for PR
-* #2050 fore change events by `$.select*` methods  --  thanks to Vicente Rossello Jaume for PR #2051
+* #2050 trigger change events by `$.select*` methods  --  thanks to Vicente Rossello Jaume for PR #2051
 * #2047 show $.selectOption() in reports friendly  --  see PR #2052
 * #2045 show sessionStorage and localStorage in reports friendly  --  see PR #2046
 * #2044 #2057 bump Selenium from 4.6.0 to 4.7.1

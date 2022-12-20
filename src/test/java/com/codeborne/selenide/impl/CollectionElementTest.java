@@ -19,7 +19,7 @@ final class CollectionElementTest {
 
   @Test
   void wrap() {
-    WebElement mockedWebElement = mock(WebElement.class);
+    WebElement mockedWebElement = mock();
     when(mockedWebElement.getTagName()).thenReturn("a");
     when(mockedWebElement.isDisplayed()).thenReturn(true);
     when(mockedWebElement.getText()).thenReturn("selenide");
@@ -32,8 +32,8 @@ final class CollectionElementTest {
 
   @Test
   void getWebElement() {
-    WebElement mockedWebElement1 = mock(WebElement.class);
-    WebElement mockedWebElement2 = mock(WebElement.class);
+    WebElement mockedWebElement1 = mock();
+    WebElement mockedWebElement2 = mock();
     CollectionSource collection = mockCollection("", mockedWebElement1, mockedWebElement2);
     CollectionElement collectionElement = new CollectionElement(collection, 1);
 
@@ -44,7 +44,7 @@ final class CollectionElementTest {
   void getSearchCriteria() {
     String collectionDescription = "Collection description";
     int index = 1;
-    CollectionSource collection = mock(CollectionSource.class);
+    CollectionSource collection = mock();
     when(collection.description()).thenReturn(collectionDescription);
     CollectionElement collectionElement = new CollectionElement(collection, 1);
     assertThat(collectionElement.getSearchCriteria())
@@ -53,7 +53,7 @@ final class CollectionElementTest {
 
   @Test
   void testToString() {
-    CollectionSource collection = mock(CollectionSource.class);
+    CollectionSource collection = mock();
     String collectionDescription = "Collection description";
     when(collection.description()).thenReturn(collectionDescription);
     int index = 1;
@@ -64,12 +64,12 @@ final class CollectionElementTest {
 
   @Test
   void createElementNotFoundErrorWithEmptyCollection() {
-    CollectionSource collection = mock(CollectionSource.class);
+    CollectionSource collection = mock();
     when(collection.driver()).thenReturn(driver);
     when(collection.description()).thenReturn("Collection description");
     CollectionElement collectionElement = new CollectionElement(collection, 33);
 
-    Condition mockedCollection = mock(Condition.class);
+    Condition mockedCollection = mock();
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
     assertThat(elementNotFoundError)
@@ -81,13 +81,13 @@ final class CollectionElementTest {
 
   @Test
   void createElementNotFoundErrorWithNonEmptyCollection() {
-    CollectionSource collection = mock(CollectionSource.class);
+    CollectionSource collection = mock();
     when(collection.driver()).thenReturn(driver);
     when(collection.description()).thenReturn("Collection description");
-    when(collection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
+    when(collection.getElements()).thenReturn(singletonList(mock()));
     CollectionElement collectionElement = new CollectionElement(collection, 1);
 
-    Condition mockedCollection = mock(Condition.class);
+    Condition mockedCollection = mock();
     when(mockedCollection.toString()).thenReturn("Reason description");
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 

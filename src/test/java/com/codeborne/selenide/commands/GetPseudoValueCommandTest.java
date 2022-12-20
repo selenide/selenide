@@ -15,10 +15,10 @@ import static org.mockito.Mockito.when;
 
 final class GetPseudoValueCommandTest {
 
-  private final Driver driver = mock(Driver.class);
-  private final SelenideElement proxy = mock(SelenideElement.class);
-  private final WebElementSource locator = mock(WebElementSource.class);
-  private final WebElement element = mock(WebElement.class);
+  private final Driver driver = mock();
+  private final SelenideElement proxy = mock();
+  private final WebElementSource locator = mock();
+  private final WebElement element = mock();
 
   @BeforeEach
   void setup() {

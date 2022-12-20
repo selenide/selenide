@@ -84,6 +84,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement append(String text);
 
   /**
+   * Append text from clipboard to the text field and trigger "change" event.
+   *
+   * @see Clipboard
+   * @see com.codeborne.selenide.commands.Paste
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement paste();
+
+  /**
    * Clear the input field
    *
    * <p>Basically it's the same as {@link WebElement#clear()}, but it works. :) </p>

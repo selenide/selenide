@@ -24,7 +24,7 @@ final class SelenideElementListIteratorTest {
 
   @Test
   void previous() {
-    WebElement mockedWebElement = mock(WebElement.class);
+    WebElement mockedWebElement = mock();
     when(mockedWebElement.isDisplayed()).thenReturn(true);
     when(mockedWebElement.getTagName()).thenReturn("a");
     when(mockedWebElement.getText()).thenReturn("selenide");
@@ -53,7 +53,7 @@ final class SelenideElementListIteratorTest {
   void add() {
     SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(collection, 0);
     assertThatThrownBy(() ->
-      selenideElementIterator.add(mock(SelenideElement.class))
+      selenideElementIterator.add(mock())
     ).isInstanceOf(UnsupportedOperationException.class)
       .hasMessage("Cannot add elements to web page");
   }
@@ -62,7 +62,7 @@ final class SelenideElementListIteratorTest {
   void set() {
     SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(collection, 0);
     assertThatThrownBy(() ->
-      selenideElementIterator.set(mock(SelenideElement.class))
+      selenideElementIterator.set(mock())
     ).isInstanceOf(UnsupportedOperationException.class)
       .hasMessage("Cannot set elements to web page");
   }

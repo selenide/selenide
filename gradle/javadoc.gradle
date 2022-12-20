@@ -1,4 +1,4 @@
-task javadocForSite(type: Javadoc) {
+tasks.register('javadocForSite', Javadoc) {
   source = subprojects.sourceSets.main.allJava
   destinationDir = file("${project.buildDir}/javadoc-for-site")
   classpath = project(":modules:core").sourceSets.main.compileClasspath

@@ -92,6 +92,7 @@ public class Commands {
     add("setValue", new SetValue());
     add("val", new Val());
     add("append", new Append());
+    add("paste", new Paste());
     add("clear", inject(Clear.class));
   }
 
