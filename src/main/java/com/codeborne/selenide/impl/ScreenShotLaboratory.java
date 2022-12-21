@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -43,7 +44,6 @@ import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
-import static org.apache.commons.io.FileUtils.moveFile;
 import static org.openqa.selenium.OutputType.BYTES;
 import static org.openqa.selenium.OutputType.FILE;
 
@@ -279,14 +279,14 @@ public class ScreenShotLaboratory {
   @Nullable
   protected File savePageImageToFile(Config config, String fileName, Driver driver) {
     try {
-      Optional<File> srcFile = photographer.takeScreenshot(driver, FILE);
+      Optional<byte[]> srcFile = photographer.takeScreenshot(driver, BYTES);
       if (!srcFile.isPresent()) {
         log.info("Webdriver doesn't support screenshots");
         return null;
       }
       File imageFile = new File(config.reportsFolder(), fileName + ".png").getAbsoluteFile();
       try {
-        moveFile(srcFile.get(), imageFile);
+        FileUtils.writeByteArrayToFile(imageFile, srcFile.get());
       }
       catch (IOException e) {
         log.error("Failed to save screenshot to {}", imageFile, e);

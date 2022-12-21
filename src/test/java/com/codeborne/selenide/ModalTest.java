@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
@@ -11,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.util.UUID;
 
 import static com.codeborne.selenide.ModalOptions.withExpectedText;
 import static org.apache.commons.io.IOUtils.resourceToByteArray;
@@ -21,7 +19,7 @@ import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.openqa.selenium.OutputType.FILE;
+import static org.openqa.selenium.OutputType.BYTES;
 
 final class ModalTest {
   private static final String ALERT_TEXT = "You really want it?";
@@ -38,7 +36,7 @@ final class ModalTest {
 
     config.reportsFolder("build/reports/tests/ModalTest");
     when(webDriver.getPageSource()).thenReturn("<html/>");
-    when(webDriver.getScreenshotAs(FILE)).thenReturn(asTemporaryFile("/screenshot.png"));
+    when(webDriver.getScreenshotAs(BYTES)).thenReturn(resourceToByteArray("/screenshot.png"));
     reportsBaseUri = new File(System.getProperty("user.dir"), config.reportsFolder()).getAbsoluteFile().toURI();
   }
 
@@ -142,11 +140,5 @@ final class ModalTest {
     catch (MalformedURLException e) {
       return "file://" + path;
     }
-  }
-
-  private File asTemporaryFile(String resource) throws IOException {
-    File tempFile = File.createTempFile("selenide-", "-screenshot-" + UUID.randomUUID());
-    FileUtils.writeByteArrayToFile(tempFile, resourceToByteArray(resource));
-    return tempFile;
   }
 }

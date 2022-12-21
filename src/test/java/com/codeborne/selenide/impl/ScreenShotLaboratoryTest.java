@@ -4,7 +4,6 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
@@ -15,11 +14,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static java.io.File.separatorChar;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.io.IOUtils.resourceToByteArray;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -28,7 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.openqa.selenium.OutputType.FILE;
+import static org.openqa.selenium.OutputType.BYTES;
 
 final class ScreenShotLaboratoryTest {
   private final String dir = System.getProperty("user.dir");
@@ -44,10 +41,8 @@ final class ScreenShotLaboratoryTest {
 
   @BeforeEach
   void setUp() {
-    when(photographer.takeScreenshot(any(), eq(FILE))).thenAnswer((Answer<Optional<File>>) invocation -> {
-      File tempFile = File.createTempFile("selenide-", "-screenshot-" + UUID.randomUUID());
-      FileUtils.writeByteArrayToFile(tempFile, "some png source".getBytes(UTF_8));
-      return Optional.of(tempFile);
+    when(photographer.takeScreenshot(any(), eq(BYTES))).thenAnswer((Answer<Optional<byte[]>>) invocation -> {
+      return Optional.of("some png source".getBytes(UTF_8));
     });
   }
 
@@ -264,10 +259,7 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void canFormatScreenShotPathWithSpaces() throws IOException {
-    ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
-
+  void canFormatScreenShotPathWithSpaces() {
     config.reportsUrl("http://ci.org/job/123/artifact");
     config.reportsFolder("build/reports/path with spaces/");
 
@@ -278,10 +270,7 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void doNotEncodeReportsURL() throws IOException {
-    ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
-
+  void doNotEncodeReportsURL() {
     config.reportsUrl("http://ci.org/path%20with%spaces/");
 
     String screenShotPath = screenshots.takeScreenshot(driver, true, false).getImage();
@@ -296,9 +285,8 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void convertsScreenshotFileNameToCIUrl() throws IOException {
+  void convertsScreenshotFileNameToCIUrl() {
     config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
     String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
@@ -314,8 +302,6 @@ final class ScreenShotLaboratoryTest {
     // directory, that not in 'user.dir'
     config.reportsFolder(Files.createTempDirectory("artifacts-storage").toFile().getAbsolutePath());
 
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
-
     String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
       .as("Concatenate reportUrl with screenshot file name if it saved outside of build/project home dir")
@@ -323,7 +309,7 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void returnsScreenshotFileName() throws IOException {
+  void returnsScreenshotFileName() {
     config.reportsUrl(null);
     String currentDir = System.getProperty("user.dir");
     if (separatorChar == '\\') {
@@ -331,8 +317,6 @@ final class ScreenShotLaboratoryTest {
     }
 
     currentDir = currentDir.replace(" ", "%20"); //the screenshot path uses %20 instead of the space character
-
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
     String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
@@ -435,6 +419,7 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
+
   void printHtmlPath_if_savePageSourceIsEnabled() {
     config.savePageSource(false);
     config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
@@ -449,11 +434,5 @@ final class ScreenShotLaboratoryTest {
 
   private String normalize(String path) {
     return separatorChar == '\\' ? path.replace('/', separatorChar) : path;
-  }
-
-  private File asTemporaryFile(String resource) throws IOException {
-    File tempFile = File.createTempFile("selenide-", "-screenshot-" + UUID.randomUUID());
-    FileUtils.writeByteArrayToFile(tempFile, resourceToByteArray(resource));
-    return tempFile;
   }
 }
