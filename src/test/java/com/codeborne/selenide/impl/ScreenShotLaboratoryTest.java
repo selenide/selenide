@@ -435,11 +435,10 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void printHtmlPath_if_savePageSourceIsEnabled() throws IOException {
+  void printHtmlPath_if_savePageSourceIsEnabled() {
     config.savePageSource(false);
     config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
     doReturn(new File("build/reports/page123.html")).when(extractor).extract(eq(config), eq(webDriver), any());
-    doReturn(asTemporaryFile("/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
     Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshot.summary()).isEqualTo(String.format(
