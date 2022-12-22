@@ -119,7 +119,9 @@ public class DownloadFileToFolder {
     }
 
     if (folder.hasFiles(extension, filter)) {
-      log.warn("Folder {} still contains files {} after {} ms.", folder, extension, timeout);
+      String message = String.format("Folder %s still contains files %s after %s ms. " +
+        "Apparently, the downloading hasn't completed in time.", folder, extension, timeout);
+      throw new FileNotFoundException(message);
     }
   }
 
