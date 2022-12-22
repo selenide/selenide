@@ -81,11 +81,24 @@ public class SelenidePageFactory implements PageObjectFactory {
                             Object page, Class<?> proxyIn, Type[] genericTypes) {
     Field[] fields = proxyIn.getDeclaredFields();
     for (Field field : fields) {
-      if (!isInitialized(page, field)) {
+      Object fieldValue = getFieldValue(page, field);
+      if (fieldValue == null) {
         By selector = findSelector(driver, field);
         Object value = decorate(page.getClass().getClassLoader(), driver, searchContext, field, selector, genericTypes);
         if (value != null) {
           setFieldValue(page, field, value);
+        }
+      }
+      else if (fieldValue instanceof SelenideElement) {
+        As as = field.getAnnotation(As.class);
+        if (as != null) {
+          setFieldValue(page, field, ((SelenideElement) fieldValue).as(as.value()));
+        }
+      }
+      else if (fieldValue instanceof ElementsCollection) {
+        As as = field.getAnnotation(As.class);
+        if (as != null) {
+          setFieldValue(page, field, ((ElementsCollection) fieldValue).as(as.value()));
         }
       }
     }
@@ -116,10 +129,17 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @CheckReturnValue
+  @Deprecated
   protected boolean isInitialized(Object page, Field field) {
+    return getFieldValue(page, field) != null;
+  }
+
+  @CheckReturnValue
+  @Nullable
+  protected Object getFieldValue(Object page, Field field) {
     try {
       field.setAccessible(true);
-      return field.get(page) != null;
+      return field.get(page);
     }
     catch (IllegalAccessException e) {
       throw new PageObjectException("Failed to access field " + field + " in " + page, e);
