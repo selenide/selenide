@@ -36,6 +36,7 @@ import java.util.List;
  *
  * @see <a href="https://github.com/SeleniumHQ/selenium/wiki/PageObjects">Page Objects Wiki</a>
  */
+@SuppressWarnings("ChainOfInstanceofChecks")
 @ParametersAreNonnullByDefault
 public class SelenidePageFactory implements PageObjectFactory {
   private static final Logger logger = LoggerFactory.getLogger(SelenidePageFactory.class);
@@ -81,27 +82,34 @@ public class SelenidePageFactory implements PageObjectFactory {
                             Object page, Class<?> proxyIn, Type[] genericTypes) {
     Field[] fields = proxyIn.getDeclaredFields();
     for (Field field : fields) {
-      Object fieldValue = getFieldValue(page, field);
-      if (fieldValue == null) {
-        By selector = findSelector(driver, field);
-        Object value = decorate(page.getClass().getClassLoader(), driver, searchContext, field, selector, genericTypes);
-        if (value != null) {
-          setFieldValue(page, field, value);
-        }
-      }
-      else if (fieldValue instanceof SelenideElement) {
-        As as = field.getAnnotation(As.class);
-        if (as != null) {
-          setFieldValue(page, field, ((SelenideElement) fieldValue).as(as.value()));
-        }
-      }
-      else if (fieldValue instanceof ElementsCollection) {
-        As as = field.getAnnotation(As.class);
-        if (as != null) {
-          setFieldValue(page, field, ((ElementsCollection) fieldValue).as(as.value()));
-        }
-      }
+      initField(driver, searchContext, page, genericTypes, field);
     }
+  }
+
+  protected void initField(Driver driver, @Nullable WebElementSource searchContext, Object page, Type[] genericTypes, Field field) {
+    Object value = createFieldValue(driver, searchContext, page, genericTypes, field);
+    if (value != null) {
+      setFieldValue(page, field, value);
+    }
+  }
+
+  @Nullable
+  @CheckReturnValue
+  protected Object createFieldValue(Driver driver, @Nullable WebElementSource searchContext,
+                                    Object page, Type[] genericTypes, Field field) {
+    Object fieldValue = getFieldValue(page, field);
+    if (fieldValue == null) {
+      By selector = findSelector(driver, field);
+      return decorate(page.getClass().getClassLoader(), driver, searchContext, field, selector, genericTypes);
+    }
+    As as = field.getAnnotation(As.class);
+    if (as != null && fieldValue instanceof SelenideElement element) {
+      return element.as(as.value());
+    }
+    if (as != null && fieldValue instanceof ElementsCollection collection) {
+      return collection.as(as.value());
+    }
+    return null;
   }
 
   /**
