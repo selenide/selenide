@@ -1,6 +1,23 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.collections.*;
+import com.codeborne.selenide.collections.AllMatch;
+import com.codeborne.selenide.collections.AnyMatch;
+import com.codeborne.selenide.collections.Attributes;
+import com.codeborne.selenide.collections.ExactAttributes;
+import com.codeborne.selenide.collections.ContainExactTextsCaseSensitive;
+import com.codeborne.selenide.collections.ExactTexts;
+import com.codeborne.selenide.collections.ExactTextsCaseSensitive;
+import com.codeborne.selenide.collections.ExactTextsCaseSensitiveInAnyOrder;
+import com.codeborne.selenide.collections.ItemWithText;
+import com.codeborne.selenide.collections.ListSize;
+import com.codeborne.selenide.collections.NoneMatch;
+import com.codeborne.selenide.collections.SizeGreaterThan;
+import com.codeborne.selenide.collections.SizeGreaterThanOrEqual;
+import com.codeborne.selenide.collections.SizeLessThan;
+import com.codeborne.selenide.collections.SizeLessThanOrEqual;
+import com.codeborne.selenide.collections.SizeNotEqual;
+import com.codeborne.selenide.collections.Texts;
+import com.codeborne.selenide.collections.TextsInAnyOrder;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
 

@@ -2,7 +2,9 @@ package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.ex.*;
+import com.codeborne.selenide.ex.AttributesMismatch;
+import com.codeborne.selenide.ex.AttributesSizeMismatch;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
@@ -60,10 +62,12 @@ public class ExactAttributes extends CollectionCondition {
       throw elementNotFound;
     }
     else if (elements.size() != expectedValues.size()) {
-      throw new AttributesSizeMismatch(collection, expectedValues, ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
+      throw new AttributesSizeMismatch(collection, expectedValues,
+        ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
     }
     else {
-      throw new AttributesMismatch(collection, expectedValues, ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
+      throw new AttributesMismatch(collection, expectedValues,
+        ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
     }
   }
 
