@@ -35,7 +35,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.impl.FileHelper.ensureParentFolderExists;
 import static com.codeborne.selenide.impl.Plugins.inject;
