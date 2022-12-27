@@ -44,6 +44,7 @@ import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import static org.openqa.selenium.OutputType.BYTES;
 import static org.openqa.selenium.OutputType.FILE;
 
@@ -320,10 +321,10 @@ public class ScreenShotLaboratory {
     List<Screenshot> result = currentContextScreenshots.get();
     currentContext.set("");
     currentContextScreenshots.remove();
-    return result.stream().map(screenshot -> screenshot.getImage() != null ?
+    return result == null ? emptyList() : result.stream().map(screenshot -> screenshot.getImage() != null ?
       fileFromUrl(screenshot.getImage()) :
       null
-    ).collect(Collectors.toList());
+    ).collect(toList());
   }
 
   @CheckReturnValue
@@ -344,7 +345,7 @@ public class ScreenShotLaboratory {
       return screenshots
         .stream()
         .map(screenshot -> screenshot.getImage() == null ? null : fileFromUrl(screenshot.getImage()))
-        .collect(Collectors.toList());
+        .collect(toList());
     }
   }
 
@@ -365,7 +366,7 @@ public class ScreenShotLaboratory {
       return screenshots
         .stream()
         .map(screenshot -> screenshot.getImage() == null ? null : fileFromUrl(screenshot.getImage()))
-        .collect(Collectors.toList());
+        .collect(toList());
     }
   }
 

@@ -50,6 +50,6 @@ final class ScreenshotsTest extends IntegrationTest {
     assertThat(screenshots.getContextScreenshots())
       .as("Temporary files screenshots are added to history")
       .hasSize(1);
-    assertThat(screenshots.getContextScreenshots().get(0)).isSameAs(screenshot);
+    assertThat(screenshots.getContextScreenshots().get(0)).isEqualTo(screenshot);
   }
 }
