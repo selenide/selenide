@@ -3,14 +3,23 @@ package com.codeborne.selenide.impl;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.File;
 
 public class Screenshot {
+  private final File imageFile;
   private final String image;
   private final String source;
 
-  public Screenshot(@Nullable String image, @Nullable String source) {
-    this.image = image;
+  public Screenshot(@Nullable File imageFile, @Nullable String imageUrl, @Nullable String source) {
+    this.imageFile = imageFile;
+    this.image = imageUrl;
     this.source = source;
+  }
+
+  @CheckReturnValue
+  @Nullable
+  File getImageFile() {
+    return imageFile;
   }
 
   @CheckReturnValue
@@ -28,7 +37,7 @@ public class Screenshot {
   @CheckReturnValue
   @Nonnull
   public static Screenshot none() {
-    return new Screenshot((String) null, null);
+    return new Screenshot(null, null, null);
   }
 
   public boolean isPresent() {
