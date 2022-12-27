@@ -4,10 +4,12 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.ex.AlertNotFoundException;
 import com.codeborne.selenide.ex.DialogTextMismatch;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.UnhandledAlertException;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
@@ -28,6 +30,20 @@ final class AlertTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_alerts.html");
+  }
+
+  @Test
+  void unexpectedAlert() {
+    Configuration.timeout = 100;
+    $(By.name("username")).val("Greg");
+    $(byValue("Alert button")).click();
+    assertThatThrownBy(() -> $("#message").shouldHave(text("Hello, Greg!")))
+      .isInstanceOf(UIAssertionError.class)
+      .hasMessageStartingWith("UnhandledAlertException: ")
+      .hasMessageContaining("Are you sure, Greg?")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasCauseInstanceOf(UnhandledAlertException.class);
   }
 
   @Test

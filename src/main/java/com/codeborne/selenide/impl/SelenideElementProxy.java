@@ -9,6 +9,7 @@ import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.JavascriptException;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriverException;
 
 import javax.annotation.CheckReturnValue;
@@ -163,6 +164,7 @@ class SelenideElementProxy implements InvocationHandler {
     if (e instanceof IllegalArgumentException) return false;
     if (e instanceof ReflectiveOperationException) return false;
     if (e instanceof JavascriptException) return false;
+    if (e instanceof UnhandledAlertException) return false;
 
     return e instanceof Exception || e instanceof AssertionError;
   }
