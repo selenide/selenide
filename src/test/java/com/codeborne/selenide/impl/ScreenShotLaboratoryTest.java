@@ -81,13 +81,13 @@ final class ScreenShotLaboratoryTest {
     assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
       .isEqualTo(String.format("%s/build/reports/tests/ui/MyTest/test_some_method/%s.2.png", workingDirectory, ts));
 
-    List<File> contextScreenshots = screenshots.finishContext();
+    List<Screenshot> contextScreenshots = screenshots.finishContext();
     assertThat(contextScreenshots).hasSize(3);
-    assertThat(contextScreenshots.get(0))
+    assertThat(contextScreenshots.get(0).getImageFile())
       .hasToString(dir + normalize(String.format("/build/reports/tests/ui/MyTest/test_some_method/%s.0.png", ts)));
-    assertThat(contextScreenshots.get(1))
+    assertThat(contextScreenshots.get(1).getImageFile())
       .hasToString(dir + normalize(String.format("/build/reports/tests/ui/MyTest/test_some_method/%s.1.png", ts)));
-    assertThat(contextScreenshots.get(2))
+    assertThat(contextScreenshots.get(2).getImageFile())
       .hasToString(dir + normalize(String.format("/build/reports/tests/ui/MyTest/test_some_method/%s.2.png", ts)));
   }
 

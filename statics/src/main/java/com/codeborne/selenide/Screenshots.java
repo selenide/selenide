@@ -89,7 +89,7 @@ public class Screenshots {
   }
 
   @Nonnull
-  public static List<File> finishContext() {
+  public static List<Screenshot> finishContext() {
     return screenshots.finishContext();
   }
 
