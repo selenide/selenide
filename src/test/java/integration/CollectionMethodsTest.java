@@ -9,6 +9,8 @@ import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
+import com.codeborne.selenide.ex.AttributesMismatch;
+import com.codeborne.selenide.ex.AttributesSizeMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -36,6 +38,8 @@ import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThanOrEqual;
 import static com.codeborne.selenide.CollectionCondition.sizeNotEqual;
 import static com.codeborne.selenide.CollectionCondition.texts;
+import static com.codeborne.selenide.CollectionCondition.attributes;
+import static com.codeborne.selenide.CollectionCondition.exactAttributes;
 import static com.codeborne.selenide.Condition.and;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exist;
@@ -188,6 +192,69 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void failsFast_ifNoExpectedTextsAreGiven() {
     assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts()))
+      .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  void canCheckThatElementsHaveCorrectAttributes() {
+    withLongTimeout(() -> {
+      $$("#dynamic-content-container span").shouldHave(
+        attributes("id", "dynamic-content", "dynamic-content2"),
+        attributes("id", "mic-cont", "content2"),
+        exactAttributes("id", asList("dynamic-content", "dynamic-content2")));
+    });
+  }
+
+  @Test
+  void ignoresWhitespacesInAttributes() {
+    withLongTimeout(() -> {
+      $$("#dynamic-content-container span").shouldHave(
+        attributes("id","   dynamic-content\n ", "\t\t\tdynamic-content2\t\t\r\n"),
+        exactAttributes("id", "\t\n dynamic-content\n\r", "    dynamic-content2      "));
+    });
+  }
+
+  @Test
+  void canCheckThatElementsHaveExactlyCorrectAttributes() {
+    withLongTimeout(() -> {
+      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(exactAttributes("id","content", "content2")))
+        .isInstanceOf(AttributesMismatch.class);
+    });
+  }
+
+  @Test
+  void attributesCheckThrowsElementNotFound() {
+    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(attributes("id","content1", "content2")))
+      .isInstanceOf(ElementNotFound.class);
+  }
+
+  @Test
+  void exactAttributesCheckThrowsElementNotFound() {
+    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(exactAttributes("id","content1", "content2")))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {.non-existing-elements}");
+  }
+
+  @Test
+  void attributesCheckThrowsAttributesSizeMismatch() {
+    withLongTimeout(() -> {
+      assertThatThrownBy(() -> $$("#dynamic-content-container span")
+        .shouldHave(attributes("id","static-content1", "static-content2", "dynamic-content1")))
+        .isInstanceOf(AttributesSizeMismatch.class);
+    });
+  }
+
+  @Test
+  void attributesCheckThrowsAttributesMismatch() {
+    withLongTimeout(() -> {
+      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(attributes("id","static-content1", "static-content2")))
+        .isInstanceOf(AttributesMismatch.class);
+    });
+  }
+
+  @Test
+  void failsFast_ifNoExpectedAttributesAreGiven() {
+    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(attributes("id")))
       .isInstanceOf(IllegalArgumentException.class);
   }
 
