@@ -35,14 +35,15 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static com.codeborne.selenide.impl.FileHelper.ensureParentFolderExists;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.io.File.separatorChar;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import static org.openqa.selenium.OutputType.BYTES;
 import static org.openqa.selenium.OutputType.FILE;
 
@@ -60,11 +61,12 @@ public class ScreenShotLaboratory {
   private final Photographer photographer;
   private final PageSourceExtractor extractor;
   private final Clock clock;
-  protected final List<File> allScreenshots = new ArrayList<>();
+  protected final List<Screenshot> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
-  protected ThreadLocal<String> currentContext = withInitial(() -> "");
-  protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
-  protected ThreadLocal<List<File>> threadScreenshots = withInitial(ArrayList::new);
+
+  protected final ThreadLocal<String> currentContext = withInitial(() -> "");
+  protected final ThreadLocal<List<Screenshot>> currentContextScreenshots = new ThreadLocal<>();
+  protected final ThreadLocal<List<Screenshot>> threadScreenshots = withInitial(ArrayList::new);
 
   protected ScreenShotLaboratory() {
     this(inject(Photographer.class), inject(PageSourceExtractor.class), new Clock());
@@ -114,13 +116,13 @@ public class ScreenShotLaboratory {
   public <T> T takeScreenShot(Driver driver, OutputType<T> outputType) {
     return ifWebDriverStarted(driver, webDriver ->
       photographer.takeScreenshot(driver, outputType)
-        .map(screenshot -> addToHistoryIfFile(screenshot, outputType))
+        .map(screenshot -> addToHistoryIfFile(driver.config(), screenshot, outputType))
         .orElse(null));
   }
 
-  private <T> T addToHistoryIfFile(T screenshot, OutputType<T> outputType) {
+  private <T> T addToHistoryIfFile(Config config, T screenshot, OutputType<T> outputType) {
     if (outputType == OutputType.FILE) {
-      addToHistory((File) screenshot);
+      addToImageHistory(config, (File) screenshot);
     }
     return screenshot;
   }
@@ -130,10 +132,9 @@ public class ScreenShotLaboratory {
   private Screenshot takeScreenShot(Config config, Driver driver, String fileName, boolean saveScreenshot, boolean savePageSource) {
     File source = savePageSource ? savePageSourceToFile(config, fileName, driver) : null;
     File image = saveScreenshot ? savePageImageToFile(config, fileName, driver) : null;
-    if (image != null) {
-      addToHistory(image);
-    }
-    return new Screenshot(toUrl(config, image), toUrl(config, source));
+    Screenshot screenshot = new Screenshot(image, toUrl(config, image), toUrl(config, source));
+    addToHistory(screenshot);
+    return screenshot;
   }
 
   @CheckReturnValue
@@ -169,16 +170,20 @@ public class ScreenShotLaboratory {
 
     try {
       byte[] screenshot = element.getScreenshotAs(BYTES);
-      try (InputStream in = new ByteArrayInputStream(screenshot)) {
-        return Optional.of(ImageIO.read(in));
-      }
-      catch (IOException e) {
-        throw new RuntimeException("Failed to take element screenshot", e);
-      }
+      return Optional.of(imageFromBytes(screenshot));
     }
     catch (InvalidElementStateException elementIsNotVisible) {
       log.error("Failed to take element screenshot: {}", elementIsNotVisible.toString());
       return Optional.empty();
+    }
+  }
+
+  private BufferedImage imageFromBytes(byte[] screenshot) {
+    try (InputStream in = new ByteArrayInputStream(screenshot)) {
+      return ImageIO.read(in);
+    }
+    catch (IOException e) {
+      throw new RuntimeException("Failed to take element screenshot", e);
     }
   }
 
@@ -240,7 +245,7 @@ public class ScreenShotLaboratory {
     return ifWebDriverStarted(driver, webDriver -> {
       try {
         return photographer.takeScreenshot(driver, FILE)
-          .map(this::addToHistory)
+          .map(imageFile -> addToImageHistory(driver.config(), imageFile))
           .orElse(null);
       }
       catch (Exception e) {
@@ -250,8 +255,7 @@ public class ScreenShotLaboratory {
     });
   }
 
-  @Nonnull
-  protected File addToHistory(File screenshot) {
+  protected void addToHistory(Screenshot screenshot) {
     if (currentContextScreenshots.get() != null) {
       currentContextScreenshots.get().add(screenshot);
     }
@@ -259,7 +263,19 @@ public class ScreenShotLaboratory {
       allScreenshots.add(screenshot);
     }
     threadScreenshots.get().add(screenshot);
-    return screenshot;
+  }
+
+  @Nonnull
+  private File addToImageHistory(Config config, File imageFile) {
+    Screenshot screenshot = new Screenshot(imageFile, toUrl(config, imageFile), null);
+    if (currentContextScreenshots.get() != null) {
+      currentContextScreenshots.get().add(screenshot);
+    }
+    synchronized (allScreenshots) {
+      allScreenshots.add(screenshot);
+    }
+    threadScreenshots.get().add(screenshot);
+    return imageFile;
   }
 
   @CheckReturnValue
@@ -272,17 +288,21 @@ public class ScreenShotLaboratory {
         return null;
       }
       File imageFile = new File(config.reportsFolder(), fileName + ".png").getAbsoluteFile();
-      try {
-        FileUtils.writeByteArrayToFile(imageFile, srcFile.get());
-      }
-      catch (IOException e) {
-        log.error("Failed to save screenshot to {}", imageFile, e);
-      }
+      writeToFileSafely(srcFile.get(), imageFile);
       return imageFile;
     }
     catch (WebDriverException e) {
       log.error("Failed to take screenshot to {}", fileName, e);
       return null;
+    }
+  }
+
+  private static void writeToFileSafely(byte[] srcFile, File imageFile) {
+    try {
+      FileUtils.writeByteArrayToFile(imageFile, srcFile);
+    }
+    catch (IOException e) {
+      log.error("Failed to save screenshot to {}", imageFile, e);
     }
   }
 
@@ -303,8 +323,8 @@ public class ScreenShotLaboratory {
   }
 
   @Nonnull
-  public List<File> finishContext() {
-    List<File> result = currentContextScreenshots.get();
+  public List<Screenshot> finishContext() {
+    List<Screenshot> result = currentContextScreenshots.get();
     currentContext.set("");
     currentContextScreenshots.remove();
     return result;
@@ -314,27 +334,55 @@ public class ScreenShotLaboratory {
   @Nonnull
   public List<File> getScreenshots() {
     synchronized (allScreenshots) {
-      return unmodifiableList(allScreenshots);
+      return allScreenshots.stream()
+        .map(screenshot -> screenshot.getImageFile())
+        .filter(image -> image != null)
+        .collect(toList());
     }
   }
 
   @CheckReturnValue
   @Nonnull
   public List<File> getThreadScreenshots() {
-    List<File> screenshots = threadScreenshots.get();
-    return screenshots == null ? emptyList() : unmodifiableList(screenshots);
+    List<Screenshot> screenshots = threadScreenshots.get();
+    return streamOf(screenshots)
+      .map(screenshot -> screenshot.getImageFile())
+      .collect(toList());
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public List<Screenshot> threadScreenshots() {
+    List<Screenshot> screenshots = threadScreenshots.get();
+    return screenshots == null ? emptyList() : screenshots;
   }
 
   @CheckReturnValue
   @Nonnull
   public List<File> getContextScreenshots() {
-    List<File> screenshots = currentContextScreenshots.get();
-    return screenshots == null ? emptyList() : unmodifiableList(screenshots);
+    List<Screenshot> screenshots = currentContextScreenshots.get();
+    return streamOf(screenshots)
+      .map(screenshot -> screenshot.getImageFile())
+      .collect(toList());
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public List<Screenshot> contextScreenshots() {
+    List<Screenshot> screenshots = currentContextScreenshots.get();
+    return screenshots == null ? emptyList() : screenshots;
   }
 
   @CheckReturnValue
   @Nullable
   public File getLastScreenshot() {
+    Screenshot screenshot = lastScreenshot();
+    return screenshot == null ? null : screenshot.getImageFile();
+  }
+
+  @CheckReturnValue
+  @Nullable
+  public Screenshot lastScreenshot() {
     synchronized (allScreenshots) {
       return allScreenshots.isEmpty() ? null : allScreenshots.get(allScreenshots.size() - 1);
     }
@@ -343,20 +391,42 @@ public class ScreenShotLaboratory {
   @CheckReturnValue
   @Nonnull
   public Optional<File> getLastThreadScreenshot() {
-    List<File> screenshots = threadScreenshots.get();
+    List<File> screenshots = getThreadScreenshots();
     return getLastScreenshot(screenshots);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public Optional<Screenshot> lastThreadScreenshot() {
+    List<Screenshot> screenshots = threadScreenshots();
+    return lastScreenshot(screenshots);
   }
 
   @CheckReturnValue
   @Nonnull
   public Optional<File> getLastContextScreenshot() {
-    List<File> screenshots = currentContextScreenshots.get();
+    List<File> screenshots = getContextScreenshots();
     return getLastScreenshot(screenshots);
   }
 
   @CheckReturnValue
   @Nonnull
+  public Optional<Screenshot> lastContextScreenshot() {
+    List<Screenshot> screenshots = contextScreenshots();
+    return lastScreenshot(screenshots);
+  }
+
+  @CheckReturnValue
+  @Nonnull
   private Optional<File> getLastScreenshot(@Nullable List<File> screenshots) {
+    return screenshots == null || screenshots.isEmpty()
+      ? Optional.empty()
+      : Optional.of(screenshots.get(screenshots.size() - 1));
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  private Optional<Screenshot> lastScreenshot(@Nullable List<Screenshot> screenshots) {
     return screenshots == null || screenshots.isEmpty()
       ? Optional.empty()
       : Optional.of(screenshots.get(screenshots.size() - 1));
@@ -458,5 +528,9 @@ public class ScreenShotLaboratory {
       return null;
     }
     return lambda.apply(config);
+  }
+
+  private static <T> Stream<T> streamOf(@Nullable List<T> list) {
+    return list == null ? Stream.empty() : list.stream();
   }
 }

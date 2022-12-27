@@ -29,7 +29,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
-          name: test-report-win
+          name: test-report-windows-${{matrix.gradle-task}}
           path: ./**/build/reports
   run-tests-on-linux:
     runs-on: ubuntu-latest
@@ -62,7 +62,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
-          name: test-report
+          name: test-report-linux-${{matrix.gradle-task}}
           path: ./**/build/reports/
 
   auto-merge-dependabot:
