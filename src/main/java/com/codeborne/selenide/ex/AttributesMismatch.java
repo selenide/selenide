@@ -14,12 +14,12 @@ public class AttributesMismatch extends UIAssertionError {
                             List<String> expectedValues, List<String> actualValues,
                             @Nullable String explanation, long timeoutMs) {
     super(
-      "Attribute '"+attribute+"' values mismatch"  +
+      "Attribute '" + attribute + "' values mismatch" +
         lineSeparator() + "Actual: " + actualValues +
         lineSeparator() + "Expected: " + expectedValues +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
         lineSeparator() + "Collection: " + collection.description(),
-            expectedValues, actualValues);
+      expectedValues, actualValues);
     super.timeoutMs = timeoutMs;
   }
 }

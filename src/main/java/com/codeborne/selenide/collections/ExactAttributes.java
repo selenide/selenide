@@ -6,7 +6,6 @@ import com.codeborne.selenide.ex.AttributesMismatch;
 import com.codeborne.selenide.ex.AttributesSizeMismatch;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
-import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -60,12 +59,10 @@ public class ExactAttributes extends CollectionCondition {
       ElementNotFound elementNotFound = new ElementNotFound(collection, toString(), lastError);
       elementNotFound.timeoutMs = timeoutMs;
       throw elementNotFound;
-    }
-    else if (elements.size() != expectedValues.size()) {
+    } else if (elements.size() != expectedValues.size()) {
       throw new AttributesSizeMismatch(attribute, collection, expectedValues,
         ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
-    }
-    else {
+    } else {
       throw new AttributesMismatch(attribute, collection, expectedValues,
         ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
     }
@@ -83,6 +80,6 @@ public class ExactAttributes extends CollectionCondition {
 
   @Override
   public String toString() {
-    return "Exact attribute: '"+attribute+"' values " + expectedValues;
+    return "Exact attribute: '" + attribute + "' values " + expectedValues;
   }
 }

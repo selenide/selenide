@@ -1,6 +1,5 @@
 package com.codeborne.selenide.collections;
 
-import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -36,6 +35,6 @@ public class Attributes extends ExactAttributes {
 
   @Override
   public String toString() {
-    return "Attribute: '"+attribute+"' values " + expectedValues;
+    return "Attribute: '" + attribute + "' values " + expectedValues;
   }
 }

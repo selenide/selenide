@@ -208,20 +208,20 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void canCheckThatElementsHaveExactlyCorrectAttributes() {
     withLongTimeout(() -> {
-      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(exactAttributes("id","content", "content2")))
+      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(exactAttributes("id", "content", "content2")))
         .isInstanceOf(AttributesMismatch.class);
     });
   }
 
   @Test
   void attributesCheckThrowsElementNotFound() {
-    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(attributes("id","content1", "content2")))
+    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(attributes("id", "content1", "content2")))
       .isInstanceOf(ElementNotFound.class);
   }
 
   @Test
   void exactAttributesCheckThrowsElementNotFound() {
-    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(exactAttributes("id","content1", "content2")))
+    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(exactAttributes("id", "content1", "content2")))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {.non-existing-elements}");
   }
@@ -230,7 +230,7 @@ final class CollectionMethodsTest extends ITest {
   void attributesCheckThrowsAttributesSizeMismatch() {
     withLongTimeout(() -> {
       assertThatThrownBy(() -> $$("#dynamic-content-container span")
-        .shouldHave(attributes("id","static-content1", "static-content2", "dynamic-content1")))
+        .shouldHave(attributes("id", "static-content1", "static-content2", "dynamic-content1")))
         .isInstanceOf(AttributesSizeMismatch.class);
     });
   }
@@ -238,7 +238,7 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void attributesCheckThrowsAttributesMismatch() {
     withLongTimeout(() -> {
-      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(attributes("id","static-content1", "static-content2")))
+      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(attributes("id", "static-content1", "static-content2")))
         .isInstanceOf(AttributesMismatch.class);
     });
   }
@@ -246,7 +246,8 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void attributesCheckThrowsAttributesMismatchIfAttributeNotExist() {
     withLongTimeout(() -> {
-      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(attributes("not-existing-attribute","static-content1", "static-content2")))
+      assertThatThrownBy(() -> $$("#dynamic-content-container span")
+        .shouldHave(attributes("not-existing-attribute", "static-content1", "static-content2")))
         .isInstanceOf(AttributesMismatch.class);
     });
   }
@@ -254,7 +255,8 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void exactAttributesCheckThrowsAttributesMismatchIfAttributeNotExist() {
     withLongTimeout(() -> {
-      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(exactAttributes("not-existing-attribute","static-content1", "static-content2")))
+      assertThatThrownBy(() -> $$("#dynamic-content-container span")
+        .shouldHave(exactAttributes("not-existing-attribute", "static-content1", "static-content2")))
         .isInstanceOf(AttributesMismatch.class);
     });
   }
