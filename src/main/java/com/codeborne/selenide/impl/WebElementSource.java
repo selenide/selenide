@@ -9,6 +9,7 @@ import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import com.codeborne.selenide.ex.UIAssertionError;
 import org.openqa.selenium.By;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -120,8 +121,16 @@ public abstract class WebElementSource {
       lastError = e;
     }
 
+    return handleError(prefix, condition, invert, check, lastError, element, checkResult);
+  }
+
+  private WebElement handleError(String prefix, Condition condition, boolean invert, Condition check,
+                                 @Nullable Throwable lastError, @Nullable WebElement element, @Nullable CheckResult checkResult) {
     if (lastError != null && Cleanup.of.isInvalidSelectorError(lastError)) {
       throw Cleanup.of.wrapInvalidSelectorException(lastError);
+    }
+    if (lastError instanceof UnhandledAlertException unhandledAlertException) {
+      throw unhandledAlertException;
     }
 
     if (element == null) {

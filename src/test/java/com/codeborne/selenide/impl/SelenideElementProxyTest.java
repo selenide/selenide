@@ -18,6 +18,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.NotFoundException;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -302,6 +303,12 @@ final class SelenideElementProxyTest {
   @Test
   void shouldNotRetry_onJavaScriptException() {
     JavascriptException exception = new JavascriptException("bla");
+    assertThat(shouldRetryAfterError(exception)).isFalse();
+  }
+
+  @Test
+  void shouldNotRetry_onUnhandledAlertException() {
+    UnhandledAlertException exception = new UnhandledAlertException("unexpected alert open: {Alert text : Are you sure, Greg?}");
     assertThat(shouldRetryAfterError(exception)).isFalse();
   }
 

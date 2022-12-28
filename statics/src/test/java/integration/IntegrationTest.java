@@ -71,6 +71,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.fileDownload = HTTPGET;
     Configuration.reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "false"));
     Configuration.textCheck = FULL_TEXT;
+    Configuration.browserCapabilities = new MutableCapabilities();
   }
 
   protected void openFile(String fileName) {
