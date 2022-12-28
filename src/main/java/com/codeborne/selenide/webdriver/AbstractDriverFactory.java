@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static java.lang.Integer.parseInt;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.openqa.selenium.UnexpectedAlertBehaviour.ACCEPT_AND_NOTIFY;
+import static org.openqa.selenium.UnexpectedAlertBehaviour.ACCEPT;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.BROWSER_VERSION;
 import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
@@ -75,7 +75,7 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     if (browser.supportsInsecureCerts()) {
       capabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
     }
-    capabilities.setCapability(UNHANDLED_PROMPT_BEHAVIOUR, ACCEPT_AND_NOTIFY);
+    capabilities.setCapability(UNHANDLED_PROMPT_BEHAVIOUR, ACCEPT);
 
     transferCapabilitiesFromSystemProperties(capabilities);
 

@@ -6,6 +6,7 @@ import com.codeborne.selenide.ex.AlertNotFoundException;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -20,6 +21,8 @@ import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.Selenide.prompt;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.openqa.selenium.UnexpectedAlertBehaviour.ACCEPT_AND_NOTIFY;
+import static org.openqa.selenium.remote.CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR;
 
 final class AlertTest extends IntegrationTest {
   @AfterAll
@@ -27,23 +30,15 @@ final class AlertTest extends IntegrationTest {
     closeWebDriver();
   }
 
-  @BeforeEach
-  void openTestPage() {
-    openFile("page_with_alerts.html");
+  @BeforeAll
+  static void beforeAll() {
+    closeWebDriver();
   }
 
-  @Test
-  void unexpectedAlert() {
-    Configuration.timeout = 100;
-    $(By.name("username")).val("Greg");
-    $(byValue("Alert button")).click();
-    assertThatThrownBy(() -> $("#message").shouldHave(text("Hello, Greg!")))
-      .isInstanceOf(UIAssertionError.class)
-      .hasMessageStartingWith("UnhandledAlertException: ")
-      .hasMessageContaining("Are you sure, Greg?")
-      .hasMessageContaining("Screenshot:")
-      .hasMessageContaining("Page source:")
-      .hasCauseInstanceOf(UnhandledAlertException.class);
+  @BeforeEach
+  void openTestPage() {
+    Configuration.browserCapabilities.setCapability(UNHANDLED_PROMPT_BEHAVIOUR, ACCEPT_AND_NOTIFY);
+    openFile("page_with_alerts.html");
   }
 
   @Test
@@ -69,6 +64,21 @@ final class AlertTest extends IntegrationTest {
     prompt("Please input your username", "Aegon Targaryen");
     $("#message").shouldHave(text("Hello, Aegon Targaryen!"));
     $("#container").shouldBe(empty);
+  }
+
+  @Test
+  void canThrowExceptionInCaseOfUnexpectedAlert() {
+    Configuration.timeout = 20;
+    $(By.name("username")).val("Greg");
+    $(byValue("Alert button")).click();
+
+    assertThatThrownBy(() -> $("#message").shouldHave(text("Hello, Greg!")))
+      .isInstanceOf(UIAssertionError.class)
+      .hasMessageStartingWith("UnhandledAlertException: ")
+      .hasMessageContaining("Are you sure, Greg?")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasCauseInstanceOf(UnhandledAlertException.class);
   }
 
   @Test
