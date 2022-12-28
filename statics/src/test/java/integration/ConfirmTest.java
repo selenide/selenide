@@ -1,10 +1,14 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.DialogTextMismatch;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.UnhandledAlertException;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
@@ -19,6 +23,8 @@ import static com.codeborne.selenide.Selenide.dismiss;
 import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.openqa.selenium.UnexpectedAlertBehaviour.ACCEPT_AND_NOTIFY;
+import static org.openqa.selenium.remote.CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR;
 
 final class ConfirmTest extends IntegrationTest {
   private static final String USER_NAME = "John Mc'Clane";
@@ -28,9 +34,15 @@ final class ConfirmTest extends IntegrationTest {
     closeWebDriver();
   }
 
+  @BeforeAll
+  static void beforeAll() {
+    closeWebDriver();
+  }
+
   @BeforeEach
   void openTestPage() {
     timeout = 1000;
+    Configuration.browserCapabilities.setCapability(UNHANDLED_PROMPT_BEHAVIOUR, ACCEPT_AND_NOTIFY);
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(USER_NAME);
@@ -125,4 +137,17 @@ final class ConfirmTest extends IntegrationTest {
     assertThat(confirmDialogText)
       .isEqualTo(String.format("Get out of this page, %s?", USER_NAME));
   }
+
+  @Test
+  void canThrowExceptionInCaseOfUnexpectedConfirmDialog() {
+    $(byText("Confirm button")).click();
+    assertThatThrownBy(() -> $("h1").shouldHave(text("Page with JQuery")))
+      .isInstanceOf(UIAssertionError.class)
+      .hasMessageStartingWith("UnhandledAlertException: ")
+      .hasMessageContaining("Get out of this page, John Mc'Clane?")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasCauseInstanceOf(UnhandledAlertException.class);
+  }
+
 }
