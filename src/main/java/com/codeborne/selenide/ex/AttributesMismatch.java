@@ -10,11 +10,11 @@ import static java.lang.System.lineSeparator;
 
 @ParametersAreNonnullByDefault
 public class AttributesMismatch extends UIAssertionError {
-  public AttributesMismatch(CollectionSource collection,
+  public AttributesMismatch(String attribute, CollectionSource collection,
                             List<String> expectedValues, List<String> actualValues,
                             @Nullable String explanation, long timeoutMs) {
     super(
-      "Attributes mismatch" +
+      "Attribute '"+attribute+"' values mismatch"  +
         lineSeparator() + "Actual: " + actualValues +
         lineSeparator() + "Expected: " + expectedValues +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +

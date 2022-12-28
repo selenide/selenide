@@ -27,7 +27,7 @@ public class Attributes extends ExactAttributes {
     for (int i = 0; i < expectedValues.size(); i++) {
       WebElement element = elements.get(i);
       String expectedValue = expectedValues.get(i);
-      if (!element.getAttribute(attribute).contains(expectedValue)) {
+      if (!getAttributeValue(element).contains(expectedValue)) {
         return false;
       }
     }

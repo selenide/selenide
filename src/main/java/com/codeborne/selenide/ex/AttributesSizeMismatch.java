@@ -10,11 +10,11 @@ import static java.lang.System.lineSeparator;
 
 @ParametersAreNonnullByDefault
 public class AttributesSizeMismatch extends UIAssertionError {
-  public AttributesSizeMismatch(CollectionSource collection,
+  public AttributesSizeMismatch(String attribute, CollectionSource collection,
                                 List<String> expectedValues, List<String> actualValues,
                                 @Nullable String explanation, long timeoutMs) {
     super(
-      "Attributes size mismatch" +
+      "Attribute '"+attribute+"' values size mismatch"  +
         lineSeparator() + "Actual: " + actualValues + ", List size: " + actualValues.size() +
         lineSeparator() + "Expected: " + expectedValues + ", List size: " + expectedValues.size() +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +

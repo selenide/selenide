@@ -44,7 +44,7 @@ public class ExactAttributes extends CollectionCondition {
     for (int i = 0; i < expectedValues.size(); i++) {
       WebElement element = elements.get(i);
       String expectedValue = expectedValues.get(i);
-      if (!element.getAttribute(attribute).equals(expectedValue)) {
+      if (!getAttributeValue(element).equals(expectedValue)) {
         return false;
       }
     }
@@ -62,11 +62,11 @@ public class ExactAttributes extends CollectionCondition {
       throw elementNotFound;
     }
     else if (elements.size() != expectedValues.size()) {
-      throw new AttributesSizeMismatch(collection, expectedValues,
+      throw new AttributesSizeMismatch(attribute, collection, expectedValues,
         ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
     }
     else {
-      throw new AttributesMismatch(collection, expectedValues,
+      throw new AttributesMismatch(attribute, collection, expectedValues,
         ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
     }
   }
@@ -74,6 +74,11 @@ public class ExactAttributes extends CollectionCondition {
   @Override
   public boolean missingElementSatisfiesCondition() {
     return false;
+  }
+
+  protected String getAttributeValue(WebElement element) {
+    String attr = element.getAttribute(attribute);
+    return attr == null ? "" : attr;
   }
 
   @Override

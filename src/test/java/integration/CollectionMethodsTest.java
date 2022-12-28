@@ -40,14 +40,7 @@ import static com.codeborne.selenide.CollectionCondition.sizeNotEqual;
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.CollectionCondition.attributes;
 import static com.codeborne.selenide.CollectionCondition.exactAttributes;
-import static com.codeborne.selenide.Condition.and;
-import static com.codeborne.selenide.Condition.cssClass;
-import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Condition.partialText;
-import static com.codeborne.selenide.Condition.tagName;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.value;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
@@ -244,7 +237,23 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void failsFast_ifNoExpectedAttributesAreGiven() {
+  void attributesCheckThrowsAttributesMismatchIfAttributeNotExist() {
+    withLongTimeout(() -> {
+      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(attributes("not-existing-attribute","static-content1", "static-content2")))
+        .isInstanceOf(AttributesMismatch.class);
+    });
+  }
+
+  @Test
+  void exactAttributesCheckThrowsAttributesMismatchIfAttributeNotExist() {
+    withLongTimeout(() -> {
+      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(exactAttributes("not-existing-attribute","static-content1", "static-content2")))
+        .isInstanceOf(AttributesMismatch.class);
+    });
+  }
+
+  @Test
+  void failsFast_ifNoExpectedAttributeValuesAreGiven() {
     assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(attributes("id")))
       .isInstanceOf(IllegalArgumentException.class);
   }
