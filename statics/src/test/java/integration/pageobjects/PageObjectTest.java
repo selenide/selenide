@@ -84,6 +84,14 @@ final class PageObjectTest extends IntegrationTest {
   }
 
   @Test
+  void canInjectListOfWebElements() {
+    assertThat(pageWithSelects.listOfWebElements).hasSize(4);
+    assertThat(pageWithSelects.listOfWebElements.get(0).isDisplayed()).isTrue();
+    assertThat(pageWithSelects.listOfWebElements.get(0).getText()).isEqualTo("Dropdown list");
+    assertThat(pageWithSelects.listOfWebElements.get(3).getText()).isEqualTo("Disabled select");
+  }
+
+  @Test
   void canInjectElementsCollection() {
     pageWithSelects.h1.shouldHave(Condition.text("Page with selects"));
 
@@ -161,6 +169,9 @@ final class PageObjectTest extends IntegrationTest {
 
     @FindBy(tagName = "h2")
     List<SelenideElement> h2s;
+
+    @FindBy(tagName = "h2")
+    List<WebElement> listOfWebElements;
 
     @FindBy(tagName = "h2")
     ElementsCollection h2sElementsCollection;
