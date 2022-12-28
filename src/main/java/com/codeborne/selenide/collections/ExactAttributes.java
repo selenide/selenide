@@ -44,7 +44,7 @@ public class ExactAttributes extends CollectionCondition {
     for (int i = 0; i < expectedValues.size(); i++) {
       WebElement element = elements.get(i);
       String expectedValue = expectedValues.get(i);
-      if (!Html.text.equals(element.getAttribute(attribute), expectedValue)) {
+      if (!element.getAttribute(attribute).equals(expectedValue)) {
         return false;
       }
     }
@@ -78,6 +78,6 @@ public class ExactAttributes extends CollectionCondition {
 
   @Override
   public String toString() {
-    return "Exact values " + expectedValues;
+    return "Exact attribute: '"+attribute+"' values " + expectedValues;
   }
 }

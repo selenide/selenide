@@ -26,8 +26,8 @@ public class Attributes extends ExactAttributes {
 
     for (int i = 0; i < expectedValues.size(); i++) {
       WebElement element = elements.get(i);
-      String expectedText = expectedValues.get(i);
-      if (!Html.text.contains(element.getAttribute(attribute), expectedText)) {
+      String expectedValue = expectedValues.get(i);
+      if (!element.getAttribute(attribute).contains(expectedValue)) {
         return false;
       }
     }
@@ -36,6 +36,6 @@ public class Attributes extends ExactAttributes {
 
   @Override
   public String toString() {
-    return "attributes " + expectedValues;
+    return "Attribute: '"+attribute+"' values " + expectedValues;
   }
 }

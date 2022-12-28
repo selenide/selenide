@@ -206,15 +206,6 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void ignoresWhitespacesInAttributes() {
-    withLongTimeout(() -> {
-      $$("#dynamic-content-container span").shouldHave(
-        attributes("id","   dynamic-content\n ", "\t\t\tdynamic-content2\t\t\r\n"),
-        exactAttributes("id", "\t\n dynamic-content\n\r", "    dynamic-content2      "));
-    });
-  }
-
-  @Test
   void canCheckThatElementsHaveExactlyCorrectAttributes() {
     withLongTimeout(() -> {
       assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(exactAttributes("id","content", "content2")))
