@@ -21,6 +21,7 @@ public class ListSizeMismatch extends UIAssertionError {
                           @Nullable Exception lastError,
                           long timeoutMs) {
     super(
+      collection.driver(),
       "List size mismatch: expected: " + operator + ' ' + expectedSize +
         (explanation == null ? "" : " (because " + explanation + ")") +
         ", actual: " + sizeOf(actualElements) +
@@ -28,9 +29,9 @@ public class ListSizeMismatch extends UIAssertionError {
         lineSeparator() + "Elements: " + elementsToString(collection.driver(), actualElements),
       expectedSize,
       sizeOf(actualElements),
-      lastError
+      lastError,
+      timeoutMs
     );
-    super.timeoutMs = timeoutMs;
   }
 
   @CheckReturnValue

@@ -189,7 +189,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     while (!stopwatch.isTimeoutReached());
 
     if (lastError instanceof IndexOutOfBoundsException) {
-      throw new ElementNotFound(collection.getAlias(), collection.description(), exist, lastError);
+      throw new ElementNotFound(collection.driver(), collection.getAlias(), collection.description(), exist, lastError);
     }
     else if (lastError instanceof UIAssertionError uiAssertionError) {
       throw uiAssertionError;

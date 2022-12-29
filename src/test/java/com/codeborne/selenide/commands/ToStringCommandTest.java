@@ -52,7 +52,7 @@ final class ToStringCommandTest {
 
   @Test
   void executeMethodWhenElementNotFoundIsThrown() {
-    doThrow(new ElementNotFound(Alias.NONE, By.name("q"), Condition.visible)).when(locator).getWebElement();
+    doThrow(new ElementNotFound(driver, Alias.NONE, By.name("q"), Condition.visible)).when(locator).getWebElement();
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)
       .isEqualTo(String.format("Element not found {By.name: q}%n" +

@@ -29,17 +29,17 @@ public class SelectOptionContainingText implements Command<Void> {
     List<String> texts = merge(arguments.nth(0), arguments.nth(1));
     Map<String, String> error = selectOptionByPartialText.execute(selectField.driver(), selectField.getWebElement(), texts);
     if (error.containsKey("disabledSelect")) {
-      throw new InvalidStateException(selectField.description(), "Cannot select option in a disabled select");
+      throw new InvalidStateException(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
     }
     if (error.containsKey("disabledOptions")) {
       List<String> text = cast(error.get("disabledOptions"));
       String elementDescription = String.format("%s/option[text containing:%s]", selectField.description(), arrayToString(text));
-      throw new InvalidStateException(elementDescription, "Cannot select a disabled option");
+      throw new InvalidStateException(selectField.driver(), elementDescription, "Cannot select a disabled option");
     }
     if (error.containsKey("optionsNotFound")) {
       List<String> text = cast(error.get("optionsNotFound"));
       String elementDescription = String.format("%s/option[text containing:%s]", selectField.getSearchCriteria(), arrayToString(text));
-      throw new ElementNotFound(selectField.getAlias(), elementDescription, exist);
+      throw new ElementNotFound(selectField.driver(), selectField.getAlias(), elementDescription, exist);
     }
     return null;
   }

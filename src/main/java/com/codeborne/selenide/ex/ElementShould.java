@@ -21,6 +21,7 @@ public class ElementShould extends UIAssertionError {
                        Condition expectedCondition, @Nullable CheckResult lastCheckResult,
                        WebElement element, @Nullable Throwable lastError) {
     super(
+      driver,
       String.format("Element%s should %s%s {%s}%nElement: '%s'%s",
         alias.appendable(),
         prefix, expectedCondition, searchCriteria,
