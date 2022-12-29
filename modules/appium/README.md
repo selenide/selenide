@@ -1,6 +1,6 @@
 # selenide-appium
 
-Selenide adaptor for Appium framework. It defines concise fluent API, natural language assertions and let you focus
+Selenide adaptor for Appium framework. It defines concise fluent API, natural language assertions and lets you focus
 on the business logic of your tests.
 
 ### How to add dependency to your project
@@ -19,7 +19,7 @@ Just add to pom.xml:
 
 1. Create a class and implement WebDriverProvider interface
 
-```
+```java
 @ParametersAreNonnullByDefault
 public class AndroidDriverForApiDemos implements WebDriverProvider {
 
@@ -45,12 +45,12 @@ public class AndroidDriverForApiDemos implements WebDriverProvider {
 }
 ```
 
-2. Set Configuration.browser = AndroidDriverForApiDemos.class.getName(); //class name which implemented WebDriverProvider interface in previous step
-3. Call SelenideAppium.launchApp();
+2. Set `Configuration.browser = AndroidDriverForApiDemos.class.getName();` // class name which implemented WebDriverProvider interface in previous step
+3. Call `SelenideAppium.launchApp();`
 
 ```
   @Test
-  void testAndroidTap()  {
+  void testAndroidTap() {
     Configuration.browser = AndroidDriverWithCalculator.class.getName();
     SelenideAppium.launchApp();
     $(AppiumBy.xpath(".//*[@text='Views']")).shouldBe(visible).click(tap());
