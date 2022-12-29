@@ -49,34 +49,34 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
   private void selectOptionsByTexts(WebElementSource selectField, List<String> texts) {
     Map<String, String> error = selectOptionByText.execute(selectField.driver(), selectField.getWebElement(), texts);
     if (error.containsKey("disabledSelect")) {
-      throw new InvalidStateException(selectField.description(), "Cannot select option in a disabled select");
+      throw new InvalidStateException(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
     }
     if (error.containsKey("disabledOptions")) {
       List<String> optionsTexts = cast(error.get("disabledOptions"));
       String elementDescription = String.format("%s/option[text:%s]", selectField.description(), arrayToString(optionsTexts));
-      throw new InvalidStateException(elementDescription, "Cannot select a disabled option");
+      throw new InvalidStateException(selectField.driver(), elementDescription, "Cannot select a disabled option");
     }
     if (error.containsKey("optionsNotFound")) {
       List<String> optionsTexts = cast(error.get("optionsNotFound"));
       String elementDescription = String.format("%s/option[text:%s]", selectField.getSearchCriteria(), arrayToString(optionsTexts));
-      throw new ElementNotFound(selectField.getAlias(), elementDescription, exist);
+      throw new ElementNotFound(selectField.driver(), selectField.getAlias(), elementDescription, exist);
     }
   }
 
   private void selectOptionsByIndexes(WebElementSource selectField, List<Integer> indexes) {
     Map<String, Object> error = selectOptionByIndex.execute(selectField.driver(), selectField.getWebElement(), indexes);
     if (error.containsKey("disabledSelect")) {
-      throw new InvalidStateException(selectField.description(), "Cannot select option in a disabled select");
+      throw new InvalidStateException(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
     }
     if (error.containsKey("disabledOptions")) {
       List<Integer> index = cast(error.get("disabledOptions"));
       String elementDescription = String.format("%s/option[index:%s]", selectField.description(), arrayToString(index));
-      throw new InvalidStateException(elementDescription, "Cannot select a disabled option");
+      throw new InvalidStateException(selectField.driver(), elementDescription, "Cannot select a disabled option");
     }
     if (error.containsKey("optionsNotFound")) {
       List<Integer> index = cast(error.get("optionsNotFound"));
       String elementDescription = String.format("%s/option[index:%s]", selectField.getSearchCriteria(), arrayToString(index));
-      throw new ElementNotFound(selectField.getAlias(), elementDescription, exist);
+      throw new ElementNotFound(selectField.driver(), selectField.getAlias(), elementDescription, exist);
     }
   }
 }

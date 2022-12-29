@@ -21,7 +21,7 @@ final class ElementNotFoundTest {
 
   @Test
   void elementNotFoundWithByCriteria() {
-    ElementNotFound elementNotFoundById = new ElementNotFound(NONE, By.id("Hello"), Condition.exist);
+    ElementNotFound elementNotFoundById = new ElementNotFound(driver, NONE, By.id("Hello"), Condition.exist);
     String expectedMessage = String.format("Element not found {By.id: Hello}%n" +
       "Expected: exist%n" +
       "Timeout: 0 ms.");
@@ -30,7 +30,7 @@ final class ElementNotFoundTest {
 
   @Test
   void elementNotFoundWithAlias() {
-    ElementNotFound elementNotFoundById = new ElementNotFound(new Alias("The Hello title"), By.id("Hello"), Condition.exist);
+    ElementNotFound elementNotFoundById = new ElementNotFound(driver, new Alias("The Hello title"), By.id("Hello"), Condition.exist);
     String expectedMessage = String.format("Element \"The Hello title\" not found {By.id: Hello}%n" +
       "Expected: exist%n" +
       "Timeout: 0 ms.");
@@ -39,7 +39,7 @@ final class ElementNotFoundTest {
 
   @Test
   void elementNotFoundWithStringCriteria() {
-    ElementNotFound elementNotFoundById = new ElementNotFound(NONE, "Hello", Condition.exist);
+    ElementNotFound elementNotFoundById = new ElementNotFound(driver, NONE, "Hello", Condition.exist);
     String expectedMessage = String.format("Element not found {Hello}%n" +
       "Expected: exist%n" +
       "Timeout: 0 ms.");
@@ -48,7 +48,7 @@ final class ElementNotFoundTest {
 
   @Test
   void elementNotFoundWithStringCriteriaAndThrowableError() {
-    ElementNotFound elementNotFoundById = new ElementNotFound(NONE, "Hello", Condition.exist, new Throwable("Error message"));
+    ElementNotFound elementNotFoundById = new ElementNotFound(driver, NONE, "Hello", Condition.exist, new Throwable("Error message"));
     String expectedMessage = String.format("Element not found {Hello}%n" +
       "Expected: exist%n" +
       "Timeout: 0 ms.%n" +

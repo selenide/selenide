@@ -62,7 +62,7 @@ public class SetValue implements Command<SelenideElement> {
       String error = setValueByJs(driver, element, value);
       if (isNotEmpty(error)) {
         String elementDescription = locator.description();
-        throw new InvalidStateException(elementDescription, error);
+        throw new InvalidStateException(driver, elementDescription, error);
       }
     }
     else {

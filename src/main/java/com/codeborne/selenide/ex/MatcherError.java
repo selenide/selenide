@@ -16,14 +16,15 @@ public class MatcherError extends UIAssertionError {
                       @Nullable Exception lastError,
                       long timeoutMs) {
     super(
+      collection.driver(),
       "Collection matcher error" +
         lineSeparator() + "Expected: " + expected +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
         lineSeparator() + "Collection: " + collection.description() +
         lineSeparator() + "Elements: " + actual,
       expected, "Elements: " + actual,
-      lastError
+      lastError,
+      timeoutMs
     );
-    super.timeoutMs = timeoutMs;
   }
 }

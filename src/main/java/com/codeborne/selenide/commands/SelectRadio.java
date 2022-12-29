@@ -36,13 +36,13 @@ public class SelectRadio implements Command<SelenideElement> {
     for (WebElement radio : matchingRadioButtons) {
       if (value.equals(radio.getAttribute("value"))) {
         if (radio.getAttribute("readonly") != null) {
-          throw new InvalidStateException(locator.description(), "Cannot select readonly radio button");
+          throw new InvalidStateException(locator.driver(), locator.description(), "Cannot select readonly radio button");
         }
 
         click.click(locator.driver(), radio);
         return wrap(locator.driver(), radio);
       }
     }
-    throw new ElementNotFound(locator.getAlias(), locator.getSearchCriteria(), value(value));
+    throw new ElementNotFound(locator.driver(), locator.getAlias(), locator.getSearchCriteria(), value(value));
   }
 }
