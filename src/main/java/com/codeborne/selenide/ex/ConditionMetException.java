@@ -5,8 +5,6 @@ import com.codeborne.selenide.ObjectCondition;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.ex.ErrorMessages.extractActualValue;
-
 @ParametersAreNonnullByDefault
 public class ConditionMetException extends ObjectConditionError {
   public <T> ConditionMetException(Driver driver, ObjectCondition<T> condition, T subject) {
@@ -14,7 +12,7 @@ public class ConditionMetException extends ObjectConditionError {
       driver,
       condition.describe(subject) + " " + condition.negativeDescription(),
       condition.expectedValue(),
-      extractActualValue(condition, subject)
+      errorFormatter.extractActualValue(condition, subject)
     );
   }
 }

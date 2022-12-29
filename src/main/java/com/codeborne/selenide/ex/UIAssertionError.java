@@ -14,13 +14,12 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.ex.ErrorMessages.causedBy;
-import static com.codeborne.selenide.ex.ErrorMessages.timeout;
-
+import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
 public class UIAssertionError extends AssertionFailedError {
   private static final Logger log = LoggerFactory.getLogger(UIAssertionError.class);
+  protected static final ErrorFormatter errorFormatter = inject(ErrorFormatter.class);
 
   private final Driver driver;
   private Screenshot screenshot = Screenshot.none();
@@ -77,7 +76,7 @@ public class UIAssertionError extends AssertionFailedError {
 
   @CheckReturnValue
   protected String uiDetails() {
-    return screenshot.summary() + timeout(timeoutMs) + causedBy(getCause());
+    return errorFormatter.uiDetails(this, driver, screenshot, timeoutMs);
   }
 
   /**

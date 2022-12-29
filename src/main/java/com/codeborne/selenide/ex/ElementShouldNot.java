@@ -10,7 +10,6 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.ex.ErrorMessages.actualValue;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.lang.System.lineSeparator;
 
@@ -27,7 +26,7 @@ public class ElementShouldNot extends UIAssertionError {
         alias.appendable(),
         prefix, expectedCondition, searchCriteria, lineSeparator(),
         describe.fully(driver, element),
-        actualValue(expectedCondition, driver, element, lastCheckResult)
+        errorFormatter.actualValue(expectedCondition, driver, element, lastCheckResult)
       ),
       expectedCondition,
       lastCheckResult == null ? null : lastCheckResult.actualValue(),
