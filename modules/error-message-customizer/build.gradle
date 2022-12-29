@@ -1,0 +1,12 @@
+ext {
+  artifactId = 'error-message-customizer'
+}
+
+dependencies {
+  api project(":statics")
+  testImplementation project(':statics').sourceSets.test.output
+  testImplementation project(':modules:core').sourceSets.test.output
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+  testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}
+}

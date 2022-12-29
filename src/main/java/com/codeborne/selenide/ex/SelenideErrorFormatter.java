@@ -6,6 +6,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.DurationFormat;
+import com.codeborne.selenide.impl.Screenshot;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -17,18 +18,26 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static org.apache.commons.lang3.StringUtils.substring;
 
 @ParametersAreNonnullByDefault
-public class ErrorMessages {
+public class SelenideErrorFormatter implements ErrorFormatter {
   private static final DurationFormat df = new DurationFormat();
 
   @CheckReturnValue
   @Nonnull
-  protected static String timeout(long timeoutMs) {
+  @Override
+  public String uiDetails(AssertionError error, Driver driver, Screenshot screenshot, long timeoutMs) {
+    return screenshot.summary() + timeout(timeoutMs) + causedBy(error.getCause());
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  protected String timeout(long timeoutMs) {
     return String.format("%nTimeout: %s", df.format(timeoutMs));
   }
 
   @CheckReturnValue
   @Nonnull
-  static String actualValue(Condition condition, Driver driver,
+  @Override
+  public String actualValue(Condition condition, Driver driver,
                             @Nullable WebElement element,
                             @Nullable CheckResult lastCheckResult) {
     if (lastCheckResult != null && lastCheckResult.actualValue() != null) {
@@ -45,7 +54,7 @@ public class ErrorMessages {
 
   @Nullable
   @CheckReturnValue
-  private static String extractActualValue(Condition condition, Driver driver, @Nullable WebElement element) {
+  protected String extractActualValue(Condition condition, Driver driver, @Nullable WebElement element) {
     if (element != null) {
       try {
         return condition.actualValue(driver, element);
@@ -60,7 +69,7 @@ public class ErrorMessages {
 
   @CheckReturnValue
   @Nonnull
-  static <T> String actualValue(ObjectCondition<T> condition, @Nullable T object) {
+  protected <T> String actualValue(ObjectCondition<T> condition, @Nullable T object) {
     if (object == null) {
       return "";
     }
@@ -68,26 +77,8 @@ public class ErrorMessages {
   }
 
   @CheckReturnValue
-  @Nullable
-  static <T> String extractActualValue(ObjectCondition<T> condition, @Nonnull T object) {
-    try {
-      return condition.actualValue(object);
-    }
-    catch (RuntimeException failedToGetValue) {
-      String failedActualValue = failedToGetValue.getClass().getSimpleName() + ": " + failedToGetValue.getMessage();
-      return substring(failedActualValue, 0, 50);
-    }
-  }
-
-  @CheckReturnValue
   @Nonnull
-  static <T> String formatActualValue(@Nullable String actualValue) {
-    return actualValue == null ? "" : String.format("%nActual value: %s", actualValue);
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  static String causedBy(@Nullable Throwable cause) {
+  protected String causedBy(@Nullable Throwable cause) {
     if (cause == null) {
       return "";
     }
