@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -66,7 +67,7 @@ public class UIAssertionError extends AssertionFailedError {
   @CheckReturnValue
   @Override
   public final String getMessage() {
-    return join(super.getMessage(), uiDetails());
+    return join(super.getMessage(), generateErrorDetails());
   }
 
   @CheckReturnValue
@@ -76,8 +77,9 @@ public class UIAssertionError extends AssertionFailedError {
   }
 
   @CheckReturnValue
-  protected String uiDetails() {
-    return errorFormatter.uiDetails(this, driver, screenshot, timeoutMs);
+  @Nonnull
+  private String generateErrorDetails() {
+    return errorFormatter.generateErrorDetails(this, driver, screenshot, timeoutMs);
   }
 
   /**
