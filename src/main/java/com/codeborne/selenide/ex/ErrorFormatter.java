@@ -21,7 +21,7 @@ public interface ErrorFormatter {
   @CheckReturnValue
   @Nonnull
   default <T> String formatActualValue(@Nullable String actualValue) {
-    return actualValue == null ? "" : String.format("%nActual value: %s", actualValue);
+    return actualValue == null ? "" : String.format("Actual value: %s", actualValue);
   }
 
   @CheckReturnValue
