@@ -14,8 +14,8 @@ import static com.codeborne.selenide.ex.Strings.join;
 public class ErrorFormatterWithPageUrl extends SelenideErrorFormatter {
   @Nonnull
   @Override
-  public String uiDetails(AssertionError error, Driver driver, Screenshot screenshot, long timeoutMs) {
-    return join(super.uiDetails(error, driver, screenshot, timeoutMs), pageUrl(driver));
+  public String generateErrorDetails(AssertionError error, Driver driver, Screenshot screenshot, long timeoutMs) {
+    return join(super.generateErrorDetails(error, driver, screenshot, timeoutMs), pageUrl(driver));
   }
 
   @CheckReturnValue

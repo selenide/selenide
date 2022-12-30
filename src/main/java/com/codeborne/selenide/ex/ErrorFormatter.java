@@ -16,7 +16,7 @@ import static org.apache.commons.lang3.StringUtils.substring;
 public interface ErrorFormatter {
   @CheckReturnValue
   @Nonnull
-  String uiDetails(AssertionError error, Driver driver, Screenshot screenshot, long timeoutMs);
+  String generateErrorDetails(AssertionError error, Driver driver, Screenshot screenshot, long timeoutMs);
 
   @CheckReturnValue
   @Nonnull

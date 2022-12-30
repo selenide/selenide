@@ -24,7 +24,7 @@ public class SelenideErrorFormatter implements ErrorFormatter {
   @CheckReturnValue
   @Nonnull
   @Override
-  public String uiDetails(AssertionError error, Driver driver, Screenshot screenshot, long timeoutMs) {
+  public String generateErrorDetails(AssertionError error, Driver driver, Screenshot screenshot, long timeoutMs) {
     return join(screenshot.summary(), timeout(timeoutMs), causedBy(error.getCause()));
   }
 
