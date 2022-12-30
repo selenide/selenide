@@ -33,7 +33,7 @@ public class ElementNotFound extends UIAssertionError {
   }
 
   public ElementNotFound(CollectionSource collection, String description, @Nullable Throwable lastError) {
-    super(collection.driver(), String.format("Element%s not found {%s}" +
-      "%nExpected: %s", collection.getAlias().appendable(), collection.getSearchCriteria(), description), lastError);
+    super(collection.driver(), String.format("Element%s not found {%s}%nExpected: %s",
+      collection.getAlias().appendable(), collection.getSearchCriteria(), description), lastError);
   }
 }

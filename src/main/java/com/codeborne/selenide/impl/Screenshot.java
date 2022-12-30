@@ -46,13 +46,13 @@ public class Screenshot {
 
   public String summary() {
     if (image != null && source != null) {
-      return String.format("%nScreenshot: %s%nPage source: %s", image, source);
+      return String.format("Screenshot: %s%nPage source: %s", image, source);
     }
     else if (source != null) {
-      return String.format("%nPage source: %s", source);
+      return String.format("Page source: %s", source);
     }
     else if (image != null) {
-      return String.format("%nScreenshot: %s", image);
+      return String.format("Screenshot: %s", image);
     }
     else {
       return "";

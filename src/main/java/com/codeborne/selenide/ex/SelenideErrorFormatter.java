@@ -7,7 +7,6 @@ import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.DurationFormat;
 import com.codeborne.selenide.impl.Screenshot;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -15,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.ex.Strings.join;
 import static org.apache.commons.lang3.StringUtils.substring;
 
 @ParametersAreNonnullByDefault
@@ -25,13 +25,13 @@ public class SelenideErrorFormatter implements ErrorFormatter {
   @Nonnull
   @Override
   public String uiDetails(AssertionError error, Driver driver, Screenshot screenshot, long timeoutMs) {
-    return screenshot.summary() + timeout(timeoutMs) + causedBy(error.getCause());
+    return join(screenshot.summary(), timeout(timeoutMs), causedBy(error.getCause()));
   }
 
   @CheckReturnValue
   @Nonnull
   protected String timeout(long timeoutMs) {
-    return String.format("%nTimeout: %s", df.format(timeoutMs));
+    return String.format("Timeout: %s", df.format(timeoutMs));
   }
 
   @CheckReturnValue
@@ -41,13 +41,13 @@ public class SelenideErrorFormatter implements ErrorFormatter {
                             @Nullable WebElement element,
                             @Nullable CheckResult lastCheckResult) {
     if (lastCheckResult != null && lastCheckResult.actualValue() != null) {
-      return String.format("%nActual value: %s", lastCheckResult.actualValue());
+      return String.format("Actual value: %s", lastCheckResult.actualValue());
     }
 
     // Deprecated branch for custom condition (not migrated to CheckResult):
     String actualValue = extractActualValue(condition, driver, element);
     if (actualValue != null) {
-      return String.format("%nActual value: %s", actualValue);
+      return String.format("Actual value: %s", actualValue);
     }
     return "";
   }
@@ -82,9 +82,6 @@ public class SelenideErrorFormatter implements ErrorFormatter {
     if (cause == null) {
       return "";
     }
-    if (cause instanceof WebDriverException) {
-      return String.format("%nCaused by: %s", Cleanup.of.webdriverExceptionMessage(cause));
-    }
-    return String.format("%nCaused by: %s", cause);
+    return String.format("Caused by: %s", Cleanup.of.webdriverExceptionMessage(cause));
   }
 }

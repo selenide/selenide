@@ -11,7 +11,7 @@ class ScreenshotTest {
   @Test
   void summary() {
     assertThat(new Screenshot(new File("shot.png"), "/home/user/shot.png", "/home/user/shot.html").summary())
-      .isEqualTo(lineSeparator() + "Screenshot: /home/user/shot.png" +
+      .isEqualTo("Screenshot: /home/user/shot.png" +
         lineSeparator() + "Page source: /home/user/shot.html");
   }
 
@@ -23,13 +23,13 @@ class ScreenshotTest {
   @Test
   void summary_with_only_image() {
     assertThat(new Screenshot(new File("shot.png"), "/home/user/shot.png", null).summary())
-      .isEqualTo(lineSeparator() + "Screenshot: /home/user/shot.png");
+      .isEqualTo("Screenshot: /home/user/shot.png");
   }
 
   @Test
   void summary_with_only_page_source() {
     assertThat(new Screenshot(null, null, "/home/user/shot.html").summary())
-      .isEqualTo(lineSeparator() + "Page source: /home/user/shot.html");
+      .isEqualTo("Page source: /home/user/shot.html");
   }
 
   @Test

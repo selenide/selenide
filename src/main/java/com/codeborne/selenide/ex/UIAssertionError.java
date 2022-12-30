@@ -14,6 +14,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.ex.Strings.join;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
@@ -65,7 +66,7 @@ public class UIAssertionError extends AssertionFailedError {
   @CheckReturnValue
   @Override
   public final String getMessage() {
-    return super.getMessage() + uiDetails();
+    return join(super.getMessage(), uiDetails());
   }
 
   @CheckReturnValue
