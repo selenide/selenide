@@ -78,8 +78,8 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       .download(withExtension("txt"));
 
     assertThat(downloadedFile).hasName("имя+с+_pound,_percent,_ampersand,_left,_right,_backslash," +
-        "_left,_right,_asterisk,_question,_dollar,_exclamation,_quote,_quotes," +
-        "_colon,_at,_plus,_backtick,_pipe,_equal.txt");
+      "_left,_right,_asterisk,_question,_dollar,_exclamation,_quote,_quotes," +
+      "_colon,_at,_plus,_backtick,_pipe,_equal.txt");
 
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед \"короед\"! Амперсанды &everywhere&&;$#`");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
@@ -197,6 +197,14 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+  }
+
+  @Test
+  void downloadLargeFile() throws IOException {
+    File downloadedFile = $(byText("Download large file")).download(withExtension("txt"));
+
+    assertThat(downloadedFile).hasName("large_file.txt");
+    assertThat(downloadedFile).hasSize(5 * 1024 * 1024);
   }
 
 }

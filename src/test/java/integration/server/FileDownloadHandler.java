@@ -1,9 +1,13 @@
 package integration.server;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,6 +35,11 @@ class FileDownloadHandler extends BaseHandler {
     }
 
     String fileName = getFilenameFromRequest(request);
+    if ("large_file.txt".equals(fileName)) {
+      int contentLength = 5 * 1024 * 1024; // 5 MB
+      return new Result(SC_OK, CONTENT_TYPE_PLAIN_TEXT, contentLength, generateLargeFile(contentLength), headers(fileName),
+        longParam(request, "pause"), longParam(request, "duration"));
+    }
     byte[] fileContent = readFileContent(fileName);
     if (fileContent == null) {
       return new Result(SC_NOT_FOUND, CONTENT_TYPE_HTML_TEXT, "NOT_FOUND: " + fileName);
@@ -43,9 +52,20 @@ class FileDownloadHandler extends BaseHandler {
         ":colon,@at,+plus,`backtick,|pipe,=equal.txt";
       contentType = CONTENT_TYPE_HTML_TEXT;
     }
+    return new Result(SC_OK, contentType, fileContent, headers(fileName),
+      longParam(request, "pause"), longParam(request, "duration"));
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  private static Map<String, String> headers(String fileName) throws UnsupportedEncodingException {
     Map<String, String> map = new HashMap<>();
     map.put("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
-    return new Result(SC_OK, contentType, fileContent, map, longParam(request, "pause"), longParam(request, "duration"));
+    return map;
+  }
+
+  private InputStream generateLargeFile(final int contentLength) {
+    return new ContentGenerator(contentLength);
   }
 
   private long longParam(HttpServletRequest request, String name) {
@@ -65,4 +85,5 @@ class FileDownloadHandler extends BaseHandler {
 
     return "No cookie 'session_id' found: " + Arrays.stream(request.getCookies()).map(Cookie::getName).collect(Collectors.toList());
   }
+
 }
