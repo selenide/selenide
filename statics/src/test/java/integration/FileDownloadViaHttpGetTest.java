@@ -212,4 +212,13 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
+
+  @Test
+  void downloadLargeFile() throws IOException {
+    File downloadedFile = $(byText("Download large file")).download(withExtension("txt"));
+
+    assertThat(downloadedFile).hasName("large_file.txt");
+    assertThat(downloadedFile).hasSize(5 * 1024 * 1024);
+  }
+
 }

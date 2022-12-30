@@ -1,5 +1,7 @@
 package integration.server;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -8,7 +10,8 @@ import static java.util.Collections.emptyMap;
 class Result {
   final int httpStatus;
   final String contentType;
-  final byte[] content;
+  final int contentLength;
+  final InputStream content;
   final Map<String, String> httpHeaders;
   final long pause;
   final long duration;
@@ -26,8 +29,14 @@ class Result {
   }
 
   Result(int httpStatus, String contentType, byte[] content, Map<String, String> httpHeaders, long pause, long duration) {
+    this(httpStatus, contentType, content.length, new ByteArrayInputStream(content), httpHeaders, pause, duration);
+  }
+
+  Result(int httpStatus, String contentType, int contentLength, InputStream content,
+         Map<String, String> httpHeaders, long pause, long duration) {
     this.httpStatus = httpStatus;
     this.contentType = contentType;
+    this.contentLength = contentLength;
     this.content = content;
     this.httpHeaders = httpHeaders;
     this.pause = pause;

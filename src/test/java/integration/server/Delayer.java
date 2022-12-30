@@ -1,6 +1,7 @@
 package integration.server;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import static java.lang.Thread.sleep;
@@ -29,11 +30,11 @@ class Delayer {
     }
   }
 
-  static void writeSlowly(OutputStream os, byte[] content, long duration) throws IOException {
+  static void writeSlowly(OutputStream os, int contentLength, InputStream content, long duration) throws IOException {
     Delayer delayer = new Delayer(duration);
-    long delay = Math.max(duration / (content.length + 1), 1);
+    long delay = Math.max(duration / (contentLength + 1), 1);
     delayer.delay(delay);
-    for (byte b : content) {
+    for (int b = content.read(); b > -1; b = content.read()) {
       os.write(b);
       os.flush();
       delayer.delay(delay);
