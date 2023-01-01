@@ -18,6 +18,7 @@ public abstract class AndroidDriverProvider implements WebDriverProvider {
   @Override
   public WebDriver createDriver(@Nonnull Capabilities capabilities) {
     Configuration.timeout = 10_000;
+    Configuration.pageLoadTimeout = -1;
     UiAutomator2Options options = getUiAutomator2Options();
     options.setApp(getApplicationUnderTest().getAbsolutePath());
     try {
