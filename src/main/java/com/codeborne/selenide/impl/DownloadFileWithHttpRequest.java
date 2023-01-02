@@ -96,11 +96,10 @@ public class DownloadFileWithHttpRequest {
     String url = makeAbsoluteUrl(driver.config(), relativeOrAbsoluteUrl);
     Resource resource = parseUrl(url);
 
-    CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : createDefaultHttpClient();
-    HttpGet httpGet = new HttpGet(resource.uri());
-    configureHttpGet(httpGet, timeout);
-    addHttpHeaders(driver, httpGet, resource.credentials());
-    try {
+    try (CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : createDefaultHttpClient()) {
+      HttpGet httpGet = new HttpGet(resource.uri());
+      configureHttpGet(httpGet, timeout);
+      addHttpHeaders(driver, httpGet, resource.credentials());
       return httpClient.execute(httpGet, createHttpContext(driver), response -> {
           return handleResponse(driver, timeout, fileFilter, url, response);
         }
