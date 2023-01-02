@@ -1,5 +1,8 @@
 package integration.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.Cookie;
@@ -13,6 +16,7 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 @ParametersAreNonnullByDefault
 class FileRenderHandler extends BaseHandler {
+  private static final Logger log = LoggerFactory.getLogger(FileRenderHandler.class);
   private final Set<String> sessions;
 
   FileRenderHandler(Set<String> sessions) {
@@ -33,7 +37,8 @@ class FileRenderHandler extends BaseHandler {
       return new Result(SC_NOT_FOUND, CONTENT_TYPE_HTML_TEXT, "NOT_FOUND");
     }
 
-    generateSessionId(response);
+    generateSessionId(request, response);
+
     return new Result(SC_OK, getContentType(fileName), fileContent);
   }
 
@@ -49,12 +54,14 @@ class FileRenderHandler extends BaseHandler {
     }
   }
 
-  private void generateSessionId(HttpServletResponse http) {
-    String sessionId = "" + System.currentTimeMillis();
+  private void generateSessionId(HttpServletRequest request, HttpServletResponse response) {
+    String sessionId = String.valueOf(System.currentTimeMillis());
     Cookie cookie = new Cookie("session_id", sessionId);
     cookie.setMaxAge(-1);
     cookie.setPath("/");
-    http.addCookie(cookie);
+    response.addCookie(cookie);
+
+    log.info("Generated session ID {} for request {}", sessionId, request.getPathInfo());
     sessions.add(sessionId);
   }
 }
