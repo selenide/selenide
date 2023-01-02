@@ -8,12 +8,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.SAFARI;
 import static integration.server.LocalHttpServer.startWithRetry;
 import static java.lang.Boolean.parseBoolean;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @ExtendWith({LogTestNameExtension.class, TextReportExtension.class})
 public abstract class BaseIntegrationTest {
@@ -60,6 +63,14 @@ public abstract class BaseIntegrationTest {
 
   protected static String getBaseUrl() {
     return protocol + domain() + ":" + server.getPort();
+  }
+
+  protected static String getProtectedUrl(String username, String password, String path) throws UnsupportedEncodingException {
+    return protocol + encode(username) + ':' + encode(password) + '@' + domain() + ":" + server.getPort() + path;
+  }
+
+  private static String encode(String value) throws UnsupportedEncodingException {
+    return URLEncoder.encode(value, UTF_8.name());
   }
 
   protected static Browser browser() {
