@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.impl.DownloadFileWithHttpRequest.Resource;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.apache.hc.core5.http.Header;
@@ -13,8 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashSet;
 
+import static com.codeborne.selenide.impl.DownloadFileWithHttpRequest.parseUrl;
 import static java.util.Collections.singletonList;
 import static org.apache.hc.client5.http.protocol.HttpClientContext.COOKIE_STORE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,7 +51,7 @@ final class DownloadFileWithHttpRequestTest {
     when(driver.hasWebDriverStarted()).thenReturn(true);
     when(driver.getUserAgent()).thenReturn("This is Chrome, baby");
 
-    download.addHttpHeaders(driver, httpGet);
+    download.addHttpHeaders(driver, httpGet, "");
 
     verify(httpGet).setHeader("User-Agent", "This is Chrome, baby");
   }
@@ -56,7 +61,7 @@ final class DownloadFileWithHttpRequestTest {
     Driver driver = mock();
     HttpGet httpGet = mock();
 
-    download.addHttpHeaders(driver, httpGet);
+    download.addHttpHeaders(driver, httpGet, "");
 
     verifyNoMoreInteractions(httpGet);
   }
@@ -106,6 +111,27 @@ final class DownloadFileWithHttpRequestTest {
     HttpResponse response = responseWithHeaders();
 
     assertThat(download.getFileName("/images/6584836/", response)).isEqualTo("111-222-333-444");
+  }
+
+  @Test
+  void parseUrl_extractsUserInfoFromUrl() throws IOException, URISyntaxException {
+    assertThat(parseUrl("https://admin:secret@the-internet.herokuapp.com/basic_auth")).isEqualTo(
+      new Resource(new URI("https://the-internet.herokuapp.com/basic_auth"), "admin:secret")
+    );
+  }
+
+  @Test
+  void parseUrl_urlWithEncodedPassword() throws IOException, URISyntaxException {
+    assertThat(parseUrl("https://admin:tiger%3A%2F%2F@the-internet.herokuapp.com/basic_auth")).isEqualTo(
+      new Resource(new URI("https://the-internet.herokuapp.com/basic_auth"), "admin:tiger://")
+    );
+  }
+
+  @Test
+  void parseUrl_withoutCredentials() throws IOException, URISyntaxException {
+    assertThat(parseUrl("https://the-internet.herokuapp.com/basic_auth")).isEqualTo(
+      new Resource(new URI("https://the-internet.herokuapp.com/basic_auth"), "")
+    );
   }
 
   private HttpResponse responseWithHeaders(Header... headers) {

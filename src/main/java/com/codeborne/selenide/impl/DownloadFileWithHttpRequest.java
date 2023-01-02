@@ -5,6 +5,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.TimeoutException;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
+import com.github.bsideup.jabel.Desugar;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -38,11 +39,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.cert.X509Certificate;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptyMap;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.stream.Collectors.joining;
@@ -119,16 +123,34 @@ public class DownloadFileWithHttpRequest {
   @CheckReturnValue
   @Nonnull
   protected CloseableHttpResponse executeHttpRequest(Driver driver, String fileToDownloadLocation, long timeout) throws IOException {
+    Resource resource = parseUrl(fileToDownloadLocation);
+
     CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : createDefaultHttpClient();
-    HttpGet httpGet = new HttpGet(fileToDownloadLocation);
+    HttpGet httpGet = new HttpGet(resource.uri());
     configureHttpGet(httpGet, timeout);
-    addHttpHeaders(driver, httpGet);
+    addHttpHeaders(driver, httpGet, resource.credentials());
     try {
       return httpClient.execute(httpGet, createHttpContext(driver));
     }
     catch (SocketTimeoutException timeoutException) {
       throw new TimeoutException("Failed to download " + fileToDownloadLocation + " in " + timeout + " ms.", timeoutException);
     }
+  }
+
+  static Resource parseUrl(String urlWithCredentials) throws IOException {
+    try {
+      URI uri = new URI(urlWithCredentials);
+      return (uri.getUserInfo() == null) ? new Resource(uri, "") :
+        new Resource(new URI(urlWithCredentials.replace(uri.getRawUserInfo() + '@', "")), uri.getUserInfo());
+    }
+    catch (URISyntaxException invalidUrl) {
+      throw new IOException(String.format("Failed to download file from %s", urlWithCredentials), invalidUrl);
+    }
+  }
+
+  @Desugar
+  @ParametersAreNonnullByDefault
+  record Resource(URI uri, String credentials) {
   }
 
   protected void configureHttpGet(HttpGet httpGet, long timeout) {
@@ -159,7 +181,7 @@ public class DownloadFileWithHttpRequest {
 
   /**
    * configure HttpClient to ignore self-signed certs
-   * as described here: http://literatejava.com/networks/ignore-ssl-certificate-errors-apache-httpclient-4-4/
+   * as described here: <a href="https://literatejava.com/networks/ignore-ssl-certificate-errors-apache-httpclient-4-4/">...</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -195,9 +217,12 @@ public class DownloadFileWithHttpRequest {
     return localContext;
   }
 
-  protected void addHttpHeaders(Driver driver, HttpGet httpGet) {
+  protected void addHttpHeaders(Driver driver, HttpGet httpGet, String credentials) {
     if (driver.hasWebDriverStarted()) {
       httpGet.setHeader("User-Agent", driver.getUserAgent());
+    }
+    if (!credentials.isEmpty()) {
+      httpGet.setHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes(UTF_8)));
     }
   }
 
