@@ -18,6 +18,7 @@ dependencies {
 
   api('io.github.bonigarcia:webdrivermanager:5.3.1') {
     exclude group: 'org.apache.httpcomponents.core5'
+    exclude group: 'org.apache.httpcomponents.client5'
     exclude group: 'com.github.docker-java'
     exclude group: 'org.rauschig'
     exclude group: 'commons-lang'
