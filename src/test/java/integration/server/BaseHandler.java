@@ -62,6 +62,9 @@ public abstract class BaseHandler extends HttpServlet {
     for (Map.Entry<String, String> httpHeader : result.httpHeaders.entrySet()) {
       response.setHeader(httpHeader.getKey(), httpHeader.getValue());
     }
+    if (!result.httpHeaders.containsKey("Cache-Control")) {
+      response.setHeader("Cache-Control", "no-cache");
+    }
     try (OutputStream os = response.getOutputStream()) {
       if (result.duration == 0) {
         writeQuickly(os, result.content);

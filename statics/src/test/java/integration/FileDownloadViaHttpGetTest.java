@@ -97,9 +97,12 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @Test
   void downloadMissingFile() {
-    assertThatThrownBy(() -> $(byText("Download missing file")).download())
+    assertThatThrownBy(() -> {
+      File unexpected = $(byText("Download missing file")).download();
+      assertThat(unexpected).content().isEqualTo("This file should not be downloaded");
+    })
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessageMatching("Failed to download file http.+/files/unexisting_file.png: .+");
+      .hasMessageMatching("(?s)Failed to download file http.+/files/unexisting_file.png: .+");
 
     assertThat(collector.events()).hasSize(1);
 
