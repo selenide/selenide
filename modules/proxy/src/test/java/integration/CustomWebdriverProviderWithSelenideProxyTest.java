@@ -63,7 +63,7 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends ProxyIntegratio
       WebDriverManager.chromedriver().setup();
 
       ChromeOptions options = new ChromeOptions();
-      if (isHeadless()) options.setHeadless(true);
+      if (isHeadless()) options.addArguments("--headless=new");
       options.addArguments("--proxy-bypass-list=<-loopback>");
       return new ChromeDriver(options.merge(desiredCapabilities));
     }
@@ -72,7 +72,7 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends ProxyIntegratio
       WebDriverManager.firefoxdriver().setup();
 
       FirefoxOptions options = new FirefoxOptions();
-      if (isHeadless()) options.setHeadless(true);
+      if (isHeadless()) options.addArguments("-headless");
       options.addPreference("network.proxy.no_proxies_on", "");
       options.addPreference("network.proxy.allow_hijacking_localhost", true);
       return new FirefoxDriver(options.merge(desiredCapabilities));

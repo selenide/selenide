@@ -26,7 +26,7 @@ class EdgeDriverFactoryTest {
 
     List<String> args = args(options);
     assertThat(args).contains(
-      "--headless",
+      "--headless=new",
       "--proxy-bypass-list=<-loopback>",
       "--disable-background-networking",
       "--disable-sync",

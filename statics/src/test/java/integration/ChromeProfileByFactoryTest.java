@@ -61,7 +61,7 @@ final class ChromeProfileByFactoryTest extends IntegrationTest {
 
     String arguments = "\"--proxy-bypass-list=\\u003C-loopback>\", \"--no-sandbox\", \"--disable-3d-apis\"";
     if (Configuration.headless) {
-      assertThat(log).contains("\"args\": [ \"--headless\", " + arguments + " ]");
+      assertThat(log).contains("\"args\": [ \"--headless=new\", " + arguments + " ]");
     }
     else {
       assertThat(log).contains("\"args\": [ " + arguments + " ]");

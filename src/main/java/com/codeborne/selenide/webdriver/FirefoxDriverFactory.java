@@ -69,7 +69,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   public FirefoxOptions createCapabilities(Config config, Browser browser,
                                            @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     FirefoxOptions initialOptions = new FirefoxOptions();
-    initialOptions.setHeadless(config.headless());
+    setHeadless(config, initialOptions);
     setupBrowserBinary(config, initialOptions);
     setupPreferences(initialOptions);
 
@@ -82,6 +82,12 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
 
     injectFirefoxPrefs(options);
     return options;
+  }
+
+  protected void setHeadless(Config config, FirefoxOptions initialOptions) {
+    if (config.headless()) {
+      initialOptions.addArguments("-headless");
+    }
   }
 
   protected void setupBrowserBinary(Config config, FirefoxOptions firefoxOptions) {

@@ -161,7 +161,7 @@ final class ChromeDriverFactoryTest {
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(optionArguments).contains("--headless");
+    assertThat(optionArguments).contains("--headless=new");
   }
 
   @Test

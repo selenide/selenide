@@ -53,7 +53,7 @@ final class CustomWebDriverProviderTest extends IntegrationTest {
     public WebDriver createDriver(@Nonnull Capabilities capabilities) {
       WebDriverManager.chromedriver().setup();
       ChromeOptions options = new ChromeOptions();
-      if (browser().isHeadless()) options.setHeadless(true);
+      if (browser().isHeadless()) options.addArguments("--headless=new");
       return new CustomChromeDriver(options);
     }
   }

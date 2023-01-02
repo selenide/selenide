@@ -47,7 +47,9 @@ final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
     @Nonnull
     public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
       ChromeOptions options = new ChromeOptions();
-      options.setHeadless(config.headless());
+      if (config.headless()) {
+        options.addArguments("--headless=new");
+      }
       addSslErrorIgnoreCapabilities(options);
 
       RemoteWebDriver webDriver = new RemoteWebDriver(url, options);

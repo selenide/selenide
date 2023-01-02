@@ -56,7 +56,9 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
     ChromeOptions commonCapabilities = createCommonCapabilities(new ChromeOptions(), config, browser, proxy);
 
     ChromeOptions options = new ChromeOptions();
-    options.setHeadless(config.headless());
+    if (config.headless()) {
+      options.addArguments("--headless=new");
+    }
     if (isNotEmpty(config.browserBinary())) {
       log.info("Using browser binary: {}", config.browserBinary());
       options.setBinary(config.browserBinary());
