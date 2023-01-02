@@ -124,12 +124,12 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   protected static ChromeOptions addHeadless(ChromeOptions options) {
-    if (Configuration.headless) options.setHeadless(true);
+    if (Configuration.headless) options.addArguments("--headless=new");
     return options;
   }
 
   protected static FirefoxOptions addHeadless(FirefoxOptions options) {
-    if (Configuration.headless) options.setHeadless(true);
+    if (Configuration.headless) options.addArguments("-headless");
     return options;
   }
 

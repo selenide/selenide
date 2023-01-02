@@ -43,7 +43,9 @@ final class CustomWebdriverProviderWithRemoteBrowser extends AbstractGridTest {
     @Nonnull
     public WebDriver createDriver(@Nonnull Capabilities capabilities) {
       ChromeOptions options = new ChromeOptions();
-      options.setHeadless(Configuration.headless);
+      if (Configuration.headless) {
+        options.addArguments("--headless=new");
+      }
       addSslErrorIgnoreCapabilities(options);
 
       RemoteWebDriver webDriver = new RemoteWebDriver(url, options);

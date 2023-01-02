@@ -38,7 +38,7 @@ final class FirefoxWithProfileTest extends BaseIntegrationTest {
   void createFirefoxWithCustomProfile() throws IOException {
     FirefoxOptions options = new FirefoxOptions();
     options.setProfile(createFirefoxProfileWithExtensions());
-    if (browser().isHeadless()) options.setHeadless(true);
+    if (browser().isHeadless()) options.addArguments("-headless");
     FirefoxDriver firefox = new FirefoxDriver(options);
 
     SelenideConfig config = new SelenideConfig().browser("firefox").baseUrl(getBaseUrl());

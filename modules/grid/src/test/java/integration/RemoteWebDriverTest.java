@@ -43,7 +43,9 @@ public class RemoteWebDriverTest extends AbstractGridTest {
   private static ChromeOptions getChromeOptions() {
     ChromeOptions options = new ChromeOptions();
     options.setCapability(ACCEPT_INSECURE_CERTS, true);
-    options.setHeadless(Configuration.headless);
+    if (Configuration.headless) {
+      options.addArguments("--headless=new");
+    }
     return options;
   }
 }
