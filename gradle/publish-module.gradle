@@ -74,7 +74,7 @@ publishing {
 if (project.hasProperty("signing.keyId")) {
   apply plugin: 'signing'
 
-  tasks.withType(Sign).configureEach {
+  signing {
     afterEvaluate {
       sign publishing.publications.mavenJava
     }
