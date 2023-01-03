@@ -1,5 +1,8 @@
 == Changelog
 
+=== 2.5.1 (released 03.01.2023)
+* bump selenide from 6.10.2 to 6.11.0
+
 === 2.5.0 (released 14.12.2022)
 * #111 fix `$.click()` when working in web browser, not mobile app  --  see PR #112
 
