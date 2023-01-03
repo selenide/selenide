@@ -248,21 +248,27 @@ public class SelenideDriver {
    * Returns selected text or empty string if no text is selected.
    *
    * @return selected text
+   * @since 6.11.0
    */
   @CheckReturnValue
   @Nonnull
   public String getSelectedText() {
-    return this.executeJavaScript("return window.getSelection.toString()");
+    return this.executeJavaScript("return window.getSelection().toString()");
   }
 
   /**
    * Copy selected text or empty string if no text is selected to clipboard.
    *
+   * @return the copied text
+   *
    * @see #getClipboard()
    * @see Clipboard
+   * @since 6.11.0
    */
-  public void copy() {
-    this.getClipboard().setText(this.getSelectedText());
+  public String copy() {
+    String selectedText = this.getSelectedText();
+    this.getClipboard().setText(selectedText);
+    return selectedText;
   }
 
   @CheckReturnValue
