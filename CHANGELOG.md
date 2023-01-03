@@ -1,11 +1,16 @@
 # Changelog
 
-## 6.11.0 (planned to 3x.12.2022)
+## 6.11.0 (released 03.01.2022)
 see https://github.com/selenide/selenide/milestone/169?closed=1
 * #1817 add methods to copy and paste content  --  thanks to Evgenii Plugatar for PR #2027
+* #2054 can fail the test if unexpected alert encountered  --  see PR #2095
+* #2082 allow downloading of large files via proxy  --  see PR #2098
 * #2081 fix screenshot file permission: `-rw-r--r--`, not `-rw-------`  --  see PR #2084
 * #2087 support @As annotation for page object fields not annotated by @FindBy  --  see PR #2088
 * #2065 added method to return last page source  --  thanks to Arman Ayvazyan for PR #2065
+* #980 added possibility to add page URL to error message  --  see PR #2097
+* #2037 fixed method `Selenide.download()` to work with URL protected by BasicAuth  --  see PR #2102
+* #2101 Bump browserup-proxy-core from 2.2.6 to 2.2.7
 
 ## 6.10.3 (released 14.12.2022)
 * #2062 don't trigger "change" event from `$.select*` if value is unchanged  --  thanks to Vicente Rossello Jaume for PR #2063
