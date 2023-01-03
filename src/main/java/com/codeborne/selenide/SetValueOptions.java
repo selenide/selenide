@@ -17,7 +17,7 @@ public class SetValueOptions {
   private final CharSequence displayedText;
   private final SetValueMethod method;
 
-  private SetValueOptions(SetValueMethod method, CharSequence value, CharSequence displayedText) {
+  protected SetValueOptions(SetValueMethod method, CharSequence value, CharSequence displayedText) {
     this.method = method;
     this.value = value;
     this.displayedText = displayedText;
