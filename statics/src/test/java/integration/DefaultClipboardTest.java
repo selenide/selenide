@@ -4,12 +4,6 @@ import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.TestAbortedException;
-
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 
 import static com.codeborne.selenide.ClipboardConditions.content;
 import static com.codeborne.selenide.Condition.attribute;
@@ -19,7 +13,6 @@ import static com.codeborne.selenide.Selenide.clipboard;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class DefaultClipboardTest extends IntegrationTest {
 
@@ -71,16 +64,5 @@ public class DefaultClipboardTest extends IntegrationTest {
   public void checkSetValue() {
     clipboard().setText("111");
     assertThat(clipboard().getText()).isEqualTo("111");
-  }
-
-  private void assumeClipboardSupported() {
-    assumeThat(GraphicsEnvironment.isHeadless()).isFalse();
-
-    try {
-      Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-    }
-    catch (UnsupportedFlavorException | IOException e) {
-      throw new TestAbortedException("Clipboard not supported in current environment", e);
-    }
   }
 }
