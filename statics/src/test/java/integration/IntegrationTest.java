@@ -11,6 +11,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.opentest4j.TestAbortedException;
+
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 
 import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Browsers.CHROME;
@@ -23,6 +29,7 @@ import static com.codeborne.selenide.TextCheck.FULL_TEXT;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
+import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 
 @ExtendWith(ScreenShooterExtension.class)
@@ -128,5 +135,14 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
 
   private static void addSslErrorIgnoreOptions(MutableCapabilities options) {
     options.setCapability(ACCEPT_INSECURE_CERTS, true);
+  }
+
+  protected void assumeClipboardSupported() {
+    assumeThat(GraphicsEnvironment.isHeadless()).isFalse();
+    try {
+      Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+    } catch (UnsupportedFlavorException | IOException e) {
+      throw new TestAbortedException("Clipboard not supported in current environment", e);
+    }
   }
 }
