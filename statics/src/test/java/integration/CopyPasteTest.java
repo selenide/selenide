@@ -1,10 +1,13 @@
 package integration;
 
-import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.clipboard;
+import static com.codeborne.selenide.Selenide.copy;
+import static com.codeborne.selenide.Selenide.getSelectedText;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class CopyPasteTest extends IntegrationTest {
@@ -17,23 +20,26 @@ final class CopyPasteTest extends IntegrationTest {
   @Test
   void copyEmptySelection() {
     openFile("start_page.html");
-    Selenide.clipboard().setText("text");
-    Selenide.copy();
-    assertThat(Selenide.clipboard().getText()).isEmpty();
+    clipboard().setText("text");
+    copy();
+    assertThat(clipboard().getText()).isEmpty();
   }
 
   @Test
   void copyNonEmptySelection() {
     openFile("start_page.html");
-    Selenide.$("h1").doubleClick();
-    Selenide.copy();
-    assertThat(Selenide.clipboard().getText()).isEqualTo("Selenide");
+    $("#greeting").doubleClick();
+    assertThat(getSelectedText()).isEqualTo("Hello_my_friend");
+    copy();
+    assertThat(clipboard().getText()).isEqualTo("Hello_my_friend");
   }
 
   @Test
   void pasteToField() {
     openFile("page_with_inputs_and_hints.html");
-    Selenide.clipboard().setText("text");
-    Selenide.$("#username").paste().shouldHave(exactText("text"));
+    clipboard().setText("text");
+    $("#username")
+      .paste()
+      .shouldHave(value("text"));
   }
 }
