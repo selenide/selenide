@@ -155,10 +155,10 @@ public class DownloadFileToFolder {
       Downloads downloads = new Downloads(newFiles(folder, clickMoment));
       List<DownloadedFile> matchingFiles = downloads.files(fileFilter);
       if (!matchingFiles.isEmpty()) {
-        log.debug("Found matching files: {}", matchingFiles);
+        log.debug("Found matching files in {}: {}", folder, matchingFiles);
         break;
       }
-      log.debug("Matching files not found: {}, all new files: {}", matchingFiles, downloads.filesAsString());
+      log.debug("Matching files not found in {}: {}, all new files: {}", folder, matchingFiles, downloads.filesAsString());
       failFastIfNoChanges(folder, fileFilter, clickMoment, start, timeout, incrementTimeout);
     }
   }

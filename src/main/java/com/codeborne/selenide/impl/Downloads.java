@@ -59,9 +59,7 @@ public class Downloads {
 
     int i = 0;
     for (DownloadedFile file : files) {
-      sb.append("  #").append(++i)
-        .append("  ").append(file.getFile().getAbsolutePath())
-        .append(" (modified at: ").append(file.getFile()).append(")\n");
+      sb.append("  #").append(++i).append("  ").append(file.toString()).append("\n");
     }
     return sb.toString();
   }
