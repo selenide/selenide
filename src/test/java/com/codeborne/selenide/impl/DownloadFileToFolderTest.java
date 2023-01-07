@@ -45,7 +45,7 @@ final class DownloadFileToFolderTest {
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");
   }
 
-  @RepeatedTest(100)
+  @RepeatedTest(300)
   void tracksForNewFilesInDownloadsFolder() throws IOException {
     String newFileName = "bingo-bongo.txt";
     doAnswer((Answer<Void>) i -> {
