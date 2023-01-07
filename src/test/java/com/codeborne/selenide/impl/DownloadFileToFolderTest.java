@@ -7,6 +7,7 @@ import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.files.FileFilters;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.openqa.selenium.WebDriver;
@@ -44,7 +45,7 @@ final class DownloadFileToFolderTest {
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");
   }
 
-  @Test
+  @RepeatedTest(100)
   void tracksForNewFilesInDownloadsFolder() throws IOException {
     String newFileName = "bingo-bongo.txt";
     doAnswer((Answer<Void>) i -> {

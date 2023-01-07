@@ -163,8 +163,9 @@ public class DownloadFileToFolder {
     long lastFileUpdate = folder.lastModificationTime().orElse(start);
     long filesHasNotBeenUpdatedForMs = currentTimeMillis() - lastFileUpdate;
     if (filesHasNotBeenUpdatedForMs > incrementTimeout) {
-      String message = String.format("Failed to download file%s in %d ms: files in %s haven't been modified for %s ms.",
-        filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs);
+      String message = String.format(
+        "Failed to download file%s in %d ms: files in %s haven't been modified for %s ms.%nModification times: %s",
+        filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs, folder.modificationTimes());
       throw new FileNotFoundException(message);
     }
   }

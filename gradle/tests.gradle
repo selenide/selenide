@@ -1,6 +1,6 @@
 subprojects {
   tasks.withType(Test).configureEach {
-    include 'com/codeborne/selenide/**/*'
+    include 'com/codeborne/selenide/**/*DownloadFileToFolderTest*'
   }
 
   tasks.register("ie", Test) {
