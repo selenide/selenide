@@ -80,7 +80,7 @@ public class DownloadFileToFolder {
     action.perform(driver, clickable);
 
     waitForNewFiles(fileFilter, folder, downloadStartedAt, timeout, incrementTimeout, pollingInterval);
-    waitUntilDownloadsCompleted(driver.browser(), folder, fileFilter, timeout, incrementTimeout, pollingInterval);
+    waitUntilDownloadsCompleted(driver.browser(), folder, fileFilter, timeout, incrementTimeout, pollingInterval, downloadStartedAt);
 
     Downloads newDownloads = new Downloads(newFiles(folder, downloadStartedAt));
     if (log.isInfoEnabled()) {
@@ -95,12 +95,13 @@ public class DownloadFileToFolder {
   }
 
   private void waitUntilDownloadsCompleted(Browser browser, DownloadsFolder folder, FileFilter filter,
-                                           long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
+                                           long timeout, long incrementTimeout, long pollingInterval, long clickMoment)
+    throws FileNotFoundException {
     if (browser.isChrome() || browser.isEdge()) {
-      waitUntilFileDisappears(folder, CHROME_TEMPORARY_FILE, filter, timeout, incrementTimeout, pollingInterval);
+      waitUntilFileDisappears(folder, CHROME_TEMPORARY_FILE, filter, timeout, incrementTimeout, pollingInterval, clickMoment);
     }
     else if (browser.isFirefox()) {
-      waitUntilFileDisappears(folder, FIREFOX_TEMPORARY_FILE, filter, timeout, incrementTimeout, pollingInterval);
+      waitUntilFileDisappears(folder, FIREFOX_TEMPORARY_FILE, filter, timeout, incrementTimeout, pollingInterval, clickMoment);
     }
     else {
       waitWhileFilesAreBeingModified(folder, timeout, pollingInterval);
@@ -108,14 +109,15 @@ public class DownloadFileToFolder {
   }
 
   private void waitUntilFileDisappears(DownloadsFolder folder, String extension, FileFilter filter,
-                                       long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
+                                       long timeout, long incrementTimeout, long pollingInterval, long clickMoment)
+    throws FileNotFoundException {
     for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       if (!folder.hasFiles(extension, filter)) {
         log.debug("No {} files found in {}, conclude download is completed", extension, folder);
         return;
       }
       log.debug("Found {} files in {}, waiting for {} ms...", extension, folder, pollingInterval);
-      failFastIfNoChanges(folder, filter, start, timeout, incrementTimeout);
+      failFastIfNoChanges(folder, filter, clickMoment, start, timeout, incrementTimeout);
     }
 
     if (folder.hasFiles(extension, filter)) {
@@ -151,24 +153,28 @@ public class DownloadFileToFolder {
                                long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
     for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       Downloads downloads = new Downloads(newFiles(folder, clickMoment));
-      if (!downloads.files(fileFilter).isEmpty()) {
+      List<DownloadedFile> matchingFiles = downloads.files(fileFilter);
+      if (!matchingFiles.isEmpty()) {
+        log.debug("Found matching files: {}", matchingFiles);
         break;
       }
-      failFastIfNoChanges(folder, fileFilter, start, timeout, incrementTimeout);
+      log.debug("Matching files not found: {}, all new files: {}", matchingFiles, downloads.filesAsString());
+      failFastIfNoChanges(folder, fileFilter, clickMoment, start, timeout, incrementTimeout);
     }
   }
 
   private void failFastIfNoChanges(DownloadsFolder folder, FileFilter filter,
-                                   long start, long timeout, long incrementTimeout) throws FileNotFoundException {
+                                   long clickMoment, long start, long timeout, long incrementTimeout) throws FileNotFoundException {
     long lastFileUpdate = folder.lastModificationTime().orElse(start);
     long now = currentTimeMillis();
     long filesHasNotBeenUpdatedForMs = now - lastFileUpdate;
     if (filesHasNotBeenUpdatedForMs > incrementTimeout) {
       String message = String.format(
         "Failed to download file%s in %d ms: files in %s haven't been modified for %s ms. " +
-          "(started at: %s, lastFileUpdate: %s, now: %s, incrementTimeout: %s)" +
+          "(clickMoment: %s, started at: %s, lastFileUpdate: %s, now: %s, incrementTimeout: %s)" +
           "%nModification times: %s",
-        filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs, start, lastFileUpdate, now, incrementTimeout,
+        filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs,
+        clickMoment, start, lastFileUpdate, now, incrementTimeout,
         folder.modificationTimes());
       throw new FileNotFoundException(message);
     }
