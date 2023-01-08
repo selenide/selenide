@@ -63,14 +63,21 @@ final class DownloadFileToFolderTest {
   void fileModificationCheck() throws IOException {
     assertThat(isFileModifiedLaterThan(file(1597333000L), 1597333000L)).isTrue();
     assertThat(isFileModifiedLaterThan(file(1597333000L), 1597332999L)).isTrue();
-    assertThat(isFileModifiedLaterThan(file(1597333000L), 1597334000L)).isFalse();
+    assertThat(isFileModifiedLaterThan(file(1597333000L), 1597334001L)).isFalse();
   }
 
   @Test
-  void fileModificationCheck_workWithSecondsPrecision() throws IOException {
+  void fileModificationCheck_worksWithSecondsPrecision() throws IOException {
     assertThat(isFileModifiedLaterThan(file(1111111000L), 1111111000L)).isTrue();
     assertThat(isFileModifiedLaterThan(file(1111111000L), 1111111999L)).isTrue();
-    assertThat(isFileModifiedLaterThan(file(1111111000L), 1111112000L)).isFalse();
+    assertThat(isFileModifiedLaterThan(file(1111111000L), 1111112000L)).isTrue();
+    assertThat(isFileModifiedLaterThan(file(1111111000L), 1111112001L)).isFalse();
+  }
+
+  @Test
+  void fileModificationCheck_worksEvenIfFileModificationTime_isInPreviousSecond() throws IOException {
+    assertThat(isFileModifiedLaterThan(file(1111111112999L), 1111111113004L)).isTrue();
+    assertThat(isFileModifiedLaterThan(file(1111111114998L), 1111111115002L)).isTrue();
   }
 
   private File file(long modifiedAt) throws IOException {
