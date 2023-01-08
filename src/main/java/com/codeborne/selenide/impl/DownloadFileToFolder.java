@@ -200,6 +200,6 @@ public class DownloadFileToFolder {
    * We have to ignore the difference in milliseconds.
    */
   static boolean isFileModifiedLaterThan(File file, long timestamp) {
-    return file.lastModified() >= timestamp / 1000L * 1000L;
+    return file.lastModified() - timestamp >= -1000L;
   }
 }
