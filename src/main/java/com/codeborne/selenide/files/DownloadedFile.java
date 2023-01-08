@@ -36,4 +36,9 @@ public class DownloadedFile {
   public String getContentType() {
     return headers.get("content-type");
   }
+
+  @Override
+  public String toString() {
+    return String.format("%s (modified at: %s)", file.getAbsolutePath(), file.lastModified());
+  }
 }

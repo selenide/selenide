@@ -55,11 +55,11 @@ public class Downloads {
   @Nonnull
   public String filesAsString() {
     StringBuilder sb = new StringBuilder();
-    sb.append(files.size()).append(" files:\n");
+    sb.append(files.size()).append(" files at ").append(System.currentTimeMillis()).append(":\n");
 
     int i = 0;
     for (DownloadedFile file : files) {
-      sb.append("  #").append(++i).append("  ").append(file.getFile().getAbsolutePath()).append("\n");
+      sb.append("  #").append(++i).append("  ").append(file.toString()).append("\n");
     }
     return sb.toString();
   }
