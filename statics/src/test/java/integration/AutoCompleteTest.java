@@ -12,8 +12,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Configuration.fastSetValue;
 import static com.codeborne.selenide.Selenide.$;
 
-@Disabled
-  // this test works on my machine, but fails on Jenkins. Need to investigate it.
+@Disabled("this test works on my machine, but fails on Jenkins. Need to investigate it.")
 final class AutoCompleteTest extends IntegrationTest {
   @BeforeEach
   void openTestPageWithAutocomplete() {
