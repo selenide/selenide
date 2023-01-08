@@ -522,13 +522,13 @@ final class CollectionMethodsTest extends ITest {
   void shouldAnyMatchPredicate() {
     $$("#radioButtons input")
       .shouldBe(anyMatch("value==cat",
-        el -> el.getAttribute("value").equals("cat")));
+        el -> "cat".equals(el.getAttribute("value"))));
   }
 
   @Test
   void errorWhenAnyNotMatchedButShouldBe() {
     assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(anyMatch("value==dog",
-      el -> el.getAttribute("value").equals("dog"))))
+      el -> "dog".equals(el.getAttribute("value")))))
       .isInstanceOf(MatcherError.class)
       .hasMessageContaining(String.format("Collection matcher error" +
         "%nExpected: any of elements to match [value==dog] predicate"));
@@ -538,13 +538,13 @@ final class CollectionMethodsTest extends ITest {
   void shouldAllMatchPredicate() {
     $$("#radioButtons input")
       .shouldBe(allMatch("name==me",
-        el -> el.getAttribute("name").equals("me")));
+        el -> "me".equals(el.getAttribute("name"))));
   }
 
   @Test
   void errorWhenAllNotMatchedButShouldBe() {
     assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(allMatch("value==cat",
-      el -> el.getAttribute("value").equals("cat"))))
+      el -> "cat".equals(el.getAttribute("value")))))
       .isInstanceOf(MatcherError.class)
       .hasMessageContaining(String.format("Collection matcher error" +
         "%nExpected: all of elements to match [value==cat] predicate"));
@@ -554,13 +554,13 @@ final class CollectionMethodsTest extends ITest {
   void shouldNoneMatchPredicate() {
     $$("#radioButtons input")
       .shouldBe(noneMatch("name==you",
-        el -> el.getAttribute("name").equals("you")));
+        el -> "you".equals(el.getAttribute("name"))));
   }
 
   @Test
   void errorWhenSomeMatchedButNoneShould() {
     assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(noneMatch("value==cat",
-      el -> el.getAttribute("value").equals("cat"))))
+      el -> "cat".equals(el.getAttribute("value")))))
       .isInstanceOf(MatcherError.class)
       .hasMessageContaining(String.format("Collection matcher error" +
         "%nExpected: none of elements to match [value==cat] predicate"));

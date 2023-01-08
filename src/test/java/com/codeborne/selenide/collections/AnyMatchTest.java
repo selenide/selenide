@@ -19,14 +19,14 @@ final class AnyMatchTest {
 
   @Test
   void applyWithEmptyList() {
-    assertThat(new AnyMatch("Predicate description", it -> it.getText().equals("World"))
+    assertThat(new AnyMatch("Predicate description", it -> "World".equals(it.getText()))
       .test(mockCollection("Collection description").getElements()))
       .isFalse();
   }
 
   @Test
   void applyWithNonMatchingPredicate() {
-    assertThat(new AnyMatch("Predicate description", it -> it.getText().equals("World"))
+    assertThat(new AnyMatch("Predicate description", it -> "World".equals(it.getText()))
       .test(singletonList(element1)))
       .isFalse();
   }
@@ -35,7 +35,7 @@ final class AnyMatchTest {
   void applyWithMatchingPredicate() {
     CollectionSource collection = mockCollection("Collection description", element1, element2);
 
-    assertThat(new AnyMatch("Predicate description", it -> it.getText().equals("World"))
+    assertThat(new AnyMatch("Predicate description", it -> "World".equals(it.getText()))
       .test(collection.getElements()))
       .isTrue();
   }
@@ -45,7 +45,7 @@ final class AnyMatchTest {
     CollectionSource collection = mockCollection("Collection description");
 
     assertThatThrownBy(() ->
-      new AnyMatch("Predicate description", it -> it.getText().equals("World"))
+      new AnyMatch("Predicate description", it -> "World".equals(it.getText()))
         .fail(collection,
           singletonList(element1),
           new Exception("Exception message"), 10000))
@@ -58,7 +58,7 @@ final class AnyMatchTest {
   @Test
   void failOnEmptyCollection() {
     assertThatThrownBy(() ->
-      new AnyMatch("Predicate description", it -> it.getText().equals("World"))
+      new AnyMatch("Predicate description", it -> "World".equals(it.getText()))
         .fail(mockCollection("Collection description"),
           emptyList(),
           new Exception("Exception message"), 10000))

@@ -140,13 +140,13 @@ final class ConditionsTest extends ITest {
 
   @Test
   void matchWithCustomPredicateShouldCheckCondition() {
-    $("#multirowTable").should(match("border=1", el -> el.getAttribute("border").equals("1")));
+    $("#multirowTable").should(match("border=1", el -> "1".equals(el.getAttribute("border"))));
   }
 
   @Test
   void matchWithPredicateShouldReportErrorMessage() {
     assertThatThrownBy(() ->
-      $("#multirowTable").should(match("tag=input", el -> el.getTagName().equals("input1")))
+      $("#multirowTable").should(match("tag=input", el -> "input1".equals(el.getTagName())))
     )
       .hasMessageStartingWith("Element should match 'tag=input' predicate. {#multirowTable}")
       .hasMessageNotContaining("Actual value");
@@ -155,7 +155,7 @@ final class ConditionsTest extends ITest {
   @Test
   void matchWithShouldNotPredicateReportErrorMessage() {
     assertThatThrownBy(() ->
-      $("#multirowTable").shouldNot(match("border=1", el -> el.getAttribute("border").equals("1")))
+      $("#multirowTable").shouldNot(match("border=1", el -> "1".equals(el.getAttribute("border"))))
     )
       .hasMessageStartingWith(
         "Element should not match 'border=1' predicate. {#multirowTable}");

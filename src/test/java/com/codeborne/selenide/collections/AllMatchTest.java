@@ -20,14 +20,14 @@ final class AllMatchTest {
 
   @Test
   void applyWithEmptyList() {
-    assertThat(new AllMatch("Predicate description", it -> it.getText().equals("EmptyList"))
+    assertThat(new AllMatch("Predicate description", it -> "EmptyList".equals(it.getText()))
       .test(mockCollection("Collection description").getElements()))
       .isFalse();
   }
 
   @Test
   void applyWithNonMatchingPredicate() {
-    assertThat(new AllMatch("Predicate description", it -> it.getText().equals("NotPresent"))
+    assertThat(new AllMatch("Predicate description", it -> "NotPresent".equals(it.getText()))
       .test(collection.getElements()))
       .isFalse();
   }
@@ -55,7 +55,7 @@ final class AllMatchTest {
   @Test
   void failOnEmptyCollection() {
     assertThatThrownBy(() ->
-      new AllMatch("Predicate description", it -> it.getText().equals("Test"))
+      new AllMatch("Predicate description", it -> "Test".equals(it.getText()))
         .fail(mockCollection("Collection description"),
           emptyList(),
           new Exception("Exception message"), 10000))

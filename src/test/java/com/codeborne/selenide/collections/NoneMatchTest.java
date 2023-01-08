@@ -20,7 +20,7 @@ final class NoneMatchTest {
 
   @Test
   void applyWithEmptyList() {
-    assertThat(new NoneMatch("Predicate description", it -> it.getText().equals("EmptyList"))
+    assertThat(new NoneMatch("Predicate description", it -> "EmptyList".equals(it.getText()))
       .test(mockCollection("Collection description").getElements()))
       .isFalse();
   }
@@ -34,7 +34,7 @@ final class NoneMatchTest {
 
   @Test
   void applyWithNonMatchingPredicate() {
-    assertThat(new NoneMatch("Predicate description", it -> it.getText().equals("NotPresent"))
+    assertThat(new NoneMatch("Predicate description", it -> "NotPresent".equals(it.getText()))
       .test(collection.getElements()))
       .isTrue();
   }
@@ -42,7 +42,7 @@ final class NoneMatchTest {
   @Test
   void failOnEmptyCollection() {
     assertThatThrownBy(() ->
-      new NoneMatch("Predicate description", it -> it.getText().equals("Test"))
+      new NoneMatch("Predicate description", it -> "Test".equals(it.getText()))
         .fail(mockCollection("Collection description"),
           emptyList(),
           new Exception("Exception message"), 10000))

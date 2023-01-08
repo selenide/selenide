@@ -56,7 +56,7 @@ final class NotExistingElementTest extends ITest {
   @Test
   void shouldNot_match() {
     assertThatThrownBy(() ->
-      $("#not_exist").shouldNot(match("border=1", el -> el.getAttribute("border").equals("1")))
+      $("#not_exist").shouldNot(match("border=1", el -> "1".equals(el.getAttribute("border"))))
     ).isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {#not_exist}");
   }

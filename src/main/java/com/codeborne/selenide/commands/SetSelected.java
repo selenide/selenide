@@ -33,10 +33,10 @@ public class SetSelected implements Command<SelenideElement> {
       throw new InvalidStateException(locator.driver(), locator.description(), "Cannot change invisible element");
     }
     String tag = element.getTagName();
-    if (!tag.equals("option")) {
-      if (tag.equals("input")) {
+    if (!"option".equals(tag)) {
+      if ("input".equals(tag)) {
         String type = element.getAttribute("type");
-        if (!type.equals("checkbox") && !type.equals("radio")) {
+        if (!"checkbox".equals(type) && !"radio".equals(type)) {
           throw new InvalidStateException(locator.driver(), locator.description(), "Only use setSelected on checkbox/option/radio");
         }
       }
