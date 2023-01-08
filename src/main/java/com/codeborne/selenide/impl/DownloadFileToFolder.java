@@ -155,10 +155,11 @@ public class DownloadFileToFolder {
       Downloads downloads = new Downloads(newFiles(folder, clickMoment));
       List<DownloadedFile> matchingFiles = downloads.files(fileFilter);
       if (!matchingFiles.isEmpty()) {
-        log.debug("Found matching files in {}: {}", folder, matchingFiles);
+        log.debug("Found matching files in {} (exists: {}): {}", folder, folder.toFile().exists(), matchingFiles);
         break;
       }
-      log.debug("Matching files not found in {}: {}, all new files: {}", folder, matchingFiles, downloads.filesAsString());
+      log.debug("Matching files not found in {} (exists: {}): {}, all new files: {}, all files: {}", folder, folder.toFile().exists(),
+        matchingFiles, downloads.filesAsString(), folder.files());
       failFastIfNoChanges(folder, fileFilter, clickMoment, start, timeout, incrementTimeout);
     }
   }
@@ -211,6 +212,6 @@ public class DownloadFileToFolder {
    * We have to ignore the difference in milliseconds.
    */
   static boolean isFileModifiedLaterThan(File file, long timestamp) {
-    return file.lastModified() >= timestamp / 1000L * 1000L;
+    return file.lastModified() - timestamp >= -1000L;
   }
 }
