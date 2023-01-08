@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
@@ -28,6 +29,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createTempDirectory;
 import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
+import static java.util.regex.Pattern.DOTALL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -214,7 +216,9 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .download(shortIncrementTimeout))
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(".+files in .+ haven't been modified for \\d+ ms.");
+      .hasMessageMatching(Pattern.compile(".+files in .+ haven't been modified for \\d+ ms. " +
+        "\\(started at: \\d+, lastFileUpdate: \\d+, now: \\d+, incrementTimeout: \\d+\\)\\s*" +
+        "Modification times: \\{.*}", DOTALL));
   }
 
   @Test
@@ -229,7 +233,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     })
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(".+files in .+ haven't been modified for \\d+ ms.");
+      .hasMessageMatching(Pattern.compile(".+files in .+ haven't been modified for \\d+ ms\\..*", DOTALL));
   }
 
   @Test

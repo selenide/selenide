@@ -151,9 +151,12 @@ public class DownloadFileToFolder {
                                long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
     for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       Downloads downloads = new Downloads(newFiles(folder, clickMoment));
-      if (!downloads.files(fileFilter).isEmpty()) {
+      List<DownloadedFile> matchingFiles = downloads.files(fileFilter);
+      if (!matchingFiles.isEmpty()) {
         break;
       }
+      log.debug("Matching files not found in {} (exists: {}): {}, all new files: {}, all files: {}", folder, folder.toFile().exists(),
+        matchingFiles, downloads.filesAsString(), folder.files());
       failFastIfNoChanges(folder, fileFilter, start, timeout, incrementTimeout);
     }
   }
@@ -161,10 +164,16 @@ public class DownloadFileToFolder {
   private void failFastIfNoChanges(DownloadsFolder folder, FileFilter filter,
                                    long start, long timeout, long incrementTimeout) throws FileNotFoundException {
     long lastFileUpdate = folder.lastModificationTime().orElse(start);
-    long filesHasNotBeenUpdatedForMs = currentTimeMillis() - lastFileUpdate;
+    long now = currentTimeMillis();
+    long filesHasNotBeenUpdatedForMs = now - lastFileUpdate;
     if (filesHasNotBeenUpdatedForMs > incrementTimeout) {
-      String message = String.format("Failed to download file%s in %d ms: files in %s haven't been modified for %s ms.",
-        filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs);
+      String message = String.format(
+        "Failed to download file%s in %d ms: files in %s haven't been modified for %s ms. " +
+          "(started at: %s, lastFileUpdate: %s, now: %s, incrementTimeout: %s)" +
+          "%nModification times: %s",
+        filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs,
+        start, lastFileUpdate, now, incrementTimeout,
+        folder.modificationTimes());
       throw new FileNotFoundException(message);
     }
   }
