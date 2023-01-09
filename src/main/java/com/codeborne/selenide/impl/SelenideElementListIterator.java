@@ -15,8 +15,7 @@ import java.util.ListIterator;
 @Deprecated
 public class SelenideElementListIterator extends SelenideElementIterator implements ListIterator<SelenideElement> {
   public SelenideElementListIterator(CollectionSource collection, int index) {
-    super(collection);
-    this.index = index;
+    super(collection, index);
   }
 
   @Override

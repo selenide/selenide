@@ -14,7 +14,12 @@ public class SelenideElementIterator implements Iterator<SelenideElement> {
   protected int index;
 
   public SelenideElementIterator(CollectionSource collection) {
+    this(collection, 0);
+  }
+
+  protected SelenideElementIterator(CollectionSource collection, int index) {
     this.collection = collection;
+    this.index = index;
   }
 
   @Override
