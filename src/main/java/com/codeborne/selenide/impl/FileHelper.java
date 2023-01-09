@@ -29,8 +29,7 @@ public final class FileHelper {
 
     try (FileOutputStream out = new FileOutputStream(targetFile)) {
       byte[] buffer = new byte[1024];
-      int len;
-      while ((len = in.read(buffer)) != -1) {
+      for (int len = in.read(buffer); len > -1; len = in.read(buffer)) {
         out.write(buffer, 0, len);
       }
     }
