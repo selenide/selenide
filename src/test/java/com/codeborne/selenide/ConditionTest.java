@@ -327,7 +327,7 @@ final class ConditionTest {
 
   @Test
   void shouldHaveText_doesNotAccept_nullParameter() {
-    //noinspection ConstantConditions
+    //noinspection DataFlowIssue
     assertThatThrownBy(() -> text(null))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Argument must not be null or empty string. Use $.shouldBe(empty) or $.shouldHave(exactText(\"\").");

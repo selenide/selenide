@@ -26,7 +26,7 @@ public class FrameByIdOrName implements ExpectedCondition<WebDriver> {
 
   @Override
   @Nullable
-  public WebDriver apply(@SuppressWarnings("NullableProblems") WebDriver driver) {
+  public WebDriver apply(WebDriver driver) {
     try {
       return requireNonNull(driver).switchTo().frame(driver.findElement(locator));
     }
