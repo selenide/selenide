@@ -21,15 +21,15 @@ public class CiReportUrl {
       log.debug("Using variable selenide.reportsUrl={}", reportsUrl);
       return resolveUrlSource(reportsUrl);
     }
-    reportsUrl = getJenkinsReportsUrl();
-    if (!isEmpty(reportsUrl)) {
-      log.debug("Using Jenkins BUILD_URL: {}", reportsUrl);
-      return reportsUrl;
+    String jenkinsReportsUrl = getJenkinsReportsUrl();
+    if (!isEmpty(jenkinsReportsUrl)) {
+      log.debug("Using Jenkins BUILD_URL: {}", jenkinsReportsUrl);
+      return jenkinsReportsUrl;
     }
-    reportsUrl = getTeamCityUrl();
-    if (!isEmpty(reportsUrl)) {
-      log.debug("Using Teamcity artifacts url: {}", reportsUrl);
-      return reportsUrl;
+    String teamCityUrl = getTeamCityUrl();
+    if (!isEmpty(teamCityUrl)) {
+      log.debug("Using Teamcity artifacts url: {}", teamCityUrl);
+      return teamCityUrl;
     }
     log.debug("Variable selenide.reportsUrl not found");
     return reportsUrl;
@@ -43,7 +43,7 @@ public class CiReportUrl {
     if (isEmpty(build_type) || isEmpty(build_number) || isEmpty(url)) {
       return null;
     }
-    return resolveUrlSource("%s/repository/download/%s/%s:id/", url, build_type, build_number);
+    return resolveUrlSource(String.format("%s/repository/download/%s/%s:id/", url, build_type, build_number));
   }
 
   @Nullable
@@ -58,17 +58,14 @@ public class CiReportUrl {
         Path pathRelative = pathAbsoluteWorkSpace.relativize(pathAbsoluteReportsFolder);
         reportRelativePath = pathRelative.toString().replace('\\', '/') + '/';
       }
-      return resolveUrlSource("%s/artifact/%s", build_url, reportRelativePath);
+      return resolveUrlSource(String.format("%s/artifact/%s", build_url, reportRelativePath));
     } else {
       return null;
     }
   }
 
   @Nullable
-  private String resolveUrlSource(String base, Object... format) {
-    if (format.length != 0) {
-      base = String.format(base, format);
-    }
+  private String resolveUrlSource(String base) {
     try {
       return new URI(base).normalize().toURL().toString();
     } catch (Exception e) {
