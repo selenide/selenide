@@ -14,6 +14,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * </p>
  */
 @ParametersAreNonnullByDefault
+@FunctionalInterface
 public interface SelenideProxyServerFactory {
 
   /**

@@ -618,6 +618,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return collection.driver();
   }
 
+  @FunctionalInterface
   public interface SelenideElementIterable extends Iterable<SelenideElement> {
     default Stream<SelenideElement> stream() {
       return StreamSupport.stream(spliterator(), false);

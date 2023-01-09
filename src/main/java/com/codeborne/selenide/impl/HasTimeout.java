@@ -7,6 +7,7 @@ import java.time.Duration;
 /**
  * @since 6.6.3
  */
+@FunctionalInterface
 public interface HasTimeout {
   @Nullable
   @CheckReturnValue

@@ -4,6 +4,10 @@ import com.browserup.bup.util.HttpMessageContents;
 import com.browserup.bup.util.HttpMessageInfo;
 import io.netty.handler.codec.http.HttpRequest;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@FunctionalInterface
+@ParametersAreNonnullByDefault
 public interface RequestMatcher {
   enum HttpMethod {
     DELETE,

@@ -7,6 +7,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 
 @ParametersAreNonnullByDefault
+@FunctionalInterface
 public interface Command<T> {
   Object[] NO_ARGS = new Object[0];
 
