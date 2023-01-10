@@ -217,7 +217,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
       .hasMessageMatching(Pattern.compile(".+files in .+ haven't been modified for \\d+ ms. " +
-        "\\(started at: \\d+, lastFileUpdate: \\d+, now: \\d+, incrementTimeout: \\d+\\)\\s*" +
+        "\\(started at: \\d+, lastFileUpdate: -?\\d+, now: \\d+, incrementTimeout: \\d+\\)\\s*" +
         "Modification times: \\{.*}", DOTALL));
   }
 
