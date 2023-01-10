@@ -80,6 +80,20 @@ final class DownloadFileToFolderTest {
     assertThat(isFileModifiedLaterThan(file(1111111114998L), 1111111115002L)).isTrue();
   }
 
+  @Test
+  void filesHasNotBeenUpdatedForMs() {
+    assertThat(command.filesHasNotBeenUpdatedForMs(1111111114000L, 1111111114998L, 1111111114998L)).isEqualTo(0);
+    assertThat(command.filesHasNotBeenUpdatedForMs(1111111114000L, 1111111114998L, 1111111114000L)).isEqualTo(998);
+
+    assertThat(command.filesHasNotBeenUpdatedForMs(1111111114000L, 1111111114998L, 1111111113333L))
+      .as("File modification time may be in the past because of file system accuracy (up to 1 second error)")
+      .isEqualTo(998);
+
+    assertThat(command.filesHasNotBeenUpdatedForMs(1111111114000L, 1111111114998L, 0))
+      .as("File modification time may be 0 (if file path is treated as invalid for some reason)")
+      .isEqualTo(998);
+  }
+
   private File file(long modifiedAt) throws IOException {
     File file = createTempFile("selenide-tests", "new-file");
     FileUtils.touch(file);

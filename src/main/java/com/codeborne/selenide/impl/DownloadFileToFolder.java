@@ -163,9 +163,9 @@ public class DownloadFileToFolder {
 
   private void failFastIfNoChanges(DownloadsFolder folder, FileFilter filter,
                                    long start, long timeout, long incrementTimeout) throws FileNotFoundException {
-    long lastFileUpdate = folder.lastModificationTime().orElse(start);
+    long lastFileUpdate = folder.lastModificationTime().orElse(-1L);
     long now = currentTimeMillis();
-    long filesHasNotBeenUpdatedForMs = now - lastFileUpdate;
+    long filesHasNotBeenUpdatedForMs = filesHasNotBeenUpdatedForMs(start, now, lastFileUpdate);
     if (filesHasNotBeenUpdatedForMs > incrementTimeout) {
       String message = String.format(
         "Failed to download file%s in %d ms: files in %s haven't been modified for %s ms. " +
@@ -176,6 +176,10 @@ public class DownloadFileToFolder {
         folder.modificationTimes());
       throw new FileNotFoundException(message);
     }
+  }
+
+  long filesHasNotBeenUpdatedForMs(long downloadStartedAt, long now, long lastFileUpdate) {
+    return now - Math.max(lastFileUpdate, downloadStartedAt);
   }
 
   private void pause(long milliseconds) {
