@@ -13,3 +13,7 @@ chromedriver.log
 .settings
 integration/ScreenshotTest/canTakeScreenshotOfElement/
 classes
+
+# Ignore all binary files
+modules/*/bin
+statics/bin
