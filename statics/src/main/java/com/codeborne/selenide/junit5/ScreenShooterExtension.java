@@ -103,7 +103,7 @@ public class ScreenShooterExtension implements BeforeEachCallback, AfterEachCall
    * @return
    */
   @Nonnull
-  public ScreenShooterExtension to(final String folderWithScreenshots, final DateTimeFormatter testRunDateTimeFormat ) {
+  public ScreenShooterExtension to(final String folderWithScreenshots, final DateTimeFormatter testRunDateTimeFormat) {
     Configuration.reportsFolder = String.format("%s/%s", folderWithScreenshots, getUniqueTestRunName(testRunDateTimeFormat));
     return this;
   }
