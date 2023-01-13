@@ -18,7 +18,7 @@ public class TestRun {
    */
   public static String getUniqueTestRunName() {
     // Idea is that a user typically would not have more than one month data, so starting with a month name, should keep data well sorted.
-    // Also, any typical test run would last for more than a month, so there is no need to add, milli or micro seconds in the name.
+    // Also, any typical test run would last for more than a second, so there is no need to add, milli or micro seconds in the name.
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM-dd-yyyy-HH-mm-ss");
     return getUniqueTestRunName(dateTimeFormatter);
   }
