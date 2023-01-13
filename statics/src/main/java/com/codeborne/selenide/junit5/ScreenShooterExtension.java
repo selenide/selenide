@@ -12,7 +12,10 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Method;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+
+import static com.codeborne.selenide.TestRun.getUniqueTestRunName;
 
 /**
  * Use this class to automatically take screenshots in case of ANY errors in tests (not only Selenide errors).
@@ -53,11 +56,11 @@ import java.util.Optional;
  * </pre>
  *
  * <p>
- *   Restrictions:
+ * Restrictions:
  * </p>
  * <p>
- *   This extension can only take screenshots for "static" webdriver managed by Selenide.
- *   It doesn't take screenshots for webdrivers created by your code, e.g. using {@code new SelenideDriver()}.
+ * This extension can only take screenshots for "static" webdriver managed by Selenide.
+ * It doesn't take screenshots for webdrivers created by your code, e.g. using {@code new SelenideDriver()}.
  * </p>
  *
  * @author Aliaksandr Rasolka
@@ -88,7 +91,20 @@ public class ScreenShooterExtension implements BeforeEachCallback, AfterEachCall
    */
   @Nonnull
   public ScreenShooterExtension to(final String folderWithScreenshots) {
-    Configuration.reportsFolder = folderWithScreenshots;
+    DateTimeFormatter testRunDateTimeFormat = DateTimeFormatter.ofPattern("MMM-dd-yyyy-HH-mm-ss");
+    to(folderWithScreenshots, testRunDateTimeFormat);
+    return this;
+  }
+
+  /**
+   * To provide a different date time format than the default one (above), if desired.
+   * @param folderWithScreenshots
+   * @param testRunDateTimeFormat
+   * @return
+   */
+  @Nonnull
+  public ScreenShooterExtension to(final String folderWithScreenshots, final DateTimeFormatter testRunDateTimeFormat ) {
+    Configuration.reportsFolder = String.format("%s/%s", folderWithScreenshots, getUniqueTestRunName(testRunDateTimeFormat));
     return this;
   }
 
