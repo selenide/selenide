@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.WebDriverException;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -21,7 +22,9 @@ public class Cleanup {
   @CheckReturnValue
   @Nonnull
   public String webdriverExceptionMessage(Throwable webDriverException) {
-    return requireNonNull(webdriverExceptionMessage(webDriverException.toString()));
+    return webDriverException instanceof WebDriverException ?
+      requireNonNull(webdriverExceptionMessage(webDriverException.toString())) :
+      webDriverException.toString();
   }
 
   @CheckReturnValue

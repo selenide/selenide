@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
+import org.opentest4j.AssertionFailedError;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -13,30 +14,35 @@ import static org.mockito.Mockito.verify;
 final class CleanupTest {
   @Test
   void cleansWebDriverExceptionMessage() {
-    String webDriverException = "org.openqa.selenium.NoSuchElementException: " +
-      "The element could not be found (WARNING: The server did not provide any stacktrace information)\n" +
-      "Command duration or timeout: 21 milliseconds\n" +
-      "For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html\n" +
-      "Build info: version: '2.29.1', revision: 'dfb1306b85be4934d23c123122e06e', time: '2013-01-22 12:58:05'\n" +
-      "System info: os.name: 'Linux', os.arch: 'amd64', os.version: '3.5.0-23-generic', java.version: '1.7.0_10'\n" +
-      "Session ID: 610138404f5c180a4f3153785e66c528\n" +
-      "Driver info: org.openqa.selenium.chrome.ChromeDriver\n" +
-      "Capabilities [{platform=LINUX, chrome.chromedriverVersion=26.0.1383.0, " +
-      "browserName=chrome, rotatable=false, locationContextEnabled=false, " +
-      "version=24.0.1312.56, cssSelectorsEnabled=true, databaseEnabled=false, " +
-      "browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, applicationCacheEnabled=false}]";
+    String webDriverException = """
+      The element could not be found (WARNING: The server did not provide any stacktrace information)
+      Command duration or timeout: 21 milliseconds
+      For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+      Build info: version: '2.29.1', revision: 'dfb1306b85be4934d23c123122e06e', time: '2013-01-22 12:58:05'
+      System info: os.name: 'Linux', os.arch: 'amd64', os.version: '3.5.0-23-generic', java.version: '1.7.0_10'
+      Session ID: 610138404f5c180a4f3153785e66c528
+      Driver info: org.openqa.selenium.chrome.ChromeDriver
+      Capabilities [{platform=LINUX, chrome.chromedriverVersion=26.0.1383.0, browserName=chrome, rotatable=false}]
+      """;
     String expectedException = "NoSuchElementException: The element could not be found";
-    assertThat(Cleanup.of.webdriverExceptionMessage(webDriverException))
+    assertThat(Cleanup.of.webdriverExceptionMessage(new NoSuchElementException(webDriverException)))
       .isEqualTo(expectedException);
+  }
+
+  @Test
+  void shouldNotCleanNonWebdriverExceptions() {
+    String multilineErrorMessage = "Failed to foo\nExpected: bar\nActual:zoo";
+    assertThat(Cleanup.of.webdriverExceptionMessage(new AssertionFailedError(multilineErrorMessage)))
+      .isEqualTo("org.opentest4j.AssertionFailedError: " + multilineErrorMessage);
   }
 
   @Test
   void detectsIfWebdriverReportedInvalidSelectorError() {
     assertThat(Cleanup.of.isInvalidSelectorError(null))
       .isFalse();
-    assertThat(Cleanup.of.isInvalidSelectorError(new NullPointerException()))
+    assertThat(Cleanup.of.isInvalidSelectorError(new NullPointerException("oops")))
       .isFalse();
-    assertThat(Cleanup.of.isInvalidSelectorError(new IllegalArgumentException()))
+    assertThat(Cleanup.of.isInvalidSelectorError(new IllegalArgumentException("oops")))
       .isFalse();
     assertThat(Cleanup.of.isInvalidSelectorError(new WebDriverException("Ups!")))
       .isFalse();
