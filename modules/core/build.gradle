@@ -16,7 +16,7 @@ sourceSets {
 dependencies {
   api('org.opentest4j:opentest4j:1.2.0')
 
-  api('io.github.bonigarcia:webdrivermanager:5.3.1') {
+  api('io.github.bonigarcia:webdrivermanager:5.3.2') {
     exclude group: 'org.apache.httpcomponents.core5'
     exclude group: 'org.apache.httpcomponents.client5'
     exclude group: 'com.github.docker-java'
