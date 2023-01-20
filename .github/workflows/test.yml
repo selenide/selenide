@@ -24,6 +24,9 @@ jobs:
       - name: Setup Edge
         if: ${{ matrix.gradle-task == 'edge_headless' }}
         uses: browser-actions/setup-edge@latest
+      - name: Set-DisplayResolution
+        shell: pwsh
+        run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
       - name: Build with Gradle
         run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
