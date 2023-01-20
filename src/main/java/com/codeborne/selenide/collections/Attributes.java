@@ -80,6 +80,6 @@ public class Attributes extends CollectionCondition {
 
   @Override
   public String toString() {
-    return "Exact attribute: '" + attribute + "' values " + expectedValues;
+    return "Attribute: '" + attribute + "' values " + expectedValues;
   }
 }

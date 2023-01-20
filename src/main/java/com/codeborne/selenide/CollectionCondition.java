@@ -90,7 +90,6 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     return new Texts(expectedTexts);
   }
 
-
   /**
    * Checks that given collection has given texts in any order (each collection element CONTAINS corresponding text)
    *
