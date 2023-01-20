@@ -3,7 +3,6 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.collections.AllMatch;
 import com.codeborne.selenide.collections.AnyMatch;
 import com.codeborne.selenide.collections.Attributes;
-import com.codeborne.selenide.collections.ExactAttributes;
 import com.codeborne.selenide.collections.ContainExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitive;
@@ -91,25 +90,6 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     return new Texts(expectedTexts);
   }
 
-  /**
-   * Checks that given collection has given specific attribute values (each collection element CONTAINS corresponding attribute value)
-   *
-   * <p>NB! Ignores multiple whitespaces between words</p>
-   */
-  @CheckReturnValue
-  public static CollectionCondition attributes(String attribute, String... expectedValues) {
-    return new Attributes(attribute, expectedValues);
-  }
-
-  /**
-   * Checks that given collection has given specific attribute values (each collection element CONTAINS corresponding attribute value)
-   *
-   * <p>NB! Ignores multiple whitespaces between words</p>
-   */
-  @CheckReturnValue
-  public static CollectionCondition attributes(String attribute, List<String> expectedValues) {
-    return new Attributes(attribute, expectedValues);
-  }
 
   /**
    * Checks that given collection has given texts in any order (each collection element CONTAINS corresponding text)
@@ -157,8 +137,8 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
   @CheckReturnValue
-  public static CollectionCondition exactAttributes(String attribute, String... expectedValues) {
-    return new ExactAttributes(attribute, expectedValues);
+  public static CollectionCondition attributes(String attribute, String... expectedValues) {
+    return new Attributes(attribute, expectedValues);
   }
 
   /**
@@ -167,8 +147,8 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
   @CheckReturnValue
-  public static CollectionCondition exactAttributes(String attribute, List<String> expectedValues) {
-    return new ExactAttributes(attribute, expectedValues);
+  public static CollectionCondition attributes(String attribute, List<String> expectedValues) {
+    return new Attributes(attribute, expectedValues);
   }
 
   /**
