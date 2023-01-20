@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.11.1 (released 20.01.2022)
+see https://github.com/selenide/selenide/milestone/174?closed=1
+* #2131 truncate only WebDriverException message
+* #2116 fix $.download(FOLDER): support case when file modification time is in previous second
+* #2119 fix $.download(FOLDER): support the case when file modification time is 0
+* bump webdrivermanager from 5.3.1 to 5.3.2
+* #2126 bump netty from 4.1.86.Final to 4.1.87.Final
+
 ## 6.11.0 (released 03.01.2022)
 see https://github.com/selenide/selenide/milestone/169?closed=1
 * #1817 add methods to copy and paste content  --  thanks to Evgenii Plugatar for PR #2027
