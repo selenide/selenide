@@ -1269,6 +1269,20 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement doubleClick();
 
   /**
+   * Double-click the element using {@link ClickOptions}: {@code $("#username").doubleClick(ClickOptions.usingJavaScript())}
+   *
+   * <p>
+   * You can specify a relative offset from the center of the element inside ClickOptions:
+   * e.g. {@code $("#username").doubleClick(usingJavaScript().offset(123, 222))}
+   * </p>
+   *
+   * @see com.codeborne.selenide.commands.DoubleClick
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement doubleClick(ClickOptions clickOption);
+
+  /**
    * Emulate "mouseOver" event. In other words, move mouse cursor over this element (without clicking it).
    *
    * @return this element
