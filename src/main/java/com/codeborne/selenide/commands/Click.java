@@ -51,7 +51,7 @@ public class Click implements Command<SelenideElement> {
       clickViaJS(driver, element, 0, 0);
     }
     else {
-      defaultClick(element);
+      defaultClick(element, driver);
     }
   }
 
@@ -93,7 +93,7 @@ public class Click implements Command<SelenideElement> {
     }
   }
 
-  protected void defaultClick(WebElement element) {
+  protected void defaultClick(WebElement element, Driver driver) {
     element.click();
   }
 
