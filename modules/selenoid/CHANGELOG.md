@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.5 (released 23.01.2023)
+* upgrade to Selenide 6.11.1
+* update dependencies
+
 ## 2.3.4 (released 03.01.2023)
 * upgrade to Selenide 6.11.0
 
