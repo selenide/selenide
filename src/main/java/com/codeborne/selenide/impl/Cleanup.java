@@ -21,10 +21,10 @@ public class Cleanup {
 
   @CheckReturnValue
   @Nonnull
-  public String webdriverExceptionMessage(Throwable webDriverException) {
-    return webDriverException instanceof WebDriverException ?
-      requireNonNull(webdriverExceptionMessage(webDriverException.toString())) :
-      webDriverException.toString();
+  public String webdriverExceptionMessage(Throwable e) {
+    return e instanceof WebDriverException ?
+      requireNonNull(webdriverExceptionMessage(e.getClass().getSimpleName() + ": " + e.getMessage())) :
+      e.toString();
   }
 
   @CheckReturnValue
