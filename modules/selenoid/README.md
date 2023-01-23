@@ -24,7 +24,7 @@ Currently the plugin supports the following features:
 We are going to implement more features like reading logs and videos etc.
 
 ## Usage
-1. Import `org.selenide:selenide-selenoid:2.3.4`
+1. Import `org.selenide:selenide-selenoid:2.3.5`
 2. Set `Configuration.fileDownload = FOLDER;`
 3. Use method `$.download()` as usually.
 
