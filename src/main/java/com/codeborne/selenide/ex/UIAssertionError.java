@@ -121,7 +121,7 @@ public class UIAssertionError extends AssertionFailedError {
 
   @CheckReturnValue
   private static UIAssertionError wrapToUIAssertionError(Driver driver, Throwable error) {
-    String message = error.getClass().getSimpleName() + ": " + Cleanup.of.webdriverExceptionMessage(error.getMessage());
+    String message = Cleanup.of.webdriverExceptionMessage(error);
     return new UIAssertionError(driver, message, error);
   }
 }
