@@ -5,8 +5,6 @@ import com.codeborne.selenide.conditions.Attribute;
 import com.codeborne.selenide.conditions.AttributeWithValue;
 import com.codeborne.selenide.conditions.CaseSensitiveText;
 import com.codeborne.selenide.conditions.Checked;
-import com.codeborne.selenide.conditions.PartialText;
-import com.codeborne.selenide.conditions.PartialTextCaseSensitive;
 import com.codeborne.selenide.conditions.CssClass;
 import com.codeborne.selenide.conditions.CssValue;
 import com.codeborne.selenide.conditions.CustomMatch;
@@ -31,6 +29,8 @@ import com.codeborne.selenide.conditions.Not;
 import com.codeborne.selenide.conditions.Or;
 import com.codeborne.selenide.conditions.OwnText;
 import com.codeborne.selenide.conditions.OwnTextCaseSensitive;
+import com.codeborne.selenide.conditions.PartialText;
+import com.codeborne.selenide.conditions.PartialTextCaseSensitive;
 import com.codeborne.selenide.conditions.PartialValue;
 import com.codeborne.selenide.conditions.PseudoElementPropertyWithValue;
 import com.codeborne.selenide.conditions.Readonly;
@@ -40,6 +40,8 @@ import com.codeborne.selenide.conditions.TagName;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
+import com.codeborne.selenide.conditions.VisibleText;
+import com.codeborne.selenide.conditions.VisibleTextCaseSensitive;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -417,6 +419,13 @@ public abstract class Condition {
     return new ExactText(text);
   }
 
+  public static Condition visibleText(String text) {
+    return new VisibleText(text);
+  }
+
+  public static Condition visibleTextCaseSensitive(String text) {
+    return new VisibleTextCaseSensitive(text);
+  }
   /**
    * Assert that element contains given text (without checking child elements).
    * <p>Sample: {@code $("h1").shouldHave(ownText("Hello"))}</p>

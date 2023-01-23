@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test::visible-text-condition</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<div style="display:block;height:19px;max-width:132.5px;overflow:hidden;text-overflow:ellipsis;font-family: Arial, serif">
+  <div style="display:block;height:19px;max-width:172.5px;overflow:hidden;text-overflow:ellipsis;font-family: Arial, serif">
+    <span name="field_value">987 65423 2Aa21 1 10asdasda10 100.876543321 AUTOOQODS</span>
+  </div>
+</div>
+
+<!--You can paste this code to your page for debugging-->
+<!--<div id="debug"></div>-->
+<!--<script>-->
+<!--  // Easily show debug output-->
+<!--  const debug = document.getElementById("debug");-->
+<!--  const addLogLine = (text) => {-->
+<!--    const line = document.createElement('div');-->
+<!--    line.style.fontFamily = 'monospace';-->
+<!--    line.innerText = text;-->
+<!--    debug.appendChild(line);-->
+<!--  };-->
+
+<!--  const p = document.getElementsByName("field_value")[0];-->
+
+<!--  // Iterate over the p's text to see each range's width-->
+<!--  const range = document.createRange();-->
+<!--  const text = p.firstChild;-->
+<!--  range.setStart(text, 0);-->
+<!--  range.setEnd(text, text.textContent.length)-->
+<!--  let visible = range.getBoundingClientRect().width;-->
+<!--  for (let i = text.textContent.length - 1; i >= 0; i&#45;&#45;) {-->
+<!--    addLogLine(`${range.getBoundingClientRect().width}: width of: "${range.toString()}" "${i}" "${visible}"`);-->
+<!--    if (visible > range.getBoundingClientRect().width) {-->
+<!--      i = i + 2-->
+<!--      range.setEnd(text,i);-->
+<!--      addLogLine(`${range.getBoundingClientRect().width}: width of: "${range.toString()}" "${i}" "${visible}"`);-->
+<!--      break-->
+<!--    }-->
+<!--    range.setEnd(text, i);-->
+<!--  }-->
+<!--  addLogLine(range.toString())-->
+
+<!--</script>-->
+</body>
+</html>
