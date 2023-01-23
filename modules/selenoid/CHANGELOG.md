@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2.3.5 (released 23.01.2023)
+* declare Selenide dependency with `api` scope
 * upgrade to Selenide 6.11.1
 * update dependencies
 
