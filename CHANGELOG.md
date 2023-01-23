@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.11.2 (released 24.01.2022)
+* #2136 bump Selenide from 4.7.2 to 4.8.0
+* #2137 once again, truncate only messages of WebDriverException :)
+
 ## 6.11.1 (released 20.01.2022)
 see https://github.com/selenide/selenide/milestone/174?closed=1
 * #2131 truncate only WebDriverException message
