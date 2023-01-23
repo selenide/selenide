@@ -2,22 +2,27 @@ name: Run tests
 on:
   push:
     branches:
-      - '*'
+      - main
   pull_request:
     branches:
-      - '*'
+
 jobs:
   run-tests-job:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+        uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
+          cache: 'gradle'
           java-version: '11'
-      - name: Run tests in Gradle
-        run: ./gradlew clean check --info --rerun-tasks
-      - uses: actions/upload-artifact@v2
+      - name: Build
+        run: ./gradlew clean build -x test
+      - name: Run tests
+        run: ./gradlew check --info
+      - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: test-report
