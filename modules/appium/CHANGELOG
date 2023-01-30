@@ -1,5 +1,9 @@
 == Changelog
 
+=== 2.5.3 (planned to 0x.02.2023)
+* Add methods $ returning SelenideAppiumElement (extends SelenideElement)
+* Bump selenide from 6.11.0 to 6.11.3
+
 === 2.5.2 (released 03.01.2023)
 * bump selenide from 6.10.2 to 6.11.0
 
