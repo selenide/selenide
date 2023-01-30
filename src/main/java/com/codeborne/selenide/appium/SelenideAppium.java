@@ -2,7 +2,13 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.impl.ElementFinder;
+import org.openqa.selenium.By;
+
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+
+import static com.codeborne.selenide.WebDriverRunner.driver;
 
 /**
  * The main starting point of Selenide-Appium.
@@ -57,4 +63,35 @@ public class SelenideAppium {
   public static void back() {
     Selenide.back();
   }
+
+  @CheckReturnValue
+  @Nonnull
+  public static SelenideAppiumElement $(String cssSelector) {
+    return $(cssSelector, 0);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static SelenideAppiumElement $(String cssSelector, int index) {
+    return $(By.cssSelector(cssSelector), index);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static SelenideAppiumElement $x(String xpathExpression) {
+    return $(By.xpath(xpathExpression), 0);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static SelenideAppiumElement $(By seleniumSelector) {
+    return $(seleniumSelector, 0);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static SelenideAppiumElement $(By seleniumSelector, int index) {
+    return ElementFinder.wrap(driver(), SelenideAppiumElement.class, null, seleniumSelector, index);
+  }
+
 }
