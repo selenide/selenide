@@ -1,10 +1,13 @@
 # Changelog
 
-## 6.11.2 (released 24.01.2022)
+## 6.11.3 (planned to 0x.02.2023)
+
+
+## 6.11.2 (released 24.01.2023)
 * #2136 bump Selenide from 4.7.2 to 4.8.0
 * #2137 once again, truncate only messages of WebDriverException :)
 
-## 6.11.1 (released 20.01.2022)
+## 6.11.1 (released 20.01.2023)
 see https://github.com/selenide/selenide/milestone/174?closed=1
 * #2131 truncate only WebDriverException message
 * #2116 fix $.download(FOLDER): support case when file modification time is in previous second
@@ -12,7 +15,7 @@ see https://github.com/selenide/selenide/milestone/174?closed=1
 * bump webdrivermanager from 5.3.1 to 5.3.2
 * #2126 bump netty from 4.1.86.Final to 4.1.87.Final
 
-## 6.11.0 (released 03.01.2022)
+## 6.11.0 (released 03.01.2023)
 see https://github.com/selenide/selenide/milestone/169?closed=1
 * #1817 add methods to copy and paste content  --  thanks to Evgenii Plugatar for PR #2027
 * #2054 can fail the test if unexpected alert encountered  --  see PR #2095

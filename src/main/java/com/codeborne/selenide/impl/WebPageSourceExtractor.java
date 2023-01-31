@@ -32,7 +32,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
   }
 
   private File extract(Config config, WebDriver driver, String fileName, boolean retryIfAlert) {
-    File pageSource = createFile(config, fileName);
+    File pageSource = createFile(config, driver, fileName);
     try {
       String source = driver.getPageSource();
       if (source == null) {
@@ -63,8 +63,17 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     return pageSource;
   }
 
+  /**
+   * @deprecated use method {#{@link #createFile(Config, WebDriver, String)}} instead
+   */
   @Nonnull
+  @Deprecated
   protected File createFile(Config config, String fileName) {
+    return new File(config.reportsFolder(), fileName + ".html").getAbsoluteFile();
+  }
+
+  @Nonnull
+  protected File createFile(Config config, WebDriver driver, String fileName) {
     return new File(config.reportsFolder(), fileName + ".html").getAbsoluteFile();
   }
 
