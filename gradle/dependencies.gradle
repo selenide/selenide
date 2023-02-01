@@ -1,16 +1,26 @@
+ext {
+  selenideVersion = '6.11.3-SNAPSHOT'
+  appiumVersion = '8.3.0'
+  junitVersion = '5.9.2'
+  assertjVersion = '3.24.2'
+  mockitoVersion = '5.1.1'
+  slf4jVersion = '2.0.6'
+}
+
 dependencies {
-  api('com.codeborne:selenide:6.11.3-SNAPSHOT')
-  api('io.appium:java-client:8.3.0') {
+  api("com.codeborne:selenide:$selenideVersion")
+  api("io.appium:java-client:$appiumVersion") {
     exclude group: 'io.opentelemetry'
     exclude group: 'org.slf4j'
     exclude group: 'org.seleniumhq'
     exclude group: 'cglib'
   }
   implementation('commons-io:commons-io:2.11.0')
-  testImplementation('org.junit.jupiter:junit-jupiter:5.9.2')
-  testImplementation('org.assertj:assertj-core:3.24.2')
-  testImplementation('org.mockito:mockito-core:5.1.1')
-  testRuntimeOnly('org.slf4j:slf4j-simple:2.0.6')
+  testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+  testImplementation("org.assertj:assertj-core:$assertjVersion")
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
+  testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
 }
 
 repositories {
@@ -24,14 +34,7 @@ repositories {
   }
 }
 
-configurations.all {
-  // Check for updates every build
+configurations.configureEach {
+  // Check for snapshot updates every build
   resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
-
-task libs(type: Sync) {
-  from configurations.testRuntimeClasspath
-  into "$buildDir/lib"
-}
-
-compileJava.dependsOn libs

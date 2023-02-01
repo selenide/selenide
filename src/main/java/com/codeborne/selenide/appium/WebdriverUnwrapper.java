@@ -18,6 +18,10 @@ public class WebdriverUnwrapper {
     return instanceOf(driver, AppiumDriver.class);
   }
 
+  public static boolean isMobile(WebDriver driver) {
+    return instanceOf(driver, AppiumDriver.class);
+  }
+
   public static <T> boolean instanceOf(Driver driver, Class<T> klass) {
     return cast(driver, klass).isPresent();
   }
