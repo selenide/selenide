@@ -52,8 +52,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - name: Install Haxm
-        run: brew install --cask intel-haxm
       - name: Install Appium
         run: |
           npm install -g appium@next
