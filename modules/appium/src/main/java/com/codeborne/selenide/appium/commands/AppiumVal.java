@@ -12,7 +12,7 @@ public class AppiumVal extends Val {
   private final AppiumSetValue setValue = new AppiumSetValue();
 
   public AppiumVal() {
-    super(); // TODO replace by `super(new GetValue(), new AppiumSetValue())`
+    super(new GetValue(), new AppiumSetValue());
   }
 
   @Override

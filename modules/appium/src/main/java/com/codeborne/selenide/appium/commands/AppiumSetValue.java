@@ -1,6 +1,5 @@
 package com.codeborne.selenide.appium.commands;
 
-import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.SetValue;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -15,8 +14,10 @@ import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Objects.requireNonNull;
 
 @ParametersAreNonnullByDefault
-public class AppiumSetValue implements Command<SelenideElement> {
-  private final SetValue defaultImplementation = new SetValue();
+public class AppiumSetValue extends SetValue {
+  AppiumSetValue() {
+    super(new AppiumClear());
+  }
 
   @Nonnull
   @Override
@@ -29,7 +30,7 @@ public class AppiumSetValue implements Command<SelenideElement> {
       return proxy;
     }
     else {
-      return defaultImplementation.execute(proxy, locator, args);
+      return super.execute(proxy, locator, args);
     }
   }
 }
