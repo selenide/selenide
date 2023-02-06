@@ -10,7 +10,7 @@ ext {
   littleProxyVersion = '2.0.15'
   commonsFileuploadVersion = '1.4'
   jabelVersion = '1.0.0'
-  byteBuddyVersion = '1.12.22'
+  byteBuddyVersion = '1.12.23'
   archunitVersion = '1.0.1'
 }
 
