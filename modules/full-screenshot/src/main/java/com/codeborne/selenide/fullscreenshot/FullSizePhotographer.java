@@ -13,8 +13,8 @@ import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.chromium.HasCdp;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v107.page.Page;
-import org.openqa.selenium.devtools.v107.page.model.Viewport;
+import org.openqa.selenium.devtools.v109.page.Page;
+import org.openqa.selenium.devtools.v109.page.model.Viewport;
 import org.openqa.selenium.firefox.HasFullPageScreenshot;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -105,7 +105,8 @@ public class FullSizePhotographer implements Photographer {
         Optional.empty(),
         Optional.of(viewport),
         Optional.empty(),
-        Optional.of(options.exceedViewport())
+        Optional.of(options.exceedViewport()),
+        Optional.of(true)
       )
     );
 
