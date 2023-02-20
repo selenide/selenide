@@ -22,6 +22,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
+import static com.codeborne.selenide.files.ExcludeBrowserOwnFilesFilter.exceptBrowserOwnFiles;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
@@ -256,7 +257,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   public void download_super_slowly_without_filter() throws FileNotFoundException {
-    File downloadedFile = $(byText("Download me super slowly")).download(4000);
+    File downloadedFile = $(byText("Download me super slowly")).download(4000, exceptBrowserOwnFiles());
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
