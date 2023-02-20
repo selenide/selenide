@@ -1,7 +1,8 @@
 # Changelog
 
-## 6.11.3 (planned to 0x.02.2023)
-
+## 6.11.3 (planned to 2x.02.2023)
+* rename "master" branch to "main" (finally!)
+* #2161 bump Selenium from 4.8.0 to 4.8.1
 
 ## 6.11.2 (released 24.01.2023)
 * #2136 bump Selenide from 4.7.2 to 4.8.0
