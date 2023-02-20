@@ -75,7 +75,7 @@ public abstract class BaseHandler extends HttpServlet {
     }
     logRequest(request, result.httpStatus, start);
     if (result.httpStatus >= SC_BAD_REQUEST) {
-      log.error(IOUtils.toString(result.content, UTF_8));
+      log.error("Http response {}: '{}'", result.httpStatus, IOUtils.toString(result.content, UTF_8));
     }
   }
 

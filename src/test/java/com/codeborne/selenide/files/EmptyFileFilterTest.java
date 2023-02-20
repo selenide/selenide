@@ -8,7 +8,6 @@ import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class EmptyFileFilterTest {
-  private static final String FILTER_DESCRIPTION = "";
   private final FileFilter filter = new EmptyFileFilter();
 
   @Test
@@ -22,12 +21,12 @@ final class EmptyFileFilterTest {
 
   @Test
   void description() {
-    assertThat(filter.description()).isEqualTo(FILTER_DESCRIPTION);
+    assertThat(filter.description()).isEqualTo("");
   }
 
   @Test
   void hasToString() {
-    assertThat(filter).hasToString(FILTER_DESCRIPTION);
+    assertThat(filter).hasToString("none");
   }
 
   @Test

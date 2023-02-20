@@ -7,6 +7,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.Map;
 
+import static java.lang.System.currentTimeMillis;
+
 @ParametersAreNonnullByDefault
 public class DownloadedFile {
   private final File file;
@@ -39,6 +41,6 @@ public class DownloadedFile {
 
   @Override
   public String toString() {
-    return String.format("%s (modified at: %s)", file.getAbsolutePath(), file.lastModified());
+    return String.format("%s (modified %s ms ago)", file.getName(), currentTimeMillis() - file.lastModified());
   }
 }

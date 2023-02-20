@@ -24,7 +24,6 @@ import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
 import static java.util.Collections.emptyMap;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
@@ -84,10 +83,10 @@ public class DownloadFileToFolder {
 
     Downloads newDownloads = new Downloads(newFiles(folder, downloadStartedAt));
     if (log.isInfoEnabled()) {
-      log.info("Downloaded {}", newDownloads.filesAsString());
+      log.info("Downloaded files in {}: {}", folder, newDownloads.filesAsString());
     }
     if (log.isDebugEnabled()) {
-      log.debug("All downloaded files in {}: {}", folder, folder.files().stream().map(f -> f.getName()).collect(joining("\n")));
+      log.debug("All downloaded files: {}", folder.filesAsString());
     }
 
     File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
@@ -111,10 +110,10 @@ public class DownloadFileToFolder {
                                        long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
     for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       if (!folder.hasFiles(extension, filter)) {
-        log.debug("No {} files found in {}, conclude download is completed", extension, folder);
+        log.debug("No {} files found, conclude download is completed (filter: {})", extension, filter);
         return;
       }
-      log.debug("Found {} files in {}, waiting for {} ms...", extension, folder, pollingInterval);
+      log.debug("Found {} files, waiting for {} ms (filter: {})...", extension, pollingInterval, filter);
       failFastIfNoChanges(folder, filter, start, timeout, incrementTimeout);
     }
 
@@ -149,16 +148,26 @@ public class DownloadFileToFolder {
 
   private void waitForNewFiles(FileFilter fileFilter, DownloadsFolder folder, long clickMoment,
                                long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
-    for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
+    if (log.isDebugEnabled()) {
+      log.debug("Waiting for files in {}...", folder);
+    }
+
+    long start = currentTimeMillis();
+    for (; currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       Downloads downloads = new Downloads(newFiles(folder, clickMoment));
       List<DownloadedFile> matchingFiles = downloads.files(fileFilter);
       if (!matchingFiles.isEmpty()) {
-        break;
+        log.debug("Matching files found: {}, all new files: {}, all files: {}",
+          matchingFiles, downloads.filesAsString(), folder.filesAsString());
+        return;
       }
-      log.debug("Matching files not found in {} (exists: {}): {}, all new files: {}, all files: {}", folder, folder.toFile().exists(),
-        matchingFiles, downloads.filesAsString(), folder.files());
+      log.debug("Matching files not found: {}, all new files: {}, all files: {}",
+        matchingFiles, downloads.filesAsString(), folder.filesAsString());
       failFastIfNoChanges(folder, fileFilter, start, timeout, incrementTimeout);
     }
+
+    log.debug("Matching files still not found -> stop waiting for new files after {} ms. (timeout: {} ms.)",
+      currentTimeMillis() - start, timeout);
   }
 
   private void failFastIfNoChanges(DownloadsFolder folder, FileFilter filter,
