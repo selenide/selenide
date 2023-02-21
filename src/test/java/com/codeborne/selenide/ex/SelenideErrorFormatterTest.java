@@ -1,7 +1,7 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.SelenideConfig;
-import integration.UseLocaleExtension;
+import com.codeborne.selenide.UseLocaleExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
