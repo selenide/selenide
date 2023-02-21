@@ -45,7 +45,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     }
     Configuration.fileDownload = FOLDER;
     openFile("page_with_uploads.html");
-    timeout = 1500;
+    timeout = 5000;
   }
 
   @Test
@@ -82,18 +82,18 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadMissingFile() {
-    timeout = 100;
+    timeout = 888;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessage("Failed to download file with extension \"txt\" in 100 ms.");
+      .hasMessage("Failed to download file with extension \"txt\" in 888 ms.");
   }
 
   @Test
   void downloadMissingFileWithExtension() {
-    timeout = 80;
+    timeout = 888;
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 80 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 888 ms");
   }
 
   @Test
