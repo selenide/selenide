@@ -7,6 +7,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
+import com.google.common.collect.ImmutableSet;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
@@ -29,8 +31,8 @@ import static java.util.stream.Collectors.toList;
 @ParametersAreNonnullByDefault
 public class DownloadFileToFolder {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolder.class);
-  private static final String CHROME_TEMPORARY_FILE = "crdownload";
-  private static final String FIREFOX_TEMPORARY_FILE = "part";
+  private static final Set<String> CHROMIUM_TEMPORARY_FILES = ImmutableSet.of("crdownload", "tmp");
+  private static final Set<String> FIREFOX_TEMPORARY_FILES = ImmutableSet.of("part");
 
   private final Downloader downloader;
   private final WindowsCloser windowsCloser;
@@ -96,17 +98,17 @@ public class DownloadFileToFolder {
   private void waitUntilDownloadsCompleted(Browser browser, DownloadsFolder folder, FileFilter filter,
                                            long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
     if (browser.isChrome() || browser.isEdge()) {
-      waitUntilFileDisappears(folder, CHROME_TEMPORARY_FILE, filter, timeout, incrementTimeout, pollingInterval);
+      waitUntilFileDisappears(folder, CHROMIUM_TEMPORARY_FILES, filter, timeout, incrementTimeout, pollingInterval);
     }
     else if (browser.isFirefox()) {
-      waitUntilFileDisappears(folder, FIREFOX_TEMPORARY_FILE, filter, timeout, incrementTimeout, pollingInterval);
+      waitUntilFileDisappears(folder, FIREFOX_TEMPORARY_FILES, filter, timeout, incrementTimeout, pollingInterval);
     }
     else {
       waitWhileFilesAreBeingModified(folder, timeout, pollingInterval);
     }
   }
 
-  private void waitUntilFileDisappears(DownloadsFolder folder, String extension, FileFilter filter,
+  private void waitUntilFileDisappears(DownloadsFolder folder, Set<String> extension, FileFilter filter,
                                        long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
     for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       if (!folder.hasFiles(extension, filter)) {
