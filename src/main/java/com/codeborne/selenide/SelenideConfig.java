@@ -384,4 +384,9 @@ public class SelenideConfig implements Config {
     this.remoteConnectionTimeout = remoteConnectionTimeout;
     return this;
   }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 }
