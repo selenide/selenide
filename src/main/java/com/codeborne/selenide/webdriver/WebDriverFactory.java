@@ -76,6 +76,7 @@ public class WebDriverFactory {
     logSeleniumInfo();
     return webdriver;
   }
+
   private boolean needBrowserResize(WebDriver webdriver) {
     String browserName = "";
     if (webdriver instanceof HasCapabilities hasCapabilities) {
@@ -83,8 +84,9 @@ public class WebDriverFactory {
       browserName = capabilities.getBrowserName();
     }
     Browser browser = new Browser(browserName, false);
-    return !browser.isChromium();
+    return !browser.isChromium() && !"msedge".equals(browserName);
   }
+
   private void setLoadTimeout(Config config, WebDriver webdriver) {
     if (config.pageLoadTimeout() < 0) {
       return;
