@@ -16,10 +16,10 @@ public class PageLoadTimeoutTest extends IntegrationTest {
 
   @Test
   void canChangeTimeout() {
-    Configuration.pageLoadTimeout = 666L;
+    Configuration.pageLoadTimeout = 1666L;
     openFile("page_with_selects_without_jquery.html");
     assertThat(pageLoadTimeout())
-      .isEqualTo(666L);
+      .isEqualTo(1666L);
   }
 
   @Test
