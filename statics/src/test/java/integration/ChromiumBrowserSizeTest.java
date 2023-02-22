@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Dimension;
@@ -21,8 +22,13 @@ final class ChromiumBrowserSizeTest extends IntegrationTest {
   void setUp() {
     assumeThat(isChrome() || isEdge()).isTrue();
     closeWebDriver();
-    Configuration.browserSize = "1200x1000";
+    Configuration.browserSize = "900x600";
     openFile("page_with_uploads.html");
+  }
+
+  @AfterAll
+  static void afterAll() {
+    closeWebDriver();
   }
 
   @Test
@@ -33,6 +39,6 @@ final class ChromiumBrowserSizeTest extends IntegrationTest {
       .until(it -> it.getWindowHandles().size() == 2);
     Selenide.switchTo().window(1);
     Dimension newTabWindowsSize = WebDriverRunner.getWebDriver().manage().window().getSize();
-    assertThat(newTabWindowsSize).isEqualTo(new Dimension(1200, 1000));
+    assertThat(newTabWindowsSize).isEqualTo(new Dimension(900, 600));
   }
 }
