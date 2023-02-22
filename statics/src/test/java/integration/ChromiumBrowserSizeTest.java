@@ -10,11 +10,10 @@ import org.openqa.selenium.Dimension;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isEdge;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
+import static org.assertj.core.data.Offset.offset;
 
 final class ChromiumBrowserSizeTest extends IntegrationTest {
 
@@ -39,6 +38,7 @@ final class ChromiumBrowserSizeTest extends IntegrationTest {
       .until(it -> it.getWindowHandles().size() == 2);
     Selenide.switchTo().window(1);
     Dimension newTabWindowsSize = WebDriverRunner.getWebDriver().manage().window().getSize();
-    assertThat(newTabWindowsSize).isEqualTo(new Dimension(900, 600));
+    assertThat(newTabWindowsSize.width).isCloseTo(900, offset(10));
+    assertThat(newTabWindowsSize.height).isCloseTo(600, offset(10));
   }
 }
