@@ -21,6 +21,7 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
@@ -32,6 +33,7 @@ import static java.time.Duration.ofSeconds;
 import static java.util.regex.Pattern.DOTALL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class FileDownloadToFolderTest extends IntegrationTest {
   private static final Logger log = LoggerFactory.getLogger(FileDownloadToFolderTest.class);
@@ -148,6 +150,10 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadsPotentiallyHarmfulWindowsFiles() throws IOException {
+    assumeThat(isEdge())
+      .as("Edge shows warning like '*.exe file is not downloaded'")
+      .isFalse();
+
     File downloadedFile = $(byText("Download EXE file")).download(withNameMatching("\\w+\\.exe"));
 
     assertThat(downloadedFile.getName()).startsWith("tiny.exe");
