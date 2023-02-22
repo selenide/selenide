@@ -28,7 +28,7 @@ jobs:
         shell: pwsh
         run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
       - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
+        run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
@@ -61,7 +61,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
+        run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
