@@ -130,7 +130,7 @@ final class SelenideMethodsTest extends IntegrationTest {
   void shouldMethodCanUseCustomTimeout() {
     $("#theHiddenElement").should(exist, Duration.ofNanos(3_000_000_000L));
     $("#theHiddenElement").shouldBe(hidden, ofMillis(3_000));
-    $("#theHiddenElement").shouldHave(exactText(""), Duration.ofSeconds(3));
+    $("#theHiddenElement").shouldHave(exactText("zopa"), Duration.ofSeconds(3));
     $("#theHiddenElement").shouldNotHave(text("no"), Duration.ofHours(3));
   }
 

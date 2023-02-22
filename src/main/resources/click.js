@@ -1,5 +1,5 @@
 (function (element, offsetX, offsetY) {
-  const rect = element.getBoundingClientRect();
+  var rect = element.getBoundingClientRect();
 
   function mouseEvent() {
     if (typeof (Event) === 'function') {
@@ -12,7 +12,7 @@
       });
     }
     else {
-      const event = document.createEvent('MouseEvent');
+      var event = document.createEvent('MouseEvent');
       event.initEvent('click', true, true);
       event.type = 'click'
       event.view = window;

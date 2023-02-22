@@ -4,7 +4,7 @@
 //   import babel from 'rollup-plugin-babel';
 //   import babelrc from 'babelrc-rollup';
 //
-//   const babelConfig = {
+//   var babelConfig = {
 //     'presets': [
 //       ['@babel/preset-env', {
 //         'targets': {
@@ -31,7 +31,7 @@
 //     }
 //   };
 // THIRD PARTY LIB CODE STARTS
-  const querySelectorShadowDom = (function (exports) {
+  var querySelectorShadowDom = (function (exports) {
     'use strict';
 
     /* istanbul ignore file */
@@ -60,7 +60,7 @@
         }
       }
 
-      let tokens = [],
+      var tokens = [],
         match,
         unmatched,
         regex,
@@ -195,7 +195,7 @@
 
     function _querySelectorDeep(selector, findMany, root, allElements = null) {
       selector = normalizeSelector(selector);
-      let lightElement = root.querySelector(selector);
+      var lightElement = root.querySelector(selector);
 
       if (document.head.createShadowRoot || document.head.attachShadow) {
         // no need to do any special if selector matches something specific in light-dom
@@ -204,7 +204,7 @@
         } // split on commas because those are a logical divide in the operation
 
 
-        const selectionsToMake = splitByCharacterUnlessQuoted(selector, ',');
+        var selectionsToMake = splitByCharacterUnlessQuoted(selector, ',');
         return selectionsToMake.reduce((acc, minimalSelector) => {
           // if not finding many just reduce the first match
           if (!findMany && acc) {
@@ -212,14 +212,14 @@
           } // do best to support complex selectors and split the query
 
 
-          const splitSelector = splitByCharacterUnlessQuoted(minimalSelector //remove white space at start of selector
+          var splitSelector = splitByCharacterUnlessQuoted(minimalSelector //remove white space at start of selector
             .replace(/^\s+/g, '').replace(/\s*([>+~]+)\s*/g, '$1'), ' ') // filter out entry white selectors
             .filter(entry => !!entry) // convert "a > b" to ["a", "b"]
             .map(entry => splitByCharacterUnlessQuoted(entry, '>'));
-          const possibleElementsIndex = splitSelector.length - 1;
-          const lastSplitPart = splitSelector[possibleElementsIndex][splitSelector[possibleElementsIndex].length - 1];
-          const possibleElements = collectAllElementsDeep(lastSplitPart, root, allElements);
-          const findElements = findMatchingElement(splitSelector, possibleElementsIndex, root);
+          var possibleElementsIndex = splitSelector.length - 1;
+          var lastSplitPart = splitSelector[possibleElementsIndex][splitSelector[possibleElementsIndex].length - 1];
+          var possibleElements = collectAllElementsDeep(lastSplitPart, root, allElements);
+          var findElements = findMatchingElement(splitSelector, possibleElementsIndex, root);
 
           if (findMany) {
             acc = acc.concat(possibleElements.filter(findElements));
@@ -240,22 +240,22 @@
 
     function findMatchingElement(splitSelector, possibleElementsIndex, root) {
       return element => {
-        let position = possibleElementsIndex;
-        let parent = element;
-        let foundElement = false;
+        var position = possibleElementsIndex;
+        var parent = element;
+        var foundElement = false;
 
         while (parent && !isDocumentNode(parent)) {
-          let foundMatch = true;
+          var foundMatch = true;
 
           if (splitSelector[position].length === 1) {
             foundMatch = parent.matches(splitSelector[position]);
           } else {
             // selector is in the format "a > b"
             // make sure a few parents match in order
-            const reversedParts = [].concat(splitSelector[position]).reverse();
-            let newParent = parent;
+            var reversedParts = [].concat(splitSelector[position]).reverse();
+            var newParent = parent;
 
-            for (const part of reversedParts) {
+            for (var part of reversedParts) {
               if (!newParent || !newParent.matches(part)) {
                 foundMatch = false;
                 break;
@@ -312,7 +312,7 @@
     }
 
     function findParentOrHost(element, root) {
-      const parentNode = element.parentNode;
+      var parentNode = element.parentNode;
       return parentNode && parentNode.host && parentNode.nodeType === 11 ? parentNode.host : parentNode === root ? null : parentNode;
     }
     /**
@@ -325,14 +325,14 @@
 
 
     function collectAllElementsDeep(selector = null, root, cachedElements = null) {
-      let allElements = [];
+      var allElements = [];
 
       if (cachedElements) {
         allElements = cachedElements;
       } else {
-        const findAllElements = function (nodes) {
-          for (let i = 0; i < nodes.length; i++) {
-            const el = nodes[i];
+        var findAllElements = function (nodes) {
+          for (var i = 0; i < nodes.length; i++) {
+            var el = nodes[i];
             allElements.push(el); // If the element has a shadow root, dig deeper.
 
             if (el.shadowRoot) {

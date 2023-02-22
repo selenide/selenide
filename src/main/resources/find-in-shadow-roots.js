@@ -4,9 +4,9 @@
       return Array.from(searchContext.querySelectorAll(target));
     }
 
-    const nextSelector = shadowRoots[0];
-    const otherSelectors = shadowRoots.slice(1);
-    const nextInnerShadowRoots = Array.from(searchContext.querySelectorAll(nextSelector));
+    var nextSelector = shadowRoots[0];
+    var otherSelectors = shadowRoots.slice(1);
+    var nextInnerShadowRoots = Array.from(searchContext.querySelectorAll(nextSelector));
     return nextInnerShadowRoots.map(function (childShadowRoot) {
       return findInShadows(target, otherSelectors, getShadowRoot(childShadowRoot));
     }).flat();
