@@ -53,7 +53,7 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
     EdgeOptions options = createCommonCapabilities(new EdgeOptions(), config, browser, proxy);
     options.setCapability(ACCEPT_INSECURE_CERTS, true);
     if (config.headless()) {
-      options.addArguments("--headless=new");
+      addHeadless(options);
     }
 
     if (isNotEmpty(config.browserBinary())) {
@@ -64,6 +64,10 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
     options.addArguments(createEdgeArguments(config));
     options.setExperimentalOption("prefs", prefs(browserDownloadsFolder, System.getProperty("edgeoptions.prefs", "")));
     return options;
+  }
+
+  protected void addHeadless(EdgeOptions options) {
+    options.addArguments("--headless=new");
   }
 
   @CheckReturnValue
