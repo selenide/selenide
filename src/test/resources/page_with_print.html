@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>page with print</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <style>
+    @media print {
+      .no-print, .no-print * {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<h1 class="no-print">Page with print</h1>
+
+<div class="container">
+  <div class="container">
+    <div id="content" class="container">
+      <h2>CV</h2>
+      <ul>
+        <li class="step">Birth</li>
+        <li class="step">School</li>
+        <li class="step">University</li>
+        <li class="step">Codeborne</li>
+        <li class="step">Selenide</li>
+      </ul>
+    </div>
+
+    <button id="button-print-cv" class="no-print">Print CV</button>
+  </div>
+</div>
+
+<script>
+  document.getElementById('button-print-cv').addEventListener('click', () => {
+    print();
+  });
+</script>
+</body>
+</html>

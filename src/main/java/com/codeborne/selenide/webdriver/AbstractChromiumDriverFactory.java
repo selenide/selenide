@@ -39,6 +39,7 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     arguments.add("--proxy-bypass-list=<-loopback>");
     arguments.add("--disable-dev-shm-usage");
     arguments.add("--no-sandbox");
+    arguments.add("--kiosk-printing");
     arguments.addAll(parseArguments(externalArguments));
     arguments.addAll(createHeadlessArguments(config));
     if (config.browserSize() != null && BrowserResizer.isValidDimension(config.browserSize())) {
@@ -55,14 +56,35 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     preferences.put("credentials_enable_service", false);
     preferences.put("plugins.always_open_pdf_externally", true);
     preferences.put("profile.default_content_setting_values.automatic_downloads", 1);
+    preferences.put("download.prompt_for_download", false);
+    preferences.put("download.directory_upgrade", true);
+    preferences.put("download.extensions_to_open", "pdf");
+    preferences.put("printing.print_preview_sticky_settings.appState", printPreviewSettings());
 
     if (browserDownloadsFolder != null) {
       preferences.put("download.default_directory", browserDownloadsFolder.getAbsolutePath());
+      preferences.put("savefile.default_directory", browserDownloadsFolder.getAbsolutePath());
     }
     preferences.putAll(parsePreferencesFromString(externalPreferences));
 
     log.debug("Using chromium preferences: {}", preferences);
     return preferences;
+  }
+
+  @Nonnull
+  protected String printPreviewSettings() {
+    //language=JSON
+    return """
+      {
+              "recentDestinations": [{
+                  "id": "Save as PDF",
+                  "origin": "local",
+                  "account": ""
+              }],
+              "selectedDestinationId": "Save as PDF",
+              "version": 2
+      }
+      """;
   }
 
   @Nonnull

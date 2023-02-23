@@ -35,7 +35,7 @@ class EdgeDriverFactoryTest {
     assertThat(options.get("extensions")).isEqualTo(emptyList());
 
     Map<String, Object> prefs = prefs(options);
-    assertThat(prefs).hasSize(5);
+    assertThat(prefs).hasSize(10);
     assertThat(prefs.get("credentials_enable_service")).isEqualTo(false);
     assertThat(prefs.get("plugins.always_open_pdf_externally")).isEqualTo(true);
     assertThat(prefs.get("profile.default_content_setting_values.automatic_downloads")).isEqualTo(1);
@@ -54,11 +54,12 @@ class EdgeDriverFactoryTest {
       "--proxy-bypass-list=<-loopback>",
       "--disable-dev-shm-usage",
       "--no-sandbox",
+      "--kiosk-printing",
       "--window-size=1366,768"
     );
 
     Map<String, Object> prefs = prefs(options);
-    assertThat(prefs).hasSize(5);
+    assertThat(prefs).hasSize(10);
     assertThat(prefs.get("credentials_enable_service")).isEqualTo(false);
     assertThat(prefs.get("plugins.always_open_pdf_externally")).isEqualTo(true);
     assertThat(prefs.get("profile.default_content_setting_values.automatic_downloads")).isEqualTo(1);
