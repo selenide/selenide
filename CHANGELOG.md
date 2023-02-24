@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.11.3 (planned to 2x.02.2023)
-* rename "master" branch to "main" (finally!)
+## 6.12.0 (released 24.02.2023)
+see https://github.com/selenide/selenide/milestone/173?closed=1
+* #2104 use new headless mode  --  thanks Boris Osipov for PR #2105 and #2169
+* #2167 improve logs when download a file
+* #2167 ignore Edge temporary files on Windows
 * #2161 bump Selenium from 4.8.0 to 4.8.1
+* Bump nettyVersion from 4.1.87.Final to 4.1.89.Final
+* rename "master" branch to "main" (finally!)
 
 ## 6.11.2 (released 24.01.2023)
 * #2136 bump Selenide from 4.7.2 to 4.8.0
