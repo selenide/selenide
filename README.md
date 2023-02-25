@@ -93,3 +93,4 @@ Here is [CHANGELOG](https://github.com/selenide/selenide-appium/blob/main/CHANGE
 ### Reference
 
 Please check our [sample project](https://github.com/selenide-examples/selenide-appium). 
+Please check our [simple skeleton framework](https://github.com/amuthansakthivel/SelenideAppiumFramework)
