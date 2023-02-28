@@ -27,7 +27,7 @@ public class SelenideConfig implements Config {
   private String baseUrl = getProperty("selenide.baseUrl", "http://localhost:8080");
   private long timeout = Long.parseLong(getProperty("selenide.timeout", "4000"));
   private long pollingInterval = Long.parseLong(getProperty("selenide.pollingInterval", "200"));
-  private boolean holdBrowserOpen = Boolean.getBoolean(getProperty("selenide.holdBrowserOpen", "false"));
+  private boolean holdBrowserOpen = Boolean.parseBoolean(getProperty("selenide.holdBrowserOpen", "false"));
   private boolean reopenBrowserOnFail = Boolean.parseBoolean(getProperty("selenide.reopenBrowserOnFail", "true"));
   private boolean clickViaJs = Boolean.parseBoolean(getProperty("selenide.clickViaJs", "false"));
   private boolean screenshots = Boolean.parseBoolean(getProperty("selenide.screenshots", "true"));
