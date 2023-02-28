@@ -33,6 +33,12 @@ final class SelenideConfigTest {
     assertThat(new SelenideConfig().remote()).isNull();
   }
 
+  @Test
+  void getsHoldBrowserOpenFromSystemProperty() {
+    System.setProperty("selenide.holdBrowserOpen", "true");
+    assertThat(new SelenideConfig().holdBrowserOpen()).isEqualTo(true);
+  }
+
   @BeforeEach
   @AfterEach
   void setUp() {
@@ -42,5 +48,6 @@ final class SelenideConfigTest {
     System.setProperty("teamcity.buildType.id", "");
     System.setProperty("build.number", "");
     System.setProperty("selenide.remote", "");
+    System.setProperty("selenide.holdBrowserOpen", "");
   }
 }
