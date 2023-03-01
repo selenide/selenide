@@ -31,11 +31,23 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
+      - name: JUnit Report Action
+        if: success() || failure()
+        uses: mikepenz/action-junit-report@v3.7.5
+        with:
+          require_tests: true
+          include_passed: true
+          detailed_summary: true
+          report_paths: '**/build/test-results/**/TEST-*.xml'
+          summary: 'TERE mister!'
+          permissions:
+            checks: write
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: test-report-windows-${{matrix.gradle-task}}
           path: ./**/build/reports
+
   run-tests-on-linux:
     runs-on: ubuntu-latest
     strategy:
@@ -58,6 +70,17 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
+      - name: JUnit Report Action
+        if: success() || failure()
+        uses: mikepenz/action-junit-report@v3.7.5
+        with:
+          require_tests: true
+          include_passed: true
+          detailed_summary: true
+          report_paths: '**/build/test-results/**/TEST-*.xml'
+          summary: 'TERE mister!'
+          permissions:
+            checks: write
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
