@@ -43,7 +43,7 @@ final class SelectsTest extends IntegrationTest {
     assertThat(select.getSelectedOptionValue())
       .isEqualTo("myrambler.ru");
     assertThat(select.getSelectedOptionText())
-      .isEqualTo("@myrambler.ru");
+      .isEqualTo("@myrambler.ru ZOPA");
   }
 
   @Test
