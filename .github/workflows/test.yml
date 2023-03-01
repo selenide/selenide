@@ -28,7 +28,9 @@ jobs:
         shell: pwsh
         run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
       - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
@@ -52,16 +54,10 @@ jobs:
       - name: Setup Firefox
         if: ${{ matrix.gradle-task != 'check' }}
         uses: browser-actions/setup-firefox@latest
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
