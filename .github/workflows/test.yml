@@ -40,8 +40,8 @@ jobs:
           detailed_summary: true
           report_paths: '**/build/test-results/**/TEST-*.xml'
           summary: 'TERE mister!'
-          permissions:
-            checks: write
+        permissions:
+          checks: write
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
@@ -79,8 +79,8 @@ jobs:
           detailed_summary: true
           report_paths: '**/build/test-results/**/TEST-*.xml'
           summary: 'TERE mister!'
-          permissions:
-            checks: write
+        permissions:
+          checks: write
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
