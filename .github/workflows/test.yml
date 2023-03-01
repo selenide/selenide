@@ -31,11 +31,19 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: 'Test report (windows & ${{matrix.gradle-task}})'
+          path: '**/build/test-results/**/TEST-*.xml'
+          reporter: java-junit
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: test-report-windows-${{matrix.gradle-task}}
           path: ./**/build/reports
+
   run-tests-on-linux:
     runs-on: ubuntu-latest
     strategy:
@@ -58,6 +66,13 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: 'Test report (linux & ${{matrix.gradle-task}})'
+          path: '**/build/test-results/**/TEST-*.xml'
+          reporter: java-junit
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
