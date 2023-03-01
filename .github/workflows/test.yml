@@ -36,7 +36,6 @@ jobs:
         uses: mikepenz/action-junit-report@v3.7.5
         with:
           require_tests: true
-          include_passed: true
           detailed_summary: true
           report_paths: '**/build/test-results/**/TEST-*.xml'
           summary: 'TERE mister!'
@@ -73,7 +72,6 @@ jobs:
         uses: mikepenz/action-junit-report@v3.7.5
         with:
           require_tests: true
-          include_passed: true
           detailed_summary: true
           report_paths: '**/build/test-results/**/TEST-*.xml'
           summary: 'TERE mister!'
