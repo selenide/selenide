@@ -20,6 +20,7 @@ import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
@@ -57,7 +58,7 @@ final class SelectsTest extends IntegrationTest {
 
     assertThatThrownBy(() -> $("select#empty-select").getSelectedOption().text())
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {selected option}");
+      .hasMessageStartingWith("Element not found {select#empty-select :selected}");
   }
 
   @Test
@@ -168,14 +169,13 @@ final class SelectsTest extends IntegrationTest {
 
   @Test
   void userCanSelectOptionByText() {
-    SelenideElement select = $(By.xpath("//select[@name='domain']"));
+    SelenideElement select = $("select[name=domain]");
     select.selectOption("@мыло.ру");
 
-    select.getSelectedOption().shouldBe(selected);
-    assertThat(select.getSelectedOptionValue())
-      .isEqualTo("мыло.ру");
-    assertThat(select.getSelectedOptionText())
-      .isEqualTo("@мыло.ру");
+    select.shouldBe(visible);
+    select.getSelectedOption().shouldBe(visible);
+    select.getSelectedOption().shouldHave(text("@мыло.ру"));
+    select.getSelectedOption().shouldHave(value("мыло.ру"));
   }
 
   @Test
