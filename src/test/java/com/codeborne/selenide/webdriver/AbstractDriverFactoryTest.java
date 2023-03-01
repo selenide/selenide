@@ -38,7 +38,7 @@ final class AbstractDriverFactoryTest {
 
     assertThat(factory.convertStringToNearestObjectType("Hottabych 2 false"))
       .as("any other value")
-      .isEqualTo("Hottabych 2 false");
+      .isEqualTo("Hottabych 2 false ZOPA");
   }
 
   @SuppressWarnings("unchecked")

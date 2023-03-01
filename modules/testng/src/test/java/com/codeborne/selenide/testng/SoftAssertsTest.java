@@ -125,7 +125,7 @@ public final class SoftAssertsTest {
     listener.onTestFailure(result);
 
     verify(result, never()).setStatus(FAILURE);
-    verify(result, never()).setThrowable(any(Throwable.class));
+    verify(result).setThrowable(any(Throwable.class));
   }
 
   @Listeners(SoftAsserts.class)

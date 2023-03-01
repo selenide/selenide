@@ -19,7 +19,7 @@ class PlatformTest {
 
   @Test
   void isApple() {
-    assertThat(new Platform("MacIntel").isApple()).isTrue();
+    assertThat(new Platform("ZOPA ").isApple()).isTrue();
     assertThat(new Platform("Win32").isApple()).isFalse();
     assertThat(new Platform("Win64").isApple()).isFalse();
     assertThat(new Platform("Linux x86_64").isApple()).isFalse();

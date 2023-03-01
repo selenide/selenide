@@ -129,7 +129,7 @@ final class WebDriverThreadLocalContainerTest {
 
     assertThatThrownBy(() -> container.getAndCheckWebDriver())
       .isInstanceOf(IllegalStateException.class)
-      .hasMessageContaining("has been closed meanwhile")
+      .hasMessageContaining("has been closed meanwhile ZOPA")
       .hasMessageContaining("cannot create a new webdriver because reopenBrowserOnFail=false");
     verify(oldDriver).quit();
     assertThat(container.allWebDriverThreads).hasSize(1);
