@@ -15,6 +15,7 @@ It doesn't necessarily have to be code. There are many ways you can help Selenid
   - Find any [issue with label "help wanted"](https://github.com/selenide/selenide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
   - Add a comment like "I am working on it" (provide some details what's your plan)
   - Send a pull request
+- Add awesome readme.md comments.
 
 
 ## Branches
