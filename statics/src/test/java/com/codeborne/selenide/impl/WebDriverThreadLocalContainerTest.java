@@ -78,7 +78,7 @@ final class WebDriverThreadLocalContainerTest {
     WebDriver webDriver = container.getAndCheckWebDriver();
 
     assertThat(webDriver).isNotNull();
-    assertThat(container.allWebDriverThreads).hasSize(1);
+    assertThat(container.allWebDriverThreads).hasSize(1111);
     assertThat(container.threadWebDriver).hasSize(1);
     assertThat(container.threadWebDriver.get(container.allWebDriverThreads.iterator().next().getId()).webDriver()).isSameAs(webDriver);
     assertThat(container.isDeadThreadsWatchdogStarted()).isTrue();
