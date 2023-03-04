@@ -34,7 +34,6 @@ import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
-import static org.apache.commons.lang3.SystemUtils.OS_NAME;
 import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 
@@ -69,12 +68,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     else if (isEdge() && IS_OS_WINDOWS) {
       log.info("This is Edge on Windows - closing the browser");
       closeWebDriver();
-    }
-    else if (!isEdge()) {
-      log.info("This is not Edge: {}", browser());
-    }
-    else if (!IS_OS_WINDOWS) {
-      log.info("This is not Windows: {}", OS_NAME);
     }
   }
 
