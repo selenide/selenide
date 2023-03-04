@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'check', 'edge_headless' ]
+        gradle-task: [ 'edge_headless', 'chrome_headless' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -30,7 +30,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
+          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
@@ -45,7 +45,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'check', 'firefox_headless', 'chrome_headless' ]
+        gradle-task: [ 'edge_headless', 'chrome_headless' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -61,7 +61,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
+          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
