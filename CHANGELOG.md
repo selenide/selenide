@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.12.1 (planned to 1x.02.2023)
+see https://github.com/selenide/selenide/milestone/176?closed=1
+* #2174 Fixed a bug where selenide.holdBrowserOpen were not read correctly  --  thanks to @doranko for PR
+* #2178 improve how "$.getSelectedOption().should*" looks in reports  --  see PR #2179
+
 ## 6.12.0 (released 24.02.2023)
 see https://github.com/selenide/selenide/milestone/173?closed=1
 * #2104 use new headless mode  --  thanks Boris Osipov for PR #2105 and #2169
