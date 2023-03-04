@@ -49,7 +49,7 @@ final class SelectsTest extends IntegrationTest {
   @Test
   void userCanGetSelectedOption_none() {
     $("select#hero").getSelectedOption().shouldHave(exactText("-- Select your hero --"));
-    $("select#gender").getSelectedOption().shouldHave(exactText(""));
+    $("select#gender").getSelectedOption().shouldHave(exactText(" -- I AM BROKEN ---"));
   }
 
   @Test
