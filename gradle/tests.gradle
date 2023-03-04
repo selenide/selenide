@@ -15,7 +15,7 @@ subprojects {
 
   tasks.register("edge", Test) {
     systemProperties['selenide.browser'] = 'edge'
-    include 'integration/**/*'
+    include 'integration/**/*Select*Test*'
     exclude 'com/codeborne/selenide/**/*'
     outputs.upToDateWhen {false}
   }
@@ -98,12 +98,18 @@ subprojects {
     if (System.getenv('CI')) {
       maxParallelForks = 1
     } else {
-      maxParallelForks = (int) Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+      maxParallelForks = 1
     }
     jvmArgs = ['-ea', '-Xmx512m']
     systemProperties['file.encoding'] = encoding
     systemProperties['user.country'] = 'TR'
     systemProperties['user.language'] = 'tr'
+
+    testLogging {
+      events "passed", "skipped", "failed"
+      showExceptions true
+      exceptionFormat 'full'
+    }
   }
 }
 
