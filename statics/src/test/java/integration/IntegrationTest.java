@@ -12,8 +12,11 @@ import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.opentest4j.TestAbortedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.awt.*;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
@@ -28,12 +31,17 @@ import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.TextCheck.FULL_TEXT;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
+import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
+import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
+import static org.apache.commons.lang3.SystemUtils.OS_NAME;
 import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 
 @ExtendWith(ScreenShooterExtension.class)
 public abstract class IntegrationTest extends BaseIntegrationTest {
+  private static final Logger log = LoggerFactory.getLogger(IntegrationTest.class);
+
   @BeforeAll
   static void resetSettingsBeforeClass() {
     resetSettings();
@@ -57,6 +65,16 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   public static void restartUnstableWebdriver() {
     if (isIE()) {
       closeWebDriver();
+    }
+    else if (isEdge() && IS_OS_WINDOWS) {
+      log.info("This is Edge on Windows - closing the browser");
+      closeWebDriver();
+    }
+    else if (!isEdge()) {
+      log.info("This is not Edge: {}", browser());
+    }
+    else if (!IS_OS_WINDOWS) {
+      log.info("This is not Windows: {}", OS_NAME);
     }
   }
 
