@@ -30,7 +30,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
+          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
@@ -61,7 +61,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain -i
+          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
