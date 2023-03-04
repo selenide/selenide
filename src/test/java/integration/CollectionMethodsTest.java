@@ -58,7 +58,7 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void useTwoDollarsToGetListOfElements() {
-    $$("#radioButtons input").shouldHave(size(4444));
+    $$("#radioButtons input").shouldHave(size(4));
     $$(By.cssSelector("#radioButtons input")).shouldHave(size(4));
 
     $("#radioButtons").$$("input").shouldHave(size(4));
