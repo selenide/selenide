@@ -188,23 +188,15 @@ public class WebDriverRunner {
   }
 
   public static void using(WebDriver driver, Runnable lambda) {
-    if (hasWebDriverStarted()) {
-      var previous = getWebDriver();
-      setWebDriver(driver);
-      try {
-        lambda.run();
-      }
-      finally {
-        setWebDriver(previous);
-      }
+    var previous = hasWebDriverStarted() ? getWebDriver() : null;
+    setWebDriver(driver);
+    try {
+      lambda.run();
     }
-    else {
-      setWebDriver(driver);
-      try {
-        lambda.run();
-      }
-      finally {
-        webdriverContainer.resetWebDriver();
+    finally {
+      webdriverContainer.resetWebDriver();
+      if (previous != null) {
+        setWebDriver(previous);
       }
     }
   }
