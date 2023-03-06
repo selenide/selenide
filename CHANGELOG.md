@@ -1,9 +1,12 @@
 # Changelog
 
-## 6.12.1 (planned to 1x.02.2023)
+## 6.12.1 (released 07.03.2023)
 see https://github.com/selenide/selenide/milestone/176?closed=1
 * #2174 Fixed a bug where selenide.holdBrowserOpen were not read correctly  --  thanks to @doranko for PR
 * #2178 improve how "$.getSelectedOption().should*" looks in reports  --  see PR #2179
+* #2186 Use custom driver in the using block  --  see PR #2188
+* #2173 bump BrowserUpProxy from 2.2.7 to 2.2.8
+* #2176 bump LittleProxy from 2.0.15 to 2.0.16
 
 ## 6.12.0 (released 24.02.2023)
 see https://github.com/selenide/selenide/milestone/173?closed=1
