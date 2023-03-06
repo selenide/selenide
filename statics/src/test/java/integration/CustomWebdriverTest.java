@@ -52,15 +52,14 @@ final class CustomWebdriverTest extends IntegrationTest {
   void userCanSwitchBetweenWebdrivers_using_setWebDriver() {
     setWebDriver(browser1);
     openFile("page_with_selects_without_jquery.html");
-    $("h1").shouldBe(visible);
+    $("h1").shouldBe(visible).shouldHave(text("Page with selects"));
 
     setWebDriver(browser2);
-    openFile("page_with_selects_without_jquery.html");
-    $("h2").shouldBe(visible);
+    openFile("file_upload_form.html");
+    $("h1").shouldBe(visible).shouldHave(text("File upload form"));
 
     setWebDriver(browser1);
-    openFile("page_with_selects_without_jquery.html");
-    $("h1").shouldBe(visible);
+    $("h1").shouldBe(visible).shouldHave(text("Page with selects"));;
   }
 
   @Test
@@ -74,8 +73,8 @@ final class CustomWebdriverTest extends IntegrationTest {
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
 
     using(browser2, () -> {
-      openFile("page_with_selects_without_jquery.html");
-      $("h2").shouldBe(visible).shouldHave(text("Dropdown list"));
+      openFile("file_upload_form.html");
+      $("h1").shouldBe(visible).shouldHave(text("File upload form"));
       assertThat(WebDriverRunner.getWebDriver()).isSameAs(browser2);
     });
 
@@ -89,11 +88,27 @@ final class CustomWebdriverTest extends IntegrationTest {
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
 
     using(browser2, () -> {
-      $("h2").shouldBe(visible).shouldHave(text("Dropdown list"));
+      $("h1").shouldBe(visible).shouldHave(text("File upload form"));
       assertThat(WebDriverRunner.getWebDriver()).isSameAs(browser2);
     });
 
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
+  }
+
+  @Test
+  void userCanSwitchToCustomWebdriverAndBackToSelenideWebdriver() {
+    openFile("page_with_big_divs.html");
+    $("h1").shouldBe(visible).shouldHave(text("Some big divs"));
+
+    using(browser1, () -> {
+      openFile("page_with_selects_without_jquery.html");
+      assertThat(WebDriverRunner.hasWebDriverStarted()).isTrue();
+      $("h1").shouldBe(visible).shouldHave(text("Page with selects"));
+      assertThat(WebDriverRunner.getWebDriver()).isSameAs(browser1);
+    });
+
+    assertThat(WebDriverRunner.hasWebDriverStarted()).isTrue();
+    $("h1").shouldBe(visible).shouldHave(text("Some big divs"));
   }
 
   @AfterEach
