@@ -43,7 +43,8 @@ public class ElementsContainerCollection extends AbstractList<ElementsContainer>
   @Nonnull
   @Override
   public ElementsContainer get(int index) {
-    WebElementSource self = new WebElementWrapper(driver, collection.getElement(index));
+    String searchCriteria = String.format("%s[%s]", collection.getSearchCriteria(), index);
+    WebElementSource self = new WebElementWrapper(driver, collection.getElement(index), searchCriteria);
     try {
       return pageFactory.initElementsContainer(driver, field, self, listType, genericTypes);
     } catch (ReflectiveOperationException e) {

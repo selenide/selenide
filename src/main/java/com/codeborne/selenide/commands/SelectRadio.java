@@ -40,7 +40,7 @@ public class SelectRadio implements Command<SelenideElement> {
         }
 
         click.click(locator.driver(), radio);
-        return wrap(locator.driver(), radio);
+        return wrap(locator.driver(), radio, locator.getSearchCriteria());
       }
     }
     throw new ElementNotFound(locator.driver(), locator.getAlias(), locator.getSearchCriteria(), value(value));
