@@ -19,6 +19,10 @@ public class SelenideAppium {
   private static final AppiumNavigator appiumNavigator = new AppiumNavigator();
   private static final DeepLinkLauncher deepLinkLauncher = new DeepLinkLauncher();
 
+  private SelenideAppium() {
+
+  }
+
   /**
    * The main starting point in your tests.
    * Launch a mobile application. Do nothing if driver already created.
@@ -62,18 +66,6 @@ public class SelenideAppium {
    */
   public static void back() {
     Selenide.back();
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  public static SelenideAppiumElement $(String cssSelector) {
-    return $(cssSelector, 0);
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  public static SelenideAppiumElement $(String cssSelector, int index) {
-    return $(By.cssSelector(cssSelector), index);
   }
 
   @CheckReturnValue
