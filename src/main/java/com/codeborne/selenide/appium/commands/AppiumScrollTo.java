@@ -82,9 +82,11 @@ public class AppiumScrollTo implements Command<SelenideAppiumElement> {
 
   private AppiumScrollCoordinates getScrollCoordinates(AppiumScrollOptions scrollOptions, Dimension size) {
     if (scrollOptions.getScrollDirection() == ScrollDirection.UP) {
-      return new AppiumScrollCoordinates(size.getWidth() / 2, (int) (size.getHeight() * 0.25), size.getWidth() / 2, size.getHeight() / 2);
+      return new AppiumScrollCoordinates(size.getWidth() / 2, (int) (size.getHeight() * 0.25),
+                                         size.getWidth() / 2, size.getHeight() / 2);
     } else {
-      return new AppiumScrollCoordinates(size.getWidth() / 2, size.getHeight() / 2, size.getWidth() / 2, (int) (size.getHeight() * 0.25));
+      return new AppiumScrollCoordinates(size.getWidth() / 2, size.getHeight() / 2,
+                                         size.getWidth() / 2, (int) (size.getHeight() * 0.25));
     }
   }
 
