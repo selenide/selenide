@@ -1,8 +1,11 @@
 == Changelog
 
-=== 2.5.3 (planned to 0x.02.2023)
-* Add methods $ returning SelenideAppiumElement (extends SelenideElement)
-* Bump selenide from 6.11.0 to 6.11.3
+=== 2.6.0 (released 07.03.2023)
+(see https://github.com/selenide/selenide-appium/milestone/21?closed=1)
+* #106 Add methods $ returning SelenideAppiumElement (extends SelenideElement)  --  see PR #131
+* #106 Add method $.hideKeyboard()  --  see PR #131
+* create "html" files for web browsers, and "xml" only for mobile apps 01.02.2023, 09:24 Andrei Solntsev
+* Bump selenide from 6.11.0 to 6.12.1
 
 === 2.5.2 (released 03.01.2023)
 * bump selenide from 6.10.2 to 6.11.0
