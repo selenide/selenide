@@ -31,10 +31,6 @@ public class AppiumScrollOptions {
     return new AppiumScrollOptions(ScrollDirection.UP, maxSwipeCounts);
   }
 
-  public static AppiumScrollOptions withDirection(ScrollDirection scrollDirection) {
-    return new AppiumScrollOptions(scrollDirection, DEFAULT_MAX_SWIPE_COUNTS);
-  }
-
   public int getMaxSwipeCounts() {
     return maxSwipeCounts;
   }
