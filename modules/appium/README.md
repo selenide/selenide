@@ -86,11 +86,19 @@ boolean isAndroid = AppiumDriverRunner.isAndroidDriver();
 boolean isIos = AppiumDriverRunner.isIosDriver();
 ```
 
+5. We handle the scrolling for you
+
+```java
+$(By.xpath(".//*[@text='Tabs']")).scrollTo().click(); //scroll max of 30 times in downward direction to find element
+$(By.xpath(".//*[@text='Tabs']")).scroll(with(DOWN, 10)); //scroll max of 10 times in downward direction to find element
+$(By.xpath(".//*[@text='Animation']")).scroll(up()); //scroll max of 30 times in upward direction to find element
+```
 ### Changelog
 
 Here is [CHANGELOG](https://github.com/selenide/selenide-appium/blob/main/CHANGELOG)
 
 ### Reference
 
-Please check our [sample project](https://github.com/selenide-examples/selenide-appium). 
+Please check our [sample project](https://github.com/selenide-examples/selenide-appium).
+
 Please check our [simple skeleton framework](https://github.com/amuthansakthivel/SelenideAppiumFramework)
