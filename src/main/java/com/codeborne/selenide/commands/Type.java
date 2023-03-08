@@ -11,7 +11,6 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.impl.Plugins.inject;
-import static java.util.Objects.requireNonNull;
 
 public class Type implements Command<SelenideElement> {
 
@@ -28,17 +27,25 @@ public class Type implements Command<SelenideElement> {
   @Nullable
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) throws IOException {
+    long timeOut = 200;
+    CharSequence charSequence = firstOf(args);
 
-    CharSequence charSequence = firstOf(requireNonNull(args));
+    if (args.length > 1) {
+      timeOut = (long) args[1];
+    }
+
     WebElement element = locator.findAndAssertElementIsEditable();
     String text = String.valueOf(charSequence);
     clearField(proxy, locator, charSequence);
+    typeIntoField(element, text, timeOut);
+    return proxy;
+  }
 
+  private void typeIntoField(WebElement element, String text, long delay) {
     for (char character : text.toCharArray()) {
       element.sendKeys(String.valueOf(character));
-      Stopwatch.sleepAtLeast(200);
+      Stopwatch.sleepAtLeast(delay);
     }
-    return proxy;
   }
 
   private void clearField(SelenideElement proxy, WebElementSource locator, CharSequence charSequence) {

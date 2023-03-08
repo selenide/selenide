@@ -16,5 +16,7 @@ class TypeTest extends ITest {
     $("#username_input").setValue("test");
     $("#username_input").type("abc");
     $("#username_input").shouldHave(attribute("value", "abc"));
+    $("#username_input").type("abc", 100);
+    $("#username_input").shouldHave(attribute("value", "abc"));
   }
 }
