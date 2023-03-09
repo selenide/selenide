@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.12.2 (released 09.03.2023)
+* #2192 added workaround for Chromedriver 111 issue ("Invalid Status code=403 text=Forbidden")  --  see PR #2194
+
 ## 6.12.1 (released 07.03.2023)
 see https://github.com/selenide/selenide/milestone/176?closed=1
 * #2174 Fixed a bug where selenide.holdBrowserOpen were not read correctly  --  thanks to @doranko for PR
