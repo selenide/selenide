@@ -1,5 +1,8 @@
 == Changelog
 
+=== 2.6.1 (released 11.03.2023)
+* #140 Bump selenide from 6.11.1 to 6.12.2
+
 === 2.6.0 (released 07.03.2023)
 (see https://github.com/selenide/selenide-appium/milestone/21?closed=1)
 * #106 Add methods $ returning SelenideAppiumElement (extends SelenideElement)  --  see PR #131
