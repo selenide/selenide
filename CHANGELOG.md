@@ -1,6 +1,7 @@
 # Changelog
 
 ## 6.12.2 (released 09.03.2023)
+see https://github.com/selenide/selenide/milestone/178?closed=1
 * #2192 added workaround for Chromedriver 111 issue ("Invalid Status code=403 text=Forbidden")  --  see PR #2194
 
 ## 6.12.1 (released 07.03.2023)
