@@ -2,16 +2,11 @@ package integration;
 
 import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.WebDriverRunner;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,22 +32,15 @@ final class CustomWebdriverTest extends IntegrationTest {
   @BeforeAll
   static void setUpWebdrivers() {
     assumeThat(isChrome() || isFirefox()).isTrue();
-
     closeWebDriver();
-    if (isFirefox()) WebDriverManager.firefoxdriver().setup();
-    if (isChrome()) WebDriverManager.chromedriver().setup();
   }
 
   @BeforeEach
   void setUpTwoBrowsers() {
     closeWebDriver();
 
-    browser1 = isFirefox() ?
-      new FirefoxDriver(addSslErrorIgnoreCapabilities(addHeadless(new FirefoxOptions()))) :
-      new ChromeDriver(addSslErrorIgnoreCapabilities(addHeadless(new ChromeOptions())));
-    browser2 = isFirefox() ?
-      new FirefoxDriver(addSslErrorIgnoreCapabilities(addHeadless(new FirefoxOptions()))) :
-      new ChromeDriver(addSslErrorIgnoreCapabilities(addHeadless(new ChromeOptions())));
+    browser1 = isFirefox() ? openFirefox() : openChrome();
+    browser2 = isFirefox() ? openFirefox() : openChrome();
   }
 
   @Test
