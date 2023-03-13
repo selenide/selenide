@@ -102,9 +102,13 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder) {
     resetWebDriver();
+    setWebDriver(new WebDriverInstance(config, webDriver, selenideProxy, browserDownloadsFolder));
+  }
 
+  private long setWebDriver(WebDriverInstance webDriverInstance) {
     long threadId = currentThread().getId();
-    threadWebDriver.put(threadId, new WebDriverInstance(config, webDriver, selenideProxy, browserDownloadsFolder));
+    threadWebDriver.put(threadId, webDriverInstance);
+    return threadId;
   }
 
   /**
@@ -180,8 +184,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Nonnull
   private WebDriverInstance createDriver() {
     WebDriverInstance result = createDriverCommand.createDriver(config, factory, userProvidedProxy, eventListeners, listeners);
-    long threadId = currentThread().getId();
-    threadWebDriver.put(threadId, result);
+    long threadId = setWebDriver(result);
 
     if (config.holdBrowserOpen()) {
       log.info("Browser and proxy will stay open due to holdBrowserOpen=true: {} -> {}, {}",
@@ -222,16 +225,14 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Override
   public void using(WebDriver driver, Runnable lambda) {
-    var previous = hasWebDriverStarted() ? getWebDriver() : null;
+    var previous = currentThreadDriver();
     setWebDriver(driver);
     try {
       lambda.run();
     }
     finally {
       resetWebDriver();
-      if (previous != null) {
-        setWebDriver(previous);
-      }
+      previous.ifPresent(this::setWebDriver);
     }
   }
 
