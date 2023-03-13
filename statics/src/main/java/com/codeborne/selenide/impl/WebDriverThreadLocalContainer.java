@@ -109,7 +109,9 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   /**
    * Remove links to webdriver/proxy, but DON'T CLOSE the webdriver/proxy itself.
+   * @deprecated Use method {@link #using(WebDriver, Runnable)} instead.
    */
+  @Deprecated
   @Override
   public void resetWebDriver() {
     threadWebDriver.remove(currentThread().getId());
@@ -216,6 +218,21 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     }
 
     resetWebDriver();
+  }
+
+  @Override
+  public void using(WebDriver driver, Runnable lambda) {
+    var previous = hasWebDriverStarted() ? getWebDriver() : null;
+    setWebDriver(driver);
+    try {
+      lambda.run();
+    }
+    finally {
+      resetWebDriver();
+      if (previous != null) {
+        setWebDriver(previous);
+      }
+    }
   }
 
   @Override
