@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.12.3 (released 14.03.2023)
+* #2202 fix method $.download(FOLDER) after using `using` --  see PR #2203
+
 ## 6.12.2 (released 09.03.2023)
 see https://github.com/selenide/selenide/milestone/178?closed=1
 * #2192 added workaround for Chromedriver 111 issue ("Invalid Status code=403 text=Forbidden")  --  see PR #2194
