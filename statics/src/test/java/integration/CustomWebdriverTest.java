@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -22,6 +23,7 @@ import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
+import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
@@ -113,7 +115,9 @@ final class CustomWebdriverTest extends IntegrationTest {
       openFile("page_with_selects_without_jquery.html");
     });
 
-    File downloadedFile = $(byText("Download me")).download(DownloadOptions.using(FOLDER).withFilter(withExtension("txt")));
+    File downloadedFile = $(byText("Download me")).download(
+      using(FOLDER).withTimeout(ofSeconds(2)).withFilter(withExtension("txt"))
+    );
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
