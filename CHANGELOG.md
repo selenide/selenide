@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.12.4 (planned to 2x.03.2023)
+* #2202 fix method $.download(PROXY) after using `using` --  see PR #2208
+
 ## 6.12.3 (released 14.03.2023)
 * #2202 fix method $.download(FOLDER) after using `using` --  see PR #2203
 

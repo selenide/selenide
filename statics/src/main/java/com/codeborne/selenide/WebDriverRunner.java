@@ -188,7 +188,11 @@ public class WebDriverRunner {
   }
 
   static void using(WebDriver driver, Runnable lambda) {
-    webdriverContainer.using(driver, lambda);
+    webdriverContainer.using(driver, null, lambda);
+  }
+
+  static void using(WebDriver driver, SelenideProxyServer proxy, Runnable lambda) {
+    webdriverContainer.using(driver, proxy, lambda);
   }
 
   @CheckReturnValue
