@@ -224,9 +224,9 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   @Override
-  public void using(WebDriver driver, Runnable lambda) {
+  public void using(WebDriver driver, @Nullable SelenideProxyServer proxy, Runnable lambda) {
     var previous = currentThreadDriver();
-    setWebDriver(driver);
+    setWebDriver(driver, proxy);
     try {
       lambda.run();
     }

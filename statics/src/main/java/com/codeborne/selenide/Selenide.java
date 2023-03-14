@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -139,6 +140,10 @@ public class Selenide {
 
   public static void using(WebDriver webDriver, Runnable lambda) {
     WebDriverRunner.using(webDriver, lambda);
+  }
+
+  public static void using(WebDriver webDriver, SelenideProxyServer proxy, Runnable lambda) {
+    WebDriverRunner.using(webDriver, proxy, lambda);
   }
 
   /**

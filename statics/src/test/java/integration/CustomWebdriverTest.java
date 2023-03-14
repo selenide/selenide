@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
