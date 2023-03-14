@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="jp">
   <head>
     <title>Test::Japanese</title>
     <meta charset="Windows-31J">
@@ -8,7 +8,18 @@
   <body>
     <h1>Page in Japanese</h1>
     <div id="description">
-      ���Y�t�H���^�c����j���[�X�T�C�g�B���t�I�����C���͐��̒�����������X�N�[�v����A�����̎d���␶���ɖ𗧂b��܂ł��͂������񃁃f�B�A�ł��B
+      文藝春秋が運営するニュースサイト。文春オンラインは世の中を驚かせるスクープから、毎日の仕事や生活に役立つ話題までお届けする情報メディアです。
     </div>
+    <form action="/post" method="post" enctype="application/x-www-form-urlencoded" accept-charset="Windows-31J">
+      <div>
+        <textarea name="username" rows="20" cols="50">...Type your username here...</textarea>
+      </div>
+      <div>
+        <input name="password" type="password">
+      </div>
+      <div>
+        <input id="login" type="submit" value="Login">
+      </div>
+    </form>
   </body>
 </html>
