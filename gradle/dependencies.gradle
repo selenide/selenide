@@ -4,7 +4,7 @@ ext {
   junitVersion = '5.9.2'
   assertjVersion = '3.24.2'
   mockitoVersion = '5.2.0'
-  slf4jVersion = '2.0.6'
+  slf4jVersion = '2.0.7'
 }
 
 dependencies {
