@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.6 (released 22.03.2023)
+* bump Selenide from 6.11.1 to 6.12.4
+* bump slf4j from 2.0.6 to 2.0.7
+
 ## 2.3.5 (released 23.01.2023)
 * declare Selenide dependency with `api` scope
 * upgrade to Selenide 6.11.1
