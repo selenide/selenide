@@ -1,5 +1,11 @@
 == Changelog
 
+=== 2.7.0 (released 23.03.2023)
+* #76 added methods for scrolling in mobile apps  -- thanks to Amuthan Sakthivel for PR #139
+* #145 fixed terminateApp not working  --  thanks to Amuthan Sakthivel for PR #146
+* Bump selenide from 6.12.2 to 6.12.4
+* Bump org.slf4j:slf4j-simple from 2.0.6 to 2.0.7
+
 === 2.6.1 (released 11.03.2023)
 * #140 Bump selenide from 6.11.1 to 6.12.2
 
