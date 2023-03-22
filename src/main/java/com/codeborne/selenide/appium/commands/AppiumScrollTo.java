@@ -5,7 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.appium.AppiumScrollCoordinates;
 import com.codeborne.selenide.appium.AppiumScrollOptions;
 import com.codeborne.selenide.appium.ScrollDirection;
-import com.codeborne.selenide.appium.SelenideAppiumElement;
+import com.codeborne.selenide.commands.ScrollTo;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.Dimension;
@@ -15,21 +15,28 @@ import org.openqa.selenium.interactions.Sequence;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
+import java.util.Optional;
 
 import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
-public class AppiumScrollTo implements Command<SelenideAppiumElement> {
+@ParametersAreNonnullByDefault
+public class AppiumScrollTo implements Command<SelenideElement> {
+  private final ScrollTo webImplementation = new ScrollTo();
 
   @Override
   @Nonnull
-  public SelenideAppiumElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    AppiumDriver appiumDriver = cast(locator.driver(), AppiumDriver.class)
-      .orElseThrow(() -> new IllegalStateException("Driver should be either an instance of Android or Ios Driver"));
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+    Optional<AppiumDriver> driver = cast(locator.driver(), AppiumDriver.class);
+    if (!driver.isPresent()) {
+      return webImplementation.execute(proxy, locator, args);
+    }
 
+    AppiumDriver appiumDriver = driver.get();
     AppiumScrollOptions appiumScrollOptions;
 
     if (args == null || args.length == 0) {
@@ -49,7 +56,7 @@ public class AppiumScrollTo implements Command<SelenideAppiumElement> {
       performScroll(appiumDriver, appiumScrollOptions);
       currentSwipeCount++;
     }
-    return (SelenideAppiumElement) proxy;
+    return proxy;
   }
 
   private boolean isLessThanMaxSwipeCount(int currentSwipeCount, int maxSwipeCounts) {
