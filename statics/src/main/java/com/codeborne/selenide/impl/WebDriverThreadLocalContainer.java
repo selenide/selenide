@@ -113,7 +113,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   /**
    * Remove links to webdriver/proxy, but DON'T CLOSE the webdriver/proxy itself.
-   * @deprecated Use method {@link #using(WebDriver, Runnable)} instead.
+   * @deprecated Use method {@link #using(WebDriver, SelenideProxyServer, Runnable)} instead.
    */
   @Deprecated
   @Override
