@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.ex.TimeoutException;
 import com.codeborne.selenide.logevents.EventsCollector;
 import com.codeborne.selenide.logevents.LogEvent;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -97,9 +99,12 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @Test
   void downloadMissingFile() {
-    assertThatThrownBy(() -> $(byText("Download missing file")).download())
+    assertThatThrownBy(() -> {
+      File unexpected = $(byText("Download missing file")).download();
+      assertThat(unexpected).content().isEqualTo("This file should not be downloaded");
+    })
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessageMatching("Failed to download file http.+/files/unexisting_file.png: .+");
+      .hasMessageMatching("(?s)Failed to download file http.+/files/unexisting_file.png: .+");
 
     assertThat(collector.events()).hasSize(1);
 
@@ -212,4 +217,23 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
+
+  @Test
+  void downloadLargeFile() throws IOException {
+    File downloadedFile = $(byText("Download large file")).download(withExtension("txt"));
+
+    assertThat(downloadedFile).hasName("large_file.txt");
+    assertThat(downloadedFile).hasSize(5 * 1024 * 1024);
+  }
+
+  @Test
+  void canDownloadResourceProtectedByBasicAuth() throws IOException, URISyntaxException {
+    String urlWithCredentials = getProtectedUrl("scott", scottPassword(), "/basic-auth/hello");
+    File f = Selenide.download(urlWithCredentials, 2000);
+    assertThat(f).content()
+      .startsWith("<html>")
+      .contains("<div id=\"greeting\">hello, scott:tiger://&lt;script&gt;alert(1)&lt;/script&gt;&amp;\\</div>")
+      .contains("<a id=\"bye\" href=\"/basic-auth/bye\">bye!</a>");
+  }
+
 }

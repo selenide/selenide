@@ -1,8 +1,8 @@
 # Selenide = UI Testing Framework powered by Selenium WebDriver
 
 ![Build Status](https://github.com/selenide/selenide/workflows/Run%20tests/badge.svg)
-[![Maven Central](https://img.shields.io/maven-central/v/com.codeborne/selenide.svg)](https://search.maven.org/artifact/com.codeborne/selenide)
-[![MIT License](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/selenide/selenide/blob/master/LICENSE)
+[![Maven Central](https://img.shields.io/maven-central/v/com.codeborne/selenide.svg)](https://central.sonatype.com/search?q=selenide&namespace=com.codeborne)
+[![MIT License](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/selenide/selenide/blob/main/LICENSE)
 ![Free](https://img.shields.io/badge/free-open--source-green.svg)
 
 [![Join the chat at https://gitter.im/codeborne/selenide](https://img.shields.io/badge/welcome%20to-chat-green.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -40,7 +40,7 @@ You can use Selenide for running tests in Selenoid containers. See plugin [selen
 
 ## Changelog
 
-Here is [CHANGELOG](https://github.com/selenide/selenide/blob/master/CHANGELOG.md)
+Here is [CHANGELOG](https://github.com/selenide/selenide/blob/main/CHANGELOG.md)
 
 ## How to start?
 

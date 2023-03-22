@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static java.lang.System.currentTimeMillis;
 import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
@@ -54,13 +55,16 @@ public class Downloads {
   @CheckReturnValue
   @Nonnull
   public String filesAsString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(files.size()).append(" files:\n");
+    if (files.isEmpty()) {
+      return "[]";
+    }
 
+    StringBuilder sb = new StringBuilder();
     int i = 0;
     for (DownloadedFile file : files) {
-      sb.append("  #").append(++i).append("  ").append(file.getFile().getAbsolutePath()).append("\n");
+      sb.append("\n  #").append(++i).append("  ").append(file).append("\n");
     }
+    sb.append('(').append(files.size()).append(" files at ").append(currentTimeMillis()).append(")\n");
     return sb.toString();
   }
 

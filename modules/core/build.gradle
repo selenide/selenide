@@ -16,8 +16,9 @@ sourceSets {
 dependencies {
   api('org.opentest4j:opentest4j:1.2.0')
 
-  api('io.github.bonigarcia:webdrivermanager:5.3.1') {
+  api('io.github.bonigarcia:webdrivermanager:5.3.2') {
     exclude group: 'org.apache.httpcomponents.core5'
+    exclude group: 'org.apache.httpcomponents.client5'
     exclude group: 'com.github.docker-java'
     exclude group: 'org.rauschig'
     exclude group: 'commons-lang'
@@ -33,7 +34,7 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
 
-  testImplementation("org.mockito:mockito-inline:$mockitoVersion")
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
   testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}
 }
 

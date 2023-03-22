@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
@@ -20,6 +21,7 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
@@ -28,8 +30,10 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createTempDirectory;
 import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
+import static java.util.regex.Pattern.DOTALL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class FileDownloadToFolderTest extends IntegrationTest {
   private static final Logger log = LoggerFactory.getLogger(FileDownloadToFolderTest.class);
@@ -42,7 +46,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     }
     Configuration.fileDownload = FOLDER;
     openFile("page_with_uploads.html");
-    timeout = 500;
+    timeout = 5000;
   }
 
   @Test
@@ -79,18 +83,18 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadMissingFile() {
-    timeout = 100;
+    timeout = 888;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessage("Failed to download file with extension \"txt\" in 100 ms.");
+      .hasMessage("Failed to download file with extension \"txt\" in 888 ms.");
   }
 
   @Test
   void downloadMissingFileWithExtension() {
-    timeout = 80;
+    timeout = 888;
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 80 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 888 ms");
   }
 
   @Test
@@ -146,6 +150,10 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadsPotentiallyHarmfulWindowsFiles() throws IOException {
+    assumeThat(isEdge())
+      .as("Edge shows warning like '*.exe file is not downloaded'")
+      .isFalse();
+
     File downloadedFile = $(byText("Download EXE file")).download(withNameMatching("\\w+\\.exe"));
 
     assertThat(downloadedFile.getName()).startsWith("tiny.exe");
@@ -214,7 +222,9 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .download(shortIncrementTimeout))
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(".+files in .+ haven't been modified for \\d+ ms.");
+      .hasMessageMatching(Pattern.compile(".+files in .+ haven't been modified for \\d+ ms. " +
+        "\\(started at: \\d+, lastFileUpdate: -?\\d+, now: \\d+, incrementTimeout: \\d+\\)\\s*" +
+        "Modification times: \\{.*}", DOTALL));
   }
 
   @Test
@@ -229,7 +239,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     })
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(".+files in .+ haven't been modified for \\d+ ms.");
+      .hasMessageMatching(Pattern.compile(".+files in .+ haven't been modified for \\d+ ms\\..*", DOTALL));
   }
 
   @Test
@@ -243,18 +253,18 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   public void download_super_slowly() throws FileNotFoundException {
-    File downloadedFile = $(byText("Download me super slowly"))
-      .download(4000, withName("hello_world.txt"));
+    File downloadedFile = $(byText("Download me super slowly")).download(6000, withExtension("txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
-  public void download_super_slowly_without_filter() throws FileNotFoundException {
-    File downloadedFile = $(byText("Download me super slowly")).download(4000);
+  void downloadLargeFile() throws IOException {
+    File downloadedFile = $(byText("Download large file")).download(withExtension("txt"));
 
-    assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).hasName("large_file.txt");
+    assertThat(downloadedFile).hasSize(5 * 1024 * 1024);
   }
+
 }

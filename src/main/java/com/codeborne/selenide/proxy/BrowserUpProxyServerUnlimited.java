@@ -14,15 +14,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 class BrowserUpProxyServerUnlimited extends BrowserUpProxyServer {
-  private static final int maxSize = 64 * 1024 * 1024; // 64 MB
+  private static final int MAX_FILE_SIZE = Integer.MAX_VALUE; // 2 GB
 
   @Override
   public void addRequestFilter(RequestFilter filter) {
-    addFirstHttpFilterFactory(new RequestFilterAdapter.FilterSource(filter, maxSize));
+    addFirstHttpFilterFactory(new RequestFilterAdapter.FilterSource(filter, MAX_FILE_SIZE));
   }
 
   @Override
   public void addResponseFilter(ResponseFilter filter) {
-    addLastHttpFilterFactory(new ResponseFilterAdapter.FilterSource(filter, maxSize));
+    addLastHttpFilterFactory(new ResponseFilterAdapter.FilterSource(filter, MAX_FILE_SIZE));
   }
 }

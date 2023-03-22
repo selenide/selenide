@@ -57,7 +57,7 @@ public class ElementsContainerCollection extends AbstractList<ElementsContainer>
     try {
       return collection.getElements().size();
     } catch (NoSuchElementException e) {
-      throw new ElementNotFound(NONE, collection.getSearchCriteria(), exist, e);
+      throw new ElementNotFound(driver, NONE, collection.getSearchCriteria(), exist, e);
     }
   }
 }

@@ -47,7 +47,7 @@ public class SoftAssertJUnit4Test extends IntegrationTest {
   @Before
   public void setUp() {
     Configuration.assertionMode = SOFT;
-    open("https://duckduckgo.com/");
+    open("about:blank");
     $("#soft-assert-login").shouldNot(exist);
   }
 

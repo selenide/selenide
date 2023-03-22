@@ -1,11 +1,14 @@
 package com.codeborne.selenide.ex;
 
-import static com.codeborne.selenide.ex.ErrorMessages.formatActualValue;
+import com.codeborne.selenide.Driver;
+
+import static com.codeborne.selenide.ex.Strings.join;
 
 class ObjectConditionError extends UIAssertionError {
-  protected ObjectConditionError(String message, String expectedValue, String actualValue) {
+  protected ObjectConditionError(Driver driver, String message, String expectedValue, String actualValue) {
     super(
-      message + formatActualValue(actualValue),
+      driver,
+      join(message, errorFormatter.formatActualValue(actualValue)),
       expectedValue,
       actualValue
     );

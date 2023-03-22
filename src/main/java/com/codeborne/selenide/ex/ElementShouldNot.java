@@ -10,9 +10,8 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.ex.ErrorMessages.actualValue;
+import static com.codeborne.selenide.ex.Strings.join;
 import static com.codeborne.selenide.impl.Plugins.inject;
-import static java.lang.System.lineSeparator;
 
 @ParametersAreNonnullByDefault
 public class ElementShouldNot extends UIAssertionError {
@@ -22,11 +21,11 @@ public class ElementShouldNot extends UIAssertionError {
                           Condition expectedCondition, @Nullable CheckResult lastCheckResult,
                           WebElement element, @Nullable Throwable lastError) {
     super(
-      String.format("Element%s should not %s%s {%s}%sElement: '%s'%s",
-        alias.appendable(),
-        prefix, expectedCondition, searchCriteria, lineSeparator(),
-        describe.fully(driver, element),
-        actualValue(expectedCondition, driver, element, lastCheckResult)
+      driver,
+      join(
+        String.format("Element%s should not %s%s {%s}", alias.appendable(), prefix, expectedCondition, searchCriteria),
+        String.format("Element: '%s'", describe.fully(driver, element)),
+        errorFormatter.actualValue(expectedCondition, driver, element, lastCheckResult)
       ),
       expectedCondition,
       lastCheckResult == null ? null : lastCheckResult.actualValue(),

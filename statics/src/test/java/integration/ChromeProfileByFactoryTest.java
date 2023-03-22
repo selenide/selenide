@@ -59,12 +59,12 @@ final class ChromeProfileByFactoryTest extends IntegrationTest {
     assertThat(log).contains("\"credentials_enable_service\": false");
     assertThat(log).contains("\"download.default_directory\": \"" + downloadsFolder.getAbsolutePath().replaceAll("\\\\", "\\\\\\\\"));
 
-    String arguments = "\"--proxy-bypass-list=\\u003C-loopback>\", \"--no-sandbox\", \"--disable-3d-apis\"";
+    String args = "\"--proxy-bypass-list=\\u003C-loopback>\", \"--no-sandbox\", \"--disable-3d-apis\", \"--remote-allow-origins=*\"";
     if (Configuration.headless) {
-      assertThat(log).contains("\"args\": [ \"--headless\", " + arguments + " ]");
+      assertThat(log).contains("\"args\": [ \"--headless=new\", " + args + " ]");
     }
     else {
-      assertThat(log).contains("\"args\": [ " + arguments + " ]");
+      assertThat(log).contains("\"args\": [ " + args + " ]");
     }
   }
 
@@ -91,7 +91,7 @@ final class ChromeProfileByFactoryTest extends IntegrationTest {
     @CheckReturnValue
     @Nonnull
     protected List<String> createChromeArguments(Config config, Browser browser) {
-      return asList("--proxy-bypass-list=<-loopback>", "--no-sandbox", "--disable-3d-apis");
+      return asList("--proxy-bypass-list=<-loopback>", "--no-sandbox", "--disable-3d-apis", "--remote-allow-origins=*");
     }
   }
 }

@@ -7,6 +7,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -19,6 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 public class LocalHttpServer {
+  private static final Logger log = LoggerFactory.getLogger(LocalHttpServer.class);
   private final List<FileItem> uploadedFiles = new CopyOnWriteArrayList<>();
   private final Set<String> sessions = new ConcurrentSkipListSet<>();
   private final Server server;
@@ -65,6 +68,7 @@ public class LocalHttpServer {
   public void reset() {
     uploadedFiles.clear();
     sessions.clear();
+    log.info("Reset sessions & uploaded files");
   }
 
   public LocalHttpServer start() throws Exception {

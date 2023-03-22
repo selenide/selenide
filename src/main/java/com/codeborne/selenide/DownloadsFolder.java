@@ -9,11 +9,14 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static java.util.Locale.ROOT;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 
@@ -48,9 +51,9 @@ public abstract class DownloadsFolder {
     return new File(folder, fileName).getAbsoluteFile();
   }
 
-  public boolean hasFiles(String extension, FileFilter excludingFilter) {
+  public boolean hasFiles(Set<String> extensions, FileFilter excludingFilter) {
     return files().stream()
-      .anyMatch(file -> getExtension(file.getName()).equalsIgnoreCase(extension) && excludingFilter.notMatch(file));
+      .anyMatch(file -> extensions.contains(getExtension(file.getName()).toLowerCase(ROOT)) && excludingFilter.notMatch(file));
   }
 
   public Map<String, Long> modificationTimes() {
@@ -65,5 +68,9 @@ public abstract class DownloadsFolder {
   @Override
   public String toString() {
     return folder.getPath();
+  }
+
+  public String filesAsString() {
+    return '[' + files().stream().map(f -> f.getName()).collect(joining(", ")) + ']';
   }
 }

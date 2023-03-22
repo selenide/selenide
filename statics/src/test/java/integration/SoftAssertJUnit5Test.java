@@ -20,7 +20,7 @@ public class SoftAssertJUnit5Test extends IntegrationTest {
   @BeforeEach
   void setUp() {
     Configuration.assertionMode = SOFT;
-    open("https://duckduckgo.com/");
+    open("about:blank");
     $("#soft-assert-login").shouldNot(exist);
   }
 

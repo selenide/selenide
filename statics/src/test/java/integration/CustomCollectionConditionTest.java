@@ -77,7 +77,9 @@ final class CustomCollectionConditionTest extends IntegrationTest {
 
       class MismatchingPrefixesError extends UIAssertionError {
         MismatchingPrefixesError(String expected, List<String> actualTexts, CollectionSource collection) {
-          super("Texts not starting with prefix " +
+          super(
+            collection.driver(),
+            "Texts not starting with prefix " +
               lineSeparator() + "Actual: " + actualTexts +
               lineSeparator() + "Expected: " + expected +
               (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +

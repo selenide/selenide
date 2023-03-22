@@ -8,7 +8,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
 
 public class ArchitecturalChecks {
-  private final JavaClasses selenideClasses = new ClassFileImporter().importPackages("com.codeborne", "integration");
+  private static final JavaClasses selenideClasses = new ClassFileImporter().importPackages("com.codeborne", "integration");
 
   @Test
   void noJunitAsserts() {

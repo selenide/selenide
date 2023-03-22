@@ -1,0 +1,17 @@
+name: 'Test Report'
+on:
+  workflow_run:
+    workflows: [ 'Run tests' ]
+    types:
+      - completed
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - uses: dorny/test-reporter@v1
+        with:
+          artifact: /test-report-(.*)-(.*)/
+          name: 'Test report: $1 $2'
+          path: '**/build/test-results/**/TEST-*.xml'
+          reporter: java-junit

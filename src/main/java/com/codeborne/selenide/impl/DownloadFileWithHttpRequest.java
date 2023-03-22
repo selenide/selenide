@@ -5,10 +5,10 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.TimeoutException;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
+import com.github.bsideup.jabel.Desugar;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
@@ -16,7 +16,9 @@ import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
 import org.apache.hc.client5.http.socket.PlainConnectionSocketFactory;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpEntityContainer;
 import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
@@ -38,11 +40,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.cert.X509Certificate;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptyMap;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.stream.Collectors.joining;
@@ -89,8 +94,25 @@ public class DownloadFileWithHttpRequest {
   @Nonnull
   public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout, FileFilter fileFilter) throws IOException {
     String url = makeAbsoluteUrl(driver.config(), relativeOrAbsoluteUrl);
-    CloseableHttpResponse response = executeHttpRequest(driver, url, timeout);
+    Resource resource = parseUrl(url);
 
+    try (CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : createDefaultHttpClient()) {
+      HttpGet httpGet = new HttpGet(resource.uri());
+      configureHttpGet(httpGet, timeout);
+      addHttpHeaders(driver, httpGet, resource.credentials());
+      return httpClient.execute(httpGet, createHttpContext(driver), response -> {
+          return handleResponse(driver, timeout, fileFilter, url, response);
+        }
+      );
+    }
+    catch (SocketTimeoutException timeoutException) {
+      throw new TimeoutException("Failed to download " + url + " in " + timeout + " ms.", timeoutException);
+    }
+  }
+
+  @Nonnull
+  private File handleResponse(Driver driver, long timeout, FileFilter fileFilter, String url,
+                              ClassicHttpResponse response) throws IOException {
     if (response.getCode() >= 500) {
       throw new RuntimeException("Failed to download file " + url + ": " + response);
     }
@@ -104,7 +126,7 @@ public class DownloadFileWithHttpRequest {
 
     if (!fileFilter.match(new DownloadedFile(downloadedFile, emptyMap()))) {
       throw new FileNotFoundException(String.format("Failed to download file from %s in %d ms.%s;%n actually downloaded: %s",
-        relativeOrAbsoluteUrl, timeout, fileFilter.description(), downloadedFile.getAbsolutePath())
+        url, timeout, fileFilter.description(), downloadedFile.getAbsolutePath())
       );
     }
     return downloadedFile;
@@ -116,19 +138,20 @@ public class DownloadFileWithHttpRequest {
     return relativeOrAbsoluteUrl.startsWith("/") ? config.baseUrl() + relativeOrAbsoluteUrl : relativeOrAbsoluteUrl;
   }
 
-  @CheckReturnValue
-  @Nonnull
-  protected CloseableHttpResponse executeHttpRequest(Driver driver, String fileToDownloadLocation, long timeout) throws IOException {
-    CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : createDefaultHttpClient();
-    HttpGet httpGet = new HttpGet(fileToDownloadLocation);
-    configureHttpGet(httpGet, timeout);
-    addHttpHeaders(driver, httpGet);
+  static Resource parseUrl(String urlWithCredentials) throws IOException {
     try {
-      return httpClient.execute(httpGet, createHttpContext(driver));
+      URI uri = new URI(urlWithCredentials);
+      return (uri.getUserInfo() == null) ? new Resource(uri, "") :
+        new Resource(new URI(urlWithCredentials.replace(uri.getRawUserInfo() + '@', "")), uri.getUserInfo());
     }
-    catch (SocketTimeoutException timeoutException) {
-      throw new TimeoutException("Failed to download " + fileToDownloadLocation + " in " + timeout + " ms.", timeoutException);
+    catch (URISyntaxException invalidUrl) {
+      throw new IOException(String.format("Failed to download file from %s", urlWithCredentials), invalidUrl);
     }
+  }
+
+  @Desugar
+  @ParametersAreNonnullByDefault
+  record Resource(URI uri, String credentials) {
   }
 
   protected void configureHttpGet(HttpGet httpGet, long timeout) {
@@ -159,7 +182,7 @@ public class DownloadFileWithHttpRequest {
 
   /**
    * configure HttpClient to ignore self-signed certs
-   * as described here: http://literatejava.com/networks/ignore-ssl-certificate-errors-apache-httpclient-4-4/
+   * as described here: <a href="https://literatejava.com/networks/ignore-ssl-certificate-errors-apache-httpclient-4-4/">...</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -195,9 +218,12 @@ public class DownloadFileWithHttpRequest {
     return localContext;
   }
 
-  protected void addHttpHeaders(Driver driver, HttpGet httpGet) {
+  protected void addHttpHeaders(Driver driver, HttpGet httpGet, String credentials) {
     if (driver.hasWebDriverStarted()) {
       httpGet.setHeader("User-Agent", driver.getUserAgent());
+    }
+    if (!credentials.isEmpty()) {
+      httpGet.setHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes(UTF_8)));
     }
   }
 
@@ -224,7 +250,7 @@ public class DownloadFileWithHttpRequest {
     return Stream.of(response.getHeaders()).map(h -> h.getName() + "=" + h.getValue()).collect(joining(", "));
   }
 
-  protected void saveContentToFile(CloseableHttpResponse response, File downloadedFile) throws IOException {
+  protected void saveContentToFile(HttpEntityContainer response, File downloadedFile) throws IOException {
     copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
   }
 }

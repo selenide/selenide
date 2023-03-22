@@ -1,11 +1,55 @@
 # Changelog
 
-## 6.11.0 (planned to 3x.12.2022)
+## 6.12.4 (planned to 2x.03.2023)
+* #2202 fix method $.download(PROXY) after using `using` --  see PR #2208
+
+## 6.12.3 (released 14.03.2023)
+* #2202 fix method $.download(FOLDER) after using `using` --  see PR #2203
+
+## 6.12.2 (released 09.03.2023)
+see https://github.com/selenide/selenide/milestone/178?closed=1
+* #2192 added workaround for Chromedriver 111 issue ("Invalid Status code=403 text=Forbidden")  --  see PR #2194
+
+## 6.12.1 (released 07.03.2023)
+see https://github.com/selenide/selenide/milestone/176?closed=1
+* #2174 Fixed a bug where selenide.holdBrowserOpen were not read correctly  --  thanks to @doranko for PR
+* #2178 improve how "$.getSelectedOption().should*" looks in reports  --  see PR #2179
+* #2186 Use custom driver in the using block  --  see PR #2188
+* #2173 bump BrowserUpProxy from 2.2.7 to 2.2.8
+* #2176 bump LittleProxy from 2.0.15 to 2.0.16
+
+## 6.12.0 (released 24.02.2023)
+see https://github.com/selenide/selenide/milestone/173?closed=1
+* #2104 use new headless mode  --  thanks Boris Osipov for PR #2105 and #2169
+* #2167 improve logs when download a file
+* #2167 ignore Edge temporary files on Windows
+* #2161 bump Selenium from 4.8.0 to 4.8.1
+* Bump nettyVersion from 4.1.87.Final to 4.1.89.Final
+* rename "master" branch to "main" (finally!)
+
+## 6.11.2 (released 24.01.2023)
+* #2136 bump Selenide from 4.7.2 to 4.8.0
+* #2137 once again, truncate only messages of WebDriverException :)
+
+## 6.11.1 (released 20.01.2023)
+see https://github.com/selenide/selenide/milestone/174?closed=1
+* #2131 truncate only WebDriverException message
+* #2116 fix $.download(FOLDER): support case when file modification time is in previous second
+* #2119 fix $.download(FOLDER): support the case when file modification time is 0
+* bump webdrivermanager from 5.3.1 to 5.3.2
+* #2126 bump netty from 4.1.86.Final to 4.1.87.Final
+
+## 6.11.0 (released 03.01.2023)
 see https://github.com/selenide/selenide/milestone/169?closed=1
 * #1817 add methods to copy and paste content  --  thanks to Evgenii Plugatar for PR #2027
+* #2054 can fail the test if unexpected alert encountered  --  see PR #2095
+* #2082 allow downloading of large files via proxy  --  see PR #2098
 * #2081 fix screenshot file permission: `-rw-r--r--`, not `-rw-------`  --  see PR #2084
 * #2087 support @As annotation for page object fields not annotated by @FindBy  --  see PR #2088
 * #2065 added method to return last page source  --  thanks to Arman Ayvazyan for PR #2065
+* #980 added possibility to add page URL to error message  --  see PR #2097
+* #2037 fixed method `Selenide.download()` to work with URL protected by BasicAuth  --  see PR #2102
+* #2101 Bump browserup-proxy-core from 2.2.6 to 2.2.7
 
 ## 6.10.3 (released 14.12.2022)
 * #2062 don't trigger "change" event from `$.select*` if value is unchanged  --  thanks to Vicente Rossello Jaume for PR #2063

@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,16 +11,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PageLoadTimeoutTest extends IntegrationTest {
   @BeforeEach
+  @AfterEach
   void setUp() {
     closeWebDriver();
   }
 
   @Test
   void canChangeTimeout() {
-    Configuration.pageLoadTimeout = 666L;
+    Configuration.pageLoadTimeout = 1666L;
     openFile("page_with_selects_without_jquery.html");
     assertThat(pageLoadTimeout())
-      .isEqualTo(666L);
+      .isEqualTo(1666L);
   }
 
   @Test

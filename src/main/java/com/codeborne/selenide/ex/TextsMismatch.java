@@ -14,12 +14,13 @@ public class TextsMismatch extends UIAssertionError {
                        List<String> expectedTexts, List<String> actualTexts,
                        @Nullable String explanation, long timeoutMs) {
     super(
+      collection.driver(),
       "Texts mismatch" +
         lineSeparator() + "Actual: " + actualTexts +
         lineSeparator() + "Expected: " + expectedTexts +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
         lineSeparator() + "Collection: " + collection.description(),
-      expectedTexts, actualTexts);
-    super.timeoutMs = timeoutMs;
+      expectedTexts, actualTexts,
+      timeoutMs);
   }
 }

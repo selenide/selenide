@@ -7,6 +7,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.Map;
 
+import static java.lang.System.currentTimeMillis;
+
 @ParametersAreNonnullByDefault
 public class DownloadedFile {
   private final File file;
@@ -35,5 +37,10 @@ public class DownloadedFile {
   @Nullable
   public String getContentType() {
     return headers.get("content-type");
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%s (modified %s ms ago)", file.getName(), currentTimeMillis() - file.lastModified());
   }
 }

@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.ex.ErrorMessages.actualValue;
+import static com.codeborne.selenide.ex.Strings.join;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
@@ -21,11 +21,11 @@ public class ElementShould extends UIAssertionError {
                        Condition expectedCondition, @Nullable CheckResult lastCheckResult,
                        WebElement element, @Nullable Throwable lastError) {
     super(
-      String.format("Element%s should %s%s {%s}%nElement: '%s'%s",
-        alias.appendable(),
-        prefix, expectedCondition, searchCriteria,
-        describe.fully(driver, element),
-        actualValue(expectedCondition, driver, element, lastCheckResult)
+      driver,
+      join(
+        String.format("Element%s should %s%s {%s}", alias.appendable(), prefix, expectedCondition, searchCriteria),
+        String.format("Element: '%s'", describe.fully(driver, element)),
+        errorFormatter.actualValue(expectedCondition, driver, element, lastCheckResult)
       ),
       expectedCondition,
       lastCheckResult == null ? null : lastCheckResult.actualValue(),

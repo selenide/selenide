@@ -290,7 +290,7 @@ final class ScreenShotLaboratoryTest {
 
     String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
-      .startsWith(String.format("%nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/"))
+      .startsWith("Screenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/")
       .endsWith(".png");
   }
 
@@ -305,7 +305,7 @@ final class ScreenShotLaboratoryTest {
     String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
       .as("Concatenate reportUrl with screenshot file name if it saved outside of build/project home dir")
-      .startsWith(String.format("%nScreenshot: %s", reportsUrl + new File(screenshot).getName()));
+      .startsWith(String.format("Screenshot: %s", reportsUrl + new File(screenshot).getName()));
   }
 
   @Test
@@ -320,7 +320,7 @@ final class ScreenShotLaboratoryTest {
 
     String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
-      .startsWith(String.format("%nScreenshot: file:%s/build/reports/tests/", currentDir))
+      .startsWith(String.format("Screenshot: file:%s/build/reports/tests/", currentDir))
       .endsWith(".png");
   }
 
@@ -427,7 +427,7 @@ final class ScreenShotLaboratoryTest {
 
     Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshot.summary()).isEqualTo(String.format(
-      "%nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/%s.0.png" +
+      "Screenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/%s.0.png" +
         "%nPage source: http://ci.mycompany.com/job/666/artifact/build/reports/page123.html", ts
     ));
   }

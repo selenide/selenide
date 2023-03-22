@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -139,6 +140,10 @@ public class Selenide {
 
   public static void using(WebDriver webDriver, Runnable lambda) {
     WebDriverRunner.using(webDriver, lambda);
+  }
+
+  public static void using(WebDriver webDriver, SelenideProxyServer proxy, Runnable lambda) {
+    WebDriverRunner.using(webDriver, proxy, lambda);
   }
 
   /**
@@ -294,7 +299,7 @@ public class Selenide {
   /**
    * Wrap standard Selenium WebElement into SelenideElement
    * to use additional methods like {@link SelenideElement#shouldHave(Condition...)},
-   * {@link SelenideElement#selectOption(String...)} etc.
+   * {@link SelenideElement#selectOption(String, String...)} etc.
    *
    * @param webElement standard Selenium WebElement
    * @return given WebElement wrapped into SelenideElement
@@ -430,7 +435,7 @@ public class Selenide {
   /**
    * Wrap standard Selenium WebElement into SelenideElement
    * to use additional methods like {@link SelenideElement#shouldHave(Condition...)},
-   * {@link SelenideElement#selectOption(String...)} etc.
+   * {@link SelenideElement#selectOption(String, String...)} etc.
    *
    * @param webElement standard Selenium WebElement
    * @return given WebElement wrapped into SelenideElement
@@ -715,21 +720,25 @@ public class Selenide {
    * Returns selected text or empty string if no text is selected.
    *
    * @return selected text
+   * @since 6.11.0
    */
   @CheckReturnValue
   @Nonnull
-  public String getSelectedText() {
+  public static String getSelectedText() {
     return getSelenideDriver().getSelectedText();
   }
 
   /**
    * Copy selected text or empty string if no text is selected to clipboard.
    *
+   * @return the copied text
+   *
    * @see #clipboard()
    * @see Clipboard
+   * @since 6.11.0
    */
-  public void copy() {
-    getSelenideDriver().copy();
+  public static String copy() {
+    return getSelenideDriver().copy();
   }
 
   /**

@@ -13,7 +13,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class ResponseSizeWatchdog implements ResponseFilter {
   private static final Logger log = LoggerFactory.getLogger(ResponseSizeWatchdog.class);
 
-  int threshold = 2 * 1024 * 1024; // 2 MB
+  private final int threshold = 4 * 1024 * 1024; // 4 MB
 
   @Override
   public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {

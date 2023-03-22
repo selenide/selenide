@@ -57,22 +57,25 @@ public abstract class BaseHandler extends HttpServlet {
       pause(result.pause);
     }
     response.setStatus(result.httpStatus);
-    response.setContentLength(result.content.length);
+    response.setContentLength(result.contentLength);
     response.setContentType(result.contentType);
     for (Map.Entry<String, String> httpHeader : result.httpHeaders.entrySet()) {
       response.setHeader(httpHeader.getKey(), httpHeader.getValue());
     }
+    if (!result.httpHeaders.containsKey("Cache-Control")) {
+      response.setHeader("Cache-Control", "no-cache");
+    }
     try (OutputStream os = response.getOutputStream()) {
       if (result.duration == 0) {
-        os.write(result.content);
+        writeQuickly(os, result.content);
       }
       else {
-        writeSlowly(os, result.content, result.duration);
+        writeSlowly(os, result.contentLength, result.content, result.duration);
       }
     }
     logRequest(request, result.httpStatus, start);
     if (result.httpStatus >= SC_BAD_REQUEST) {
-      log.error(new String(result.content, UTF_8));
+      log.error("Http response {}: '{}'", result.httpStatus, IOUtils.toString(result.content, UTF_8));
     }
   }
 
@@ -103,5 +106,13 @@ public abstract class BaseHandler extends HttpServlet {
       httpStatus,
       (System.nanoTime() - startTime) / 1_000_000
     );
+  }
+
+  private static void writeQuickly(OutputStream os, InputStream content) throws IOException {
+    byte[] buffer = new byte[2048];
+    for (int count = content.read(buffer); count > -1; count = content.read(buffer)) {
+      os.write(buffer, 0, count);
+      os.flush();
+    }
   }
 }

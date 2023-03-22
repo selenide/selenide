@@ -102,14 +102,20 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder) {
     resetWebDriver();
+    setWebDriver(new WebDriverInstance(config, webDriver, selenideProxy, browserDownloadsFolder));
+  }
 
+  private long setWebDriver(WebDriverInstance webDriverInstance) {
     long threadId = currentThread().getId();
-    threadWebDriver.put(threadId, new WebDriverInstance(config, webDriver, selenideProxy, browserDownloadsFolder));
+    threadWebDriver.put(threadId, webDriverInstance);
+    return threadId;
   }
 
   /**
    * Remove links to webdriver/proxy, but DON'T CLOSE the webdriver/proxy itself.
+   * @deprecated Use method {@link #using(WebDriver, Runnable)} instead.
    */
+  @Deprecated
   @Override
   public void resetWebDriver() {
     threadWebDriver.remove(currentThread().getId());
@@ -178,8 +184,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Nonnull
   private WebDriverInstance createDriver() {
     WebDriverInstance result = createDriverCommand.createDriver(config, factory, userProvidedProxy, eventListeners, listeners);
-    long threadId = currentThread().getId();
-    threadWebDriver.put(threadId, result);
+    long threadId = setWebDriver(result);
 
     if (config.holdBrowserOpen()) {
       log.info("Browser and proxy will stay open due to holdBrowserOpen=true: {} -> {}, {}",
@@ -216,6 +221,19 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     }
 
     resetWebDriver();
+  }
+
+  @Override
+  public void using(WebDriver driver, @Nullable SelenideProxyServer proxy, Runnable lambda) {
+    var previous = currentThreadDriver();
+    setWebDriver(driver, proxy);
+    try {
+      lambda.run();
+    }
+    finally {
+      resetWebDriver();
+      previous.ifPresent(this::setWebDriver);
+    }
   }
 
   @Override
