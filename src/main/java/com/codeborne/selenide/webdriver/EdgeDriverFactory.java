@@ -2,7 +2,6 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -27,9 +26,6 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
 
   @Override
   public void setupWebdriverBinary() {
-    if (isSystemPropertyNotSet("webdriver.edge.driver")) {
-      WebDriverManager.edgedriver().setup();
-    }
   }
 
   @Override

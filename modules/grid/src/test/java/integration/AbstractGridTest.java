@@ -1,8 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.grid.Main;
@@ -24,15 +22,6 @@ abstract class AbstractGridTest extends IntegrationTest {
 
   @BeforeEach
   final void setUpGrid() throws MalformedURLException {
-    if (WebDriverRunner.isChrome()) {
-      WebDriverManager.chromedriver().setup();
-    }
-    if (WebDriverRunner.isFirefox()) {
-      WebDriverManager.firefoxdriver().setup();
-    }
-    if (WebDriverRunner.isEdge()) {
-      WebDriverManager.edgedriver().setup();
-    }
     closeWebDriver();
 
     for (int tries = 0; tries < 3; tries++) {

@@ -2,7 +2,6 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -25,9 +24,6 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
 
   @Override
   public void setupWebdriverBinary() {
-    if (isSystemPropertyNotSet("webdriver.ie.driver")) {
-      WebDriverManager.iedriver().setup();
-    }
   }
 
   @Override
