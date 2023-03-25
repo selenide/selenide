@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.13.0 (planned to 1x.04.2023)
+* #2220 add condition $.shouldHave(innerText()) --  see PR #2223
+
 ## 6.12.4 (released 22.03.2023)
 * #2215 support jdk-http-client instead of NettyClient --  see PR #2216
 * #2202 fix method $.download(PROXY) after using `using` --  see PR #2208 and #2209
