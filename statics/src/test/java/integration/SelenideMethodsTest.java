@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -247,7 +248,7 @@ final class SelenideMethodsTest extends IntegrationTest {
     $("h2").shouldHave(exactText("Dropdown list"));
     $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
     $("#radioButtons").shouldHave(text("Radio buttons\n" +
-      "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
+                                       "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
   }
 
   @Test
@@ -292,12 +293,21 @@ final class SelenideMethodsTest extends IntegrationTest {
     WebElement selenideElement = $(By.name("domain")).toWebElement();
     WebElement seleniumElement = getWebDriver().findElement(By.name("domain"));
 
-    assertThat(selenideElement.getClass())
-      .isEqualTo(seleniumElement.getClass());
-    assertThat(selenideElement.getTagName())
-      .isEqualTo(seleniumElement.getTagName());
-    assertThat(selenideElement.getText())
-      .isEqualTo(seleniumElement.getText());
+    assertThat(selenideElement.getClass()).isEqualTo(seleniumElement.getClass());
+    assertThat(selenideElement.getTagName()).isEqualTo(seleniumElement.getTagName());
+    assertThat(selenideElement.getText()).isEqualTo(seleniumElement.getText());
+    assertThat(selenideElement.getAttribute("id")).isEqualTo(seleniumElement.getAttribute("id"));
+    assertThat(selenideElement).isEqualTo(seleniumElement);
+  }
+
+  @Test
+  void userCanCacheWebElement() {
+    SelenideElement cachedElement = $(By.xpath("//select[@name='domain']")).cached();
+    assertThat(cachedElement.getTagName()).isEqualTo("select");
+
+    assertThatThrownBy(() -> cachedElement.shouldHave(text("WRONG TEXT")))
+      .isInstanceOf(UIAssertionError.class)
+      .hasMessageStartingWith("Element should have text \"WRONG TEXT\" {By.xpath: //select[@name='domain']}");
   }
 
   @Test

@@ -1155,6 +1155,14 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   WebElement getWrappedElement();
 
   /**
+   * Cache this web element. The following calls to this object will not re-load this element from browser.
+   * @see com.codeborne.selenide.commands.CacheSelenideElement
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement cached();
+
+  /**
    * Click the element using {@link ClickOptions}: {@code $("#username").click(ClickOptions.usingJavaScript())}
    *
    * <p>
