@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -30,6 +31,10 @@ public abstract class BaseIntegrationTest {
   private static final boolean SSL = !SAFARI.equalsIgnoreCase(browser);
   static final boolean headless = parseBoolean(System.getProperty("selenide.headless", "false"));
   private static final Locale defaultLocale = Locale.getDefault();
+
+  static {
+    SLF4JBridgeHandler.install();
+  }
 
   @BeforeAll
   static void setUpAll() throws Exception {

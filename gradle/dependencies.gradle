@@ -46,5 +46,6 @@ subprojects {
     testImplementation("com.tngtech.archunit:archunit-junit5:${archunitVersion}")
     api("org.slf4j:slf4j-api:$slf4jVersion")
     testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
+    testImplementation("org.slf4j:jul-to-slf4j:$slf4jVersion")
   }
 }
