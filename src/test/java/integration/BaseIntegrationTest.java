@@ -7,6 +7,8 @@ import integration.server.LocalHttpServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -20,6 +22,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 @ExtendWith({LogTestNameExtension.class, TextReportExtension.class})
 public abstract class BaseIntegrationTest {
+  private static final Logger log = LoggerFactory.getLogger(BaseIntegrationTest.class);
+
   protected static volatile LocalHttpServer server;
   private static String protocol;
   protected static final String browser = System.getProperty("selenide.browser", CHROME);
@@ -44,6 +48,7 @@ public abstract class BaseIntegrationTest {
         if (server == null) {
           protocol = SSL ? "https://" : "http://";
           server = startWithRetry(SSL, "no-cors-allowed", ImmutableMap.of("scott", scottPassword(), "john", johnPassword()));
+          log.info("Server started at {}", getBaseUrl());
         }
       }
     }

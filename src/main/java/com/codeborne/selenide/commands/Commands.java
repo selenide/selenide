@@ -47,6 +47,7 @@ public class Commands {
     add("toString", new ToString());
     add("toWebElement", new ToWebElement());
     add("getWrappedElement", new GetWrappedElement());
+    add("cached", new CacheSelenideElement());
     add("screenshot", new TakeScreenshot());
     add("screenshotAsImage", new TakeScreenshotAsImage());
     add("getSearchCriteria", new GetSearchCriteria());

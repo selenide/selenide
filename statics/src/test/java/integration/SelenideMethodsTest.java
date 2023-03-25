@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -22,12 +23,14 @@ import static com.codeborne.selenide.Condition.cssValue;
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.empty;
+import static com.codeborne.selenide.Condition.exactOwnText;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.focused;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.id;
+import static com.codeborne.selenide.Condition.innerText;
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.readonly;
@@ -168,6 +171,17 @@ final class SelenideMethodsTest extends IntegrationTest {
 
     assertThat($("#theHiddenElement").innerText().trim())
       .isEqualTo("Видишь суслика? И я не вижу. А он есть!");
+
+    $("#theHiddenElement").shouldHave(exactOwnText("Видишь суслика? И я не вижу. !"));
+    $("#theHiddenElement").shouldHave(innerText("Видишь суслика? И я не вижу. А он есть!"));
+  }
+
+  @Test
+  void innerText_errorMessage() {
+    assertThatThrownBy(() -> $("#theHiddenElement").shouldHave(innerText("Видишь суслика?")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have inner text \"Видишь суслика?\" {#theHiddenElement}")
+      .hasMessageContaining("Actual value: text=\"Видишь суслика? И я не вижу. А он есть!\"");
   }
 
   @Test
@@ -234,7 +248,7 @@ final class SelenideMethodsTest extends IntegrationTest {
     $("h2").shouldHave(exactText("Dropdown list"));
     $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
     $("#radioButtons").shouldHave(text("Radio buttons\n" +
-      "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
+                                       "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
   }
 
   @Test
@@ -279,12 +293,21 @@ final class SelenideMethodsTest extends IntegrationTest {
     WebElement selenideElement = $(By.name("domain")).toWebElement();
     WebElement seleniumElement = getWebDriver().findElement(By.name("domain"));
 
-    assertThat(selenideElement.getClass())
-      .isEqualTo(seleniumElement.getClass());
-    assertThat(selenideElement.getTagName())
-      .isEqualTo(seleniumElement.getTagName());
-    assertThat(selenideElement.getText())
-      .isEqualTo(seleniumElement.getText());
+    assertThat(selenideElement.getClass()).isEqualTo(seleniumElement.getClass());
+    assertThat(selenideElement.getTagName()).isEqualTo(seleniumElement.getTagName());
+    assertThat(selenideElement.getText()).isEqualTo(seleniumElement.getText());
+    assertThat(selenideElement.getAttribute("id")).isEqualTo(seleniumElement.getAttribute("id"));
+    assertThat(selenideElement).isEqualTo(seleniumElement);
+  }
+
+  @Test
+  void userCanCacheWebElement() {
+    SelenideElement cachedElement = $(By.xpath("//select[@name='domain']")).cached();
+    assertThat(cachedElement.getTagName()).isEqualTo("select");
+
+    assertThatThrownBy(() -> cachedElement.shouldHave(text("WRONG TEXT")))
+      .isInstanceOf(UIAssertionError.class)
+      .hasMessageStartingWith("Element should have text \"WRONG TEXT\" {By.xpath: //select[@name='domain']}");
   }
 
   @Test
