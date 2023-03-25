@@ -1,5 +1,6 @@
 package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.CollectionSource;
 
 import javax.annotation.Nullable;
@@ -10,10 +11,10 @@ import static java.lang.System.lineSeparator;
 
 @ParametersAreNonnullByDefault
 public class AttributesMismatch extends UIAssertionError {
-  public AttributesMismatch(String attribute, CollectionSource collection,
+  public AttributesMismatch(Driver driver, String attribute, CollectionSource collection,
                             List<String> expectedValues, List<String> actualValues,
                             @Nullable String explanation, long timeoutMs) {
-    super(
+    super(driver,
       "Attribute '" + attribute + "' values mismatch" +
         lineSeparator() + "Actual: " + actualValues +
         lineSeparator() + "Expected: " + expectedValues +

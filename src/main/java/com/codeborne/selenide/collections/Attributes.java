@@ -60,10 +60,10 @@ public class Attributes extends CollectionCondition {
       elementNotFound.timeoutMs = timeoutMs;
       throw elementNotFound;
     } else if (elements.size() != expectedValues.size()) {
-      throw new AttributesSizeMismatch(attribute, collection, expectedValues,
+      throw new AttributesSizeMismatch(collection.driver(), attribute, collection, expectedValues,
         ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
     } else {
-      throw new AttributesMismatch(attribute, collection, expectedValues,
+      throw new AttributesMismatch(collection.driver(), attribute, collection, expectedValues,
         ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
     }
   }
