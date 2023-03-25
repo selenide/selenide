@@ -1,14 +1,9 @@
 package integration;
 
 import com.codeborne.selenide.WebDriverRunner;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
@@ -27,12 +22,7 @@ final class CloseWebdriverTest extends IntegrationTest {
 
   @Test
   void canCloseWebdriver_createdByHimself() {
-    if (isFirefox()) WebDriverManager.firefoxdriver().setup();
-    if (isChrome()) WebDriverManager.chromedriver().setup();
-
-    WebDriver driver = isFirefox() ?
-      new FirefoxDriver(addSslErrorIgnoreCapabilities(addHeadless(new FirefoxOptions()))) :
-      new ChromeDriver(addSslErrorIgnoreCapabilities(addHeadless(new ChromeOptions())));
+    WebDriver driver = isFirefox() ? openFirefox() : openChrome();
     WebDriverRunner.setWebDriver(driver);
 
     open();

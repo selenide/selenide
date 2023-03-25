@@ -1,6 +1,7 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
@@ -17,7 +18,11 @@ public class GetInnerText implements Command<String> {
   @Nonnull
   public String execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     WebElement element = locator.getWebElement();
-    if (locator.driver().browser().isIE()) {
+    return getInnerText(locator.driver(), element);
+  }
+
+  public static String getInnerText(Driver driver, WebElement element) {
+    if (driver.browser().isIE()) {
       return element.getAttribute("innerText");
     }
     return element.getAttribute("textContent");

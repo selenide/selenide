@@ -3,17 +3,24 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
+import com.codeborne.selenide.proxy.SelenideProxyServer;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.opentest4j.TestAbortedException;
 
-import java.awt.*;
+import javax.annotation.Nullable;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
@@ -118,23 +125,52 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     );
   }
 
-  protected static <T extends MutableCapabilities> T addSslErrorIgnoreCapabilities(T options) {
-    addSslErrorIgnoreOptions(options);
-    return options;
+  protected static ChromeDriver openChrome() {
+    return openChrome(null);
   }
 
-  protected static ChromeOptions addHeadless(ChromeOptions options) {
-    if (Configuration.headless) options.addArguments("--headless=new");
-    return options;
+  protected static ChromeDriver openChrome(@Nullable SelenideProxyServer proxy) {
+    WebDriverManager.chromedriver().setup();
+    return new ChromeDriver(chromeOptions(proxy == null ? null : proxy.getSeleniumProxy()));
   }
 
-  protected static FirefoxOptions addHeadless(FirefoxOptions options) {
-    if (Configuration.headless) options.addArguments("-headless");
-    return options;
-  }
-
-  private static void addSslErrorIgnoreOptions(MutableCapabilities options) {
+  protected static ChromeOptions chromeOptions(@Nullable Proxy proxy) {
+    ChromeOptions options = new ChromeOptions();
+    if (Configuration.headless) {
+      options.addArguments("--headless=new");
+    }
+    if (proxy != null) {
+      options.setProxy(proxy);
+    }
+    options.addArguments("--proxy-bypass-list=<-loopback>");
+    options.addArguments("--disable-dev-shm-usage");
+    options.addArguments("--no-sandbox");
+    options.addArguments("--remote-allow-origins=*");
     options.setCapability(ACCEPT_INSECURE_CERTS, true);
+    return options;
+  }
+
+  protected static FirefoxDriver openFirefox() {
+    return openFirefox(null);
+  }
+
+  protected static FirefoxDriver openFirefox(@Nullable SelenideProxyServer proxy) {
+    WebDriverManager.firefoxdriver().setup();
+    return new FirefoxDriver(firefoxOptions(proxy));
+  }
+
+  protected static FirefoxOptions firefoxOptions(@Nullable SelenideProxyServer proxy) {
+    FirefoxOptions options = new FirefoxOptions();
+    if (Configuration.headless) {
+      options.addArguments("-headless");
+    }
+    if (proxy != null) {
+      options.setProxy(proxy.getSeleniumProxy());
+    }
+    options.addPreference("network.proxy.no_proxies_on", "");
+    options.addPreference("network.proxy.allow_hijacking_localhost", true);
+    options.setCapability(ACCEPT_INSECURE_CERTS, true);
+    return options;
   }
 
   protected void assumeClipboardSupported() {

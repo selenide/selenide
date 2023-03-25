@@ -21,6 +21,12 @@ public interface WebDriverContainer {
   void setWebDriver(WebDriver webDriver);
   void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy);
   void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder);
+
+  /**
+   * @deprecated This method is intended only for private usage.
+   * Use method {@link #using(WebDriver, SelenideProxyServer, Runnable)} instead.
+   */
+  @Deprecated
   void resetWebDriver();
 
   @CheckReturnValue
@@ -44,6 +50,8 @@ public interface WebDriverContainer {
   void closeWindow();
   void closeWebDriver();
   boolean hasWebDriverStarted();
+
+  void using(WebDriver driver, @Nullable SelenideProxyServer proxy, Runnable lambda);
 
   void clearBrowserCache();
 

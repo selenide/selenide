@@ -2,13 +2,13 @@ plugins {
   id 'idea'
   id 'jacoco'
   id 'checkstyle'
-  id 'com.github.spotbugs' version '5.0.13'
+  id 'com.github.spotbugs' version '5.0.14'
   id 'org.sonarqube' version '4.0.0.2929'
 }
 
 allprojects {
   group = 'com.codeborne'
-  version = '6.12.1-SNAPSHOT'
+  version = '6.13.0-SNAPSHOT'
 }
 
 subprojects {

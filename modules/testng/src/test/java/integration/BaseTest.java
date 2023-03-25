@@ -30,6 +30,7 @@ abstract class BaseTest {
       log.info("START {} Test NG tests", Configuration.browser);
       server = LocalHttpServer.startWithRetry(true, "no-cors-allowed", ImmutableMap.of("scott", "tiger")).start();
       Configuration.baseUrl = "https://127.0.0.1:" + server.getPort();
+      log.info("Server started at {}", Configuration.baseUrl);
     }
   }
 }

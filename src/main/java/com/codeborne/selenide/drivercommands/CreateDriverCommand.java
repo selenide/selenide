@@ -65,7 +65,7 @@ public class CreateDriverCommand {
         catch (NoClassDefFoundError e) {
           throw new IllegalStateException("Cannot initialize proxy. " +
             "Probably you should add \"selenide-proxy\" dependency to your project " +
-            "- see https://search.maven.org/search?q=a:selenide-proxy", e);
+            "- see https://central.sonatype.com/search?q=selenide-proxy&namespace=com.codeborne", e);
         }
       }
 

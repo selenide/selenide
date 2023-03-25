@@ -3,11 +3,9 @@ package integration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.texts;
@@ -44,9 +42,6 @@ final class UnopenedBrowserTest extends IntegrationTest {
 
   @Test
   void dollarsShouldNotOpenBrowser() {
-    WebDriverManager webDriverManager = WebDriverManager.chromedriver().avoidBrowserDetection();
-    webDriverManager.setup();
-
     assertThatThrownBy(() ->
       $$("div").shouldHave(size(666))
     ).isInstanceOf(IllegalStateException.class)
@@ -76,9 +71,7 @@ final class UnopenedBrowserTest extends IntegrationTest {
     useProxy(false);
 
     SelenideElement header = $("h1");
-    WebDriverManager.chromedriver().setup();
-    ChromeOptions options = new ChromeOptions();
-    ChromeDriver driver = new ChromeDriver(addHeadless(addSslErrorIgnoreCapabilities(options)));
+    ChromeDriver driver = openChrome();
     try {
       WebDriverRunner.setWebDriver(driver);
       openFile("page_with_selects_without_jquery.html");
