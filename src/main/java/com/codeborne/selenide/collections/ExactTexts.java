@@ -55,9 +55,7 @@ public class ExactTexts extends CollectionCondition {
                    @Nullable Exception lastError,
                    long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
-      ElementNotFound elementNotFound = new ElementNotFound(collection, toString(), lastError);
-      elementNotFound.timeoutMs = timeoutMs;
-      throw elementNotFound;
+      throw new ElementNotFound(collection, toString(), timeoutMs, lastError);
     }
     else if (elements.size() != expectedTexts.size()) {
       throw new TextsSizeMismatch(collection, expectedTexts, ElementsCollection.texts(elements), explanation, timeoutMs);

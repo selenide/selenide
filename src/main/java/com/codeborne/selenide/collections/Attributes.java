@@ -52,9 +52,7 @@ public class Attributes extends CollectionCondition {
                    @Nullable Exception lastError,
                    long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
-      ElementNotFound elementNotFound = new ElementNotFound(collection, toString(), lastError);
-      elementNotFound.timeoutMs = timeoutMs;
-      throw elementNotFound;
+      throw new ElementNotFound(collection, toString(), timeoutMs, lastError);
     } else if (elements.size() != expectedValues.size()) {
       throw new AttributesSizeMismatch(collection.driver(), attribute, collection, expectedValues,
         ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);

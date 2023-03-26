@@ -20,8 +20,7 @@ public class AttributesSizeMismatch extends UIAssertionError {
         lineSeparator() + "Expected: " + expectedValues + ", List size: " + expectedValues.size() +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
         lineSeparator() + "Collection: " + collection.description(),
-      expectedValues, actualValues
+      expectedValues, actualValues, timeoutMs
     );
-    super.timeoutMs = timeoutMs;
   }
 }

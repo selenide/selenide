@@ -20,7 +20,6 @@ public class AttributesMismatch extends UIAssertionError {
         lineSeparator() + "Expected: " + expectedValues +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
         lineSeparator() + "Collection: " + collection.description(),
-      expectedValues, actualValues);
-    super.timeoutMs = timeoutMs;
+      expectedValues, actualValues, timeoutMs);
   }
 }

@@ -49,9 +49,7 @@ public class ContainExactTextsCaseSensitive extends CollectionCondition {
                    @Nullable Exception lastError,
                    long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
-      ElementNotFound elementNotFound = new ElementNotFound(collection, toString(), lastError);
-      elementNotFound.timeoutMs = timeoutMs;
-      throw elementNotFound;
+      throw new ElementNotFound(collection, toString(), timeoutMs, lastError);
     }
     else {
       List<String> actualTexts = ElementsCollection.texts(elements);
