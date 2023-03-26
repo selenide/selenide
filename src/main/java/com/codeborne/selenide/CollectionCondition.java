@@ -26,6 +26,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static java.util.Arrays.asList;
+
 @ParametersAreNonnullByDefault
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
   protected String explanation;
@@ -131,13 +133,11 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   }
 
   /**
-   * Checks that given collection has given attribute values(each collection element EQUALS TO corresponding attribute value)
-   *
-   * <p>NB! Ignores multiple whitespaces between words</p>
+   * @see #attributes(String, List)
    */
   @CheckReturnValue
   public static CollectionCondition attributes(String attribute, String... expectedValues) {
-    return new Attributes(attribute, expectedValues);
+    return attributes(attribute, asList(expectedValues));
   }
 
   /**

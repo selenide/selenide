@@ -12,18 +12,14 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.Objects;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
 @ParametersAreNonnullByDefault
 public class Attributes extends CollectionCondition {
   protected final List<String> expectedValues;
   protected final String attribute;
-
-  public Attributes(String attribute, String... expectedValues) {
-    this(attribute, asList(expectedValues));
-  }
 
   public Attributes(String attribute, List<String> expectedValues) {
     if (expectedValues.isEmpty()) {
@@ -43,7 +39,7 @@ public class Attributes extends CollectionCondition {
     for (int i = 0; i < expectedValues.size(); i++) {
       WebElement element = elements.get(i);
       String expectedValue = expectedValues.get(i);
-      if (!getAttributeValue(element).equals(expectedValue)) {
+      if (!Objects.equals(element.getAttribute(attribute), expectedValue)) {
         return false;
       }
     }
@@ -71,11 +67,6 @@ public class Attributes extends CollectionCondition {
   @Override
   public boolean missingElementSatisfiesCondition() {
     return false;
-  }
-
-  protected String getAttributeValue(WebElement element) {
-    String attr = element.getAttribute(attribute);
-    return attr == null ? "" : attr;
   }
 
   @Override

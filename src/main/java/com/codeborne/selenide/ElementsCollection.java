@@ -346,11 +346,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   @CheckReturnValue
   @Nonnull
-  public static List<String> attributes(String attribute, @Nullable Collection<WebElement> elements) {
-    return elements == null ? emptyList() : elements.stream().map(e -> getAttribute(attribute, e)).collect(toList());
+  public static List<String> attributes(String attribute, Collection<WebElement> elements) {
+    return elements.stream().map(e -> getAttribute(e, attribute)).collect(toList());
   }
 
-  private static String getAttribute(String attribute, WebElement element) {
+  private static String getAttribute(WebElement element, String attribute) {
     try {
       return element.getAttribute(attribute);
     }
