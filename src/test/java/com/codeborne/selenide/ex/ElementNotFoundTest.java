@@ -62,11 +62,11 @@ final class ElementNotFoundTest {
     List<String> expectedStrings = asList("One", "Two", "Three");
 
     ElementNotFound elementNotFoundById = new ElementNotFound(webElementCollectionMock,
-      new ExactTexts(expectedStrings).toString(),
+      new ExactTexts(expectedStrings).toString(), 8000,
       new Throwable("Error message"));
     String expectedMessage = String.format("Element not found {mock collection description}%n" +
       "Expected: Exact texts [One, Two, Three]%n" +
-      "Timeout: 0 ms.%n" +
+      "Timeout: 8 s.%n" +
       "Caused by: java.lang.Throwable: Error message");
     assertThat(elementNotFoundById).hasMessage(expectedMessage);
   }
