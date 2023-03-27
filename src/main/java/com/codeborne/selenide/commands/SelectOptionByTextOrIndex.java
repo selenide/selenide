@@ -48,6 +48,9 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
 
   private void selectOptionsByTexts(WebElementSource selectField, List<String> texts) {
     Map<String, String> error = selectOptionByText.execute(selectField.driver(), selectField.getWebElement(), texts);
+    if (error.containsKey("nonSelect")) {
+      throw new IllegalArgumentException("Cannot select option from a non-select element");
+    }
     if (error.containsKey("disabledSelect")) {
       throw new InvalidStateException(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
     }
@@ -65,6 +68,9 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
 
   private void selectOptionsByIndexes(WebElementSource selectField, List<Integer> indexes) {
     Map<String, Object> error = selectOptionByIndex.execute(selectField.driver(), selectField.getWebElement(), indexes);
+    if (error.containsKey("nonSelect")) {
+      throw new IllegalArgumentException("Cannot select option from a non-select element");
+    }
     if (error.containsKey("disabledSelect")) {
       throw new InvalidStateException(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
     }

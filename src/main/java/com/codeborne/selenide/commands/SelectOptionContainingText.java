@@ -28,6 +28,9 @@ public class SelectOptionContainingText implements Command<Void> {
     Arguments arguments = new Arguments(args);
     List<String> texts = merge(arguments.nth(0), arguments.nth(1));
     Map<String, String> error = selectOptionByPartialText.execute(selectField.driver(), selectField.getWebElement(), texts);
+    if (error.containsKey("nonSelect")) {
+      throw new IllegalArgumentException("Cannot select option from a non-select element");
+    }
     if (error.containsKey("disabledSelect")) {
       throw new InvalidStateException(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
     }

@@ -1,4 +1,7 @@
 (function(select, indexes) {
+  if (select.tagName.toLowerCase() !== 'select') {
+    return {nonSelect: 'Cannot select option from a non-select element'};
+  }
   if (select.disabled) {
     return {disabledSelect: 'Cannot select option in a disabled select'};
   }
