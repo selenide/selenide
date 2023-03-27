@@ -145,7 +145,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     options.addArguments("--proxy-bypass-list=<-loopback>");
     options.addArguments("--disable-dev-shm-usage");
     options.addArguments("--no-sandbox");
-    options.addArguments("--remote-allow-origins=*");
     options.setCapability(ACCEPT_INSECURE_CERTS, true);
     return options;
   }

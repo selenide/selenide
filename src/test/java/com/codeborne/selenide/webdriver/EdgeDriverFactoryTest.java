@@ -51,10 +51,10 @@ class EdgeDriverFactoryTest {
 
     Map<String, Object> options = edgeOptions(edgeOptions);
     assertThat(args(options)).containsExactly(
+      "--remote-allow-origins=*",
       "--proxy-bypass-list=<-loopback>",
       "--disable-dev-shm-usage",
       "--no-sandbox",
-      "--remote-allow-origins=*",
       "--window-size=1366,768"
     );
 
