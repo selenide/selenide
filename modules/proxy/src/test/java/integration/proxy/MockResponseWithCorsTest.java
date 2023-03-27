@@ -36,7 +36,7 @@ final class MockResponseWithCorsTest extends ProxyIntegrationTest {
   @Test
   void proxySupportsCors() {
     open("/page_with_cross-origin-request.html?anotherPort=" + corsProtectedService.getPort());
-    $("#moria").shouldHave(text("Say CORS and enter, friend Frodo!"));
+    $("#moria").shouldHave(text("[200] Say CORS and enter, friend Frodo!"));
   }
 
   @Test
@@ -44,7 +44,15 @@ final class MockResponseWithCorsTest extends ProxyIntegrationTest {
     open();
     proxyMocker().mockText("cors-mock", urlContains(POST, "/try-cors/Frodo"), this::mockedResponse);
     open("/page_with_cross-origin-request.html?anotherPort=" + corsProtectedService.getPort());
-    $("#moria").shouldHave(text("You hacked the CORS, Frodo!"));
+    $("#moria").shouldHave(text("[200] You hacked the CORS, Frodo!"));
+  }
+
+  @Test
+  void canMockServerResponseWithAnyHttpStatus() {
+    open();
+    proxyMocker().mockText("cors-mock", urlContains(POST, "/try-cors/Frodo"), 429, this::mockedResponse);
+    open("/page_with_cross-origin-request.html?anotherPort=" + corsProtectedService.getPort());
+    $("#moria").shouldHave(text("[429] You hacked the CORS, Frodo!"));
   }
 
   private String mockedResponse() {
