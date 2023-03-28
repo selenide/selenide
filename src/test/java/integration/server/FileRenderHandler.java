@@ -37,7 +37,9 @@ class FileRenderHandler extends BaseHandler {
       return new Result(SC_NOT_FOUND, CONTENT_TYPE_HTML_TEXT, "NOT_FOUND");
     }
 
-    generateSessionId(request, response);
+    if (!"/favicon.ico".equals(request.getPathInfo())) {
+      generateSessionId(request, response);
+    }
 
     return new Result(SC_OK, getContentType(fileName), fileContent);
   }
