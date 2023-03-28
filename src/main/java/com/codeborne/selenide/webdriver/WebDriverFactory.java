@@ -34,6 +34,7 @@ import static com.codeborne.selenide.Browsers.SAFARI;
 @ParametersAreNonnullByDefault
 public class WebDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(WebDriverFactory.class);
+  private static final String WEBDRIVER_HTTP_FACTORY = "webdriver.http.factory";
 
   private final Map<String, Class<? extends AbstractDriverFactory>> factories = factories();
   private final RemoteDriverFactory remoteDriverFactory = new RemoteDriverFactory();
@@ -117,10 +118,10 @@ public class WebDriverFactory {
       if (config.driverManagerEnabled()) {
         webdriverFactory.setupWebdriverBinary();
       }
-      if (System.getProperty("webdriver.http.factory") == null) {
-        System.setProperty("webdriver.http.factory", "selenide-netty-client-factory");
+      if (System.getProperty(WEBDRIVER_HTTP_FACTORY) == null) {
+        System.setProperty(WEBDRIVER_HTTP_FACTORY, "selenide-netty-client-factory");
       }
-      System.setProperty("webdriver.http.factory", "jdk-http-client");
+      System.setProperty(WEBDRIVER_HTTP_FACTORY, "jdk-http-client");
       return webdriverFactory.create(config, browser, proxy, browserDownloadsFolder);
     }
   }
