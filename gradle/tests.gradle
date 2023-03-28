@@ -54,7 +54,7 @@ subprojects {
     exclude 'com/codeborne/selenide/**/*'
   }
 
-  task brave_headless(type: Test) {
+  tasks.register("brave_headless", Test) {
     systemProperties['selenide.browser'] = 'chromium'
     systemProperties['selenide.headless'] = 'true'
     systemProperties['selenide.reportsFolder'] = 'build/reports/tests/brave_headless'
@@ -63,7 +63,7 @@ subprojects {
     exclude 'com/codeborne/selenide/**/*'
   }
 
-  task chrome_remote(type: Test) {
+  tasks.register("chrome_remote", Test) {
     systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
     systemProperties['selenide.browser'] = 'chrome'
     include 'integration/**/*'
