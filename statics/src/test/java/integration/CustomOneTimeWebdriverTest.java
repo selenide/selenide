@@ -68,7 +68,7 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
 
     inNewBrowser(() -> {
       openFile("downloadMultipleFiles.html");
-      checkDownload(PROXY);
+      checkDownload(PROXY, "hello_world.txt");
     });
 
     File downloadedFile = $(byText("Download me")).download(using(PROXY).withFilter(withExtension("txt")));
@@ -77,12 +77,18 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
   }
 
   private void checkDownload(FileDownloadMode mode) {
+    checkDownload(mode, "download.html");
+    checkDownload(mode, "empty.html");
+    checkDownload(mode, "hello_world.txt");
+  }
+
+  private void checkDownload(FileDownloadMode mode, String fileName) {
     try {
       File text = $("#multiple-downloads").download(
-        using(mode).withFilter(withName("file1.txt"))
+        using(mode).withFilter(withName(fileName))
       );
-      assertThat(text.getName()).isEqualTo("file1.txt");
-      assertThat(text.length()).isEqualTo(new FileContent("download.html").content().length());
+      assertThat(text.getName()).isEqualTo(fileName);
+      assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
     }
     catch (FileNotFoundException e) {
       throw new RuntimeException(e);
