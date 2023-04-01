@@ -30,12 +30,16 @@ import java.time.Duration;
 @ParametersAreNonnullByDefault
 public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, Locatable, TakesScreenshot {
   /**
-   * <b>Implementation details:</b>
+   * Set value to given input element.<p>
+
+   * <b>Applicable for:</b>: {@code <input>} and {@code <textarea>}.<p>
+
+   * <b>Implementation details:</b><p>
    *
-   * <p>If Configuration.fastSetValue is true, sets value by javascript instead of using Selenium built-in "sendKey" function
-   * and trigger "focus", "keydown", "keypress", "input", "keyup", "change" events.
+   * If Configuration.fastSetValue is true, sets value by javascript instead of using Selenium built-in "sendKey" function
+   * and trigger "focus", "keydown", "keypress", "input", "keyup", "change" events.<p>
    *
-   * <p>In other case behavior will be:
+   * In other case behavior will be:
    * <pre>
    * 1. WebElement.clear()
    * 2. WebElement.sendKeys(text)
@@ -59,6 +63,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement val(@Nullable String text);
 
   /**
+   * Similar to {@link #setValue(java.lang.String)}
+   *
    * @see com.codeborne.selenide.commands.SetValue
    * @since 6.5.0
    */
@@ -89,6 +95,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Append given text to the text field and trigger "change" event.
    * <p>
    * Implementation details:
+   * Append given text to the text field and trigger "change" event.<p>
+   *
+   * <b>Applicable for:</b> {@code <input>} and {@code <textarea>}.<p>
+   *
+   * <b>Implementation details:</b><p>
+   *
    * This is the same as
    * <pre>
    *   1. WebElement.sendKeys(text)
@@ -113,9 +125,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement paste();
 
   /**
-   * Clear the input field
+   * Clear the input field<p>
    *
-   * <p>Basically it's the same as {@link WebElement#clear()}, but it works. :) </p>
+   * Basically, it's the same as {@link WebElement#clear()}, but it works. :)
    * @see com.codeborne.selenide.commands.Clear
    */
   @CanIgnoreReturnValue
@@ -126,7 +138,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Press ENTER. Useful for input field and textareas: <pre>
    *  $("query").val("Aikido techniques").pressEnter();</pre>
    * <p>
-   * Implementation details:
+   *
+   * <b>Implementation details:</b>
    * Check that element is displayed and execute <pre>
    *  WebElement.sendKeys(Keys.ENTER)</pre>
    *
@@ -140,7 +153,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Press TAB. Useful for input field and textareas: <pre>
    *  $("#to").val("stiven@seagal.com").pressTab();</pre>
    * <p>
-   * Implementation details:
+   * <b>Implementation details:</b><p>
    * Check that element is displayed and execute <pre>
    *  WebElement.sendKeys(Keys.TAB)</pre>
    *
@@ -154,7 +167,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Press ESCAPE. Useful for input field and textareas: <pre>
    *  $(".edit").click().pressEscape();</pre>
    * <p>
-   * Implementation details:
+   *
+   * <b>Implementation details:</b><p>
    * Check that element is displayed and execute <pre>
    *  WebElement.sendKeys(Keys.ESCAPE)</pre>
    *
@@ -168,7 +182,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Press a Key(s) on Keyboard: <pre>
    *  $(".edit").press(Keys.DOWN).click();</pre>
    * <p>
-   * Implementation details:
+   *
+   * <b>Implementation details:</b><p>
    * Checks that element is displayed and executes <pre>
    *  WebElement.sendKeys(keysToPress)</pre>
    *
@@ -197,6 +212,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Element alias, which can be set with {@link #as(String text)}
+   *
+   * Usually you should not need this method, unless you are writing a custom reporting engine like Allure Reports.
    *
    * @return Alias of this element or null, if element alias is not set
    * @see com.codeborne.selenide.commands.GetAlias
@@ -228,12 +245,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String getOwnText();
 
   /**
-   * Get the text code of the element with children.
-   * <p>
-   * It can be used to get the text of a hidden element.
-   * <p>
-   * Short form of getAttribute("textContent") or getAttribute("innerText") depending on browser.
-   * <p>
+   * Get the text code of the element with children.<p>
+   * It can be used to get the text of a hidden element.<p>
+   *
+   * Short form of {@code getAttribute("textContent")} or {@code getAttribute("innerText")} depending on browser.
+   *
    * @see com.codeborne.selenide.commands.GetInnerText
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
@@ -242,12 +258,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String innerText();
 
   /**
-   * Get the HTML code of the element with children.
-   * <p>
-   * It can be used to get the html of a hidden element.
-   * <p>
-   * Short form of getAttribute("innerHTML")
-   * <p>
+   * Get the HTML code of the element with children.<p>
+   * It can be used to get the html of a hidden element.<p>
+   * Short form of {@code getAttribute("innerHTML")}.
+   *
    * @see com.codeborne.selenide.commands.GetInnerHtml
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
@@ -349,7 +363,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String data(String dataAttributeName);
 
   /**
-   * {@inheritDoc}
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
@@ -358,7 +371,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String getAttribute(String name);
 
   /**
-   * {@inheritDoc}
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
@@ -422,18 +434,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement setSelected(boolean selected);
 
   /**
-   * <p>Checks that given element meets all of given conditions.</p>
+   * Checks that given element meets all given conditions.<p>
    *
-   * <p>
    * IMPORTANT: If element does not match then conditions immediately, waits up to
-   * 4 seconds until element meets the conditions. It's extremely useful for dynamic content.
-   * </p>
+   * 4 seconds until element meets the conditions. It's extremely useful for dynamic content.<p>
    *
-   * <p>Timeout is configurable via {@link com.codeborne.selenide.Configuration#timeout}</p>
+   * Timeout is configurable via {@link com.codeborne.selenide.Configuration#timeout}<p>
    *
-   * <p>For example: {@code
+   * For example: {@code
    * $("#errorMessage").should(appear);
-   * }</p>
+   * }
    *
    * @return Given element, useful for chaining:
    * {@code $("#errorMessage").should(appear).shouldBe(enabled);}
@@ -452,10 +462,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement should(Condition condition, Duration timeout);
 
   /**
-   * <p>Synonym for {@link #should(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
-   * <p>For example: {@code
+   * Synonym for {@link #should(com.codeborne.selenide.Condition...)}. Useful for better readability.<p>
+   *
+   * For example: {@code
    * $("#errorMessage").shouldHave(text("Hello"), text("World"));
-   * }</p>
+   * }
    *
    * @see SelenideElement#should(com.codeborne.selenide.Condition...)
    * @see com.codeborne.selenide.commands.ShouldHave
@@ -472,10 +483,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldHave(Condition condition, Duration timeout);
 
   /**
-   * <p>Synonym for {@link #should(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
-   * <p>For example: {@code
+   * Synonym for {@link #should(com.codeborne.selenide.Condition...)}. Useful for better readability.<p>
+   *
+   * For example: {@code
    * $("#errorMessage").shouldBe(visible, enabled);
-   * }</p>
+   * }
    *
    * @see SelenideElement#should(com.codeborne.selenide.Condition...)
    * @see com.codeborne.selenide.commands.ShouldBe
@@ -492,18 +504,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldBe(Condition condition, Duration timeout);
 
   /**
-   * <p>Checks that given element does not meet given conditions.</p>
+   * Checks that given element does not meet given conditions.<p>
    *
-   * <p>
    * IMPORTANT: If element does match the conditions, waits up to
-   * 4 seconds until element does not meet the conditions. It's extremely useful for dynamic content.
-   * </p>
+   * 4 seconds until element does not meet the conditions. It's extremely useful for dynamic content.<p>
    *
-   * <p>Timeout is configurable via {@link com.codeborne.selenide.Configuration#timeout}</p>
+   * Timeout is configurable via {@link com.codeborne.selenide.Configuration#timeout}<p>
    *
-   * <p>For example: {@code
+   * For example: {@code
    * $("#errorMessage").should(exist);
-   * }</p>
+   * }
    *
    * @see com.codeborne.selenide.Config#timeout
    * @see com.codeborne.selenide.commands.ShouldNot
@@ -520,10 +530,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldNot(Condition condition, Duration timeout);
 
   /**
-   * <p>Synonym for {@link #shouldNot(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
-   * <p>For example: {@code
+   * Synonym for {@link #shouldNot(com.codeborne.selenide.Condition...)}. Useful for better readability.<p>
+   *
+   * For example: {@code
    * $("#errorMessage").shouldNotHave(text("Exception"), text("Error"));
-   * }</p>
+   * }
    *
    * @see SelenideElement#shouldNot(com.codeborne.selenide.Condition...)
    * @see com.codeborne.selenide.commands.ShouldNotHave
@@ -540,10 +551,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldNotHave(Condition condition, Duration timeout);
 
   /**
-   * <p>Synonym for {@link #shouldNot(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
-   * <p>For example: {@code
+   * Synonym for {@link #shouldNot(com.codeborne.selenide.Condition...)}. Useful for better readability.<p>
+   *
+   * For example: {@code
    * $("#errorMessage").shouldNotBe(visible, enabled);
-   * }</p>
+   * }
    *
    * @see SelenideElement#shouldNot(com.codeborne.selenide.Condition...)
    * @see com.codeborne.selenide.commands.ShouldNotBe
@@ -724,9 +736,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement closest(String selector);
 
   /**
-   * <p>Locates the first matching element inside given element</p>
+   * Locates the first matching element inside given element<p>
    *
-   * <p>Short form of {@code webElement.findElement(By.cssSelector(cssSelector))}</p>
+   * Short form of {@code webElement.findElement(By.cssSelector(cssSelector))}
    *
    * @see com.codeborne.selenide.commands.Find
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
@@ -736,7 +748,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement find(String cssSelector);
 
   /**
-   * <p>Locates the Nth matching element inside given element</p>
+   * Locates the Nth matching element inside given element
    *
    * @see com.codeborne.selenide.commands.Find
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
@@ -806,9 +818,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement $(By selector, int index);
 
   /**
-   * <p>Locates the first matching element inside given element using xpath locator</p>
+   * Locates the first matching element inside given element using xpath locator<p>
    *
-   * <p>Short form of {@code webElement.findElement(By.xpath(xpathLocator))}</p>
+   * Short form of {@code webElement.findElement(By.xpath(xpathLocator))}
    *
    * @see com.codeborne.selenide.commands.FindByXpath
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
@@ -818,7 +830,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement $x(String xpath);
 
   /**
-   * <p>Locates the Nth matching element inside given element using xpath locator</p>
+   * Locates the Nth matching element inside given element using xpath locator
    *
    * @see com.codeborne.selenide.commands.FindByXpath
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
@@ -828,13 +840,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement $x(String xpath, int index);
 
   /**
-   * <p>
    * Short form of {@code webDriver.findElements(thisElement, By.cssSelector(cssSelector))}
-   * </p>
-   *
    * <p>
+   *
    * For example, {@code $("#multirowTable").findAll("tr.active").shouldHave(size(2));}
-   * </p>
    *
    * @return list of elements inside given element matching given CSS selector
    * @see com.codeborne.selenide.commands.FindAll
@@ -845,13 +854,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   ElementsCollection findAll(String cssSelector);
 
   /**
-   * <p>
    * Short form of {@code webDriver.findElements(thisElement, selector)}
-   * </p>
-   *
    * <p>
+   *
    * For example, {@code $("#multirowTable").findAll(By.className("active")).shouldHave(size(2));}
-   * </p>
    *
    * @return list of elements inside given element matching given criteria
    * @see com.codeborne.selenide.commands.FindAll
@@ -877,13 +883,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   ElementsCollection $$(By selector);
 
   /**
-   * <p>
    * Short form of {@code webDriver.findElements(thisElement, By.xpath(xpath))}
-   * </p>
-   *
    * <p>
+   *
    * For example, {@code $("#multirowTable").$$x("./input").shouldHave(size(2));}
-   * </p>
    *
    * @return list of elements inside given element matching given xpath locator
    * @see com.codeborne.selenide.commands.FindAllByXpath
@@ -894,9 +897,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   ElementsCollection $$x(String xpath);
 
   /**
-   * <p>Upload file into file upload field. File is searched from classpath.</p>
+   * Upload file into file upload field. File is searched from classpath.<p>
+   * Multiple file upload is also supported. Just pass as many file names as you wish.<p>
    *
-   * <p>Multiple file upload is also supported. Just pass as many file names as you wish.</p>
+   * <b>Applicable for:</b> {@code <input type="file">}.
    *
    * @param fileName name of the file or the relative path in classpath e.g. "files/1.pfd"
    * @return the object of the first file uploaded
@@ -908,9 +912,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   File uploadFromClasspath(String... fileName);
 
   /**
-   * <p>Upload file into file upload field.</p>
+   * Upload file into file upload field.<p>
+   * Multiple file upload is also supported. Just pass as many files as you wish.<p>
    *
-   * <p>Multiple file upload is also supported. Just pass as many files as you wish.</p>
+   * <b>Applicable for:</b> {@code <input type="file">}.
    *
    * @param file file object(s)
    * @return the object of the first file uploaded
@@ -923,6 +928,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Select an option from dropdown list (by index)
+   * <p>
+   *
+   * <b>Applicable for:</b> <pre>{@code
+   * <select>
+   *   <option>...<option>
+   * </select>
+   * }</pre>
    *
    * @param index 0..N (0 means first option)
    * @param otherIndexes other indexes (if you need to select multiple options)
@@ -932,6 +944,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Select an option from dropdown list (by text)
+   * <p>
+   *
+   * <b>Applicable for:</b> <pre>{@code
+   * <select>
+   *   <option>...<option>
+   * </select>
+   * }</pre>
    *
    * @param text visible text of option
    * @param otherTexts other texts (if you need to select multiple options)
@@ -941,6 +960,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Select an option from dropdown list that contains given text
+   * <p>
+   *
+   * <b>Applicable for:</b> <pre>{@code
+   * <select>
+   *   <option>...<option>
+   * </select>
+   * }</pre>
    *
    * @param text substring of visible text of option
    * @param otherTexts other texts (if you need to select multiple options)
@@ -950,6 +976,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Select an option from dropdown list (by value)
+   * <p>
+   *
+   * <b>Applicable for:</b> <pre>{@code
+   * <select>
+   *   <option>...<option>
+   * </select>
+   * }</pre>
    *
    * @param value "value" attribute of option
    * @param otherValues other values (if you need to select multiple options)
@@ -959,6 +992,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Find (first) selected option from this select field
+   * <p>
+   *
+   * <b>Applicable for:</b> <pre>{@code
+   * <select>
+   *   <option>...<option>
+   * </select>
+   * }</pre>
    *
    * @return WebElement for selected &lt;option&gt; element
    * @see com.codeborne.selenide.commands.GetSelectedOption
@@ -969,6 +1009,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Find all selected options from this select field
+   * <p>
+   *
+   * <b>Applicable for:</b> <pre>{@code
+   * <select>
+   *   <option>...<option>
+   * </select>
+   * }</pre>
    *
    * @return ElementsCollection for selected &lt;option&gt; elements (empty list if no options are selected)
    * @see com.codeborne.selenide.commands.GetSelectedOptions
@@ -979,6 +1026,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get value of selected option in select field
+   * <p>
+   *
+   * <b>Applicable for:</b> <pre>{@code
+   * <select>
+   *   <option>...<option>
+   * </select>
+   * }</pre>
    *
    * @see GetSelectedOptionValue
    * @return null if the selected option doesn't have "value" attribute (or the select doesn't have options at all)
@@ -998,6 +1052,14 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get text of selected option in select field
+   * <p>
+   *
+   * <b>Applicable for:</b> <pre>{@code
+   * <select>
+   *   <option>...<option>
+   * </select>
+   * }</pre>
+   *
    * @return null if there is no selected options (or the select doesn't have options at all)
    * @throws IllegalArgumentException if the element type is not {@code <select/>}
    * @see GetSelectedOptionText
@@ -1025,18 +1087,19 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement scrollTo();
 
   /**
-   * Ask browser to scrolls the element on which it's called into the visible area of the browser window.
-   * <p>
-   * If <b>alignToTop</b> boolean value is <i>true</i> - the top of the element will be aligned to the top.
-   * <p>
-   * If <b>alignToTop</b> boolean value is <i>false</i> - the bottom of the element will be aligned to the bottom.
-   * Usage:
-   * <pre>
-   *     element.scrollIntoView(true);
-   *     // Corresponds to scrollIntoViewOptions: {block: "start", inline: "nearest"}
+   * Ask browser to scroll the element on which it's called into the visible area of the browser window.<p>
    *
-   *     element.scrollIntoView(false);
-   *     // Corresponds to scrollIntoViewOptions: {block: "end", inline: "nearest"}
+   * If <b>alignToTop</b> boolean value is <i>true</i> - the top of the element will be aligned to the top.<p>
+   *
+   * If <b>alignToTop</b> boolean value is <i>false</i> - the bottom of the element will be aligned to the bottom.<p>
+   *
+   * <b>Usage:</b>
+   * <pre>
+   *   element.scrollIntoView(true);
+   *   // Corresponds to scrollIntoViewOptions: {block: "start", inline: "nearest"}
+   *
+   *   element.scrollIntoView(false);
+   *   // Corresponds to scrollIntoViewOptions: {block: "end", inline: "nearest"}
    * </pre>
    *
    * @param alignToTop boolean value that indicate how element will be aligned to the visible area of the scrollable ancestor.
@@ -1048,7 +1111,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement scrollIntoView(boolean alignToTop);
 
   /**
-   * Ask browser to scrolls the element on which it's called into the visible area of the browser window.
+   * Ask browser to scroll the element on which it's called into the visible area of the browser window.
    * <pre>
    * scrollIntoViewOptions:
    *  * behavior (optional) - Defines the transition animation
@@ -1066,11 +1129,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *    3. end
    *    4. nearest (default)
    * </pre>
-   * <p>
-   * Usage:
+   *
+   * <b>Usage:</b>
    * <pre>
-   *     element.scrollIntoView("{block: \"end\"}");
-   *     element.scrollIntoView("{behavior: \"instant\", block: \"end\", inline: \"nearest\"}");
+   *   element.scrollIntoView("{block: \"end\"}");
+   *   element.scrollIntoView("{behavior: \"instant\", block: \"end\", inline: \"nearest\"}");
    * </pre>
    *
    * @param scrollIntoViewOptions is an object with the align properties: behavior, block and inline.
@@ -1174,27 +1237,33 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   WebElement getWrappedElement();
 
   /**
-   * Click the element using {@link ClickOptions}: {@code $("#username").click(ClickOptions.usingJavaScript())}
+   * Cache this web element. The following calls to this object will not re-load this element from browser.
+   * @see com.codeborne.selenide.commands.CacheSelenideElement
+   * @since 6.13.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement cached();
+
+  /**
+   * Click the element using {@link ClickOptions}: {@code $("#username").click(ClickOptions.usingJavaScript())}<p>
    *
-   * <p>
    * You can specify a relative offset from the center of the element inside ClickOptions:
-   * e.g. {@code $("#username").click(usingJavaScript().offset(123, 222))}
-   * </p>
+   * e.g. <pre>
+   *  {@code $("#username").click(usingJavaScript().offset(123, 222))}
+   * </pre>
    *
    * @see com.codeborne.selenide.commands.Click
    */
   SelenideElement click(ClickOptions clickOption);
 
   /**
-   * Click the element
+   * Click the element<p>
    *
-   * <p>
-   * By default it uses default Selenium method click.
-   * </p>
-   * <p>
+   * By default, it uses default Selenium method click.<p>
+   *
    * But it uses JavaScript method to click if {@code com.codeborne.selenide.Configuration#clickViaJs} is defined.
    * It may be helpful for testing in Internet Explorer where native click doesn't always work correctly.
-   * </p>
    *
    * @see com.codeborne.selenide.commands.Click
    */
@@ -1212,7 +1281,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement contextClick();
 
   /**
-   * Double click the element
+   * Double-click the element
    *
    * @return this element
    * @see com.codeborne.selenide.commands.DoubleClick
@@ -1243,8 +1312,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement hover(HoverOptions options);
 
   /**
-   * Drag and drop this element to the target
-   * <p>
+   * Drag and drop this element to the target<p>
+   *
    * Before dropping, waits until target element gets visible.
    *
    * @param targetCssSelector CSS selector defining target element
@@ -1256,8 +1325,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement dragAndDropTo(String targetCssSelector);
 
   /**
-   * Drag and drop this element to the target
-   * <p>
+   * Drag and drop this element to the target<p>
+   *
    * Before dropping, waits until target element gets visible.
    *
    * @param target target element
@@ -1269,10 +1338,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement dragAndDropTo(WebElement target);
 
   /**
-   Drag and drop this element to the target via JS script
-   * see resources/drag_and_drop_script
+   * Drag and drop this element to the target via JS script<p>
    *
-   * <p>
    * Before dropping, waits until target element gets visible.
    *
    * @param targetCssSelector target css selector
@@ -1313,6 +1380,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Check if image is properly loaded.
+   * <p>
+   * <b>Applicable for:</b> {@code <img src="...">}.
    *
    * @throws IllegalArgumentException if argument is not an "img" element
    * @see com.codeborne.selenide.commands.IsImage

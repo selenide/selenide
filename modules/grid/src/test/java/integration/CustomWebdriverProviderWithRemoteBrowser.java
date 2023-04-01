@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -42,13 +41,7 @@ final class CustomWebdriverProviderWithRemoteBrowser extends AbstractGridTest {
     @CheckReturnValue
     @Nonnull
     public WebDriver createDriver(@Nonnull Capabilities capabilities) {
-      ChromeOptions options = new ChromeOptions();
-      if (Configuration.headless) {
-        options.addArguments("--headless=new");
-      }
-      addSslErrorIgnoreCapabilities(options);
-
-      RemoteWebDriver webDriver = new RemoteWebDriver(url, options);
+      RemoteWebDriver webDriver = new RemoteWebDriver(url, chromeOptions(null));
       webDriver.setFileDetector(new LocalFileDetector());
       return webDriver;
     }

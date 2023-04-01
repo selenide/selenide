@@ -327,6 +327,38 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     }
   }
 
+
+  /**
+   * Gets all the specific attribute values in elements collection
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  public List<String> attributes(String attribute) {
+    return attributes(attribute, getElements());
+  }
+
+  /**
+   * Fail-safe method for retrieving specific attribute values of given elements.
+   *
+   * @param elements Any collection of WebElements
+   * @return Texts (or exceptions in case of any WebDriverExceptions)
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static List<String> attributes(String attribute, Collection<WebElement> elements) {
+    return elements.stream().map(e -> getAttribute(e, attribute)).collect(toList());
+  }
+
+  private static String getAttribute(WebElement element, String attribute) {
+    try {
+      return element.getAttribute(attribute);
+    }
+    catch (WebDriverException elementDisappeared) {
+      return elementDisappeared.toString();
+    }
+  }
+
   /**
    * Outputs string presentation of the element's collection
    *

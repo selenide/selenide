@@ -5,6 +5,7 @@ import com.codeborne.selenide.conditions.Attribute;
 import com.codeborne.selenide.conditions.AttributeWithValue;
 import com.codeborne.selenide.conditions.CaseSensitiveText;
 import com.codeborne.selenide.conditions.Checked;
+import com.codeborne.selenide.conditions.InnerText;
 import com.codeborne.selenide.conditions.PartialText;
 import com.codeborne.selenide.conditions.PartialTextCaseSensitive;
 import com.codeborne.selenide.conditions.CssClass;
@@ -415,6 +416,21 @@ public abstract class Condition {
   @Nonnull
   public static Condition exactText(String text) {
     return new ExactText(text);
+  }
+
+  /**
+   * Assert that element contains given inner text.
+   * <p>Sample: {@code $("h1").shouldHave(innerText("Hello"))}</p>
+   *
+   * It can be used to check the text of a hidden element.
+   *
+   * <p>Case insensitive</p>
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition innerText(String text) {
+    return new InnerText(text);
   }
 
   /**

@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 
 import static io.netty.buffer.Unpooled.wrappedBuffer;
 import static io.netty.handler.codec.http.HttpMethod.OPTIONS;
-import static io.netty.handler.codec.http.HttpResponseStatus.OK;
+import static io.netty.handler.codec.http.HttpResponseStatus.valueOf;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -31,6 +31,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 @ParametersAreNonnullByDefault
 public class MockResponseFilter implements RequestFilter {
+  private static final int HTTP_STATUS_OK = 200;
+  private static final byte[] EMPTY_RESPONSE = new byte[0];
+
   private final Map<String, ResponseMock> mocks = new LinkedHashMap<>();
 
   /**
@@ -38,6 +41,20 @@ public class MockResponseFilter implements RequestFilter {
    */
   public void mockText(String name, RequestMatcher requestMatcher, Supplier<String> mockedResponse) {
     mockBytes(name, requestMatcher, () -> mockedResponse.get().getBytes(UTF_8));
+  }
+
+  /**
+   * See {@link #mockBytes(String, RequestMatcher, int, Supplier)}
+   */
+  public void mockText(String name, RequestMatcher requestMatcher, int status, Supplier<String> mockedResponse) {
+    mockBytes(name, requestMatcher, status, () -> mockedResponse.get().getBytes(UTF_8));
+  }
+
+  /**
+   * See {@link #mockBytes(String, RequestMatcher, int, Supplier)}
+   */
+  public void mockBytes(String name, RequestMatcher requestMatcher, Supplier<byte[]> mockedResponse) {
+    mockBytes(name, requestMatcher, HTTP_STATUS_OK, mockedResponse);
   }
 
   /**
@@ -49,11 +66,11 @@ public class MockResponseFilter implements RequestFilter {
    * @param requestMatcher criteria which requests to mock
    * @param mockedResponse the mocked response body (e.g. html or image)
    */
-  public void mockBytes(String name, RequestMatcher requestMatcher, Supplier<byte[]> mockedResponse) {
+  public void mockBytes(String name, RequestMatcher requestMatcher, int status, Supplier<byte[]> mockedResponse) {
     if (mocks.containsKey(name)) {
       throw new IllegalArgumentException("Response filter already registered: " + name);
     }
-    mocks.put(name, new ResponseMock(name, requestMatcher, mockedResponse));
+    mocks.put(name, new ResponseMock(name, requestMatcher, status, mockedResponse));
   }
 
   /**
@@ -99,7 +116,7 @@ public class MockResponseFilter implements RequestFilter {
       .add("Access-Control-Max-Age", "0")
       .add("X-Mocked-By", mock.name);
 
-    return response(request, wrappedBuffer(new byte[0]), headers);
+    return response(request, HTTP_STATUS_OK, wrappedBuffer(EMPTY_RESPONSE), headers);
   }
 
   @Nonnull
@@ -111,24 +128,26 @@ public class MockResponseFilter implements RequestFilter {
       .set("Access-Control-Allow-Origin", "*")
       .add("X-Mocked-By", mock.name);
 
-    return response(request, content, headers);
+    return response(request, mock.status, content, headers);
   }
 
   @Nonnull
   @CheckReturnValue
-  private static DefaultFullHttpResponse response(HttpRequest request, ByteBuf content, HttpHeaders headers) {
-    return new DefaultFullHttpResponse(request.protocolVersion(), OK, content, headers, EmptyHttpHeaders.INSTANCE);
+  private static DefaultFullHttpResponse response(HttpRequest request, int status, ByteBuf content, HttpHeaders headers) {
+    return new DefaultFullHttpResponse(request.protocolVersion(), valueOf(status), content, headers, EmptyHttpHeaders.INSTANCE);
   }
 
   @ParametersAreNonnullByDefault
   private static final class ResponseMock {
     private final String name;
     private final RequestMatcher requestMatcher;
+    private final int status;
     private final Supplier<byte[]> mockedResponse;
 
-    private ResponseMock(String name, RequestMatcher requestMatcher, Supplier<byte[]> mockedResponse) {
+    private ResponseMock(String name, RequestMatcher requestMatcher, int status, Supplier<byte[]> mockedResponse) {
       this.name = name;
       this.requestMatcher = requestMatcher;
+      this.status = status;
       this.mockedResponse = mockedResponse;
     }
   }

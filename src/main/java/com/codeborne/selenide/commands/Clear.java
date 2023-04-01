@@ -4,7 +4,10 @@ import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -29,6 +32,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 public class Clear implements Command<SelenideElement> {
+  private static final Logger log = LoggerFactory.getLogger(Clear.class);
+
   @Nonnull
   @CheckReturnValue
   @Override
@@ -48,7 +53,16 @@ public class Clear implements Command<SelenideElement> {
    */
   protected void clearAndTrigger(Driver driver, WebElement input) {
     clear(driver, input);
-    driver.executeJavaScript("arguments[0].blur()", input);
+    blurSafely(driver, input);
+  }
+
+  protected void blurSafely(Driver driver, WebElement input) {
+    try {
+      driver.executeJavaScript("arguments[0].blur()", input);
+    }
+    catch (StaleElementReferenceException elementHasDisappeared) {
+      log.debug("The input has disappeared after clearing: {}", elementHasDisappeared.toString());
+    }
   }
 
   /**

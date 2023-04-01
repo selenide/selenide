@@ -1,5 +1,22 @@
 # Changelog
 
+## 6.13.0 (planned to 1x.04.2023)
+* #2220 add condition $.shouldHave(innerText()) --  see PR #2223
+
+## 6.12.4 (released 22.03.2023)
+* #2215 support jdk-http-client instead of NettyClient --  see PR #2216
+* #2202 fix method $.download(PROXY) after using `using` --  see PR #2208 and #2209
+* #2207 $.clear() should not fail if element has disappeared as a result of clearing --  see PR #2221
+* #2210 Bump nettyVersion from 4.1.89.Final to 4.1.90.Final
+* #2218 Bump slf4jVersion from 2.0.6 to 2.0.7
+
+## 6.12.3 (released 14.03.2023)
+* #2202 fix method $.download(FOLDER) after using `using` --  see PR #2203
+
+## 6.12.2 (released 09.03.2023)
+see https://github.com/selenide/selenide/milestone/178?closed=1
+* #2192 added workaround for Chromedriver 111 issue ("Invalid Status code=403 text=Forbidden")  --  see PR #2194
+
 ## 6.12.1 (released 07.03.2023)
 see https://github.com/selenide/selenide/milestone/176?closed=1
 * #2174 Fixed a bug where selenide.holdBrowserOpen were not read correctly  --  thanks to @doranko for PR

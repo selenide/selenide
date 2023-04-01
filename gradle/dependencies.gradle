@@ -1,16 +1,16 @@
 ext {
-  seleniumVersion = '4.8.1'
+  seleniumVersion = '4.8.3'
   junitVersion = '5.9.2'
   jettyVersion = '9.4.51.v20230217'
-  nettyVersion = '4.1.89.Final'
+  nettyVersion = '4.1.90.Final'
   assertjVersion = '3.24.2'
-  mockitoVersion = '5.1.1'
-  slf4jVersion = '2.0.6'
-  browserupProxyVersion = '2.2.8'
+  mockitoVersion = '5.2.0'
+  slf4jVersion = '2.0.7'
+  browserupProxyVersion = '2.2.9'
   littleProxyVersion = '2.0.16'
   commonsFileuploadVersion = '1.5'
   jabelVersion = '1.0.0'
-  byteBuddyVersion = '1.14.1'
+  byteBuddyVersion = '1.14.3'
   archunitVersion = '1.0.1'
 }
 

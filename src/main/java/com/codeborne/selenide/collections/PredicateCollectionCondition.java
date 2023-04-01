@@ -31,9 +31,7 @@ public abstract class PredicateCollectionCondition extends CollectionCondition {
                    @Nullable Exception lastError,
                    long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
-      ElementNotFound elementNotFound = new ElementNotFound(collection, toString(), lastError);
-      elementNotFound.timeoutMs = timeoutMs;
-      throw elementNotFound;
+      throw new ElementNotFound(collection, toString(), timeoutMs, lastError);
     } else {
       String expected = String.format("%s of elements to match [%s] predicate", matcher, description);
       throw new MatcherError(explanation,
