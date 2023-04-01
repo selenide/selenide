@@ -76,15 +76,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement type(CharSequence textToType);
 
   /**
-   * Mimic how real user would type in a text field
-   * Useful to work with autosuggestion dropdown
-   * @param textToType
-   * @param delayTimeInMillis - time delay before typing each character
-   * @return
+   *
+   * @param typeOptions
+   * com.codeborne.selenide.commands.Type
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement type(CharSequence textToType, long delayTimeInMillis);
+  SelenideElement type(TypeOptions typeOptions);
 
 
   /**
