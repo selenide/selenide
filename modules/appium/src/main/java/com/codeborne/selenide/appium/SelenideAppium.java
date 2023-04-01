@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import java.util.Set;
 
 import static com.codeborne.selenide.WebDriverRunner.driver;
 
@@ -66,6 +67,14 @@ public class SelenideAppium {
    */
   public static void back() {
     Selenide.back();
+  }
+
+  public static void setContext(String contextName) {
+    new SelenideAppiumTargetLocator().setContext(contextName);
+  }
+
+  public static Set<String> getContextHandles() {
+    return new SelenideAppiumTargetLocator().getContextHandles();
   }
 
   @CheckReturnValue
