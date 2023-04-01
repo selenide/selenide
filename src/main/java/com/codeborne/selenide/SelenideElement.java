@@ -92,9 +92,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
 
   /**
-   * Append given text to the text field and trigger "change" event.
-   * <p>
-   * Implementation details:
    * Append given text to the text field and trigger "change" event.<p>
    *
    * <b>Applicable for:</b> {@code <input>} and {@code <textarea>}.<p>
