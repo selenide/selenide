@@ -12,7 +12,7 @@ public class SelenideAppiumTargetLocator {
     SelenideLogger.run("set context", contextName, () -> {
       (WebdriverUnwrapper.cast(WebDriverRunner.getWebDriver(), ContextAware.class))
         .map(contextAware -> contextAware.context(contextName))
-        .orElseThrow(() -> new UnsupportedOperationException("Context not found"+ contextName));
+        .orElseThrow(() -> new UnsupportedOperationException("Context not found" + contextName));
     });
   }
 
