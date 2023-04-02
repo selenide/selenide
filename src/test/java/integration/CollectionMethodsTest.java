@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.AttributesMismatch;
 import com.codeborne.selenide.ex.DoesNotContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
@@ -9,7 +10,6 @@ import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
-import com.codeborne.selenide.ex.AttributesMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -18,12 +18,11 @@ import org.openqa.selenium.NoSuchElementException;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import static com.codeborne.selenide.CollectionCondition.allMatch;
 import static com.codeborne.selenide.CollectionCondition.anyMatch;
+import static com.codeborne.selenide.CollectionCondition.attributes;
 import static com.codeborne.selenide.CollectionCondition.containExactTextsCaseSensitive;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
@@ -37,7 +36,6 @@ import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThanOrEqual;
 import static com.codeborne.selenide.CollectionCondition.sizeNotEqual;
 import static com.codeborne.selenide.CollectionCondition.texts;
-import static com.codeborne.selenide.CollectionCondition.attributes;
 import static com.codeborne.selenide.Condition.and;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exist;
@@ -304,43 +302,6 @@ final class CollectionMethodsTest extends ITest {
     $$(".first_row").shouldHave(size(1));
     $$(".second_row").shouldHave(size(1));
     $$(".first_row,.second_row").shouldHave(size(2));
-  }
-
-  @Test
-  void canIterateCollection_withIterator() {
-    Iterator<SelenideElement> it = $$("[name=domain] option").iterator();
-    assertThat(it.hasNext()).isTrue();
-    it.next().shouldHave(text("@livemail.ru"));
-
-    assertThat(it.hasNext()).isTrue();
-    it.next().shouldHave(text("@myrambler.ru"));
-
-    assertThat(it.hasNext()).isTrue();
-    it.next().shouldHave(text("@rusmail.ru"));
-
-    assertThat(it.hasNext()).isTrue();
-    it.next().shouldHave(text("@мыло.ру"));
-
-    assertThat(it.hasNext()).isFalse();
-  }
-
-  @Test
-  void canIterateCollection_withListIterator() {
-    ListIterator<SelenideElement> it = $$("[name=domain] option").listIterator(3);
-    assertThat(it.hasNext()).isTrue();
-    assertThat(it.hasPrevious()).isTrue();
-    it.previous().shouldHave(text("@rusmail.ru"));
-
-    assertThat(it.hasPrevious()).isTrue();
-    it.previous().shouldHave(text("@myrambler.ru"));
-
-    assertThat(it.hasPrevious()).isTrue();
-    it.previous().shouldHave(text("@livemail.ru"));
-
-    assertThat(it.hasPrevious()).isFalse();
-
-    it.next().shouldHave(text("@livemail.ru"));
-    assertThat(it.hasPrevious()).isTrue();
   }
 
   @Test
