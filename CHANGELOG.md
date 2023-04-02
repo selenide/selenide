@@ -1,7 +1,15 @@
 # Changelog
 
 ## 6.13.0 (planned to 1x.04.2023)
-* #2220 add condition $.shouldHave(innerText()) --  see PR #2223
+* #2171 added method $.cached()  --  see PR #2189
+* #2227 added method to mock http response with any status  --  see PR #2234
+* #2220 added condition $.shouldHave(innerText()) --  see PR #2223
+* #2091 added method $$.shouldHave(attributes(...))  --  thanks to Alexey Lakovych for PR #2091, also see PR #2230
+* #2231 throw clear error when $.select*() is applied for non-select  --  see PR #2233
+* #2239 fixed method $$.subList(0, 3)  --  see PR #2240
+* bump Selenium from 4.8.1 to 4.8.3  --  see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* bump LittleProxy from 2.0.16 to 2.0.17
+* #2232 bump BrowserUpProxy from 2.2.8 to 2.2.9
 
 ## 6.12.4 (released 22.03.2023)
 * #2215 support jdk-http-client instead of NettyClient --  see PR #2216
