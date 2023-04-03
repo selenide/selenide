@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -139,6 +140,22 @@ public class Selenide {
 
   public static void using(WebDriver webDriver, Runnable lambda) {
     WebDriverRunner.using(webDriver, lambda);
+  }
+
+  public static void using(WebDriver webDriver, SelenideProxyServer proxy, Runnable lambda) {
+    WebDriverRunner.using(webDriver, proxy, lambda);
+  }
+
+  /**
+   * Open a new browser (with the same settings as the default browser),
+   * and run given code block in this browser.
+   * <p/>
+   *
+   * In the end, the browser will be closed.
+   * @since 6.13.0
+   */
+  public static void inNewBrowser(Runnable lambda) {
+    WebDriverRunner.inNewBrowser(lambda);
   }
 
   /**

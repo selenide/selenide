@@ -59,12 +59,12 @@ final class ChromeProfileByFactoryTest extends IntegrationTest {
     assertThat(log).contains("\"credentials_enable_service\": false");
     assertThat(log).contains("\"download.default_directory\": \"" + downloadsFolder.getAbsolutePath().replaceAll("\\\\", "\\\\\\\\"));
 
-    String arguments = "\"--proxy-bypass-list=\\u003C-loopback>\", \"--no-sandbox\", \"--disable-3d-apis\"";
+    String args = "\"--proxy-bypass-list=\\u003C-loopback>\", \"--no-sandbox\", \"--disable-3d-apis\"";
     if (Configuration.headless) {
-      assertThat(log).contains("\"args\": [ \"--headless\", " + arguments + " ]");
+      assertThat(log).contains("\"args\": [ \"--remote-allow-origins=*\", \"--headless=new\", " + args + " ]");
     }
     else {
-      assertThat(log).contains("\"args\": [ " + arguments + " ]");
+      assertThat(log).contains("\"args\": [ \"--remote-allow-origins=*\", " + args + " ]");
     }
   }
 

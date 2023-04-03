@@ -22,14 +22,14 @@ final class SelenideDriverITest extends ITest {
   @BeforeEach
   void setUp() {
     driver().close();
-    browser1 = new SelenideDriver(new SelenideConfig().browser(browser).baseUrl(getBaseUrl()));
-    browser2 = new SelenideDriver(new SelenideConfig().browser(browser).baseUrl(getBaseUrl()));
+    browser1 = new SelenideDriver(new SelenideConfig().browser(browser).headless(true).baseUrl(getBaseUrl()));
+    browser2 = new SelenideDriver(new SelenideConfig().browser(browser).headless(true).baseUrl(getBaseUrl()));
   }
 
   @AfterEach
   void tearDown() {
-    browser1.close();
-    browser2.close();
+    if (browser2 != null) browser2.close();
+    if (browser1 != null) browser1.close();
   }
 
   @Test

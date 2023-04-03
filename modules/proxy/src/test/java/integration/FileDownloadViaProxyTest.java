@@ -1,13 +1,17 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.DownloadOptions.using;
@@ -16,12 +20,17 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.Selenide.using;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static java.nio.file.Files.createTempDirectory;
+import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
   private final File folder = new File(Configuration.downloadsFolder).getAbsoluteFile();
@@ -184,16 +193,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
 
   @Test
   public void download_super_slowly() throws FileNotFoundException {
-    File downloadedFile = $(byText("Download me super slowly"))
-      .download(4000, withName("hello_world.txt"));
-
-    assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
-  }
-
-  @Test
-  public void download_super_slowly_without_filter() throws FileNotFoundException {
-    File downloadedFile = $(byText("Download me super slowly")).download(4000);
+    File downloadedFile = $(byText("Download me super slowly")).download(6000, withExtension("txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -207,4 +207,45 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     assertThat(downloadedFile).hasSize(5 * 1024 * 1024);
   }
 
+  @Test
+  void canDownloadFilesAfterUsing() throws IOException {
+    assumeThat(isChrome() || isFirefox()).isTrue();
+
+    openFile("page_with_uploads.html");
+    useAnotherBrowser();
+
+    File downloadedFile = $(byText("Download me")).download(
+      using(PROXY).withTimeout(ofSeconds(2)).withFilter(withExtension("txt"))
+    );
+
+    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+  }
+
+  private void useAnotherBrowser() {
+    withProxy(proxy -> {
+      WebDriver anotherBrowser = isFirefox() ? openFirefox(proxy) : openChrome(proxy);
+      try {
+        using(anotherBrowser, proxy, () -> {
+          openFile("page_with_selects_without_jquery.html");
+        });
+      }
+      finally {
+        anotherBrowser.quit();
+      }
+    });
+  }
+
+  private void withProxy(Consumer<SelenideProxyServer> block) {
+    SelenideProxyServer proxy = new SelenideProxyServer(new SelenideConfig(), null);
+    proxy.start();
+    try {
+      block.accept(proxy);
+    }
+    finally {
+      proxy.shutdown();
+    }
+  }
+
 }
+

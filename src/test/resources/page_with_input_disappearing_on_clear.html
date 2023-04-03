@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test page :: element that disappears after clearing</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h1>This input will disappear after clearing</h1>
+
+<input id="greeting" type="text" value="Bond. James Bond."/>
+<script>
+  const greeting = document.getElementById('greeting');
+
+  function onChange() {
+    console.log(`New greeting: ${this.value}`)
+    if (!this.value) {
+      console.log(`Greeting became empty, hiding the input.`)
+      greeting.remove()
+    }
+  }
+  greeting.onkeyup = onChange
+  greeting.onchange = onChange
+</script>
+</body>
+</html>

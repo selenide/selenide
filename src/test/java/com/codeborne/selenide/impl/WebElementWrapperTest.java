@@ -47,7 +47,7 @@ final class WebElementWrapperTest {
       .executeScript(anyString(), any()))
       .thenReturn(map);
 
-    assertThat(new WebElementWrapper(driver, element))
+    assertThat(new WebElementWrapper(driver, element, null))
       .hasToString("<h2 class=\"class1 class2\" data-binding=\"to-name\" id=\"id1\"></h2>");
   }
 
@@ -57,7 +57,7 @@ final class WebElementWrapperTest {
       .executeScript(anyString(), any()))
       .thenThrow(new UnsupportedOperationException("You must be using WebDriver that supports executing javascript"));
 
-    assertThat(new WebElementWrapper(driver, element))
+    assertThat(new WebElementWrapper(driver, element, null))
       .hasToString("<h2 class=\"class1 class2\" id=\"id1\"></h2>");
   }
 }

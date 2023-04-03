@@ -1,6 +1,52 @@
 # Changelog
 
-## 6.11.1 (released 20.01.2022)
+## 6.13.0 (planned to 1x.04.2023)
+* #2171 added method $.cached()  --  see PR #2189
+* #2227 added method to mock http response with any status  --  see PR #2234
+* #2220 added condition $.shouldHave(innerText()) --  see PR #2223
+* #2091 added method $$.shouldHave(attributes(...))  --  thanks to Alexey Lakovych for PR #2091, also see PR #2230
+* #2231 throw clear error when $.select*() is applied for non-select  --  see PR #2233
+* #2239 fixed method $$.subList(0, 3)  --  see PR #2240
+* bump Selenium from 4.8.1 to 4.8.3  --  see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* bump LittleProxy from 2.0.16 to 2.0.17
+* #2232 bump BrowserUpProxy from 2.2.8 to 2.2.9
+
+## 6.12.4 (released 22.03.2023)
+* #2215 support jdk-http-client instead of NettyClient --  see PR #2216
+* #2202 fix method $.download(PROXY) after using `using` --  see PR #2208 and #2209
+* #2207 $.clear() should not fail if element has disappeared as a result of clearing --  see PR #2221
+* #2210 Bump nettyVersion from 4.1.89.Final to 4.1.90.Final
+* #2218 Bump slf4jVersion from 2.0.6 to 2.0.7
+
+## 6.12.3 (released 14.03.2023)
+* #2202 fix method $.download(FOLDER) after using `using` --  see PR #2203
+
+## 6.12.2 (released 09.03.2023)
+see https://github.com/selenide/selenide/milestone/178?closed=1
+* #2192 added workaround for Chromedriver 111 issue ("Invalid Status code=403 text=Forbidden")  --  see PR #2194
+
+## 6.12.1 (released 07.03.2023)
+see https://github.com/selenide/selenide/milestone/176?closed=1
+* #2174 Fixed a bug where selenide.holdBrowserOpen were not read correctly  --  thanks to @doranko for PR
+* #2178 improve how "$.getSelectedOption().should*" looks in reports  --  see PR #2179
+* #2186 Use custom driver in the using block  --  see PR #2188
+* #2173 bump BrowserUpProxy from 2.2.7 to 2.2.8
+* #2176 bump LittleProxy from 2.0.15 to 2.0.16
+
+## 6.12.0 (released 24.02.2023)
+see https://github.com/selenide/selenide/milestone/173?closed=1
+* #2104 use new headless mode  --  thanks Boris Osipov for PR #2105 and #2169
+* #2167 improve logs when download a file
+* #2167 ignore Edge temporary files on Windows
+* #2161 bump Selenium from 4.8.0 to 4.8.1
+* Bump nettyVersion from 4.1.87.Final to 4.1.89.Final
+* rename "master" branch to "main" (finally!)
+
+## 6.11.2 (released 24.01.2023)
+* #2136 bump Selenide from 4.7.2 to 4.8.0
+* #2137 once again, truncate only messages of WebDriverException :)
+
+## 6.11.1 (released 20.01.2023)
 see https://github.com/selenide/selenide/milestone/174?closed=1
 * #2131 truncate only WebDriverException message
 * #2116 fix $.download(FOLDER): support case when file modification time is in previous second
@@ -8,7 +54,7 @@ see https://github.com/selenide/selenide/milestone/174?closed=1
 * bump webdrivermanager from 5.3.1 to 5.3.2
 * #2126 bump netty from 4.1.86.Final to 4.1.87.Final
 
-## 6.11.0 (released 03.01.2022)
+## 6.11.0 (released 03.01.2023)
 see https://github.com/selenide/selenide/milestone/169?closed=1
 * #1817 add methods to copy and paste content  --  thanks to Evgenii Plugatar for PR #2027
 * #2054 can fail the test if unexpected alert encountered  --  see PR #2095

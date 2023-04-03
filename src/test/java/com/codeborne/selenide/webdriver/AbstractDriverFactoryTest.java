@@ -63,7 +63,7 @@ final class AbstractDriverFactoryTest {
     Map<String, Object> opts = (Map<String, Object>) options.getCapability("goog:chromeOptions");
     assertThat(opts).as("extra capabilities should override base capabilities").containsEntry("binary", "chrome.dll");
     assertThat(opts).as("base and extra arguments should be merged together")
-      .containsEntry("args", asList("--start-maximized", "--start-incognito"));
+      .containsEntry("args", asList("--remote-allow-origins=*", "--start-maximized", "--start-incognito"));
   }
 
   @Test

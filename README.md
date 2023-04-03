@@ -1,15 +1,14 @@
 # Selenide = UI Testing Framework powered by Selenium WebDriver
 
 ![Build Status](https://github.com/selenide/selenide/workflows/Run%20tests/badge.svg)
-[![Maven Central](https://img.shields.io/maven-central/v/com.codeborne/selenide.svg)](https://search.maven.org/artifact/com.codeborne/selenide)
-[![MIT License](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/selenide/selenide/blob/master/LICENSE)
+[![Maven Central](https://img.shields.io/maven-central/v/com.codeborne/selenide.svg)](https://central.sonatype.com/search?q=selenide&namespace=com.codeborne)
+[![MIT License](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/selenide/selenide/blob/main/LICENSE)
 ![Free](https://img.shields.io/badge/free-open--source-green.svg)
 
 [![Join the chat at https://gitter.im/codeborne/selenide](https://img.shields.io/badge/welcome%20to-chat-green.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Присоединяйся к чату https://gitter.im/codeborne/selenide-ru](https://img.shields.io/badge/%D0%B7%D0%B0%D1%85%D0%BE%D0%B4%D0%B8%20%D0%B2-%D1%87%D0%B0%D1%82-green.svg)](https://gitter.im/codeborne/selenide-ru?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Follow](https://img.shields.io/twitter/follow/selenide.svg?style=social&label=Follow)](https://twitter.com/selenide)
-[![Slack chat](https://img.shields.io/badge/slack-chat-yellow.svg)](https://testers.io/messages/selenide)
-[![Слак чат](https://img.shields.io/badge/слак-чат-yellow.svg)](https://softwaretesters.slack.com/messages/selenide_ru)
+[![Telegram channel](https://img.shields.io/badge/Telegram-channel-blue.svg)](https://t.me/selenide)
 [![Telegram чат](https://img.shields.io/badge/Telegram-%D1%87%D0%B0%D1%82-blue.svg)](https://t.me/selenide_ru)
 
 ## What is Selenide?
@@ -40,7 +39,7 @@ You can use Selenide for running tests in Selenoid containers. See plugin [selen
 
 ## Changelog
 
-Here is [CHANGELOG](https://github.com/selenide/selenide/blob/master/CHANGELOG.md)
+Here is [CHANGELOG](https://github.com/selenide/selenide/blob/main/CHANGELOG.md)
 
 ## How to start?
 

@@ -33,8 +33,11 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Boom': 'bah' }
       })
-      .then(resp => resp.text())
-      .then((greeting) => document.getElementById('moria').textContent = greeting)
+      .then(response => {
+        response.text().then((greeting) => {
+          document.getElementById('moria').textContent = `[${response.status}] ${greeting}`
+        })
+      })
       .catch((e) => document.getElementById('moria').textContent = e)
   }
 

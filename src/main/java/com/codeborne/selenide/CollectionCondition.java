@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.collections.AllMatch;
 import com.codeborne.selenide.collections.AnyMatch;
+import com.codeborne.selenide.collections.Attributes;
 import com.codeborne.selenide.collections.ContainExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitive;
@@ -24,6 +25,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Predicate;
+
+import static java.util.Arrays.asList;
 
 @ParametersAreNonnullByDefault
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
@@ -127,6 +130,24 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   @CheckReturnValue
   public static CollectionCondition exactTexts(List<String> expectedTexts) {
     return new ExactTexts(expectedTexts);
+  }
+
+  /**
+   * @see #attributes(String, List)
+   */
+  @CheckReturnValue
+  public static CollectionCondition attributes(String attribute, String... expectedValues) {
+    return attributes(attribute, asList(expectedValues));
+  }
+
+  /**
+   * Checks that given collection has given attribute values (each collection element EQUALS TO corresponding attribute value)
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   */
+  @CheckReturnValue
+  public static CollectionCondition attributes(String attribute, List<String> expectedValues) {
+    return new Attributes(attribute, expectedValues);
   }
 
   /**

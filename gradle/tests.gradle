@@ -104,6 +104,12 @@ subprojects {
     systemProperties['file.encoding'] = encoding
     systemProperties['user.country'] = 'TR'
     systemProperties['user.language'] = 'tr'
+
+    testLogging {
+      events "passed", "skipped", "failed"
+      showExceptions true
+      exceptionFormat 'full'
+    }
   }
 }
 

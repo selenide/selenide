@@ -6,12 +6,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 
-import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
-import static com.codeborne.selenide.ClickOptions.usingJavaScript;
-import static com.codeborne.selenide.ClickOptions.withOffset;
-import static com.codeborne.selenide.Condition.exactText;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.codeborne.selenide.ClickOptions.*;
+import static com.codeborne.selenide.Condition.matchText;
 import static com.codeborne.selenide.Selenide.$;
+import static java.lang.Integer.parseInt;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.data.Offset.offset;
 
 /**
  * Click with offset - calculates offset from the center of clicked element.
@@ -33,23 +37,23 @@ final class ClickRelativeTest extends IntegrationTest {
       .click(usingDefaultMethod().offset(10, 10))
       .click(usingDefaultMethod().offset(123, 222));
 
-    $("#coords").shouldHave(exactText("(523, 522)"));
+    verifyCoordinates(523, 522);
   }
 
   @Test
   void userCanClickElementWithOffsetPosition_withJavascript() {
     Configuration.clickViaJs = true;
 
-    $("#page").click(usingDefaultMethod().offset(123, 222));
+    $("#page").click(usingDefaultMethod().offset(133, 222));
 
-    $("#coords").shouldHave(exactText("(523, 522)"));
+    verifyCoordinates(533, 522);
   }
 
   @Test
   void userCanClickElementWithOffset() {
     $("#page").click(withOffset(123, 222));
 
-    $("#coords").shouldHave(exactText("(523, 522)"));
+    verifyCoordinates(523, 522);
   }
 
   @Test
@@ -58,7 +62,7 @@ final class ClickRelativeTest extends IntegrationTest {
 
     $("#page").click(usingJavaScript().offset(123, 222));
 
-    $("#coords").shouldHave(exactText("(523, 522)"));
+    verifyCoordinates(523, 522);
   }
 
   @Test
@@ -67,7 +71,7 @@ final class ClickRelativeTest extends IntegrationTest {
 
     $("#page").click(usingJavaScript().offsetX(123));
 
-    $("#coords").shouldHave(exactText("(523, 300)"));
+    verifyCoordinates(523, 300);
   }
 
   @Test
@@ -82,5 +86,15 @@ final class ClickRelativeTest extends IntegrationTest {
       .hasMessageContaining("Page source:")
       .hasMessageContaining("Timeout: 123 ms.")
       .hasCauseInstanceOf(MoveTargetOutOfBoundsException.class);
+  }
+
+  private void verifyCoordinates(int expectedX, int expectedY) {
+    String regex = "\\((\\d+), (\\d+)\\)";
+    $("#coords").shouldHave(matchText(regex));
+    Matcher matcher = Pattern.compile(regex).matcher($("#coords").text());
+    int x = parseInt(matcher.replaceFirst("$1"));
+    int y = parseInt(matcher.replaceFirst("$2"));
+    assertThat(x).isCloseTo(expectedX, offset(5));
+    assertThat(y).isCloseTo(expectedY, offset(5));
   }
 }

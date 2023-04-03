@@ -25,7 +25,7 @@ public class UIAssertionError extends AssertionFailedError {
 
   private final Driver driver;
   private Screenshot screenshot = Screenshot.none();
-  public long timeoutMs;
+  private long timeoutMs;
 
   protected UIAssertionError(Driver driver, String message) {
     super(message);
@@ -46,6 +46,12 @@ public class UIAssertionError extends AssertionFailedError {
   protected UIAssertionError(Driver driver, String message, @Nullable Throwable cause) {
     super(message, cause);
     this.driver = driver;
+  }
+
+  protected UIAssertionError(Driver driver, String message, long timeoutMs, @Nullable Throwable cause) {
+    super(message, cause);
+    this.driver = driver;
+    this.timeoutMs = timeoutMs;
   }
 
   protected UIAssertionError(Driver driver, String message,
@@ -121,7 +127,7 @@ public class UIAssertionError extends AssertionFailedError {
 
   @CheckReturnValue
   private static UIAssertionError wrapToUIAssertionError(Driver driver, Throwable error) {
-    String message = error.getClass().getSimpleName() + ": " + Cleanup.of.webdriverExceptionMessage(error.getMessage());
+    String message = Cleanup.of.webdriverExceptionMessage(error);
     return new UIAssertionError(driver, message, error);
   }
 }

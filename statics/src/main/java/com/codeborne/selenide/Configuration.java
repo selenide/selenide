@@ -12,7 +12,7 @@ import org.openqa.selenium.net.NetworkUtils;
  * every change will immediately reflect in all threads (if you run tests in parallel).
  *
  * <p>
- * These system properties can be additonally used having effect on every new created browser in test.
+ * These system properties can be additionally used having effect on every new created browser in test.
  * For example as -D&lt;property&gt;=&lt;value&gt; in command-line
  * </p>
  * <p>

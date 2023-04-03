@@ -187,25 +187,16 @@ public class WebDriverRunner {
     return webdriverContainer.hasWebDriverStarted();
   }
 
-  public static void using(WebDriver driver, Runnable lambda) {
-    if (hasWebDriverStarted()) {
-      var previous = getWebDriver();
-      try {
-        lambda.run();
-      }
-      finally {
-        setWebDriver(previous);
-      }
-    }
-    else {
-      setWebDriver(driver);
-      try {
-        lambda.run();
-      }
-      finally {
-        webdriverContainer.resetWebDriver();
-      }
-    }
+  static void using(WebDriver driver, Runnable lambda) {
+    webdriverContainer.using(driver, null, null, lambda);
+  }
+
+  static void using(WebDriver driver, SelenideProxyServer proxy, Runnable lambda) {
+    webdriverContainer.using(driver, proxy, null, lambda);
+  }
+
+  static void inNewBrowser(Runnable lambda) {
+    webdriverContainer.inNewBrowser(lambda);
   }
 
   @CheckReturnValue

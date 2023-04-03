@@ -32,6 +32,9 @@ public class SelectOptionByValue implements Command<Void> {
 
   private void selectOptionByValue(WebElementSource selectField, List<String> values) {
     Map<String, String> error = selectOptionByValue.execute(selectField.driver(), selectField.getWebElement(), values);
+    if (error.containsKey("nonSelect")) {
+      throw new IllegalArgumentException("Cannot select option from a non-select element");
+    }
     if (error.containsKey("disabledSelect")) {
       throw new InvalidStateException(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
     }

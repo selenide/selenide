@@ -3,8 +3,8 @@
 <body>
 
 <input type="text" value="Hello World" id="text-to-copy">
-<button id="button-copy-text">Copy text</button>
-<button id="button-copy-text-slowly">Copy text slowly</button>
+<button id="button-copy-text" disabled>Copy text</button>
+<button id="button-copy-text-slowly" disabled>Copy text slowly</button>
 
 <div id="debug">Clipboard is empty...</div>
 
@@ -22,8 +22,12 @@
       setTimeout(copyTextToClipboard, 1000);
     }
 
-    document.getElementById('button-copy-text').addEventListener('click', copyTextToClipboard, false);
-    document.getElementById('button-copy-text-slowly').addEventListener('click', copyTextSlowly, false);
+    function initButton(webElement, clickHandler) {
+      webElement.addEventListener('click', clickHandler, false);
+      webElement.removeAttribute('disabled');
+    }
+    initButton(document.getElementById('button-copy-text'), copyTextToClipboard);
+    initButton(document.getElementById('button-copy-text-slowly'), copyTextSlowly);
   })();
 </script>
 

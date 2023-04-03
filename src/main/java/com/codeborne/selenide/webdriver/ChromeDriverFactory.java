@@ -56,7 +56,9 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
     ChromeOptions commonCapabilities = createCommonCapabilities(new ChromeOptions(), config, browser, proxy);
 
     ChromeOptions options = new ChromeOptions();
-    options.setHeadless(config.headless());
+    if (config.headless()) {
+      addHeadless(options);
+    }
     if (isNotEmpty(config.browserBinary())) {
       log.info("Using browser binary: {}", config.browserBinary());
       options.setBinary(config.browserBinary());
@@ -67,6 +69,10 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
     setMobileEmulation(options);
 
     return options.merge(commonCapabilities);
+  }
+
+  protected void addHeadless(ChromeOptions options) {
+    options.addArguments("--headless=new");
   }
 
   @CheckReturnValue

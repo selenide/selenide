@@ -20,6 +20,7 @@ import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
@@ -57,7 +58,7 @@ final class SelectsTest extends IntegrationTest {
 
     assertThatThrownBy(() -> $("select#empty-select").getSelectedOption().text())
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {selected option}");
+      .hasMessageStartingWith("Element not found {select#empty-select :selected}");
   }
 
   @Test
@@ -168,14 +169,13 @@ final class SelectsTest extends IntegrationTest {
 
   @Test
   void userCanSelectOptionByText() {
-    SelenideElement select = $(By.xpath("//select[@name='domain']"));
+    SelenideElement select = $("select[name=domain]");
     select.selectOption("@мыло.ру");
 
-    select.getSelectedOption().shouldBe(selected);
-    assertThat(select.getSelectedOptionValue())
-      .isEqualTo("мыло.ру");
-    assertThat(select.getSelectedOptionText())
-      .isEqualTo("@мыло.ру");
+    select.shouldBe(visible);
+    select.getSelectedOption().shouldBe(visible);
+    select.getSelectedOption().shouldHave(text("@мыло.ру"));
+    select.getSelectedOption().shouldHave(value("мыло.ру"));
   }
 
   @Test
@@ -381,6 +381,13 @@ final class SelectsTest extends IntegrationTest {
   }
 
   @Test
+  void selectOptionByText_nonSelect() {
+    assertThatThrownBy(() -> $("#greetings").selectOption("Lada"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Cannot select option from a non-select element");
+  }
+
+  @Test
   void selectOptionByIndex_disabledOption() {
     assertThatThrownBy(() -> $("#cars").selectOption(4))
       .isInstanceOf(InvalidStateException.class)
@@ -402,6 +409,13 @@ final class SelectsTest extends IntegrationTest {
   }
 
   @Test
+  void selectOptionByIndex_nonSelect() {
+    assertThatThrownBy(() -> $("#greetings").selectOption(1))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Cannot select option from a non-select element");
+  }
+
+  @Test
   void selectOptionContainingText_disabledOption() {
     assertThatThrownBy(() -> $("#cars").selectOptionContainingText("higul"))
       .isInstanceOf(InvalidStateException.class)
@@ -413,6 +427,13 @@ final class SelectsTest extends IntegrationTest {
     assertThatThrownBy(() -> $("#cars").selectOptionContainingText("higul", "ada"))
       .isInstanceOf(InvalidStateException.class)
       .hasMessageContaining("Invalid element state [#cars/option[text containing:higul,ada]]: Cannot select a disabled option");
+  }
+
+  @Test
+  public void selectOptionContainingText_nonSelect() {
+    assertThatThrownBy(() -> $("#greetings").selectOptionContainingText("Kelly Sildaru"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Cannot select option from a non-select element");
   }
 
   @Test
@@ -434,6 +455,13 @@ final class SelectsTest extends IntegrationTest {
     assertThatThrownBy(() -> $("#cars").selectOptionByValue("opel", "zhiguli", "audi", "lada"))
       .isInstanceOf(InvalidStateException.class)
       .hasMessageContaining("Invalid element state [#cars/option[value:zhiguli,lada]]: Cannot select a disabled option");
+  }
+
+  @Test
+  public void selectOptionByValue_nonSelect() {
+    assertThatThrownBy(() -> $("#greetings").selectOptionByValue("opel"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Cannot select option from a non-select element");
   }
 
   @Test
