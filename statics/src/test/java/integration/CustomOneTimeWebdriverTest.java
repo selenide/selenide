@@ -22,7 +22,7 @@ import static com.codeborne.selenide.Selenide.inNewBrowser;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
-import static com.codeborne.selenide.files.FileFilters.withName;
+import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class CustomOneTimeWebdriverTest extends IntegrationTest {
@@ -68,7 +68,7 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
 
     inNewBrowser(() -> {
       openFile("downloadMultipleFiles.html");
-      checkDownload(PROXY, "hello_world.txt");
+      checkDownload(PROXY, "hello_world.*\\.txt", "hello_world.txt");
     });
 
     File downloadedFile = $(byText("Download me")).download(using(PROXY).withFilter(withExtension("txt")));
@@ -77,18 +77,18 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
   }
 
   private void checkDownload(FileDownloadMode mode) {
-    checkDownload(mode, "download.html");
-    checkDownload(mode, "empty.html");
-    checkDownload(mode, "hello_world.txt");
+    checkDownload(mode, "download.*\\.html", "download.html");
+    checkDownload(mode, "empty.*\\.html", "empty.html");
+    checkDownload(mode, "hello_world.*\\.txt", "hello_world.txt");
   }
 
-  private void checkDownload(FileDownloadMode mode, String fileName) {
+  private void checkDownload(FileDownloadMode mode, String fileName, String referenceFile) {
     try {
       File text = $("#multiple-downloads").download(
-        using(mode).withFilter(withName(fileName))
+        using(mode).withFilter(withNameMatching(fileName))
       );
-      assertThat(text.getName()).isEqualTo(fileName);
-      assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
+      assertThat(text.getName()).matches(fileName);
+      assertThat(text.length()).isEqualTo(new FileContent(referenceFile).content().length());
     }
     catch (FileNotFoundException e) {
       throw new RuntimeException(e);

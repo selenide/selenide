@@ -208,6 +208,7 @@ public class DownloadFileToFolder {
     File uniqueFolder = downloader.prepareTargetFolder(config);
     File archivedFile = new File(uniqueFolder, downloadedFile.getName());
     moveFile(downloadedFile, archivedFile);
+    log.debug("Moved the downloaded file {} to {}", downloadedFile, archivedFile);
     return archivedFile;
   }
 
