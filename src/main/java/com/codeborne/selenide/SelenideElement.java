@@ -1277,6 +1277,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * </p>
    *
    * @see com.codeborne.selenide.commands.DoubleClick
+   * @since 6.13.0
    */
   @Nonnull
   @CanIgnoreReturnValue
