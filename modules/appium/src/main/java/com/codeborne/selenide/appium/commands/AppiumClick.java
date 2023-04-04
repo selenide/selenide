@@ -30,7 +30,7 @@ import static java.util.Collections.singletonList;
 public class AppiumClick extends Click {
 
   @Override
-  @Nullable
+  @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     if (!isMobile(locator.driver())) {
       return super.execute(proxy, locator, args);
