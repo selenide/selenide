@@ -4,29 +4,80 @@
   <title>Test::double-clickable-button</title>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <style>
+    #button-container {
+      width: 400px;
+    }
+    #double-clickable-button {
+      width: 200px;
+      height: 20px;
+    }
+    #double-clickable-area {
+      display: none;
+      position: relative;
+      width: 800px;
+      height: 400px;
+      left: 100px;
+      top: 50px;
+      border: 1px solid lightgreen;
+      text-align: center;
+    }
+    #double-clickable-area .marker {
+      position: absolute;
+      top: 66px;
+      left: 333px;
+      border: 1px solid darkgreen;
+    }
+  </style>
 </head>
 <body>
   <h1>Page with double-clickable button</h1>
+  <h2>Status: not clicked yet</h2>
+  <span id="coords"></span>
 
   <br/>
-  <div style="width: 400px">
+  <div id="button-container">
     <form>
       <input type="button" id="double-clickable-button" value="double click me" disabled>
     </form>
   </div>
-  <h2>not clicked yet</h2>
+
+  <div id="double-clickable-area">
+    <div>Double-click me if you can.</div>
+    <div>Area size: 800x400.</div>
+    <div class="marker">My coordinates are [333, 66]</div>
+  </div>
 
   <script>
     function onDbClickButton(event) {
-      var e = event || window.event;
-      document.querySelector('h2').innerText = 'Double click worked';
+      const e = event || window.event;
       e.target.value = 'do not click me anymore';
       e.target.disabled = true;
       e.stopImmediatePropagation();
+      document.querySelector('h2').innerText = 'Status: double-clicked the button';
+      document.querySelector('#coords').innerText = `(${event.offsetX}, ${event.offsetY})`;
     }
 
-    document.querySelector('#double-clickable-button').addEventListener('dblclick', onDbClickButton);
-    document.querySelector('#double-clickable-button').disabled = false;
+    const button = document.querySelector('#double-clickable-button');
+    button.addEventListener('dblclick', onDbClickButton);
+    button.disabled = false;
+  </script>
+
+  <script>
+    const area = document.querySelector('#double-clickable-area');
+
+    function onDbClickArea(event) {
+      const e = event || window.event;
+      e.stopImmediatePropagation();
+      const areaRect = area.getBoundingClientRect();
+      const x = Math.round(event.clientX - areaRect.left);
+      const y = Math.round(event.clientY - areaRect.top);
+      document.querySelector('h2').innerText = `Status: double-clicked the area at`;
+      document.querySelector('#coords').innerText = `(${x}, ${y})`;
+    }
+
+    area.addEventListener('dblclick', onDbClickArea);
+    area.style.display = 'block';
   </script>
 </body>
 </html>
