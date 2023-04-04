@@ -58,13 +58,16 @@ public class Downloads {
     if (files.isEmpty()) {
       return "[]";
     }
+    if (files.size() == 1) {
+      return files.get(0) + " (1 file at " + currentTimeMillis() + ")";
+    }
 
     StringBuilder sb = new StringBuilder();
     int i = 0;
     for (DownloadedFile file : files) {
-      sb.append("\n  #").append(++i).append("  ").append(file).append("\n");
+      sb.append("\n  #").append(++i).append("  ").append(file);
     }
-    sb.append('(').append(files.size()).append(" files at ").append(currentTimeMillis()).append(")\n");
+    sb.append("\n  (").append(files.size()).append(" files at ").append(currentTimeMillis()).append(")\n");
     return sb.toString();
   }
 
