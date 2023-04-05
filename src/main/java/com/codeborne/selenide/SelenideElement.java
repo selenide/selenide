@@ -1331,7 +1331,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement dragAndDropTo(WebElement target);
 
   /**
-   * Drag and drop this element to the target via JS script<p>
+   * Drag and drop this element to the target<p>
    *
    * Before dropping, waits until target element gets visible.
    *
