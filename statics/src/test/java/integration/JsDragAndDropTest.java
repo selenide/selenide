@@ -22,6 +22,12 @@ public class JsDragAndDropTest extends IntegrationTest {
     $("#div2").$("#drag1").shouldBe(Condition.appear);
   }
 
+  @Test
+  public void checkDragAndDropToWebElementByJS() {
+    $("#drag1").dragAndDropTo($("#div2"), usingJavaScript());
+    $("#div2").$("#drag1").shouldBe(Condition.appear);
+  }
+
   @AfterAll
   public static void tearDown() {
     closeWebDriver();
