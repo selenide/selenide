@@ -1,5 +1,8 @@
 == Changelog
 
+=== 2.7.1 (released 05.04.2023)
+* Bump selenide from 6.12.3 to 6.13.0  (PR #143 #150)
+
 === 2.7.0 (released 23.03.2023)
 * #76 added methods for scrolling in mobile apps  -- thanks to Amuthan Sakthivel for PR #139
 * #145 fixed terminateApp not working  --  thanks to Amuthan Sakthivel for PR #146
