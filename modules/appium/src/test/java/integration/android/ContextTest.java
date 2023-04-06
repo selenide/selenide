@@ -1,5 +1,6 @@
 package integration.android;
 
+import com.codeborne.selenide.Stopwatch;
 import io.appium.java_client.AppiumBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ class ContextTest extends BaseSwagLabsAndroidTest {
     openAndroidDeepLink("mydemoapprn://webview", "com.saucelabs.mydemoapp.rn");
     $(AppiumBy.accessibilityId("URL input field")).shouldBe(visible).setValue("www.google.com");
     $(AppiumBy.accessibilityId("Go To Site button")).shouldBe(visible).click();
+    Stopwatch.sleepAtLeast(4000);
     setContext("WEBVIEW_com.saucelabs.mydemoapp.rn");
 
     assertThat(getContextHandles())
