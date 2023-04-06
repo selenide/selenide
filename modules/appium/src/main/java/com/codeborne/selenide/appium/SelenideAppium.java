@@ -77,6 +77,10 @@ public class SelenideAppium {
     return new SelenideAppiumTargetLocator().getContextHandles();
   }
 
+  public static String getCurrentContext() {
+    return new SelenideAppiumTargetLocator().getCurrentContext();
+  }
+
   @CheckReturnValue
   @Nonnull
   public static SelenideAppiumElement $x(String xpathExpression) {

@@ -22,5 +22,9 @@ public class SelenideAppiumTargetLocator {
       .orElseThrow(() -> new UnsupportedOperationException("Cannot get contexts from mobile driver"));
   }
 
-
+  public String getCurrentContext() {
+    return (WebdriverUnwrapper.cast(WebDriverRunner.getWebDriver(), ContextAware.class))
+      .map(ContextAware::getContext)
+      .orElseThrow(() -> new UnsupportedOperationException("Cannot get contexts from mobile driver"));
+  }
 }
