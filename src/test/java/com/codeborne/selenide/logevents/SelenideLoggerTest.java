@@ -7,19 +7,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.ArgumentCaptor;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 final class SelenideLoggerTest {
   @RegisterExtension
-  private static final UseLocaleExtension useLocale = new UseLocaleExtension("en");
+  public static final UseLocaleExtension useLocale = new UseLocaleExtension("en");
   private static final Object[] NO_ARGS = null;
 
   @BeforeEach
@@ -92,6 +91,88 @@ final class SelenideLoggerTest {
 
     verifyEvent(listener1, "open", "https://any.url", FAIL);
     verifyNoMoreInteractions(listener1);
+  }
+
+  @Test
+  void runExecutesRunnableAndCommitsEvent() {
+    LogEventListener listener = mock();
+    var executed = new AtomicBoolean();
+
+    SelenideLogger.addListener("simpleReport", listener);
+
+    SelenideLogger.run("some-source", "some-subject", () -> executed.set(true));
+
+    assertThat(executed.get()).isTrue();
+
+    verifyEvent(listener, "some-source", "some-subject", PASS);
+  }
+
+  @Test
+  void runCommitsFailureAndRethrowsInCaseOfException() {
+    LogEventListener listener = mock();
+    var exception = new RuntimeException();
+
+    SelenideLogger.addListener("simpleReport", listener);
+
+    assertThatThrownBy(() -> SelenideLogger.run("some-source", "some-subject", () -> {
+      throw exception;
+    })).isSameAs(exception);
+
+    verifyEvent(listener, "some-source", "some-subject", FAIL);
+  }
+
+  @Test
+  void getExecutesSupplierAndCommitsEvent() {
+    LogEventListener listener = mock();
+
+    SelenideLogger.addListener("simpleReport", listener);
+
+    var executed = SelenideLogger.get("some-source", "some-subject", () -> true);
+
+    assertThat(executed).isTrue();
+
+    verifyEvent(listener, "some-source", "some-subject", PASS);
+  }
+
+  @Test
+  void getCommitsFailureAndRethrowsInCaseOfException() {
+    LogEventListener listener = mock();
+    var exception = new RuntimeException();
+
+    SelenideLogger.addListener("simpleReport", listener);
+
+    assertThatThrownBy(() -> SelenideLogger.get("some-source", "some-subject", () -> {
+      throw exception;
+    })).isSameAs(exception);
+
+    verifyEvent(listener, "some-source", "some-subject", FAIL);
+  }
+
+  @Test
+  void stepExecutesSupplierAndCommitsEventWithEmptySubject() {
+    LogEventListener listener = mock();
+
+    SelenideLogger.addListener("simpleReport", listener);
+
+    var executed = SelenideLogger.step("some-source", () -> true);
+
+    assertThat(executed).isTrue();
+
+    verifyEvent(listener, "some-source", "", PASS);
+  }
+
+  @Test
+  void stepCommitsFailureWithEmptySubjectAndRethrowsInCaseOfException() {
+    LogEventListener listener = mock();
+    var exception = new RuntimeException();
+
+    SelenideLogger.addListener("simpleReport", listener);
+
+    assertThatThrownBy(() -> SelenideLogger.step("some-source", () -> {
+      throw exception;
+    })).isSameAs(exception);
+
+    verifyEvent(listener, "some-source", "", FAIL);
   }
 
   private void verifyEvent(LogEventListener listener, String element, String subject, LogEvent.EventStatus status) {

@@ -1,6 +1,7 @@
 package com.codeborne.selenide.logevents;
 
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,19 +101,25 @@ public class SelenideLogger {
   }
 
   public static void run(String source, String subject, Runnable runnable) {
-    SelenideLog log = SelenideLogger.beginStep(source, subject);
-    try {
+    wrap(source, subject, () -> {
       runnable.run();
-      SelenideLogger.commitStep(log, PASS);
-    }
-    catch (RuntimeException | Error e) {
-      SelenideLogger.commitStep(log, e);
-      throw e;
-    }
+
+      return null;
+    });
   }
 
   @CheckReturnValue
   public static <T> T get(String source, String subject, Supplier<T> supplier) {
+    return wrap(source, subject, supplier);
+  }
+
+  @CanIgnoreReturnValue
+  public static <T> T step(String source, Supplier<T> supplier) {
+    return wrap(source, "", supplier);
+  }
+
+  @CanIgnoreReturnValue
+  private static <T> T wrap(String source, String subject, Supplier<T> supplier) {
     SelenideLog log = SelenideLogger.beginStep(source, subject);
     try {
       T result = supplier.get();
