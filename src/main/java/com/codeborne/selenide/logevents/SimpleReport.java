@@ -108,22 +108,13 @@ public class SimpleReport {
     @CheckReturnValue
     @Nonnull
     private String line(int count) {
-      StringBuilder sb = new StringBuilder(count);
-      for (int i = 0; i < count; i++) {
-        sb.append('-');
-      }
-      return sb.toString();
+      return new String(new char[count]).replace("\0", "-");
     }
 
     @CheckReturnValue
     @Nonnull
     private String indent(int count) {
-      if (count == 0) return "";
-      StringBuilder sb = new StringBuilder(count);
-      for (int i = 0; i < count; i++) {
-        sb.append(INDENT);
-      }
-      return sb.toString();
+      return new String(new char[count]).replace("\0", INDENT);
     }
 
     public void appendHeader() {
