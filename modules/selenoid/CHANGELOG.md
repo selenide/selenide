@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.3.6 (released 22.03.2023)
+* bump Selenide from 6.11.1 to 6.12.4
+* bump slf4j from 2.0.6 to 2.0.7
+
+## 2.3.5 (released 23.01.2023)
+* declare Selenide dependency with `api` scope
+* upgrade to Selenide 6.11.1
+* update dependencies
+
+## 2.3.4 (released 03.01.2023)
+* upgrade to Selenide 6.11.0
+
+## 2.3.3 (released 08.12.2022)
+* upgrade to Selenide 6.10.2
+
+## 2.3.2
+* upgrade to Selenide 6.10.0
+
+## 2.3.1
+* upgrade to Selenide 6.9.0
+
+## 2.3.0 (released 27.09.2022)
+* upgrade to Selenide 6.8.0
+
+## 2.2.4 (released 14.08.2022)
+* upgrade to Selenide 6.7.2
+* #20 fix reading multiline clipboard content
+
 ## 2.2.3 (released 20.05.2022)
 * upgrade to Selenide 6.5.0
 

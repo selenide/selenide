@@ -1,17 +1,16 @@
 buildscript {
   ext.versions = [
-      selenide: '6.4.0',
-      junit: '5.8.2',
-      assertj: '3.22.0',
-      slf4j: '1.7.36'
+      selenide: '6.13.0',
+      junit: '5.9.2',
+      assertj: '3.24.2',
+      slf4j: '2.0.7'
   ]
 }
 
 dependencies {
   api("com.codeborne:selenide:${versions.selenide}")
-  implementation('org.apache.httpcomponents.client5:httpclient5:5.1.3') {
-    exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
-  }
+  testRuntimeOnly("com.codeborne:selenide-proxy:${versions.selenide}")
+  implementation('org.apache.httpcomponents.client5:httpclient5:5.2.1')
   implementation("commons-io:commons-io:2.11.0")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:${versions.junit}")
   testImplementation("org.assertj:assertj-core:${versions.assertj}")

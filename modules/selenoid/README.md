@@ -5,7 +5,7 @@ A [Selenide](https://selenide.org) extension for working with Selenoid
 
 ## Why it's needed?
 
-Most of Selenide features work with Selenoid out of the box.  
+Most Selenide features work with Selenoid out of the box.  
 There are only a few things that might not work: proxy and downloading files. 
 1. Selenide proxy generally works with Selenoid, except one case: when tests and Selenoid are run on different machines, 
 and "test machine" is not accessible from "selenoid machine". 
@@ -16,7 +16,7 @@ and "test machine" is not accessible from "selenoid machine".
 This problem is addressed by `selenide-selenoid` plugin: _it can get files from Selenoid container_. 
 
 ## Features
-Currently the plugin supports the following features:
+Currently, the plugin supports the following features:
 * File download 
 * Access to clipboard  (get & set & verify clipboard contents)
 * BasicAuth
@@ -24,7 +24,7 @@ Currently the plugin supports the following features:
 We are going to implement more features like reading logs and videos etc.
 
 ## Usage
-1. Import `org.selenide:selenide-selenoid:2.2.3`
+1. Import `org.selenide:selenide-selenoid:2.3.6`
 2. Set `Configuration.fileDownload = FOLDER;`
 3. Use method `$.download()` as usually.
 
@@ -42,7 +42,7 @@ This is a sample project using `selenide-selenoid` plugin:
 ## Feedback
 _Feel free to share your feedback!_
 
-Register [github issues](https://github.com/selenide/selenide-selenoid/issues), write to 
+Register [GitHub issues](https://github.com/selenide/selenide-selenoid/issues), write to 
 [![chat](https://img.shields.io/badge/chat-green.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
  or
 [![чат](https://img.shields.io/badge/%D1%87%D0%B0%D1%82-green.svg)](https://gitter.im/codeborne/selenide-ru?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge).
