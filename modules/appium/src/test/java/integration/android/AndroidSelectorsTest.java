@@ -20,6 +20,7 @@ import static com.codeborne.selenide.appium.SelenideAppium.back;
 import com.codeborne.selenide.appium.SelenideAppium;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 
 class AndroidSelectorsTest extends BaseApiDemosTest {
 
@@ -56,7 +57,7 @@ class AndroidSelectorsTest extends BaseApiDemosTest {
     back();
     $(withTagAndText("android.widget.TextView", GRAPHICS_PARTIAL_STRING)).click();
     back();
-    $(withText(GRAPHICS_PARTIAL_STRING))
+    SelenideAppium.$(withText(GRAPHICS_PARTIAL_STRING), By.xpath(""))
       .shouldHave(text("Graphics"));
   }
 }
