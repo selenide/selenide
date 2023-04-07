@@ -19,9 +19,34 @@ jobs:
           cache: 'gradle'
           java-version: '11'
       - name: Build
-        run: ./gradlew clean build -x test
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: clean build -x test
       - name: Run tests
-        run: ./gradlew check --info
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check --info
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: test-report
+          path: build/reports/
+  run-integrationTest-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          cache: 'gradle'
+          java-version: '11'
+      - name: Start selenoid
+        uses: Xotabu4/selenoid-github-action@v2
+      - name: Run integration tests
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: integrationTest --info --rerun-tasks
       - uses: actions/upload-artifact@v3
         if: failure()
         with:

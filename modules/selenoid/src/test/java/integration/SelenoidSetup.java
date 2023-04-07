@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.FileDownloadMode;
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -23,10 +24,13 @@ public class SelenoidSetup implements BeforeEachCallback, AfterEachCallback  {
   @Override
   public void beforeEach(final ExtensionContext context) {
     closeWebDriver();
+    Configuration.baseUrl = "https://selenide.org/test-page";
     Configuration.browserCapabilities = capabilities();
     Configuration.browser = "chrome";
     Configuration.remote = selenoidUrl();
     Configuration.headless = false;
+    Configuration.fileDownload = FileDownloadMode.HTTPGET;
+    Configuration.proxyEnabled = false;
   }
 
   static String selenoidUrl() {
@@ -47,7 +51,6 @@ public class SelenoidSetup implements BeforeEachCallback, AfterEachCallback  {
   static DesiredCapabilities capabilities() {
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setBrowserName("chrome");
-    capabilities.setVersion("100.0");
     capabilities.setCapability("selenoid:options", ImmutableMap.of(
       "enableVNC", true,
       "enableVideo", true
@@ -56,9 +59,9 @@ public class SelenoidSetup implements BeforeEachCallback, AfterEachCallback  {
   }
 
   static void checkDownload() throws IOException {
-    open("https://the-internet.herokuapp.com/download");
-    File file = $(byText("some-file.txt")).download(withExtension("txt"));
-    assertThat(file).hasName("some-file.txt");
-    assertThat(readFileToString(file, UTF_8)).startsWith("{\\rtf");
+    open("/download.html");
+    File file = $(byText("hello-world.txt")).download(withExtension("txt"));
+    assertThat(file).hasName("hello-world.txt");
+    assertThat(readFileToString(file, UTF_8)).isEqualTo("Hello, world!");
   }
 }

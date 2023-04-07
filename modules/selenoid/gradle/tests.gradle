@@ -15,3 +15,8 @@ tasks.withType(Test).configureEach {
     false
   }
 }
+
+task integrationTest(type: Test) {
+  include 'integration/**/*'
+  exclude 'org.selenide.selenoid/**/*'
+}

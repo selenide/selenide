@@ -15,6 +15,7 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-engine:${versions.junit}")
   testImplementation("org.assertj:assertj-core:${versions.assertj}")
   testRuntimeOnly("org.slf4j:slf4j-simple:${versions.slf4j}")
+  testRuntimeOnly("com.codeborne:selenide-proxy:${versions.selenide}")
 }
 
 repositories {
