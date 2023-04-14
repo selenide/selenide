@@ -554,6 +554,34 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return new SelenideElementListIterator(new CollectionSnapshot(collection), index);
   }
 
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  @Deprecated
+  public ListIterator<SelenideElement> listIterator() {
+    return listIterator(0);
+  }
+
+  @Override
+  @Deprecated
+  protected void removeRange(int fromIndex, int toIndex) {
+    throw new UnsupportedOperationException("You cannot remove elements from web page");
+  }
+
+  @Override
+  @Deprecated
+  public void clear() {
+    throw new UnsupportedOperationException("You cannot remove elements from web page");
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  @Deprecated
+  public List<SelenideElement> subList(int fromIndex, int toIndex) {
+    return super.subList(fromIndex, toIndex);
+  }
+
   /**
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * @deprecated use method {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
