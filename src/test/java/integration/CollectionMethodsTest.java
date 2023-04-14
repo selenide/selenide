@@ -192,6 +192,12 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
+  void canCheckCollectionAttributes() {
+    $$("#domain option").shouldHave(attributes("data-mailServerId",
+      "111", "222A", "33333B", "111АБВГД"));
+  }
+
+  @Test
   void canCheckThatElementsHaveExactlyCorrectAttributes() {
     withLongTimeout(() -> {
       assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(attributes("id", "content", "content2")))
