@@ -5,10 +5,11 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.regex.Pattern;
 
 class BrowserResizer {
-  private static final Pattern DIMENSION_REGEX = Pattern.compile("\\d+x\\d+");
+  private static final Pattern DIMENSION_REGEX = Pattern.compile("-?\\d+x-?\\d+");
   private static final Logger log = LoggerFactory.getLogger(BrowserResizer.class);
 
   void adjustBrowserPosition(Config config, WebDriver driver) {
