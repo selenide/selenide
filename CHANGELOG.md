@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.13.1 (released 21.04.2023)
+* #2257 bump Selenium from 4.8.3 to 4.9.0  --  see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* mark $$.subList() as deprecated (see #2239)
+
 ## 6.13.0 (released 04.04.2023)
 see https://github.com/selenide/selenide/milestone/177?closed=1
 * #2171 #1927 added method $.cached()  --  see PR #2189
