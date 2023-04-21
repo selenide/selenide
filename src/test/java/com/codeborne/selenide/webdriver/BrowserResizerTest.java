@@ -68,6 +68,9 @@ final class BrowserResizerTest {
   private static Stream<Arguments> provideSize() {
     return Stream.of(
       Arguments.of("1920x1080", true),
+      Arguments.of("-200x100", true),
+      Arguments.of("200x-100", true),
+      Arguments.of("-200x-100", true),
       Arguments.of("0x0", true),
       Arguments.of("123X123", false),
       Arguments.of("123х123", false),
