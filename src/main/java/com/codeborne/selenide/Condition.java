@@ -336,8 +336,8 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition partialText(String regex) {
-    return new PartialText(regex);
+  public static Condition partialText(String expectedText) {
+    return new PartialText(expectedText);
   }
 
   /**
@@ -349,8 +349,8 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition partialTextCaseSensitive(String regex) {
-    return new PartialTextCaseSensitive(regex);
+  public static Condition partialTextCaseSensitive(String expectedText) {
+    return new PartialTextCaseSensitive(expectedText);
   }
 
   /**
