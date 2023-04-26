@@ -118,6 +118,14 @@ public class SelenideLogger {
     return wrap(source, "", supplier);
   }
 
+  public static void step(String source, Runnable runnable) {
+    wrap(source, "", () -> {
+      runnable.run();
+
+      return null;
+    });
+  }
+
   @CanIgnoreReturnValue
   private static <T> T wrap(String source, String subject, Supplier<T> supplier) {
     SelenideLog log = SelenideLogger.beginStep(source, subject);

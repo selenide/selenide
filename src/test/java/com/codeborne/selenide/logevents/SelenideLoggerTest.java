@@ -175,6 +175,34 @@ final class SelenideLoggerTest {
     verifyEvent(listener, "some-source", "", FAIL);
   }
 
+  @Test
+  void stepExecutesRunnableAndCommitsEvent() {
+    LogEventListener listener = mock();
+    var executed = new AtomicBoolean();
+
+    SelenideLogger.addListener("simpleReport", listener);
+
+    SelenideLogger.step("some-source", () -> executed.set(true));
+
+    assertThat(executed.get()).isTrue();
+
+    verifyEvent(listener, "some-source", "some-subject", PASS);
+  }
+
+  @Test
+  void stepCommitsFailureAndRethrowsInCaseOfException() {
+    LogEventListener listener = mock();
+    var exception = new RuntimeException();
+
+    SelenideLogger.addListener("simpleReport", listener);
+
+    assertThatThrownBy(() -> SelenideLogger.step("some-source", (Runnable) () -> {
+      throw exception;
+    })).isSameAs(exception);
+
+    verifyEvent(listener, "some-source", "some-subject", FAIL);
+  }
+
   private void verifyEvent(LogEventListener listener, String element, String subject, LogEvent.EventStatus status) {
     ArgumentCaptor<LogEvent> event = ArgumentCaptor.forClass(LogEvent.class);
     verify(listener).beforeEvent(event.capture());
