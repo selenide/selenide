@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.System.lineSeparator;
+import static java.util.Comparator.comparingLong;
 
 /**
  * A simple text report of Selenide actions performed during test run.
@@ -43,7 +44,11 @@ public class SimpleReport {
       return;
     }
 
-    String report = generateReport(title, logEventListener.events());
+    List<LogEvent> events = new ArrayList<>(logEventListener.events());
+
+    events.sort(comparingLong(LogEvent::getStartTime));
+
+    String report = generateReport(title, events);
     log.info(report);
   }
 
