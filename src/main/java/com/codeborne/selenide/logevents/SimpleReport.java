@@ -113,13 +113,19 @@ public class SimpleReport {
     @CheckReturnValue
     @Nonnull
     private String line(int count) {
-      return new String(new char[count]).replace("\0", "-");
+      return repeat("-", count);
     }
 
     @CheckReturnValue
     @Nonnull
     private String indent(int count) {
-      return new String(new char[count]).replace("\0", INDENT);
+      return repeat(INDENT, count);
+    }
+
+    @CheckReturnValue
+    @Nonnull
+    private String repeat(String value, int count) {
+      return new String(new char[count]).replace("\0", value);
     }
 
     public void appendHeader() {
