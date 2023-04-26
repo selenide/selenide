@@ -1,6 +1,6 @@
 ext {
   seleniumVersion = '4.9.0'
-  junitVersion = '5.9.2'
+  junitVersion = '5.9.3'
   jettyVersion = '9.4.51.v20230217'
   nettyVersion = '4.1.91.Final'
   assertjVersion = '3.24.2'
