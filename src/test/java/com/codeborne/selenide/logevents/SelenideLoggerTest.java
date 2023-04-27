@@ -186,7 +186,7 @@ final class SelenideLoggerTest {
 
     assertThat(executed.get()).isTrue();
 
-    verifyEvent(listener, "some-source", "some-subject", PASS);
+    verifyEvent(listener, "some-source", "", PASS);
   }
 
   @Test
@@ -200,7 +200,7 @@ final class SelenideLoggerTest {
       throw exception;
     })).isSameAs(exception);
 
-    verifyEvent(listener, "some-source", "some-subject", FAIL);
+    verifyEvent(listener, "some-source", "", FAIL);
   }
 
   private void verifyEvent(LogEventListener listener, String element, String subject, LogEvent.EventStatus status) {
