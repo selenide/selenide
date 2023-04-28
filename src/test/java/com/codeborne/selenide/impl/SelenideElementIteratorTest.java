@@ -35,7 +35,7 @@ final class SelenideElementIteratorTest {
     SelenideElement nextElement = selenideElementIterator.next();
 
     assertThat(nextElement).isNotNull();
-    assertThat(nextElement).hasToString("<a>click me if you can</a>");
+    assertThat(nextElement).hasToString("collection with 1 element[0]");
     assertThat(selenideElementIterator.hasNext()).isFalse();
   }
 

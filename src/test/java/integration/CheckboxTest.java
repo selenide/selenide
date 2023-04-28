@@ -26,8 +26,7 @@ final class CheckboxTest extends ITest {
 
     $(By.name("rememberMe")).shouldBe(selected);
     $(By.name("rememberMe")).shouldBe(checked);
-    assertThat($(By.name("rememberMe")))
-      .hasToString("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\" selected:true></input>");
+    assertThat($(By.name("rememberMe"))).hasToString("{By.name: rememberMe}");
   }
 
   @Test

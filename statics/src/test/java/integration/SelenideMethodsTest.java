@@ -47,6 +47,7 @@ import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.actions;
 import static com.codeborne.selenide.Selenide.element;
 import static com.codeborne.selenide.Selenide.elements;
@@ -563,5 +564,17 @@ final class SelenideMethodsTest extends IntegrationTest {
       "var callback = arguments[arguments.length - 1]; setTimeout(function() { callback(10); }, 50);"
     );
     assertThat(value).isEqualTo(10);
+  }
+
+  @Test
+  void toStringShowsLocator() {
+    assertThat($("#theHiddenElement").toString())
+      .isEqualTo("{#theHiddenElement}");
+
+    assertThat($("#theHiddenElement").find(By.xpath(".//div[2]")).toString())
+      .isEqualTo("{#theHiddenElement/By.xpath: .//div[2]}");
+
+    assertThat($$("div").findBy(id("theHiddenElement")).toString())
+      .isEqualTo("div.findBy(attribute id=\"theHiddenElement\")");
   }
 }

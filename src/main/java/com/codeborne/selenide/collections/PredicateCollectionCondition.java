@@ -4,6 +4,7 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.impl.CollectionSource;
+import com.codeborne.selenide.impl.ElementDescriber;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nullable;
@@ -11,10 +12,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.codeborne.selenide.ElementsCollection.elementsToString;
+import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
 public abstract class PredicateCollectionCondition extends CollectionCondition {
+  private static final ElementDescriber describe = inject(ElementDescriber.class);
+
   protected final String matcher;
   protected final String description;
   protected final Predicate<WebElement> predicate;
@@ -36,7 +39,7 @@ public abstract class PredicateCollectionCondition extends CollectionCondition {
       String expected = String.format("%s of elements to match [%s] predicate", matcher, description);
       throw new MatcherError(explanation,
         expected,
-        elementsToString(collection.driver(), elements),
+        describe.fully(collection.driver(), elements),
         collection, lastError, timeoutMs);
     }
   }

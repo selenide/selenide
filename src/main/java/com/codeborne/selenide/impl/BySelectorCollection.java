@@ -56,6 +56,12 @@ public class BySelectorCollection implements CollectionSource {
   }
 
   @Override
+  public String toString() {
+    return parent == null ? '[' + describe.selector(selector) + ']' :
+      parent + "/" + '[' + describe.selector(selector) + ']';
+  }
+
+  @Override
   @CheckReturnValue
   @Nonnull
   public Driver driver() {
