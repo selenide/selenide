@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static com.codeborne.selenide.ElementsCollection.elementsToString;
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static java.lang.System.lineSeparator;
@@ -22,16 +21,13 @@ final class MatcherErrorTest {
   void message() {
     MatcherError error = new MatcherError(null,
       "all of elements to match [class=active] predicate",
-      elementsToString(mockCollection(".rows").driver(), actualElements),
+      "<actual-elements>",
       mockCollection(".rows"), ex, 4000);
     assertThat(error.getMessage()).isEqualTo(
       "Collection matcher error" + lineSeparator() +
         "Expected: all of elements to match [class=active] predicate" + lineSeparator() +
         "Collection: .rows" + lineSeparator() +
-        "Elements: [" + lineSeparator() +
-        "\t<div displayed:false>mr. %First</div>," + lineSeparator() +
-        "\t<div displayed:false>mr. %Second</div>" + lineSeparator() +
-        "]" + lineSeparator() +
+        "Elements: <actual-elements>" + lineSeparator() +
         "Timeout: 4 s." + lineSeparator() +
         "Caused by: NoSuchElementException: .third");
   }
@@ -40,15 +36,12 @@ final class MatcherErrorTest {
   void message_withExplanation() {
     assertThat(new MatcherError("I think so",
       "some of elements to match [class=active] predicate",
-      elementsToString(mockCollection(".rows").driver(), actualElements), mockCollection(".rows"), ex, 4000).getMessage()).isEqualTo(
+      "<actual-elements>", mockCollection(".rows"), ex, 4000).getMessage()).isEqualTo(
       "Collection matcher error" + lineSeparator() +
         "Expected: some of elements to match [class=active] predicate" + lineSeparator() +
         "Because: I think so" + lineSeparator() +
         "Collection: .rows" + lineSeparator() +
-        "Elements: [" + lineSeparator() +
-        "\t<div displayed:false>mr. %First</div>," + lineSeparator() +
-        "\t<div displayed:false>mr. %Second</div>" + lineSeparator() +
-        "]" + lineSeparator() +
+        "Elements: <actual-elements>" + lineSeparator() +
         "Timeout: 4 s." + lineSeparator() +
         "Caused by: NoSuchElementException: .third");
   }

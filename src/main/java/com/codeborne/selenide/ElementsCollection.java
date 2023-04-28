@@ -8,7 +8,6 @@ import com.codeborne.selenide.impl.CollectionElement;
 import com.codeborne.selenide.impl.CollectionElementByCondition;
 import com.codeborne.selenide.impl.CollectionSnapshot;
 import com.codeborne.selenide.impl.CollectionSource;
-import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.FilteringCollection;
 import com.codeborne.selenide.impl.HeadOfCollection;
 import com.codeborne.selenide.impl.LastCollectionElement;
@@ -39,16 +38,13 @@ import java.util.stream.StreamSupport;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
-import static java.lang.System.lineSeparator;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
 public class ElementsCollection extends AbstractList<SelenideElement> {
-  private static final ElementDescriber describe = inject(ElementDescriber.class);
   private final CollectionSource collection;
 
   public ElementsCollection(CollectionSource collection) {
@@ -360,36 +356,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Outputs string presentation of the element's collection
-   *
-   * @param elements elements of string
-   * @return e.g. {@code "[<h1>foo</h1>, <h2>bar</h2>]"}
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static String elementsToString(Driver driver, @Nullable Collection<WebElement> elements) {
-    if (elements == null) {
-      return "[not loaded yet...]";
-    }
-
-    if (elements.isEmpty()) {
-      return "[]";
-    }
-
-    StringBuilder sb = new StringBuilder(256);
-    sb.append("[").append(lineSeparator()).append("\t");
-    for (WebElement element : elements) {
-      if (sb.length() > 4) {
-        sb.append(",").append(lineSeparator()).append("\t");
-      }
-      sb.append(describe.fully(driver, element));
-    }
-    sb.append(lineSeparator()).append("]");
-    return sb.toString();
-  }
-
-  /**
    * Gets the n-th element of collection (lazy evaluation)
    *
    * @param index 0..N
@@ -664,12 +630,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @Override
   @CheckReturnValue
   public String toString() {
-    try {
-      return String.format("%s %s", collection.shortDescription(), elementsToString(driver(), getElements()));
-    }
-    catch (RuntimeException e) {
-      return String.format("%s [%s]", collection.description(), Cleanup.of.webdriverExceptionMessage(e));
-    }
+    return collection.getAlias().getOrElse(collection::toString);
   }
 
   @CheckReturnValue

@@ -559,17 +559,33 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldNotBe(Condition condition, Duration timeout);
 
   /**
-   * Displays WebElement in human-readable format.
+   * Short description of WebElement, usually a selector.
    * Useful for logging and debugging.
    * Not recommended to use for test verifications.
    *
-   * @return e.g. <strong id=orderConfirmedStatus class=>Order has been confirmed</strong>
+   * @return e.g. call to {@code $("#loginButton").toString()} returns {@code "{#loginButton}"}
    * @see com.codeborne.selenide.commands.ToString
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
   @CheckReturnValue
   @Nonnull
   String toString();
+
+  /**
+   * Displays WebElement in human-readable format.
+   * Useful for logging and debugging.
+   * Not recommended to use for test verifications.
+   * May work relatively slowly because it fetches actual element information from browser.
+   *
+   * @since 6.14.0
+   * @return e.g. <strong id=orderConfirmedStatus class=>Order has been confirmed</strong>
+   * @see com.codeborne.selenide.commands.DescribeElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  String describe();
 
   /**
    * Give this element a human-readable name

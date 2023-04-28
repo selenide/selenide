@@ -52,6 +52,11 @@ public class TailOfCollection implements CollectionSource {
   }
 
   @Override
+  public String toString() {
+    return originalCollection + ":last(" + size + ')';
+  }
+
+  @Override
   @CheckReturnValue
   @Nonnull
   public Driver driver() {

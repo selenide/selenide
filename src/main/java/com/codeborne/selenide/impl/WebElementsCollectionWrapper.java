@@ -45,6 +45,11 @@ public class WebElementsCollectionWrapper implements CollectionSource {
   }
 
   @Override
+  public String toString() {
+    return getSearchCriteria();
+  }
+
+  @Override
   @CheckReturnValue
   @Nonnull
   public String description() {

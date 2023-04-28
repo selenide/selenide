@@ -45,6 +45,7 @@ public class Commands {
     add("as", new As());
     add("getAlias", new GetAlias());
     add("toString", new ToString());
+    add("describe", new DescribeElement());
     add("toWebElement", new ToWebElement());
     add("getWrappedElement", new GetWrappedElement());
     add("cached", new CacheSelenideElement());
