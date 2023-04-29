@@ -54,7 +54,6 @@ class EdgeDriverFactoryTest {
       "--remote-allow-origins=*",
       "--proxy-bypass-list=<-loopback>",
       "--disable-dev-shm-usage",
-      "--no-sandbox",
       "--window-size=1366,768"
     );
 
