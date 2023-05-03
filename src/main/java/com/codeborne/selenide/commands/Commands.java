@@ -56,6 +56,7 @@ public class Commands {
 
   private void addActionsCommands() {
     add("dragAndDropTo", new DragAndDropTo());
+    add("dragAndDrop", new DragAndDropTo());
     add("hover", new Hover());
     add("scrollTo", new ScrollTo());
     add("scrollIntoView", new ScrollIntoView());

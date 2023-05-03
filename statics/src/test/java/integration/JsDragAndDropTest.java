@@ -19,13 +19,13 @@ public class JsDragAndDropTest extends IntegrationTest {
 
   @Test
   public void checkDragAndDropByJS() {
-    $("#drag1").dragAndDropTo(to("#div2").usingJS());
+    $("#drag1").dragAndDrop(to("#div2").usingJS());
     $("#div2").$("#drag1").shouldBe(Condition.appear);
   }
 
   @Test
   public void checkDragAndDropToWebElementByJS() {
-    $("#drag1").dragAndDropTo(to($("#div2")).usingJS());
+    $("#drag1").dragAndDrop(to($("#div2")).usingJS());
     $("#div2").$("#drag1").shouldBe(Condition.appear);
   }
 

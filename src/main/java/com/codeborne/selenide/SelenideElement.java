@@ -1312,7 +1312,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param targetCssSelector CSS selector defining target element
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDropTo
-   * @deprecated Use {@link SelenideElement#dragAndDropTo(DragAndDropOptions)} instead
+   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -1327,7 +1327,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param target target element
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDropTo
-   * @deprecated Use {@link SelenideElement#dragAndDropTo(DragAndDropOptions)} instead
+   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -1344,7 +1344,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDropTo
-   * @deprecated Use {@link SelenideElement#dragAndDropTo(DragAndDropOptions)} instead
+   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -1386,7 +1386,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement dragAndDropTo(DragAndDropOptions options);
+  SelenideElement dragAndDrop(DragAndDropOptions options);
 
   /**
    * Execute custom implemented command (this command will not receive
