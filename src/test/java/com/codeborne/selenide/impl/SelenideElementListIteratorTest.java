@@ -25,17 +25,13 @@ final class SelenideElementListIteratorTest {
 
   @Test
   void previous() {
-    WebElement mockedWebElement = mock();
-    when(mockedWebElement.isDisplayed()).thenReturn(true);
-    when(mockedWebElement.getTagName()).thenReturn("a");
-    when(mockedWebElement.getText()).thenReturn("selenide");
-
+    WebElement mockedWebElement = mockWebElement("a", "hello");
     when(collection.getElements()).thenReturn(singletonList(mockedWebElement));
 
     SelenideElementListIterator it = new SelenideElementListIterator(collection, 1);
     SelenideElement previous = it.previous();
     assertThat(previous).isNotNull();
-    assertThat(previous).hasToString("<a>click me if you can</a>");
+    assertThat(previous).hasToString("Collection description[0]");
   }
 
   @Test

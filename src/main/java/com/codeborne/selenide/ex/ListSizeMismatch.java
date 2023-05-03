@@ -1,6 +1,7 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.impl.CollectionSource;
+import com.codeborne.selenide.impl.ElementDescriber;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -9,11 +10,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.List;
 
-import static com.codeborne.selenide.ElementsCollection.elementsToString;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.lang.System.lineSeparator;
 
 @ParametersAreNonnullByDefault
 public class ListSizeMismatch extends UIAssertionError {
+  private static final ElementDescriber describe = inject(ElementDescriber.class);
+
   public ListSizeMismatch(String operator, int expectedSize,
                           @Nullable String explanation,
                           CollectionSource collection,
@@ -26,7 +29,7 @@ public class ListSizeMismatch extends UIAssertionError {
         (explanation == null ? "" : " (because " + explanation + ")") +
         ", actual: " + sizeOf(actualElements) +
         ", collection: " + collection.description() +
-        lineSeparator() + "Elements: " + elementsToString(collection.driver(), actualElements),
+        lineSeparator() + "Elements: " + describe.fully(collection.driver(), actualElements),
       expectedSize,
       sizeOf(actualElements),
       lastError,

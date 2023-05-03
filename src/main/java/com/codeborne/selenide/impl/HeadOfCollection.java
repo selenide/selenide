@@ -53,6 +53,11 @@ public class HeadOfCollection implements CollectionSource {
     return originalCollection.description() + ":first(" + size + ')';
   }
 
+  @Override
+  public String toString() {
+    return originalCollection + ":first(" + size + ')';
+  }
+
   @Nonnull
   @Override
   public Alias getAlias() {

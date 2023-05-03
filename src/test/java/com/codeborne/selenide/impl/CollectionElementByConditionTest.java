@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Mocks.mockWebElement;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,15 +24,12 @@ final class CollectionElementByConditionTest {
 
   @Test
   void wrap() {
-    WebElement mockedWebElement = mock();
-    when(mockedWebElement.getTagName()).thenReturn("a");
-    when(mockedWebElement.isDisplayed()).thenReturn(true);
-    when(mockedWebElement.getText()).thenReturn("selenide");
+    WebElement mockedWebElement = mockWebElement("a", "hello");
 
     SelenideElement selenideElement = CollectionElementByCondition.wrap(
       new WebElementsCollectionWrapper(driver, singletonList(mockedWebElement)), visible);
     assertThat(selenideElement)
-      .hasToString("<a>selenide</a>");
+      .hasToString("$$(1 elements).findBy(visible)");
   }
 
   @Test

@@ -1,5 +1,6 @@
 package com.codeborne.selenide.logevents;
 
+import com.github.bsideup.jabel.Desugar;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +10,12 @@ import org.slf4j.helpers.NOPLoggerFactory;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalInt;
 
 import static java.lang.System.lineSeparator;
+import static java.util.Comparator.comparingLong;
 
 /**
  * A simple text report of Selenide actions performed during test run.
@@ -24,6 +27,9 @@ public class SimpleReport {
   private static final Logger log = LoggerFactory.getLogger(SimpleReport.class);
   private static final int MIN_FIRST_COLUMN_WIDTH = 20;
   private static final int MAX_SECOND_COLUMN_WIDTH = 70;
+  private static final int MIN_SECOND_COLUMN_WIDTH = 7;
+  private static final String TWO_SPACES = "  ";
+  private static final String INDENT = System.getProperty("selenide.report.indent", TWO_SPACES);
 
   public void start() {
     checkThatSlf4jIsConfigured();
@@ -38,26 +44,47 @@ public class SimpleReport {
       return;
     }
 
-    String report = generateReport(title, logEventListener.events());
+    List<LogEvent> events = new ArrayList<>(logEventListener.events());
+
+    events.sort(comparingLong(LogEvent::getStartTime));
+
+    String report = generateReport(title, events);
     log.info(report);
   }
 
   @Nonnull
   @CheckReturnValue
   String generateReport(String title, List<LogEvent> events) {
-    int firstColumnWidth = Math.max(maxLocatorLength(events).orElse(0), MIN_FIRST_COLUMN_WIDTH);
-    int secondColumnWidth = Math.min(maxSubjectLength(events).orElse(7), MAX_SECOND_COLUMN_WIDTH);
-    int estimatedReportLength = 20 + title.length() + (firstColumnWidth + secondColumnWidth + 35) * (4 + events.size());
+    var eventsWithNestingLevel = computeNestingLevel(events);
+
+    int firstColumnWidth = Math.max(maxLocatorLength(eventsWithNestingLevel), MIN_FIRST_COLUMN_WIDTH);
+    int secondColumnWidth = Math.min(maxSubjectLength(eventsWithNestingLevel), MAX_SECOND_COLUMN_WIDTH);
+    int estimatedReportLength = 20 + title.length() + (firstColumnWidth + secondColumnWidth + 35) * (4 + eventsWithNestingLevel.size());
 
     ReportBuilder report = new ReportBuilder(firstColumnWidth, secondColumnWidth, estimatedReportLength);
     report.appendTitle(title);
     report.appendHeader();
 
-    for (LogEvent e : events) {
-      report.appendEvent(e);
+    for (var wrapper : eventsWithNestingLevel) {
+      report.appendEvent(wrapper);
     }
     report.appendDelimiterLine();
     return report.build();
+  }
+
+  private List<LogEventWithNestingLevel> computeNestingLevel(List<LogEvent> events) {
+    var stack = new ArrayDeque<LogEvent>();
+    var result = new ArrayList<LogEventWithNestingLevel>(events.size());
+    for (LogEvent event : events) {
+      while (!stack.isEmpty() && stack.peekFirst().getEndTime() <= event.getStartTime())
+        stack.removeFirst();
+
+      result.add(new LogEventWithNestingLevel(stack.size(), event));
+
+      stack.addFirst(event);
+    }
+
+    return result;
   }
 
   private static class ReportBuilder {
@@ -86,11 +113,19 @@ public class SimpleReport {
     @CheckReturnValue
     @Nonnull
     private String line(int count) {
-      StringBuilder sb = new StringBuilder(count);
-      for (int i = 0; i < count; i++) {
-        sb.append('-');
-      }
-      return sb.toString();
+      return repeat("-", count);
+    }
+
+    @CheckReturnValue
+    @Nonnull
+    private String indent(int count) {
+      return repeat(INDENT, count);
+    }
+
+    @CheckReturnValue
+    @Nonnull
+    private String repeat(String value, int count) {
+      return new String(new char[count]).replace("\0", value);
     }
 
     public void appendHeader() {
@@ -99,21 +134,22 @@ public class SimpleReport {
     }
 
     private void appendLine(StringBuilder sb, int firstColumnWidth, int secondColumnWidth,
-                            String first, String second, String third, String fourth) {
+                            String element, String subject, String status, String duration) {
       sb.append("| ");
-      append(sb, first, firstColumnWidth);
+      append(sb, element, firstColumnWidth);
       sb.append(" | ");
-      append(sb, second, secondColumnWidth);
+      append(sb, subject, secondColumnWidth);
       sb.append(" | ");
-      append(sb, third, 10);
+      append(sb, status, 10);
       sb.append(" | ");
-      append(sb, fourth, 10);
+      append(sb, duration, 10);
       sb.append(" |").append(lineSeparator());
     }
 
-    private void appendEvent(LogEvent e) {
-      appendLine(sb, firstColumnWidth, secondColumnWidth, e.getElement(), e.getSubject(),
-        e.getStatus().name(), String.valueOf(e.getDuration()));
+    private void appendEvent(LogEventWithNestingLevel wrapper) {
+      var elementWithIndent = indent(wrapper.nestingLevel) + wrapper.event.getElement();
+      appendLine(sb, firstColumnWidth, secondColumnWidth, elementWithIndent, wrapper.event.getSubject(),
+        wrapper.event.getStatus().name(), String.valueOf(wrapper.event.getDuration()));
     }
 
     public void appendDelimiterLine() {
@@ -132,26 +168,30 @@ public class SimpleReport {
     }
   }
 
-  @Nonnull
   @CheckReturnValue
-  private OptionalInt maxLocatorLength(List<LogEvent> events) {
-    return events
-            .stream()
-            .map(LogEvent::getElement)
-            .map(String::length)
-            .mapToInt(Integer::intValue)
-            .max();
+  private int maxLocatorLength(List<LogEventWithNestingLevel> events) {
+    var maxLength = 0;
+    for (var wrapper : events) {
+      int length = wrapper.event.getElement().length() + wrapper.nestingLevel * INDENT.length();
+
+      if (length > maxLength)
+        maxLength = length;
+    }
+
+    return maxLength;
   }
 
-  @Nonnull
   @CheckReturnValue
-  private OptionalInt maxSubjectLength(List<LogEvent> events) {
-    return events
-            .stream()
-            .map(LogEvent::getSubject)
-            .map(String::length)
-            .mapToInt(Integer::intValue)
-            .max();
+  private int maxSubjectLength(List<LogEventWithNestingLevel> events) {
+    var maxLength = MIN_SECOND_COLUMN_WIDTH;
+
+    for (var wrapper : events) {
+      final int length = wrapper.event.getSubject().length();
+      if (length > maxLength)
+        maxLength = length;
+    }
+
+    return maxLength;
   }
 
   public void clean() {
@@ -165,5 +205,9 @@ public class SimpleReport {
         "  Please add slf4j-simple.jar, slf4j-log4j12.jar or logback-classic.jar to your classpath. " + lineSeparator() +
         "  See https://github.com/selenide/selenide/wiki/slf4j");
     }
+  }
+
+  @Desugar
+  private record LogEventWithNestingLevel(int nestingLevel, LogEvent event) {
   }
 }
