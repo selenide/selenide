@@ -1337,9 +1337,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param targetCssSelector CSS selector defining target element
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDropTo
+   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
    */
   @Nonnull
   @CanIgnoreReturnValue
+  @Deprecated
   SelenideElement dragAndDropTo(String targetCssSelector);
 
   /**
@@ -1350,13 +1352,15 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param target target element
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDropTo
+   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
    */
   @Nonnull
   @CanIgnoreReturnValue
+  @Deprecated
   SelenideElement dragAndDropTo(WebElement target);
 
   /**
-   * Drag and drop this element to the target via JS script<p>
+   * Drag and drop this element to the target<p>
    *
    * Before dropping, waits until target element gets visible.
    *
@@ -1365,10 +1369,49 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDropTo
+   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
    */
   @Nonnull
   @CanIgnoreReturnValue
+  @Deprecated
   SelenideElement dragAndDropTo(String targetCssSelector, DragAndDropOptions options);
+
+  /**
+   * Drag and drop this element to the target
+   * <br>
+   * Before dropping, waits until target element gets visible.
+   * <br>
+   *
+   * Examples:
+   * <br>
+   * using a CSS selector defining the target element:
+   * <br>
+   * {@code $("#element").dragAndDropTo(to("#target")) }
+   * <br>
+   * using a SelenideElement defining the target element:
+   * <br>
+   * {@code $("#element").dragAndDropTo(to($("#target"))) }
+   * <br>
+   * <br>
+   * define which way it will be executed:
+   * <br>
+   * using {@code JavaScript } (by default):
+   * <br>
+   * {@code $("#element").dragAndDropTo(to("#target").usingJS()) }
+   * <br>
+   * using {@code Actions }:
+   * <br>
+   * {@code $("#element").dragAndDropTo(to("#target").usingSeleniumActions()) }
+   * <br>
+  / *
+   * @param options drag and drop options to define target and which way it will be executed
+   *
+   * @return this element
+   * @see com.codeborne.selenide.commands.DragAndDropTo
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement dragAndDrop(DragAndDropOptions options);
 
   /**
    * Execute custom implemented command (this command will not receive
