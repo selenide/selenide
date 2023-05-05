@@ -89,13 +89,11 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   protected void openFile(String fileName) {
-    open("/" + fileName + "?browser=" + browser +
-      "&timeout=" + timeout);
+    open("/" + fileName);
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
-    return open("/" + fileName + "?browser=" + browser +
-      "&timeout=" + timeout, pageObjectClass);
+    return open("/" + fileName, pageObjectClass);
   }
 
   /**
