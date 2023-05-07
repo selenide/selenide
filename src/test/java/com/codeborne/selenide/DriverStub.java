@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.util.UUID.randomUUID;
+import static org.mockito.Mockito.mock;
 
 /**
  * A dummy `Driver` implementation used in tests.
@@ -23,6 +24,7 @@ public class DriverStub implements Driver {
   private final WebDriver webDriver;
   private final SelenideProxyServer proxy;
   private final DownloadsFolder browserDownloadsFolder;
+  private final Actions actionsMock = mock();
 
   public DriverStub() {
     this("netscape navigator");
@@ -167,6 +169,6 @@ public class DriverStub implements Driver {
   @CheckReturnValue
   @Nonnull
   public Actions actions() {
-    return new Actions(getWebDriver());
+    return actionsMock;
   }
 }

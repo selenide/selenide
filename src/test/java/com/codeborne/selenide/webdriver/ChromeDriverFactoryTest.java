@@ -173,7 +173,25 @@ final class ChromeDriverFactoryTest {
   }
 
   @Test
-  void disablesSandbox() {
+  void doesNotDisableSandboxByDefault() {
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+
+    assertThat(optionArguments).doesNotContain("--no-sandbox");
+  }
+
+  @Test
+  void canDisableSandbox_withArgument() {
+    config.browserCapabilities(new ChromeOptions().addArguments("--no-sandbox"));
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+
+    assertThat(optionArguments).contains("--no-sandbox");
+  }
+
+  @Test
+  void canDisableSandbox_withSystemProperty() {
+    System.setProperty("chromeoptions.args", "foo,--no-sandbox,bar");
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 

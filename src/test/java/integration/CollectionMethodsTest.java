@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.AttributesMismatch;
 import com.codeborne.selenide.ex.DoesNotContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
@@ -9,21 +10,21 @@ import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
-import com.codeborne.selenide.ex.AttributesMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import static com.codeborne.selenide.CollectionCondition.allMatch;
 import static com.codeborne.selenide.CollectionCondition.anyMatch;
+import static com.codeborne.selenide.CollectionCondition.attributes;
 import static com.codeborne.selenide.CollectionCondition.containExactTextsCaseSensitive;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
@@ -37,8 +38,8 @@ import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThanOrEqual;
 import static com.codeborne.selenide.CollectionCondition.sizeNotEqual;
 import static com.codeborne.selenide.CollectionCondition.texts;
-import static com.codeborne.selenide.CollectionCondition.attributes;
 import static com.codeborne.selenide.Condition.and;
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.partialText;
@@ -194,6 +195,12 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
+  void canCheckCollectionAttributes() {
+    $$("#domain option").shouldHave(attributes("data-mailServerId",
+      "111", "222A", "33333B", "111АБВГД"));
+  }
+
+  @Test
   void canCheckThatElementsHaveExactlyCorrectAttributes() {
     withLongTimeout(() -> {
       assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(attributes("id", "content", "content2")))
@@ -304,43 +311,6 @@ final class CollectionMethodsTest extends ITest {
     $$(".first_row").shouldHave(size(1));
     $$(".second_row").shouldHave(size(1));
     $$(".first_row,.second_row").shouldHave(size(2));
-  }
-
-  @Test
-  void canIterateCollection_withIterator() {
-    Iterator<SelenideElement> it = $$("[name=domain] option").iterator();
-    assertThat(it.hasNext()).isTrue();
-    it.next().shouldHave(text("@livemail.ru"));
-
-    assertThat(it.hasNext()).isTrue();
-    it.next().shouldHave(text("@myrambler.ru"));
-
-    assertThat(it.hasNext()).isTrue();
-    it.next().shouldHave(text("@rusmail.ru"));
-
-    assertThat(it.hasNext()).isTrue();
-    it.next().shouldHave(text("@мыло.ру"));
-
-    assertThat(it.hasNext()).isFalse();
-  }
-
-  @Test
-  void canIterateCollection_withListIterator() {
-    ListIterator<SelenideElement> it = $$("[name=domain] option").listIterator(3);
-    assertThat(it.hasNext()).isTrue();
-    assertThat(it.hasPrevious()).isTrue();
-    it.previous().shouldHave(text("@rusmail.ru"));
-
-    assertThat(it.hasPrevious()).isTrue();
-    it.previous().shouldHave(text("@myrambler.ru"));
-
-    assertThat(it.hasPrevious()).isTrue();
-    it.previous().shouldHave(text("@livemail.ru"));
-
-    assertThat(it.hasPrevious()).isFalse();
-
-    it.next().shouldHave(text("@livemail.ru"));
-    assertThat(it.hasPrevious()).isTrue();
   }
 
   @Test
@@ -655,16 +625,44 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void collectionToString() {
+    $("not-existing-locator").toString();
+    assertThat($("not-existing-locator"))
+      .hasToString("{not-existing-locator}");
+
     assertThat($$("not-existing-locator"))
-      .hasToString("not-existing-locator []");
+      .hasToString("[not-existing-locator]");
 
     assertThat($$("input[type=checkbox].red").as("red checkboxes"))
-      .hasToString("red checkboxes []");
+      .hasToString("red checkboxes");
 
     assertThat($$(".active").first(42))
-      .hasToString(".active:first(42) []");
+      .hasToString("[.active]:first(42)");
 
     assertThat($$(".parent").first(2).filterBy(cssClass("child")))
-      .hasToString(".parent:first(2).filter(css class \"child\") []");
+      .hasToString("[.parent]:first(2).filter(css class \"child\")");
+  }
+
+  @Test
+  void filteredWebElementsCollectionToString() {
+    List<WebElement> webElements = driver().getWebDriver().findElements(By.cssSelector("#hero option"));
+    ElementsCollection collection = driver().$$(webElements).filterBy(attribute("value"));
+
+    assertThat(collection).hasToString("$$(5 elements).filter(attribute value)");
+    assertThatThrownBy(() -> collection.shouldHave(size(999), Duration.ofMillis(0)))
+      .hasMessageStartingWith("List size mismatch")
+      .hasMessageContaining("Elements: [")
+      .hasMessageContaining("<option value selected:true>-- Select your hero --</option>")
+      .hasMessageContaining("<option value=\"arnold \"schwarzenegger\"\">Arnold \"Schwarzenegger\"</option>");
+  }
+
+  @Test
+  void filteredWebElementsCollection_singleElement_ToString() {
+    List<WebElement> webElements = driver().getWebDriver().findElements(By.cssSelector("#hero option"));
+    SelenideElement singleElement = driver().$$(webElements).filterBy(attribute("value")).get(2);
+
+    assertThat(singleElement).hasToString("$$(5 elements).filter(attribute value)[2]");
+    assertThatThrownBy(() -> singleElement.shouldHave(text("nope"), Duration.ofMillis(0)))
+      .hasMessageStartingWith("Element should have text \"nope\" {$$(5 elements).filter(attribute value)[2]}")
+      .hasMessageContaining("Element: '<option value=\"arnold \"schwarzenegger\"\">Arnold \"Schwarzenegger\"</option>'");
   }
 }

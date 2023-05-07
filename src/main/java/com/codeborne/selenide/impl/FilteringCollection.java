@@ -52,6 +52,11 @@ public class FilteringCollection implements CollectionSource {
   }
 
   @Override
+  public String toString() {
+    return originalCollection + ".filter(" + filter + ')';
+  }
+
+  @Override
   @CheckReturnValue
   @Nonnull
   public Driver driver() {

@@ -113,7 +113,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   /**
    * Remove links to webdriver/proxy, but DON'T CLOSE the webdriver/proxy itself.
-   * @deprecated Use method {@link #using(WebDriver, SelenideProxyServer, Runnable)} instead.
+   * @deprecated Use method {@link #using(WebDriver, SelenideProxyServer, DownloadsFolder, Runnable)} instead.
    */
   @Deprecated
   @Override
@@ -152,7 +152,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     WebDriver webDriver = currentThreadDriver().map(WebDriverInstance::webDriver).orElse(null);
     if (webDriver == null) {
       log.info("No webdriver is bound to current thread: {} - let's create a new webdriver", currentThread().getId());
-      return createDriver().webDriver();
+      return createAndRegisterDriver().webDriver();
     }
 
     if (browserHealthChecker.isBrowserStillOpen(webDriver)) {
@@ -167,7 +167,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
     log.info("Webdriver has been closed meanwhile. Let's re-create it.");
     closeWebDriver();
-    return createDriver().webDriver();
+    return createAndRegisterDriver().webDriver();
   }
 
   @Nullable
@@ -182,18 +182,24 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @CheckReturnValue
   @Nonnull
-  private WebDriverInstance createDriver() {
-    WebDriverInstance result = createDriverCommand.createDriver(config, factory, userProvidedProxy, eventListeners, listeners);
-    long threadId = setWebDriver(result);
+  private WebDriverInstance createAndRegisterDriver() {
+    WebDriverInstance driver = createDriver();
+    long threadId = setWebDriver(driver);
 
     if (config.holdBrowserOpen()) {
       log.info("Browser and proxy will stay open due to holdBrowserOpen=true: {} -> {}, {}",
-        threadId, result.webDriver(), result.proxy());
+        threadId, driver.webDriver(), driver.proxy());
     }
     else {
       markForAutoClose(currentThread());
     }
-    return result;
+    return driver;
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  private WebDriverInstance createDriver() {
+    return createDriverCommand.createDriver(config, factory, userProvidedProxy, eventListeners, listeners);
   }
 
   @Override
@@ -224,15 +230,31 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   @Override
-  public void using(WebDriver driver, @Nullable SelenideProxyServer proxy, Runnable lambda) {
+  public void using(WebDriver driver, @Nullable SelenideProxyServer proxy, @Nullable DownloadsFolder downloadsFolder, Runnable lambda) {
+    DownloadsFolder folder = downloadsFolder != null ? downloadsFolder : new SharedDownloadsFolder(config.downloadsFolder());
+    using(new WebDriverInstance(config, driver, proxy, folder), lambda);
+  }
+
+  private void using(WebDriverInstance webDriverInstance, Runnable lambda) {
     var previous = currentThreadDriver();
-    setWebDriver(driver, proxy);
+    setWebDriver(webDriverInstance);
     try {
       lambda.run();
     }
     finally {
       resetWebDriver();
       previous.ifPresent(this::setWebDriver);
+    }
+  }
+
+  @Override
+  public void inNewBrowser(Runnable lambda) {
+    var newBrowser = createDriver();
+    try {
+      using(newBrowser, lambda);
+    }
+    finally {
+      newBrowser.dispose();
     }
   }
 

@@ -97,21 +97,6 @@ final class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   }
 
   @Test
-  void actionWithoutWaiting_ToString_WhenCollectionElement_WithNonExistentWebElement() {
-    SelenideElement element = $$("ul li").findBy(cssClass("nonexistent"));
-
-    assertThat(element.toString())
-      .startsWith("NoSuchElementException: Cannot locate an element ul li.findBy(css class \"nonexistent\")");
-  }
-
-  @Test
-  void actionWithoutWaiting_ToString_WhenCollectionElement_WithExistentWebElement() {
-    SelenideElement element = $$("ul li").findBy(cssClass("detective"));
-
-    assertThat(element.toString().contains("Miller")).isTrue();
-  }
-
-  @Test
   void actionWithVisibilityWaiting_WhenCollectionElementByIndex() {
     SelenideElement element = $$("ul li").get(0);
 

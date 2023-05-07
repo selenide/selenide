@@ -6,16 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.codeborne.selenide.ClickOptions.*;
-import static com.codeborne.selenide.Condition.matchText;
+import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
+import static com.codeborne.selenide.ClickOptions.usingJavaScript;
+import static com.codeborne.selenide.ClickOptions.withOffset;
 import static com.codeborne.selenide.Selenide.$;
-import static java.lang.Integer.parseInt;
-import static org.assertj.core.api.Assertions.assertThat;
+import static integration.Coordinates.coordinates;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.data.Offset.offset;
 
 /**
  * Click with offset - calculates offset from the center of clicked element.
@@ -89,12 +85,6 @@ final class ClickRelativeTest extends IntegrationTest {
   }
 
   private void verifyCoordinates(int expectedX, int expectedY) {
-    String regex = "\\((\\d+), (\\d+)\\)";
-    $("#coords").shouldHave(matchText(regex));
-    Matcher matcher = Pattern.compile(regex).matcher($("#coords").text());
-    int x = parseInt(matcher.replaceFirst("$1"));
-    int y = parseInt(matcher.replaceFirst("$2"));
-    assertThat(x).isCloseTo(expectedX, offset(5));
-    assertThat(y).isCloseTo(expectedY, offset(5));
+    $("#coords").shouldHave(coordinates(expectedX, expectedY));
   }
 }

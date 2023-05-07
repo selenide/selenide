@@ -161,11 +161,6 @@ final class ElementsCollectionTest {
   }
 
   @Test
-  void elementsToStringOnNullCollection() {
-    assertThat(ElementsCollection.elementsToString(driver, null)).isEqualTo("[not loaded yet...]");
-  }
-
-  @Test
   void firstMethod() {
     assertThat(collection("Hello", "Mark").first().getText()).isEqualTo("Hello");
   }
@@ -255,23 +250,6 @@ final class ElementsCollectionTest {
 
     collection.shouldHave(size(3));
     verify(collection, times(2)).sleep(anyLong());
-  }
-
-  @Test
-  void toStringFetchesCollectionFromWebdriverIfNotFetchedYet() {
-    when(source.shortDescription()).thenReturn("li.odd");
-    ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(asList(element1, element2));
-    assertThat(collection)
-      .hasToString(String.format("li.odd [%n\t<h1></h1>,%n\t<h2></h2>%n]"));
-  }
-
-  @Test
-  void toStringPrintsErrorIfFailedToFetchElements() {
-    when(source.description()).thenReturn("li.odd");
-    when(source.getElements()).thenThrow(new WebDriverException("Failed to fetch elements"));
-    assertThat(new ElementsCollection(source))
-      .hasToString("li.odd [WebDriverException: Failed to fetch elements]");
   }
 
   @Test

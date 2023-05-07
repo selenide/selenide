@@ -147,6 +147,18 @@ public class Selenide {
   }
 
   /**
+   * Open a new browser (with the same settings as the default browser),
+   * and run given code block in this browser.
+   * <p/>
+   *
+   * In the end, the browser will be closed.
+   * @since 6.13.0
+   */
+  public static void inNewBrowser(Runnable lambda) {
+    WebDriverRunner.inNewBrowser(lambda);
+  }
+
+  /**
    * Update the hash of the window location.
    * Useful to navigate in ajax apps without reloading the page, since open(url) makes a full page reload.
    *

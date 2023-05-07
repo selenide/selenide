@@ -63,6 +63,15 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement val(@Nullable String text);
 
   /**
+   * Same as {@link #setValue(SetValueOptions)}
+   *
+   * @see com.codeborne.selenide.commands.Val
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement val(SetValueOptions options);
+
+  /**
    * Similar to {@link #setValue(java.lang.String)}
    *
    * @see com.codeborne.selenide.commands.SetValue
@@ -70,7 +79,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement setValue(SetValueOptions text);
+  SelenideElement setValue(SetValueOptions options);
 
   /**
    * Mimic how real user would type in a text field
@@ -569,17 +578,33 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldNotBe(Condition condition, Duration timeout);
 
   /**
-   * Displays WebElement in human-readable format.
+   * Short description of WebElement, usually a selector.
    * Useful for logging and debugging.
    * Not recommended to use for test verifications.
    *
-   * @return e.g. <strong id=orderConfirmedStatus class=>Order has been confirmed</strong>
+   * @return e.g. call to {@code $("#loginButton").toString()} returns {@code "{#loginButton}"}
    * @see com.codeborne.selenide.commands.ToString
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
   @CheckReturnValue
   @Nonnull
   String toString();
+
+  /**
+   * Displays WebElement in human-readable format.
+   * Useful for logging and debugging.
+   * Not recommended to use for test verifications.
+   * May work relatively slowly because it fetches actual element information from browser.
+   *
+   * @since 6.14.0
+   * @return e.g. <strong id=orderConfirmedStatus class=>Order has been confirmed</strong>
+   * @see com.codeborne.selenide.commands.DescribeElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  String describe();
 
   /**
    * Give this element a human-readable name
@@ -1288,6 +1313,21 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement doubleClick();
 
   /**
+   * Double-click the element using {@link ClickOptions}: {@code $("#username").doubleClick(ClickOptions.usingJavaScript())}
+   *
+   * <p>
+   * You can specify a relative offset from the center of the element inside ClickOptions:
+   * e.g. {@code $("#username").doubleClick(usingJavaScript().offset(123, 222))}
+   * </p>
+   *
+   * @see com.codeborne.selenide.commands.DoubleClick
+   * @since 6.13.0
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement doubleClick(ClickOptions clickOption);
+
+  /**
    * Emulate "mouseOver" event. In other words, move mouse cursor over this element (without clicking it).
    *
    * @return this element
@@ -1316,9 +1356,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param targetCssSelector CSS selector defining target element
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDropTo
+   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
    */
   @Nonnull
   @CanIgnoreReturnValue
+  @Deprecated
   SelenideElement dragAndDropTo(String targetCssSelector);
 
   /**
@@ -1329,13 +1371,15 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param target target element
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDropTo
+   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
    */
   @Nonnull
   @CanIgnoreReturnValue
+  @Deprecated
   SelenideElement dragAndDropTo(WebElement target);
 
   /**
-   * Drag and drop this element to the target via JS script<p>
+   * Drag and drop this element to the target<p>
    *
    * Before dropping, waits until target element gets visible.
    *
@@ -1344,10 +1388,49 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDropTo
+   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
    */
   @Nonnull
   @CanIgnoreReturnValue
+  @Deprecated
   SelenideElement dragAndDropTo(String targetCssSelector, DragAndDropOptions options);
+
+  /**
+   * Drag and drop this element to the target
+   * <br>
+   * Before dropping, waits until target element gets visible.
+   * <br>
+   *
+   * Examples:
+   * <br>
+   * using a CSS selector defining the target element:
+   * <br>
+   * {@code $("#element").dragAndDropTo(to("#target")) }
+   * <br>
+   * using a SelenideElement defining the target element:
+   * <br>
+   * {@code $("#element").dragAndDropTo(to($("#target"))) }
+   * <br>
+   * <br>
+   * define which way it will be executed:
+   * <br>
+   * using {@code JavaScript } (by default):
+   * <br>
+   * {@code $("#element").dragAndDropTo(to("#target").usingJS()) }
+   * <br>
+   * using {@code Actions }:
+   * <br>
+   * {@code $("#element").dragAndDropTo(to("#target").usingSeleniumActions()) }
+   * <br>
+  / *
+   * @param options drag and drop options to define target and which way it will be executed
+   *
+   * @return this element
+   * @see com.codeborne.selenide.commands.DragAndDropTo
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement dragAndDrop(DragAndDropOptions options);
 
   /**
    * Execute custom implemented command (this command will not receive

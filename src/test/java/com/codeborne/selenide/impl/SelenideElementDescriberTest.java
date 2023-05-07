@@ -11,7 +11,11 @@ import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import java.util.Collection;
+
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Mocks.mockWebElement;
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -19,6 +23,7 @@ import static org.mockito.Mockito.when;
 
 final class SelenideElementDescriberTest {
   private final SelenideElementDescriber describe = new SelenideElementDescriber();
+  private final Driver driver = mock();
 
   @Test
   void selectorIsReportedAsIs() {
@@ -38,7 +43,6 @@ final class SelenideElementDescriberTest {
 
   @Test
   void shortlyForSelenideElementShouldDelegateToOriginalWebElement() {
-    Driver driver = mock();
     WebElement webElement = mock();
     when(webElement.getTagName()).thenThrow(new StaleElementReferenceException("disappeared"));
 
@@ -52,7 +56,6 @@ final class SelenideElementDescriberTest {
 
   @Test
   void describe() {
-    Driver driver = mock();
     SelenideElement selenideElement = element("h1", "class", "active");
 
     assertThat(describe.fully(driver, selenideElement)).isEqualTo("<h1 class=\"active\">Hello yo</h1>");
@@ -60,7 +63,6 @@ final class SelenideElementDescriberTest {
 
   @Test
   void describe_attribute_with_empty_value() {
-    Driver driver = mock();
     SelenideElement selenideElement = element("input", "readonly", "");
 
     assertThat(describe.fully(driver, selenideElement)).isEqualTo("<input readonly>Hello yo</input>");
@@ -68,7 +70,6 @@ final class SelenideElementDescriberTest {
 
   @Test
   void describe_elementHasDisappeared() {
-    Driver driver = mock();
     SelenideElement selenideElement = element("input", "readonly", "");
     doThrow(new StaleElementReferenceException("Booo")).when(selenideElement).getTagName();
 
@@ -78,7 +79,6 @@ final class SelenideElementDescriberTest {
 
   @Test
   void describe_collectionHasResized() {
-    Driver driver = mock();
     SelenideElement selenideElement = element("input", "readonly", "");
     doThrow(new IndexOutOfBoundsException("Fooo")).when(selenideElement).getTagName();
 
@@ -88,7 +88,6 @@ final class SelenideElementDescriberTest {
 
   @Test
   void describe_appium_NoSuchElementException() {
-    Driver driver = mock();
     SelenideElement selenideElement = element("h1", "name", "theName");
     when(selenideElement.getAttribute("class")).thenThrow(new NoSuchElementException("Appium throws exception for missing attributes"));
 
@@ -97,7 +96,6 @@ final class SelenideElementDescriberTest {
 
   @Test
   void describe_appium_UnsupportedOperationException() {
-    Driver driver = mock();
     SelenideElement selenideElement = element("h1", "name", "theName");
     when(selenideElement.getAttribute("disabled")).thenThrow(new UnsupportedOperationException(
       "io.appium.uiautomator2.common.exceptions.NoAttributeFoundException: 'disabled' attribute is unknown for the element"));
@@ -107,7 +105,6 @@ final class SelenideElementDescriberTest {
 
   @Test
   void describe_appium_UnsupportedCommandException() {
-    Driver driver = mock();
     SelenideElement selenideElement = element("h1", "name", "theName");
     when(selenideElement.getAttribute("disabled")).thenThrow(new UnsupportedCommandException(
       "io.appium.uiautomator2.common.exceptions.NoAttributeFoundException: 'disabled' attribute is unknown for the element"));
@@ -117,7 +114,6 @@ final class SelenideElementDescriberTest {
 
   @Test
   void describe_appium_isSelected_UnsupportedOperationException() {
-    Driver driver = mock();
     SelenideElement selenideElement = element("h1", "name", "fname");
     when(selenideElement.isSelected()).thenThrow(new UnsupportedOperationException("isSelected doesn't work in iOS"));
 
@@ -126,7 +122,6 @@ final class SelenideElementDescriberTest {
 
   @Test
   void describe_appium_isSelected_WebDriverException() {
-    Driver driver = mock();
     SelenideElement selenideElement = element("h1", "name", "fname");
     when(selenideElement.isSelected()).thenThrow(new WebDriverException("isSelected might fail on stolen element"));
 
@@ -135,7 +130,6 @@ final class SelenideElementDescriberTest {
 
   @Test
   void describe_appium_isDisplayed_UnsupportedOperationException() {
-    Driver driver = mock();
     SelenideElement selenideElement = element("h1", "name", "fname");
     when(selenideElement.isDisplayed()).thenThrow(new UnsupportedOperationException("it happens"));
 
@@ -145,12 +139,42 @@ final class SelenideElementDescriberTest {
 
   @Test
   void describe_appium_isDisplayed_WebDriverException() {
-    Driver driver = mock();
     SelenideElement selenideElement = element("h1", "name", "fname");
     when(selenideElement.isDisplayed()).thenThrow(new WebDriverException("isDisplayed might fail on stolen element"));
 
     assertThat(describe.fully(driver, selenideElement)).isEqualTo(
       "<h1 name=\"fname\" displayed:WebDriverException: isDisplayed might fail on stolen element>Hello yo</h1>");
+  }
+
+  @Test
+  void fully_onNullCollection() {
+    assertThat(describe.fully(driver, (Collection<WebElement>) null)).isEqualTo("[not loaded yet...]");
+  }
+
+  @Test
+  void fully_fetchesCollectionFromWebdriverIfNotFetchedYet() {
+    WebElement element1 = mockWebElement("option", "Bruce");
+    WebElement element2 = mockWebElement("option", "Robert");
+
+    assertThat(describe.fully(driver, asList(element1, element2))).isEqualToIgnoringNewLines("""
+      [
+      \t<option>Bruce</option>,
+      \t<option>Robert</option>
+      ]
+      """);
+  }
+
+  @Test
+  void fully_printsErrorIfFailedToFetchElements() {
+    WebElement element1 = mockWebElement("option", "Bruce");
+    WebElement element2 = mockWebElement("option", "Robert");
+    when(element2.getText()).thenThrow(new WebDriverException("Failed to fetch elements"));
+    assertThat(describe.fully(driver, asList(element1, element2))).isEqualToIgnoringNewLines("""
+      [
+      \t<option>Bruce</option>,
+      \t<option>WebDriverException: Failed to fetch elements</option>
+      ]
+      """);
   }
 
   private SelenideElement element(String tagName, String attributeName, String attributeValue) {
