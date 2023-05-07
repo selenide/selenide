@@ -1,5 +1,16 @@
 # Changelog
 
+## 6.14.0 (released 06.05.2023)
+see https://github.com/selenide/selenide/milestone/181?closed=1
+* #2253 make method $.toString() fast  --  see PR #2269
+* #2270 don't add `--no-sandbox` automatically  --  see PR #2271
+* #2172 Introduce `step` method to be able to group multiple actions  --  thanks to Maksim @Au6ojlut for PR #2250
+* #2245 Add method $.dragAndDrop(DragAndDropOptions)  --  thanks to Maksim @Au6ojlut
+* #2258 allow setting negative browser position  --  see PR #2259
+* #2267 setBinary is supported by Edge  --  thanks to Vladislav Velichko
+* add missing method $.val(options)
+* #2263 Bump nettyVersion from 4.1.91.Final to 4.1.92.Final
+
 ## 6.13.1 (released 21.04.2023)
 * #2257 bump Selenium from 4.8.3 to 4.9.0  --  see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
 * mark $$.subList() as deprecated (see #2239)
