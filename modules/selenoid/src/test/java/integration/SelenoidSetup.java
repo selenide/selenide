@@ -24,6 +24,7 @@ public class SelenoidSetup implements BeforeEachCallback, AfterEachCallback  {
   @Override
   public void beforeEach(final ExtensionContext context) {
     closeWebDriver();
+    System.setProperty("webdriver.http.factory", "jdk-http-client");
     Configuration.baseUrl = "https://selenide.org/test-page";
     Configuration.browserCapabilities = capabilities();
     Configuration.browser = "chrome";

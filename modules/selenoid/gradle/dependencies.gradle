@@ -10,6 +10,7 @@ buildscript {
 dependencies {
   api("com.codeborne:selenide:${versions.selenide}")
   testRuntimeOnly("com.codeborne:selenide-proxy:${versions.selenide}")
+  testImplementation "org.seleniumhq.selenium:selenium-http-jdk-client:4.9.1"
   implementation('org.apache.httpcomponents.client5:httpclient5:5.2.1')
   implementation("commons-io:commons-io:2.11.0")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:${versions.junit}")
