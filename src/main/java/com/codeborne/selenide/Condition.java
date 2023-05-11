@@ -6,6 +6,12 @@ import com.codeborne.selenide.conditions.AttributeWithValue;
 import com.codeborne.selenide.conditions.CaseSensitiveText;
 import com.codeborne.selenide.conditions.Checked;
 import com.codeborne.selenide.conditions.InnerText;
+import com.codeborne.selenide.conditions.LocalDateBetweenCondition;
+import com.codeborne.selenide.conditions.LocalDateCondition;
+import com.codeborne.selenide.conditions.LocalDateFormatCondition;
+import com.codeborne.selenide.conditions.LocalDateTimeBetweenCondition;
+import com.codeborne.selenide.conditions.LocalDateTimeCondition;
+import com.codeborne.selenide.conditions.LocalDateTimeFormatCondition;
 import com.codeborne.selenide.conditions.PartialText;
 import com.codeborne.selenide.conditions.PartialTextCaseSensitive;
 import com.codeborne.selenide.conditions.CssClass;
@@ -47,6 +53,8 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
@@ -771,4 +779,166 @@ public abstract class Condition {
   public boolean missingElementSatisfiesCondition() {
     return missingElementSatisfiesCondition;
   }
+
+  /**
+   * Assert that element contains "value" attribute with date value that is satisfied to the pattern and is equal to expected date
+   *
+   * <p>Sample: {@code $("input").shouldHave(date(expectedLocalDate, "dd/MM/yyyy"));}</p>
+   *
+   * @param expectedDate expected value of "value" attribute
+   * @param pattern date format of value of "value" attribute
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition date(LocalDate expectedDate, String pattern) {
+    return new LocalDateCondition(expectedDate, pattern);
+  }
+
+  /**
+   * Assert that element contains "value" attribute with date value that
+   * is satisfied to the {@link LocalDateCondition#DEFAULT_PATTERN default pattern}
+   * and is equal to expected date
+   *
+   * <p>Sample: {@code $("input").shouldHave(date(expectedLocalDate));}</p>
+   *
+   * @param expectedDate expected value of "value" attribute
+   *
+   * @see Condition#date(LocalDate, String)
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition date(LocalDate expectedDate) {
+    return new LocalDateCondition(expectedDate, LocalDateCondition.DEFAULT_PATTERN);
+  }
+
+  /**
+   * Assert that element contains "value" attribute with date value that is satisfied to the pattern
+   *
+   * <p>Sample: {@code $("input").shouldHave(dateFormat("dd/MM/yyyy"));}</p>
+   *
+   * @param pattern date format of value of "value" attribute
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition dateFormat(String pattern) {
+    return new LocalDateFormatCondition(pattern);
+  }
+
+  /**
+   * Assert that element contains "value" attribute with date value that is satisfied to the pattern
+   * <br>
+   * and is inside interval {@code [startDate, endDate] (inclusive)}
+   *
+   * <p>Sample: {@code $("input").shouldHave(dateBetween(expectedStartDate, expectedEndDate, "dd/MM/yyyy"));}</p>
+   *
+   * @param startDate start of the interval (inclusive)
+   * @param endDate end of the interval (inclusive)
+   * @param pattern date format of value of "value" attribute
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition dateBetween(LocalDate startDate, LocalDate endDate, String pattern) {
+    return new LocalDateBetweenCondition(startDate, endDate, pattern);
+  }
+
+  /**
+   * Assert that element contains "value" attribute with date value that
+   * is satisfied to the {@link LocalDateCondition#DEFAULT_PATTERN default pattern}
+   * <br>
+   * and is inside interval {@code [startDate, endDate] (inclusive)}
+   *
+   * <p>Sample: {@code $("input").shouldHave(dateBetween(expectedStartDate, expectedEndDate));}</p>
+   *
+   * @param startDate start of the interval (inclusive)
+   * @param endDate end of the interval (inclusive)
+   *
+   * @see Condition#dateBetween(LocalDate, LocalDate, String)
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition dateBetween(LocalDate startDate, LocalDate endDate) {
+    return new LocalDateBetweenCondition(startDate, endDate, LocalDateCondition.DEFAULT_PATTERN);
+  }
+
+  /**
+   * Assert that element contains "value" attribute with datetime value
+   * that is satisfied to the pattern and is equal to expected datetime
+   *
+   * <p>Sample: {@code $("input").shouldHave(datetime(expectedLocalDateTime, "dd/MM/yyyy HH:mm:ss"));}</p>
+   *
+   * @param expectedDateTime expected value of "value" attribute
+   * @param pattern datetime format of value of "value" attribute
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition datetime(LocalDateTime expectedDateTime, String pattern) {
+    return new LocalDateTimeCondition(expectedDateTime, pattern);
+  }
+
+  /**
+   * Assert that element contains "value" attribute with datetime value that
+   * is satisfied to the {@link LocalDateTimeCondition#DEFAULT_PATTERN default pattern}
+   * and is equal to expected datetime
+   *
+   * <p>Sample: {@code $("input").shouldHave(datetime(expectedLocalDateTime);}</p>
+   *
+   * @param expectedDateTime expected value of "value" attribute
+   *
+   * @see Condition#datetime(LocalDateTime, String)
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition datetime(LocalDateTime expectedDateTime) {
+    return new LocalDateTimeCondition(expectedDateTime, LocalDateTimeCondition.DEFAULT_PATTERN);
+  }
+
+  /**
+   * Assert that element contains "value" attribute with datetime value that is satisfied to the pattern
+   *
+   * <p>Sample: {@code $("input").shouldHave(datetimeFormat("dd/MM/yyyy HH:mm:ss"));}</p>
+   *
+   * @param pattern date format of value of "value" attribute
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition datetimeFormat(String pattern) {
+    return new LocalDateTimeFormatCondition(pattern);
+  }
+
+  /**
+   * Assert that element contains "value" attribute with date value that is satisfied to the pattern
+   * <br>
+   * and is inside interval {@code [startDateTime, endDateTime] (inclusive)}
+   *
+   * <p>Sample: {@code $("input").shouldHave(datetimeBetween(expectedStartDateTime, expectedEndDateTime, "dd/MM/yyyy"));}</p>
+   *
+   * @param startDateTime start of the interval (inclusive)
+   * @param endDateTime end of the interval (inclusive)
+   * @param pattern date format of value of "value" attribute
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition datetimeBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, String pattern) {
+    return new LocalDateTimeBetweenCondition(startDateTime, endDateTime, pattern);
+  }
+
+  /**
+   * Assert that element contains "value" attribute with datetime value that
+   * is satisfied to the {@link LocalDateTimeCondition#DEFAULT_PATTERN default pattern}
+   * <br>
+   * and is inside interval {@code [startDateTime, endDateTime] (inclusive)}
+   *
+   * <p>Sample: {@code $("input").shouldHave(datetimeBetween(expectedStartDateTime, expectedEndDateTime));}</p>
+   *
+   * @param startDateTime start of the interval (inclusive)
+   * @param endDateTime end of the interval (inclusive)
+   *
+   * @see Condition#dateBetween(LocalDate, LocalDate, String)
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition datetimeBetween(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return new LocalDateTimeBetweenCondition(startDateTime, endDateTime, LocalDateTimeCondition.DEFAULT_PATTERN);
+  }
+
 }
