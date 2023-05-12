@@ -46,7 +46,7 @@ final class LocalDateFormatConditionTest {
 
   @Test
   void formatLocalDateAccordingToHeldPattern() {
-    assertThat(condition.formatLocalDate(LocalDate.of(2022, 10, 11))).isEqualTo("2022/10/11");
+    assertThat(condition.format(LocalDate.of(2022, 10, 11))).isEqualTo("2022/10/11");
   }
 
   @Test

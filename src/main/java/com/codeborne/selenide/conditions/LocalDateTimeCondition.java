@@ -39,13 +39,13 @@ public class LocalDateTimeCondition extends Condition {
 
     LocalDateTime localDateValue = (LocalDateTime) formatted.actualValue();
 
-    return new CheckResult(expectedDateTime.isEqual(localDateValue), formatCondition.formatLocalDateTime(localDateValue));
+    return new CheckResult(expectedDateTime.isEqual(localDateValue), formatCondition.format(localDateValue));
   }
 
   @Nonnull
   @CheckReturnValue
   @Override
   public String toString() {
-    return String.format("%s: \"%s\" (with %s)", getName(), formatCondition.formatLocalDateTime(expectedDateTime), formatCondition);
+    return String.format("%s: \"%s\" (with %s)", getName(), formatCondition.format(expectedDateTime), formatCondition);
   }
 }

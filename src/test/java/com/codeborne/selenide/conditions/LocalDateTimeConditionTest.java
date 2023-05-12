@@ -24,7 +24,7 @@ final class LocalDateTimeConditionTest {
   @Test
   void correctDateTimeValueWithCorrectFormat() {
     when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, expectedDateTime));
-    when(formatCondition.formatLocalDateTime(any())).thenReturn("formatted date");
+    when(formatCondition.format(any())).thenReturn("formatted date");
 
     CheckResult check = condition.check(driver, element);
 
@@ -32,7 +32,7 @@ final class LocalDateTimeConditionTest {
     assertThat(check.actualValue()).isEqualTo("formatted date");
 
     verify(formatCondition).check(driver, element);
-    verify(formatCondition).formatLocalDateTime(expectedDateTime);
+    verify(formatCondition).format(expectedDateTime);
   }
 
   @Test
@@ -48,7 +48,7 @@ final class LocalDateTimeConditionTest {
   @Test
   void incorrectDateTimeValue() {
     when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, expectedDateTime.minusDays(1)));
-    when(formatCondition.formatLocalDateTime(any())).thenReturn("formatted date");
+    when(formatCondition.format(any())).thenReturn("formatted date");
 
     CheckResult check = condition.check(driver, element);
 
@@ -56,7 +56,7 @@ final class LocalDateTimeConditionTest {
     assertThat(check.actualValue()).isEqualTo("formatted date");
 
     verify(formatCondition).check(driver, element);
-    verify(formatCondition).formatLocalDateTime(expectedDateTime.minusDays(1));
+    verify(formatCondition).format(expectedDateTime.minusDays(1));
   }
 
   @Test

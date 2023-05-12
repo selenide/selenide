@@ -42,7 +42,7 @@ public class LocalDateBetweenCondition extends Condition {
 
     if (localDateValue == null) throw new NullPointerException();
 
-    String actualValue = formatCondition.formatLocalDate(localDateValue);
+    String actualValue = formatCondition.format(localDateValue);
     return new CheckResult((long) localDateValue.compareTo(endDate) * localDateValue.compareTo(startDate) <= 0, actualValue);
   }
 
@@ -52,8 +52,8 @@ public class LocalDateBetweenCondition extends Condition {
   public String toString() {
     return String.format("%s [\"%s\", \"%s\"] (with %s)",
       getName(),
-      formatCondition.formatLocalDate(startDate),
-      formatCondition.formatLocalDate(endDate),
+      formatCondition.format(startDate),
+      formatCondition.format(endDate),
       formatCondition
       );
   }

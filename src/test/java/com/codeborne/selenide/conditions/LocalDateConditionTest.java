@@ -24,7 +24,7 @@ final class LocalDateConditionTest {
   @Test
   void correctDateValueWithCorrectFormat() {
     when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, LocalDate.of(2022, 10, 11)));
-    when(formatCondition.formatLocalDate(any())).thenReturn("formatted date");
+    when(formatCondition.format(any())).thenReturn("formatted date");
 
     CheckResult check = condition.check(driver, element);
 
@@ -32,7 +32,7 @@ final class LocalDateConditionTest {
     assertThat(check.actualValue()).isEqualTo("formatted date");
 
     verify(formatCondition).check(driver, element);
-    verify(formatCondition).formatLocalDate(LocalDate.of(2022, 10, 11));
+    verify(formatCondition).format(LocalDate.of(2022, 10, 11));
   }
 
   @Test
@@ -48,7 +48,7 @@ final class LocalDateConditionTest {
   @Test
   void incorrectDateValue() {
     when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, LocalDate.of(2023, 10, 11)));
-    when(formatCondition.formatLocalDate(any())).thenReturn("formatted date");
+    when(formatCondition.format(any())).thenReturn("formatted date");
 
     CheckResult check = condition.check(driver, element);
 
@@ -56,7 +56,7 @@ final class LocalDateConditionTest {
     assertThat(check.actualValue()).isEqualTo("formatted date");
 
     verify(formatCondition).check(driver, element);
-    verify(formatCondition).formatLocalDate(LocalDate.of(2023, 10, 11));
+    verify(formatCondition).format(LocalDate.of(2023, 10, 11));
   }
 
   @Test

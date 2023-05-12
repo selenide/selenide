@@ -27,7 +27,7 @@ final class LocalDateBetweenConditionTest {
   @Test
   void correctDateValueWithCorrectFormat() {
     when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, LocalDate.of(2022, 10, 11)));
-    when(formatCondition.formatLocalDate(any())).thenReturn("formatted date");
+    when(formatCondition.format(any())).thenReturn("formatted date");
 
     CheckResult check = condition.check(driver, element);
 
@@ -35,7 +35,7 @@ final class LocalDateBetweenConditionTest {
     assertThat(check.actualValue()).isEqualTo("formatted date");
 
     verify(formatCondition).check(driver, element);
-    verify(formatCondition).formatLocalDate(LocalDate.of(2022, 10, 11));
+    verify(formatCondition).format(LocalDate.of(2022, 10, 11));
   }
 
   @Test
@@ -51,7 +51,7 @@ final class LocalDateBetweenConditionTest {
   @Test
   void incorrectDateValue() {
     when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, LocalDate.of(2021, 10, 12)));
-    when(formatCondition.formatLocalDate(any())).thenReturn("formatted date");
+    when(formatCondition.format(any())).thenReturn("formatted date");
 
     CheckResult check = condition.check(driver, element);
 
@@ -59,7 +59,7 @@ final class LocalDateBetweenConditionTest {
     assertThat(check.actualValue()).isEqualTo("formatted date");
 
     verify(formatCondition).check(driver, element);
-    verify(formatCondition).formatLocalDate(LocalDate.of(2021, 10, 12));
+    verify(formatCondition).format(LocalDate.of(2021, 10, 12));
   }
 
   @Test
