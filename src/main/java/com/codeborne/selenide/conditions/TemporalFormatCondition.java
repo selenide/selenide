@@ -21,7 +21,7 @@ public abstract class  TemporalFormatCondition<T extends TemporalAccessor> exten
   private final String originalPattern;
   private final DateTimeFormatter formatter;
 
-  public TemporalFormatCondition(String name, String pattern) {
+  protected TemporalFormatCondition(String name, String pattern) {
     super(name);
     this.originalPattern = pattern;
     this.formatter = DateTimeFormatter.ofPattern(pattern);
