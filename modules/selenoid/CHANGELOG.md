@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.7 (released 15.05.2023)
+* #19 inherit most of downloading logic from Selenide
+* #24 #26 bump Selenide from 6.12.4 to 6.14.1
+
 ## 2.3.6 (released 22.03.2023)
 * bump Selenide from 6.11.1 to 6.12.4
 * bump slf4j from 2.0.6 to 2.0.7

@@ -5,7 +5,7 @@ plugins {
 
 group = 'org.selenide'
 archivesBaseName = 'selenide-selenoid'
-version = '2.3.6'
+version = '2.3.7'
 
 apply from: 'gradle/compilation.gradle'
 apply from: 'gradle/dependencies.gradle'
