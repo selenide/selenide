@@ -1,5 +1,8 @@
 == Changelog
 
+=== 2.8.0 (released 14.05.2023)
+* Support new Selenide method $.dragAndDrop(options)
+
 === 2.7.1 (released 05.04.2023)
 * Bump selenide from 6.12.3 to 6.13.0  (PR #143 #150)
 

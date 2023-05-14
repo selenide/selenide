@@ -1,5 +1,6 @@
 package com.codeborne.selenide.appium.commands;
 
+import com.codeborne.selenide.DragAndDropOptions;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.DragAndDropTo;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -16,6 +17,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.ACTIONS;
+import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.JS;
 import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
@@ -32,7 +35,11 @@ public class AppiumDragAndDropTo extends DragAndDropTo {
     }
     AppiumDriver appiumDriver = appiumDriverOptional.get();
 
-    SelenideElement target = findTarget(locator.driver(), args);
+    DragAndDropOptions options = dragAndDropOptions(args, ACTIONS);
+    if (options.getMethod() == JS) {
+      throw new UnsupportedOperationException("Drag'n'Drop with JavaScript is not supported in mobile apps");
+    }
+    SelenideElement target = options.getTarget(locator.driver());
     target.shouldBe(visible);
 
     Sequence sequence = getSequenceToPerformDragAndDrop(getCenter(locator.getWebElement()), getCenter(target));
