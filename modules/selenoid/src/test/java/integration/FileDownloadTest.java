@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.io.File;
 import java.io.IOException;
 
+import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
@@ -48,7 +49,7 @@ public class FileDownloadTest {
     $("[name=delay]").setValue("3000");
     $("#lore-ipsum").setValue(fileContent);
 
-    File file = $("#slow-download").download(withExtension("txt"));
+    File file = $("#slow-download").download(using(FOLDER).withFilter(withExtension("txt")));
 
     assertThat(file).hasName("hello.txt");
     assertThat(file).content().isEqualToIgnoringWhitespace(fileContent);
