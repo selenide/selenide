@@ -1,29 +1,17 @@
 package org.selenide.selenoid;
 
-import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.files.DownloadAction;
-import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.Downloader;
-import com.codeborne.selenide.impl.WebElementSource;
-import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Optional;
-
-import static com.codeborne.selenide.Selenide.sleep;
-import static com.codeborne.selenide.impl.FileHelper.moveFile;
-import static java.lang.System.currentTimeMillis;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 
 
 @ParametersAreNonnullByDefault
@@ -39,66 +27,48 @@ public class DownloadFileInSelenoid extends com.codeborne.selenide.impl.Download
     this.downloader = downloader;
   }
 
-  @CheckReturnValue
+  @Nullable
+  protected DownloadsFolder getDownloadsFolder(Driver driver) {
+    return isLocalBrowser(driver) ? 
+      super.getDownloadsFolder(driver) : 
+      new SelenoidDownloadsFolder(driver);
+  }
+
+  @Override
+  protected void waitWhileFilesAreBeingModified(Driver driver, DownloadsFolder folder, long timeout, long pollingInterval) {
+    if (isLocalBrowser(driver)) {
+      super.waitWhileFilesAreBeingModified(driver, folder, timeout, pollingInterval);
+    }
+    else {
+      // In Selenoid, we don't know files' modification time :(
+    }
+  }
+
+  @Override
+  protected void failFastIfNoChanges(Driver driver, DownloadsFolder folder, FileFilter filter,
+                                     long start, long timeout, long incrementTimeout) throws FileNotFoundException {
+    if (isLocalBrowser(driver)) {
+      super.failFastIfNoChanges(driver, folder, filter, start, timeout, incrementTimeout);
+    }
+    else {
+      // In Selenoid, we don't know files' modification time :(
+    }
+  }
+
   @Nonnull
   @Override
-  public File download(WebElementSource anyClickableElement,
-                       WebElement clickable, long timeout, long incrementTimeout,
-                       FileFilter fileFilter,
-                       DownloadAction action) throws FileNotFoundException {
-
-    Driver driver = anyClickableElement.driver();
-    Config config = driver.config();
-    if (config.remote() == null) {
-      log.debug("Working in local browser. Switching to a default FOLDER implementation.");
-      return super.download(anyClickableElement, clickable, timeout, incrementTimeout, fileFilter, action);
+  protected File archiveFile(Driver driver, File downloadedFile) {
+    if (isLocalBrowser(driver)) {
+      return super.archiveFile(driver, downloadedFile);
     }
-
-    SelenoidClient selenoidClient = new SelenoidClient(config.remote(), driver.getSessionId().toString());
-
-    selenoidClient.deleteDownloadedFiles();
-    clickable.click();
-
-    Optional<String> downloadedFileName = waitForDownloads(selenoidClient, config, timeout, fileFilter);
-    if (!downloadedFileName.isPresent()) {
-      throw new FileNotFoundException("Failed to download file " + anyClickableElement + " in " + timeout + " ms.");
-    }
-
-    File downloadedFile = selenoidClient.download(downloadedFileName.get());
-    return archiveFile(driver.config(), downloadedFile);
+    SelenoidClient selenoidClient = new SelenoidClient(driver.config().remote(), driver.getSessionId().toString());
+    File uniqueFolder = downloader.prepareTargetFolder(driver.config());
+    File localFile = selenoidClient.download(downloadedFile.getName(), uniqueFolder);
+    log.debug("Copied the downloaded file {} from Selenoid to {}", downloadedFile, localFile);
+    return localFile;
   }
 
-  @CheckReturnValue
-  @Nonnull
-  private Optional<String> waitForDownloads(SelenoidClient selenoidClient, Config config, long timeout, FileFilter fileFilter) {
-    sleep(config.pollingInterval());
-
-    List<String> fileNames = emptyList();
-    Optional<String> matchingFile = Optional.empty();
-
-    for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; ) {
-      fileNames = selenoidClient.downloads();
-      matchingFile = firstMatchingFile(fileNames, fileFilter);
-      if (matchingFile.isPresent()) break;
-      sleep(config.pollingInterval());
-    }
-
-    log.debug("All downloaded files: {}", fileNames);
-    return matchingFile;
-  }
-
-  private Optional<String> firstMatchingFile(List<String> fileNames, FileFilter fileFilter) {
-    return fileNames.stream()
-        .filter(fileName -> fileFilter.match(new DownloadedFile(new File(fileName), emptyMap())))
-        .findFirst();
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private File archiveFile(Config config, File downloadedFile) {
-    File uniqueFolder = downloader.prepareTargetFolder(config);
-    File archivedFile = new File(uniqueFolder, downloadedFile.getName());
-    moveFile(downloadedFile, archivedFile);
-    return archivedFile;
+  private boolean isLocalBrowser(Driver driver) {
+    return driver.config().remote() == null;
   }
 }

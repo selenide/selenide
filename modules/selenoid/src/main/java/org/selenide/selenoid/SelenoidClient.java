@@ -21,7 +21,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -56,11 +55,10 @@ public class SelenoidClient {
 
   @CheckReturnValue
   @Nonnull
-  public File download(String fileName) {
+  public File download(String fileName, File targetFolder) {
     URL url = urlOfDownloadedFile(fileName);
     try (InputStream in = connectionFromUrl(url).getInputStream()) {
-      Path uniqueDir = Files.createTempDirectory("selenoid-download");
-      File file = new File(uniqueDir.toFile(), fileName);
+      File file = new File(targetFolder, fileName);
       try (OutputStream out = Files.newOutputStream(file.toPath())) {
         IOUtils.copyLarge(in, out);
       }
