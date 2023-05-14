@@ -5,7 +5,6 @@ import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.files.FileFilters;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
@@ -16,8 +15,6 @@ import java.io.File;
 import java.io.IOException;
 
 import static com.codeborne.selenide.files.DownloadActions.click;
-import static com.codeborne.selenide.impl.DownloadFileToFolder.isFileModifiedLaterThan;
-import static java.io.File.createTempFile;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
@@ -60,27 +57,6 @@ final class DownloadFileToFolderTest {
   }
 
   @Test
-  void fileModificationCheck() throws IOException {
-    assertThat(isFileModifiedLaterThan(file(1597333000L), 1597333000L)).isTrue();
-    assertThat(isFileModifiedLaterThan(file(1597333000L), 1597332999L)).isTrue();
-    assertThat(isFileModifiedLaterThan(file(1597333000L), 1597334001L)).isFalse();
-  }
-
-  @Test
-  void fileModificationCheck_worksWithSecondsPrecision() throws IOException {
-    assertThat(isFileModifiedLaterThan(file(1111111000L), 1111111000L)).isTrue();
-    assertThat(isFileModifiedLaterThan(file(1111111000L), 1111111999L)).isTrue();
-    assertThat(isFileModifiedLaterThan(file(1111111000L), 1111112000L)).isTrue();
-    assertThat(isFileModifiedLaterThan(file(1111111000L), 1111112001L)).isFalse();
-  }
-
-  @Test
-  void fileModificationCheck_worksEvenIfFileModificationTime_isInPreviousSecond() throws IOException {
-    assertThat(isFileModifiedLaterThan(file(1111111112999L), 1111111113004L)).isTrue();
-    assertThat(isFileModifiedLaterThan(file(1111111114998L), 1111111115002L)).isTrue();
-  }
-
-  @Test
   void filesHasNotBeenUpdatedForMs() {
     assertThat(command.filesHasNotBeenUpdatedForMs(1111111114000L, 1111111114998L, 1111111114998L)).isEqualTo(0);
     assertThat(command.filesHasNotBeenUpdatedForMs(1111111114000L, 1111111114998L, 1111111114000L)).isEqualTo(998);
@@ -92,14 +68,5 @@ final class DownloadFileToFolderTest {
     assertThat(command.filesHasNotBeenUpdatedForMs(1111111114000L, 1111111114998L, 0))
       .as("File modification time may be 0 (if file path is treated as invalid for some reason)")
       .isEqualTo(998);
-  }
-
-  private File file(long modifiedAt) throws IOException {
-    File file = createTempFile("selenide-tests", "new-file");
-    FileUtils.touch(file);
-    if (!file.setLastModified(modifiedAt)) {
-      throw new IllegalStateException("Failed to set last modified time to file " + file.getAbsolutePath());
-    }
-    return file;
   }
 }
