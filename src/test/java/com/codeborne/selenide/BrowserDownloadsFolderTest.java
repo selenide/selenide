@@ -7,7 +7,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.io.IOException;
 
-import static com.codeborne.selenide.DownloadsFolder.isFileModifiedLaterThan;
+import static com.codeborne.selenide.BrowserDownloadsFolder.isFileModifiedLaterThan;
 import static java.io.File.createTempFile;
 import static org.apache.commons.io.FileUtils.touch;
 import static org.assertj.core.api.Assertions.assertThat;
