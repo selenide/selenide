@@ -244,7 +244,13 @@ public class SimpleReport {
         case '\n' -> builder.append("\\n");
         case '\f' -> builder.append("\\f");
         case '\b' -> builder.append("\\b");
-        default -> builder.append(symbol);
+        case '\u00A0' -> builder.append("\\u00A0");
+        default -> {
+          if (symbol <= 31)
+            builder.append(String.format("\\u%04X", (int) symbol));
+          else
+            builder.append(symbol);
+        }
       }
     }
 
