@@ -58,6 +58,18 @@ final class SimpleReportTest {
   }
 
   @Test
+  void reportWithSubjectWithSpecialChars() throws IOException {
+    String report = new SimpleReport().generateReport("escapeSpecialCharactersInSubject", asList(
+      new Log("open", "https://some.com/", PASS, 0, millisToNanos(100)),
+      new Log("shouldHave", "text \"with\n\t\f\bspecial\n\r\"characters", PASS,
+        millisToNanos(100), millisToNanos(200)),
+      new Log("#loginButton", "click", FAIL, millisToNanos(200), millisToNanos(300))
+    ));
+
+    assertThat(report).isEqualTo(sample("/simple-report-test6.txt"));
+  }
+
+  @Test
   void reportWithLongSelectors() throws IOException {
     String report = new SimpleReport().generateReport("userCanUseVeryLongSelectors", asList(
       new Log("open", "about:blank", PASS, 0, millisToNanos(100)),
