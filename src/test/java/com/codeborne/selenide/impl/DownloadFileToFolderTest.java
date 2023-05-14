@@ -1,9 +1,11 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.BrowserDownloadsFolder;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.SharedDownloadsFolder;
 import com.codeborne.selenide.files.FileFilters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.files.DownloadActions.click;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.UUID.randomUUID;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +35,8 @@ final class DownloadFileToFolderTest {
   private final WebDriver webdriver = new DummyWebDriver();
   private final WebElementSource linkWithHref = mock();
   private final WebElement link = mock();
-  private final DriverStub driver = new DriverStub(config, new Browser("opera", false), webdriver, null);
+  private final BrowserDownloadsFolder downloadsFolder = new SharedDownloadsFolder("build/downloads/" + randomUUID());
+  private final DriverStub driver = new DriverStub(config, new Browser("opera", false), webdriver, null, downloadsFolder);
 
   @BeforeEach
   void setUp() {
@@ -45,14 +49,14 @@ final class DownloadFileToFolderTest {
   void tracksForNewFilesInDownloadsFolder() throws IOException {
     String newFileName = "bingo-bongo.txt";
     doAnswer((Answer<Void>) i -> {
-      writeStringToFile(driver.browserDownloadsFolder().file(newFileName), "Hello Bingo-Bongo", UTF_8);
+      writeStringToFile(downloadsFolder.file(newFileName), "Hello Bingo-Bongo", UTF_8);
       return null;
     }).when(link).click();
 
     File downloadedFile = command.download(linkWithHref, link, 3000, 300, FileFilters.none(), click());
 
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);
-    assertThat(downloadedFile.getParentFile()).isNotEqualTo(driver.browserDownloadsFolder().toFile());
+    assertThat(downloadedFile.getParentFile()).isNotEqualTo(downloadsFolder.getFolder());
     assertThat(readFileToString(downloadedFile, UTF_8)).isEqualTo("Hello Bingo-Bongo");
   }
 
