@@ -1,7 +1,10 @@
 # Changelog
 
 ## 6.14.1 (released 12.05.2023)
+* make new method `$.dragAndDrop()` usable by `selenide-appium`
+* make `$.download(FOLDER)` usable by `selenide-selenoid`
 * bump webdrivermanager from 5.3.2 to 5.3.3  --  see https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md#533---2023-05-11
+* bump BrowserUpProxy from 2.2.9 to 2.2.10  --  see https://github.com/valfirst/browserup-proxy/blob/master/CHANGELOG.md
 
 ## 6.14.0 (released 08.05.2023)
 see https://github.com/selenide/selenide/milestone/181?closed=1

@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,8 +26,6 @@ import java.util.Set;
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
-import static java.util.Collections.emptyMap;
-import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
 public class DownloadFileToFolder {
@@ -69,7 +68,7 @@ public class DownloadFileToFolder {
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
     long pollingInterval = Math.max(config.pollingInterval(), 50);
-    DownloadsFolder folder = driver.browserDownloadsFolder();
+    DownloadsFolder folder = getDownloadsFolder(driver);
 
     if (folder == null) {
       throw new IllegalStateException("Downloads folder is not configured");
@@ -80,10 +79,10 @@ public class DownloadFileToFolder {
 
     action.perform(driver, clickable);
 
-    waitForNewFiles(fileFilter, folder, downloadStartedAt, timeout, incrementTimeout, pollingInterval);
-    waitUntilDownloadsCompleted(driver.browser(), folder, fileFilter, timeout, incrementTimeout, pollingInterval);
+    waitForNewFiles(driver, fileFilter, folder, downloadStartedAt, timeout, incrementTimeout, pollingInterval);
+    waitUntilDownloadsCompleted(driver, folder, fileFilter, timeout, incrementTimeout, pollingInterval);
 
-    Downloads newDownloads = new Downloads(newFiles(folder, downloadStartedAt));
+    Downloads newDownloads = new Downloads(folder.filesNewerThan(downloadStartedAt));
     if (log.isInfoEnabled()) {
       log.info("Downloaded files in {}: {}", folder, newDownloads.filesAsString());
     }
@@ -92,23 +91,29 @@ public class DownloadFileToFolder {
     }
 
     File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
-    return archiveFile(config, downloadedFile);
+    return archiveFile(driver, downloadedFile);
   }
 
-  private void waitUntilDownloadsCompleted(Browser browser, DownloadsFolder folder, FileFilter filter,
+  @Nullable
+  protected DownloadsFolder getDownloadsFolder(Driver driver) {
+    return driver.browserDownloadsFolder();
+  }
+
+  private void waitUntilDownloadsCompleted(Driver driver, DownloadsFolder folder, FileFilter filter,
                                            long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
+    Browser browser = driver.browser();
     if (browser.isChrome() || browser.isEdge()) {
-      waitUntilFileDisappears(folder, CHROMIUM_TEMPORARY_FILES, filter, timeout, incrementTimeout, pollingInterval);
+      waitUntilFileDisappears(driver, folder, CHROMIUM_TEMPORARY_FILES, filter, timeout, incrementTimeout, pollingInterval);
     }
     else if (browser.isFirefox()) {
-      waitUntilFileDisappears(folder, FIREFOX_TEMPORARY_FILES, filter, timeout, incrementTimeout, pollingInterval);
+      waitUntilFileDisappears(driver, folder, FIREFOX_TEMPORARY_FILES, filter, timeout, incrementTimeout, pollingInterval);
     }
     else {
-      waitWhileFilesAreBeingModified(folder, timeout, pollingInterval);
+      waitWhileFilesAreBeingModified(driver, folder, timeout, pollingInterval);
     }
   }
 
-  private void waitUntilFileDisappears(DownloadsFolder folder, Set<String> extension, FileFilter filter,
+  private void waitUntilFileDisappears(Driver driver, DownloadsFolder folder, Set<String> extension, FileFilter filter,
                                        long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
     for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       if (!folder.hasFiles(extension, filter)) {
@@ -116,17 +121,17 @@ public class DownloadFileToFolder {
         return;
       }
       log.debug("Found {} files, waiting for {} ms (filter: {})...", extension, pollingInterval, filter);
-      failFastIfNoChanges(folder, filter, start, timeout, incrementTimeout);
+      failFastIfNoChanges(driver, folder, filter, start, timeout, incrementTimeout);
     }
 
     if (folder.hasFiles(extension, filter)) {
       String message = String.format("Folder %s still contains files %s after %s ms. " +
-        "Apparently, the downloading hasn't completed in time.", folder, extension, timeout);
+                                     "Apparently, the downloading hasn't completed in time.", folder, extension, timeout);
       throw new FileNotFoundException(message);
     }
   }
 
-  private void waitWhileFilesAreBeingModified(DownloadsFolder folder, long timeout, long pollingInterval) {
+  protected void waitWhileFilesAreBeingModified(Driver driver, DownloadsFolder folder, long timeout, long pollingInterval) {
     Map<String, Long> times = folder.modificationTimes();
     long lastModifiedAt = currentTimeMillis();
 
@@ -148,7 +153,7 @@ public class DownloadFileToFolder {
     log.warn("Files are still being modified during last {} ms.", currentTimeMillis() - lastModifiedAt);
   }
 
-  private void waitForNewFiles(FileFilter fileFilter, DownloadsFolder folder, long clickMoment,
+  private void waitForNewFiles(Driver driver, FileFilter fileFilter, DownloadsFolder folder, long clickMoment,
                                long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
     if (log.isDebugEnabled()) {
       log.debug("Waiting for files in {}...", folder);
@@ -156,7 +161,7 @@ public class DownloadFileToFolder {
 
     long start = currentTimeMillis();
     for (; currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
-      Downloads downloads = new Downloads(newFiles(folder, clickMoment));
+      Downloads downloads = new Downloads(folder.filesNewerThan(clickMoment));
       List<DownloadedFile> matchingFiles = downloads.files(fileFilter);
       if (!matchingFiles.isEmpty()) {
         log.debug("Matching files found: {}, all new files: {}, all files: {}",
@@ -165,15 +170,15 @@ public class DownloadFileToFolder {
       }
       log.debug("Matching files not found: {}, all new files: {}, all files: {}",
         matchingFiles, downloads.filesAsString(), folder.filesAsString());
-      failFastIfNoChanges(folder, fileFilter, start, timeout, incrementTimeout);
+      failFastIfNoChanges(driver, folder, fileFilter, start, timeout, incrementTimeout);
     }
 
     log.debug("Matching files still not found -> stop waiting for new files after {} ms. (timeout: {} ms.)",
       currentTimeMillis() - start, timeout);
   }
 
-  private void failFastIfNoChanges(DownloadsFolder folder, FileFilter filter,
-                                   long start, long timeout, long incrementTimeout) throws FileNotFoundException {
+  protected void failFastIfNoChanges(Driver driver, DownloadsFolder folder, FileFilter filter,
+                                     long start, long timeout, long incrementTimeout) throws FileNotFoundException {
     long lastFileUpdate = folder.lastModificationTime().orElse(-1L);
     long now = currentTimeMillis();
     long filesHasNotBeenUpdatedForMs = filesHasNotBeenUpdatedForMs(start, now, lastFileUpdate);
@@ -204,27 +209,11 @@ public class DownloadFileToFolder {
   }
 
   @Nonnull
-  private File archiveFile(Config config, File downloadedFile) {
-    File uniqueFolder = downloader.prepareTargetFolder(config);
+  protected File archiveFile(Driver driver, File downloadedFile) {
+    File uniqueFolder = downloader.prepareTargetFolder(driver.config());
     File archivedFile = new File(uniqueFolder, downloadedFile.getName());
     moveFile(downloadedFile, archivedFile);
     log.debug("Moved the downloaded file {} to {}", downloadedFile, archivedFile);
     return archivedFile;
-  }
-
-  private static List<DownloadedFile> newFiles(DownloadsFolder folder, long modifiedAfterTs) {
-    return folder.files().stream()
-      .filter(File::isFile)
-      .filter(file -> isFileModifiedLaterThan(file, modifiedAfterTs))
-      .map(file -> new DownloadedFile(file, emptyMap()))
-      .collect(toList());
-  }
-
-  /**
-   * Depending on OS, file modification time can have seconds precision, not milliseconds.
-   * We have to ignore the difference in milliseconds.
-   */
-  static boolean isFileModifiedLaterThan(File file, long timestamp) {
-    return file.lastModified() - timestamp >= -1000L;
   }
 }

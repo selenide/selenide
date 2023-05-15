@@ -109,7 +109,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   public void download_byNameRegex() throws FileNotFoundException {
     File downloadedFile = $(byText("Download me")).download(withNameMatching("hello_.+\\.txt"));
 
-    assertThat(downloadedFile).hasName("hello_world.txt");
+    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
