@@ -1,5 +1,6 @@
 package com.codeborne.selenide.appium.commands;
 
+import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.appium.AppiumClickOptions;
@@ -21,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
+import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.appium.WebdriverUnwrapper.isMobile;
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static java.time.Duration.ofMillis;
@@ -41,12 +43,33 @@ public class AppiumClick extends Click {
     if (args == null || args.length == 0) {
       click(locator.driver(), webElement);
     } else if (args.length == 1) {
-      AppiumClickOptions appiumClickOptions = firstOf(args);
-      click(locator.driver(), webElement, appiumClickOptions);
+      Object options = firstOf(args);
+      if (options instanceof AppiumClickOptions) {
+        AppiumClickOptions appiumClickOptions = (AppiumClickOptions) options;
+        click(locator.driver(), webElement, appiumClickOptions);
+      }
+      else if (options instanceof ClickOptions) {
+        ClickOptions clickOptions = (ClickOptions) options;
+        click(locator.driver(), webElement, clickOptions);
+      }
+      else {
+        throw new UnsupportedOperationException("Unsupported click argument: " + options);
+      }
     } else {
       throw new IllegalArgumentException("Unsupported click arguments: " + Arrays.toString(args));
     }
     return proxy;
+  }
+
+  @Override
+  protected void click(Driver driver, WebElement webElement, ClickOptions options) {
+    if (options.timeout() != null) {
+      throw new UnsupportedOperationException("Click timeout is not supported in mobile");
+    }
+    if (options.clickMethod() == JS) {
+      throw new UnsupportedOperationException("Click using JavaScript is not supported in mobile");
+    }
+    super.click(driver, webElement, options);
   }
 
   protected void click(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
