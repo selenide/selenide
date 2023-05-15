@@ -5,14 +5,15 @@ import com.codeborne.selenide.WebDriverProvider;
 import com.codeborne.selenide.webdriver.HttpClientTimeouts;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.SessionNotCreatedException;
+import org.openqa.selenium.WebDriver;
+
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
-import javax.annotation.Nonnull;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.SessionNotCreatedException;
-import org.openqa.selenium.WebDriver;
 
 public abstract class IosDriverProvider implements WebDriverProvider {
   @Nonnull
@@ -38,7 +39,7 @@ public abstract class IosDriverProvider implements WebDriverProvider {
 
   protected XCUITestOptions getXcuiTestOptions() {
     XCUITestOptions options = new XCUITestOptions();
-    // on github actions first test run maybe extremely slow
+    // on GitHub actions, first test run maybe extremely slow
     options.setWdaLaunchTimeout(Duration.ofMinutes(10));
     options.setDeviceName("iPhone 12");
     options.setFullReset(false);
