@@ -1,6 +1,6 @@
 ext {
   selenideVersion = '6.14.1'
-  appiumVersion = '8.4.0'
+  appiumVersion = '8.5.0'
   junitVersion = '5.9.3'
   assertjVersion = '3.24.2'
   mockitoVersion = '5.3.1'
