@@ -1122,8 +1122,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *    2. instant
    *    3. smooth
    *  * block (optional)
-   *    1. start
-   *    2. center (default)
+   *    1. start (default)
+   *    2. center
    *    3. end
    *    4. nearest
    *  * inline
