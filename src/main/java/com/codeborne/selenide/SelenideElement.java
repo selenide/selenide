@@ -1249,13 +1249,21 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement cached();
 
   /**
-   * Click the element using {@link ClickOptions}: {@code $("#username").click(ClickOptions.usingJavaScript())}<p>
+   * Click the element using {@link ClickOptions}:
+   *
+   * <pre>
+   *  {@code $("#username").click(ClickOptions.usingJavaScript())}
+   * </pre>
    *
    * You can specify a relative offset from the center of the element inside ClickOptions:
    * e.g. <pre>
    *  {@code $("#username").click(usingJavaScript().offset(123, 222))}
    * </pre>
    *
+   * Before clicking, waits until element gets interactable and enabled.
+   * <br>
+   *
+   * @return this element
    * @see com.codeborne.selenide.commands.Click
    */
   SelenideElement click(ClickOptions clickOption);
@@ -1267,6 +1275,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * But it uses JavaScript method to click if {@code com.codeborne.selenide.Configuration#clickViaJs} is defined.
    * It may be helpful for testing in Internet Explorer where native click doesn't always work correctly.
+   *
+   * <br><br>
+   * Before clicking, waits until element gets interactable and enabled.
+   * <br>
    *
    * @see com.codeborne.selenide.commands.Click
    */
@@ -1286,6 +1298,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Double-click the element
    *
+   * <br><br>
+   * Before clicking, waits until element gets interactable and enabled.
+   * <br>
+   *
    * @return this element
    * @see com.codeborne.selenide.commands.DoubleClick
    */
@@ -1301,6 +1317,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * e.g. {@code $("#username").doubleClick(usingJavaScript().offset(123, 222))}
    * </p>
    *
+   * <br>
+   * Before clicking, waits until element gets interactable and enabled.
+   * <br>
+   *
+   * @return this element
    * @see com.codeborne.selenide.commands.DoubleClick
    * @since 6.13.0
    */
