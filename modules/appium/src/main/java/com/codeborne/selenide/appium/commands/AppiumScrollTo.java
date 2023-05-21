@@ -69,12 +69,9 @@ public class AppiumScrollTo implements Command<SelenideElement> {
 
   private void scrollInMobile(AppiumDriver appiumDriver, WebElementSource locator, AppiumScrollOptions scrollOptions) {
     int currentSwipeCount = 0;
-    String previousPageSource = "";
 
     while (isElementNotDisplayed(locator)
-           && isNotEndOfPage(appiumDriver, previousPageSource)
            && isLessThanMaxSwipeCount(currentSwipeCount, scrollOptions.getMaxSwipeCounts())) {
-      previousPageSource = appiumDriver.getPageSource();
       performScroll(appiumDriver, scrollOptions.getScrollDirection());
       currentSwipeCount++;
     }
@@ -90,10 +87,6 @@ public class AppiumScrollTo implements Command<SelenideElement> {
     } catch (NoSuchElementException noSuchElementException) {
       return true;
     }
-  }
-
-  private boolean isNotEndOfPage(AppiumDriver appiumDriver, String initialPageSource) {
-    return !initialPageSource.equals(appiumDriver.getPageSource());
   }
 
   private Dimension getMobileDeviceSize(AppiumDriver appiumDriver) {
