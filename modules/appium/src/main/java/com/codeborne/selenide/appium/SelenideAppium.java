@@ -85,12 +85,4 @@ public class SelenideAppium {
   public static SelenideAppiumElement $(By seleniumSelector, int index) {
     return ElementFinder.wrap(driver(), SelenideAppiumElement.class, null, seleniumSelector, index);
   }
-
-  @CheckReturnValue
-  @Nonnull
-  public static SelenideAppiumElement $(By androidSelector, By iosSelector) {
-    return AppiumDriverRunner.isAndroidDriver()
-      ? $(androidSelector, 0)
-      : $(iosSelector, 0);
-  }
 }
