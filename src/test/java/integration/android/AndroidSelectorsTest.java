@@ -1,7 +1,11 @@
 package integration.android;
 
+import com.codeborne.selenide.appium.SelenideAppium;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.appium.AppiumSelectors.byAttribute;
 import static com.codeborne.selenide.appium.AppiumSelectors.byContentDescription;
@@ -15,12 +19,9 @@ import static com.codeborne.selenide.appium.AppiumSelectors.withTagAndAttribute;
 import static com.codeborne.selenide.appium.AppiumSelectors.withTagAndContentDescription;
 import static com.codeborne.selenide.appium.AppiumSelectors.withTagAndText;
 import static com.codeborne.selenide.appium.AppiumSelectors.withText;
+import static com.codeborne.selenide.appium.SelenideAppium.$;
 import static com.codeborne.selenide.appium.SelenideAppium.back;
-
-import com.codeborne.selenide.appium.SelenideAppium;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
+import static com.codeborne.selenide.appium.selector.CombinedBy.android;
 
 class AndroidSelectorsTest extends BaseApiDemosTest {
 
@@ -57,7 +58,7 @@ class AndroidSelectorsTest extends BaseApiDemosTest {
     back();
     $(withTagAndText("android.widget.TextView", GRAPHICS_PARTIAL_STRING)).click();
     back();
-    SelenideAppium.$(withText(GRAPHICS_PARTIAL_STRING), By.xpath(""))
+    $(android(withText(GRAPHICS_PARTIAL_STRING)).ios(By.xpath("")))
       .shouldHave(text("Graphics"));
   }
 }
