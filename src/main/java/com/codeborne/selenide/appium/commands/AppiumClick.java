@@ -63,11 +63,13 @@ public class AppiumClick extends Click {
 
   @Override
   protected void click(Driver driver, WebElement webElement, ClickOptions options) {
-    if (options.timeout() != null) {
-      throw new UnsupportedOperationException("Click timeout is not supported in mobile");
-    }
-    if (options.clickMethod() == JS) {
-      throw new UnsupportedOperationException("Click using JavaScript is not supported in mobile");
+    if (isMobile(driver)) {
+      if (options.timeout() != null) {
+        throw new UnsupportedOperationException("Click timeout is not supported in mobile");
+      }
+      if (options.clickMethod() == JS) {
+        throw new UnsupportedOperationException("Click using JavaScript is not supported in mobile");
+      }
     }
     super.click(driver, webElement, options);
   }
