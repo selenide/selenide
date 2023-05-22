@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -123,7 +123,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     try {
       return String.join(";", IOUtils.readLines(getClass().getResourceAsStream("/content-types.properties"), UTF_8));
     }
-    catch (IOException e) {
+    catch (UncheckedIOException e) {
       return "text/plain;text/csv;application/zip;application/pdf;application/octet-stream;" +
         "application/msword;application/vnd.ms-excel;text/css;text/html";
     }

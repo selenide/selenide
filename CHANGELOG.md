@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.15.0
+* #2287 Bump commons-io:commons-io from 2.11.0 to 2.12.0
+
 ## 6.14.1 (released 12.05.2023)
 * make new method `$.dragAndDrop()` usable by `selenide-appium`
 * make `$.download(FOLDER)` usable by `selenide-selenoid`
