@@ -17,14 +17,6 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
           java-version: '11'
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Run checks and unit tests
         run: ./gradlew check --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
@@ -48,6 +40,12 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
           java-version: '11'
+      - uses: actions/cache@v3
+        with:
+          path: build/apps
+          key: ${{ runner.os }}-android-tests-${{ hashFiles('**/*.zip*') }}
+          restore-keys: |
+            ${{ runner.os }}-android-tests-
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
@@ -95,10 +93,84 @@ jobs:
             build/reports/
             appium.log
 
+  run-ios-tests:
+    runs-on: macOS-12
+    env:
+      APPIUM_TEST_SERVER_PORT: 4723
+      APPIUM_TEST_SERVER_HOST: 127.0.0.1
+      APPIUM_STARTUP_TIMEOUT_SEC: 30
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup iOS simulator
+        uses: futureware-tech/simulator-action@v2
+        with:
+          model: 'iPhone 14'
+          os: 'iOS'
+          os_version: '16.2'
+      - uses: actions/cache@v3
+        with:
+          path: build/apps
+          key: ${{ runner.os }}-ios-tests-${{ hashFiles('**/*.zip*') }}
+          restore-keys: |
+            ${{ runner.os }}-ios-tests-
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install Appium
+        run: |
+          npm install -g appium@next
+          npm install -g appium-doctor
+      - name: Log Xcode Version
+        run: xcodebuild -version
+      - name: Log Installed Simulators
+        run: xcrun simctl list
+      - name: Log Runtimes
+        run: xcrun simctl list runtimes
+      - name: Start Appium server
+        run: |
+          cwd=$(pwd)
+          pushd "$cwd"
+          cd ~
+          appium driver install xcuitest
+          appium driver install safari
+          appium-doctor
+          nohup appium \
+            --base-path /wd/hub \
+            --relaxed-security \
+            2>&1 > "$cwd/appium.log" &
+          popd
+      - name: Wait for Appium server startup
+        run: |
+          seconds_started=$(date +%s)
+          while ! nc -z $APPIUM_TEST_SERVER_HOST $APPIUM_TEST_SERVER_PORT; do
+            sleep 0.1
+            seconds_elapsed=$(( $(date +%s) - seconds_started ))
+            if [[ $seconds_elapsed -gt $APPIUM_STARTUP_TIMEOUT_SEC ]]; then
+              echo "Appium server was unable to start within $APPIUM_STARTUP_TIMEOUT_SEC seconds timeout"
+              exit 1
+            fi
+          done
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          cache: 'gradle'
+          java-version: '11'
+      - name: Run iOS tests
+        run: ./gradlew ios --no-daemon --console=plain -i
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: test-report-ios
+          path: |
+            build/reports/
+            appium.log
+
   auto-merge-dependabot:
     name: 🤖 Auto merge dependabot PR
     timeout-minutes: 10
-    needs: [run-unit-tests, run-android-tests]
+    needs: [run-unit-tests, run-android-tests, run-ios-tests]
     if: ${{ github.actor == 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     permissions:

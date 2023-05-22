@@ -13,7 +13,7 @@ class DeepLinkUrlIosTest extends BaseSwagLabsAppIosTest {
   @Test
   void testDeepLinkInIos() {
     SelenideAppium.openIOSDeepLink("mydemoapprn://product-details/1");
-    $(byAttribute("label", "Sauce Labs Backpack")).shouldBe(visible, Duration.ofSeconds(60));
+    $(byAttribute("label", "Sauce Labs Backpack")).shouldBe(visible, Duration.ofSeconds(20));
     SelenideAppium.terminateApp("com.saucelabs.mydemoapp.rn");
   }
 }

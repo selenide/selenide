@@ -21,9 +21,9 @@ public abstract class IosDriverProvider implements WebDriverProvider {
   public WebDriver createDriver(@Nonnull Capabilities capabilities) {
     Configuration.timeout = 10_000;
     Configuration.pageLoadTimeout = -1;
-    Configuration.remoteConnectionTimeout = Duration.ofMinutes(5).toMillis();
-    Configuration.remoteReadTimeout = Duration.ofMinutes(5).toMillis();
-    HttpClientTimeouts.defaultLocalReadTimeout = Duration.ofMinutes(10);
+    Configuration.remoteConnectionTimeout = Duration.ofSeconds(10).toMillis();
+    Configuration.remoteReadTimeout = Duration.ofSeconds(30).toMillis();
+    HttpClientTimeouts.defaultLocalReadTimeout = Duration.ofSeconds(20);
     XCUITestOptions options = getXcuiTestOptions();
     options.setApp(getApplicationUnderTest().getAbsolutePath());
     try {
@@ -41,7 +41,7 @@ public abstract class IosDriverProvider implements WebDriverProvider {
     XCUITestOptions options = new XCUITestOptions();
     // on GitHub actions, first test run maybe extremely slow
     options.setWdaLaunchTimeout(Duration.ofMinutes(10));
-    options.setDeviceName("iPhone 12");
+    options.setDeviceName("iPhone 14");
     options.setFullReset(false);
     return options;
   }
