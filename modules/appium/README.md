@@ -11,7 +11,7 @@ Just add to pom.xml:
 <dependency>
     <groupId>com.codeborne</groupId>
     <artifactId>selenide-appium</artifactId>
-    <version>2.8.1</version>
+    <version>6.15.0</version>
 </dependency>
 ```
 
@@ -126,7 +126,8 @@ $(By.xpath(".//*[@text='Animation']")).scroll(up()); //scroll max of 30 times in
 
 ### Changelog
 
-Here is [CHANGELOG](https://github.com/selenide/selenide-appium/blob/main/CHANGELOG)
+* Here is [CHANGELOG](https://github.com/selenide/selenide-appium/blob/main/CHANGELOG) for selenide-appium 1.0.0 ... 2.8.1
+* Here is [CHANGELOG](https://github.com/selenide/selenide/blob/main/CHANGELOG.md) for selenide-appium 6.15.0+
 
 ### Reference
 

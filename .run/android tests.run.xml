@@ -1,13 +1,13 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="unit-tests" type="JUnit" factoryName="JUnit">
-    <module name="selenide-appium.test" />
+  <configuration default="false" name="android tests" type="JUnit" factoryName="JUnit">
+    <module name="selenide.modules.appium.test" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="com.codeborne.selenide.appium.*" />
+        <option name="PATTERN" value="integration.android.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
-    <option name="PACKAGE_NAME" value="com.codeborne.selenide.appium" />
+    <option name="PACKAGE_NAME" value="integration.android" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="package" />

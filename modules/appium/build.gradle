@@ -1,21 +1,37 @@
-plugins {
-  id 'java-library'
-  id 'checkstyle'
-  id 'com.github.spotbugs' version '5.0.14'
+ext {
+  artifactId = 'selenide-appium'
 }
 
-defaultTasks 'check', 'test', 'publishToMavenLocal'
+dependencies {
+  api project(":statics")
+  testImplementation project(':statics').sourceSets.test.output
+  testImplementation project(':modules:core').sourceSets.test.output
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 
-group = 'com.codeborne'
-description = 'Selenide adaptor for Appium framework'
-version = '2.8.1'
-
-tasks.withType(Test) {
-  useJUnitPlatform()
+  api("io.appium:java-client:8.5.0") {
+    exclude group: 'io.opentelemetry'
+    exclude group: 'org.slf4j'
+    exclude group: 'org.seleniumhq'
+    exclude group: 'cglib'
+  }
+  implementation('commons-io:commons-io:2.12.0')
+  testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+  testImplementation("org.assertj:assertj-core:$assertjVersion")
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
+  testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
 }
 
-apply from: 'gradle/code-analysis.gradle'
-apply from: 'gradle/compilation.gradle'
-apply from: 'gradle/dependencies.gradle'
-apply from: 'gradle/deploy.gradle'
-apply from: 'gradle/tests.gradle'
+task android(type: Test) {
+  include 'integration/android/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+  outputs.upToDateWhen { false }
+}
+
+task ios(type: Test) {
+  include 'integration/ios/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+  outputs.upToDateWhen { false }
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')

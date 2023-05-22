@@ -10,11 +10,11 @@ Any contributions to `selenide-appium` are appreciated.
 
 ## How to send a pull request?
 - Create a github account
-- Fork `selenide-appium` repo  
-  - go to https://github.com/selenide/selenide-appium
+- Fork `selenide` repo  
+  - go to https://github.com/selenide/selenide
   - click "Fork" link in the right upper corner
-- Check out your `selenide-appium` copy:  
-  - `git clone https://github.com/username/selenide-appium`
+- Check out your `selenide` copy:  
+  - `git clone https://github.com/username/selenide`
 - Create a new branch from `main` branch
   - `git checkout -b remove-duplicate-screenshots-in-allure`   (choose any reasonable branch name)
 - Make your changes
@@ -23,7 +23,7 @@ Any contributions to `selenide-appium` are appreciated.
   - it's recommended to start commit message with issue id, like `#ID remove duplicate screenshots in Allure`
   - also read a [commit message tutorial](https://chris.beams.io/posts/git-commit/)
   - prefer small independent commits to one big commit with many changes
-- go to http://github.com/username/selenide-appium/
+- go to http://github.com/username/selenide/
   - you will see a automatic suggestion to create a pull request
   - accept it, fill all the required fields.
   - wait. Don't worry, we review pull requests often. We will contact you.  
@@ -32,8 +32,8 @@ Any contributions to `selenide-appium` are appreciated.
 ## How to build selenide-appium locally?
 
 ```
-git clone https://github.com/selenide/selenide-appium.git
-cd selenide-appium
+git clone https://github.com/selenide/selenide.git
+cd selenide
 ./gradlew    (or `gradlew.bat` on Windows)
 ```
 
@@ -52,7 +52,7 @@ NB! Use Pixel_3_XL device profile to match your local environment and our CI set
 For more details please read [official docs](https://developer.android.com/studio/run/managing-avds).
 #### 2. Run appium server:
 ```
-> appium
+> appium --base-path /wd/hub --relaxed-security
 ```
 
 #### 3. And finally, run the test:
