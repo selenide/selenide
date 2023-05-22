@@ -52,7 +52,7 @@ public class AppiumAttributeValues extends ExactTexts {
     if (AppiumDriverRunner.isAndroidDriver()) {
       return element -> element.getAttribute(androidAttributeName);
     } else if (AppiumDriverRunner.isIosDriver()) {
-      return element -> element.getAttribute(androidAttributeName);
+      return element -> element.getAttribute(iosAttributeName);
     } else {
       throw new IllegalArgumentException("Appium Collection Condition is only applicable for android and ios driver. " +
         "Please use Condition class instead.");
