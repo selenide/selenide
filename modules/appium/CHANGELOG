@@ -1,7 +1,12 @@
 == Changelog
 
-=== 2.8.0 (released 14.05.2023)
-* Support new Selenide method $.dragAndDrop(options)
+=== 2.8.0 (released 22.05.2023)  -- see https://github.com/selenide/selenide-appium/milestone/25?closed=1
+* Support new Selenide method `$.dragAndDrop(options)` (PR #164)
+* #155 restore support for `$.click(ClickOptions)` (PR #165)
+* #153 speed up swipe/scroll in ios (PR #172)
+* find element based on android or ios driver with new class `CombinedBy` (PR #151, #171)
+* Bump selenide from 6.13.0 to 6.14.1 (PR #156, #164)
+* Bump appium from 8.3.0 to 8.5.0 (PR #161, #163)
 
 === 2.7.1 (released 05.04.2023)
 * Bump selenide from 6.12.3 to 6.13.0  (PR #143 #150)
