@@ -1,5 +1,8 @@
 == Changelog
 
+=== 2.8.1 (released 22.05.2023)
+* Fix $.click(options) in web browser
+
 === 2.8.0 (released 22.05.2023)  -- see https://github.com/selenide/selenide-appium/milestone/25?closed=1
 * Support new Selenide method `$.dragAndDrop(options)` (PR #164)
 * #155 restore support for `$.click(ClickOptions)` (PR #165)
