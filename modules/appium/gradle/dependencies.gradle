@@ -1,0 +1,40 @@
+ext {
+  selenideVersion = '6.14.1'
+  appiumVersion = '8.5.0'
+  junitVersion = '5.9.3'
+  assertjVersion = '3.24.2'
+  mockitoVersion = '5.3.1'
+  slf4jVersion = '2.0.7'
+}
+
+dependencies {
+  api("com.codeborne:selenide:$selenideVersion")
+  api("io.appium:java-client:$appiumVersion") {
+    exclude group: 'io.opentelemetry'
+    exclude group: 'org.slf4j'
+    exclude group: 'org.seleniumhq'
+    exclude group: 'cglib'
+  }
+  implementation('commons-io:commons-io:2.12.0')
+  testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+  testImplementation("org.assertj:assertj-core:$assertjVersion")
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
+  testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
+}
+
+repositories {
+  mavenCentral()
+  mavenLocal()
+  maven {
+    url "https://oss.sonatype.org/content/repositories/snapshots"
+    mavenContent {
+      snapshotsOnly()
+    }
+  }
+}
+
+configurations.configureEach {
+  // Check for snapshot updates every build
+  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}

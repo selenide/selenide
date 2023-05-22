@@ -1,0 +1,17 @@
+name-template: 'v$NEXT_PATCH_VERSION'
+tag-template: 'v$NEXT_PATCH_VERSION'
+template: |
+  ## Changes
+  $CHANGES
+
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'feature'
+      - 'refactoring'
+  - title: '🐛 Bug Fixes'
+    label: 'bug'
+  - title: 📦 Dependency updates
+    label: 'dependencies'
+  - title: 📖 Documentation
+    label: 'documentation'

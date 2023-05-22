@@ -1,0 +1,12 @@
+build
+hs_err_pid*
+.gradle
+.idea
+!gradle-wrapper.jar
+*.iml
+/.classpath
+/.project
+/.gradletasknamecache
+/bin/
+/out/
+/.settings/

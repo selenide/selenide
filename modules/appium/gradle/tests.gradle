@@ -1,0 +1,34 @@
+test {
+  include 'com/codeborne/selenide/appium/**/*'
+}
+
+task android(type: Test) {
+  include 'integration/android/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+  outputs.upToDateWhen { false }
+}
+
+task ios(type: Test) {
+  include 'integration/ios/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+  outputs.upToDateWhen { false }
+}
+
+tasks.withType(Test) {
+  useJUnitPlatform()
+
+  System.properties.stringPropertyNames()
+    .findAll { it.startsWith("selenide.") }
+    .forEach {
+      println " set ${it} to ${System.getProperty(it)}"
+      systemProperties[it] = System.getProperty(it)
+    }
+
+  maxParallelForks = 1
+  jvmArgs = ['-ea', '-Xmx512m']
+  systemProperties['file.encoding'] = 'UTF-8'
+//    systemProperties['user.country'] = 'TR'
+//    systemProperties['user.language'] = 'tr'
+}
+
+task allTests(dependsOn: ['clean', 'check', 'android', 'ios']) {}
