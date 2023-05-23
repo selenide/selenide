@@ -1,0 +1,22 @@
+test {
+  include 'org/selenide/selenoid/**/*'
+}
+
+tasks.register('test-chrome', Test) {
+  systemProperties['selenide.browser'] = 'chrome'
+  include 'integration/**/*'
+  exclude 'org/selenide/selenoid/**/*'
+}
+
+tasks.withType(Test).configureEach {
+  useJUnitPlatform()
+  systemProperty('file.encoding', encoding)
+  outputs.upToDateWhen {
+    false
+  }
+}
+
+task integrationTest(type: Test) {
+  include 'integration/**/*'
+  exclude 'org.selenide.selenoid/**/*'
+}
