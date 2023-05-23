@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.15.0 (released 2x.05.2023)
+Project "selenide-selenoid" was merged into project "selenide".
+
 ## 2.3.7 (released 15.05.2023)
 * Make the method $.download() wait for the full completion of download #19
 * #24 #26 bump Selenide from 6.12.4 to 6.14.1

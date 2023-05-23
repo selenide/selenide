@@ -24,7 +24,7 @@ Currently, the plugin supports the following features:
 We are going to implement more features like reading logs and videos etc.
 
 ## Usage
-1. Import `org.selenide:selenide-selenoid:2.3.6`
+1. Import `com.codeborne:selenide-selenoid:6.15.0`
 2. Set `Configuration.fileDownload = FOLDER;`
 3. Use method `$.download()` as usually.
 
@@ -42,7 +42,7 @@ This is a sample project using `selenide-selenoid` plugin:
 ## Feedback
 _Feel free to share your feedback!_
 
-Register [GitHub issues](https://github.com/selenide/selenide-selenoid/issues), write to 
+Register [GitHub issues](https://github.com/selenide/selenide/issues), write to 
 [![chat](https://img.shields.io/badge/chat-green.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
  or
 [![чат](https://img.shields.io/badge/%D1%87%D0%B0%D1%82-green.svg)](https://gitter.im/codeborne/selenide-ru?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge).

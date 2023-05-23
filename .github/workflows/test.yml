@@ -214,10 +214,32 @@ jobs:
             build/reports/
             appium.log
 
+  run-selenoid-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          cache: 'gradle'
+          java-version: '11'
+      - name: Start selenoid
+        uses: Xotabu4/selenoid-github-action@v2
+      - name: Run integration tests
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: :modules:selenoid:selenoidTests
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: test-report-selenoid
+          path: build/reports/
+
   auto-merge-dependabot:
     name: 🤖 Auto merge dependabot PR
     timeout-minutes: 10
-    needs: [run-tests-on-linux, run-tests-on-windows, run-android-tests, run-ios-tests]
+    needs: [run-tests-on-linux, run-tests-on-windows, run-android-tests, run-ios-tests, run-selenoid-tests]
     if: ${{ github.actor == 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     permissions:

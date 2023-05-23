@@ -1,4 +1,4 @@
-package integration;
+package it.selenoid;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,9 +11,9 @@ import java.net.URL;
 
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
-import static integration.SelenoidSetup.capabilities;
-import static integration.SelenoidSetup.checkDownload;
-import static integration.SelenoidSetup.selenoidUrl;
+import static it.selenoid.SelenoidSetup.capabilities;
+import static it.selenoid.SelenoidSetup.checkDownload;
+import static it.selenoid.SelenoidSetup.selenoidUrl;
 
 @ExtendWith(SelenoidSetup.class)
 public class RemoteWebdriverTest {

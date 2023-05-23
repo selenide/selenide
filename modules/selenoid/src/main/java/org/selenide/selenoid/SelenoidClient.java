@@ -1,7 +1,6 @@
 package org.selenide.selenoid;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
@@ -30,7 +29,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @ParametersAreNonnullByDefault
 public class SelenoidClient {
   private static final Logger log = LoggerFactory.getLogger(SelenoidClient.class);
-  private static final Type listType = new TypeToken<List<String>>() {}.getType();
+  private static final Type listType = new StringListType().getType();
   private static final Gson gson = new Gson();
   final String baseUrl;
   private final String sessionId;
@@ -86,7 +85,7 @@ public class SelenoidClient {
       int responseCode = connection.getResponseCode();
       if (responseCode != 200) {
         throw new RuntimeException("Failed to deleted downloaded file " + fileName +
-            ", received http status " + responseCode);
+                                   ", received http status " + responseCode);
       }
       log.debug("Deleted downloaded file {}", url);
     }
@@ -95,47 +94,49 @@ public class SelenoidClient {
     }
   }
 
-    @CheckReturnValue
-    @Nonnull
-    public String getClipboardText() {
-        try {
-            HttpURLConnection connection = connectionFromUrl(url(baseUrl, "clipboard", sessionId));
-            int code = connection.getResponseCode();
-            if (code != 200)
-                throw new RuntimeException("Something went wrong while getting clipboard! Response code: " + code);
+  @CheckReturnValue
+  @Nonnull
+  public String getClipboardText() {
+    try {
+      HttpURLConnection connection = connectionFromUrl(url(baseUrl, "clipboard", sessionId));
+      int code = connection.getResponseCode();
+      if (code != 200)
+        throw new RuntimeException("Something went wrong while getting clipboard! Response code: " + code);
 
-            try (InputStream in = connection.getInputStream()) {
-                return IOUtils.toString(in, UTF_8);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Something went wrong while getting clipboard!", e);
-        }
+      try (InputStream in = connection.getInputStream()) {
+        return IOUtils.toString(in, UTF_8);
+      }
     }
+    catch (IOException e) {
+      throw new RuntimeException("Something went wrong while getting clipboard!", e);
+    }
+  }
 
-    public void setClipboardText(String text) {
-        try {
-            HttpURLConnection connection = connectionFromUrl(url(baseUrl, "clipboard", sessionId));
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            connection.setConnectTimeout(10000);
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
-            try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream())) {
-                writer.write(text);
-            }
-            int code = connection.getResponseCode();
-            if (code != 200)
-                throw new RuntimeException("Something went wrong while writing clipboard! Response code: " + code);
-        } catch (IOException e) {
-            throw new RuntimeException("Can't set clipboard content! ", e);
-        }
+  public void setClipboardText(String text) {
+    try {
+      HttpURLConnection connection = connectionFromUrl(url(baseUrl, "clipboard", sessionId));
+      connection.setRequestMethod("POST");
+      connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+      connection.setConnectTimeout(10000);
+      connection.setRequestMethod("POST");
+      connection.setDoOutput(true);
+      try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), UTF_8)) {
+        writer.write(text);
+      }
+      int code = connection.getResponseCode();
+      if (code != 200)
+        throw new RuntimeException("Something went wrong while writing clipboard! Response code: " + code);
     }
+    catch (IOException e) {
+      throw new RuntimeException("Can't set clipboard content! ", e);
+    }
+  }
 
-    @CheckReturnValue
-    @Nonnull
-    URL urlOfDownloadedFile(String fileName) {
-        return url(baseUrl, "download", sessionId, fileName);
-    }
+  @CheckReturnValue
+  @Nonnull
+  URL urlOfDownloadedFile(String fileName) {
+    return url(baseUrl, "download", sessionId, fileName);
+  }
 
   @CheckReturnValue
   @Nonnull
@@ -153,8 +154,8 @@ public class SelenoidClient {
   private URL url(String base, String... pathSegments) {
     try {
       return new URIBuilder(base)
-          .setPathSegments(pathSegments)
-          .build().toURL();
+        .setPathSegments(pathSegments)
+        .build().toURL();
     }
     catch (URISyntaxException | MalformedURLException e) {
       throw new RuntimeException("Failed to build valid URL from " + base + '+' + Arrays.toString(pathSegments), e);
@@ -177,7 +178,7 @@ public class SelenoidClient {
   private HttpURLConnection connectionFromUrl(URL url) throws IOException {
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     if (url.getUserInfo() != null) {
-      String basicAuth = "Basic " + new String(Base64.getEncoder().encode(url.getUserInfo().getBytes()));
+      String basicAuth = "Basic " + new String(Base64.getEncoder().encode(url.getUserInfo().getBytes(UTF_8)), UTF_8);
       connection.setRequestProperty("Authorization", basicAuth);
     }
     return connection;

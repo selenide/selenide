@@ -1,15 +1,30 @@
-plugins {
-  id 'java-library'
-  id 'idea'
+ext {
+  artifactId = 'selenide-selenoid'
 }
 
-group = 'org.selenide'
-archivesBaseName = 'selenide-selenoid'
-version = '2.3.7'
+dependencies {
+  api project(":statics")
+  testImplementation "org.seleniumhq.selenium:selenium-http-jdk-client:$seleniumVersion"
+  implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
+  implementation("commons-io:commons-io:2.12.0")
 
-apply from: 'gradle/compilation.gradle'
-apply from: 'gradle/dependencies.gradle'
-apply from: 'gradle/tests.gradle'
-apply from: 'gradle/deploy.gradle'
+  testImplementation project(':statics').sourceSets.test.output
+  testImplementation project(':modules:core').sourceSets.test.output
+  testRuntimeOnly project(':modules:proxy')
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 
-defaultTasks 'check'
+  testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+  testImplementation("org.assertj:assertj-core:$assertjVersion")
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
+  testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
+}
+
+task selenoidTests(type: Test) {
+  systemProperties['selenide.browser'] = 'chrome'
+  include 'it/selenoid/**/*'
+  exclude 'org/selenide/**/*'
+  exclude 'com/codeborne/**/*'
+  outputs.upToDateWhen { false }
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')

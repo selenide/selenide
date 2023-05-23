@@ -1,4 +1,4 @@
-package integration;
+package it.selenoid;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,8 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
-import static integration.SelenoidSetup.checkDownload;
-import static integration.SelenoidSetup.resetSelenoidSettings;
+import static it.selenoid.SelenoidSetup.checkDownload;
+import static it.selenoid.SelenoidSetup.resetSelenoidSettings;
 import static org.apache.commons.lang3.StringUtils.rightPad;
 import static org.assertj.core.api.Assertions.assertThat;
 

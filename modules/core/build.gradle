@@ -25,7 +25,7 @@ dependencies {
     exclude group: 'org.slf4j'
   }
   implementation('org.apache.commons:commons-compress:1.23.0') {because 'used by webdrivermanager'}
-  implementation('org.apache.httpcomponents.client5:httpclient5:5.2.1')
+  implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
 
   compileOnly("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
   compileOnly("xyz.rogfam:littleproxy:$littleProxyVersion")

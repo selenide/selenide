@@ -993,7 +993,7 @@ public class Selenide {
    * <p>
    * Remote runs support can be implemented via plugins.
    * Plugin for Selenoid supports clipboard since v1.1.0.
-   * @see <a href="https://github.com/selenide/selenide-selenoid">selenide-selenoid</a>
+   * @see <a href="https://github.com/selenide/selenide/tree/main/modules/selenoid">selenide-selenoid</a>
    * <p>
    * Pay attention that Clipboard is shared resource for instance where tests runs
    * and keep in mind while developing test suite with multiple tests for clipboard.
