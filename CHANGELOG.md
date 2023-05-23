@@ -1,6 +1,9 @@
 # Changelog
 
-## 6.15.0
+## 6.15.0 (planned to 2x.05.2023)
+* #2292 Project "selenide-appium" was merged into project "selenide".
+* #2291 Project "selenide-selenoid" was merged into project "selenide".
+* #2288 Clicking a disabled element now fails --  thanks to Maksim @Au6ojlut for PR #2290
 * #2287 Bump commons-io:commons-io from 2.11.0 to 2.12.0
 
 ## 6.14.1 (released 12.05.2023)
