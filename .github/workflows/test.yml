@@ -137,8 +137,9 @@ jobs:
         with:
           name: test-report-android
           path: |
-            build/reports/
-            appium.log
+            **/build/reports
+            **/build/test-results
+            **/appium.log
 
   run-ios-tests:
     runs-on: macOS-12
@@ -211,8 +212,9 @@ jobs:
         with:
           name: test-report-ios
           path: |
-            build/reports/
-            appium.log
+            **/build/reports
+            **/build/test-results
+            **/appium.log
 
   run-selenoid-tests:
     runs-on: ubuntu-latest
@@ -229,12 +231,14 @@ jobs:
       - name: Run integration tests
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: :modules:selenoid:selenoidTests
+          arguments: selenoidTests
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: test-report-selenoid
-          path: build/reports/
+          path: |
+            **/build/reports
+            **/build/test-results
 
   auto-merge-dependabot:
     name: 🤖 Auto merge dependabot PR
