@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.appium.AppiumElementDescriber.isUnsupportedAttributeError;
+import static com.codeborne.selenide.appium.AppiumElementDescriber.removePackage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
@@ -179,5 +180,11 @@ public class AppiumElementDescriberTest {
   void isUnsupportedAttributeError_otherErrors() {
     assertThat(isUnsupportedAttributeError(new WebDriverException("Not implemented"))).isFalse();
     assertThat(isUnsupportedAttributeError(new NoSuchElementException("nope"))).isFalse();
+  }
+
+  @Test
+  void removesPackageFromAndroidClassName() {
+    assertThat(removePackage("android.widget.TextView")).isEqualTo("TextView");
+    assertThat(removePackage("JustSomeClass")).isEqualTo("JustSomeClass");
   }
 }

@@ -33,12 +33,16 @@ import static java.util.regex.Pattern.compile;
  * <p>
  * Sample output:
  * <p>
+ * <pre>{@code
  * Element should have text '666' {By.id: result}
- * Element: '<TextView class="android.widget.TextView" id="com.android.calculator2:id/result" name="6" displayed="true"
- * checked="false" enabled="true" focused="false" bounds="[0,183][1080,584]"
- * contentDescription="null" package="com.android.calculator2">6</TextView>'
+ * Element:
+ *  <TextView class="android.widget.TextView" id="com.android.calculator2:id/result" name="6" displayed="true"
+ *            checked="false" enabled="true" focused="false" bounds="[0,183][1080,584]"
+ *            contentDescription="null" package="com.android.calculator2">6</TextView>
  * Screenshot: file:/Users/andrei/projects/selenide/build/reports/tests/1599256941895.0.png
  * Page source: file:/Users/andrei/projects/selenide/build/reports/tests/1599256941895.0.html
+ * }
+ * </pre>
  */
 @ParametersAreNonnullByDefault
 public class AppiumElementDescriber implements ElementDescriber {
@@ -127,7 +131,7 @@ public class AppiumElementDescriber implements ElementDescriber {
     private Builder appendTagName() {
       if (instanceOf(webDriver, AndroidDriver.class)) {
         getAttribute("class", className -> {
-          tagName = className.replaceFirst(".+\\.(.+)", "$1");
+          tagName = removePackage(className);
         });
       }
       if ("?".equals(tagName)) {
@@ -212,6 +216,12 @@ public class AppiumElementDescriber implements ElementDescriber {
     private String build() {
       return sb.toString();
     }
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  static String removePackage(String className) {
+    return className.replaceFirst(".+\\.(.+)", "$1");
   }
 
   static boolean isUnsupportedAttributeError(WebDriverException e) {
