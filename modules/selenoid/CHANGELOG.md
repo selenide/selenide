@@ -1,7 +1,7 @@
 # Changelog
 
 ## 2.3.7 (released 15.05.2023)
-* #19 inherit most of downloading logic from Selenide
+* Make the method $.download() wait for the full completion of download #19
 * #24 #26 bump Selenide from 6.12.4 to 6.14.1
 
 ## 2.3.6 (released 22.03.2023)
