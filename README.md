@@ -31,7 +31,7 @@ public void login() {
 Look for [detailed comparison of Selenide and Selenium WebDriver API](https://github.com/selenide/selenide/wiki/Selenide-vs-Selenium).
 
 #### Selenide for mobile apps
-You can use Selenide for testing mobile applications. See plugin [selenide-appium](https://github.com/selenide/selenide-appium).
+You can use Selenide for testing mobile applications. See plugin [selenide-appium](https://github.com/selenide/selenide/tree/main/modules/selenide-appium).
 
 #### Selenide with Selenoid
 You can use Selenide for running tests in Selenoid containers. See plugin [selenide-selenoid](https://github.com/selenide/selenide-selenoid).
