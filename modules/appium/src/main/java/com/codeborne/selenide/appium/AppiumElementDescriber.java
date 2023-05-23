@@ -37,8 +37,8 @@ import static java.util.regex.Pattern.compile;
  * Element: '<TextView class="android.widget.TextView" id="com.android.calculator2:id/result" name="6" displayed="true"
  * checked="false" enabled="true" focused="false" bounds="[0,183][1080,584]"
  * contentDescription="null" package="com.android.calculator2">6</TextView>'
- * Screenshot: file:/Users/andrei/projects/selenide-appium/build/reports/tests/1599256941895.0.png
- * Page source: file:/Users/andrei/projects/selenide-appium/build/reports/tests/1599256941895.0.html
+ * Screenshot: file:/Users/andrei/projects/selenide/build/reports/tests/1599256941895.0.png
+ * Page source: file:/Users/andrei/projects/selenide/build/reports/tests/1599256941895.0.html
  */
 @ParametersAreNonnullByDefault
 public class AppiumElementDescriber implements ElementDescriber {

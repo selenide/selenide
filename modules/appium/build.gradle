@@ -23,13 +23,13 @@ dependencies {
 }
 
 task android(type: Test) {
-  include 'integration/android/**/*'
+  include 'it/mobile/android/**/*'
   exclude 'com/codeborne/selenide/**/*'
   outputs.upToDateWhen { false }
 }
 
 task ios(type: Test) {
-  include 'integration/ios/**/*'
+  include 'it/mobile/ios/**/*'
   exclude 'com/codeborne/selenide/**/*'
   outputs.upToDateWhen { false }
 }

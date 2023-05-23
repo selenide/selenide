@@ -3,11 +3,11 @@
     <module name="selenide.modules.appium.test" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="integration.ios.*" />
+        <option name="PATTERN" value="it.mobile.ios.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
-    <option name="PACKAGE_NAME" value="integration.ios" />
+    <option name="PACKAGE_NAME" value="it.mobile.ios" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="package" />
