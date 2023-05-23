@@ -1,6 +1,5 @@
 package org.selenide.selenoid;
 
-import com.codeborne.selenide.Clipboard;
 import com.codeborne.selenide.DefaultClipboard;
 import com.codeborne.selenide.Driver;
 import org.slf4j.Logger;
@@ -11,50 +10,45 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class SelenoidClipboard implements Clipboard {
+public class SelenoidClipboard extends DefaultClipboard {
   private static final Logger log = LoggerFactory.getLogger(SelenoidClipboard.class);
 
-  private final Driver driver;
-
-  SelenoidClipboard(Driver driver) {
-    this.driver = driver;
-  }
-
-  @Nonnull
-  @CheckReturnValue
-  @Override
-  public Driver driver() {
-    return driver;
-  }
-
-  @Nonnull
-  @CheckReturnValue
-  @Override
-  public Clipboard object() {
-    return this;
+  public SelenoidClipboard(Driver driver) {
+    super(driver);
   }
 
   @CheckReturnValue
   @Nonnull
   @Override
   public String getText() {
-    if (driver.config().remote() == null) {
+    if (isLocalWebdriver()) {
       log.debug("Working in local browser. Switching to a default Clipboard implementation.");
-      return new DefaultClipboard(driver).getText();
+      return super.getText();
     }
     else {
-      return new SelenoidClient(driver.config().remote(), driver.getSessionId().toString()).getClipboardText();
+      return selenoidClient().getClipboardText();
     }
   }
 
   @Override
   public void setText(String text) {
-    if (driver.config().remote() == null) {
+    if (isLocalWebdriver()) {
       log.debug("Working in local browser. Switching to a default Clipboard implementation.");
-      new DefaultClipboard(driver).setText(text);
+      super.setText(text);
     }
     else {
-      new SelenoidClient(driver.config().remote(), driver.getSessionId().toString()).setClipboardText(text);
+      selenoidClient().setClipboardText(text);
     }
+  }
+
+  @CheckReturnValue
+  private boolean isLocalWebdriver() {
+    return driver().config().remote() == null;
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  private SelenoidClient selenoidClient() {
+    return new SelenoidClient(driver().config().remote(), driver().getSessionId().toString());
   }
 }
