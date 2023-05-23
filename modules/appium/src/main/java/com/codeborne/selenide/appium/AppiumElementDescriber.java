@@ -221,7 +221,8 @@ public class AppiumElementDescriber implements ElementDescriber {
   @Nonnull
   @CheckReturnValue
   static String removePackage(String className) {
-    return className.replaceFirst(".+\\.(.+)", "$1");
+    int i = className.lastIndexOf('.');
+    return i < 0 ? className : className.substring(i + 1);
   }
 
   static boolean isUnsupportedAttributeError(WebDriverException e) {
