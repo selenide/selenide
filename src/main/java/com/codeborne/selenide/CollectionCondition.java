@@ -21,16 +21,34 @@ import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.function.Predicate;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static java.util.Arrays.asList;
 
 @ParametersAreNonnullByDefault
-public abstract class CollectionCondition implements Predicate<List<WebElement>> {
+public abstract class CollectionCondition {
   protected String explanation;
+
+  /**
+   * @deprecated Please implement method {@link #check(Driver, List)} instead.
+   */
+  @Deprecated
+  @CheckReturnValue
+  public boolean test(List<WebElement> elements) {
+    throw new UnsupportedOperationException("Implement method 'check' (recommended) or 'test' (deprecated)");
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  public CheckResult check(Driver driver, List<WebElement> elements) {
+    boolean result = test(elements);
+    return new CheckResult(result ? ACCEPT : REJECT, null);
+  }
 
   public abstract void fail(CollectionSource collection,
                             @Nullable List<WebElement> elements,
@@ -328,8 +346,15 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     }
 
     @Override
-    public boolean test(@Nullable List<WebElement> input) {
+    @Deprecated
+    public boolean test(List<WebElement> input) {
       return delegate.test(input);
+    }
+
+    @Nonnull
+    @Override
+    public CheckResult check(Driver driver, List<WebElement> elements) {
+      return delegate.check(driver, elements);
     }
   }
 

@@ -1,6 +1,8 @@
 package com.codeborne.selenide.collections;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ex.AttributesMismatch;
 import com.codeborne.selenide.ex.AttributesSizeMismatch;
@@ -9,11 +11,14 @@ import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static java.util.Collections.unmodifiableList;
 
 @ParametersAreNonnullByDefault
@@ -29,21 +34,23 @@ public class Attributes extends CollectionCondition {
     this.attribute = attribute;
   }
 
-  @CheckReturnValue
   @Override
-  public boolean test(List<WebElement> elements) {
+  @Nonnull
+  @CheckReturnValue
+  public CheckResult check(Driver driver, List<WebElement> elements) {
     if (elements.size() != expectedValues.size()) {
-      return false;
+      return new CheckResult(REJECT, elements.size());
     }
 
     for (int i = 0; i < expectedValues.size(); i++) {
       WebElement element = elements.get(i);
       String expectedValue = expectedValues.get(i);
-      if (!Objects.equals(element.getAttribute(attribute), expectedValue)) {
-        return false;
+      String actualAttributeValue = element.getAttribute(attribute);
+      if (!Objects.equals(actualAttributeValue, expectedValue)) {
+        return new CheckResult(REJECT, actualAttributeValue);
       }
     }
-    return true;
+    return new CheckResult(ACCEPT, null);
   }
 
   @Override
