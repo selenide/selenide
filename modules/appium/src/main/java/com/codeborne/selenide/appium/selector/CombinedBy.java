@@ -1,6 +1,8 @@
 package com.codeborne.selenide.appium.selector;
 
 import com.codeborne.selenide.WebDriverRunner;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -9,8 +11,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static com.codeborne.selenide.appium.AppiumDriverRunner.isAndroidDriver;
-import static com.codeborne.selenide.appium.AppiumDriverRunner.isIosDriver;
+import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
 import static java.util.Objects.requireNonNull;
 
 @ParametersAreNonnullByDefault
@@ -36,19 +37,19 @@ public class CombinedBy extends By {
 
   @Override
   public WebElement findElement(SearchContext context) {
-    return chooseSelector().findElement(context);
+    return chooseSelector(context).findElement(context);
   }
 
   @Override
   public List<WebElement> findElements(SearchContext context) {
-    return chooseSelector().findElements(context);
+    return chooseSelector(context).findElements(context);
   }
 
-  private By chooseSelector() {
-    if (isAndroidDriver()) {
+  private By chooseSelector(SearchContext context) {
+    if (instanceOf(context, AndroidDriver.class)) {
       return requireNonNull(androidSelector, "Android selector not given");
     }
-    if (isIosDriver()) {
+    if (instanceOf(context, IOSDriver.class)) {
       return requireNonNull(iosSelector, "iOS selector not given");
     }
     throw new UnsupportedOperationException("Unsupported webdriver: " + WebDriverRunner.getWebDriver());
