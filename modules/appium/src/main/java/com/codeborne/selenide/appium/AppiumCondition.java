@@ -1,24 +1,12 @@
 package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.conditions.AttributeWithValue;
+import com.codeborne.selenide.appium.conditions.AttributeWithValue;
+import com.codeborne.selenide.appium.conditions.CombinedAttribute;
 
 public class AppiumCondition {
 
-  private AppiumCondition() {
-  }
-
-  public static Condition attributeWithValue(String androidAttributeName, String iosAttributeName, String expectedAttributeValue) {
-    return AppiumDriverRunner.isAndroidDriver()
-      ? androidAttributeWithValue(androidAttributeName, expectedAttributeValue)
-      : iosAttributeWithValue(iosAttributeName, expectedAttributeValue);
-  }
-
-  public static Condition androidAttributeWithValue(String androidAttributeName, String expectedAttributeValue) {
-    return new AttributeWithValue(androidAttributeName, expectedAttributeValue);
-  }
-
-  public static Condition iosAttributeWithValue(String iosAttributeName, String expectedAttributeValue) {
-    return new AttributeWithValue(iosAttributeName, expectedAttributeValue);
+  public static Condition attribute(CombinedAttribute attribute, String expectedAttributeValue) {
+    return new AttributeWithValue(attribute, expectedAttributeValue);
   }
 }
