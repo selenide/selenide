@@ -58,10 +58,10 @@ public class ExactTexts extends CollectionCondition {
       throw new ElementNotFound(collection, toString(), timeoutMs, cause);
     }
     else if (elements.size() != expectedTexts.size()) {
-      throw new TextsSizeMismatch(collection, expectedTexts, ElementsCollection.texts(elements), explanation, timeoutMs);
+      throw new TextsSizeMismatch(collection, expectedTexts, ElementsCollection.texts(elements), explanation, timeoutMs, cause);
     }
     else {
-      throw new TextsMismatch(collection, expectedTexts, ElementsCollection.texts(elements), explanation, timeoutMs);
+      throw new TextsMismatch(collection, expectedTexts, ElementsCollection.texts(elements), explanation, timeoutMs, cause);
     }
   }
 

@@ -91,7 +91,8 @@ final class ExactTextsCaseSensitiveTest {
         "Actual: [Hello]%n" +
         "Expected: [One]%n" +
         "Collection: Collection description%n" +
-        "Timeout: 10 s."));
+        "Timeout: 10 s.%n" +
+        "Caused by: java.lang.Exception: Exception method"));
   }
 
   @Test
@@ -109,7 +110,8 @@ final class ExactTextsCaseSensitiveTest {
         "Actual: [One]%n" +
         "Expected: [ONE]%n" +
         "Collection: Collection description%n" +
-        "Timeout: 10 s."));
+        "Timeout: 10 s.%n" +
+        "Caused by: java.lang.Exception: Exception method"));
   }
 
   @Test
@@ -124,7 +126,9 @@ final class ExactTextsCaseSensitiveTest {
       .isInstanceOf(TextsSizeMismatch.class)
       .hasMessageContaining("Actual: [One], List size: 1")
       .hasMessageContaining("Expected: [One, Two], List size: 2")
-      .hasMessageEndingWith(String.format("Collection: Collection description%nTimeout: 10 s."));
+      .hasMessageContaining("Collection: Collection description")
+      .hasMessageContaining("Timeout: 10 s.")
+      .hasMessageEndingWith("Caused by: java.lang.Exception: Exception method");
   }
 
   @Test

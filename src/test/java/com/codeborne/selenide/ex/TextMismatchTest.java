@@ -25,7 +25,7 @@ final class TextMismatchTest {
 
   @Test
   void toString_withoutExplanation() {
-    TextsMismatch textsMismatch = new TextsMismatch(collection, expectedTexts, actualTexts, null, timeoutMs);
+    TextsMismatch textsMismatch = new TextsMismatch(collection, expectedTexts, actualTexts, null, timeoutMs, null);
 
     assertThat(textsMismatch).hasMessage(String.format("Texts mismatch%n" +
       "Actual: [One, Two, Three]%n" +
@@ -36,7 +36,7 @@ final class TextMismatchTest {
 
   @Test
   void toString_withExplanation() {
-    TextsMismatch textsMismatch = new TextsMismatch(collection, expectedTexts, actualTexts, "it's said in doc", timeoutMs);
+    TextsMismatch textsMismatch = new TextsMismatch(collection, expectedTexts, actualTexts, "it's said in doc", timeoutMs, null);
 
     assertThat(textsMismatch).hasMessage(String.format("Texts mismatch%n" +
       "Actual: [One, Two, Three]%n" +

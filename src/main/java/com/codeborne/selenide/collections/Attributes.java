@@ -23,7 +23,7 @@ public class Attributes extends CollectionCondition {
 
   public Attributes(String attribute, List<String> expectedValues) {
     if (expectedValues.isEmpty()) {
-      throw new IllegalArgumentException("No expected values given");
+      throw new IllegalArgumentException("No expected values given for attribute " + attribute);
     }
     this.expectedValues = unmodifiableList(expectedValues);
     this.attribute = attribute;
@@ -55,10 +55,10 @@ public class Attributes extends CollectionCondition {
       throw new ElementNotFound(collection, toString(), timeoutMs, cause);
     } else if (elements.size() != expectedValues.size()) {
       throw new AttributesSizeMismatch(collection.driver(), attribute, collection, expectedValues,
-        ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
+        ElementsCollection.attributes(attribute, elements), explanation, timeoutMs, cause);
     } else {
       throw new AttributesMismatch(collection.driver(), attribute, collection, expectedValues,
-        ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);
+        ElementsCollection.attributes(attribute, elements), explanation, timeoutMs, cause);
     }
   }
 
