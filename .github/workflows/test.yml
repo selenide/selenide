@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'check', 'edge_headless' ]
+        gradle-task: [ 'check', 'edge_headless_smoke' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -22,7 +22,7 @@ jobs:
           cache: 'gradle'
           java-version: '17'
       - name: Setup Edge
-        if: ${{ matrix.gradle-task == 'edge_headless' }}
+        if: ${{ contains(matrix.gradle-task, 'edge') }}
         uses: browser-actions/setup-edge@latest
       - name: Set-DisplayResolution
         shell: pwsh
