@@ -13,7 +13,7 @@ public class DoesNotContainTextsError extends UIAssertionError {
 
   public DoesNotContainTextsError(CollectionSource collection,
                                   List<String> expectedTexts, List<String> actualTexts, List<String> difference,
-                                  @Nullable String explanation, long timeoutMs, @Nullable Throwable lastError) {
+                                  @Nullable String explanation, long timeoutMs, @Nullable Throwable cause) {
     super(collection.driver(),
       "The collection with text elements: " + actualTexts +
         lineSeparator() + "should contain all of the following text elements: " + expectedTexts +
@@ -22,7 +22,7 @@ public class DoesNotContainTextsError extends UIAssertionError {
         lineSeparator() + "Collection: " + collection.description(),
       expectedTexts,
       actualTexts,
-      lastError,
+      cause,
       timeoutMs);
   }
 }

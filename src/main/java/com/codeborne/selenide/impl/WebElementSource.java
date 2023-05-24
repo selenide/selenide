@@ -84,11 +84,11 @@ public abstract class WebElementSource {
 
   @CheckReturnValue
   @Nonnull
-  public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
-    if (lastError instanceof UIAssertionError) {
-      throw new IllegalArgumentException("Unexpected UIAssertionError as a cause of ElementNotFound: " + lastError, lastError);
+  public ElementNotFound createElementNotFoundError(Condition condition, Throwable cause) {
+    if (cause instanceof UIAssertionError) {
+      throw new IllegalArgumentException("Unexpected UIAssertionError as a cause of ElementNotFound: " + cause, cause);
     }
-    return new ElementNotFound(driver(), alias, getSearchCriteria(), condition, lastError);
+    return new ElementNotFound(driver(), alias, getSearchCriteria(), condition, cause);
   }
 
   @CheckReturnValue

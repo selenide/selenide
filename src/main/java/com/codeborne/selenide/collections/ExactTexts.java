@@ -52,10 +52,10 @@ public class ExactTexts extends CollectionCondition {
   @Override
   public void fail(CollectionSource collection,
                    @Nullable List<WebElement> elements,
-                   @Nullable Exception lastError,
+                   @Nullable Exception cause,
                    long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
-      throw new ElementNotFound(collection, toString(), timeoutMs, lastError);
+      throw new ElementNotFound(collection, toString(), timeoutMs, cause);
     }
     else if (elements.size() != expectedTexts.size()) {
       throw new TextsSizeMismatch(collection, expectedTexts, ElementsCollection.texts(elements), explanation, timeoutMs);

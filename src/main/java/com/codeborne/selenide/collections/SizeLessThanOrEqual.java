@@ -25,9 +25,9 @@ public class SizeLessThanOrEqual extends CollectionCondition {
   @Override
   public void fail(CollectionSource collection,
                    @Nullable List<WebElement> elements,
-                   @Nullable Exception lastError,
+                   @Nullable Exception cause,
                    long timeoutMs) {
-    throw new ListSizeMismatch("<=", expectedSize, explanation, collection, elements, lastError, timeoutMs);
+    throw new ListSizeMismatch("<=", expectedSize, explanation, collection, elements, cause, timeoutMs);
   }
 
   @Override
