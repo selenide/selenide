@@ -45,7 +45,7 @@ public class AppiumDriverRunner {
     if (isAndroidDriver() || isIosDriver()) {
       return isAndroidDriver() ? (T) getAndroidDriver() : (T) getIosDriver();
     }
-    throw new ClassCastException("WebDriver is not instance of AndroidDriver or IOSDriver");
+    throw new ClassCastException("WebDriver is not instance of AndroidDriver or IOSDriver: " + WebDriverRunner.getWebDriver());
   }
 
   /**

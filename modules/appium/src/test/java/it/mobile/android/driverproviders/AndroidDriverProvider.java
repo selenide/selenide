@@ -81,7 +81,7 @@ public abstract class AndroidDriverProvider implements WebDriverProvider {
     }
   }
 
-  private static class ClickListener implements WebDriverListener {
+  public static class ClickListener implements WebDriverListener {
     private static final Logger log = LoggerFactory.getLogger(ClickListener.class);
 
     @Override
