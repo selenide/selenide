@@ -1,61 +1,59 @@
 package com.codeborne.selenide.appium.conditions;
 
-import com.codeborne.selenide.appium.AppiumDriverRunner;
+import com.codeborne.selenide.CheckResult;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.collections.ExactTexts;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
+import static java.util.stream.Collectors.toList;
+
+@ParametersAreNonnullByDefault
 public class AppiumAttributeValues extends ExactTexts {
 
-  protected String androidAttributeName;
-  protected String iosAttributeName;
+  protected final CombinedAttribute attribute;
 
-  public AppiumAttributeValues(String androidAttributeName, String iosAttributeName, String... expectedAttributeValues) {
+  public AppiumAttributeValues(CombinedAttribute attribute, String... expectedAttributeValues) {
     super(expectedAttributeValues);
-    this.androidAttributeName = androidAttributeName;
-    this.iosAttributeName = iosAttributeName;
+    this.attribute = attribute;
   }
 
-  public AppiumAttributeValues(String androidAttributeName, String iosAttributeName, List<String> expectedAttributeValues) {
+  public AppiumAttributeValues(CombinedAttribute attribute, List<String> expectedAttributeValues) {
     super(expectedAttributeValues);
-    this.androidAttributeName = androidAttributeName;
-    this.iosAttributeName = iosAttributeName;
+    this.attribute = attribute;
   }
 
   @Override
-  public boolean test(List<WebElement> elements) {
-
+  @Nonnull
+  @CheckReturnValue
+  public CheckResult check(Driver driver, List<WebElement> elements) {
     if (elements.size() != this.expectedTexts.size()) {
-      return false;
-    } else {
-      List<String> actualAttributeValues = getActualAttributeValuesToCompare(elements);
+      return new CheckResult(REJECT, elements.size());
+    }
+    else {
+      List<String> actualAttributeValues = getActualAttributes(driver, elements);
       for (int i = 0; i < this.expectedTexts.size(); ++i) {
         String expectedText = this.expectedTexts.get(i);
         String actualAttributeValue = actualAttributeValues.get(i);
-        if (!expectedText.equals(actualAttributeValue)) {
-          return false;
+        if (!Objects.equals(expectedText, actualAttributeValue)) {
+          return new CheckResult(REJECT, actualAttributeValues);
         }
       }
 
-      return true;
+      return new CheckResult(ACCEPT, null);
     }
   }
 
-  private List<String> getActualAttributeValuesToCompare(List<WebElement> elements) {
-    return elements.stream().map(getFunctionBasedOnMobileOs()).collect(Collectors.toList());
-  }
-
-  private Function<WebElement, String> getFunctionBasedOnMobileOs() {
-    if (AppiumDriverRunner.isAndroidDriver()) {
-      return element -> element.getAttribute(androidAttributeName);
-    } else if (AppiumDriverRunner.isIosDriver()) {
-      return element -> element.getAttribute(iosAttributeName);
-    } else {
-      throw new IllegalArgumentException("Appium Collection Condition is only applicable for android and ios driver. " +
-        "Please use Condition class instead.");
-    }
+  private List<String> getActualAttributes(Driver driver, List<WebElement> elements) {
+    return elements.stream()
+      .map(element -> attribute.getAttributeValue(driver, element))
+      .collect(toList());
   }
 }
