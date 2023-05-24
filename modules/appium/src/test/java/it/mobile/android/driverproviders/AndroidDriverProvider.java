@@ -5,13 +5,22 @@ import com.codeborne.selenide.WebDriverProvider;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.remote.AutomationName;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.annotation.Nonnull;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
+import org.openqa.selenium.support.events.EventFiringDecorator;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.openqa.selenium.support.events.WebDriverListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public abstract class AndroidDriverProvider implements WebDriverProvider {
   @Nonnull
@@ -22,10 +31,26 @@ public abstract class AndroidDriverProvider implements WebDriverProvider {
     UiAutomator2Options options = getUiAutomator2Options();
     options.setApp(getApplicationUnderTest().getAbsolutePath());
     try {
-      return new AndroidDriver(url(), options);
+      AndroidDriver androidDriver = new AndroidDriver(url(), options);
+      return addOldSchoolListener(addListener(androidDriver));
     } catch (SessionNotCreatedException e) {
-      return new AndroidDriver(url(), options);
+      AndroidDriver androidDriver = new AndroidDriver(url(), options);
+      return addOldSchoolListener(addListener(androidDriver));
     }
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  @SuppressWarnings("deprecation")
+  private WebDriver addOldSchoolListener(WebDriver webDriver) {
+    EventFiringWebDriver eventFiringWebDriver = new EventFiringWebDriver(webDriver);
+    eventFiringWebDriver.register(new OldSchoolListener());
+    return eventFiringWebDriver;
+  }
+
+  private WebDriver addListener(WebDriver webDriver) {
+    WebDriverListener listener = new ClickListener();
+    return new EventFiringDecorator<>(listener).decorate(webDriver);
   }
 
   protected abstract File getApplicationUnderTest();
@@ -43,6 +68,25 @@ public abstract class AndroidDriverProvider implements WebDriverProvider {
       return new URL("http://127.0.0.1:4723/wd/hub");
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  @SuppressWarnings("deprecation")
+  private static class OldSchoolListener extends AbstractWebDriverEventListener {
+    private static final Logger log = LoggerFactory.getLogger(OldSchoolListener.class);
+
+    @Override
+    public void beforeClickOn(WebElement element, WebDriver driver) {
+      log.info("before click {}", element);
+    }
+  }
+
+  private static class ClickListener implements WebDriverListener {
+    private static final Logger log = LoggerFactory.getLogger(ClickListener.class);
+
+    @Override
+    public void beforeClick(WebElement element) {
+      log.info("before click {}", element);
     }
   }
 }

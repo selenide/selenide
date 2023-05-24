@@ -2,6 +2,7 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
@@ -18,7 +19,7 @@ public class WebdriverUnwrapper {
     return instanceOf(driver, AppiumDriver.class);
   }
 
-  public static boolean isMobile(WebDriver driver) {
+  public static boolean isMobile(SearchContext driver) {
     return instanceOf(driver, AppiumDriver.class);
   }
 
@@ -26,7 +27,7 @@ public class WebdriverUnwrapper {
     return cast(driver, klass).isPresent();
   }
 
-  public static <T> boolean instanceOf(WebDriver driver, Class<T> klass) {
+  public static <T> boolean instanceOf(SearchContext driver, Class<T> klass) {
     return cast(driver, klass).isPresent();
   }
 
@@ -34,10 +35,10 @@ public class WebdriverUnwrapper {
     return cast(driver.getWebDriver(), klass);
   }
 
-  public static <T> Optional<T> cast(WebDriver probablyWrappedWebdriver, Class<T> klass) {
+  public static <T> Optional<T> cast(SearchContext probablyWrappedWebdriver, Class<T> klass) {
     WebDriver unwrappedWebdriver = probablyWrappedWebdriver instanceof WrapsDriver ?
       ((WrapsDriver) probablyWrappedWebdriver).getWrappedDriver() :
-      probablyWrappedWebdriver;
+      (WebDriver) probablyWrappedWebdriver;
 
     //noinspection unchecked
     return klass.isAssignableFrom(unwrappedWebdriver.getClass()) ?
