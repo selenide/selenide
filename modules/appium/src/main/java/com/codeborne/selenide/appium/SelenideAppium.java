@@ -69,16 +69,16 @@ public class SelenideAppium {
     Selenide.back();
   }
 
-  public static void setContext(String contextName) {
-    new SelenideAppiumTargetLocator().setContext(contextName);
+  public static SelenideAppiumTargetLocator switchTo() {
+    return new SelenideAppiumTargetLocator(WebDriverRunner.driver());
   }
 
   public static Set<String> getContextHandles() {
-    return new SelenideAppiumTargetLocator().getContextHandles();
+    return switchTo().getContextHandles();
   }
 
   public static String getCurrentContext() {
-    return new SelenideAppiumTargetLocator().getCurrentContext();
+    return switchTo().getCurrentContext();
   }
 
   @CheckReturnValue
