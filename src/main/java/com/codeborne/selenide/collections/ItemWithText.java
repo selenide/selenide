@@ -33,10 +33,10 @@ public class ItemWithText extends CollectionCondition {
   @Override
   public void fail(CollectionSource collection,
                    @Nullable List<WebElement> elements,
-                   @Nullable Exception lastError,
+                   @Nullable Exception cause,
                    long timeoutMs) {
     throw new ElementWithTextNotFound(
-      collection, singletonList(expectedText), ElementsCollection.texts(elements), explanation, timeoutMs, lastError);
+      collection, singletonList(expectedText), ElementsCollection.texts(elements), explanation, timeoutMs, cause);
   }
 
   @CheckReturnValue

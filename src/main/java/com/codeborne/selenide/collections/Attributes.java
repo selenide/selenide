@@ -49,10 +49,10 @@ public class Attributes extends CollectionCondition {
   @Override
   public void fail(CollectionSource collection,
                    @Nullable List<WebElement> elements,
-                   @Nullable Exception lastError,
+                   @Nullable Exception cause,
                    long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
-      throw new ElementNotFound(collection, toString(), timeoutMs, lastError);
+      throw new ElementNotFound(collection, toString(), timeoutMs, cause);
     } else if (elements.size() != expectedValues.size()) {
       throw new AttributesSizeMismatch(collection.driver(), attribute, collection, expectedValues,
         ElementsCollection.attributes(attribute, elements), explanation, timeoutMs);

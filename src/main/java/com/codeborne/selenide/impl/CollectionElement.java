@@ -56,10 +56,10 @@ public class CollectionElement extends WebElementSource {
   @Override
   @CheckReturnValue
   @Nonnull
-  public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
+  public ElementNotFound createElementNotFoundError(Condition condition, Throwable cause) {
     if (collection.getElements().isEmpty()) {
-      return new ElementNotFound(driver(), getAlias(), getSearchCriteria(), visible, lastError);
+      return new ElementNotFound(driver(), getAlias(), getSearchCriteria(), visible, cause);
     }
-    return super.createElementNotFoundError(condition, lastError);
+    return super.createElementNotFoundError(condition, cause);
   }
 }

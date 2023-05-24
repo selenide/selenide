@@ -46,10 +46,10 @@ public class ContainExactTextsCaseSensitive extends CollectionCondition {
   @Override
   public void fail(CollectionSource collection,
                    @Nullable List<WebElement> elements,
-                   @Nullable Exception lastError,
+                   @Nullable Exception cause,
                    long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
-      throw new ElementNotFound(collection, toString(), timeoutMs, lastError);
+      throw new ElementNotFound(collection, toString(), timeoutMs, cause);
     }
     else {
       List<String> actualTexts = ElementsCollection.texts(elements);
@@ -57,7 +57,7 @@ public class ContainExactTextsCaseSensitive extends CollectionCondition {
       difference.removeAll(actualTexts);
       throw new DoesNotContainTextsError(collection,
         expectedTexts, actualTexts, difference, explanation,
-        timeoutMs, lastError);
+        timeoutMs, cause);
     }
   }
 

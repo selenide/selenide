@@ -34,7 +34,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
   public abstract void fail(CollectionSource collection,
                             @Nullable List<WebElement> elements,
-                            @Nullable Exception lastError,
+                            @Nullable Exception cause,
                             long timeoutMs);
 
   public static CollectionCondition empty = size(0);
@@ -317,9 +317,9 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     @Override
     public void fail(CollectionSource collection,
                      @Nullable List<WebElement> elements,
-                     @Nullable Exception lastError,
+                     @Nullable Exception cause,
                      long timeoutMs) {
-      delegate.fail(collection, elements, lastError, timeoutMs);
+      delegate.fail(collection, elements, cause, timeoutMs);
     }
 
     @Override

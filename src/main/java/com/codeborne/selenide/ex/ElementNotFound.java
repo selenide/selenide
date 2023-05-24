@@ -22,20 +22,20 @@ public class ElementNotFound extends UIAssertionError {
   }
 
   public ElementNotFound(Driver driver, Alias alias, String searchCriteria, Condition expectedCondition,
-                         @Nullable Throwable lastError) {
+                         @Nullable Throwable cause) {
     super(driver, String.format("Element%s not found {%s}" +
-      "%nExpected: %s", alias.appendable(), searchCriteria, expectedCondition), lastError);
+      "%nExpected: %s", alias.appendable(), searchCriteria, expectedCondition), cause);
   }
 
-  public ElementNotFound(CollectionSource collection, List<String> expectedTexts, @Nullable Throwable lastError) {
+  public ElementNotFound(CollectionSource collection, List<String> expectedTexts, @Nullable Throwable cause) {
     super(collection.driver(), String.format("Element%s not found {%s}" +
-      "%nExpected: %s", collection.getAlias().appendable(), collection.getSearchCriteria(), expectedTexts), lastError);
+      "%nExpected: %s", collection.getAlias().appendable(), collection.getSearchCriteria(), expectedTexts), cause);
   }
 
-  public ElementNotFound(CollectionSource collection, String description, long timeoutMs, @Nullable Throwable lastError) {
+  public ElementNotFound(CollectionSource collection, String description, long timeoutMs, @Nullable Throwable cause) {
     super(collection.driver(), String.format("Element%s not found {%s}%nExpected: %s",
         collection.getAlias().appendable(), collection.getSearchCriteria(), description),
       timeoutMs,
-      lastError);
+      cause);
   }
 }

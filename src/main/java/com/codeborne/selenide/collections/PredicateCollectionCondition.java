@@ -31,16 +31,16 @@ public abstract class PredicateCollectionCondition extends CollectionCondition {
   @Override
   public void fail(CollectionSource collection,
                    @Nullable List<WebElement> elements,
-                   @Nullable Exception lastError,
+                   @Nullable Exception cause,
                    long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
-      throw new ElementNotFound(collection, toString(), timeoutMs, lastError);
+      throw new ElementNotFound(collection, toString(), timeoutMs, cause);
     } else {
       String expected = String.format("%s of elements to match [%s] predicate", matcher, description);
       throw new MatcherError(explanation,
         expected,
         describe.fully(collection.driver(), elements),
-        collection, lastError, timeoutMs);
+        collection, cause, timeoutMs);
     }
   }
 

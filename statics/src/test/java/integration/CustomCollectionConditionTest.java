@@ -57,7 +57,7 @@ final class CustomCollectionConditionTest extends IntegrationTest {
       @Override
       public void fail(CollectionSource collection,
                        @Nullable List<WebElement> elements,
-                       @Nullable Exception lastError,
+                       @Nullable Exception cause,
                        long timeoutMs) {
         List<String> actualTexts = ElementsCollection.texts(elements);
         String expected = "prefix \"" + prefix + '"';
