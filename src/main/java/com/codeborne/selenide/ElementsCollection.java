@@ -36,6 +36,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
@@ -164,7 +165,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     do {
       try {
         actualElements = collection.getElements();
-        if (condition.test(actualElements)) {
+        if (condition.check(collection.driver(), actualElements).verdict() == ACCEPT) {
           return;
         }
       }
