@@ -3,7 +3,6 @@ package com.codeborne.selenide.appium;
 import com.codeborne.selenide.Driver;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.WrapsElement;
@@ -35,10 +34,11 @@ public class WebdriverUnwrapper {
     return cast(driver.getWebDriver(), klass);
   }
 
-  public static <T> Optional<T> cast(SearchContext probablyWrappedWebdriver, Class<T> klass) {
-    WebDriver unwrappedWebdriver = probablyWrappedWebdriver instanceof WrapsDriver ?
-      ((WrapsDriver) probablyWrappedWebdriver).getWrappedDriver() :
-      (WebDriver) probablyWrappedWebdriver;
+  public static <T> Optional<T> cast(SearchContext driverOrElement, Class<T> klass) {
+    SearchContext unwrappedWebdriver = driverOrElement;
+    while (unwrappedWebdriver instanceof WrapsDriver wrapper) {
+      unwrappedWebdriver = wrapper.getWrappedDriver();
+    }
 
     //noinspection unchecked
     return klass.isAssignableFrom(unwrappedWebdriver.getClass()) ?
@@ -47,9 +47,10 @@ public class WebdriverUnwrapper {
   }
 
   public static <T> T cast(WebElement probablyWrappedWebElement, Class<T> klass) {
-    WebElement unwrappedWebElement = probablyWrappedWebElement instanceof WrapsElement ?
-      ((WrapsElement) probablyWrappedWebElement).getWrappedElement() :
-      probablyWrappedWebElement;
+    WebElement unwrappedWebElement = probablyWrappedWebElement;
+    while (unwrappedWebElement instanceof WrapsElement wrapper) {
+      unwrappedWebElement = wrapper.getWrappedElement();
+    }
 
     if (!klass.isAssignableFrom(unwrappedWebElement.getClass())) {
       throw new IllegalArgumentException("WebElement " + unwrappedWebElement + " is not instance of " + klass.getName());
