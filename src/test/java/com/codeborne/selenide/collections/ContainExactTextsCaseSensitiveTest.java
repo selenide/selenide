@@ -1,5 +1,6 @@
 package com.codeborne.selenide.collections;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.DoesNotContainTextsError;
@@ -158,10 +159,7 @@ public class ContainExactTextsCaseSensitiveTest {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
-    assertThatThrownBy(() -> expectedTexts
-      .fail(emptyCollection,
-        null,
-        new Exception("Exception message"), 10_000))
+    assertThatThrownBy(() -> expectedTexts.fail(emptyCollection, (CheckResult) null, new Exception("Exception message"), 10_000))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining(
         String.format("Element not found {Empty collection}" +
