@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 @ParametersAreNonnullByDefault
 public class AnyMatch extends PredicateCollectionCondition {
   public AnyMatch(String description, Predicate<WebElement> predicate) {
-    super("any", description, predicate);
+    super("any of", description, predicate);
   }
 
   @Nonnull

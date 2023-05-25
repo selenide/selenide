@@ -64,7 +64,7 @@ final class AllMatchTest {
 
   @Test
   void testToString() {
-    assertThat(new AllMatch("Predicate description", it -> true))
-      .hasToString("all match [Predicate description] predicate");
+    assertThat(new AllMatch("Peaceful", it -> it.getText().contains("Peace")))
+      .hasToString("all elements to match [Peaceful] predicate");
   }
 }
