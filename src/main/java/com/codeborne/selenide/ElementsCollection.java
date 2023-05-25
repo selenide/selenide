@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
@@ -160,12 +161,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   protected void waitUntil(CollectionCondition condition, Duration timeout) {
     Throwable lastError = null;
-    List<WebElement> actualElements = null;
+    CheckResult lastCheckResult = new CheckResult(REJECT, null);
     Stopwatch stopwatch = new Stopwatch(timeout.toMillis());
     do {
       try {
-        actualElements = collection.getElements();
-        if (condition.check(collection.driver(), actualElements).verdict() == ACCEPT) {
+        lastCheckResult = condition.check(collection);
+        if (lastCheckResult.verdict() == ACCEPT) {
           return;
         }
       }
@@ -192,7 +193,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       throw uiAssertionError;
     }
     else {
-      condition.fail(collection, actualElements, (Exception) lastError, timeout.toMillis());
+      condition.fail(collection, lastCheckResult, (Exception) lastError, timeout.toMillis());
     }
   }
 
