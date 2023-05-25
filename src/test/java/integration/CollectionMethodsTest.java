@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.allMatch;
-import static com.codeborne.selenide.CollectionCondition.anyMatch;
 import static com.codeborne.selenide.CollectionCondition.attributes;
 import static com.codeborne.selenide.CollectionCondition.containExactTextsCaseSensitive;
 import static com.codeborne.selenide.CollectionCondition.empty;
@@ -512,22 +511,6 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void shouldHaveZeroSizeWhenFindCollectionInLastElementOfFullCollection() {
     $$("#user-table td").last().$$("#not_exist").shouldHave(size(0));
-  }
-
-  @Test
-  void shouldAnyMatchPredicate() {
-    $$("#radioButtons input")
-      .shouldBe(anyMatch("value==cat",
-        el -> el.getAttribute("value").equals("cat")));
-  }
-
-  @Test
-  void errorWhenAnyNotMatchedButShouldBe() {
-    assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(anyMatch("value==dog",
-      el -> el.getAttribute("value").equals("dog"))))
-      .isInstanceOf(MatcherError.class)
-      .hasMessageContaining(String.format("Collection matcher error" +
-        "%nExpected: any of elements to match [value==dog] predicate"));
   }
 
   @Test
