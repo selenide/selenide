@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 @ParametersAreNonnullByDefault
 public class NoneMatch extends PredicateCollectionCondition {
   public NoneMatch(String description, Predicate<WebElement> predicate) {
-    super("none", description, predicate);
+    super("none of", description, predicate);
   }
 
   @Override

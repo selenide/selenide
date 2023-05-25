@@ -64,7 +64,7 @@ final class NoneMatchTest {
 
   @Test
   void testToString() {
-    assertThat(new NoneMatch("Predicate description", it -> true))
-      .hasToString("none match [Predicate description] predicate");
+    assertThat(new NoneMatch("Is gentlemen", it -> it.getText().startsWith("Mr.")))
+      .hasToString("none of elements to match [Is gentlemen] predicate");
   }
 }

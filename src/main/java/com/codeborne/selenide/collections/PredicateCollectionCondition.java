@@ -33,11 +33,10 @@ public abstract class PredicateCollectionCondition extends CollectionCondition {
                    @Nullable List<WebElement> elements,
                    @Nullable Exception cause,
                    long timeoutMs) {
-    String expected = String.format("%s of elements to match [%s] predicate", matcher, description);
     if (elements == null || elements.isEmpty()) {
-      throw new ElementNotFound(collection, expected, timeoutMs, cause);
+      throw new ElementNotFound(collection, toString(), timeoutMs, cause);
     } else {
-      throw new MatcherError(explanation, expected,
+      throw new MatcherError(explanation, toString(),
         describe.fully(collection.driver(), elements),
         collection, cause, timeoutMs);
     }
@@ -50,6 +49,6 @@ public abstract class PredicateCollectionCondition extends CollectionCondition {
 
   @Override
   public String toString() {
-    return String.format("%s match [%s] predicate", matcher, description);
+    return String.format("%s elements to match [%s] predicate", matcher, description);
   }
 }
