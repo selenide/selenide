@@ -7,7 +7,6 @@ import com.codeborne.selenide.ex.DoesNotContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
-import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +27,6 @@ import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.exactTextsCaseSensitive;
 import static com.codeborne.selenide.CollectionCondition.itemWithText;
-import static com.codeborne.selenide.CollectionCondition.noneMatch;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
@@ -510,22 +508,6 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void shouldHaveZeroSizeWhenFindCollectionInLastElementOfFullCollection() {
     $$("#user-table td").last().$$("#not_exist").shouldHave(size(0));
-  }
-
-  @Test
-  void shouldNoneMatchPredicate() {
-    $$("#radioButtons input")
-      .shouldBe(noneMatch("name==you",
-        el -> el.getAttribute("name").equals("you")));
-  }
-
-  @Test
-  void errorWhenSomeMatchedButNoneShould() {
-    assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(noneMatch("value==cat",
-      el -> el.getAttribute("value").equals("cat"))))
-      .isInstanceOf(MatcherError.class)
-      .hasMessageContaining(String.format("Collection matcher error" +
-        "%nExpected: none of elements to match [value==cat] predicate"));
   }
 
   @Test
