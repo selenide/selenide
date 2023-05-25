@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.github.bsideup.jabel.Desugar;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.LocalDateTime;
@@ -38,5 +39,12 @@ public record CheckResult(
   @Override
   public String toString() {
     return String.format("%s @ %s%n", actualValue, timeFormat.format(timestamp));
+  }
+
+  @Nullable
+  @CheckReturnValue
+  @SuppressWarnings("unchecked")
+  public <T> T getActualValue() {
+    return (T) actualValue();
   }
 }

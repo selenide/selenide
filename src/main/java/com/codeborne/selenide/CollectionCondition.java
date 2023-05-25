@@ -18,6 +18,7 @@ import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import com.codeborne.selenide.impl.CollectionSource;
+import com.github.bsideup.jabel.Desugar;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -47,7 +48,7 @@ public abstract class CollectionCondition {
   @CheckReturnValue
   public CheckResult check(Driver driver, List<WebElement> elements) {
     boolean result = test(elements);
-    return new CheckResult(result ? ACCEPT : REJECT, elements);
+    return result ? new CheckResult(ACCEPT, null) : new CheckResult(REJECT, new ActualElementsHolder(elements));
   }
 
   /**
@@ -76,10 +77,10 @@ public abstract class CollectionCondition {
    * We left here the default implementation only because of backward compatibility.
    */
   public void fail(CollectionSource collection,
-                   @Nullable CheckResult lastCheckResult,
+                   CheckResult lastCheckResult,
                    @Nullable Exception cause,
                    long timeoutMs) {
-    List<WebElement> actualElements = collection.getElements();
+    List<WebElement> actualElements = lastCheckResult.actualValue() instanceof ActualElementsHolder holder ? holder.elements() : null;
     fail(collection, actualElements, cause, timeoutMs);
   }
 
@@ -397,4 +398,16 @@ public abstract class CollectionCondition {
   }
 
   public abstract boolean missingElementSatisfiesCondition();
+
+  /**
+   * A temporary solution for keeping backward compatibility
+   * until we throw away old method {@link #test(List)} and {@link #fail(CollectionSource, List, Exception, long)}
+   */
+  @Desugar
+  private record ActualElementsHolder(List<WebElement> elements) {
+    @Override
+    public String toString() {
+      return "Elements: " + elements;
+    }
+  }
 }

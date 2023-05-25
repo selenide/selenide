@@ -1,14 +1,15 @@
 package com.codeborne.selenide.collections;
 
-import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.DoesNotContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebElement;
 
 import java.util.Collections;
+import java.util.List;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
@@ -159,7 +160,7 @@ public class ContainExactTextsCaseSensitiveTest {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
-    assertThatThrownBy(() -> expectedTexts.fail(emptyCollection, (CheckResult) null, new Exception("Exception message"), 10_000))
+    assertThatThrownBy(() -> expectedTexts.fail(emptyCollection, (List<WebElement>) null, new Exception("Exception message"), 10_000))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining(
         String.format("Element not found {Empty collection}" +
