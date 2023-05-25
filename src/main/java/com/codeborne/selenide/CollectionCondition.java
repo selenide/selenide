@@ -35,25 +35,53 @@ public abstract class CollectionCondition {
   protected String explanation;
 
   /**
-   * @deprecated Please implement method {@link #check(Driver, List)} instead.
+   * @deprecated Please implement method {@link #check(CollectionSource)} instead.
    */
   @Deprecated
   @CheckReturnValue
   public boolean test(List<WebElement> elements) {
-    throw new UnsupportedOperationException("Implement method 'check' (recommended) or 'test' (deprecated)");
+    throw new UnsupportedOperationException("Implement method 'check' (powerful) or 'test' (simple)");
   }
 
   @Nonnull
   @CheckReturnValue
   public CheckResult check(Driver driver, List<WebElement> elements) {
     boolean result = test(elements);
-    return new CheckResult(result ? ACCEPT : REJECT, null);
+    return new CheckResult(result ? ACCEPT : REJECT, elements);
   }
 
-  public abstract void fail(CollectionSource collection,
-                            @Nullable List<WebElement> elements,
-                            @Nullable Exception cause,
-                            long timeoutMs);
+  /**
+   * The most powerful way to implement condition.
+   * Can check the collection using JavaScript or any other effective means.
+   * Also, can return "actual values" in the returned {@link CheckResult} object.
+   */
+  @Nonnull
+  @CheckReturnValue
+  public CheckResult check(CollectionSource collection) {
+    List<WebElement> elements = collection.getElements();
+    return check(collection.driver(), elements);
+  }
+
+  @Deprecated
+  public void fail(CollectionSource collection,
+                   @Nullable List<WebElement> elements,
+                   @Nullable Exception cause,
+                   long timeoutMs) {
+    throw new UnsupportedOperationException(
+      "Implement method 'fail(..CheckResult..)' (powerful) or 'fail(..List<WebElement>..)' (simple)");
+  }
+
+  /**
+   * Every subclass should implement this method.
+   * We left here the default implementation only because of backward compatibility.
+   */
+  public void fail(CollectionSource collection,
+                   @Nullable CheckResult lastCheckResult,
+                   @Nullable Exception cause,
+                   long timeoutMs) {
+    List<WebElement> actualElements = collection.getElements();
+    fail(collection, actualElements, cause, timeoutMs);
+  }
 
   public static CollectionCondition empty = size(0);
 
@@ -347,14 +375,16 @@ public abstract class CollectionCondition {
 
     @Override
     @Deprecated
+    @SuppressWarnings("deprecation")
     public boolean test(List<WebElement> input) {
       return delegate.test(input);
     }
 
     @Nonnull
+    @CheckReturnValue
     @Override
-    public CheckResult check(Driver driver, List<WebElement> elements) {
-      return delegate.check(driver, elements);
+    public CheckResult check(CollectionSource collection) {
+      return delegate.check(collection);
     }
   }
 
