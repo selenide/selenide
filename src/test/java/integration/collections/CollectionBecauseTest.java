@@ -1,9 +1,9 @@
-package integration;
+package integration.collections;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
+import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,13 +11,12 @@ import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.CollectionCondition.texts;
-import static com.codeborne.selenide.Selenide.$$;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-final class CollectionBecauseTest extends IntegrationTest {
+final class CollectionBecauseTest extends ITest {
   @BeforeEach
   void openTestPage() {
-    Configuration.timeout = 10;
+    setTimeout(10);
     openFile("page_with_selects_without_jquery.html");
   }
 

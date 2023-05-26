@@ -1,9 +1,9 @@
-package integration;
+package integration.collections;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
+import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,19 +15,18 @@ import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$$;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-final class CollectionWaitTest extends IntegrationTest {
+final class CollectionWaitTest extends ITest {
   private final long startedAt = System.currentTimeMillis();
 
   @BeforeEach
   void openTestPage() {
     openFile("collection_with_delays.html");
-    Configuration.timeout = 1000;
+    setTimeout(1000);
   }
 
   @Test
@@ -95,14 +94,14 @@ final class CollectionWaitTest extends IntegrationTest {
 
   @Test
   void customTimeoutForCollections() {
-    Configuration.timeout = 1;
+    setTimeout(1);
     $$("#collection li").first(2).shouldHave(texts("Element #0", "Element #1"), Duration.ofSeconds(5));
     $$("#collection li").last(2).shouldHave(texts("Element #18", "Element #19"), Duration.ofSeconds(5));
   }
 
   @Test
   void waitsForCustomTimeoutForCollections() {
-    Configuration.timeout = 1;
+    setTimeout(1);
     assertThatThrownBy(() ->
       $$("#collection li").last(2).shouldHave(texts("Element #88888", "Element #99999"), Duration.ofMillis(2000))
     )
@@ -114,7 +113,7 @@ final class CollectionWaitTest extends IntegrationTest {
 
   @Test
   void waitsForElementInsideCollection() {
-    Configuration.timeout = 2000;
+    setTimeout(2000);
     assertThatThrownBy(() ->
       $$("h1").findBy(cssClass("active")).findAll("h2").shouldHave(texts("nothing else matters"))
     )

@@ -1,6 +1,7 @@
-package integration;
+package integration.collections;
 
 import com.codeborne.selenide.ElementsCollection;
+import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
