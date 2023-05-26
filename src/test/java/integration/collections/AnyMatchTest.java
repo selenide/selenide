@@ -16,7 +16,7 @@ public class AnyMatchTest extends ITest {
   private final CollectionCondition containDog = anyMatch("value==dog", el -> "dog".equals(el.getAttribute("value")));
 
   @BeforeEach
-  void openTestPageWithJQuery() {
+  void openPage() {
     openFile("page_with_selects_without_jquery.html");
   }
 
