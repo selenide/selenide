@@ -9,7 +9,6 @@ import com.codeborne.selenide.collections.SizeGreaterThan;
 import com.codeborne.selenide.collections.SizeGreaterThanOrEqual;
 import com.codeborne.selenide.collections.SizeLessThan;
 import com.codeborne.selenide.collections.SizeLessThanOrEqual;
-import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import org.junit.jupiter.api.Test;
@@ -44,12 +43,6 @@ final class CollectionConditionTest {
   void sizeLessThanOrEqual() {
     assertThat(CollectionCondition.sizeLessThanOrEqual(10))
       .isInstanceOf(SizeLessThanOrEqual.class);
-  }
-
-  @Test
-  void sizeNotEqual() {
-    assertThat(CollectionCondition.sizeNotEqual(10))
-      .isInstanceOf(SizeNotEqual.class);
   }
 
   @Test
