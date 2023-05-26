@@ -1,6 +1,7 @@
-package integration;
+package integration.collections;
 
 import com.codeborne.selenide.ex.ListSizeMismatch;
+import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,6 @@ import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThanOrEqual;
-import static com.codeborne.selenide.CollectionCondition.sizeNotEqual;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class CollectionSizeTest extends ITest {
@@ -75,18 +75,5 @@ final class CollectionSizeTest extends ITest {
     assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(sizeLessThanOrEqual(3)))
       .isInstanceOf(ListSizeMismatch.class)
       .hasMessageContaining("expected: <= 3, actual: 4");
-  }
-
-  @Test
-  void size_notEqual() {
-    $$("#radioButtons input").shouldHave(sizeNotEqual(3));
-    $$("#radioButtons input").shouldHave(sizeNotEqual(5));
-  }
-
-  @Test
-  void size_notEqual_failure() {
-    assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(sizeNotEqual(4)))
-      .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageContaining("expected: <> 4, actual: 4");
   }
 }

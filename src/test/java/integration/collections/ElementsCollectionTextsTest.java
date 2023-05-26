@@ -1,6 +1,7 @@
-package integration;
+package integration.collections;
 
 import com.codeborne.selenide.ex.TextsMismatch;
+import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,10 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.exactTextsCaseSensitiveInAnyOrder;
-import static com.codeborne.selenide.Selenide.$$;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ElementsCollectionTextsTest extends IntegrationTest {
+class ElementsCollectionTextsTest extends ITest {
 
   @BeforeEach
   void setUp() {
