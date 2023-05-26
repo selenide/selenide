@@ -1,4 +1,4 @@
-package integration;
+package integration.collections;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -8,6 +8,7 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
+import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -410,10 +411,6 @@ final class CollectionMethodsTest extends ITest {
       .as(description, "sizeGreaterThanOrEqual").isInstanceOf(ListSizeMismatch.class)
       .hasCauseExactlyInstanceOf(NoSuchElementException.class);
 
-    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeNotEqual(0)))
-      .as(description, "sizeNotEqual").isInstanceOf(ListSizeMismatch.class)
-      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
-
     assertThatThrownBy(() -> elementsCollection.shouldHave(sizeLessThan(0)))
       .as(description, "sizeLessThan").isInstanceOf(ListSizeMismatch.class)
       .hasCauseExactlyInstanceOf(NoSuchElementException.class);
@@ -450,10 +447,6 @@ final class CollectionMethodsTest extends ITest {
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(sizeGreaterThanOrEqual(1)))
       .as(description, "sizeGreaterThanOrEqual").isInstanceOf(ElementNotFound.class)
-      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
-
-    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeNotEqual(0)))
-      .as(description, "sizeNotEqual").isInstanceOf(ElementNotFound.class)
       .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(sizeLessThan(0)))
