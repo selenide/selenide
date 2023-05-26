@@ -5,7 +5,6 @@ import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitiveInAnyOrder;
 import com.codeborne.selenide.collections.ListSize;
-import com.codeborne.selenide.collections.SizeGreaterThan;
 import com.codeborne.selenide.collections.SizeGreaterThanOrEqual;
 import com.codeborne.selenide.collections.SizeLessThan;
 import com.codeborne.selenide.collections.SizeLessThanOrEqual;
@@ -20,11 +19,6 @@ final class CollectionConditionTest {
   @Test
   void exactSize() {
     assertThat(CollectionCondition.size(10)).isInstanceOf(ListSize.class);
-  }
-
-  @Test
-  void sizeGreaterThan() {
-    assertThat(CollectionCondition.sizeGreaterThan(10)).isInstanceOf(SizeGreaterThan.class);
   }
 
   @Test
