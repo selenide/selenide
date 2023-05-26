@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class AllMatchTest extends ITest {
 
   @BeforeEach
-  void openTestPageWithJQuery() {
+  void openPage() {
     openFile("page_with_selects_without_jquery.html");
   }
 

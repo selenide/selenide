@@ -5,7 +5,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.AttributesMismatch;
 import com.codeborne.selenide.ex.DoesNotContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
@@ -18,7 +17,6 @@ import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.attributes;
@@ -26,7 +24,6 @@ import static com.codeborne.selenide.CollectionCondition.containExactTextsCaseSe
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.exactTextsCaseSensitive;
-import static com.codeborne.selenide.CollectionCondition.itemWithText;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
@@ -432,10 +429,6 @@ final class CollectionMethodsTest extends ITest {
     assertThatThrownBy(() -> elementsCollection.shouldHave(texts("any text")))
       .as(description, "texts").isInstanceOf(ElementNotFound.class)
       .hasCauseExactlyInstanceOf(NoSuchElementException.class);
-
-    assertThatThrownBy(() -> elementsCollection.shouldHave(itemWithText("any text")))
-      .as(description, "itemWithText").isInstanceOf(ElementWithTextNotFound.class)
-      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
   }
 
   @Test
@@ -478,10 +471,6 @@ final class CollectionMethodsTest extends ITest {
     assertThatThrownBy(() -> elementsCollection.shouldHave(texts("any text")))
       .as(description, "texts").isInstanceOf(ElementNotFound.class)
       .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
-
-    assertThatThrownBy(() -> elementsCollection.shouldHave(itemWithText("any text")))
-      .as(description, "itemWithText").isInstanceOf(ElementNotFound.class)
-      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
   }
 
   @Test
@@ -508,22 +497,6 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void shouldHaveZeroSizeWhenFindCollectionInLastElementOfFullCollection() {
     $$("#user-table td").last().$$("#not_exist").shouldHave(size(0));
-  }
-
-  @Test
-  void shouldItemWithText() {
-    $$("#user-table tbody tr td.firstname")
-      .shouldBe(itemWithText("Bob"));
-  }
-
-  @Test
-  void errorWhenItemWithTextNotMatchedButShouldBe() {
-    String expectedText = "Luis";
-    assertThatThrownBy(() -> $$("#user-table tbody tr td.firstname").shouldHave(itemWithText(expectedText)))
-      .isInstanceOf(ElementWithTextNotFound.class)
-      .hasMessageContaining(String.format("Element with text not found" +
-        "%nActual: %s" +
-        "%nExpected: %s", Arrays.asList("Bob", "John"), Collections.singletonList(expectedText)));
   }
 
   @Test
