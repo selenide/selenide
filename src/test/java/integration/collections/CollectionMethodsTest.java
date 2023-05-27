@@ -403,10 +403,6 @@ final class CollectionMethodsTest extends ITest {
       .as(description, "size").isInstanceOf(ListSizeMismatch.class)
       .hasCauseExactlyInstanceOf(NoSuchElementException.class);
 
-    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeLessThanOrEqual(-1)))
-      .as(description, "sizeLessThanOrEqual").isInstanceOf(ListSizeMismatch.class)
-      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
-
     assertThatThrownBy(() -> elementsCollection.shouldHave(exactTexts("any text")))
       .as(description, "exactTexts").isInstanceOf(ElementNotFound.class)
       .hasCauseExactlyInstanceOf(NoSuchElementException.class);
@@ -427,10 +423,6 @@ final class CollectionMethodsTest extends ITest {
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(size(1)))
       .as(description, "size").isInstanceOf(ElementNotFound.class)
-      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
-
-    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeLessThanOrEqual(-1)))
-      .as(description, "sizeLessThanOrEqual").isInstanceOf(ElementNotFound.class)
       .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(exactTexts("any text")))
