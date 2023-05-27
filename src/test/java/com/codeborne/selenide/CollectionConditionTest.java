@@ -4,10 +4,6 @@ import com.codeborne.selenide.collections.ContainExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitiveInAnyOrder;
-import com.codeborne.selenide.collections.ListSize;
-import com.codeborne.selenide.collections.SizeGreaterThanOrEqual;
-import com.codeborne.selenide.collections.SizeLessThan;
-import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import org.junit.jupiter.api.Test;
@@ -16,29 +12,6 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class CollectionConditionTest {
-  @Test
-  void exactSize() {
-    assertThat(CollectionCondition.size(10)).isInstanceOf(ListSize.class);
-  }
-
-  @Test
-  void sizeGraterThenOrEqual() {
-    assertThat(CollectionCondition.sizeGreaterThanOrEqual(10))
-      .isInstanceOf(SizeGreaterThanOrEqual.class);
-  }
-
-  @Test
-  void sizeLessThan() {
-    assertThat(CollectionCondition.sizeLessThan(10))
-      .isInstanceOf(SizeLessThan.class);
-  }
-
-  @Test
-  void sizeLessThanOrEqual() {
-    assertThat(CollectionCondition.sizeLessThanOrEqual(10))
-      .isInstanceOf(SizeLessThanOrEqual.class);
-  }
-
   @Test
   void textsWithObjectsList() {
     CollectionCondition collectionCondition = CollectionCondition.texts("One", "Two", "Three");
