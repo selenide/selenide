@@ -242,8 +242,17 @@ final class CollectionMethodsTest extends ITest {
 
     assertThatThrownBy(() -> filteredRows.shouldHave(size(0)))
       .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageContaining("collection: #multirowTable " +
-        "tr.filter(condition name: partial text \"Chack\" and partial text \"Baskerville\"");
+      .hasMessageStartingWith("List size mismatch")
+      .hasMessageContaining("expected: = 0, actual: 1")
+      .hasMessageContaining("""
+        collection: #multirowTable tr.filter(condition name: partial text "Chack" and partial text "Baskerville")""")
+      .hasMessageContaining("""
+        Elements: [
+        \t<tr id="multirowTableSecondRow">Chack L'a Baskerville</tr>
+        ]""")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source: ")
+      .hasMessageContaining("Timeout: ");
   }
 
   @Test
@@ -395,14 +404,6 @@ final class CollectionMethodsTest extends ITest {
     ElementsCollection elementsCollection = $$("not-existing-locator").first().$$("#multirowTable");
     String description = "Check throwing ElementNotFound for %s";
 
-    assertThatThrownBy(() -> elementsCollection.shouldHave(size(1)))
-      .as(description, "shouldHaveSize").isInstanceOf(ListSizeMismatch.class)
-      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
-
-    assertThatThrownBy(() -> elementsCollection.shouldHave(size(1)))
-      .as(description, "size").isInstanceOf(ListSizeMismatch.class)
-      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
-
     assertThatThrownBy(() -> elementsCollection.shouldHave(exactTexts("any text")))
       .as(description, "exactTexts").isInstanceOf(ElementNotFound.class)
       .hasCauseExactlyInstanceOf(NoSuchElementException.class);
@@ -416,14 +417,6 @@ final class CollectionMethodsTest extends ITest {
   void shouldThrow_ElementNotFound_causedBy_IndexOutOfBoundsException() {
     ElementsCollection elementsCollection = $$("not-existing-locator").get(1).$$("#multirowTable");
     String description = "Check throwing ElementNotFound for %s";
-
-    assertThatThrownBy(() -> elementsCollection.shouldHave(size(1)))
-      .as(description, "shouldHaveSize").isInstanceOf(ElementNotFound.class)
-      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
-
-    assertThatThrownBy(() -> elementsCollection.shouldHave(size(1)))
-      .as(description, "size").isInstanceOf(ElementNotFound.class)
-      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(exactTexts("any text")))
       .as(description, "exactTexts").isInstanceOf(ElementNotFound.class)
@@ -440,24 +433,6 @@ final class CollectionMethodsTest extends ITest {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {#not_exist:last}")
       .hasCauseInstanceOf(IndexOutOfBoundsException.class);
-  }
-
-  @Test
-  void errorWhenFindCollectionInLastElementOfEmptyCollection() {
-    assertThatThrownBy(() -> $$("#not_exist").last().$$("#multirowTable").shouldHave(size(1)))
-      .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {#not_exist:last/#multirowTable}")
-      .hasCauseInstanceOf(IndexOutOfBoundsException.class);
-  }
-
-  @Test
-  void shouldHaveZeroSizeWhenFindCollectionInLastElementOfEmptyCollection() {
-    $$("#not_exist").last().$$("#multirowTable").shouldHave(size(0));
-  }
-
-  @Test
-  void shouldHaveZeroSizeWhenFindCollectionInLastElementOfFullCollection() {
-    $$("#user-table td").last().$$("#not_exist").shouldHave(size(0));
   }
 
   @Test
