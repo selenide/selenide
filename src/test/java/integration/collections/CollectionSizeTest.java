@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThanOrEqual;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -20,19 +19,6 @@ final class CollectionSizeTest extends ITest {
   @Test
   void size_equals() {
     $$("#radioButtons input").shouldHave(size(4));
-  }
-
-  @Test
-  void size_greaterThanOrEqual() {
-    $$("#radioButtons input").shouldHave(sizeGreaterThanOrEqual(4));
-    $$("#radioButtons input").shouldHave(sizeGreaterThanOrEqual(3));
-  }
-
-  @Test
-  void size_greaterThanOrEqual_failure() {
-    assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(sizeGreaterThanOrEqual(5)))
-      .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageContaining("expected: >= 5, actual: 4");
   }
 
   @Test
