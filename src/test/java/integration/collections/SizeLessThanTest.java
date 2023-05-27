@@ -5,27 +5,29 @@ import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
+import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class SizeGreaterThanOrEqualTest extends ITest {
+public class SizeLessThanTest extends ITest {
 
   @BeforeEach
   void openPage() {
     openFile("page_with_selects_without_jquery.html");
   }
+
   @Test
-  void size_greaterThanOrEqual() {
-    $$("#radioButtons input").shouldHave(sizeGreaterThanOrEqual(4));
-    $$("#radioButtons input").shouldHave(sizeGreaterThanOrEqual(3));
+  void size_lessThan() {
+    $$("#radioButtons input").shouldHave(sizeLessThan(5));
+    $$("#radioButtons input").shouldHave(sizeLessThan(6));
+    $$("#radioButtons input").shouldHave(sizeLessThan(7));
   }
 
   @Test
-  void size_greaterThanOrEqual_failure() {
-    assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(sizeGreaterThanOrEqual(5)))
+  void size_lessThan_failure() {
+    assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(sizeLessThan(4)))
       .isInstanceOf(ListSizeMismatch.class)
       .hasMessageStartingWith("List size mismatch")
-      .hasMessageContaining("expected: >= 5, actual: 4")
+      .hasMessageContaining("expected: < 4, actual: 4")
       .hasMessageContaining("collection: #radioButtons input")
       .hasMessageContaining("""
         Elements: [
@@ -33,7 +35,6 @@ public class SizeGreaterThanOrEqualTest extends ITest {
         \t<input name="me" type="radio" value="margarita"></input>,
         \t<input name="me" type="radio" value="cat"></input>,
         \t<input name="me" type="radio" value="woland"></input>
-        ]""")
-      .hasNoCause();
+        ]""");
   }
 }
