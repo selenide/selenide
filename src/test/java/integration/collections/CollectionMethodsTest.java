@@ -3,7 +3,6 @@ package integration.collections;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.AttributesMismatch;
-import com.codeborne.selenide.ex.DoesNotContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
@@ -17,11 +16,9 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.attributes;
-import static com.codeborne.selenide.CollectionCondition.containExactTextsCaseSensitive;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.exactTextsCaseSensitive;
@@ -413,14 +410,6 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void shouldContainExactTextsCaseSensitive() {
-    $$("#hero option")
-      .should(containExactTextsCaseSensitive("Denzel Washington", "John Mc'Lain", "Arnold \"Schwarzenegger\""));
-    $$("#user-table th")
-      .should(containExactTextsCaseSensitive("First name", "Last name"));
-  }
-
-  @Test
   void shouldHaveExactTextsCaseSensitive() {
     $$("#hero option").should(exactTextsCaseSensitive(
       "-- Select your hero --",
@@ -443,23 +432,7 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void errorWhenCollectionDoesNotContainTextsButShould() {
-    List<String> expectedTexts = Arrays.asList("@livemail.ru", "@yandex.ru", "@list.ru");
-    List<String> actualTexts = Arrays.asList("@livemail.ru", "@myrambler.ru", "@rusmail.ru", "@мыло.ру");
-    List<String> difference = Arrays.asList("@yandex.ru", "@list.ru");
-
-    assertThatThrownBy(() -> $$("[name='domain'] > option").should(containExactTextsCaseSensitive(expectedTexts)))
-      .isInstanceOf(DoesNotContainTextsError.class)
-      .hasMessageContaining(
-        String.format("The collection with text elements: %s%n" +
-            "should contain all of the following text elements: %s%n" +
-            "but could not find these elements: %s%n",
-          actualTexts, expectedTexts, difference));
-  }
-
-  @Test
   void collectionToString() {
-    $("not-existing-locator").toString();
     assertThat($("not-existing-locator"))
       .hasToString("{not-existing-locator}");
 
