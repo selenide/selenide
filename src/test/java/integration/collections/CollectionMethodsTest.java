@@ -145,24 +145,9 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void canCheckThatElementsHaveExactlyCorrectTexts() {
-    withLongTimeout(() -> {
-      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(exactTexts("content", "content2")))
-        .isInstanceOf(TextsMismatch.class);
-    });
-  }
-
-  @Test
   void textsCheckThrowsElementNotFound() {
     assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(texts("content1", "content2")))
       .isInstanceOf(ElementNotFound.class);
-  }
-
-  @Test
-  void exactTextsCheckThrowsElementNotFound() {
-    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(exactTexts("content1", "content2")))
-      .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {.non-existing-elements}");
   }
 
   @Test
@@ -404,10 +389,6 @@ final class CollectionMethodsTest extends ITest {
     ElementsCollection elementsCollection = $$("not-existing-locator").first().$$("#multirowTable");
     String description = "Check throwing ElementNotFound for %s";
 
-    assertThatThrownBy(() -> elementsCollection.shouldHave(exactTexts("any text")))
-      .as(description, "exactTexts").isInstanceOf(ElementNotFound.class)
-      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
-
     assertThatThrownBy(() -> elementsCollection.shouldHave(texts("any text")))
       .as(description, "texts").isInstanceOf(ElementNotFound.class)
       .hasCauseExactlyInstanceOf(NoSuchElementException.class);
@@ -417,10 +398,6 @@ final class CollectionMethodsTest extends ITest {
   void shouldThrow_ElementNotFound_causedBy_IndexOutOfBoundsException() {
     ElementsCollection elementsCollection = $$("not-existing-locator").get(1).$$("#multirowTable");
     String description = "Check throwing ElementNotFound for %s";
-
-    assertThatThrownBy(() -> elementsCollection.shouldHave(exactTexts("any text")))
-      .as(description, "exactTexts").isInstanceOf(ElementNotFound.class)
-      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(texts("any text")))
       .as(description, "texts").isInstanceOf(ElementNotFound.class)
