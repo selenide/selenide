@@ -4,8 +4,6 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
-import com.codeborne.selenide.ex.TextsMismatch;
-import com.codeborne.selenide.ex.TextsSizeMismatch;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -128,50 +126,6 @@ final class CollectionMethodsTest extends ITest {
         texts("mic cont", "content2"),
         exactTexts(asList("dynamic content", "dynamic content2")));
     });
-  }
-
-  @Test
-  void ignoresWhitespacesInTexts() {
-    openFile("page_with_list_of_elements.html");
-    $$("ol.spaces li").shouldHave(
-      texts("   The \nfirst ", "The \t\t\tsecond\t\t\r\n", "The third")
-    );
-  }
-
-  @Test
-  void textsCheckThrowsElementNotFound() {
-    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(texts("content1", "content2")))
-      .isInstanceOf(ElementNotFound.class);
-  }
-
-  @Test
-  void textsCheckThrowsTextsSizeMismatch() {
-    setTimeout(300);
-    assertThatThrownBy(() -> $$("#dynamic-content-container span")
-      .shouldHave(texts("static-content1", "static-content2", "dynamic-content1")))
-      .isInstanceOf(TextsSizeMismatch.class)
-      .hasMessageStartingWith("Texts size mismatch")
-      .hasMessageContaining("Actual: [dynamic content, dynamic content2], List size: 2")
-      .hasMessageContaining("Expected: [static-content1, static-content2, dynamic-content1], List size: 3")
-      .hasMessageContaining("Collection: #dynamic-content-container span");
-  }
-
-  @Test
-  void textsCheckThrowsTextsMismatch() {
-    setTimeout(300);
-    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2")))
-      .isInstanceOf(TextsMismatch.class)
-      .hasMessageStartingWith("Texts mismatch")
-      .hasMessageContaining("Actual: [dynamic content, dynamic content2]")
-      .hasMessageContaining("Expected: [static-content1, static-content2]")
-      .hasMessageContaining("Collection: #dynamic-content-container span")
-      .hasMessageContaining("Timeout: 300 ms.");
-  }
-
-  @Test
-  void failsFast_ifNoExpectedTextsAreGiven() {
-    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts()))
-      .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
@@ -360,26 +314,6 @@ final class CollectionMethodsTest extends ITest {
       .shouldHave(text("non-clickable element"));
 
     $$("div").filterBy(visible).get(2).click();
-  }
-
-  @Test
-  void shouldThrow_ElementNotFound_causedBy_IndexOutOfBoundsException_first() {
-    ElementsCollection elementsCollection = $$("not-existing-locator").first().$$("#multirowTable");
-    String description = "Check throwing ElementNotFound for %s";
-
-    assertThatThrownBy(() -> elementsCollection.shouldHave(texts("any text")))
-      .as(description, "texts").isInstanceOf(ElementNotFound.class)
-      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
-  }
-
-  @Test
-  void shouldThrow_ElementNotFound_causedBy_IndexOutOfBoundsException() {
-    ElementsCollection elementsCollection = $$("not-existing-locator").get(1).$$("#multirowTable");
-    String description = "Check throwing ElementNotFound for %s";
-
-    assertThatThrownBy(() -> elementsCollection.shouldHave(texts("any text")))
-      .as(description, "texts").isInstanceOf(ElementNotFound.class)
-      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
   }
 
   @Test
