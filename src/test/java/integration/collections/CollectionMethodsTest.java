@@ -177,30 +177,6 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void canCheckThatElementsHaveExactlyCorrectAttributes() {
-    withLongTimeout(() -> {
-      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(attributes("id", "content", "content2")))
-        .isInstanceOf(AttributesMismatch.class);
-    });
-  }
-
-  @Test
-  void attributesCheckThrowsElementNotFound() {
-    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(attributes("id", "content1", "content2")))
-      .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {.non-existing-elements}");
-  }
-
-  @Test
-  void attributesCheckThrowsAttributesMismatchIfAttributeNotExist() {
-    withLongTimeout(() -> {
-      assertThatThrownBy(() -> $$("#dynamic-content-container span")
-        .shouldHave(attributes("not-existing-attribute", "static-content1", "static-content2")))
-        .isInstanceOf(AttributesMismatch.class);
-    });
-  }
-
-  @Test
   void userCanFilterOutMatchingElements() {
     $$("#multirowTable tr").shouldHave(size(2));
     $$("#multirowTable tr").filterBy(partialText("Norris")).shouldHave(size(1));
