@@ -21,12 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class CollectionWaitTest extends ITest {
-  private final long startedAt = System.currentTimeMillis();
+  private long startedAt;
 
   @BeforeEach
   void openTestPage() {
     openFile("collection_with_delays.html");
     setTimeout(1000);
+    startedAt = System.currentTimeMillis();
   }
 
   @Test
@@ -41,14 +42,17 @@ final class CollectionWaitTest extends ITest {
 
   @Test
   void failsIfWrongSize() {
+    setTimeout(3);
     assertThatThrownBy(() -> $$("#collection li").shouldHave(size(-1)))
       .isInstanceOf(AssertionError.class)
-      .hasMessageContaining("expected: = -1, actual: 20, collection: #collection li");
-    assertTestTookMoreThan(1, SECONDS);
+      .hasMessageContaining("expected: = -1, actual: ")
+      .hasMessageContaining("collection: #collection li")
+      .hasMessageContaining("Timeout: 3 ms.");
+    assertTestTookLessThan(500, MILLISECONDS);
   }
 
   @Test
-  void canDetermineSize() {
+  void waitsUntilCollectionsGetsLoaded() {
     $$("#collection li").shouldHave(size(20));
   }
 
@@ -64,11 +68,12 @@ final class CollectionWaitTest extends ITest {
 
   @Test
   void firstNElements_TextsMismatchErrorMessage() {
-    assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element", "#wrong")))
+    assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element", "#wrong"), Duration.ofSeconds(1)))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageContaining(String.format("Actual: [Element #0, Element #1]%n" +
+      .hasMessageStartingWith(String.format("Texts mismatch%nActual: [Element #0, Element #1]%n" +
         "Expected: [Element, #wrong]%n" +
-        "Collection: #collection li:first(2)"));
+        "Collection: #collection li:first(2)"))
+      .hasMessageContaining("Timeout: 1 s.");
     assertTestTookMoreThan(1, SECONDS);
   }
 
@@ -84,11 +89,12 @@ final class CollectionWaitTest extends ITest {
 
   @Test
   void lastNElements_errorMessage() {
-    assertThatThrownBy(() -> $$("#collection li").last(2).shouldHave(texts("Element", "#wrong")))
+    assertThatThrownBy(() -> $$("#collection li").last(2).shouldHave(texts("Element", "#wrong"), Duration.ofSeconds(1)))
       .isInstanceOf(TextsMismatch.class)
       .hasMessageContaining(String.format("Actual: [Element #18, Element #19]%n" +
         "Expected: [Element, #wrong]%n" +
-        "Collection: #collection li:last(2)"));
+        "Collection: #collection li:last(2)"))
+        .hasMessageContaining("Timeout: 1 s.");
     assertTestTookMoreThan(1, SECONDS);
   }
 
@@ -103,27 +109,33 @@ final class CollectionWaitTest extends ITest {
   void waitsForCustomTimeoutForCollections() {
     setTimeout(1);
     assertThatThrownBy(() ->
-      $$("#collection li").last(2).shouldHave(texts("Element #88888", "Element #99999"), Duration.ofMillis(2000))
+      $$("#collection li").last(2).shouldHave(texts("Element #88888", "Element #99999"), Duration.ofMillis(999))
     )
       .isInstanceOf(TextsMismatch.class)
       .hasMessageContaining("Actual: [Element #18, Element #19]")
-      .hasMessageContaining("Expected: [Element #88888, Element #99999]");
-    assertTestTookMoreThan(2000, MILLISECONDS);
+      .hasMessageContaining("Expected: [Element #88888, Element #99999]")
+      .hasMessageContaining("Timeout: 999 ms.");
+    assertTestTookMoreThan(999, MILLISECONDS);
   }
 
   @Test
   void waitsForElementInsideCollection() {
-    setTimeout(2000);
+    setTimeout(100);
     assertThatThrownBy(() ->
       $$("h1").findBy(cssClass("active")).findAll("h2").shouldHave(texts("nothing else matters"))
     )
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining("Element not found {h1.findBy(css class \"active\")");
-    assertTestTookMoreThan(2000, MILLISECONDS);
+    assertTestTookMoreThan(100, MILLISECONDS);
   }
 
   private void assertTestTookMoreThan(int value, TimeUnit unit) {
     long endedAt = System.currentTimeMillis();
     assertThat(endedAt - startedAt).isGreaterThanOrEqualTo(unit.toMillis(value));
+  }
+
+  private void assertTestTookLessThan(int value, TimeUnit unit) {
+    long endedAt = System.currentTimeMillis();
+    assertThat(endedAt - startedAt).isLessThanOrEqualTo(unit.toMillis(value));
   }
 }

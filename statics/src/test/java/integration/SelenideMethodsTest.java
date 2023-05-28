@@ -65,7 +65,6 @@ import static org.openqa.selenium.Keys.CONTROL;
 import static org.openqa.selenium.Keys.ENTER;
 import static org.openqa.selenium.Keys.TAB;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
 final class SelenideMethodsTest extends IntegrationTest {
   @BeforeEach
   void openTestPageWithJQuery() {
