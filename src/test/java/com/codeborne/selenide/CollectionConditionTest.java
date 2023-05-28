@@ -3,7 +3,6 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.Texts;
-import com.codeborne.selenide.collections.TextsInAnyOrder;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
@@ -68,26 +67,6 @@ final class CollectionConditionTest {
     assertThat(collectionCondition)
       .as("Exact texts case sensitive content")
       .hasToString("Exact texts case sensitive [One, Two, Three]");
-  }
-
-  @Test
-  void textsInAnyOrderWithObjectsList() {
-    CollectionCondition collectionCondition = CollectionCondition.textsInAnyOrder("One", "Two", "Three");
-    assertThat(collectionCondition)
-      .isInstanceOf(TextsInAnyOrder.class);
-    assertThat(collectionCondition)
-      .as("Text in any order content")
-      .hasToString("TextsInAnyOrder [One, Two, Three]");
-  }
-
-  @Test
-  void textsInAnyOrderWithStringsList() {
-    CollectionCondition collectionCondition = CollectionCondition.textsInAnyOrder(asList("One", "Two", "Three"));
-    assertThat(collectionCondition)
-      .isInstanceOf(TextsInAnyOrder.class);
-    assertThat(collectionCondition)
-      .as("Text in any order content")
-      .hasToString("TextsInAnyOrder [One, Two, Three]");
   }
 
   @Test
