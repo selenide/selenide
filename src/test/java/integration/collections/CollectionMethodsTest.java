@@ -2,7 +2,6 @@ package integration.collections;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.AttributesMismatch;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
@@ -134,11 +133,10 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void ignoresWhitespacesInTexts() {
-    withLongTimeout(() -> {
-      $$("#dynamic-content-container span").shouldHave(
-        texts("   dynamic \ncontent ", "dynamic \t\t\tcontent2\t\t\r\n"),
-        exactTexts("dynamic \t\n content\n\r", "    dynamic content2      "));
-    });
+    openFile("page_with_list_of_elements.html");
+    $$("ol.spaces li").shouldHave(
+      texts("   The \nfirst ", "The \t\t\tsecond\t\t\r\n", "The third")
+    );
   }
 
   @Test
@@ -149,19 +147,26 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void textsCheckThrowsTextsSizeMismatch() {
-    withLongTimeout(() -> {
-      assertThatThrownBy(() -> $$("#dynamic-content-container span")
-        .shouldHave(texts("static-content1", "static-content2", "dynamic-content1")))
-        .isInstanceOf(TextsSizeMismatch.class);
-    });
+    setTimeout(300);
+    assertThatThrownBy(() -> $$("#dynamic-content-container span")
+      .shouldHave(texts("static-content1", "static-content2", "dynamic-content1")))
+      .isInstanceOf(TextsSizeMismatch.class)
+      .hasMessageStartingWith("Texts size mismatch")
+      .hasMessageContaining("Actual: [dynamic content, dynamic content2], List size: 2")
+      .hasMessageContaining("Expected: [static-content1, static-content2, dynamic-content1], List size: 3")
+      .hasMessageContaining("Collection: #dynamic-content-container span");
   }
 
   @Test
-  void textCheckThrowsTextsMismatch() {
-    withLongTimeout(() -> {
-      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2")))
-        .isInstanceOf(TextsMismatch.class);
-    });
+  void textsCheckThrowsTextsMismatch() {
+    setTimeout(300);
+    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2")))
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("Texts mismatch")
+      .hasMessageContaining("Actual: [dynamic content, dynamic content2]")
+      .hasMessageContaining("Expected: [static-content1, static-content2]")
+      .hasMessageContaining("Collection: #dynamic-content-container span")
+      .hasMessageContaining("Timeout: 300 ms.");
   }
 
   @Test
@@ -220,6 +225,7 @@ final class CollectionMethodsTest extends ITest {
       .shouldHave(texts("foo bar")))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining("Element not found {#multirowTable.findBy(text \"INVALID-TEXT\")/valid-selector}")
+      .hasMessageContaining("Timeout: 1 ms.")
       .hasCauseInstanceOf(NoSuchElementException.class)
       .getCause()
       .hasMessageStartingWith("Cannot locate an element #multirowTable.findBy(text \"INVALID-TEXT\")");

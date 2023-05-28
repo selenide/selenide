@@ -27,6 +27,13 @@ public class ExactTextsTest extends ITest {
   }
 
   @Test
+  void ignoresWhitespacesInTexts() {
+    $$("ol.spaces li").shouldHave(
+      exactTexts("The \t\n first\n\r", "    The second      ", "The     third")
+    );
+  }
+
+  @Test
   void doesNotAcceptSubstrings() {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTexts("On", "Tw", "Thre")))
       .isInstanceOf(TextsMismatch.class)
