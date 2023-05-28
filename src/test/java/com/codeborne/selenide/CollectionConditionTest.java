@@ -2,7 +2,6 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitive;
-import com.codeborne.selenide.collections.ExactTextsCaseSensitiveInAnyOrder;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import org.junit.jupiter.api.Test;
@@ -97,17 +96,5 @@ final class CollectionConditionTest {
     assertThat(collectionCondition)
       .as("Should contain explanation")
       .hasToString("texts [One] (because should be)");
-  }
-
-  @Test
-  void exactTextsCaseSensitiveInAnyOrderWithList() {
-    CollectionCondition condition = CollectionCondition.exactTextsCaseSensitiveInAnyOrder(asList("One", "Two"));
-    assertThat(condition).isInstanceOf(ExactTextsCaseSensitiveInAnyOrder.class);
-  }
-
-  @Test
-  void exactTextsCaseSensitiveInAnyOrderWithVarargs() {
-    CollectionCondition condition = CollectionCondition.exactTextsCaseSensitiveInAnyOrder("One", "Two");
-    assertThat(condition).isInstanceOf(ExactTextsCaseSensitiveInAnyOrder.class);
   }
 }
