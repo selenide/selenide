@@ -12,7 +12,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.byTagAndText("*", "selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: text; by value: selen'ide-app'ium");
+      .hasToString("[text=selen'ide-app'ium]");
   }
 
   @Test
@@ -20,7 +20,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.byText("selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: text; by value: selen'ide-app'ium");
+      .hasToString("[text=selen'ide-app'ium]");
   }
 
   @Test
@@ -28,7 +28,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.withTagAndText("*", "selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: text; with value: selen'ide-app'ium");
+      .hasToString("[text*=selen'ide-app'ium]");
   }
 
   @Test
@@ -36,7 +36,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.withText("selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: text; with value: selen'ide-app'ium");
+      .hasToString("[text*=selen'ide-app'ium]");
   }
 
   @Test
@@ -44,7 +44,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.byTagAndName("*", "selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: name; by value: selen'ide-app'ium");
+      .hasToString("[name=selen'ide-app'ium]");
   }
 
   @Test
@@ -52,7 +52,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.byName("selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: name; by value: selen'ide-app'ium");
+      .hasToString("[name=selen'ide-app'ium]");
   }
 
   @Test
@@ -60,7 +60,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.withTagAndName("*", "selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: name; with value: selen'ide-app'ium");
+      .hasToString("[name*=selen'ide-app'ium]");
   }
 
   @Test
@@ -68,7 +68,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.withName("selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: name; with value: selen'ide-app'ium");
+      .hasToString("[name*=selen'ide-app'ium]");
   }
 
   @Test
@@ -76,7 +76,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.byTagAndAttribute("*", "text", "selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: text; by value: selen'ide-app'ium");
+      .hasToString("[text=selen'ide-app'ium]");
   }
 
   @Test
@@ -84,7 +84,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.byAttribute("text", "selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: text; by value: selen'ide-app'ium");
+      .hasToString("[text=selen'ide-app'ium]");
   }
 
   @Test
@@ -92,7 +92,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.withTagAndAttribute("*", "text", "selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: text; with value: selen'ide-app'ium");
+      .hasToString("[text*=selen'ide-app'ium]");
   }
 
   @Test
@@ -100,7 +100,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.withAttribute("text", "selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: text; with value: selen'ide-app'ium");
+      .hasToString("[text*=selen'ide-app'ium]");
   }
 
   @Test
@@ -108,15 +108,18 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.byTagAndContentDescription("*", "selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: content-desc; by value: selen'ide-app'ium");
+      .hasToString("[content-desc=selen'ide-app'ium]");
   }
 
   @Test
   void testWithTagAndContentDescriptionSelector() {
-    By by = AppiumSelectors.withTagAndContentDescription("*", "selen'ide-app'ium");
-    assertThat(by)
+    assertThat(AppiumSelectors.withTagAndContentDescription("*", "selen'ide-app'ium"))
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: content-desc; with value: selen'ide-app'ium");
+      .hasToString("[content-desc*=selen'ide-app'ium]");
+
+    assertThat(AppiumSelectors.withTagAndContentDescription("android.widget.TextView", "selen'ide-app'ium"))
+      .isInstanceOf(By.ByXPath.class)
+      .hasToString("android.widget.TextView[content-desc*=selen'ide-app'ium]");
   }
 
   @Test
@@ -124,7 +127,7 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.byContentDescription("selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: content-desc; by value: selen'ide-app'ium");
+      .hasToString("[content-desc=selen'ide-app'ium]");
   }
 
   @Test
@@ -132,6 +135,6 @@ class AppiumSelectorsTest {
     By by = AppiumSelectors.withContentDescription("selen'ide-app'ium");
     assertThat(by)
       .isInstanceOf(By.ByXPath.class)
-      .hasToString("by tag: *; by attribute: content-desc; with value: selen'ide-app'ium");
+      .hasToString("[content-desc*=selen'ide-app'ium]");
   }
 }

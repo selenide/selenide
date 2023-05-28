@@ -54,4 +54,18 @@ public class CombinedBy extends By {
     }
     throw new UnsupportedOperationException("Unsupported webdriver: " + WebDriverRunner.getWebDriver());
   }
+
+  @Override
+  public String toString() {
+    if (androidSelector != null && iosSelector != null) {
+      return String.format("[android:%s, ios:%s]", androidSelector, iosSelector);
+    }
+    if (androidSelector != null) {
+      return androidSelector.toString();
+    }
+    if (iosSelector != null) {
+      return iosSelector.toString();
+    }
+    return "CombinedBy: null";
+  }
 }

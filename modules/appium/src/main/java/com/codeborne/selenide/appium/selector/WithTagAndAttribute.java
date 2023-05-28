@@ -23,6 +23,8 @@ public class WithTagAndAttribute extends By.ByXPath {
   @CheckReturnValue
   @Nonnull
   public String toString() {
-    return "by tag: " + tag + "; by attribute: " + attributeName + "; with value: " + attributeValue;
+    return "*".equals(tag) ?
+      String.format("[%s*=%s]", attributeName, attributeValue) :
+      String.format("%s[%s*=%s]", tag, attributeName, attributeValue);
   }
 }

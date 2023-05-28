@@ -26,7 +26,6 @@ import static com.codeborne.selenide.appium.selector.CombinedBy.android;
 class AndroidSelectorsTest extends BaseApiDemosTest {
 
   private static final String VIEWS = "Views";
-  private static final String GRAPHICS_PARTIAL_STRING = "Graphi";
 
   @BeforeEach
   void setUp() {
@@ -35,7 +34,7 @@ class AndroidSelectorsTest extends BaseApiDemosTest {
   }
 
   @Test
-  void testAppiumSelectorsInAndroidApp() {
+  void appiumSelectorsInAndroidApp() {
     $(byAttribute("content-desc", VIEWS)).click();
     back();
     $(byContentDescription(VIEWS)).click();
@@ -48,17 +47,17 @@ class AndroidSelectorsTest extends BaseApiDemosTest {
     back();
     $(byText(VIEWS)).click();
     back();
-    $(withAttribute("text", GRAPHICS_PARTIAL_STRING)).click();
+    $(withAttribute("text", "Graphi")).click();
     back();
-    $(withContentDescription(GRAPHICS_PARTIAL_STRING)).click();
+    $(withContentDescription("Graphi")).click();
     back();
-    $(withTagAndAttribute("*", "text", GRAPHICS_PARTIAL_STRING)).click();
+    $(withTagAndAttribute("*", "text", "Graphi")).click();
     back();
-    $(withTagAndContentDescription("*", GRAPHICS_PARTIAL_STRING)).click();
+    $(withTagAndContentDescription("*", "Graphi")).click();
     back();
-    $(withTagAndText("android.widget.TextView", GRAPHICS_PARTIAL_STRING)).click();
+    $(withTagAndText("android.widget.TextView", "Graphi")).click();
     back();
-    $(android(withText(GRAPHICS_PARTIAL_STRING)).ios(By.xpath("")))
-      .shouldHave(text("Graphics"));
+    $(android(withText("Graphi")).ios(By.xpath("/"))).shouldHave(text("Graphics"));
+    $(android(byText("Graphics")).ios(By.xpath("/"))).shouldHave(text("Graphics"));
   }
 }
