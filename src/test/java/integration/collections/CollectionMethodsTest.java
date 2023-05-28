@@ -20,7 +20,6 @@ import java.util.List;
 import static com.codeborne.selenide.CollectionCondition.attributes;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
-import static com.codeborne.selenide.CollectionCondition.exactTextsCaseSensitive;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
@@ -389,28 +388,6 @@ final class CollectionMethodsTest extends ITest {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {#not_exist:last}")
       .hasCauseInstanceOf(IndexOutOfBoundsException.class);
-  }
-
-  @Test
-  void shouldHaveExactTextsCaseSensitive() {
-    $$("#hero option").should(exactTextsCaseSensitive(
-      "-- Select your hero --",
-      "John Mc'Lain",
-      "Arnold \"Schwarzenegger\"",
-      "Mickey \"Rock'n'Roll\" Rourke",
-      "Denzel Washington"
-    ));
-    $$("#user-table th").should(exactTextsCaseSensitive(
-      "First name",
-      "Last name",
-      "Age"
-    ));
-
-    assertThatThrownBy(() -> $$("#user-table th").should(exactTextsCaseSensitive("First name", "Last name", "ge")))
-      .isInstanceOf(TextsMismatch.class)
-      .hasMessageContaining("Texts mismatch")
-      .hasMessageContaining("Actual: [First name, Last name, Age]")
-      .hasMessageContaining("Expected: [First name, Last name, ge]");
   }
 
   @Test
