@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.15.0 (released 2x.05.2023)
+## 6.15.0 (released 29.05.2023)
 Project "selenide-selenoid" was merged into project "selenide".
 
 ## 2.3.7 (released 15.05.2023)

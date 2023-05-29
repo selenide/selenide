@@ -8,7 +8,7 @@ ext {
   mockitoVersion = '5.3.1'
   slf4jVersion = '2.0.7'
   browserupProxyVersion = '2.2.10'
-  littleProxyVersion = '2.0.17'
+  littleProxyVersion = '2.0.18'
   commonsFileuploadVersion = '1.5'
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.4'
