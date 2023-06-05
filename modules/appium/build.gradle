@@ -8,7 +8,7 @@ dependencies {
   testImplementation project(':modules:core').sourceSets.test.output
   testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 
-  api("io.appium:java-client:8.5.0") {
+  api("io.appium:java-client:8.5.1") {
     exclude group: 'io.opentelemetry'
     exclude group: 'org.slf4j'
     exclude group: 'org.seleniumhq'
