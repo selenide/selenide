@@ -39,6 +39,8 @@ public class LocalDateCondition extends Condition {
 
     LocalDate localDateValue = (LocalDate) formatted.actualValue();
 
+    if (localDateValue == null) throw new IllegalStateException("Format condition returns null, not date");
+
     return new CheckResult(expectedDate.isEqual(localDateValue), formatCondition.format(localDateValue));
   }
 

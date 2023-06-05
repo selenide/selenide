@@ -37,9 +37,11 @@ public class LocalDateTimeCondition extends Condition {
 
     if (formatted.verdict() == REJECT) return formatted;
 
-    LocalDateTime localDateValue = (LocalDateTime) formatted.actualValue();
+    LocalDateTime localDateTimeValue = (LocalDateTime) formatted.actualValue();
 
-    return new CheckResult(expectedDateTime.isEqual(localDateValue), formatCondition.format(localDateValue));
+    if (localDateTimeValue == null) throw new IllegalStateException("Format condition returns null, not datetime");
+
+    return new CheckResult(expectedDateTime.isEqual(localDateTimeValue), formatCondition.format(localDateTimeValue));
   }
 
   @Nonnull
