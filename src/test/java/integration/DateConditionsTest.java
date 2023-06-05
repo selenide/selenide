@@ -30,18 +30,24 @@ public class DateConditionsTest extends ITest {
   public void failure_wrongDates() {
     assertThatThrownBy(() -> $("#birthdate").shouldHave(date(LocalDate.of(2022, 11, 11), "yyyy/MM/dd")))
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should have date value: \"2022/11/11\" (with date value format: \"yyyy/MM/dd\") {#birthdate}")
-      .hasMessageContaining("Element: '<input id=\"birthdate\" type=\"text\" value=\"2022/10/11\"></input>'")
+      .hasMessageStartingWith("""
+        Element should have date value: "2022/11/11" (with date value format: "yyyy/MM/dd") {#birthdate}
+        """)
+      .hasMessageContaining("""
+        Element: '<input id="birthdate" type="text" value="2022/10/11"></input>'
+        """)
       .hasMessageContaining("Actual value: 2022/10/11");
 
     assertThatThrownBy(() ->
       $("#birthdate").shouldHave(dateBetween(LocalDate.of(2022, 10, 12), LocalDate.of(2022, 10, 13), "yyyy/MM/dd"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith(
-        "Element should have date value between [\"2022/10/12\", \"2022/10/13\"] (with date value format: \"yyyy/MM/dd\") {#birthdate}"
-      )
-      .hasMessageContaining("Element: '<input id=\"birthdate\" type=\"text\" value=\"2022/10/11\"></input>'")
+      .hasMessageStartingWith("""
+        Element should have date value between ["2022/10/12", "2022/10/13"] (with date value format: "yyyy/MM/dd") {#birthdate}
+        """)
+      .hasMessageContaining("""
+        Element: '<input id="birthdate" type="text" value="2022/10/11"></input>'
+        """)
       .hasMessageContaining("Actual value: 2022/10/11");
   }
 
@@ -51,24 +57,34 @@ public class DateConditionsTest extends ITest {
       $("#birthdate").shouldHave(date(LocalDate.of(2022, 11, 11), "yyyy-MM-dd"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should have date value: \"2022-11-11\" (with date value format: \"yyyy-MM-dd\") {#birthdate}")
-      .hasMessageContaining("Element: '<input id=\"birthdate\" type=\"text\" value=\"2022/10/11\"></input>'")
+      .hasMessageStartingWith("""
+        Element should have date value: "2022-11-11" (with date value format: "yyyy-MM-dd") {#birthdate}
+        """)
+      .hasMessageContaining("""
+        Element: '<input id="birthdate" type="text" value="2022/10/11"></input>'
+        """)
       .hasMessageContaining("Actual value: 2022/10/11");
 
     assertThatThrownBy(() ->
       $("#birthdate").shouldHave(dateBetween(LocalDate.of(2022, 10, 12), LocalDate.of(2022, 10, 13), "yyyy-MM-dd"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith(
-        "Element should have date value between [\"2022-10-12\", \"2022-10-13\"] (with date value format: \"yyyy-MM-dd\") {#birthdate}"
-      )
-      .hasMessageContaining("Element: '<input id=\"birthdate\" type=\"text\" value=\"2022/10/11\"></input>'")
+      .hasMessageStartingWith("""
+        Element should have date value between ["2022-10-12", "2022-10-13"] (with date value format: "yyyy-MM-dd") {#birthdate}
+        """)
+      .hasMessageContaining("""
+        Element: '<input id="birthdate" type="text" value="2022/10/11"></input>'
+        """)
       .hasMessageContaining("Actual value: 2022/10/11");
 
     assertThatThrownBy(() -> $("#birthdate").shouldHave(dateFormat("yyyy-MM-dd")))
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should have date value format: \"yyyy-MM-dd\" {#birthdate}")
-      .hasMessageContaining("Element: '<input id=\"birthdate\" type=\"text\" value=\"2022/10/11\"></input>'")
+      .hasMessageStartingWith("""
+        Element should have date value format: "yyyy-MM-dd" {#birthdate}
+        """)
+      .hasMessageContaining("""
+        Element: '<input id="birthdate" type="text" value="2022/10/11"></input>'
+        """)
       .hasMessageContaining("Actual value: 2022/10/11");
   }
 }
