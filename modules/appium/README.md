@@ -60,7 +60,7 @@ public class AndroidDriverForApiDemos implements WebDriverProvider {
 
 ### Features
 
-1. Additional Locators - Please refer [here](https://github.com/selenide/selenide/blob/main/modules/appium/src/test/java/com/codeborne/selenide/appium/AppiumSelectorsTest.java)
+1. Additional [Android Locators](https://github.com/selenide/selenide/blob/main/modules/appium/src/test/java/it/mobile/android/AndroidSelectorsTest.java) and [iOS selectors](https://github.com/selenide/selenide/blob/main/modules/appium/src/test/java/it/mobile/ios/IosSelectorsTest.java) 
 2. Working with Deep links is easier than ever
 ```java
 SelenideAppium.openAndroidDeepLink("mydemoapprn://product-details/1", "com.saucelabs.mydemoapp.rn");
