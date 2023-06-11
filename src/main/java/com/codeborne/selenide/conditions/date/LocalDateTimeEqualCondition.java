@@ -13,17 +13,17 @@ import java.time.LocalDateTime;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 
 @ParametersAreNonnullByDefault
-public class LocalDateTimeCondition extends Condition {
+public class LocalDateTimeEqualCondition extends Condition {
   public static final String DEFAULT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
   private final LocalDateTime expectedDateTime;
   private final LocalDateTimeFormatCondition formatCondition;
 
-  public LocalDateTimeCondition(LocalDateTime expectedDateTime, String pattern) {
+  public LocalDateTimeEqualCondition(LocalDateTime expectedDateTime, String pattern) {
     this(expectedDateTime, new LocalDateTimeFormatCondition(pattern));
   }
 
-  LocalDateTimeCondition(LocalDateTime expectedDateTime, LocalDateTimeFormatCondition formatCondition) {
+  LocalDateTimeEqualCondition(LocalDateTime expectedDateTime, LocalDateTimeFormatCondition formatCondition) {
     super("datetime value");
     this.expectedDateTime = expectedDateTime;
     this.formatCondition = formatCondition;

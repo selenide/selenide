@@ -20,7 +20,7 @@ final class LocalDateTimeConditionTest {
   private final WebElement element = mock();
   private final LocalDateTimeFormatCondition formatCondition = mock();
   private final LocalDateTime expectedDateTime = LocalDateTime.of(2022, 10, 11, 12, 13, 14);
-  private final LocalDateTimeCondition condition = new LocalDateTimeCondition(expectedDateTime, formatCondition);
+  private final LocalDateTimeEqualCondition condition = new LocalDateTimeEqualCondition(expectedDateTime, formatCondition);
   @Test
   void correctDateTimeValueWithCorrectFormat() {
     when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, expectedDateTime));
@@ -61,7 +61,7 @@ final class LocalDateTimeConditionTest {
 
   @Test
   void stringRepresentationOfCondition() {
-    var condition = new LocalDateTimeCondition(expectedDateTime, "yyyy/MM/dd HH:mm:ss");
+    var condition = new LocalDateTimeEqualCondition(expectedDateTime, "yyyy/MM/dd HH:mm:ss");
 
     assertThat(condition.toString())
       .isEqualTo("datetime value: \"2022/10/11 12:13:14\" (with datetime value format: \"yyyy/MM/dd HH:mm:ss\")");

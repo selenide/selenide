@@ -42,17 +42,13 @@ import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
 import com.codeborne.selenide.conditions.date.DateConditionOptions;
-import com.codeborne.selenide.conditions.date.LocalDateTimeBetweenCondition;
-import com.codeborne.selenide.conditions.date.LocalDateTimeCondition;
-import com.codeborne.selenide.conditions.date.LocalDateTimeFormatCondition;
+import com.codeborne.selenide.conditions.date.DateTimeConditionOptions;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
@@ -798,83 +794,21 @@ public abstract class Condition {
 
   /**
    * Assert that element contains "value" attribute with datetime value
-   * that is satisfied to the pattern and is equal to expected datetime
+   * that is satisfied to the provided `options`
    *
-   * <p>Sample: {@code $("input").shouldHave(datetime(expectedLocalDateTime, "dd/MM/yyyy HH:mm:ss"));}</p>
-   *
-   * @param expectedDateTime expected value of "value" attribute
-   * @param pattern datetime format of value of "value" attribute
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static Condition datetime(LocalDateTime expectedDateTime, String pattern) {
-    return new LocalDateTimeCondition(expectedDateTime, pattern);
-  }
-
-  /**
-   * Assert that element contains "value" attribute with datetime value that
-   * is satisfied to the {@link LocalDateTimeCondition#DEFAULT_PATTERN default pattern}
-   * and is equal to expected datetime
-   *
-   * <p>Sample: {@code $("input").shouldHave(datetime(expectedLocalDateTime);}</p>
-   *
-   * @param expectedDateTime expected value of "value" attribute
-   *
-   * @see Condition#datetime(LocalDateTime, String)
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static Condition datetime(LocalDateTime expectedDateTime) {
-    return new LocalDateTimeCondition(expectedDateTime, LocalDateTimeCondition.DEFAULT_PATTERN);
-  }
-
-  /**
-   * Assert that element contains "value" attribute with datetime value that is satisfied to the pattern
-   *
-   * <p>Sample: {@code $("input").shouldHave(datetimeFormat("dd/MM/yyyy HH:mm:ss"));}</p>
-   *
-   * @param pattern date format of value of "value" attribute
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static Condition datetimeFormat(String pattern) {
-    return new LocalDateTimeFormatCondition(pattern);
-  }
-
-  /**
-   * Assert that element contains "value" attribute with date value that is satisfied to the pattern
+   * <p>Samples:
    * <br>
-   * and is inside interval {@code [startDateTime, endDateTime] (inclusive)}
    *
-   * <p>Sample: {@code $("input").shouldHave(datetimeBetween(expectedStartDateTime, expectedEndDateTime, "dd/MM/yyyy"));}</p>
+   * {@code $("input").shouldHave(datetime(eq(LocalDateTime.of(2020, 11, 12, 1, 1, 1)).format("dd/MM/yyyy HH:mm:ss"));}
+   * {@code $("input").shouldHave(datetime(withFormat("dd/MM/yyyy")));}
+   * </p>
    *
-   * @param startDateTime start of the interval (inclusive)
-   * @param endDateTime end of the interval (inclusive)
-   * @param pattern date format of value of "value" attribute
+   * @see DateTimeConditionOptions
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition datetimeBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, String pattern) {
-    return new LocalDateTimeBetweenCondition(startDateTime, endDateTime, pattern);
-  }
-
-  /**
-   * Assert that element contains "value" attribute with datetime value that
-   * is satisfied to the {@link LocalDateTimeCondition#DEFAULT_PATTERN default pattern}
-   * <br>
-   * and is inside interval {@code [startDateTime, endDateTime] (inclusive)}
-   *
-   * <p>Sample: {@code $("input").shouldHave(datetimeBetween(expectedStartDateTime, expectedEndDateTime));}</p>
-   *
-   * @param startDateTime start of the interval (inclusive)
-   * @param endDateTime end of the interval (inclusive)
-   *
-   * @see Condition#dateBetween(LocalDate, LocalDate, String)
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static Condition datetimeBetween(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-    return new LocalDateTimeBetweenCondition(startDateTime, endDateTime, LocalDateTimeCondition.DEFAULT_PATTERN);
+  public static Condition datetime(DateTimeConditionOptions options) {
+    return options.condition();
   }
 
 }
