@@ -5,11 +5,12 @@ import com.codeborne.selenide.Condition;
 import java.time.LocalDate;
 
 public interface DateConditionOptions {
+  String DEFAULT_PATTERN = "yyyy-MM-dd";
 
   Condition condition();
 
   static EqDateConditionOptions eq(LocalDate date) {
-    return new EqDateConditionOptions(date, new LocalDateFormatCondition(LocalDateEqualCondition.DEFAULT_PATTERN));
+    return new EqDateConditionOptions(date, new LocalDateFormatCondition(DEFAULT_PATTERN));
   }
 
   static EqDateConditionOptions eq(LocalDate date, String pattern) {
@@ -17,7 +18,7 @@ public interface DateConditionOptions {
   }
 
   static BetweenDateConditionOptions between(LocalDate startDate, LocalDate endDate) {
-    return new BetweenDateConditionOptions(startDate, endDate, new LocalDateFormatCondition(LocalDateEqualCondition.DEFAULT_PATTERN));
+    return new BetweenDateConditionOptions(startDate, endDate, new LocalDateFormatCondition(DEFAULT_PATTERN));
   }
 
   static BetweenDateConditionOptions between(LocalDate startDate, LocalDate endDate, String pattern) {

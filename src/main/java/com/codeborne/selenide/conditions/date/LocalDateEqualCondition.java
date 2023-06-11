@@ -14,7 +14,6 @@ import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 
 @ParametersAreNonnullByDefault
 public class LocalDateEqualCondition extends Condition {
-  public static final String DEFAULT_PATTERN = "yyyy-MM-dd";
 
   private final LocalDate expectedDate;
   private final LocalDateFormatCondition formatCondition;

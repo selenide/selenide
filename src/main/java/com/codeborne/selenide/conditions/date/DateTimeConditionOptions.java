@@ -4,9 +4,8 @@ import com.codeborne.selenide.Condition;
 
 import java.time.LocalDateTime;
 
-import static com.codeborne.selenide.conditions.date.LocalDateTimeEqualCondition.DEFAULT_PATTERN;
-
 public interface DateTimeConditionOptions {
+  String DEFAULT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
   Condition condition();
 
