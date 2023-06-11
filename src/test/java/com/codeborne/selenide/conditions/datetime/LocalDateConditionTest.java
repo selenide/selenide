@@ -1,4 +1,4 @@
-package com.codeborne.selenide.conditions.date;
+package com.codeborne.selenide.conditions.datetime;
 
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
@@ -10,19 +10,16 @@ import java.time.LocalDate;
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class LocalDateBetweenConditionTest {
+final class LocalDateConditionTest {
   private final Driver driver = mock();
   private final WebElement element = mock();
   private final LocalDateFormatCondition formatCondition = mock();
-  private final LocalDate start = LocalDate.of(2022, 10, 9);
-  private final LocalDate end = LocalDate.of(2022, 10, 12);
-  private final LocalDateBetweenCondition condition = new LocalDateBetweenCondition(start, end, formatCondition);
+  private final LocalDateEqualCondition condition = new LocalDateEqualCondition(LocalDate.of(2022, 10, 11), formatCondition);
 
   @Test
   void correctDateValueWithCorrectFormat() {
@@ -50,7 +47,7 @@ final class LocalDateBetweenConditionTest {
 
   @Test
   void incorrectDateValue() {
-    when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, LocalDate.of(2021, 10, 12)));
+    when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, LocalDate.of(2023, 10, 11)));
     when(formatCondition.format(any())).thenReturn("formatted date");
 
     CheckResult check = condition.check(driver, element);
@@ -59,31 +56,13 @@ final class LocalDateBetweenConditionTest {
     assertThat(check.actualValue()).isEqualTo("formatted date");
 
     verify(formatCondition).check(driver, element);
-    verify(formatCondition).format(LocalDate.of(2021, 10, 12));
+    verify(formatCondition).format(LocalDate.of(2023, 10, 11));
   }
 
   @Test
   void stringRepresentationOfCondition() {
-    var condition = new LocalDateBetweenCondition(start, end, "yyyy/MM/dd");
+    var condition = new LocalDateEqualCondition(LocalDate.of(2022, 10, 11), "yyyy/MM/dd");
 
-    assertThat(condition.toString())
-      .isEqualTo("date value between [\"2022/10/09\", \"2022/10/12\"] (with date value format: \"yyyy/MM/dd\")");
-  }
-
-  @Test
-  void throwExceptionIfStartDateIsEqualToEndDate() {
-    LocalDate date = LocalDate.of(2022, 10, 11);
-    assertThatThrownBy(() -> new LocalDateBetweenCondition(date, date, formatCondition))
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("startDate must be before endDate");
-  }
-
-  @Test
-  void throwExceptionIfStartDateAfterEndDate() {
-    LocalDate startDate = LocalDate.of(2022, 10, 11);
-    LocalDate endDate = LocalDate.of(2021, 10, 11);
-    assertThatThrownBy(() -> new LocalDateBetweenCondition(startDate, endDate, formatCondition))
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("startDate must be before endDate");
+    assertThat(condition.toString()).isEqualTo("date value: \"2022/10/11\" (with date value format: \"yyyy/MM/dd\")");
   }
 }

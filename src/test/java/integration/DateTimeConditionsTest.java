@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static com.codeborne.selenide.Condition.datetime;
-import static com.codeborne.selenide.conditions.date.DateTimeConditionOptions.between;
-import static com.codeborne.selenide.conditions.date.DateTimeConditionOptions.eq;
-import static com.codeborne.selenide.conditions.date.DateTimeConditionOptions.withFormat;
+import static com.codeborne.selenide.conditions.datetime.DateTimeConditionOptions.between;
+import static com.codeborne.selenide.conditions.datetime.DateTimeConditionOptions.eq;
+import static com.codeborne.selenide.conditions.datetime.DateTimeConditionOptions.withFormat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 public class DateTimeConditionsTest extends ITest {

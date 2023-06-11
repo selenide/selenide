@@ -41,8 +41,8 @@ import com.codeborne.selenide.conditions.TagName;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
-import com.codeborne.selenide.conditions.date.DateConditionOptions;
-import com.codeborne.selenide.conditions.date.DateTimeConditionOptions;
+import com.codeborne.selenide.conditions.datetime.DateConditionOptions;
+import com.codeborne.selenide.conditions.datetime.DateTimeConditionOptions;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;

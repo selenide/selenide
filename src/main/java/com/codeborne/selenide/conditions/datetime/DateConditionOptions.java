@@ -1,4 +1,4 @@
-package com.codeborne.selenide.conditions.date;
+package com.codeborne.selenide.conditions.datetime;
 
 import com.codeborne.selenide.Condition;
 

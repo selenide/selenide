@@ -1,4 +1,4 @@
-package com.codeborne.selenide.conditions.date;
+package com.codeborne.selenide.conditions.datetime;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.LocalDate;
