@@ -1,0 +1,37 @@
+ext {
+  artifactId = 'selenide-appium'
+}
+
+dependencies {
+  api project(":statics")
+  testImplementation project(':statics').sourceSets.test.output
+  testImplementation project(':modules:core').sourceSets.test.output
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+
+  api("io.appium:java-client:8.5.1") {
+    exclude group: 'io.opentelemetry'
+    exclude group: 'org.slf4j'
+    exclude group: 'org.seleniumhq'
+    exclude group: 'cglib'
+  }
+  implementation('commons-io:commons-io:2.13.0')
+  testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+  testImplementation("org.assertj:assertj-core:$assertjVersion")
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
+  testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
+}
+
+task android(type: Test) {
+  include 'it/mobile/android/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+  outputs.upToDateWhen { false }
+}
+
+task ios(type: Test) {
+  include 'it/mobile/ios/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+  outputs.upToDateWhen { false }
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')

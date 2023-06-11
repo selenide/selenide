@@ -88,7 +88,7 @@ public class LazyWebElementSnapshot extends WebElementSource {
 
   @Nonnull
   @Override
-  public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
-    return delegate.createElementNotFoundError(condition, lastError);
+  public ElementNotFound createElementNotFoundError(Condition condition, Throwable cause) {
+    return delegate.createElementNotFoundError(condition, cause);
   }
 }

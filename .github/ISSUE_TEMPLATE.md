@@ -13,7 +13,9 @@ If necessary, describe the problem you have been experiencing in more detail.
 ## Tell us about your environment
 * **Selenide Version**: 
 * **Chrome\Firefox\IE Version**: 
-* **Browser Driver Version**: 
+* **Browser Driver Version**:
+* **Selenide-Appium Version**:
+* **IOS\Android\WEB version**:
 * **Selenium Version**: 
 * **OS Version**: 
 

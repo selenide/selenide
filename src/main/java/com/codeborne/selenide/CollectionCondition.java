@@ -18,24 +18,71 @@ import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import com.codeborne.selenide.impl.CollectionSource;
+import com.github.bsideup.jabel.Desugar;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.function.Predicate;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static java.util.Arrays.asList;
 
 @ParametersAreNonnullByDefault
-public abstract class CollectionCondition implements Predicate<List<WebElement>> {
+public abstract class CollectionCondition {
   protected String explanation;
 
-  public abstract void fail(CollectionSource collection,
-                            @Nullable List<WebElement> elements,
-                            @Nullable Exception lastError,
-                            long timeoutMs);
+  /**
+   * @deprecated Please implement method {@link #check(CollectionSource)} instead.
+   */
+  @Deprecated
+  @CheckReturnValue
+  public boolean test(List<WebElement> elements) {
+    throw new UnsupportedOperationException("Implement method 'check' (powerful) or 'test' (simple)");
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  public CheckResult check(Driver driver, List<WebElement> elements) {
+    boolean result = test(elements);
+    return result ? new CheckResult(ACCEPT, null) : new CheckResult(REJECT, new ActualElementsHolder(elements));
+  }
+
+  /**
+   * The most powerful way to implement condition.
+   * Can check the collection using JavaScript or any other effective means.
+   * Also, can return "actual values" in the returned {@link CheckResult} object.
+   */
+  @Nonnull
+  @CheckReturnValue
+  public CheckResult check(CollectionSource collection) {
+    List<WebElement> elements = collection.getElements();
+    return check(collection.driver(), elements);
+  }
+
+  @Deprecated
+  public void fail(CollectionSource collection,
+                   @Nullable List<WebElement> elements,
+                   @Nullable Exception cause,
+                   long timeoutMs) {
+    throw new UnsupportedOperationException(
+      "Implement method 'fail(..CheckResult..)' (powerful) or 'fail(..List<WebElement>..)' (simple)");
+  }
+
+  /**
+   * Every subclass should implement this method.
+   * We left here the default implementation only because of backward compatibility.
+   */
+  public void fail(CollectionSource collection,
+                   CheckResult lastCheckResult,
+                   @Nullable Exception cause,
+                   long timeoutMs) {
+    List<WebElement> actualElements = lastCheckResult.actualValue() instanceof ActualElementsHolder holder ? holder.elements() : null;
+    fail(collection, actualElements, cause, timeoutMs);
+  }
 
   public static CollectionCondition empty = size(0);
 
@@ -317,9 +364,9 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     @Override
     public void fail(CollectionSource collection,
                      @Nullable List<WebElement> elements,
-                     @Nullable Exception lastError,
+                     @Nullable Exception cause,
                      long timeoutMs) {
-      delegate.fail(collection, elements, lastError, timeoutMs);
+      delegate.fail(collection, elements, cause, timeoutMs);
     }
 
     @Override
@@ -328,8 +375,17 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     }
 
     @Override
-    public boolean test(@Nullable List<WebElement> input) {
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public boolean test(List<WebElement> input) {
       return delegate.test(input);
+    }
+
+    @Nonnull
+    @CheckReturnValue
+    @Override
+    public CheckResult check(CollectionSource collection) {
+      return delegate.check(collection);
     }
   }
 
@@ -342,4 +398,16 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   }
 
   public abstract boolean missingElementSatisfiesCondition();
+
+  /**
+   * A temporary solution for keeping backward compatibility
+   * until we throw away old method {@link #test(List)} and {@link #fail(CollectionSource, List, Exception, long)}
+   */
+  @Desugar
+  private record ActualElementsHolder(List<WebElement> elements) {
+    @Override
+    public String toString() {
+      return "Elements: " + elements;
+    }
+  }
 }

@@ -19,7 +19,7 @@ import static java.util.Comparator.comparingLong;
 
 /**
  * A simple text report of Selenide actions performed during test run.
- *
+ * <p>
  * Class is thread-safe: the same instance of SimpleReport can be reused by different threads simultaneously.
  */
 @ParametersAreNonnullByDefault
@@ -55,7 +55,7 @@ public class SimpleReport {
   @Nonnull
   @CheckReturnValue
   String generateReport(String title, List<LogEvent> events) {
-    var eventsWithNestingLevel = computeNestingLevel(events);
+    var eventsWithNestingLevel = escapeSubjectAndComputeNestingLevel(events);
 
     int firstColumnWidth = Math.max(maxLocatorLength(eventsWithNestingLevel), MIN_FIRST_COLUMN_WIDTH);
     int secondColumnWidth = Math.min(maxSubjectLength(eventsWithNestingLevel), MAX_SECOND_COLUMN_WIDTH);
@@ -72,16 +72,26 @@ public class SimpleReport {
     return report.build();
   }
 
-  private List<LogEventWithNestingLevel> computeNestingLevel(List<LogEvent> events) {
-    var stack = new ArrayDeque<LogEvent>();
+  private List<LogEventWithNestingLevel> escapeSubjectAndComputeNestingLevel(List<LogEvent> events) {
+    var stack = new ArrayDeque<LogEventWithNestingLevel.SimpleLogEvent>();
     var result = new ArrayList<LogEventWithNestingLevel>(events.size());
     for (LogEvent event : events) {
-      while (!stack.isEmpty() && stack.peekFirst().getEndTime() <= event.getStartTime())
+      var eventWithEscapedSubject = new LogEventWithNestingLevel.SimpleLogEvent(
+        event.getElement(),
+        escape(event.getSubject()),
+        event.getStatus(),
+        event.getDuration(),
+        event.getStartTime(),
+        event.getEndTime(),
+        event.getError()
+      );
+
+      while (!stack.isEmpty() && stack.peekFirst().getEndTime() <= eventWithEscapedSubject.getStartTime())
         stack.removeFirst();
 
-      result.add(new LogEventWithNestingLevel(stack.size(), event));
+      result.add(new LogEventWithNestingLevel(stack.size(), eventWithEscapedSubject));
 
-      stack.addFirst(event);
+      stack.addFirst(eventWithEscapedSubject);
     }
 
     return result;
@@ -208,6 +218,42 @@ public class SimpleReport {
   }
 
   @Desugar
-  private record LogEventWithNestingLevel(int nestingLevel, LogEvent event) {
+  private record LogEventWithNestingLevel(int nestingLevel, SimpleLogEvent event) {
+
+    @Desugar
+    private record SimpleLogEvent(
+      String getElement,
+      String getSubject,
+      EventStatus getStatus,
+      long getDuration,
+      long getStartTime,
+      long getEndTime,
+      Throwable getError
+    ) implements LogEvent {
+    }
+  }
+
+  private static String escape(String text) {
+    var builder = new StringBuilder((int) (text.length() * 1.5));
+    for (int i = 0; i < text.length(); i++) {
+      var symbol = text.charAt(i);
+
+      switch (symbol) {
+        case '\t' -> builder.append("\\t");
+        case '\r' -> builder.append("\\r");
+        case '\n' -> builder.append("\\n");
+        case '\f' -> builder.append("\\f");
+        case '\b' -> builder.append("\\b");
+        case '\u00A0' -> builder.append("\\u00A0");
+        default -> {
+          if (symbol <= 31)
+            builder.append(String.format("\\u%04X", (int) symbol));
+          else
+            builder.append(symbol);
+        }
+      }
+    }
+
+    return builder.toString();
   }
 }

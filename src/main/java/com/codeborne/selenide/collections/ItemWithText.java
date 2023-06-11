@@ -1,5 +1,6 @@
 package com.codeborne.selenide.collections;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
@@ -7,6 +8,7 @@ import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -22,21 +24,23 @@ public class ItemWithText extends CollectionCondition {
     this.expectedText = expectedText;
   }
 
+  @Nonnull
   @CheckReturnValue
   @Override
-  public boolean test(List<WebElement> elements) {
-    return ElementsCollection
-      .texts(elements)
-      .contains(expectedText);
+  public CheckResult check(CollectionSource collection) {
+    List<WebElement> elements = collection.getElements();
+    List<String> texts = ElementsCollection.texts(elements);
+
+    return new CheckResult(texts.contains(expectedText), texts);
   }
 
   @Override
   public void fail(CollectionSource collection,
-                   @Nullable List<WebElement> elements,
-                   @Nullable Exception lastError,
+                   CheckResult lastCheckResult,
+                   @Nullable Exception cause,
                    long timeoutMs) {
     throw new ElementWithTextNotFound(
-      collection, singletonList(expectedText), ElementsCollection.texts(elements), explanation, timeoutMs, lastError);
+      collection, singletonList(expectedText), lastCheckResult.getActualValue(), explanation, timeoutMs, cause);
   }
 
   @CheckReturnValue

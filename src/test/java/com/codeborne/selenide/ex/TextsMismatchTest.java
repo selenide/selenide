@@ -16,7 +16,7 @@ final class TextsMismatchTest {
   void errorMessage() {
     TextsMismatch textsMismatch = new TextsMismatch(mockCollection(".characters"),
         expectedTexts, actualTexts,
-        null, 9000);
+        null, 9000, null);
 
     assertThat(textsMismatch).hasMessage(String.format("Texts mismatch%n" +
       "Actual: [Niff, Naff, Nuff]%n" +
@@ -29,7 +29,7 @@ final class TextsMismatchTest {
   void errorMessage_withExplanation() {
     TextsMismatch textsMismatch = new TextsMismatch(mockCollection(".characters"),
         expectedTexts, actualTexts,
-        "we expect favorite characters", 9000);
+        "we expect favorite characters", 9000, null);
 
     assertThat(textsMismatch).hasMessage(String.format("Texts mismatch%n" +
       "Actual: [Niff, Naff, Nuff]%n" +

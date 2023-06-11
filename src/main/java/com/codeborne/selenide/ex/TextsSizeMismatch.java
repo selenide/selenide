@@ -12,7 +12,8 @@ import static java.lang.System.lineSeparator;
 public class TextsSizeMismatch extends UIAssertionError {
   public TextsSizeMismatch(CollectionSource collection,
                            List<String> expectedTexts, List<String> actualTexts,
-                           @Nullable String explanation, long timeoutMs) {
+                           @Nullable String explanation, long timeoutMs,
+                           @Nullable Throwable cause) {
     super(
       collection.driver(),
       "Texts size mismatch" +
@@ -21,6 +22,7 @@ public class TextsSizeMismatch extends UIAssertionError {
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
         lineSeparator() + "Collection: " + collection.description(),
       expectedTexts, actualTexts,
+      cause,
       timeoutMs
     );
   }

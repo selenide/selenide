@@ -36,6 +36,8 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
@@ -159,12 +161,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   protected void waitUntil(CollectionCondition condition, Duration timeout) {
     Throwable lastError = null;
-    List<WebElement> actualElements = null;
+    CheckResult lastCheckResult = new CheckResult(REJECT, null);
     Stopwatch stopwatch = new Stopwatch(timeout.toMillis());
     do {
       try {
-        actualElements = collection.getElements();
-        if (condition.test(actualElements)) {
+        lastCheckResult = condition.check(collection);
+        if (lastCheckResult.verdict() == ACCEPT) {
           return;
         }
       }
@@ -191,7 +193,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       throw uiAssertionError;
     }
     else {
-      condition.fail(collection, actualElements, (Exception) lastError, timeout.toMillis());
+      condition.fail(collection, lastCheckResult, (Exception) lastError, timeout.toMillis());
     }
   }
 
@@ -327,9 +329,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Gets all the specific attribute values in elements collection
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   * @deprecated Instead of getting attributes, verify them with {@code $$.shouldHave(attributes(...));}.
    */
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   public List<String> attributes(String attribute) {
     return attributes(attribute, getElements());
   }
@@ -339,13 +343,16 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    *
    * @param elements Any collection of WebElements
    * @return Texts (or exceptions in case of any WebDriverExceptions)
+   * @deprecated Instead of getting attributes, verify them with {@code $$.shouldHave(attributes(...));}.
    */
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   public static List<String> attributes(String attribute, Collection<WebElement> elements) {
     return elements.stream().map(e -> getAttribute(e, attribute)).collect(toList());
   }
 
+  @Deprecated
   private static String getAttribute(WebElement element, String attribute) {
     try {
       return element.getAttribute(attribute);

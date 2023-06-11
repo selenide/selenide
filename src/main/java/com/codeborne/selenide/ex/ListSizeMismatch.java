@@ -21,7 +21,7 @@ public class ListSizeMismatch extends UIAssertionError {
                           @Nullable String explanation,
                           CollectionSource collection,
                           @Nullable List<WebElement> actualElements,
-                          @Nullable Exception lastError,
+                          @Nullable Exception cause,
                           long timeoutMs) {
     super(
       collection.driver(),
@@ -32,7 +32,7 @@ public class ListSizeMismatch extends UIAssertionError {
         lineSeparator() + "Elements: " + describe.fully(collection.driver(), actualElements),
       expectedSize,
       sizeOf(actualElements),
-      lastError,
+      cause,
       timeoutMs
     );
   }

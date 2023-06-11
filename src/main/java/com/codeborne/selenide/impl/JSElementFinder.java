@@ -60,9 +60,9 @@ public class JSElementFinder extends WebElementSource {
   @Override
   @CheckReturnValue
   @Nonnull
-  public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
+  public ElementNotFound createElementNotFoundError(Condition condition, Throwable cause) {
     parent.checkCondition("", exist, false);
-    return super.createElementNotFoundError(condition, lastError);
+    return super.createElementNotFoundError(condition, cause);
   }
 
   @Override

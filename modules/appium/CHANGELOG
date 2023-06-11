@@ -1,0 +1,197 @@
+== Changelog
+
+=== 6.15.0 (released 29.05.2023)
+Project "selenide-appium" was merged into project "selenide".
+
+* #135 add appium collection conditions  --  thanks to Amuthan Sakthivel
+* #149 add wrapper methods for getContextHandles and setContext  --  thanks to Amuthan Sakthivel
+
+=== 2.8.1 (released 22.05.2023)
+* Fix $.click(options) in web browser
+
+=== 2.8.0 (released 22.05.2023)  -- see https://github.com/selenide/selenide-appium/milestone/25?closed=1
+* Support new Selenide method `$.dragAndDrop(options)` (PR #164)
+* #155 restore support for `$.click(ClickOptions)` (PR #165)
+* #153 speed up swipe/scroll in ios (PR #172)
+* find element based on android or ios driver with new class `CombinedBy` (PR #151, #171)
+* Bump selenide from 6.13.0 to 6.14.1 (PR #156, #164)
+* Bump appium from 8.3.0 to 8.5.0 (PR #161, #163)
+
+=== 2.7.1 (released 05.04.2023)
+* Bump selenide from 6.12.3 to 6.13.0  (PR #143 #150)
+
+=== 2.7.0 (released 23.03.2023)
+* #76 added methods for scrolling in mobile apps  -- thanks to Amuthan Sakthivel for PR #139
+* #145 fixed terminateApp not working  --  thanks to Amuthan Sakthivel for PR #146
+* Bump selenide from 6.12.2 to 6.12.4
+* Bump org.slf4j:slf4j-simple from 2.0.6 to 2.0.7
+
+=== 2.6.1 (released 11.03.2023)
+* #140 Bump selenide from 6.11.1 to 6.12.2
+
+=== 2.6.0 (released 07.03.2023)
+(see https://github.com/selenide/selenide-appium/milestone/21?closed=1)
+* #106 Add methods $ returning SelenideAppiumElement (extends SelenideElement)  --  see PR #131
+* #106 Add method $.hideKeyboard()  --  see PR #131
+* create "html" files for web browsers, and "xml" only for mobile apps 01.02.2023, 09:24 Andrei Solntsev
+* Bump selenide from 6.11.0 to 6.12.1
+
+=== 2.5.2 (released 03.01.2023)
+* bump selenide from 6.10.2 to 6.11.0
+
+=== 2.5.0 (released 14.12.2022)
+* #111 fix `$.click()` when working in web browser, not mobile app  --  see PR #112
+
+=== 2.4.0 (released 08.12.2022)
+* #78 Added wrappers over AndroidDriver commands in Selenide-Appium  --  thanks to Boris Osipov for PR #100
+* #99 Deeplink support  --  thanks to Boris Osipov for PR #100 and Amuthan Sakthivel for PR #90
+* Terminate app support  --  thanks to Boris Osipov for PR #100
+* #88 Remove unsupported xcuitest resource-id attribute.  --  thanks to Boris Osipov for PR #97
+* Get rid of Calculator app tests  --  thanks to Boris Osipov for PR #100
+* #109 bump appium from 8.2.1 to 8.3.0
+* #109 bump selenide from 6.10.1 to 6.10.2
+
+=== 2.3.1 (released 29.11.2022)
+* Renamed primary branch to `main`
+* #92 Disable build-in Appium pagefactory timeout  --  thanks to Boris Osipov
+* #95 Don't try to describe element when NoSuchElementException  --  thanks to Boris Osipov
+* bump appium from 8.2.0 to 8.2.1  --  see https://github.com/appium/java-client/blob/master/README.md#changelog
+* bump selenide from 6.10.0 to 6.10.1
+
+=== 2.3.0 (released 22.11.2022)
+* #81 Add new locators for appium  --  thanks to Amuthan Sakthivel
+* #82 added click options to perform tap, doubletap, longpress, tap with offset  --  thanks to Amuthan Sakthivel
+* #83 removed the deprecated touchaction implementation and replaced with sequence  --  thanks to Amuthan Sakthivel
+* #84 Add checkstyle and spotbugs plugins. Fix code analysis issues.  --  thanks to Boris Osipov
+* upgrade to Selenide 6.10.0
+
+=== 2.2.0 (released 26.09.2022)
+* upgrade to Selenide 6.8.0 and Appium 8.2.0
+
+=== 2.1.3 (released 14.08.2022)
+* upgrade to Selenide 6.7.2
+
+=== 2.1.2 (released 08.08.2022)
+* upgrade to Selenide 6.7.1
+* #75 fix ClassCastException in Drag'n'Drop
+
+=== 2.1.1 (released 21.07.2022)
+* #72 fix clipboard work with webdriver that has some listeners added  --  see PR #73
+
+=== 2.1.0 (released 01.07.2022)
+* #70 fix NPE "Cannot invoke "Object.toString()" because the return value of "org.openqa.selenium.Capabilities.getCapability(String)" is null"
+* upgrade to Selenide 6.6.6
+
+=== 2.0.5 (released 27.06.2022)
+* upgrade to Selenide 6.6.5 and Selenium 4.3.0
+
+=== 2.0.4 (released 23.06.2022)
+* upgrade to Appium 8.1.1 ("Perform safe typecast while getting the platform name")
+* upgrade to Selenide 6.6.4
+
+=== 2.0.3 (released 31.05.2022)
+* upgrade to Appium 8.1.0  --  see https://github.com/appium/java-client/blob/master/README.md#changelog
+
+=== 2.0.2 (released 24.05.2022)
+* upgrade to Selenide 6.5.1
+* fix UnsupportedCommandException in `$.setValue()`  --  see https://github.com/selenide/selenide/issues/1810
+
+=== 2.0.1 (released 20.05.2022)
+* upgrade to Selenide 6.5.0
+
+=== 2.0.0 (released 11.03.2022)
+* #65 upgrade to Appium 8 / Selenium 4 / Selenide 6  -- thanks to Milena Sobolewska for PR #67
+
+=== 1.7.4 (released 12.12.2021)
+* #61 avoid useless logs "Failed to get attribute ..."  --  see PR #63
+
+=== 1.7.3 (released 23.11.2021)
+* #60 make $.dragAndDrop() and $.click() work in both mobile and web
+
+=== 1.7.2 (released 28.10.2021)
+* upgrade to Appium 7.6.0
+* #58 fix "UnsupportedCommandException: Unhandled endpoint: /css/opacity"
+
+=== 1.7.1 (released 05.10.2021)
+* #57 remove attribute `contentSize` from error message
+
+=== 1.7.0 (released 28.09.2021)
+* upgrade to Selenide 5.25.0
+
+=== 1.6.10 (released 22.09.2021)
+* #56 add clipboard methods in Appium
+* upgrade to Selenide 5.24.4
+
+=== 1.6.9 (released 13.09.2021)
+* upgrade to Selenide 5.24.3
+
+=== 1.6.8 (released 29.08.2021)
+* upgrade to Selenide 5.24.0
+
+=== 1.6.7 (released 17.07.2021)
+* upgrade to Selenide 5.23.0
+
+=== 1.6.6 (released 08.06.2021)
+* upgrade to Selenide 5.22.0
+
+=== 1.6.5 (released 07.05.2021)
+* restore transitive dependencies (selenide:5.20.4 and appium:7.5.1)
+
+=== 1.6.4 (released 07.05.2021)
+* #54 improve $.toString() in iOS
+
+=== 1.6.3 (released 22.04.2021)
+* upgrade to Selenide 5.20.4
+* upgrade to Appium 7.5.1
+* upgrade to Gradle 7.0
+
+=== 1.6.2 (released 24.02.2021)
+* #52 override Selenide standard method `$.dragAndDropTo()`
+* upgrade to Selenide 5.19.0
+
+=== 1.6.1 (released 21.01.2021)
+* #50 change scope of selenide and appium dependencies from "implementation" to "api"
+
+=== 1.6.0 (released 14.01.2021)
+* upgrade to selenide:5.17.4
+* upgrade to io.appium:java-client:7.4.1
+
+=== 1.5.0 (released 20.11.2020)
+* upgrade to selenide:5.16.0
+* introduce Selenide plugins for better Appium support
+* upgrade to io.appium:java-client:7.4.0
+
+=== 1.4.6
+* upgrade to selenide:5.14.2
+
+=== 1.4.5 (release 25.05.2020)
+* upgrade to selenide:5.12.1
+
+=== 1.4.4 (release 28.02.2020)
+* upgrade to selenide:5.8.0
+
+=== 1.4.3
+* upgrade to io.appium:java-client:7.3.0
+
+=== 1.4.2
+* upgrade to io.appium:java-client:7.2.0
+
+=== 1.4.1
+* upgrade to selenide:5.4.1
+
+=== 1.4.0
+* upgrade to selenide:5.4.0
+
+=== 1.3
+* upgrade to selenide:5.2.5
+
+=== 1.2 (Released 18.06.2019)
+* upgrade to selenide:5.2.3
+* upgrade to io.appium:java-client:7.0.0˚
+
+=== 1.1 (Released 05.10.2018)
+* upgrade to selenide:4.14.2
+* upgrade to io.appium:java-client:6.1.0˚
+
+=== 1.0 (Released 31.12.2017)
+* First version

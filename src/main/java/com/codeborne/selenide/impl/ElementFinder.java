@@ -134,12 +134,12 @@ public class ElementFinder extends WebElementSource {
   @Override
   @CheckReturnValue
   @Nonnull
-  public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
+  public ElementNotFound createElementNotFoundError(Condition condition, Throwable cause) {
     if (parent != null) {
       parent.checkCondition("", exist, false);
     }
 
-    return super.createElementNotFoundError(condition, lastError);
+    return super.createElementNotFoundError(condition, cause);
   }
 
   @Override

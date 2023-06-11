@@ -18,20 +18,20 @@ import static com.codeborne.selenide.Condition.exist;
 class ExceptionWrapper {
   @CheckReturnValue
   @Nonnull
-  Throwable wrap(Throwable lastError, WebElementSource webElementSource) {
-    if (lastError instanceof UIAssertionError) {
-      return lastError;
+  Throwable wrap(Throwable error, WebElementSource webElementSource) {
+    if (error instanceof UIAssertionError) {
+      return error;
     }
-    else if (lastError instanceof InvalidElementStateException) {
-      return new InvalidStateException(webElementSource.driver(), webElementSource.description(), lastError);
+    else if (error instanceof InvalidElementStateException) {
+      return new InvalidStateException(webElementSource.driver(), webElementSource.description(), error);
     }
-    else if (isElementNotClickableException(lastError)) {
-      return new ElementIsNotClickableException(webElementSource.driver(), webElementSource.description(), lastError);
+    else if (isElementNotClickableException(error)) {
+      return new ElementIsNotClickableException(webElementSource.driver(), webElementSource.description(), error);
     }
-    else if (lastError instanceof StaleElementReferenceException || lastError instanceof NotFoundException) {
-      return webElementSource.createElementNotFoundError(exist, lastError);
+    else if (error instanceof StaleElementReferenceException || error instanceof NotFoundException) {
+      return webElementSource.createElementNotFoundError(exist, error);
     }
-    return lastError;
+    return error;
   }
 
   @CheckReturnValue
