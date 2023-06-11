@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.appium.SelenideAppium.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.appium.SelenideAppium.openIOSDeepLink;
 import static java.time.Duration.ofSeconds;
 
@@ -25,6 +25,6 @@ class IosCombinedByTest extends BaseSwagLabsAppIosTest {
   @Test
   void combinedByIos() {
     //selenide will choose appropriate locator at the runtime
-    $(username).shouldBe(visible, ofSeconds(10));
+    $$(username).get(0).shouldBe(visible, ofSeconds(10));
   }
 }
