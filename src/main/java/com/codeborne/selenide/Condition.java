@@ -800,7 +800,7 @@ public abstract class Condition {
    * <br>
    *
    * {@code $("input").shouldHave(datetime(eq(LocalDateTime.of(2020, 11, 12, 1, 1, 1)).format("dd/MM/yyyy HH:mm:ss"));}
-   * {@code $("input").shouldHave(datetime(withFormat("dd/MM/yyyy")));}
+   * {@code $("input").shouldHave(datetime(withFormat("dd/MM/yyyy HH:mm:ss")));}
    * </p>
    *
    * @see DateTimeConditionOptions
