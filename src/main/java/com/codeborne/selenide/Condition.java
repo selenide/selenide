@@ -41,9 +41,7 @@ import com.codeborne.selenide.conditions.TagName;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
-import com.codeborne.selenide.conditions.date.LocalDateBetweenCondition;
-import com.codeborne.selenide.conditions.date.LocalDateCondition;
-import com.codeborne.selenide.conditions.date.LocalDateFormatCondition;
+import com.codeborne.selenide.conditions.date.DateConditionOptions;
 import com.codeborne.selenide.conditions.date.LocalDateTimeBetweenCondition;
 import com.codeborne.selenide.conditions.date.LocalDateTimeCondition;
 import com.codeborne.selenide.conditions.date.LocalDateTimeFormatCondition;
@@ -781,83 +779,21 @@ public abstract class Condition {
   }
 
   /**
-   * Assert that element contains "value" attribute with date value that is satisfied to the pattern and is equal to expected date
+   * Assert that element contains "value" attribute with date value that is satisfied to the provided `options`
    *
-   * <p>Sample: {@code $("input").shouldHave(date(expectedLocalDate, "dd/MM/yyyy"));}</p>
-   *
-   * @param expectedDate expected value of "value" attribute
-   * @param pattern date format of value of "value" attribute
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static Condition date(LocalDate expectedDate, String pattern) {
-    return new LocalDateCondition(expectedDate, pattern);
-  }
-
-  /**
-   * Assert that element contains "value" attribute with date value that
-   * is satisfied to the {@link LocalDateCondition#DEFAULT_PATTERN default pattern}
-   * and is equal to expected date
-   *
-   * <p>Sample: {@code $("input").shouldHave(date(expectedLocalDate));}</p>
-   *
-   * @param expectedDate expected value of "value" attribute
-   *
-   * @see Condition#date(LocalDate, String)
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static Condition date(LocalDate expectedDate) {
-    return new LocalDateCondition(expectedDate, LocalDateCondition.DEFAULT_PATTERN);
-  }
-
-  /**
-   * Assert that element contains "value" attribute with date value that is satisfied to the pattern
-   *
-   * <p>Sample: {@code $("input").shouldHave(dateFormat("dd/MM/yyyy"));}</p>
-   *
-   * @param pattern date format of value of "value" attribute
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static Condition dateFormat(String pattern) {
-    return new LocalDateFormatCondition(pattern);
-  }
-
-  /**
-   * Assert that element contains "value" attribute with date value that is satisfied to the pattern
+   * <p>Samples:
    * <br>
-   * and is inside interval {@code [startDate, endDate] (inclusive)}
    *
-   * <p>Sample: {@code $("input").shouldHave(dateBetween(expectedStartDate, expectedEndDate, "dd/MM/yyyy"));}</p>
+   * {@code $("input").shouldHave(date(eq(LocalDate.of(2020, 11, 12)).format("dd/MM/yyyy"));}
+   * {@code $("input").shouldHave(date(withFormat("dd/MM/yyyy")));}
+   * </p>
    *
-   * @param startDate start of the interval (inclusive)
-   * @param endDate end of the interval (inclusive)
-   * @param pattern date format of value of "value" attribute
+   * @see DateConditionOptions
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition dateBetween(LocalDate startDate, LocalDate endDate, String pattern) {
-    return new LocalDateBetweenCondition(startDate, endDate, pattern);
-  }
-
-  /**
-   * Assert that element contains "value" attribute with date value that
-   * is satisfied to the {@link LocalDateCondition#DEFAULT_PATTERN default pattern}
-   * <br>
-   * and is inside interval {@code [startDate, endDate] (inclusive)}
-   *
-   * <p>Sample: {@code $("input").shouldHave(dateBetween(expectedStartDate, expectedEndDate));}</p>
-   *
-   * @param startDate start of the interval (inclusive)
-   * @param endDate end of the interval (inclusive)
-   *
-   * @see Condition#dateBetween(LocalDate, LocalDate, String)
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static Condition dateBetween(LocalDate startDate, LocalDate endDate) {
-    return new LocalDateBetweenCondition(startDate, endDate, LocalDateCondition.DEFAULT_PATTERN);
+  public static Condition date(DateConditionOptions options) {
+    return options.condition();
   }
 
   /**

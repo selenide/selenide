@@ -19,7 +19,7 @@ final class LocalDateConditionTest {
   private final Driver driver = mock();
   private final WebElement element = mock();
   private final LocalDateFormatCondition formatCondition = mock();
-  private final LocalDateCondition condition = new LocalDateCondition(LocalDate.of(2022, 10, 11), formatCondition);
+  private final LocalDateEqualCondition condition = new LocalDateEqualCondition(LocalDate.of(2022, 10, 11), formatCondition);
 
   @Test
   void correctDateValueWithCorrectFormat() {
@@ -61,7 +61,7 @@ final class LocalDateConditionTest {
 
   @Test
   void stringRepresentationOfCondition() {
-    var condition = new LocalDateCondition(LocalDate.of(2022, 10, 11), "yyyy/MM/dd");
+    var condition = new LocalDateEqualCondition(LocalDate.of(2022, 10, 11), "yyyy/MM/dd");
 
     assertThat(condition.toString()).isEqualTo("date value: \"2022/10/11\" (with date value format: \"yyyy/MM/dd\")");
   }
