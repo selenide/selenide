@@ -23,8 +23,8 @@ class AndroidCombinedByTest extends BaseSwagLabsAndroidTest {
 
     int index = 1;
     CombinedBy username = CombinedBy
-      .android(AppiumBy.xpath("(//android.widget.EditText)["+index+"]"))
-      .ios(AppiumBy.xpath("(//XCUIElementTypeTextField)["+index+"]"));
+      .android(AppiumBy.xpath("(//android.widget.EditText)[" + index + "]"))
+      .ios(AppiumBy.xpath("(//XCUIElementTypeTextField)[" + index + "]"));
     //selenide will choose appropriate locator at the runtime
     $(username).shouldBe(visible, ofSeconds(10));
   }
