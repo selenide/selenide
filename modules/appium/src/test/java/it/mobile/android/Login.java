@@ -1,12 +1,5 @@
 package it.mobile.android;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.closeWebDriver;
-import static com.codeborne.selenide.appium.ScreenObject.screen;
-import static io.appium.java_client.AppiumBy.accessibilityId;
-
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.appium.SelenideAppium;
 import io.appium.java_client.pagefactory.AndroidFindBy;
@@ -14,7 +7,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-public class LoginTest extends BaseSwagLabsAndroidTest {
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.appium.ScreenObject.screen;
+import static com.codeborne.selenide.appium.SelenideAppium.$;
+import static io.appium.java_client.AppiumBy.accessibilityId;
+import static java.time.Duration.ofSeconds;
+
+class SauceLabLoginTest extends BaseSwagLabsAndroidTest {
+
   @BeforeEach
   void openLoginScreen() {
     closeWebDriver();
@@ -23,19 +25,21 @@ public class LoginTest extends BaseSwagLabsAndroidTest {
 
   @Test
   void loginTest() {
-    $(accessibilityId("Username input field")).setValue("bob@example.com");
+    $(accessibilityId("Username input field")).shouldBe(visible, ofSeconds(10)).setValue("bob@example.com");
     $(accessibilityId("Password input field")).setValue("10203040");
     $(accessibilityId("Login button")).click();
-    $(accessibilityId("checkout address screen")).shouldBe(visible);
+    $(accessibilityId("checkout address screen")).shouldBe(visible, ofSeconds(10));
   }
 
   @Test
-  public void loginTestPageObject() {
+  void loginTestPageObject() {
     LoginPage loginPage = screen(LoginPage.class);
-    loginPage.login.setValue("bob@example.com");
+    loginPage.login.shouldBe(visible, ofSeconds(10)).setValue("bob@example.com");
     loginPage.password.setValue("wrongpassword");
     loginPage.loginButton.click();
-    loginPage.errorMessage.shouldHave(text("Provided credentials do not match any user in this service."));
+    loginPage.errorMessage
+      .shouldBe(visible, ofSeconds(10))
+      .shouldHave(text("Provided credentials do not match any user in this service."));
   }
 }
 
@@ -52,3 +56,4 @@ class LoginPage {
   @AndroidFindBy(xpath = "//*[@content-desc='generic-error-message']/android.widget.TextView")
   SelenideElement errorMessage;
 }
+
