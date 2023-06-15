@@ -104,16 +104,21 @@ Assertions.assertThat(getAttribute()).isEqualTo("expected-value")
 
 _Selenide-Appium way:_
 ```java
-$(mobileElement)
-      .shouldHave(AppiumCondition.attributeWithValue("content-desc", "name", "expected-value"));
+  /*
+    if android, fetch text attribute and assert with value 
+    if ios, fetch name attribute and assert with value
+  */
+CombinedAttribute combinedAttribute = CombinedAttribute.android("text").ios("name");
+$(element).shouldHave(AppiumCondition.attribute(combinedAttribute, "value"));
 ```
 
 We can also assert collection
 ```java
+CombinedAttribute combinedAttribute = CombinedAttribute.android("content-desc").ios("label");
 List<String> expectedList = Arrays.asList("API Demos", "KeyEventText", "Linkify", "LogTextBox", "Marquee", "Unicode");
 
 $$(AppiumBy.xpath("//android.widget.TextView"))
-      .shouldHave(AppiumCollectionCondition.exactAttributes("text", "name", expectedList));
+      .shouldHave(AppiumCollectionCondition.attributes(combinedAttribute, expectedList));
 ```
 
 6. We handle the scrolling for you
