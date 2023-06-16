@@ -504,6 +504,12 @@ public class SelenideDriver {
     return inject(ClipboardService.class).getClipboard(driver());
   }
 
+  @CheckReturnValue
+  @Nonnull
+  public Cdp cdp() {
+    return new Cdp(getWebDriver());
+  }
+
   private static final PageObjectFactory pageFactory = inject(PageObjectFactory.class);
   private static DownloadFileWithHttpRequest downloadFileWithHttpRequest;
 

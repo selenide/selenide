@@ -434,6 +434,7 @@ public class Selenide {
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
    * </p>
+   *
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return empty list if element was no found
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
@@ -764,8 +765,9 @@ public class Selenide {
 
   /**
    * Create a Page Object instance
-   * @since 6.8.0
+   *
    * @param reified Don't pass any values here. It's Java Magic :)
+   * @since 6.8.0
    */
   @CheckReturnValue
   @Nonnull
@@ -993,6 +995,8 @@ public class Selenide {
    * <p>
    * Remote runs support can be implemented via plugins.
    * Plugin for Selenoid supports clipboard since v1.1.0.
+   *
+   * @return Clipboard
    * @see <a href="https://github.com/selenide/selenide/tree/main/modules/selenoid">selenide-selenoid</a>
    * <p>
    * Pay attention that Clipboard is shared resource for instance where tests runs
@@ -1016,5 +1020,11 @@ public class Selenide {
   @CheckReturnValue
   public static SessionId sessionId() {
     return getSelenideDriver().getSessionId();
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  public static Cdp cdp() {
+    return getSelenideDriver().cdp();
   }
 }
