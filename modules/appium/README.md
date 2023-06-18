@@ -54,7 +54,7 @@ public class AndroidDriverForApiDemos implements WebDriverProvider {
     Configuration.browser = AndroidDriverWithCalculator.class.getName();
     SelenideAppium.launchApp();
     $(AppiumBy.xpath(".//*[@text='Views']")).shouldBe(visible).click(tap());
-    $(AppiumBy.xpath(".//*[@text='Animation']")).shouldHave(visible);
+    $(AppiumBy.xpath(".//*[@text='Animation']")).shouldBe(visible);
   }
 ```
 

@@ -1,8 +1,8 @@
 # Changelog
 
 ## 6.15.0 (released 29.05.2023)
-* #2292 Project "selenide-appium" was merged into project "selenide".
-* #2291 Project "selenide-selenoid" was merged into project "selenide".
+* #2291 Project "selenide-appium" was merged into project "selenide".
+* #2292 Project "selenide-selenoid" was merged into project "selenide".
 * #2288 Clicking a disabled element now fails --  thanks to Maksim @Au6ojlut for PR #2290
 * #2283 Escape special characters in subject in text report  --  thanks to Maksim @Au6ojlut for PR #2284
 * #2300 Add few collection conditions for mobile apps  --  thanks to Amuthan Sakthivel for https://github.com/selenide/selenide-appium/pull/135, also see PR #2315

@@ -26,7 +26,7 @@ class AndroidScrollTest extends BaseApiDemosTest {
     $(By.xpath(".//*[@text='Views']")).click();
     $(By.xpath(".//*[@text='Tabs']")).scrollTo().click();
     $(By.xpath(".//*[@text='1. Content By Id']"))
-      .shouldHave(visible);
+      .shouldBe(visible);
   }
 
   @Test
@@ -36,6 +36,6 @@ class AndroidScrollTest extends BaseApiDemosTest {
       .scroll(with(DOWN, 10));
     $(By.xpath(".//*[@text='Animation']"))
       .scroll(up())
-      .shouldHave(visible);
+      .shouldBe(visible);
   }
 }

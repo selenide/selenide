@@ -12,6 +12,6 @@ class IosScrollTest extends BaseSwagLabsAppIosTest {
 
     $x("//XCUIElementTypeStaticText[@name='© 2023 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy.']")
       .scrollTo()
-      .shouldHave(visible);
+      .shouldBe(visible);
   }
 }

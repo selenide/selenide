@@ -29,13 +29,13 @@ class AndroidClickOptionsTest extends BaseApiDemosTest {
   @Test
   void androidTap() {
     $(AppiumBy.xpath(".//*[@text='Views']")).click(tap());
-    $(AppiumBy.xpath(".//*[@text='Animation']")).shouldHave(visible);
+    $(AppiumBy.xpath(".//*[@text='Animation']")).shouldBe(visible);
   }
 
   @Test
   void androidTapWithOffset() {
     $(AppiumBy.xpath(".//*[@text='Views']")).click(tapWithOffset(0, -200)); //Find view but click Text
-    $(AppiumBy.xpath(".//*[@text='KeyEventText']")).shouldHave(visible);
+    $(AppiumBy.xpath(".//*[@text='KeyEventText']")).shouldBe(visible);
   }
 
   @Test
@@ -44,7 +44,7 @@ class AndroidClickOptionsTest extends BaseApiDemosTest {
     $(AppiumBy.xpath(".//*[@text='Expandable Lists']")).click();
     $(AppiumBy.xpath(".//*[@text='1. Custom Adapter']")).click();
     $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPress());
-    $(AppiumBy.xpath(".//*[@text='Sample menu']")).shouldHave(visible);
+    $(AppiumBy.xpath(".//*[@text='Sample menu']")).shouldBe(visible);
   }
 
   @Test
