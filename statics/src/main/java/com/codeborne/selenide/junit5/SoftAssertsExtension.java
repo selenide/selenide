@@ -38,6 +38,16 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 public class SoftAssertsExtension implements BeforeAllCallback, BeforeEachCallback, AfterEachCallback, AfterAllCallback {
   public static final ExtensionContext.Namespace namespace = create(SoftAssertsExtension.class);
 
+  private final boolean fullStacktraces;
+
+  public SoftAssertsExtension() {
+    this(true);
+  }
+
+  public SoftAssertsExtension(boolean fullStacktraces) {
+    this.fullStacktraces = fullStacktraces;
+  }
+
   @Override
   public void beforeAll(ExtensionContext context) {
     getErrorsCollector(context).ifPresent(collector -> {
@@ -59,7 +69,7 @@ public class SoftAssertsExtension implements BeforeAllCallback, BeforeEachCallba
   @Override
   public void afterEach(final ExtensionContext context) {
     getErrorsCollector(context).ifPresent(collector ->
-      collector.cleanAndThrowAssertionError(context.getDisplayName(), context.getExecutionException().orElse(null))
+      collector.cleanAndThrowAssertionError(context.getDisplayName(), context.getExecutionException().orElse(null), fullStacktraces)
     );
   }
 
@@ -68,7 +78,9 @@ public class SoftAssertsExtension implements BeforeAllCallback, BeforeEachCallba
     removeListener(LISTENER_SOFT_ASSERT);
     ErrorsCollector errorsCollector = context.getStore(namespace).remove(LISTENER_SOFT_ASSERT, ErrorsCollector.class);
     if (errorsCollector != null) {
-      errorsCollector.cleanAndThrowAssertionError(context.getDisplayName(), context.getExecutionException().orElse(null));
+      errorsCollector.cleanAndThrowAssertionError(context.getDisplayName(),
+        context.getExecutionException().orElse(null), fullStacktraces
+      );
     }
   }
 

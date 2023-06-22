@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.testng.SoftAsserts;
 import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.testng.annotations.AfterClass;
@@ -32,6 +33,7 @@ public class TestNgSoftTest extends BaseTest {
   @BeforeSuite
   final void setupAsserts() {
     Configuration.assertionMode = SOFT;
+    SoftAsserts.fullStacktraces = false;
     closeWebDriver();
     WebDriverRunner.addListener(listener1);
     WebDriverRunner.addListener(listener2);
