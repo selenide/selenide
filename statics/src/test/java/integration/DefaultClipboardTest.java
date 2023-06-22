@@ -21,6 +21,7 @@ public class DefaultClipboardTest extends IntegrationTest {
   public void openTestPage() {
     assumeClipboardSupported();
     openFile("clipboard.html");
+    clipboard().setText("");
   }
 
   @Test
