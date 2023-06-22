@@ -9,5 +9,6 @@ import java.util.List;
 public class SoftAssertionError extends MultipleFailuresError {
   public SoftAssertionError(String message, List<? extends Throwable> failures) {
     super(message, failures);
+    failures.forEach(this::addSuppressed);
   }
 }
