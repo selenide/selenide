@@ -21,6 +21,8 @@ import static java.util.Arrays.asList;
  */
 @ParametersAreNonnullByDefault
 public class SoftAsserts extends ExitCodeListener {
+  public static boolean fullStacktraces = true;
+
   @Override
   public void onTestStart(ITestResult result) {
     addSelenideErrorListener(result);
@@ -88,7 +90,9 @@ public class SoftAsserts extends ExitCodeListener {
   private void failIfErrors(ITestResult result) {
     ErrorsCollector errorsCollector = SelenideLogger.removeListener(LISTENER_SOFT_ASSERT);
     if (errorsCollector != null) {
-      AssertionError assertionError = errorsCollector.cleanAndGetAssertionError(testName(result), result.getThrowable());
+      AssertionError assertionError = errorsCollector.cleanAndGetAssertionError(
+        testName(result), result.getThrowable(), fullStacktraces
+      );
       if (assertionError != null) {
         result.setStatus(ITestResult.FAILURE);
         result.setThrowable(assertionError);

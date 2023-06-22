@@ -73,7 +73,7 @@ final class ErrorsCollectorTest {
   void failIfErrorMethodWhenOnlyOneError() {
     errorsCollector.afterEvent(mockedFailedEvent);
 
-    assertThatThrownBy(() -> errorsCollector.cleanAndThrowAssertionError(defaultTestName, null))
+    assertThatThrownBy(() -> errorsCollector.cleanAndThrowAssertionError(defaultTestName, null, true))
       .isInstanceOf(SoftAssertionError.class)
       .hasMessageContaining(defaultErrorMessage);
   }
@@ -88,7 +88,7 @@ final class ErrorsCollectorTest {
     errorsCollector.afterEvent(mockedFailedEvent);
     errorsCollector.afterEvent(mockedFailedEvent2);
     try {
-      errorsCollector.cleanAndThrowAssertionError(defaultTestName, null);
+      errorsCollector.cleanAndThrowAssertionError(defaultTestName, null, true);
       fail("Expected SoftAssertionError");
     }
     catch (SoftAssertionError error) {
@@ -96,6 +96,7 @@ final class ErrorsCollectorTest {
         .hasMessageStartingWith("Test " + defaultTestName + " failed (2 failures)");
       assertThat(error.getFailures())
         .isEqualTo(asList(defaultError, failedEvent2Error));
+      assertThat(error.getSuppressed()).containsExactly(defaultError, failedEvent2Error);
     }
   }
 
@@ -110,7 +111,7 @@ final class ErrorsCollectorTest {
     errorsCollector.afterEvent(mockedFailedEvent2);
     AssertionError assertionError = new AssertionError("simple hamcrest assertion error");
     try {
-      errorsCollector.cleanAndThrowAssertionError(defaultTestName, assertionError);
+      errorsCollector.cleanAndThrowAssertionError(defaultTestName, assertionError, false);
       fail("Expected SoftAssertionError");
     }
     catch (SoftAssertionError error) {
@@ -118,6 +119,7 @@ final class ErrorsCollectorTest {
         .hasMessageStartingWith("Test " + defaultTestName + " failed (3 failures)");
       assertThat(error.getFailures())
         .isEqualTo(asList(defaultError, failedEvent2Error, assertionError));
+      assertThat(error.getSuppressed()).isEmpty();
     }
   }
 }
