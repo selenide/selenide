@@ -5,9 +5,6 @@ import com.codeborne.selenide.conditions.Attribute;
 import com.codeborne.selenide.conditions.AttributeWithValue;
 import com.codeborne.selenide.conditions.CaseSensitiveText;
 import com.codeborne.selenide.conditions.Checked;
-import com.codeborne.selenide.conditions.InnerText;
-import com.codeborne.selenide.conditions.PartialText;
-import com.codeborne.selenide.conditions.PartialTextCaseSensitive;
 import com.codeborne.selenide.conditions.CssClass;
 import com.codeborne.selenide.conditions.CssValue;
 import com.codeborne.selenide.conditions.CustomMatch;
@@ -23,6 +20,7 @@ import com.codeborne.selenide.conditions.ExplainedCondition;
 import com.codeborne.selenide.conditions.Focused;
 import com.codeborne.selenide.conditions.Hidden;
 import com.codeborne.selenide.conditions.Href;
+import com.codeborne.selenide.conditions.InnerText;
 import com.codeborne.selenide.conditions.Interactable;
 import com.codeborne.selenide.conditions.IsImageLoaded;
 import com.codeborne.selenide.conditions.MatchAttributeWithValue;
@@ -32,6 +30,8 @@ import com.codeborne.selenide.conditions.Not;
 import com.codeborne.selenide.conditions.Or;
 import com.codeborne.selenide.conditions.OwnText;
 import com.codeborne.selenide.conditions.OwnTextCaseSensitive;
+import com.codeborne.selenide.conditions.PartialText;
+import com.codeborne.selenide.conditions.PartialTextCaseSensitive;
 import com.codeborne.selenide.conditions.PartialValue;
 import com.codeborne.selenide.conditions.PseudoElementPropertyWithValue;
 import com.codeborne.selenide.conditions.Readonly;
@@ -41,6 +41,8 @@ import com.codeborne.selenide.conditions.TagName;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
+import com.codeborne.selenide.conditions.datetime.DateConditionOptions;
+import com.codeborne.selenide.conditions.datetime.DateTimeConditionOptions;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -771,4 +773,42 @@ public abstract class Condition {
   public boolean missingElementSatisfiesCondition() {
     return missingElementSatisfiesCondition;
   }
+
+  /**
+   * Assert that element contains "value" attribute with date value that is satisfied to the provided `options`
+   *
+   * <p>Samples:
+   * <br>
+   *
+   * {@code $("input").shouldHave(date(eq(LocalDate.of(2020, 11, 12)).format("dd/MM/yyyy"));}
+   * {@code $("input").shouldHave(date(withFormat("dd/MM/yyyy")));}
+   * </p>
+   *
+   * @see DateConditionOptions
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition date(DateConditionOptions options) {
+    return options.condition();
+  }
+
+  /**
+   * Assert that element contains "value" attribute with datetime value
+   * that is satisfied to the provided `options`
+   *
+   * <p>Samples:
+   * <br>
+   *
+   * {@code $("input").shouldHave(datetime(eq(LocalDateTime.of(2020, 11, 12, 1, 1, 1)).format("dd/MM/yyyy HH:mm:ss"));}
+   * {@code $("input").shouldHave(datetime(withFormat("dd/MM/yyyy HH:mm:ss")));}
+   * </p>
+   *
+   * @see DateTimeConditionOptions
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition datetime(DateTimeConditionOptions options) {
+    return options.condition();
+  }
+
 }
