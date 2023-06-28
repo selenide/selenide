@@ -1,9 +1,15 @@
 package com.codeborne.selenide;
 
+import com.github.bsideup.jabel.Desugar;
+
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.SetValueMethod.JS;
@@ -13,6 +19,10 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 @ParametersAreNonnullByDefault
 public class SetValueOptions {
   private static final Pattern REGEX_ANY_CHAR = Pattern.compile(".");
+  private static final Formats DATE = new Formats(ofPattern("yyyy-MM-dd"), ofPattern("dd.MM.yyyy"));
+  private static final Formats DATETIME = new Formats(ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"), ofPattern("dd.MM.yyyy HH:mm"));
+  private static final Formats TIME = new Formats(ofPattern("HH:mm:ss.SSS"), ofPattern("HH:mm"));
+
   private final CharSequence value;
   private final CharSequence displayedText;
   private final SetValueMethod method;
@@ -33,12 +43,30 @@ public class SetValueOptions {
   }
 
   /**
-   * Text value to set into input field
+   * Text value to set into input field of {@code type="date"}
    */
   @CheckReturnValue
   @Nonnull
   public static SetValueOptions withDate(LocalDate date) {
-    return new SetValueOptions(JS, date.format(ofPattern("yyyy-MM-dd")), date.format(ofPattern("dd.MM.yyyy")));
+    return new SetValueOptions(JS, DATE.value(date), DATE.display(date));
+  }
+
+  /**
+   * Text value to set into input field of {@code type="datetime-local"}
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static SetValueOptions withDateTime(LocalDateTime dateTime) {
+    return new SetValueOptions(JS, DATETIME.value(dateTime), DATETIME.display(dateTime));
+  }
+
+  /**
+   * Text value to set into input field of {@code type="time"}
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static SetValueOptions withTime(LocalTime time) {
+    return new SetValueOptions(JS, TIME.value(time), TIME.display(time));
   }
 
   /**
@@ -89,5 +117,15 @@ public class SetValueOptions {
       return displayedText.toString();
     else
       return String.format("\"%s\" (feat. %s)", displayedText, method);
+  }
+
+  @Desugar
+  private record Formats(DateTimeFormatter valueFormat, DateTimeFormatter displayFormat) {
+    String value(TemporalAccessor date) {
+      return valueFormat.format(date);
+    }
+    String display(TemporalAccessor date) {
+      return displayFormat.format(date);
+    }
   }
 }
