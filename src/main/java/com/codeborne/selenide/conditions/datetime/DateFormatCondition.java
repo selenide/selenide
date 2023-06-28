@@ -1,16 +1,20 @@
 package com.codeborne.selenide.conditions.datetime;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.LocalDate;
 import java.time.temporal.TemporalQuery;
 
 @ParametersAreNonnullByDefault
-public class LocalDateFormatCondition extends TemporalFormatCondition<LocalDate> {
+class DateFormatCondition extends TemporalFormatCondition<LocalDate> {
 
-  public LocalDateFormatCondition(String pattern) {
-    super("date value format", pattern);
+  DateFormatCondition(String pattern) {
+    super("date format", pattern);
   }
 
+  @Nonnull
+  @CheckReturnValue
   @Override
   protected TemporalQuery<LocalDate> queryFromTemporal() {
     return LocalDate::from;

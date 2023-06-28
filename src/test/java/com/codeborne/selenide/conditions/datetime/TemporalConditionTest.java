@@ -5,7 +5,7 @@ import com.codeborne.selenide.Driver;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
@@ -15,15 +15,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class LocalDateTimeConditionTest {
+final class TemporalConditionTest {
   private final Driver driver = mock();
   private final WebElement element = mock();
-  private final LocalDateTimeFormatCondition formatCondition = mock();
-  private final LocalDateTime expectedDateTime = LocalDateTime.of(2022, 10, 11, 12, 13, 14);
-  private final LocalDateTimeEqualCondition condition = new LocalDateTimeEqualCondition(expectedDateTime, formatCondition);
+  private final DateFormatCondition formatCondition = mock();
+  private final DateEquals condition = new DateEquals(LocalDate.of(2022, 10, 11), formatCondition);
+
   @Test
-  void correctDateTimeValueWithCorrectFormat() {
-    when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, expectedDateTime));
+  void correctDateValueWithCorrectFormat() {
+    when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, LocalDate.of(2022, 10, 11)));
     when(formatCondition.format(any())).thenReturn("formatted date");
 
     CheckResult check = condition.check(driver, element);
@@ -32,7 +32,7 @@ final class LocalDateTimeConditionTest {
     assertThat(check.actualValue()).isEqualTo("formatted date");
 
     verify(formatCondition).check(driver, element);
-    verify(formatCondition).format(expectedDateTime);
+    verify(formatCondition).format(LocalDate.of(2022, 10, 11));
   }
 
   @Test
@@ -46,8 +46,8 @@ final class LocalDateTimeConditionTest {
   }
 
   @Test
-  void incorrectDateTimeValue() {
-    when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, expectedDateTime.minusDays(1)));
+  void incorrectDateValue() {
+    when(formatCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, LocalDate.of(2023, 10, 11)));
     when(formatCondition.format(any())).thenReturn("formatted date");
 
     CheckResult check = condition.check(driver, element);
@@ -56,14 +56,12 @@ final class LocalDateTimeConditionTest {
     assertThat(check.actualValue()).isEqualTo("formatted date");
 
     verify(formatCondition).check(driver, element);
-    verify(formatCondition).format(expectedDateTime.minusDays(1));
+    verify(formatCondition).format(LocalDate.of(2023, 10, 11));
   }
 
   @Test
-  void stringRepresentationOfCondition() {
-    var condition = new LocalDateTimeEqualCondition(expectedDateTime, "yyyy/MM/dd HH:mm:ss");
-
-    assertThat(condition.toString())
-      .isEqualTo("datetime value: \"2022/10/11 12:13:14\" (with datetime value format: \"yyyy/MM/dd HH:mm:ss\")");
+  void stringRepresentation() {
+    assertThat(new DateEquals(LocalDate.of(2022, 10, 11), "yyyy/MM/dd"))
+      .hasToString("date value \"2022/10/11\"");
   }
 }
