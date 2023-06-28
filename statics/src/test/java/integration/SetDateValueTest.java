@@ -14,6 +14,7 @@ import static com.codeborne.selenide.SetValueMethod.JS;
 import static com.codeborne.selenide.SetValueOptions.withDate;
 import static com.codeborne.selenide.SetValueOptions.withDateTime;
 import static com.codeborne.selenide.SetValueOptions.withTime;
+import static com.codeborne.selenide.conditions.datetime.DateTimeConditions.dateTime;
 
 final class SetDateValueTest extends IntegrationTest {
   @BeforeEach
@@ -39,7 +40,8 @@ final class SetDateValueTest extends IntegrationTest {
   void canSetDateTime() {
     openFile("page_with_datetime_inputs.html");
     $("#birthdate").setValue(withDateTime(LocalDateTime.of(1981, 6, 8, 23, 58, 59)));
-    $("#birthdate").shouldHave(exactValue("1981-06-08T23:58:59.000"));
+    $("#birthdate").shouldHave(exactValue("1981-06-08T23:58:59"));
+    $("#birthdate").shouldHave(dateTime(LocalDateTime.of(1981, 6, 8, 23, 58, 59)));
   }
 
   @Test

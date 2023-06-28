@@ -15,9 +15,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class LocalDateFormatConditionTest {
+final class DateFormatConditionTest {
   private final Driver driver = mock();
-  private final LocalDateFormatCondition condition = new LocalDateFormatCondition("yyyy/MM/dd");
+  private final DateFormatCondition condition = new DateFormatCondition("yyyy/MM/dd");
   private final WebElement element = mock();
 
   @Test
@@ -50,7 +50,7 @@ final class LocalDateFormatConditionTest {
   }
 
   @Test
-  void stringRepresentationOfCondition() {
-    assertThat(condition.toString()).isEqualTo("date value format: \"yyyy/MM/dd\"");
+  void stringRepresentation() {
+    assertThat(condition).hasToString("date format \"yyyy/MM/dd\"");
   }
 }
