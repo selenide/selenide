@@ -14,8 +14,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
+import static java.util.Locale.ROOT;
 
 @ParametersAreNonnullByDefault
 public class BasicAuthUtils {
@@ -80,7 +83,10 @@ public class BasicAuthUtils {
       // Remove this if before releasing Selenide 7.0.0
       return true;
     }
-    return domain.equalsIgnoreCase(host);
+    if (host == null) return false;
+
+    List<String> domains = asList(domain.toLowerCase(ROOT).split("[,|]"));
+    return domains.contains(host.toLowerCase(ROOT));
   }
 
   @Nullable

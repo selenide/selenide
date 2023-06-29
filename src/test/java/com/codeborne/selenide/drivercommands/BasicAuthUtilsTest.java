@@ -54,6 +54,16 @@ final class BasicAuthUtilsTest {
   }
 
   @Test
+  void canSetMultipleDomains() {
+    String domain = "burger-queen.com,burger-queen.eu,burger-queen.ee";
+    assertThat(uriMatchesDomain("http://burger-queen.com/login", domain)).isTrue();
+    assertThat(uriMatchesDomain("http://BURGER-queen.eu/login", domain)).isTrue();
+    assertThat(uriMatchesDomain("http://burger-queen.EE/login", domain)).isTrue();
+    assertThat(uriMatchesDomain("http://burger-queen.au/login", domain)).isFalse();
+    assertThat(uriMatchesDomain("http://burger-queen.es/login", domain)).isFalse();
+  }
+
+  @Test
   void extractsHostName() {
     assertThat(getHostname("http://burger-queen.com")).isEqualTo("burger-queen.com");
     assertThat(getHostname("https://burger-queen.com.eu/zoo")).isEqualTo("burger-queen.com.eu");

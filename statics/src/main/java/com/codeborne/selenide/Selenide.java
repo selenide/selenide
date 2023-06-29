@@ -72,6 +72,11 @@ public class Selenide {
    * If not starting with "http://" or "https://" or "file://", it's considered to be relative URL.
    * <p>
    * In this case, it's prepended by baseUrl
+   *
+   * @param domain Name of domain to apply Basic Auth.
+   *               1. If empty, Basic Auth will be applied to all domains.
+   *               2. If non-empty, Basic Auth will be applied only to URLs containing this domain.
+   *                 2.1. May contain multiple domain names (delimited by "," or "|").
    */
   public static void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
     getSelenideDriver().open(relativeOrAbsoluteUrl, domain, login, password);
