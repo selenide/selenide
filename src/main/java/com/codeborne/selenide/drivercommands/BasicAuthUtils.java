@@ -28,20 +28,14 @@ public class BasicAuthUtils {
       return url;
     }
 
-    String domain = credentials.domain.isEmpty() ? "" : encode(credentials.domain) + "%5C";
     String login = credentials.login.isEmpty() ? "" : encode(credentials.login) + ':';
     String password = credentials.password.isEmpty() ? "" : encode(credentials.password) + "@";
 
     int index = url.indexOf("://");
-    if (index < 0) {
-      return domain + login + password + url;
-    }
+    return index < 0 ?
+      login + password + url :
+      url.substring(0, index) + "://" + login + password + url.substring(index + 3);
 
-    return url.substring(0, index) + "://"
-      + domain
-      + login
-      + password
-      + url.substring(index + 3);
   }
 
   @Nonnull

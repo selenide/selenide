@@ -14,13 +14,13 @@ final class BasicAuthUtilsTest {
     assertThat(appendBasicAuthToURL(
       "https://company.com/login",
       new BasicAuthCredentials("domain-01", "login-01", "password-01")))
-      .isEqualTo("https://domain-01%5Clogin-01:password-01@company.com/login");
+      .isEqualTo("https://login-01:password-01@company.com/login");
   }
 
   @Test
   void appendBasicAuthToURL_relativeUrl() {
     assertThat(appendBasicAuthToURL("/login", new BasicAuthCredentials("domain-01", "login-01", "password-01")))
-      .isEqualTo("domain-01%5Clogin-01:password-01@/login");
+      .isEqualTo("login-01:password-01@/login");
   }
 
   @Test
