@@ -1,5 +1,20 @@
 # Changelog
 
+## 6.16.0 (released 02.07.2023)
+* #2362 Speed up collection conditions
+* #2268 Add conditions `date(...)` and `datetime(...)` to check date values  --  thanks to Maksim @Au6ojlut for PR #2281
+* #2357 add methods `$.setValue(withDateTime)` and `$.setValue(withTime)`
+* #2350 show full stack trace in soft asserts  --  see PR #2354
+* #2336 pass BasicAuth in Chromium-based browser using `HasAuthentication` mechanism  --  see PR #2358
+* #2336 user can set multiple domains for BasicAuth
+* #2346 fix `$.doubleClick()` in Appium  --  see PR #2347
+* #2352 take screenshot even if webdriver has been closed in `@AfterEach` method  --  see PR #2356
+* #2318 use latest version of geckodriver for FF 102+  --  see PR #2319
+* #2328 bump Selenium from 4.9.1 to 4.10.0
+* #2324 Bump io.appium:java-client from 8.5.0 to 8.5.1
+* #2349 Bump Netty from 4.1.93.Final to 4.1.94.Final
+* bump WebDriverManager from 5.3.3 to 5.4.0
+
 ## 6.15.0 (released 29.05.2023)
 * #2291 Project "selenide-appium" was merged into project "selenide".
 * #2292 Project "selenide-selenoid" was merged into project "selenide".
