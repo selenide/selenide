@@ -27,13 +27,6 @@ public class SizeGreaterThanOrEqualTest extends ITest {
       .hasMessageStartingWith("List size mismatch")
       .hasMessageContaining("expected: >= 5, actual: 4")
       .hasMessageContaining("collection: #radioButtons input")
-      .hasMessageContaining("""
-        Elements: [
-        \t<input name="me" type="radio" value="master"></input>,
-        \t<input name="me" type="radio" value="margarita"></input>,
-        \t<input name="me" type="radio" value="cat"></input>,
-        \t<input name="me" type="radio" value="woland"></input>
-        ]""")
       .hasNoCause();
   }
 }

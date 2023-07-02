@@ -38,16 +38,7 @@ final class ListSizeTest extends ITest {
   void errorMessage() {
     assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(size(3)))
       .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageStartingWith("List size mismatch")
-      .hasMessageContaining("expected: = 3, actual: 4")
-      .hasMessageContaining("collection: #radioButtons input")
-      .hasMessageContaining("""
-        Elements: [
-        \t<input name="me" type="radio" value="master"></input>,
-        \t<input name="me" type="radio" value="margarita"></input>,
-        \t<input name="me" type="radio" value="cat"></input>,
-        \t<input name="me" type="radio" value="woland"></input>
-        ]""")
+      .hasMessageStartingWith("List size mismatch: expected: = 3, actual: 4, collection: #radioButtons input")
       .hasNoCause();
   }
 

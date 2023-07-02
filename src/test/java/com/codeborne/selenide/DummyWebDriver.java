@@ -1,7 +1,9 @@
 package com.codeborne.selenide;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -11,7 +13,7 @@ import java.util.Set;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 
-public class DummyWebDriver implements WebDriver {
+public class DummyWebDriver implements WebDriver, JavascriptExecutor {
   @Override
   public void get(String url) { }
 
@@ -69,5 +71,15 @@ public class DummyWebDriver implements WebDriver {
   @Override
   public Options manage() {
     return null;
+  }
+
+  @Override
+  public Object executeScript(String script, Object... args) {
+    throw new UnsupportedCommandException("Dummy webdriver does not support JavaScript");
+  }
+
+  @Override
+  public Object executeAsyncScript(String script, Object... args) {
+    throw new UnsupportedCommandException("Dummy webdriver does not support JavaScript");
   }
 }

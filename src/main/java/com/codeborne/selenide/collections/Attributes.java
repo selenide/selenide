@@ -4,26 +4,27 @@ import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.AttributesMismatch;
-import com.codeborne.selenide.ex.AttributesSizeMismatch;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
+import com.codeborne.selenide.impl.ElementCommunicator;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Collections.unmodifiableList;
-import static java.util.Objects.requireNonNull;
 
 @ParametersAreNonnullByDefault
 public class Attributes extends CollectionCondition {
+  private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
+
   protected final List<String> expectedValues;
   protected final String attribute;
 
@@ -42,19 +43,19 @@ public class Attributes extends CollectionCondition {
     if (elements.size() != expectedValues.size()) {
       return new CheckResult(REJECT, elements.size());
     }
+    List<String> actualAttributeValues = communicator.attributes(driver, elements, attribute);
 
-    List<String> actualAttributeValues = new ArrayList<>(expectedValues.size());
     for (int i = 0; i < expectedValues.size(); i++) {
-      WebElement element = elements.get(i);
       String expectedValue = expectedValues.get(i);
-      String actualAttributeValue = element.getAttribute(attribute);
-      actualAttributeValues.add(actualAttributeValue);
+      String actualValue = actualAttributeValues.get(i);
 
-      if (!Objects.equals(actualAttributeValue, expectedValue)) {
-        return new CheckResult(REJECT, actualAttributeValues);
+      if (!Objects.equals(actualValue, expectedValue)) {
+        String message = String.format("Attribute \"%s\" values mismatch (#%s expected: \"%s\", actual: \"%s\")",
+          attribute, i, expectedValue, actualValue);
+        return CheckResult.rejected(message, actualAttributeValues);
       }
     }
-    return new CheckResult(ACCEPT, null);
+    return CheckResult.accepted();
   }
 
   @Override
@@ -67,13 +68,19 @@ public class Attributes extends CollectionCondition {
         throw new ElementNotFound(collection, toString(), timeoutMs, cause);
       }
       else {
-        throw new AttributesSizeMismatch(collection.driver(), attribute, collection, expectedValues,
-          actualSize, explanation, timeoutMs, cause);
+        throw new ListSizeMismatch("=", expectedValues.size(), actualSize, explanation, collection, cause, timeoutMs);
       }
     }
 
-    throw new AttributesMismatch(collection.driver(), attribute, collection, expectedValues,
-      requireNonNull(lastCheckResult.getActualValue()), explanation, timeoutMs, cause);
+    List<String> actualAttributeValues = lastCheckResult.requireActualValue();
+
+    if (actualAttributeValues.isEmpty()) {
+      throw new ElementNotFound(collection, toString(), timeoutMs, cause);
+    }
+
+    String message = lastCheckResult.getMessageOrElse(() -> String.format("Attribute '%s' values mismatch", attribute));
+    throw new AttributesMismatch(collection.driver(), message, collection, expectedValues,
+      actualAttributeValues, explanation, timeoutMs, cause);
   }
 
   @Override

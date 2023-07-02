@@ -1,8 +1,8 @@
 package integration.collections;
 
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
-import com.codeborne.selenide.ex.TextsSizeMismatch;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,9 +70,11 @@ final class CollectionWaitTest extends ITest {
   void firstNElements_TextsMismatchErrorMessage() {
     assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element", "#wrong"), Duration.ofSeconds(1)))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageStartingWith(String.format("Texts mismatch%nActual: [Element #0, Element #1]%n" +
-        "Expected: [Element, #wrong]%n" +
-        "Collection: #collection li:first(2)"))
+      .hasMessageStartingWith(
+        String.format("Text #1 mismatch (expected: \"#wrong\", actual: \"Element #1\")%n" +
+                      "Actual: [Element #0, Element #1]%n" +
+                      "Expected: [Element, #wrong]%n" +
+                      "Collection: #collection li:first(2)"))
       .hasMessageContaining("Timeout: 1 s.");
     assertTestTookMoreThan(1, SECONDS);
   }
@@ -80,10 +82,8 @@ final class CollectionWaitTest extends ITest {
   @Test
   void firstNElements_TextsSizeMismatchErrorMessage() {
     assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element #wrong")))
-      .isInstanceOf(TextsSizeMismatch.class)
-      .hasMessageContaining(String.format("Actual: [Element #0, Element #1], List size: 2%n" +
-        "Expected: [Element #wrong], List size: 1%n" +
-        "Collection: #collection li:first(2)"));
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageContaining("List size mismatch: expected: = 1, actual: 2, collection: #collection li:first(2)");
     assertTestTookMoreThan(1, SECONDS);
   }
 

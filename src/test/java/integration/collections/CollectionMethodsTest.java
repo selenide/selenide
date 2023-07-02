@@ -162,10 +162,6 @@ final class CollectionMethodsTest extends ITest {
       .hasMessageContaining("expected: = 0, actual: 1")
       .hasMessageContaining("""
         collection: #multirowTable tr.filter(condition name: partial text "Chack" and partial text "Baskerville")""")
-      .hasMessageContaining("""
-        Elements: [
-        \t<tr id="multirowTableSecondRow">Chack L'a Baskerville</tr>
-        ]""")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: ");
@@ -350,9 +346,8 @@ final class CollectionMethodsTest extends ITest {
     assertThat(collection).hasToString("$$(5 elements).filter(attribute value)");
     assertThatThrownBy(() -> collection.shouldHave(size(999), Duration.ofMillis(0)))
       .hasMessageStartingWith("List size mismatch")
-      .hasMessageContaining("Elements: [")
-      .hasMessageContaining("<option value selected:true>-- Select your hero --</option>")
-      .hasMessageContaining("<option value=\"arnold \"schwarzenegger\"\">Arnold \"Schwarzenegger\"</option>");
+      .hasMessageContaining("expected: = 999, actual: 5")
+      .hasMessageContaining("collection: $$(5 elements).filter(attribute value)");
   }
 
   @Test
