@@ -154,7 +154,7 @@ public class Selenide {
   /**
    * Open a new browser (with the same settings as the default browser),
    * and run given code block in this browser.
-   * <p/>
+   * <p>
    *
    * In the end, the browser will be closed.
    * @since 6.13.0
