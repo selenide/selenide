@@ -2,7 +2,6 @@ package integration.collections;
 
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
-import com.codeborne.selenide.ex.TextsSizeMismatch;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ final class CollectionBecauseTest extends ITest {
       );
     })
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageStartingWith("Texts mismatch")
+      .hasMessageStartingWith("Text #0 mismatch (expected: \"foo\", actual: \"@livemail.ru\")")
       .hasMessageContaining("Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]")
       .hasMessageContaining("Expected: [foo, bar, var, buzz]")
       .hasMessageContaining("Because: that's why");
@@ -43,11 +42,9 @@ final class CollectionBecauseTest extends ITest {
           .because("that's why")
       );
     })
-      .isInstanceOf(TextsSizeMismatch.class)
-      .hasMessageStartingWith("Texts size mismatch")
-      .hasMessageContaining("Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру], List size: 4")
-      .hasMessageContaining("Expected: [foo, bar, var, buzz], List size: 3")
-      .hasMessageContaining("Because: that's why");
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageStartingWith("List size mismatch")
+      .hasMessageContaining("expected: = 3 (because that's why), actual: 4, collection: #dropdown-list-container option");
   }
 
   @Test
@@ -59,7 +56,7 @@ final class CollectionBecauseTest extends ITest {
       );
     })
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageStartingWith("Texts mismatch")
+      .hasMessageStartingWith("Text #0 mismatch (expected: \"foo\", actual: \"@livemail.ru\")")
       .hasMessageContaining("Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]")
       .hasMessageContaining("Expected: [foo, bar, var, buzz]")
       .hasMessageContaining("Because: that's why");
@@ -73,11 +70,9 @@ final class CollectionBecauseTest extends ITest {
           .because("that's why")
       );
     })
-      .isInstanceOf(TextsSizeMismatch.class)
-      .hasMessageStartingWith("Texts size mismatch")
-      .hasMessageContaining("Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру], List size: 4")
-      .hasMessageContaining("Expected: [foo, bar, var, buzz], List size: 3")
-      .hasMessageContaining("Because: that's why");
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageStartingWith("List size mismatch")
+      .hasMessageContaining("expected: = 3 (because that's why), actual: 4, collection: #dropdown-list-container option");
   }
 
   @Test

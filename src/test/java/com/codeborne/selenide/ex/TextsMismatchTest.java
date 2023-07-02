@@ -14,7 +14,7 @@ final class TextsMismatchTest {
 
   @Test
   void errorMessage() {
-    TextsMismatch textsMismatch = new TextsMismatch(mockCollection(".characters"),
+    TextsMismatch textsMismatch = new TextsMismatch("Texts mismatch", mockCollection(".characters"),
         expectedTexts, actualTexts,
         null, 9000, null);
 
@@ -27,7 +27,7 @@ final class TextsMismatchTest {
 
   @Test
   void errorMessage_withExplanation() {
-    TextsMismatch textsMismatch = new TextsMismatch(mockCollection(".characters"),
+    TextsMismatch textsMismatch = new TextsMismatch("Texts mismatch", mockCollection(".characters"),
         expectedTexts, actualTexts,
         "we expect favorite characters", 9000, null);
 

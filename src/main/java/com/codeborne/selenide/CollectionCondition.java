@@ -362,6 +362,12 @@ public abstract class CollectionCondition {
     }
 
     @Override
+    public void fail(CollectionSource collection, CheckResult lastCheckResult, @Nullable Exception cause, long timeoutMs) {
+      delegate.fail(collection, lastCheckResult, cause, timeoutMs);
+    }
+
+    @Override
+    @Deprecated
     public void fail(CollectionSource collection,
                      @Nullable List<WebElement> elements,
                      @Nullable Exception cause,
