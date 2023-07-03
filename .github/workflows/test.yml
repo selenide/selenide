@@ -45,6 +45,7 @@ jobs:
           appium-doctor
           nohup appium \
             --base-path /wd/hub \
+            --allow-insecure="execute_driver_script,chromedriver_autodownload,adb_shell"
             --relaxed-security \
             2>&1 > "$cwd/appium.log" &
           popd
@@ -120,6 +121,7 @@ jobs:
           appium-doctor
           nohup appium \
             --base-path /wd/hub \
+            --allow-insecure="execute_driver_script,chromedriver_autodownload,adb_shell"
             --relaxed-security \
             2>&1 > "$cwd/appium.log" &
           popd
