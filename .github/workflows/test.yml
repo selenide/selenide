@@ -21,7 +21,7 @@ jobs:
         with:
           distribution: 'temurin'
           cache: 'gradle'
-          java-version: '17'
+          java-version: '11'
       - uses: actions/cache@v3
         with:
           path: build/apps
@@ -45,7 +45,7 @@ jobs:
           appium-doctor
           nohup appium \
             --base-path /wd/hub \
-            --allow-insecure="execute_driver_script,chromedriver_autodownload,adb_shell"
+            --allow-insecure="execute_driver_script,chromedriver_autodownload"
             --relaxed-security \
             2>&1 > "$cwd/appium.log" &
           popd
@@ -63,7 +63,7 @@ jobs:
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 30
+          api-level: 28
           profile: pixel_3_xl
           disable-animations: true
           emulator-options: -no-snapshot -no-window -no-boot-anim -camera-back emulated -camera-front emulated -gpu swiftshader_indirect
@@ -121,7 +121,7 @@ jobs:
           appium-doctor
           nohup appium \
             --base-path /wd/hub \
-            --allow-insecure="execute_driver_script,chromedriver_autodownload,adb_shell"
+            --allow-insecure="execute_driver_script,chromedriver_autodownload"
             --relaxed-security \
             2>&1 > "$cwd/appium.log" &
           popd
@@ -141,7 +141,7 @@ jobs:
         with:
           distribution: 'temurin'
           cache: 'gradle'
-          java-version: '17'
+          java-version: '11'
       - name: Run iOS tests
         run: ./gradlew ios --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
