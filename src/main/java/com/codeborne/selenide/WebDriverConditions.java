@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.conditions.webdriver.CookieWithName;
+import com.codeborne.selenide.conditions.webdriver.CookieWithNameAndValue;
 import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrl;
 import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrlContaining;
 import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrlStartingWith;
@@ -17,59 +19,71 @@ import javax.annotation.Nonnull;
  * @since 5.23.0
  */
 public class WebDriverConditions {
-  @CheckReturnValue
-  @Nonnull
-  public static ObjectCondition<WebDriver> url(String expectedUrl) {
-    return new Url(expectedUrl);
-  }
+    @CheckReturnValue
+    @Nonnull
+    public static ObjectCondition<WebDriver> url(String expectedUrl) {
+        return new Url(expectedUrl);
+    }
 
-  @CheckReturnValue
-  @Nonnull
-  public static ObjectCondition<WebDriver> urlStartingWith(String expectedUrl) {
-    return new UrlStartingWith(expectedUrl);
-  }
+    @CheckReturnValue
+    @Nonnull
+    public static ObjectCondition<WebDriver> urlStartingWith(String expectedUrl) {
+        return new UrlStartingWith(expectedUrl);
+    }
 
-  @CheckReturnValue
-  @Nonnull
-  public static ObjectCondition<WebDriver> urlContaining(String expectedUrl) {
-    return new UrlContaining(expectedUrl);
-  }
+    @CheckReturnValue
+    @Nonnull
+    public static ObjectCondition<WebDriver> urlContaining(String expectedUrl) {
+        return new UrlContaining(expectedUrl);
+    }
 
-  @CheckReturnValue
-  @Nonnull
-  public static ObjectCondition<WebDriver> currentFrameUrl(String expectedUrl) {
-    return new CurrentFrameUrl(expectedUrl);
-  }
+    @CheckReturnValue
+    @Nonnull
+    public static ObjectCondition<WebDriver> currentFrameUrl(String expectedUrl) {
+        return new CurrentFrameUrl(expectedUrl);
+    }
 
-  @CheckReturnValue
-  @Nonnull
-  public static ObjectCondition<WebDriver> currentFrameUrlStartingWith(String expectedUrl) {
-    return new CurrentFrameUrlStartingWith(expectedUrl);
-  }
+    @CheckReturnValue
+    @Nonnull
+    public static ObjectCondition<WebDriver> currentFrameUrlStartingWith(String expectedUrl) {
+        return new CurrentFrameUrlStartingWith(expectedUrl);
+    }
 
-  @CheckReturnValue
-  @Nonnull
-  public static ObjectCondition<WebDriver> currentFrameUrlContaining(String expectedUrl) {
-    return new CurrentFrameUrlContaining(expectedUrl);
-  }
+    @CheckReturnValue
+    @Nonnull
+    public static ObjectCondition<WebDriver> currentFrameUrlContaining(String expectedUrl) {
+        return new CurrentFrameUrlContaining(expectedUrl);
+    }
 
-  /**
-   * Check that the number of windows/tabs in the browser is as expected.
-   * Example:
-   * {@code webdriver().shouldHave(numberOfWindows(2)) }
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static ObjectCondition<WebDriver> numberOfWindows(int numberOfWindows) {
-    return new NumberOfWindows(numberOfWindows);
-  }
+    /**
+     * Check that the number of windows/tabs in the browser is as expected.
+     * Example:
+     * {@code webdriver().shouldHave(numberOfWindows(2)) }
+     */
+    @CheckReturnValue
+    @Nonnull
+    public static ObjectCondition<WebDriver> numberOfWindows(int numberOfWindows) {
+        return new NumberOfWindows(numberOfWindows);
+    }
 
-  /**
-   * @since 5.25.0
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static ObjectCondition<WebDriver> title(String expectedTitle) {
-    return new Title(expectedTitle);
-  }
+    /**
+     * @since 5.25.0
+     */
+    @CheckReturnValue
+    @Nonnull
+    public static ObjectCondition<WebDriver> title(String expectedTitle) {
+        return new Title(expectedTitle);
+    }
+
+    @CheckReturnValue
+    @Nonnull
+    public static ObjectCondition<WebDriver> cookieWithName(String name) {
+        return new CookieWithName(name);
+    }
+
+    @CheckReturnValue
+    @Nonnull
+    public static ObjectCondition<WebDriver> cookieWithNameAndValue(String name, String value) {
+        return new CookieWithNameAndValue(name, value);
+    }
 }
