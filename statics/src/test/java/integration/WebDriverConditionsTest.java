@@ -5,6 +5,7 @@ import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
 import javax.annotation.CheckReturnValue;
@@ -14,8 +15,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.clearBrowserCookies;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.Selenide.webdriver;
+import static com.codeborne.selenide.WebDriverConditions.cookieWithName;
+import static com.codeborne.selenide.WebDriverConditions.cookieWithNameAndValue;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrl;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlContaining;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlStartingWith;
@@ -231,5 +235,47 @@ final class WebDriverConditionsTest extends IntegrationTest {
         return "webdriver";
       }
     };
+  }
+
+  @Test
+  void assertPresenceOfCookieInWebDriver() {
+    openFile("cookies.html");
+
+    $("#button-put").click();
+    webdriver().shouldHave(cookieWithName("TEST_COOKIE"));
+    clearBrowserCookies();
+  }
+
+  @Test
+  void assertCookieValue() {
+    openFile("cookies.html");
+
+    $("#button-put").click();
+    webdriver().shouldHave(cookieWithNameAndValue("TEST_COOKIE", "AF33892F98ABC39A"));
+    clearBrowserCookies();
+  }
+
+  @Test
+  void assertAbsenceOfCookieInWebDriver() {
+    openFile("cookies.html");
+
+    addCustomCookie();
+    $("#button-remove").click();
+    webdriver().shouldNotHave(cookieWithName("TEST_COOKIE"));
+    clearBrowserCookies();
+  }
+
+  @Test
+  void assertAbsenceOfCookieWithValueInWebDriver() {
+    openFile("cookies.html");
+
+    addCustomCookie();
+    $("#button-remove").click();
+    webdriver().shouldNotHave(cookieWithNameAndValue("TEST_COOKIE", "AF33892F98ABC39A"));
+    clearBrowserCookies();
+  }
+
+  private static void addCustomCookie() {
+    webdriver().driver().getWebDriver().manage().addCookie(new Cookie("TEST_COOKIE", "AF33892F98ABC39A"));
   }
 }
