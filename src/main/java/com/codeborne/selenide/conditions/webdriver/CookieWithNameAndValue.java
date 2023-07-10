@@ -12,52 +12,52 @@ import java.util.Objects;
 @ParametersAreNonnullByDefault
 public class CookieWithNameAndValue implements ObjectCondition<WebDriver> {
 
-    private final String name;
-    private final String value;
+  private final String name;
+  private final String value;
 
-    public CookieWithNameAndValue(String name, String value) {
-        this.name = name;
-        this.value = value;
-    }
+  public CookieWithNameAndValue(String name, String value) {
+    this.name = name;
+    this.value = value;
+  }
 
-    @Nonnull
-    @CheckReturnValue
-    @Override
-    public String description() {
-        return String.format("should have cookie with name \"%s\" and value \"%s\"", name, value);
-    }
+  @Nonnull
+  @CheckReturnValue
+  @Override
+  public String description() {
+    return String.format("should have cookie with name \"%s\" and value \"%s\"", name, value);
+  }
 
-    @Nonnull
-    @CheckReturnValue
-    @Override
-    public String negativeDescription() {
-        return String.format("should not have cookie with name \"%s\" and value \"%s\"", name, value);
-    }
+  @Nonnull
+  @CheckReturnValue
+  @Override
+  public String negativeDescription() {
+    return String.format("should not have cookie with name \"%s\" and value \"%s\"", name, value);
+  }
 
-    @CheckReturnValue
-    @Override
-    public boolean test(WebDriver webDriver) {
-        return Objects.equals(webDriver.manage().getCookieNamed(name).getValue(), value);
-    }
+  @CheckReturnValue
+  @Override
+  public boolean test(WebDriver webDriver) {
+    return Objects.equals(webDriver.manage().getCookieNamed(name).getValue(), value);
+  }
 
-    @Nullable
-    @CheckReturnValue
-    @Override
-    public String actualValue(WebDriver webDriver) {
-        return String.format("Available cookies: %s", webDriver.manage().getCookies());
-    }
+  @Nullable
+  @CheckReturnValue
+  @Override
+  public String actualValue(WebDriver webDriver) {
+    return String.format("Available cookies: %s", webDriver.manage().getCookies());
+  }
 
-    @Nullable
-    @CheckReturnValue
-    @Override
-    public String expectedValue() {
-        return String.format("cookie with name \"%s\" and value \"%s\"", name, value);
-    }
+  @Nullable
+  @CheckReturnValue
+  @Override
+  public String expectedValue() {
+    return String.format("cookie with name \"%s\" and value \"%s\"", name, value);
+  }
 
-    @Nonnull
-    @CheckReturnValue
-    @Override
-    public String describe(@Nonnull WebDriver webDriver) {
-        return "webdriver";
-    }
+  @Nonnull
+  @CheckReturnValue
+  @Override
+  public String describe(@Nonnull WebDriver webDriver) {
+    return "webdriver";
+  }
 }
