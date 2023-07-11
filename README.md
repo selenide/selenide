@@ -53,7 +53,7 @@ Look for [Quick Start](https://github.com/selenide/selenide/wiki/Quick-Start) fo
 * For bustlers: [How to start writing UI tests in 10 minutes](http://selenide.org/2014/10/01/how-to-start-writing-ui-tests/)
 * For developers: [Selenide presentation on Devoxx 2015](http://selenide.org/2015/11/13/selenide-on-devoxx/)
 * For QA engineers: [Selenide presentation on SeleniumConf 2015](http://selenide.org/2015/09/23/selenide-on-seleniumconf/)
-* For russians: [Selenide presentation on SeleniumCamp 2015](http://seleniumcamp.com/materials/good-short-test/)
+* In Russian: [Selenide presentation on SeleniumCamp 2015](http://seleniumcamp.com/materials/good-short-test/)
 
 ## FAQ
 
