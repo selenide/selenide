@@ -637,6 +637,24 @@ public abstract class Condition {
   }
 
   /**
+   * Synonym for {@link #and(String, Condition, Condition, Condition...)}. Useful for better readability.
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition allOf(String name, Condition condition1, Condition condition2, Condition... conditions) {
+    return and(name, condition1, condition2, conditions);
+  }
+
+  /**
+   * Synonym for {@link #and(String, Condition, Condition, Condition...)} with "all of" name. Useful for better readability.
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition allOf(Condition condition1, Condition condition2, Condition... conditions) {
+    return and("all of", condition1, condition2, conditions);
+  }
+
+  /**
    * Check if element matches ANY of given conditions.
    * The method signature makes you to pass at least 2 conditions, otherwise it would be nonsense.
    *
@@ -650,6 +668,24 @@ public abstract class Condition {
   @Nonnull
   public static Condition or(String name, Condition condition1, Condition condition2, Condition... conditions) {
     return new Or(name, merge(condition1, condition2, conditions));
+  }
+
+  /**
+   * Synonym for {@link #or(String, Condition, Condition, Condition...)}. Useful for better readability.
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition anyOf(String name, Condition condition1, Condition condition2, Condition... conditions) {
+    return or(name, condition1, condition2, conditions);
+  }
+
+  /**
+   * Synonym for {@link #or(String, Condition, Condition, Condition...)} with "any of" name. Useful for better readability.
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition anyOf(Condition condition1, Condition condition2, Condition... conditions) {
+    return or("any of", condition1, condition2, conditions);
   }
 
   /**
