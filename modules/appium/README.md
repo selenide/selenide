@@ -128,7 +128,16 @@ $(By.xpath(".//*[@text='Tabs']")).scrollTo().click(); //scroll max of 30 times i
 $(By.xpath(".//*[@text='Tabs']")).scroll(with(DOWN, 10)); //scroll max of 10 times in downward direction to find element
 $(By.xpath(".//*[@text='Animation']")).scroll(up()); //scroll max of 30 times in upward direction to find element
 ```
-7. Not able to use page factory for dynamic elements? We got you covered with CombinedBy for writing dynamic locators for both android and ios platforms
+
+7. We got covered you to the left and right
+
+```java
+$(By.xpath(".//*[@text='Tabs']")).swipeTo().click(); //swipe max of 30 times in right direction to find element
+$(By.xpath(".//*[@text='Tabs']")).swipe(left()).click(); //swipe max of 30 times in left direction to find element
+$(By.xpath(".//*[@text='Tabs']")).swipe(left(10)).click(); //swipe max of 10 times in left direction to find element
+```
+
+8. Not able to use page factory for dynamic elements? We got you covered with CombinedBy for writing dynamic locators for both android and ios platforms
 
 ```java
 int index = 1;
