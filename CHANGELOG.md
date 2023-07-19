@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.16.1
+* #2368 added `allOf` and `anyOf` conditions  --  see PR #2368
+
 ## 6.16.0 (released 02.07.2023)
 * #2362 Speed up collection conditions
 * #2268 Add conditions `date(...)` and `datetime(...)` to check date values  --  thanks to Maksim @Au6ojlut for PR #2281

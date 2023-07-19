@@ -421,7 +421,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement setSelected(boolean selected);
 
   /**
-   * Checks that given element meets all given conditions.<p>
+   * Sequentially checks that given element meets all given conditions.<p>
    *
    * IMPORTANT: If element does not match then conditions immediately, waits up to
    * 4 seconds until element meets the conditions. It's extremely useful for dynamic content.<p>
@@ -491,7 +491,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldBe(Condition condition, Duration timeout);
 
   /**
-   * Checks that given element does not meet given conditions.<p>
+   * Sequentially checks that given element does not meet given conditions.<p>
    *
    * IMPORTANT: If element does match the conditions, waits up to
    * 4 seconds until element does not meet the conditions. It's extremely useful for dynamic content.<p>
