@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.conditions.webdriver.CookieObject;
 import com.codeborne.selenide.conditions.webdriver.CookieWithName;
 import com.codeborne.selenide.conditions.webdriver.CookieWithNameAndValue;
 import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrl;
@@ -10,6 +11,7 @@ import com.codeborne.selenide.conditions.webdriver.Title;
 import com.codeborne.selenide.conditions.webdriver.Url;
 import com.codeborne.selenide.conditions.webdriver.UrlContaining;
 import com.codeborne.selenide.conditions.webdriver.UrlStartingWith;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
 import javax.annotation.CheckReturnValue;
@@ -85,5 +87,11 @@ public class WebDriverConditions {
   @Nonnull
   public static ObjectCondition<WebDriver> cookie(String name, String value) {
     return new CookieWithNameAndValue(name, value);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static ObjectCondition<WebDriver> cookie(Cookie cookie) {
+    return new CookieObject(cookie);
   }
 }
