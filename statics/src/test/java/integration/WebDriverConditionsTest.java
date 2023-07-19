@@ -263,7 +263,6 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
     final var expectedCookie = getExpectedCookie();
 
-    addCustomCookie();
     $("#button-put").click();
     webdriver().shouldHave(WebDriverConditions.cookie(expectedCookie));
     clearBrowserCookies();
