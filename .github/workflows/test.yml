@@ -32,7 +32,7 @@ jobs:
         with:
           arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v3
-        if: failure()
+        if: always()
         with:
           name: test-report-win-${{matrix.gradle-task}}
           retention-days: 14
@@ -63,7 +63,7 @@ jobs:
         with:
           arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v3
-        if: failure()
+        if: always()
         with:
           name: test-report-linux-${{matrix.gradle-task}}
           retention-days: 14
@@ -133,7 +133,7 @@ jobs:
           emulator-options: -no-snapshot -no-window -no-boot-anim -camera-back emulated -camera-front emulated -gpu swiftshader_indirect
           script: ./gradlew clean android --info
       - uses: actions/upload-artifact@v3
-        if: failure()
+        if: always()
         with:
           name: test-report-android
           path: |
@@ -208,7 +208,7 @@ jobs:
       - name: Run iOS tests
         run: ./gradlew ios --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
-        if: failure()
+        if: always()
         with:
           name: test-report-ios
           path: |
@@ -233,7 +233,7 @@ jobs:
         with:
           arguments: selenoidTests
       - uses: actions/upload-artifact@v3
-        if: failure()
+        if: always()
         with:
           name: test-report-selenoid
           path: |
