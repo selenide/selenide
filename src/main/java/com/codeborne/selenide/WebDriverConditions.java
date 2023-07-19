@@ -77,13 +77,13 @@ public class WebDriverConditions {
 
   @CheckReturnValue
   @Nonnull
-  public static ObjectCondition<WebDriver> cookieWithName(String name) {
+  public static ObjectCondition<WebDriver> cookie(String name) {
     return new CookieWithName(name);
   }
 
   @CheckReturnValue
   @Nonnull
-  public static ObjectCondition<WebDriver> cookieWithNameAndValue(String name, String value) {
+  public static ObjectCondition<WebDriver> cookie(String name, String value) {
     return new CookieWithNameAndValue(name, value);
   }
 }
