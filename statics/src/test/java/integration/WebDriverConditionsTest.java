@@ -240,7 +240,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
-  void assertPresenceOfCookieInWebDriver() {
+  void assertPresenceOfCookieWithGivenName() {
     openFile("cookies.html");
 
     $("#button-put").click();
@@ -249,7 +249,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
-  void assertCookieValue() {
+  void assertPresenceOfCookieWithGivenNameAndValue() {
     openFile("cookies.html");
 
     $("#button-put").click();
@@ -258,7 +258,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
-  void assertCookieObject() {
+  void assertPresenceOfGivenCookieObject() {
     openFile("cookies.html");
 
     final var expectedCookie = getExpectedCookie();
@@ -270,7 +270,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
-  void assertAbsenceOfCookieInWebDriver() {
+  void assertAbsenceOfCookieWithGivenName() {
     openFile("cookies.html");
 
     addCustomCookie();
@@ -280,7 +280,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
-  void assertAbsenceOfCookieWithValueInWebDriver() {
+  void assertAbsenceOfCookieWithGivenNameAndValue() {
     openFile("cookies.html");
 
     addCustomCookie();
@@ -290,7 +290,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
-  void assertAbsenceOfCookieObjectInWebDriver() {
+  void assertAbsenceOfGivenCookieObject() {
     openFile("cookies.html");
 
     final var expectedCookie = getExpectedCookie();
