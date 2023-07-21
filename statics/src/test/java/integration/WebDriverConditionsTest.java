@@ -1,19 +1,25 @@
 package integration;
 
 import com.codeborne.selenide.ObjectCondition;
+import com.codeborne.selenide.WebDriverConditions;
 import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.clearBrowserCookies;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.Selenide.webdriver;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrl;
@@ -231,5 +237,78 @@ final class WebDriverConditionsTest extends IntegrationTest {
         return "webdriver";
       }
     };
+  }
+
+  @Test
+  void assertPresenceOfCookieWithGivenName() {
+    openFile("cookies.html");
+
+    $("#button-put").click();
+    webdriver().shouldHave(WebDriverConditions.cookie("TEST_COOKIE"));
+    clearBrowserCookies();
+  }
+
+  @Test
+  void assertPresenceOfCookieWithGivenNameAndValue() {
+    openFile("cookies.html");
+
+    $("#button-put").click();
+    webdriver().shouldHave(WebDriverConditions.cookie("TEST_COOKIE", "AF33892F98ABC39A"));
+    clearBrowserCookies();
+  }
+
+  @Test
+  void assertPresenceOfGivenCookieObject() {
+    openFile("cookies.html");
+
+    final var expectedCookie = getExpectedCookie();
+
+    $("#button-put").click();
+    webdriver().shouldHave(WebDriverConditions.cookie(expectedCookie));
+    clearBrowserCookies();
+  }
+
+  @Test
+  void assertAbsenceOfCookieWithGivenName() {
+    openFile("cookies.html");
+
+    addCustomCookie();
+    $("#button-remove").click();
+    webdriver().shouldNotHave(WebDriverConditions.cookie("TEST_COOKIE"));
+    clearBrowserCookies();
+  }
+
+  @Test
+  void assertAbsenceOfCookieWithGivenNameAndValue() {
+    openFile("cookies.html");
+
+    addCustomCookie();
+    $("#button-remove").click();
+    webdriver().shouldNotHave(WebDriverConditions.cookie("TEST_COOKIE", "AF33892F98ABC39A"));
+    clearBrowserCookies();
+  }
+
+  @Test
+  void assertAbsenceOfGivenCookieObject() {
+    openFile("cookies.html");
+
+    final var expectedCookie = getExpectedCookie();
+
+    addCustomCookie();
+    $("#button-remove").click();
+    webdriver().shouldNotHave(WebDriverConditions.cookie(expectedCookie));
+    clearBrowserCookies();
+  }
+
+  private static void addCustomCookie() {
+    final var expectedCookie = getExpectedCookie();
+
+    webdriver().driver().getWebDriver().manage().addCookie(expectedCookie);
+  }
+
+  private static Cookie getExpectedCookie() {
+    final var expiry = Date.from(Instant.now().plus(Duration.ofDays(3)));
+
+    return new Cookie("TEST_COOKIE", "AF33892F98ABC39A", "/", expiry);
   }
 }
