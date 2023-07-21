@@ -87,4 +87,12 @@ class ExactTextsCaseSensitiveInAnyOrderTest extends ITest {
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("No expected texts given");
   }
+
+  @Test
+  void textsInsideSvg() {
+    openFile("page_with_svg.html");
+    $$("#banana svg tspan").shouldHave(exactTextsCaseSensitiveInAnyOrder("the Fruit", "apple", "not"));
+    $$("#banana svg text").shouldHave(exactTextsCaseSensitiveInAnyOrder(
+      "You are not a banana!", "You are the Fruit.", "You are not an apple;"));
+  }
 }

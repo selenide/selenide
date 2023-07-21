@@ -15,7 +15,7 @@ public class WebElementCommunicator implements ElementCommunicator {
   @Override
   public List<String> texts(Driver driver, List<WebElement> elements) {
     try {
-      return driver.executeJavaScript("return Array.from(arguments[0]).map(el => el.innerText)", elements);
+      return driver.executeJavaScript("return Array.from(arguments[0]).map(el => el.innerText || el.textContent)", elements);
     }
     catch (UnsupportedCommandException javascriptNotSupported) {
       return textsOneByOne(elements);

@@ -88,4 +88,11 @@ public class ExactTextsTest extends ITest {
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("No expected texts given");
   }
+
+  @Test
+  void textsInsideSvg() {
+    openFile("page_with_svg.html");
+    $$("#banana svg tspan").shouldHave(exactTexts("noT", "APPle", "THE frUIt"));
+    $$("#banana svg text").shouldHave(exactTexts("You are not a BANANA!", "You are not an APPLE;", "You are the FRUIT."));
+  }
 }

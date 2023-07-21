@@ -80,4 +80,11 @@ public class TextsInAnyOrderTest extends ITest {
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("No expected texts given");
   }
+
+  @Test
+  void textsInsideSvg() {
+    openFile("page_with_svg.html");
+    $$("#banana svg tspan").shouldHave(textsInAnyOrder("not", "appl", "fruit"));
+    $$("#banana svg text").shouldHave(textsInAnyOrder("the Fruit", "not a banana", "not an apple"));
+  }
 }
