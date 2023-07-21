@@ -84,4 +84,11 @@ public class ExactTextsCaseSensitiveTest extends ITest {
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("No expected texts given");
   }
+
+  @Test
+  void textsInsideSvg() {
+    openFile("page_with_svg.html");
+    $$("#banana svg tspan").shouldHave(exactTextsCaseSensitive("not", "apple", "the Fruit"));
+    $$("#banana svg text").shouldHave(exactTextsCaseSensitive("You are not a banana!", "You are not an apple;", "You are the Fruit."));
+  }
 }

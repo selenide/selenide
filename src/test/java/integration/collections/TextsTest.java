@@ -112,4 +112,11 @@ public class TextsTest extends ITest {
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("No expected texts given");
   }
+
+  @Test
+  void textsInsideSvg() {
+    openFile("page_with_svg.html");
+    $$("#banana svg tspan").shouldHave(texts("not", "apple", "fruit"));
+    $$("#banana svg text").shouldHave(texts("are not a banana", "are not an apple", "are the Fruit"));
+  }
 }
