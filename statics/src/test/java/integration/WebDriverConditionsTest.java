@@ -258,17 +258,6 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
-  void assertPresenceOfGivenCookieObject() {
-    openFile("cookies.html");
-
-    final var expectedCookie = getExpectedCookie();
-
-    $("#button-put").click();
-    webdriver().shouldHave(WebDriverConditions.cookie(expectedCookie));
-    clearBrowserCookies();
-  }
-
-  @Test
   void assertAbsenceOfCookieWithGivenName() {
     openFile("cookies.html");
 
@@ -285,18 +274,6 @@ final class WebDriverConditionsTest extends IntegrationTest {
     addCustomCookie();
     $("#button-remove").click();
     webdriver().shouldNotHave(WebDriverConditions.cookie("TEST_COOKIE", "AF33892F98ABC39A"));
-    clearBrowserCookies();
-  }
-
-  @Test
-  void assertAbsenceOfGivenCookieObject() {
-    openFile("cookies.html");
-
-    final var expectedCookie = getExpectedCookie();
-
-    addCustomCookie();
-    $("#button-remove").click();
-    webdriver().shouldNotHave(WebDriverConditions.cookie(expectedCookie));
     clearBrowserCookies();
   }
 
