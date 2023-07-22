@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.ObjectCondition;
-import com.codeborne.selenide.WebDriverConditions;
 import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +11,6 @@ import org.openqa.selenium.WebDriver;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Date;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.byText;
@@ -22,6 +18,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.clearBrowserCookies;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.Selenide.webdriver;
+import static com.codeborne.selenide.WebDriverConditions.cookie;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrl;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlContaining;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlStartingWith;
@@ -34,6 +31,9 @@ import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class WebDriverConditionsTest extends IntegrationTest {
+  private static final String NAME = "TEST_COOKIE";
+  private static final String VALUE = "AF33892F98ABC39A";
+
   @BeforeEach
   void openTestPage() {
     openFile("page_with_frames_with_delays.html");
@@ -194,13 +194,14 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
   @Test
   void userCanDefineCustomConditions() {
-    webdriver().shouldHave(cookie("session_id"));
-    webdriver().shouldNotHave(cookie("nonexistent_cookie"));
+    webdriver().shouldHave(customCookie("session_id"));
+    webdriver().shouldNotHave(customCookie("nonexistent_cookie"));
   }
 
   @ParametersAreNonnullByDefault
-  private ObjectCondition<WebDriver> cookie(String expectedCookieName) {
-    return new ObjectCondition<WebDriver>() {
+  @SuppressWarnings("AnonymousInnerClassMayBeStatic")
+  private ObjectCondition<WebDriver> customCookie(String expectedCookieName) {
+    return new ObjectCondition<>() {
       @Nonnull
       @Override
       public String description() {
@@ -241,51 +242,89 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
   @Test
   void assertPresenceOfCookieWithGivenName() {
-    openFile("cookies.html");
+    openPageWithCookies();
 
     $("#button-put").click();
-    webdriver().shouldHave(WebDriverConditions.cookie("TEST_COOKIE"));
-    clearBrowserCookies();
+    webdriver().shouldHave(cookie(NAME));
+  }
+
+  @Test
+  void assertPresenceOfCookieWithGivenName_errorMessage() {
+    openPageWithCookies();
+
+    $("#button-put").click();
+    assertThatThrownBy(() -> webdriver().shouldHave(cookie("WRONG_COOKIE")))
+      .isInstanceOf(ConditionNotMetException.class)
+      .hasMessageStartingWith("webdriver should have a cookie with name \"WRONG_COOKIE\"")
+      .hasMessageContaining("Actual value: Available cookies: [TEST_COOKIE=AF33892F98ABC39A")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source: ")
+      .hasMessageContaining("Timeout: 1 ms.");
   }
 
   @Test
   void assertPresenceOfCookieWithGivenNameAndValue() {
-    openFile("cookies.html");
+    openPageWithCookies();
 
     $("#button-put").click();
-    webdriver().shouldHave(WebDriverConditions.cookie("TEST_COOKIE", "AF33892F98ABC39A"));
-    clearBrowserCookies();
+    webdriver().shouldHave(cookie(NAME, VALUE));
+  }
+
+  @Test
+  void assertPresenceOfCookieWithGivenNameAndValue_errorMessage() {
+    openPageWithCookies();
+
+    $("#button-put").click();
+    assertThatThrownBy(() -> webdriver().shouldHave(cookie("WRONG_COOKIE", VALUE)))
+      .isInstanceOf(ConditionNotMetException.class)
+      .hasMessageStartingWith("webdriver should have a cookie with name \"WRONG_COOKIE\" and value \"AF33892F98ABC39A\"")
+      .hasMessageContaining("Actual value: Available cookies: [TEST_COOKIE=AF33892F98ABC39A");
   }
 
   @Test
   void assertAbsenceOfCookieWithGivenName() {
-    openFile("cookies.html");
+    openPageWithCookies();
 
     addCustomCookie();
     $("#button-remove").click();
-    webdriver().shouldNotHave(WebDriverConditions.cookie("TEST_COOKIE"));
-    clearBrowserCookies();
+    webdriver().shouldNotHave(cookie(NAME));
+  }
+
+  @Test
+  void assertAbsenceOfGivenCookieWithGivenName_errorMessage() {
+    openPageWithCookies();
+    addCustomCookie();
+    assertThatThrownBy(() -> webdriver().shouldNotHave(cookie(NAME)))
+      .isInstanceOf(ConditionMetException.class)
+      .hasMessageStartingWith("webdriver should not have cookie with name \"TEST_COOKIE\"")
+      .hasMessageContaining("Actual value: Available cookies: [TEST_COOKIE=AF33892F98ABC39A");
   }
 
   @Test
   void assertAbsenceOfCookieWithGivenNameAndValue() {
-    openFile("cookies.html");
+    openPageWithCookies();
 
     addCustomCookie();
     $("#button-remove").click();
-    webdriver().shouldNotHave(WebDriverConditions.cookie("TEST_COOKIE", "AF33892F98ABC39A"));
+    webdriver().shouldNotHave(cookie(NAME, VALUE));
+  }
+
+  @Test
+  void assertAbsenceOfGivenCookieWithGivenNameAndValue_errorMessage() {
+    openPageWithCookies();
+    addCustomCookie();
+    assertThatThrownBy(() -> webdriver().shouldNotHave(cookie(NAME, VALUE)))
+      .isInstanceOf(ConditionMetException.class)
+      .hasMessageStartingWith("webdriver should not have cookie with name \"TEST_COOKIE\" and value \"AF33892F98ABC39A\"")
+      .hasMessageContaining("Actual value: Available cookies: [TEST_COOKIE=AF33892F98ABC39A");
+  }
+
+  private void openPageWithCookies() {
+    openFile("cookies.html");
     clearBrowserCookies();
   }
 
-  private static void addCustomCookie() {
-    final var expectedCookie = getExpectedCookie();
-
-    webdriver().driver().getWebDriver().manage().addCookie(expectedCookie);
-  }
-
-  private static Cookie getExpectedCookie() {
-    final var expiry = Date.from(Instant.now().plus(Duration.ofDays(3)));
-
-    return new Cookie("TEST_COOKIE", "AF33892F98ABC39A", "/", expiry);
+  private void addCustomCookie() {
+    webdriver().driver().getWebDriver().manage().addCookie(new Cookie(NAME, VALUE));
   }
 }

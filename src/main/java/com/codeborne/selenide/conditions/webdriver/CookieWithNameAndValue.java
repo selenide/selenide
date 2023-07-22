@@ -1,6 +1,7 @@
 package com.codeborne.selenide.conditions.webdriver;
 
 import com.codeborne.selenide.ObjectCondition;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
 import javax.annotation.CheckReturnValue;
@@ -24,7 +25,7 @@ public class CookieWithNameAndValue implements ObjectCondition<WebDriver> {
   @CheckReturnValue
   @Override
   public String description() {
-    return String.format("should have cookie with name \"%s\" and value \"%s\"", name, value);
+    return String.format("should have a cookie with name \"%s\" and value \"%s\"", name, value);
   }
 
   @Nonnull
@@ -37,7 +38,8 @@ public class CookieWithNameAndValue implements ObjectCondition<WebDriver> {
   @CheckReturnValue
   @Override
   public boolean test(WebDriver webDriver) {
-    return Objects.equals(webDriver.manage().getCookieNamed(name).getValue(), value);
+    Cookie cookie = webDriver.manage().getCookieNamed(name);
+    return cookie != null && Objects.equals(cookie.getValue(), value);
   }
 
   @Nullable

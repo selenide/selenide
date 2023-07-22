@@ -22,7 +22,7 @@ public class CookieWithName implements ObjectCondition<WebDriver> {
   @CheckReturnValue
   @Override
   public String description() {
-    return String.format("should have cookie with name \"%s\"", name);
+    return String.format("should have a cookie with name \"%s\"", name);
   }
 
   @Nonnull
