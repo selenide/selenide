@@ -1,6 +1,7 @@
 package com.codeborne.selenide.appium;
 
-import static com.codeborne.selenide.appium.AppiumSwipeDirection.*;
+import static com.codeborne.selenide.appium.AppiumSwipeDirection.LEFT;
+import static com.codeborne.selenide.appium.AppiumSwipeDirection.RIGHT;
 
 public class AppiumSwipeOptions {
   private final AppiumSwipeDirection appiumSwipeDirection;
