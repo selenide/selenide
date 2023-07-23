@@ -35,6 +35,7 @@ class SelenideElementProxy implements InvocationHandler {
     "as",
     "getAlias",
     "toWebElement",
+    "getWrappedElement",
     "toString",
     "getSearchCriteria",
     "$",
