@@ -70,9 +70,10 @@ SelenideAppium.openIOSDeepLink("mydemoapprn://product-details/1");
 ```java
    $(AppiumBy.xpath(".//*[@text='Views']")).click(tap()); //perform native event tap
    $(AppiumBy.xpath(".//*[@text='Views']")).click(tapWithOffset(100, -60)) //perform tap with offset from center of the element
-   $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPress()); 
-   
-   //drag and drop
+   $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPress());
+  $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPressFor(ofSeconds(5)));
+
+  //drag and drop
    SelenideElement from = $(By.id("io.appium.android.apis:id/drag_dot_1")).shouldBe(visible);
    SelenideElement to = $(By.id("io.appium.android.apis:id/drag_dot_2")).shouldBe(visible);
    from.dragAndDropTo(to);
