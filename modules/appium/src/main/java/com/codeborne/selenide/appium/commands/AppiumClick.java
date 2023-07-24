@@ -30,6 +30,8 @@ import static java.util.Collections.singletonList;
 @ParametersAreNonnullByDefault
 public class AppiumClick extends Click {
 
+  private static final String FINGER_1 = "finger1";
+
   @Override
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
@@ -83,7 +85,7 @@ public class AppiumClick extends Click {
 
   private void performDoubleTap(Driver driver, WebElement webElement) {
     Point size = webElement.getLocation();
-    PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
+    PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
     Sequence doubleTapSequence = getSequenceToPerformTap(finger, size, 0, 0)
       .addAction(new Pause(finger, ofMillis(40)))
       .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
@@ -94,7 +96,7 @@ public class AppiumClick extends Click {
 
   private void performLongPress(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
     Point size = webElement.getLocation();
-    PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
+    PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
     Sequence doubleTapSequence = new Sequence(finger, 1)
       .addAction(finger.createPointerMove(ofMillis(0),
         PointerInput.Origin.viewport(), size.getX(), size.getY()))
@@ -105,7 +107,7 @@ public class AppiumClick extends Click {
   }
 
   private void performTapWithOffset(Driver driver, WebElement webElement, int offsetX, int offsetY) {
-    PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
+    PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
     Point size = getCenter(webElement);
 
     Sequence tapSequence = getSequenceToPerformTap(finger, size, offsetX, offsetY);
