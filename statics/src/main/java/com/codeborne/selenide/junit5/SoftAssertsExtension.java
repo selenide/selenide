@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
  */
 @ParametersAreNonnullByDefault
 public class SoftAssertsExtension implements BeforeAllCallback, BeforeEachCallback, AfterEachCallback, AfterAllCallback {
-  public static final ExtensionContext.Namespace namespace = create(SoftAssertsExtension.class);
+  private static final ExtensionContext.Namespace namespace = create(SoftAssertsExtension.class);
 
   private final boolean fullStacktraces;
 
