@@ -183,4 +183,9 @@ public class SelenoidClient {
     }
     return connection;
   }
+
+  @Override
+  public String toString() {
+    return "SelenoidClient{" + sessionId + "}";
+  }
 }
