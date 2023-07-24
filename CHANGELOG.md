@@ -1,7 +1,10 @@
 # Changelog
 
-## 6.16.1
-* #2368 added `allOf` and `anyOf` conditions  --  see PR #2368
+## 6.16.1 (released 24.07.2023)
+* #2368 added `allOf` and `anyOf` conditions  --  thanks Evgenii Plugatar for PR #2368
+* #2367 Add conditions to check cookies  --  thanks adorne for PR #2367
+* #2374 bump WebDriverManager from 5.4.0 to 5.4.1 (incl. support for Chrome 115) 
+* #2377 support <tspan> elements in SVG  --  see PR #2379
 
 ## 6.16.0 (released 02.07.2023)
 * #2362 Speed up collection conditions
