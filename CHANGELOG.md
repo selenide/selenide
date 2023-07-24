@@ -5,6 +5,8 @@
 * #2367 Add conditions to check cookies  --  thanks adorne for PR #2367
 * #2374 bump WebDriverManager from 5.4.0 to 5.4.1 (incl. support for Chrome 115) 
 * #2377 support <tspan> elements in SVG  --  see PR #2379
+* #2382 bump junitVersion from 5.9.3 to 5.10.0
+* #2383 bump org.opentest4j:opentest4j from 1.2.0 to 1.3.0
 
 ## 6.16.0 (released 02.07.2023)
 * #2362 Speed up collection conditions
