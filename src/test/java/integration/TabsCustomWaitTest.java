@@ -8,18 +8,22 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.WebDriverConditions.numberOfWindows;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class TabsCustomWaitTest extends ITest {
   @BeforeEach
   void setUp() {
     openFile("page_with_tabs_with_big_delays.html");
+    driver().webdriver().shouldHave(numberOfWindows(1));
   }
 
   @Test
   void waitsUntilTabAppears_withCustomTimeout() {
     setTimeout(1000);
     $("#open-new-tab-with-delay").click();
+    driver().webdriver().shouldHave(numberOfWindows(1));
+
     switchTo().window("Test::alerts", Duration.ofSeconds(3));
     $("h1").shouldHave(text("Page with alerts"));
   }
@@ -27,6 +31,8 @@ final class TabsCustomWaitTest extends ITest {
   @Test
   void waitsUntilTabAppears_withoutCustomTimeout() {
     $("#open-new-tab-with-delay").click();
+    driver().webdriver().shouldHave(numberOfWindows(1));
+
     assertThatThrownBy(() -> switchTo().window(1))
       .isInstanceOf(WindowNotFoundException.class);
   }
@@ -34,6 +40,8 @@ final class TabsCustomWaitTest extends ITest {
   @Test
   void waitsUntilTabAppears_withLowerTimeout() {
     $("#open-new-tab-with-delay").click();
+    driver().webdriver().shouldHave(numberOfWindows(1));
+
     assertThatThrownBy(() -> switchTo().window(1, Duration.ofSeconds(1)))
       .isInstanceOf(WindowNotFoundException.class);
   }
