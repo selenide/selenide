@@ -1,0 +1,14 @@
+Report for nesting steps
++---------------------------------------------------------------------+---------+------------+------------+
+| Element                                                             | Subject | Status     | ms.        |
++---------------------------------------------------------------------+---------+------------+------------+
+| login                                                               |         | PASS       | 1000       |
+|   level 1                                                           | click   | PASS       | 700        |
+|     level 2                                                         | click   | PASS       | 100        |
+|     level 2                                                         | click   | PASS       | 100        |
+|     level 2                                                         | click   | PASS       | 200        |
+|       level 3 with long text field that should not break the report | click   | PASS       | 100        |
+| logout                                                              |         | FAIL       | 200        |
+|   level 1                                                           | click   | PASS       | 100        |
+|   level 1                                                           | click   | FAIL       | 100        |
++---------------------------------------------------------------------+---------+------------+------------+

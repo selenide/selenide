@@ -45,6 +45,11 @@ public class CollectionSnapshot implements CollectionSource {
   }
 
   @Override
+  public String toString() {
+    return getSearchCriteria();
+  }
+
+  @Override
   @CheckReturnValue
   @Nonnull
   public Driver driver() {

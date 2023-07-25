@@ -4,6 +4,7 @@ import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.conditions.And;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -21,9 +22,11 @@ import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.Condition.editable;
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.interactable;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.impl.Alias.NONE;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
@@ -81,11 +84,11 @@ public abstract class WebElementSource {
 
   @CheckReturnValue
   @Nonnull
-  public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
-    if (lastError instanceof UIAssertionError) {
-      throw new IllegalArgumentException("Unexpected UIAssertionError as a cause of ElementNotFound: " + lastError, lastError);
+  public ElementNotFound createElementNotFoundError(Condition condition, Throwable cause) {
+    if (cause instanceof UIAssertionError) {
+      throw new IllegalArgumentException("Unexpected UIAssertionError as a cause of ElementNotFound: " + cause, cause);
     }
-    return new ElementNotFound(driver(), alias, getSearchCriteria(), condition, lastError);
+    return new ElementNotFound(driver(), alias, getSearchCriteria(), condition, cause);
   }
 
   @CheckReturnValue
@@ -156,6 +159,18 @@ public abstract class WebElementSource {
   @CheckReturnValue
   public WebElement findAndAssertElementIsInteractable() {
     return requireNonNull(checkConditionAndReturnElement("be ", interactable, false));
+  }
+
+  /**
+   * Asserts that returned element is enabled and can be interacted with.
+   *
+   * @return element or throws ElementShould/ElementShouldNot exceptions
+   * @since 6.15.0
+   */
+  @Nonnull
+  @CheckReturnValue
+  public WebElement findAndAssertElementIsClickable() {
+    return requireNonNull(checkConditionAndReturnElement("be ", new And("clickable", asList(interactable, enabled)), false));
   }
 
   /**

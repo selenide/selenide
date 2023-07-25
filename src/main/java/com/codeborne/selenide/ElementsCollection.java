@@ -8,7 +8,7 @@ import com.codeborne.selenide.impl.CollectionElement;
 import com.codeborne.selenide.impl.CollectionElementByCondition;
 import com.codeborne.selenide.impl.CollectionSnapshot;
 import com.codeborne.selenide.impl.CollectionSource;
-import com.codeborne.selenide.impl.ElementDescriber;
+import com.codeborne.selenide.impl.ElementCommunicator;
 import com.codeborne.selenide.impl.FilteringCollection;
 import com.codeborne.selenide.impl.HeadOfCollection;
 import com.codeborne.selenide.impl.LastCollectionElement;
@@ -37,18 +37,20 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
-import static java.lang.System.lineSeparator;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
 public class ElementsCollection extends AbstractList<SelenideElement> {
-  private static final ElementDescriber describe = inject(ElementDescriber.class);
+  private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
+
   private final CollectionSource collection;
 
   public ElementsCollection(CollectionSource collection) {
@@ -163,12 +165,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   protected void waitUntil(CollectionCondition condition, Duration timeout) {
     Throwable lastError = null;
-    List<WebElement> actualElements = null;
+    CheckResult lastCheckResult = new CheckResult(REJECT, null);
     Stopwatch stopwatch = new Stopwatch(timeout.toMillis());
     do {
       try {
-        actualElements = collection.getElements();
-        if (condition.test(actualElements)) {
+        lastCheckResult = condition.check(collection);
+        if (lastCheckResult.verdict() == ACCEPT) {
           return;
         }
       }
@@ -195,7 +197,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       throw uiAssertionError;
     }
     else {
-      condition.fail(collection, actualElements, (Exception) lastError, timeout.toMillis());
+      condition.fail(collection, lastCheckResult, (Exception) lastError, timeout.toMillis());
     }
   }
 
@@ -299,11 +301,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Gets all the texts in elements collection
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   * @deprecated Instead of getting attributes, verify them with {@code $$.shouldHave(texts(...));}.
    */
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   public List<String> texts() {
-    return texts(getElements());
+    return communicator.texts(driver(), getElements());
   }
 
   /**
@@ -311,13 +315,16 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    *
    * @param elements Any collection of WebElements
    * @return Texts (or exceptions in case of any WebDriverExceptions)
+   * @deprecated Use method {@link ElementsCollection#texts()} instead (or even better, don't use it at all)
    */
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   public static List<String> texts(@Nullable Collection<WebElement> elements) {
     return elements == null ? emptyList() : elements.stream().map(ElementsCollection::getText).collect(toList());
   }
 
+  @Deprecated
   private static String getText(WebElement element) {
     try {
       return element.getText();
@@ -331,11 +338,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Gets all the specific attribute values in elements collection
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   * @deprecated Instead of getting attributes, verify them with {@code $$.shouldHave(attributes(...));}.
    */
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   public List<String> attributes(String attribute) {
-    return attributes(attribute, getElements());
+    return communicator.attributes(driver(), getElements(), attribute);
   }
 
   /**
@@ -343,13 +352,16 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    *
    * @param elements Any collection of WebElements
    * @return Texts (or exceptions in case of any WebDriverExceptions)
+   * @deprecated Instead of getting attributes, verify them with {@code $$.shouldHave(attributes(...));}.
    */
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   public static List<String> attributes(String attribute, Collection<WebElement> elements) {
     return elements.stream().map(e -> getAttribute(e, attribute)).collect(toList());
   }
 
+  @Deprecated
   private static String getAttribute(WebElement element, String attribute) {
     try {
       return element.getAttribute(attribute);
@@ -357,36 +369,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     catch (WebDriverException elementDisappeared) {
       return elementDisappeared.toString();
     }
-  }
-
-  /**
-   * Outputs string presentation of the element's collection
-   *
-   * @param elements elements of string
-   * @return e.g. {@code "[<h1>foo</h1>, <h2>bar</h2>]"}
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static String elementsToString(Driver driver, @Nullable Collection<WebElement> elements) {
-    if (elements == null) {
-      return "[not loaded yet...]";
-    }
-
-    if (elements.isEmpty()) {
-      return "[]";
-    }
-
-    StringBuilder sb = new StringBuilder(256);
-    sb.append("[").append(lineSeparator()).append("\t");
-    for (WebElement element : elements) {
-      if (sb.length() > 4) {
-        sb.append(",").append(lineSeparator()).append("\t");
-      }
-      sb.append(describe.fully(driver, element));
-    }
-    sb.append(lineSeparator()).append("]");
-    return sb.toString();
   }
 
   /**
@@ -554,6 +536,34 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return new SelenideElementListIterator(new CollectionSnapshot(collection), index);
   }
 
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  @Deprecated
+  public ListIterator<SelenideElement> listIterator() {
+    return listIterator(0);
+  }
+
+  @Override
+  @Deprecated
+  protected void removeRange(int fromIndex, int toIndex) {
+    throw new UnsupportedOperationException("You cannot remove elements from web page");
+  }
+
+  @Override
+  @Deprecated
+  public void clear() {
+    throw new UnsupportedOperationException("You cannot remove elements from web page");
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  @Deprecated
+  public List<SelenideElement> subList(int fromIndex, int toIndex) {
+    return super.subList(fromIndex, toIndex);
+  }
+
   /**
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * @deprecated use method {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
@@ -636,12 +646,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @Override
   @CheckReturnValue
   public String toString() {
-    try {
-      return String.format("%s %s", collection.shortDescription(), elementsToString(driver(), getElements()));
-    }
-    catch (RuntimeException e) {
-      return String.format("%s [%s]", collection.description(), Cleanup.of.webdriverExceptionMessage(e));
-    }
+    return collection.getAlias().getOrElse(collection::toString);
   }
 
   @CheckReturnValue

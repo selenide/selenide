@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
+import static com.codeborne.selenide.Mocks.mockWebElement;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -19,15 +20,11 @@ final class CollectionElementTest {
 
   @Test
   void wrap() {
-    WebElement mockedWebElement = mock();
-    when(mockedWebElement.getTagName()).thenReturn("a");
-    when(mockedWebElement.isDisplayed()).thenReturn(true);
-    when(mockedWebElement.getText()).thenReturn("selenide");
-
+    WebElement mockedWebElement = mockWebElement("a", "hello");
     CollectionSource collection = new WebElementsCollectionWrapper(driver, singletonList(mockedWebElement));
     SelenideElement selenideElement = CollectionElement.wrap(collection, 0);
     assertThat(selenideElement)
-      .hasToString("<a>selenide</a>");
+      .hasToString("$$(1 elements)[0]");
   }
 
   @Test

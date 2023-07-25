@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
@@ -17,6 +18,7 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 @ParametersAreNonnullByDefault
 class FileRenderHandler extends BaseHandler {
   private static final Logger log = LoggerFactory.getLogger(FileRenderHandler.class);
+  private final AtomicLong sessionIdCounter = new AtomicLong();
   private final Set<String> sessions;
 
   FileRenderHandler(Set<String> sessions) {
@@ -57,7 +59,7 @@ class FileRenderHandler extends BaseHandler {
   }
 
   private void generateSessionId(HttpServletRequest request, HttpServletResponse response) {
-    String sessionId = String.valueOf(System.currentTimeMillis());
+    String sessionId = String.format("%s.%s", System.currentTimeMillis(), sessionIdCounter.getAndIncrement());
     Cookie cookie = new Cookie("session_id", sessionId);
     cookie.setMaxAge(-1);
     cookie.setPath("/");

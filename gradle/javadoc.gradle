@@ -3,8 +3,12 @@ tasks.register('javadocForSite', Javadoc) {
   destinationDir = file("${project.buildDir}/javadoc-for-site")
   classpath = project(":modules:core").sourceSets.main.compileClasspath
   classpath += project(":statics").sourceSets.main.compileClasspath
-  classpath += project(":modules:proxy").sourceSets.main.compileClasspath
+  classpath += project(":modules:appium").sourceSets.main.compileClasspath
+  classpath += project(":modules:clear-with-shortcut").sourceSets.main.compileClasspath
+  classpath += project(":modules:full-screenshot").sourceSets.main.compileClasspath
   classpath += project(":modules:grid").sourceSets.main.compileClasspath
   classpath += project(":modules:junit4").sourceSets.main.compileClasspath
+  classpath += project(":modules:proxy").sourceSets.main.compileClasspath
+  classpath += project(":modules:selenoid").sourceSets.main.compileClasspath
   classpath += project(":modules:testng").sourceSets.main.compileClasspath
 }

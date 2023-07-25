@@ -12,9 +12,9 @@ import static java.lang.System.lineSeparator;
 public class ElementWithTextNotFound extends UIAssertionError {
 
   public ElementWithTextNotFound(CollectionSource collection,
-                                 List<String> expectedTexts, List<String> actualTexts,
+                                 List<String> expectedTexts, @Nullable List<String> actualTexts,
                                  @Nullable String explanation,
-                                 long timeoutMs, @Nullable Throwable lastError) {
+                                 long timeoutMs, @Nullable Throwable cause) {
     super(
       collection.driver(),
       "Element with text not found" +
@@ -24,7 +24,7 @@ public class ElementWithTextNotFound extends UIAssertionError {
         lineSeparator() + "Collection: " + collection.description(),
       expectedTexts,
       actualTexts,
-      lastError,
+      cause,
       timeoutMs);
   }
 }

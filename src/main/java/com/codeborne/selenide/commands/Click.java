@@ -23,7 +23,7 @@ public class Click implements Command<SelenideElement> {
   private final JavaScript jsSource = new JavaScript("click.js");
 
   @Override
-  @Nullable
+  @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     WebElement webElement = findElement(locator);
 
@@ -43,7 +43,7 @@ public class Click implements Command<SelenideElement> {
   @Nonnull
   @CheckReturnValue
   protected WebElement findElement(WebElementSource locator) {
-    return locator.findAndAssertElementIsInteractable();
+    return locator.findAndAssertElementIsClickable();
   }
 
   protected void click(Driver driver, WebElement element) {
@@ -51,7 +51,7 @@ public class Click implements Command<SelenideElement> {
       clickViaJS(driver, element, 0, 0);
     }
     else {
-      defaultClick(element);
+      defaultClick(driver, element);
     }
   }
 
@@ -93,7 +93,7 @@ public class Click implements Command<SelenideElement> {
     }
   }
 
-  protected void defaultClick(WebElement element) {
+  protected void defaultClick(Driver driver, WebElement element) {
     element.click();
   }
 

@@ -58,7 +58,7 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
 
     if (isNotEmpty(config.browserBinary())) {
       log.info("Using browser binary: {}", config.browserBinary());
-      log.warn("Changing browser binary not supported in Edge, setting will be ignored.");
+      options.setBinary(config.browserBinary());
     }
 
     options.addArguments(createEdgeArguments(config));

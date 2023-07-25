@@ -35,7 +35,7 @@ public class SelenideElementListIterator extends SelenideElementIterator impleme
   @Override
   @CheckReturnValue
   public int nextIndex() {
-    return index + 1;
+    return index;
   }
 
   @Override

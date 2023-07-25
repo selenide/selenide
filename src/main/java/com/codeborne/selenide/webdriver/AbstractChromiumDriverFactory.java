@@ -38,7 +38,6 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     List<String> arguments = new ArrayList<>();
     arguments.add("--proxy-bypass-list=<-loopback>");
     arguments.add("--disable-dev-shm-usage");
-    arguments.add("--no-sandbox");
     arguments.addAll(parseArguments(externalArguments));
     arguments.addAll(createHeadlessArguments(config));
     if (config.browserSize() != null && BrowserResizer.isValidDimension(config.browserSize())) {

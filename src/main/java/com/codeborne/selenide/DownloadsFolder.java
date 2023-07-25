@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 
 import javax.annotation.CheckReturnValue;
@@ -10,67 +11,40 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 import static java.util.Locale.ROOT;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 
 @ParametersAreNonnullByDefault
-public abstract class DownloadsFolder {
-  protected final File folder;
-
-  protected DownloadsFolder(File folder) {
-    this.folder = folder.getAbsoluteFile();
-  }
+public interface DownloadsFolder {
+  @CheckReturnValue
+  @Nonnull
+  List<File> files();
 
   @CheckReturnValue
   @Nonnull
-  public File toFile() {
-    return folder;
-  }
+  List<DownloadedFile> filesNewerThan(long modifiedAfterTs);
 
-  @CheckReturnValue
-  @Nonnull
-  public List<File> files() {
-    File[] files = folder.listFiles();
-    return files == null ? emptyList() : asList(files);
-  }
+  void cleanupBeforeDownload();
 
-  public abstract void cleanupBeforeDownload();
+  void deleteIfEmpty();
 
-  public abstract void deleteIfEmpty();
-
-  @CheckReturnValue
-  @Nonnull
-  public File file(String fileName) {
-    return new File(folder, fileName).getAbsoluteFile();
-  }
-
-  public boolean hasFiles(Set<String> extensions, FileFilter excludingFilter) {
+  default boolean hasFiles(Set<String> extensions, FileFilter excludingFilter) {
     return files().stream()
       .anyMatch(file -> extensions.contains(getExtension(file.getName()).toLowerCase(ROOT)) && excludingFilter.notMatch(file));
   }
 
-  public Map<String, Long> modificationTimes() {
-    File[] files = folder.listFiles();
-    return files == null ? emptyMap() : Stream.of(files).collect(toMap(f -> f.getName(), f -> f.lastModified()));
+  default Map<String, Long> modificationTimes() {
+    return files().stream().collect(toMap(f -> f.getName(), f -> f.lastModified()));
   }
 
-  public Optional<Long> lastModificationTime() {
+  default Optional<Long> lastModificationTime() {
     return modificationTimes().values().stream().max(Long::compare);
   }
 
-  @Override
-  public String toString() {
-    return folder.getPath();
-  }
-
-  public String filesAsString() {
+  default String filesAsString() {
     return '[' + files().stream().map(f -> f.getName()).collect(joining(", ")) + ']';
   }
 }

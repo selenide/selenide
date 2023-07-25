@@ -58,6 +58,11 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     }
 
     @Override
+    public String toString() {
+      return selectElement + " selected options";
+    }
+
+    @Override
     @CheckReturnValue
     @Nonnull
     public Driver driver() {

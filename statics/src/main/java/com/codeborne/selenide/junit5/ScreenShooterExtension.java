@@ -3,7 +3,7 @@ package com.codeborne.selenide.junit5;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.UIAssertionError;
-import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
@@ -64,7 +64,7 @@ import java.util.Optional;
  * @since 4.12.2
  */
 @ParametersAreNonnullByDefault
-public class ScreenShooterExtension implements BeforeEachCallback, AfterEachCallback {
+public class ScreenShooterExtension implements BeforeEachCallback, AfterTestExecutionCallback {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooterExtension.class);
 
   private final boolean captureSuccessfulTests;
@@ -104,7 +104,7 @@ public class ScreenShooterExtension implements BeforeEachCallback, AfterEachCall
   }
 
   @Override
-  public void afterEach(final ExtensionContext context) {
+  public void afterTestExecution(final ExtensionContext context) {
     if (captureSuccessfulTests) {
       log.info(Screenshots.saveScreenshotAndPageSource());
     } else {

@@ -1,7 +1,80 @@
 # Changelog
 
-## 6.13.0 (planned to 1x.04.2023)
-* #2220 add condition $.shouldHave(innerText()) --  see PR #2223
+## 6.16.1 (released 24.07.2023)
+* #2368 added `allOf` and `anyOf` conditions  --  thanks Evgenii Plugatar for PR #2368
+* #2367 Add conditions to check cookies  --  thanks adorne for PR #2367
+* #2374 bump WebDriverManager from 5.4.0 to 5.4.1 (incl. support for Chrome 115) 
+* #2377 support <tspan> elements in SVG  --  see PR #2379
+* #2382 bump junitVersion from 5.9.3 to 5.10.0
+* #2383 bump org.opentest4j:opentest4j from 1.2.0 to 1.3.0
+
+## 6.16.0 (released 02.07.2023)
+* #2362 Speed up collection conditions
+* #2268 Add conditions `date(...)` and `datetime(...)` to check date values  --  thanks to Maksim @Au6ojlut for PR #2281
+* #2357 add methods `$.setValue(withDateTime)` and `$.setValue(withTime)`
+* #2350 show full stack trace in soft asserts  --  see PR #2354
+* #2336 pass BasicAuth in Chromium-based browser using `HasAuthentication` mechanism  --  see PR #2358
+* #2336 user can set multiple domains for BasicAuth
+* #2346 fix `$.doubleClick()` in Appium  --  see PR #2347
+* #2352 take screenshot even if webdriver has been closed in `@AfterEach` method  --  see PR #2356
+* #2318 use latest version of geckodriver for FF 102+  --  see PR #2319
+* #2328 bump Selenium from 4.9.1 to 4.10.0
+* #2324 Bump io.appium:java-client from 8.5.0 to 8.5.1
+* #2349 Bump Netty from 4.1.93.Final to 4.1.94.Final
+* bump WebDriverManager from 5.3.3 to 5.4.0
+
+## 6.15.0 (released 29.05.2023)
+* #2291 Project "selenide-appium" was merged into project "selenide".
+* #2292 Project "selenide-selenoid" was merged into project "selenide".
+* #2288 Clicking a disabled element now fails --  thanks to Maksim @Au6ojlut for PR #2290
+* #2283 Escape special characters in subject in text report  --  thanks to Maksim @Au6ojlut for PR #2284
+* #2300 Add few collection conditions for mobile apps  --  thanks to Amuthan Sakthivel for https://github.com/selenide/selenide-appium/pull/135, also see PR #2315
+* Add methods for switching between mobile contexts  --  see PR #2308, thanks to Amuthan Sakthivel for https://github.com/selenide/selenide-appium/pull/149
+* #2312 #2307 refactor CollectionCondition: replace method `test(elements)` by `check(driver, elements)` or `check(CollectionSource collection)`.
+* #2305 Added cause to collection errors
+* #2287 Bump commons-io:commons-io from 2.11.0 to 2.12.0
+* #2309 Bump nettyVersion from 4.1.92.Final to 4.1.93.Final
+
+Full list: https://github.com/selenide/selenide/milestone/184?closed=1
+
+## 6.14.1 (released 12.05.2023)
+* make new method `$.dragAndDrop()` usable by `selenide-appium`
+* make `$.download(FOLDER)` usable by `selenide-selenoid`
+* bump webdrivermanager from 5.3.2 to 5.3.3  --  see https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md#533---2023-05-11
+* bump BrowserUpProxy from 2.2.9 to 2.2.10  --  see https://github.com/valfirst/browserup-proxy/blob/master/CHANGELOG.md
+
+## 6.14.0 (released 08.05.2023)
+* #2253 make method $.toString() fast  --  see PR #2269
+* #2270 don't add `--no-sandbox` automatically  --  see PR #2271
+* #2172 Introduce `step` method to be able to group multiple actions  --  thanks to Maksim @Au6ojlut for PR #2250
+* #2245 Add method $.dragAndDrop(DragAndDropOptions)  --  thanks to Maksim @Au6ojlut
+* #2258 allow setting negative browser position  --  see PR #2259
+* #2267 setBinary is supported by Edge  --  thanks to Vladislav Velichko
+* add missing method $.val(options)
+* #2277 Bump selenium from 4.9.0 to 4.9.1  --  see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* #2263 Bump nettyVersion from 4.1.91.Final to 4.1.92.Final
+
+Full list: https://github.com/selenide/selenide/milestone/181?closed=1
+
+## 6.13.1 (released 21.04.2023)
+* #2257 bump Selenium from 4.8.3 to 4.9.0  --  see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* mark $$.subList() as deprecated (see #2239)
+
+## 6.13.0 (released 04.04.2023)
+* #2171 #1927 added method $.cached()  --  see PR #2189
+* #2227 added method to mock http response with any status  --  see PR #2234
+* #2213 add method `inNewBrowser` for running a code block in new one-time browser instance  --  see PR #2236
+* #2133 add method `$.doubleClick(options)`  --  thanks to @aakachurin for PR #2135
+* #2220 added condition `$.shouldHave(innerText())` --  see PR #2223
+* #2091 added method `$$.shouldHave(attributes(...))`  --  thanks to Alexey Lakovych for PR #2091, also see PR #2230
+* #2231 throw clear error when `$.select*()` is applied for non-select  --  see PR #2233
+* #2239 fixed method `$$.subList(0, 3)`  --  see PR #2240
+* bump Selenium from 4.8.1 to 4.8.3  --  see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* bump LittleProxy from 2.0.16 to 2.0.17
+* #2232 bump BrowserUpProxy from 2.2.8 to 2.2.9
+* #2243 Bump nettyVersion from 4.1.90.Final to 4.1.91.Final
+
+Full list: https://github.com/selenide/selenide/milestone/177?closed=1
 
 ## 6.12.4 (released 22.03.2023)
 * #2215 support jdk-http-client instead of NettyClient --  see PR #2216
@@ -10,23 +83,26 @@
 * #2210 Bump nettyVersion from 4.1.89.Final to 4.1.90.Final
 * #2218 Bump slf4jVersion from 2.0.6 to 2.0.7
 
+Full list: https://github.com/selenide/selenide/milestone/180?closed=1
+
 ## 6.12.3 (released 14.03.2023)
 * #2202 fix method $.download(FOLDER) after using `using` --  see PR #2203
 
 ## 6.12.2 (released 09.03.2023)
-see https://github.com/selenide/selenide/milestone/178?closed=1
 * #2192 added workaround for Chromedriver 111 issue ("Invalid Status code=403 text=Forbidden")  --  see PR #2194
 
+Full list: https://github.com/selenide/selenide/milestone/178?closed=1
+
 ## 6.12.1 (released 07.03.2023)
-see https://github.com/selenide/selenide/milestone/176?closed=1
 * #2174 Fixed a bug where selenide.holdBrowserOpen were not read correctly  --  thanks to @doranko for PR
 * #2178 improve how "$.getSelectedOption().should*" looks in reports  --  see PR #2179
 * #2186 Use custom driver in the using block  --  see PR #2188
 * #2173 bump BrowserUpProxy from 2.2.7 to 2.2.8
 * #2176 bump LittleProxy from 2.0.15 to 2.0.16
 
+Full list: https://github.com/selenide/selenide/milestone/176?closed=1
+
 ## 6.12.0 (released 24.02.2023)
-see https://github.com/selenide/selenide/milestone/173?closed=1
 * #2104 use new headless mode  --  thanks Boris Osipov for PR #2105 and #2169
 * #2167 improve logs when download a file
 * #2167 ignore Edge temporary files on Windows
@@ -34,20 +110,22 @@ see https://github.com/selenide/selenide/milestone/173?closed=1
 * Bump nettyVersion from 4.1.87.Final to 4.1.89.Final
 * rename "master" branch to "main" (finally!)
 
+Full list: https://github.com/selenide/selenide/milestone/173?closed=1
+
 ## 6.11.2 (released 24.01.2023)
 * #2136 bump Selenide from 4.7.2 to 4.8.0
 * #2137 once again, truncate only messages of WebDriverException :)
 
 ## 6.11.1 (released 20.01.2023)
-see https://github.com/selenide/selenide/milestone/174?closed=1
 * #2131 truncate only WebDriverException message
 * #2116 fix $.download(FOLDER): support case when file modification time is in previous second
 * #2119 fix $.download(FOLDER): support the case when file modification time is 0
 * bump webdrivermanager from 5.3.1 to 5.3.2
 * #2126 bump netty from 4.1.86.Final to 4.1.87.Final
 
+Full list: https://github.com/selenide/selenide/milestone/174?closed=1
+
 ## 6.11.0 (released 03.01.2023)
-see https://github.com/selenide/selenide/milestone/169?closed=1
 * #1817 add methods to copy and paste content  --  thanks to Evgenii Plugatar for PR #2027
 * #2054 can fail the test if unexpected alert encountered  --  see PR #2095
 * #2082 allow downloading of large files via proxy  --  see PR #2098
@@ -57,6 +135,8 @@ see https://github.com/selenide/selenide/milestone/169?closed=1
 * #980 added possibility to add page URL to error message  --  see PR #2097
 * #2037 fixed method `Selenide.download()` to work with URL protected by BasicAuth  --  see PR #2102
 * #2101 Bump browserup-proxy-core from 2.2.6 to 2.2.7
+
+Full list: https://github.com/selenide/selenide/milestone/169?closed=1
 
 ## 6.10.3 (released 14.12.2022)
 * #2062 don't trigger "change" event from `$.select*` if value is unchanged  --  thanks to Vicente Rossello Jaume for PR #2063
@@ -81,7 +161,6 @@ see https://github.com/selenide/selenide/milestone/169?closed=1
 * #2028 Bump archunit-junit5 from 1.0.0 to 1.0.1
 
 ## 6.10.0 (released 21.11.2022)
-see https://github.com/selenide/selenide/milestone/167?closed=1
 * #1989 support very slow downloading in Firefox  --  see PR #2003
 * #1990 fail download process faster than timeout if no any bytes received  --  see #2023
 * #1553 select options using JavaScript  -- see PR #1876;  thanks to Oleg Berezhnoy for PR #1553 (in the end, it affected Selenium)
@@ -98,6 +177,8 @@ see https://github.com/selenide/selenide/milestone/167?closed=1
 * bump LittleProxy from 2.0.13 to 2.0.14
 * #2014 Bump httpclient5 from 5.1.3 to 5.2
 * #2025 bump slf4j from 2.0.3 to 2.0.4
+
+Full list: https://github.com/selenide/selenide/milestone/167?closed=1
 
 ## 6.9.0 (released 07.10.2022)
 * #1254 add methods to mock any server response in Selenide proxy  --  see PR #1978
@@ -634,7 +715,7 @@ Features & bugfixes:
 * #1119 disable annoying popup about extensions in Chrome  --  see PR #1120
 * make selectorMode and assertionMode configurable via system properties  --  see commit 231597eb6229e
 
-See https://github.com/selenide/selenide/milestone/94?closed=1
+Full list: https://github.com/selenide/selenide/milestone/94?closed=1
 
 ## 5.10.0 (released 18.03.2020)
 * #1014 Add support for Shadow DOM  --  thanks to Dmytro Stekanov for #1090

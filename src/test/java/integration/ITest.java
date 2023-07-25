@@ -24,7 +24,7 @@ public abstract class ITest extends BaseIntegrationTest {
     config.get().timeout(1);
   }
 
-  protected void setTimeout(long timeoutMs) {
+  protected final void setTimeout(long timeoutMs) {
     config.get().timeout(timeoutMs);
   }
 
@@ -48,47 +48,47 @@ public abstract class ITest extends BaseIntegrationTest {
     }
   }
 
-  protected SelenideDriver driver() {
+  protected final SelenideDriver driver() {
     return driver.get();
   }
 
-  protected SelenideElement $(String locator) {
+  protected final SelenideElement $(String locator) {
     return driver().$(locator);
   }
 
-  protected SelenideElement $(String locator, int index) {
+  protected final SelenideElement $(String locator, int index) {
     return driver().$(locator, index);
   }
 
-  protected SelenideElement $(By locator) {
+  protected final SelenideElement $(By locator) {
     return driver().$(locator);
   }
 
-  protected SelenideElement $(By locator, int index) {
+  protected final SelenideElement $(By locator, int index) {
     return driver().$(locator, index);
   }
 
-  protected SelenideElement $x(String locator) {
+  protected final SelenideElement $x(String locator) {
     return driver().$x(locator);
   }
 
-  protected ElementsCollection $$(String locator) {
+  protected final ElementsCollection $$(String locator) {
     return driver().$$(locator);
   }
 
-  protected ElementsCollection $$(By locator) {
+  protected final ElementsCollection $$(By locator) {
     return driver().$$(locator);
   }
 
-  protected ElementsCollection $$x(String locator) {
+  protected final ElementsCollection $$x(String locator) {
     return driver().$$x(locator);
   }
 
-  protected SelenideTargetLocator switchTo() {
+  protected final SelenideTargetLocator switchTo() {
     return driver().switchTo();
   }
 
-  protected void openFile(String fileName) {
+  protected final void openFile(String fileName) {
     if (driver().hasWebDriverStarted()) {
       driver().open("about:blank");
     }

@@ -1,24 +1,31 @@
 package com.codeborne.selenide.collections;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
-import com.codeborne.selenide.ex.TextsSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
+import com.codeborne.selenide.impl.ElementCommunicator;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
 @ParametersAreNonnullByDefault
 public class ExactTexts extends CollectionCondition {
+  private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
+
   protected final List<String> expectedTexts;
 
   public ExactTexts(String... expectedTexts) {
@@ -32,36 +39,51 @@ public class ExactTexts extends CollectionCondition {
     this.expectedTexts = unmodifiableList(expectedTexts);
   }
 
-  @CheckReturnValue
+  @Nonnull
   @Override
-  public boolean test(List<WebElement> elements) {
+  public CheckResult check(Driver driver, List<WebElement> elements) {
     if (elements.size() != expectedTexts.size()) {
-      return false;
+      return new CheckResult(REJECT, elements.size());
     }
 
+    List<String> actualTexts = communicator.texts(driver, elements);
     for (int i = 0; i < expectedTexts.size(); i++) {
-      WebElement element = elements.get(i);
       String expectedText = expectedTexts.get(i);
-      if (!Html.text.equals(element.getText(), expectedText)) {
-        return false;
+      String actualText = actualTexts.get(i);
+      if (!check(actualText, expectedText)) {
+        String message = String.format("Text #%s mismatch (expected: \"%s\", actual: \"%s\")", i, expectedText, actualText);
+        return CheckResult.rejected(message, actualTexts);
       }
     }
-    return true;
+    return CheckResult.accepted();
+  }
+
+  @CheckReturnValue
+  protected boolean check(String actualText, String expectedText) {
+    return Html.text.equals(actualText, expectedText);
   }
 
   @Override
   public void fail(CollectionSource collection,
-                   @Nullable List<WebElement> elements,
-                   @Nullable Exception lastError,
+                   CheckResult lastCheckResult,
+                   @Nullable Exception cause,
                    long timeoutMs) {
-    if (elements == null || elements.isEmpty()) {
-      throw new ElementNotFound(collection, toString(), timeoutMs, lastError);
+    if (lastCheckResult.actualValue() instanceof Integer actualSize) {
+      if (actualSize == 0) {
+        throw new ElementNotFound(collection, toString(), timeoutMs, cause);
+      }
+      else {
+        throw new ListSizeMismatch("=", expectedTexts.size(), actualSize, explanation, collection, cause, timeoutMs);
+      }
     }
-    else if (elements.size() != expectedTexts.size()) {
-      throw new TextsSizeMismatch(collection, expectedTexts, ElementsCollection.texts(elements), explanation, timeoutMs);
+
+    List<String> actualTexts = lastCheckResult.getActualValue();
+    if (actualTexts == null || actualTexts.isEmpty()) {
+      throw new ElementNotFound(collection, toString(), timeoutMs, cause);
     }
     else {
-      throw new TextsMismatch(collection, expectedTexts, ElementsCollection.texts(elements), explanation, timeoutMs);
+      String message = lastCheckResult.getMessageOrElse(() -> "Texts mismatch");
+      throw new TextsMismatch(message, collection, expectedTexts, actualTexts, explanation, timeoutMs, cause);
     }
   }
 

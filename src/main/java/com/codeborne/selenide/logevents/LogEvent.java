@@ -16,5 +16,7 @@ public interface LogEvent {
   String getSubject();
   EventStatus getStatus();
   long getDuration();
+  long getStartTime();
+  long getEndTime();
   Throwable getError();
 }

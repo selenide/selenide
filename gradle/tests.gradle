@@ -1,6 +1,7 @@
 subprojects {
   tasks.withType(Test).configureEach {
     include 'com/codeborne/selenide/**/*'
+    include 'org/selenide/**/*'
   }
 
   tasks.register("ie", Test) {
@@ -10,6 +11,7 @@ subprojects {
     exclude '**/AlertText.*'
     exclude '**/ConfirmTest.*'
     exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
     outputs.upToDateWhen {false}
   }
 
@@ -17,6 +19,7 @@ subprojects {
     systemProperties['selenide.browser'] = 'edge'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
     outputs.upToDateWhen {false}
   }
 
@@ -25,6 +28,16 @@ subprojects {
     systemProperties['selenide.headless'] = 'true'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
+    outputs.upToDateWhen {false}
+  }
+
+  tasks.register("edge_headless_smoke", Test) {
+    systemProperties['selenide.browser'] = 'edge'
+    systemProperties['selenide.headless'] = 'true'
+    include 'integration/**/*Download*'
+    exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
     outputs.upToDateWhen {false}
   }
 
@@ -32,6 +45,7 @@ subprojects {
     systemProperties['selenide.browser'] = 'chrome'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
     outputs.upToDateWhen {false}
   }
 
@@ -40,6 +54,7 @@ subprojects {
     systemProperties['selenide.headless'] = 'true'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
     outputs.upToDateWhen {false}
   }
 
@@ -48,6 +63,7 @@ subprojects {
     systemProperties['selenide.browser'] = 'chrome'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
     outputs.upToDateWhen {false}
   }
 
@@ -55,6 +71,7 @@ subprojects {
     systemProperties['selenide.browser'] = 'firefox'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
     outputs.upToDateWhen {false}
   }
 
@@ -63,6 +80,7 @@ subprojects {
     systemProperties['selenide.headless'] = 'true'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
     outputs.upToDateWhen {false}
   }
 
@@ -70,6 +88,7 @@ subprojects {
     systemProperties['selenide.browser'] = 'safari'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
     maxParallelForks = 1
     outputs.upToDateWhen {false}
   }
@@ -79,6 +98,7 @@ subprojects {
     systemProperties['selenide.browser'] = 'firefox'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
     outputs.upToDateWhen {false}
   }
 

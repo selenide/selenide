@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.util.UUID.randomUUID;
+import static org.mockito.Mockito.mock;
 
 /**
  * A dummy `Driver` implementation used in tests.
@@ -22,7 +23,8 @@ public class DriverStub implements Driver {
   private final Browser browser;
   private final WebDriver webDriver;
   private final SelenideProxyServer proxy;
-  private final DownloadsFolder browserDownloadsFolder;
+  private final BrowserDownloadsFolder browserDownloadsFolder;
+  private final Actions actionsMock = mock();
 
   public DriverStub() {
     this("netscape navigator");
@@ -48,7 +50,7 @@ public class DriverStub implements Driver {
     this(config, new Browser(browser, false), new DummyWebDriver(), null, new SharedDownloadsFolder("build/downloads/" + randomUUID()));
   }
 
-  public DriverStub(String browser, DownloadsFolder downloadsFolder) {
+  public DriverStub(String browser, BrowserDownloadsFolder downloadsFolder) {
     this(new SelenideConfig(), new Browser(browser, false), new DummyWebDriver(), null, downloadsFolder);
   }
 
@@ -65,7 +67,7 @@ public class DriverStub implements Driver {
   public DriverStub(Config config, Browser browser,
                     WebDriver webDriver,
                     @Nullable SelenideProxyServer proxy,
-                    DownloadsFolder downloadsFolder) {
+                    BrowserDownloadsFolder downloadsFolder) {
     this.config = config;
     this.browser = browser;
     this.webDriver = webDriver;
@@ -115,7 +117,7 @@ public class DriverStub implements Driver {
   @Override
   @CheckReturnValue
   @Nullable
-  public DownloadsFolder browserDownloadsFolder() {
+  public BrowserDownloadsFolder browserDownloadsFolder() {
     return browserDownloadsFolder;
   }
 
@@ -167,6 +169,6 @@ public class DriverStub implements Driver {
   @CheckReturnValue
   @Nonnull
   public Actions actions() {
-    return new Actions(getWebDriver());
+    return actionsMock;
   }
 }

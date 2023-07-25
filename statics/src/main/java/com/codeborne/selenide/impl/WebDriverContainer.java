@@ -24,7 +24,7 @@ public interface WebDriverContainer {
 
   /**
    * @deprecated This method is intended only for private usage.
-   * Use method {@link #using(WebDriver, SelenideProxyServer, Runnable)} instead.
+   * Use method {@link #using(WebDriver, SelenideProxyServer, DownloadsFolder, Runnable)} instead.
    */
   @Deprecated
   void resetWebDriver();
@@ -51,7 +51,8 @@ public interface WebDriverContainer {
   void closeWebDriver();
   boolean hasWebDriverStarted();
 
-  void using(WebDriver driver, @Nullable SelenideProxyServer proxy, Runnable lambda);
+  void using(WebDriver driver, @Nullable SelenideProxyServer proxy, @Nullable DownloadsFolder downloadsFolder, Runnable lambda);
+  void inNewBrowser(Runnable lambda);
 
   void clearBrowserCache();
 

@@ -40,6 +40,11 @@ public class LazyCollectionSnapshot implements CollectionSource {
     return delegate.getSearchCriteria();
   }
 
+  @Override
+  public String toString() {
+    return delegate.toString();
+  }
+
   @Nonnull
   @Override
   public Driver driver() {

@@ -35,7 +35,7 @@ public class Html {
     return reduceSpaces(text).equals(reduceSpaces(subtext));
   }
 
-  String reduceSpaces(String text) {
+  public String reduceSpaces(String text) {
     return REGEX_SPACES.matcher(text).replaceAll(" ").trim();
   }
 }

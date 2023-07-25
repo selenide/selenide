@@ -8,8 +8,7 @@
 [![Join the chat at https://gitter.im/codeborne/selenide](https://img.shields.io/badge/welcome%20to-chat-green.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Присоединяйся к чату https://gitter.im/codeborne/selenide-ru](https://img.shields.io/badge/%D0%B7%D0%B0%D1%85%D0%BE%D0%B4%D0%B8%20%D0%B2-%D1%87%D0%B0%D1%82-green.svg)](https://gitter.im/codeborne/selenide-ru?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Follow](https://img.shields.io/twitter/follow/selenide.svg?style=social&label=Follow)](https://twitter.com/selenide)
-[![Slack chat](https://img.shields.io/badge/slack-chat-yellow.svg)](https://testers.io/messages/selenide)
-[![Слак чат](https://img.shields.io/badge/слак-чат-yellow.svg)](https://softwaretesters.slack.com/messages/selenide_ru)
+[![Telegram channel](https://img.shields.io/badge/Telegram-channel-blue.svg)](https://t.me/selenide)
 [![Telegram чат](https://img.shields.io/badge/Telegram-%D1%87%D0%B0%D1%82-blue.svg)](https://t.me/selenide_ru)
 
 ## What is Selenide?
@@ -32,10 +31,10 @@ public void login() {
 Look for [detailed comparison of Selenide and Selenium WebDriver API](https://github.com/selenide/selenide/wiki/Selenide-vs-Selenium).
 
 #### Selenide for mobile apps
-You can use Selenide for testing mobile applications. See plugin [selenide-appium](https://github.com/selenide/selenide-appium).
+You can use Selenide for testing mobile applications. See plugin [selenide-appium](https://github.com/selenide/selenide/tree/main/modules/appium).
 
 #### Selenide with Selenoid
-You can use Selenide for running tests in Selenoid containers. See plugin [selenide-selenoid](https://github.com/selenide/selenide-selenoid).
+You can use Selenide for running tests in Selenoid containers. See plugin [selenide-selenoid](https://github.com/selenide/selenide/tree/main/modules/selenoid).
 
 
 ## Changelog

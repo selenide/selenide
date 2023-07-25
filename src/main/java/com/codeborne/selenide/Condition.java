@@ -5,9 +5,6 @@ import com.codeborne.selenide.conditions.Attribute;
 import com.codeborne.selenide.conditions.AttributeWithValue;
 import com.codeborne.selenide.conditions.CaseSensitiveText;
 import com.codeborne.selenide.conditions.Checked;
-import com.codeborne.selenide.conditions.InnerText;
-import com.codeborne.selenide.conditions.PartialText;
-import com.codeborne.selenide.conditions.PartialTextCaseSensitive;
 import com.codeborne.selenide.conditions.CssClass;
 import com.codeborne.selenide.conditions.CssValue;
 import com.codeborne.selenide.conditions.CustomMatch;
@@ -23,6 +20,7 @@ import com.codeborne.selenide.conditions.ExplainedCondition;
 import com.codeborne.selenide.conditions.Focused;
 import com.codeborne.selenide.conditions.Hidden;
 import com.codeborne.selenide.conditions.Href;
+import com.codeborne.selenide.conditions.InnerText;
 import com.codeborne.selenide.conditions.Interactable;
 import com.codeborne.selenide.conditions.IsImageLoaded;
 import com.codeborne.selenide.conditions.MatchAttributeWithValue;
@@ -32,6 +30,8 @@ import com.codeborne.selenide.conditions.Not;
 import com.codeborne.selenide.conditions.Or;
 import com.codeborne.selenide.conditions.OwnText;
 import com.codeborne.selenide.conditions.OwnTextCaseSensitive;
+import com.codeborne.selenide.conditions.PartialText;
+import com.codeborne.selenide.conditions.PartialTextCaseSensitive;
 import com.codeborne.selenide.conditions.PartialValue;
 import com.codeborne.selenide.conditions.PseudoElementPropertyWithValue;
 import com.codeborne.selenide.conditions.Readonly;
@@ -336,8 +336,8 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition partialText(String regex) {
-    return new PartialText(regex);
+  public static Condition partialText(String expectedText) {
+    return new PartialText(expectedText);
   }
 
   /**
@@ -349,8 +349,8 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition partialTextCaseSensitive(String regex) {
-    return new PartialTextCaseSensitive(regex);
+  public static Condition partialTextCaseSensitive(String expectedText) {
+    return new PartialTextCaseSensitive(expectedText);
   }
 
   /**
@@ -637,6 +637,24 @@ public abstract class Condition {
   }
 
   /**
+   * Synonym for {@link #and(String, Condition, Condition, Condition...)}. Useful for better readability.
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition allOf(String name, Condition condition1, Condition condition2, Condition... conditions) {
+    return and(name, condition1, condition2, conditions);
+  }
+
+  /**
+   * Synonym for {@link #and(String, Condition, Condition, Condition...)} with "all of" name. Useful for better readability.
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition allOf(Condition condition1, Condition condition2, Condition... conditions) {
+    return and("all of", condition1, condition2, conditions);
+  }
+
+  /**
    * Check if element matches ANY of given conditions.
    * The method signature makes you to pass at least 2 conditions, otherwise it would be nonsense.
    *
@@ -650,6 +668,24 @@ public abstract class Condition {
   @Nonnull
   public static Condition or(String name, Condition condition1, Condition condition2, Condition... conditions) {
     return new Or(name, merge(condition1, condition2, conditions));
+  }
+
+  /**
+   * Synonym for {@link #or(String, Condition, Condition, Condition...)}. Useful for better readability.
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition anyOf(String name, Condition condition1, Condition condition2, Condition... conditions) {
+    return or(name, condition1, condition2, conditions);
+  }
+
+  /**
+   * Synonym for {@link #or(String, Condition, Condition, Condition...)} with "any of" name. Useful for better readability.
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition anyOf(Condition condition1, Condition condition2, Condition... conditions) {
+    return or("any of", condition1, condition2, conditions);
   }
 
   /**
@@ -771,4 +807,5 @@ public abstract class Condition {
   public boolean missingElementSatisfiesCondition() {
     return missingElementSatisfiesCondition;
   }
+
 }

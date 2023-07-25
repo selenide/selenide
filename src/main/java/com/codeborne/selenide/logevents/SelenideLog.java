@@ -48,7 +48,17 @@ public class SelenideLog implements LogEvent {
 
   @Override
   public long getDuration() {
-    return NANOSECONDS.toMillis(endNs - startNs);
+    return NANOSECONDS.toMillis(getEndTime() - getStartTime());
+  }
+
+  @Override
+  public long getStartTime() {
+    return startNs;
+  }
+
+  @Override
+  public long getEndTime() {
+    return endNs;
   }
 
   @Override

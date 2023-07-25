@@ -13,7 +13,7 @@ public class MatcherError extends UIAssertionError {
   public MatcherError(@Nullable String explanation,
                       String expected, String actual,
                       CollectionSource collection,
-                      @Nullable Exception lastError,
+                      @Nullable Exception cause,
                       long timeoutMs) {
     super(
       collection.driver(),
@@ -23,7 +23,7 @@ public class MatcherError extends UIAssertionError {
         lineSeparator() + "Collection: " + collection.description() +
         lineSeparator() + "Elements: " + actual,
       expected, "Elements: " + actual,
-      lastError,
+      cause,
       timeoutMs
     );
   }
