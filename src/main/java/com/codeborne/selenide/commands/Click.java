@@ -43,7 +43,7 @@ public class Click implements Command<SelenideElement> {
   @Nonnull
   @CheckReturnValue
   protected WebElement findElement(WebElementSource locator) {
-    return locator.findAndAssertElementIsInteractable();
+    return locator.findAndAssertElementIsClickable();
   }
 
   protected void click(Driver driver, WebElement element) {

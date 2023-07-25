@@ -440,7 +440,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement setSelected(boolean selected);
 
   /**
-   * Checks that given element meets all given conditions.<p>
+   * Sequentially checks that given element meets all given conditions.<p>
    *
    * IMPORTANT: If element does not match then conditions immediately, waits up to
    * 4 seconds until element meets the conditions. It's extremely useful for dynamic content.<p>
@@ -510,7 +510,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldBe(Condition condition, Duration timeout);
 
   /**
-   * Checks that given element does not meet given conditions.<p>
+   * Sequentially checks that given element does not meet given conditions.<p>
    *
    * IMPORTANT: If element does match the conditions, waits up to
    * 4 seconds until element does not meet the conditions. It's extremely useful for dynamic content.<p>
@@ -1141,8 +1141,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *    2. instant
    *    3. smooth
    *  * block (optional)
-   *    1. start
-   *    2. center (default)
+   *    1. start (default)
+   *    2. center
    *    3. end
    *    4. nearest
    *  * inline
@@ -1268,13 +1268,21 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement cached();
 
   /**
-   * Click the element using {@link ClickOptions}: {@code $("#username").click(ClickOptions.usingJavaScript())}<p>
+   * Click the element using {@link ClickOptions}:
+   *
+   * <pre>
+   *  {@code $("#username").click(ClickOptions.usingJavaScript())}
+   * </pre>
    *
    * You can specify a relative offset from the center of the element inside ClickOptions:
    * e.g. <pre>
    *  {@code $("#username").click(usingJavaScript().offset(123, 222))}
    * </pre>
    *
+   * Before clicking, waits until element gets interactable and enabled.
+   * <br>
+   *
+   * @return this element
    * @see com.codeborne.selenide.commands.Click
    */
   SelenideElement click(ClickOptions clickOption);
@@ -1286,6 +1294,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * But it uses JavaScript method to click if {@code com.codeborne.selenide.Configuration#clickViaJs} is defined.
    * It may be helpful for testing in Internet Explorer where native click doesn't always work correctly.
+   *
+   * <br><br>
+   * Before clicking, waits until element gets interactable and enabled.
+   * <br>
    *
    * @see com.codeborne.selenide.commands.Click
    */
@@ -1305,6 +1317,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Double-click the element
    *
+   * <br><br>
+   * Before clicking, waits until element gets interactable and enabled.
+   * <br>
+   *
    * @return this element
    * @see com.codeborne.selenide.commands.DoubleClick
    */
@@ -1320,6 +1336,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * e.g. {@code $("#username").doubleClick(usingJavaScript().offset(123, 222))}
    * </p>
    *
+   * <br>
+   * Before clicking, waits until element gets interactable and enabled.
+   * <br>
+   *
+   * @return this element
    * @see com.codeborne.selenide.commands.DoubleClick
    * @since 6.13.0
    */

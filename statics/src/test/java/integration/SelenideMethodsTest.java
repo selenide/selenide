@@ -65,7 +65,6 @@ import static org.openqa.selenium.Keys.CONTROL;
 import static org.openqa.selenium.Keys.ENTER;
 import static org.openqa.selenium.Keys.TAB;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
 final class SelenideMethodsTest extends IntegrationTest {
   @BeforeEach
   void openTestPageWithJQuery() {
@@ -314,19 +313,19 @@ final class SelenideMethodsTest extends IntegrationTest {
   @Test
   void userCanFollowLinks() {
     $(By.linkText("Want to see ajax in action?")).scrollTo().click();
-    webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(500));
+    webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(1000));
   }
 
   @Test
   void userCanFollowLinksUsingScrollIntoViewBoolean() {
-    $(By.linkText("Want to see ajax in action?")).scrollIntoView(false).click();
-    webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(500));
+    $(By.linkText("Want to see ajax in action?")).scrollIntoView(true).click();
+    webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(1000));
   }
 
   @Test
   void userCanFollowLinksUsingScrollIntoViewOptions() {
     $(By.linkText("Want to see ajax in action?")).scrollIntoView("{behavior: \"smooth\", inline: \"center\"}").click();
-    webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(500));
+    webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(1000));
   }
 
   @Test

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Test cookies</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h2>Test cookies</h2>
+
+<label for="debug">cookies content:</label><textarea id="debug"></textarea>
+<button id="button-put">put</button>
+<button id="button-remove">remove</button>
+
+<script type="text/javascript">
+    (function () {
+        const name = "TEST_COOKIE";
+        const value = "AF33892F98ABC39A";
+        const days = 3;
+
+        function putCookie() {
+            let date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + date.toUTCString();
+
+            document.cookie = `${name}=${value}; ${expires}; path=/`;
+            document.getElementById('debug').innerText = document.cookie;
+        }
+
+        function removeCookie() {
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+            document.getElementById('debug').innerText = document.cookie;
+        }
+
+        document.getElementById('button-put').addEventListener("click", putCookie)
+        document.getElementById('button-remove').addEventListener("click", removeCookie)
+    })();
+</script>
+</body>
+</html>

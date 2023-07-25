@@ -13,7 +13,8 @@ import static com.codeborne.selenide.Selenide.open;
 public class BasicAuthViaProxyTest extends ProxyIntegrationTest {
   @Test
   void canPassBasicAuth_via_proxy() {
-    open("/basic-auth/hello", domain(), "scott", scottPassword());
+    String allowedDomains = String.format("localhost,%s,my.laptop.local", domain());
+    open("/basic-auth/hello", allowedDomains, "scott", scottPassword());
     $("#greeting").shouldHave(text("Hello, scott:" + scottPassword()));
   }
 

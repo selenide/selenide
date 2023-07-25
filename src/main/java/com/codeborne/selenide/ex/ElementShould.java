@@ -19,7 +19,7 @@ public class ElementShould extends UIAssertionError {
 
   public ElementShould(Driver driver, Alias alias, String searchCriteria, String prefix,
                        Condition expectedCondition, @Nullable CheckResult lastCheckResult,
-                       WebElement element, @Nullable Throwable lastError) {
+                       WebElement element, @Nullable Throwable cause) {
     super(
       driver,
       join(
@@ -29,6 +29,6 @@ public class ElementShould extends UIAssertionError {
       ),
       expectedCondition,
       lastCheckResult == null ? null : lastCheckResult.actualValue(),
-      lastError);
+      cause);
   }
 }

@@ -1,16 +1,17 @@
 ext {
-  seleniumVersion = '4.9.0'
-  junitVersion = '5.9.3'
+  seleniumVersion = '4.10.0'
+  httpClientVersion = '5.2.1'
+  junitVersion = '5.10.0'
   jettyVersion = '9.4.51.v20230217'
-  nettyVersion = '4.1.92.Final'
+  nettyVersion = '4.1.95.Final'
   assertjVersion = '3.24.2'
-  mockitoVersion = '5.3.1'
+  mockitoVersion = '5.4.0'
   slf4jVersion = '2.0.7'
-  browserupProxyVersion = '2.2.9'
-  littleProxyVersion = '2.0.17'
+  browserupProxyVersion = '2.2.10'
+  littleProxyVersion = '2.0.19'
   commonsFileuploadVersion = '1.5'
   jabelVersion = '1.0.0'
-  byteBuddyVersion = '1.14.4'
+  byteBuddyVersion = '1.14.5'
   archunitVersion = '1.0.1'
 }
 
@@ -33,9 +34,9 @@ subprojects {
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
       exclude group: 'org.slf4j'
     }
-    implementation("com.google.guava:guava:31.1-jre")
+    implementation("com.google.guava:guava:32.1.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("commons-io:commons-io:2.11.0")
+    implementation("commons-io:commons-io:2.13.0")
     testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
     testImplementation("xyz.rogfam:littleproxy:$littleProxyVersion")
     testImplementation("io.netty:netty-all:$nettyVersion")

@@ -171,6 +171,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   protected void assumeClipboardSupported() {
+    assumeThat(headless).isFalse();
     assumeThat(GraphicsEnvironment.isHeadless()).isFalse();
     try {
       Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);

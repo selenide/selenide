@@ -1,5 +1,6 @@
 package com.codeborne.selenide.collections;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.MatcherError;
@@ -29,18 +30,15 @@ public abstract class PredicateCollectionCondition extends CollectionCondition {
   }
 
   @Override
-  public void fail(CollectionSource collection,
-                   @Nullable List<WebElement> elements,
-                   @Nullable Exception lastError,
-                   long timeoutMs) {
+  public void fail(CollectionSource collection, CheckResult lastCheckResult, @Nullable Exception cause, long timeoutMs) {
+    List<WebElement> elements = lastCheckResult.getActualValue();
     if (elements == null || elements.isEmpty()) {
-      throw new ElementNotFound(collection, toString(), timeoutMs, lastError);
-    } else {
-      String expected = String.format("%s of elements to match [%s] predicate", matcher, description);
-      throw new MatcherError(explanation,
-        expected,
+      throw new ElementNotFound(collection, toString(), timeoutMs, cause);
+    }
+    else {
+      throw new MatcherError(explanation, toString(),
         describe.fully(collection.driver(), elements),
-        collection, lastError, timeoutMs);
+        collection, cause, timeoutMs);
     }
   }
 
@@ -51,6 +49,6 @@ public abstract class PredicateCollectionCondition extends CollectionCondition {
 
   @Override
   public String toString() {
-    return String.format("%s match [%s] predicate", matcher, description);
+    return String.format("%s elements to match [%s] predicate", matcher, description);
   }
 }

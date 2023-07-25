@@ -72,6 +72,11 @@ public class Selenide {
    * If not starting with "http://" or "https://" or "file://", it's considered to be relative URL.
    * <p>
    * In this case, it's prepended by baseUrl
+   *
+   * @param domain Name of domain to apply Basic Auth.
+   *               1. If empty, Basic Auth will be applied to all domains.
+   *               2. If non-empty, Basic Auth will be applied only to URLs containing this domain.
+   *                 2.1. May contain multiple domain names (delimited by "," or "|").
    */
   public static void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
     getSelenideDriver().open(relativeOrAbsoluteUrl, domain, login, password);
@@ -149,7 +154,7 @@ public class Selenide {
   /**
    * Open a new browser (with the same settings as the default browser),
    * and run given code block in this browser.
-   * <p/>
+   * <p>
    *
    * In the end, the browser will be closed.
    * @since 6.13.0
@@ -993,7 +998,7 @@ public class Selenide {
    * <p>
    * Remote runs support can be implemented via plugins.
    * Plugin for Selenoid supports clipboard since v1.1.0.
-   * @see <a href="https://github.com/selenide/selenide-selenoid">selenide-selenoid</a>
+   * @see <a href="https://github.com/selenide/selenide/tree/main/modules/selenoid">selenide-selenoid</a>
    * <p>
    * Pay attention that Clipboard is shared resource for instance where tests runs
    * and keep in mind while developing test suite with multiple tests for clipboard.

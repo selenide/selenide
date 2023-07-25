@@ -1,1 +1,1 @@
-com.codeborne.selenide.ex.ErrorFormatterWithPageUrl
+com.codeborne.selenide.ex.custom.ErrorFormatterWithPageUrl
