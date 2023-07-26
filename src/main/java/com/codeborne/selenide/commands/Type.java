@@ -42,7 +42,7 @@ public class Type implements Command<SelenideElement> {
       return options;
     } else {
       CharSequence text = firstOf(args);
-      return TypeOptions.with(text);
+      return TypeOptions.text(text);
     }
   }
 
