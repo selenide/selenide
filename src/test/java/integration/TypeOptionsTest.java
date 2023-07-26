@@ -4,9 +4,8 @@ import com.codeborne.selenide.TypeOptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-
 import static com.codeborne.selenide.Condition.attribute;
+import static java.time.Duration.ofMillis;
 
 class TypeOptionsTest extends ITest {
   @BeforeEach
@@ -20,13 +19,10 @@ class TypeOptionsTest extends ITest {
     $("#username_input").type("abc");
     $("#username_input").shouldHave(attribute("value", "abc"));
 
-    $("#username_input").type(TypeOptions.with("test", Duration.ofMillis(200), false));
-    $("#username_input").shouldHave(attribute("value", "abctest"));
-
-    $("#username_input").type(TypeOptions.withDelay("test", Duration.ofMillis(100)));
+    $("#username_input").type(TypeOptions.text("test"));
     $("#username_input").shouldHave(attribute("value", "test"));
 
-    $("#username_input").type(TypeOptions.withoutClearingField("abcd"));
-    $("#username_input").shouldHave(attribute("value", "testabcd"));
+    $("#username_input").type(TypeOptions.text("abc").withDelay(ofMillis(100)).clearFirst(false));
+    $("#username_input").shouldHave(attribute("value", "testabc"));
   }
 }
