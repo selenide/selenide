@@ -10,6 +10,7 @@ public class SelenideAppiumCommands extends Commands {
     add("dragAndDropTo", new AppiumDragAndDropTo());
     add("dragAndDrop", new AppiumDragAndDropTo());
     add("click", new AppiumClick());
+    add("doubleClick", new AppiumDoubleClick());
     add("clear", new AppiumClear());
     add("setValue", new AppiumSetValue());
     add("val", new AppiumVal());

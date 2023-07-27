@@ -23,6 +23,15 @@ import static java.util.Objects.requireNonNull;
 @ParametersAreNonnullByDefault
 public class SoftAsserts extends ExternalResource {
   private Description currentTest;
+  private final boolean fullStacktraces;
+
+  public SoftAsserts() {
+    this(true);
+  }
+
+  public SoftAsserts(boolean fullStacktraces) {
+    this.fullStacktraces = fullStacktraces;
+  }
 
   @Override
   public Statement apply(Statement base, Description description) {
@@ -41,6 +50,6 @@ public class SoftAsserts extends ExternalResource {
 
     // if both test and "after" method threw an error, JUnit4 collects all of them
     // and throws org.junit.internal.runners.model.MultipleFailureException
-    errorsCollector.cleanAndThrowAssertionError(currentTest.getDisplayName(), null);
+    errorsCollector.cleanAndThrowAssertionError(currentTest.getDisplayName(), null, fullStacktraces);
   }
 }

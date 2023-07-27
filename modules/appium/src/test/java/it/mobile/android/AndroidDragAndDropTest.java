@@ -6,11 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.DragAndDropOptions.to;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 
 /**
@@ -34,6 +36,7 @@ class AndroidDragAndDropTest extends BaseApiDemosTest {
     By dragText = By.id("io.appium.android.apis:id/drag_result_text");
 
     $(dragText).shouldHave(exactText(""));
+    $$(dragText).shouldHave(exactTexts(""));
 
     from.dragAndDropTo(to);
 

@@ -36,11 +36,6 @@ public class SizeGreaterThanTest extends ITest {
       .hasMessageStartingWith("List size mismatch")
       .hasMessageContaining("expected: > 2, actual: 2")
       .hasMessageContaining("collection: h1")
-      .hasMessageContaining("""
-        Elements: [
-        \t<h1>Page with selects</h1>,
-        \t<h1>Now typing:</h1>
-        ]""")
       .hasNoCause();
   }
 
@@ -53,7 +48,6 @@ public class SizeGreaterThanTest extends ITest {
       .hasMessageStartingWith("List size mismatch")
       .hasMessageContaining("expected: > 0, actual: 0")
       .hasMessageContaining("collection: .missing")
-      .hasMessageContaining("Elements: []")
       .hasNoCause();
   }
 

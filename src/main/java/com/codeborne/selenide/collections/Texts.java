@@ -1,9 +1,7 @@
 package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.impl.Html;
-import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -17,21 +15,9 @@ public class Texts extends ExactTexts {
     super(expectedTexts);
   }
 
-  @CheckReturnValue
   @Override
-  public boolean test(List<WebElement> elements) {
-    if (elements.size() != expectedTexts.size()) {
-      return false;
-    }
-
-    for (int i = 0; i < expectedTexts.size(); i++) {
-      WebElement element = elements.get(i);
-      String expectedText = expectedTexts.get(i);
-      if (!Html.text.contains(element.getText(), expectedText)) {
-        return false;
-      }
-    }
-    return true;
+  protected boolean check(String actualText, String expectedText) {
+    return Html.text.contains(actualText, expectedText);
   }
 
   @Override

@@ -1,16 +1,21 @@
 package com.codeborne.selenide.collections;
 
+import com.codeborne.selenide.CheckResult;
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.impl.ElementCommunicator;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
+import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
 public class ExactTextsCaseSensitiveInAnyOrder extends ExactTexts {
+  private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
 
   public ExactTextsCaseSensitiveInAnyOrder(String... exactTexts) {
     super(exactTexts);
@@ -20,27 +25,32 @@ public class ExactTextsCaseSensitiveInAnyOrder extends ExactTexts {
     super(exactTexts);
   }
 
-  @CheckReturnValue
+  @Nonnull
   @Override
-  public boolean test(List<WebElement> elements) {
+  public CheckResult check(Driver driver, List<WebElement> elements) {
     if (elements.size() != expectedTexts.size()) {
-      return false;
+      return new CheckResult(REJECT, elements.size());
     }
 
-    List<String> elementsTexts = elements.stream().map(WebElement::getText).collect(toList());
+    List<String> actualTexts = communicator.texts(driver, elements);
 
-    for (String expectedText : expectedTexts) {
-      boolean found = false;
-      for (String elementText : elementsTexts) {
-        if (Html.text.equalsCaseSensitive(elementText, expectedText)) {
-          found = true;
-        }
-      }
-      if (!found) {
-        return false;
+    for (int i = 0; i < expectedTexts.size(); i++) {
+      String expectedText = expectedTexts.get(i);
+      if (!find(actualTexts, expectedText)) {
+        String message = String.format("Text #%s not found: \"%s\"", i, expectedText);
+        return CheckResult.rejected(message, actualTexts);
       }
     }
-    return true;
+    return CheckResult.accepted();
+  }
+
+  private boolean find(List<String> texts, String text) {
+    for (String actualText : texts) {
+      if (Html.text.equalsCaseSensitive(actualText, text)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override

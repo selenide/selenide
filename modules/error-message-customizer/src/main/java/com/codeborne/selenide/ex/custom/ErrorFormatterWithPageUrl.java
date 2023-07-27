@@ -1,6 +1,7 @@
-package com.codeborne.selenide.ex;
+package com.codeborne.selenide.ex.custom;
 
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.ex.SelenideErrorFormatter;
 import com.codeborne.selenide.impl.Screenshot;
 import org.openqa.selenium.WebDriverException;
 

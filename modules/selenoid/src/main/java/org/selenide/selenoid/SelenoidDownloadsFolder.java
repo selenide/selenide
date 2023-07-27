@@ -45,4 +45,9 @@ public class SelenoidDownloadsFolder implements DownloadsFolder {
       .map(file -> new DownloadedFile(file, emptyMap()))
       .collect(toList());
   }
+
+  @Override
+  public String toString() {
+    return selenoidClient.toString();
+  }
 }

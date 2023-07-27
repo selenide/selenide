@@ -56,6 +56,14 @@ class AndroidClickOptionsTest extends BaseApiDemosTest {
   }
 
   @Test
+  void androidDoubleClick() {
+    $(AppiumBy.xpath(".//*[@text='Preference']")).click();
+    $(AppiumBy.xpath(".//*[@text='1. Preferences from XML']")).click();
+    $(AppiumBy.xpath(".//android.widget.CheckBox")).doubleClick();
+    $(AppiumBy.xpath(".//android.widget.CheckBox")).shouldHave(attribute("checked", "false"));
+  }
+
+  @Test
   void selenideClickOptions() {
     $(AppiumBy.xpath(".//*[@text='Preference']")).click(usingDefaultMethod().offset(3, -3));
     $(AppiumBy.xpath(".//*[@text='1. Preferences from XML']")).shouldBe(visible);

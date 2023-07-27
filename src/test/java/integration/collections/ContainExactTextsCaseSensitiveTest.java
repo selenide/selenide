@@ -41,7 +41,7 @@ public class ContainExactTextsCaseSensitiveTest extends ITest {
 
   @Test
   void doesNotAcceptSubstrings() {
-    assertThatThrownBy(() -> $$(".element").shouldHave(containExactTextsCaseSensitive("On", "Tw", "Thre")))
+    assertThatThrownBy(() -> $$(".element").should(containExactTextsCaseSensitive("On", "Tw", "Thre")))
       .isInstanceOf(DoesNotContainTextsError.class)
       .hasMessageStartingWith("""
         The collection with text elements: [One, Two, Three]
@@ -52,7 +52,7 @@ public class ContainExactTextsCaseSensitiveTest extends ITest {
 
   @Test
   void doesNotAcceptWrongCase() {
-    assertThatThrownBy(() -> $$(".element").shouldHave(containExactTextsCaseSensitive("one", "Two", "Three")))
+    assertThatThrownBy(() -> $$(".element").should(containExactTextsCaseSensitive("one", "Two", "Three")))
       .isInstanceOf(DoesNotContainTextsError.class)
       .hasMessageStartingWith("The collection with text elements: [One, Two, Three]")
       .hasMessageContaining("should contain all of the following text elements: [one, Two, Three]")
@@ -61,7 +61,7 @@ public class ContainExactTextsCaseSensitiveTest extends ITest {
 
   @Test
   void checksElementsCount() {
-    assertThatThrownBy(() -> $$(".element").shouldHave(containExactTextsCaseSensitive("One", "Two", "Three", "Four")))
+    assertThatThrownBy(() -> $$(".element").should(containExactTextsCaseSensitive("One", "Two", "Three", "Four")))
       .isInstanceOf(DoesNotContainTextsError.class)
       .hasMessageStartingWith("The collection with text elements: [One, Two, Three]")
       .hasMessageContaining("should contain all of the following text elements: [One, Two, Three, Four]")
@@ -70,22 +70,30 @@ public class ContainExactTextsCaseSensitiveTest extends ITest {
 
   @Test
   void throwsElementNotFound() {
-    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(containExactTextsCaseSensitive("content1", "content2")))
+    assertThatThrownBy(() -> $$(".non-existing-elements").should(containExactTextsCaseSensitive("content1", "content2")))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {.non-existing-elements}");
   }
 
   @Test
   void emptyArrayIsNotAllowed() {
-    assertThatThrownBy(() -> $$(".element").shouldHave(containExactTextsCaseSensitive()))
+    assertThatThrownBy(() -> $$(".element").should(containExactTextsCaseSensitive()))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("No expected texts given");
   }
 
   @Test
   void emptyListIsNotAllowed() {
-    assertThatThrownBy(() -> $$(".element").shouldHave(containExactTextsCaseSensitive(emptyList())))
+    assertThatThrownBy(() -> $$(".element").should(containExactTextsCaseSensitive(emptyList())))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("No expected texts given");
+  }
+
+  @Test
+  void textsInsideSvg() {
+    openFile("page_with_svg.html");
+    $$("#banana svg tspan").should(containExactTextsCaseSensitive("not", "the Fruit"));
+    $$("#banana svg text").should(containExactTextsCaseSensitive(
+      "You are not a banana!", "You are not an apple;"));
   }
 }

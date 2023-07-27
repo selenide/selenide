@@ -1,8 +1,8 @@
 package integration.collections;
 
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
-import com.codeborne.selenide.ex.TextsSizeMismatch;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class ExactTextsCaseSensitiveTest extends ITest {
   void doesNotAcceptSubstrings() {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitive("On", "Two", "Three")))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageStartingWith("Texts mismatch")
+      .hasMessageStartingWith("Text #0 mismatch (expected: \"On\", actual: \"One\")")
       .hasMessageContaining("Actual: [One, Two, Three]")
       .hasMessageContaining("Expected: [On, Two, Three]")
       .hasMessageContaining("Collection: .element");
@@ -60,11 +60,8 @@ public class ExactTextsCaseSensitiveTest extends ITest {
   @Test
   void checksElementsCount() {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitive("One", "Two", "Three", "Four")))
-      .isInstanceOf(TextsSizeMismatch.class)
-      .hasMessageStartingWith("Texts size mismatch")
-      .hasMessageContaining("Actual: [One, Two, Three], List size: 3")
-      .hasMessageContaining("Expected: [One, Two, Three, Four], List size: 4")
-      .hasMessageContaining("Collection: .element");
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageStartingWith("List size mismatch: expected: = 4, actual: 3, collection: .element");
   }
 
   @Test
@@ -86,5 +83,12 @@ public class ExactTextsCaseSensitiveTest extends ITest {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitive(emptyList())))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("No expected texts given");
+  }
+
+  @Test
+  void textsInsideSvg() {
+    openFile("page_with_svg.html");
+    $$("#banana svg tspan").shouldHave(exactTextsCaseSensitive("not", "apple", "the Fruit"));
+    $$("#banana svg text").shouldHave(exactTextsCaseSensitive("You are not a banana!", "You are not an apple;", "You are the Fruit."));
   }
 }
