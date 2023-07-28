@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.17.0 (work in progress)
+* ...
+
 ## 6.16.1 (released 24.07.2023)
 * #2368 added `allOf` and `anyOf` conditions  --  thanks Evgenii Plugatar for PR #2368
 * #2367 Add conditions to check cookies  --  thanks adorne for PR #2367
