@@ -12,7 +12,8 @@ import javax.annotation.Nullable;
 import java.io.File;
 
 public interface DriverFactory {
-  void setupWebdriverBinary();
+  default void setupWebdriverBinary() {
+  }
 
   @CheckReturnValue
   @Nonnull

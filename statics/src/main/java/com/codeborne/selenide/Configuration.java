@@ -307,15 +307,16 @@ public class Configuration {
   public static int proxyPort = defaults.proxyPort();
 
   /**
-   * Controls Selenide and WebDriverManager integration.
-   * When integration is enabled you don't need to download and setup any browser driver executables.
+   * Not used anymore.
+   * WebDriverManager was replaced by Selenium built-in SeleniumManager.
+   *
    * See <a href="https://github.com/bonigarcia/webdrivermanager">WebDriverManager configuration details</a>.
-   * Can be configured either programmatically, via selenide.properties file
-   * or by system property "-Dselenide.driverManagerEnabled=false"
-   * <br>
+   *
    * <p>
-   * Default: true
+   * Default: false
+   * @deprecated
    */
+  @Deprecated
   public static boolean driverManagerEnabled = defaults.driverManagerEnabled();
 
   /**

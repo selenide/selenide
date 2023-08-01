@@ -32,4 +32,13 @@ class SelenoidClientTest {
         new URL("http://localhost:4444/download/sid-01/some%20file%20%282%29.txt")
     );
   }
+
+  @Test
+  void readsFileNamesFromJson() {
+    String selenoidDownloadsResponse = "[\"test.txt\", \"report.pdf\"]";
+    SelenoidClient client = new SelenoidClient("http://localhost:4444/wd/hub", "sid-01");
+    assertThat(client.parseJson(selenoidDownloadsResponse)).containsExactly(
+      "test.txt", "report.pdf"
+    );
+  }
 }

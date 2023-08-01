@@ -7,6 +7,7 @@ dependencies {
   testImplementation "org.seleniumhq.selenium:selenium-http-jdk-client:$seleniumVersion"
   implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
   implementation("commons-io:commons-io:2.13.0")
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 
   testImplementation project(':statics').sourceSets.test.output
   testImplementation project(':modules:core').sourceSets.test.output

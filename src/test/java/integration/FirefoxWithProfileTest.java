@@ -4,7 +4,6 @@ import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SharedDownloadsFolder;
 import integration.FirefoxProfileReader.FirefoxProfileChecker;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,6 @@ final class FirefoxWithProfileTest extends BaseIntegrationTest {
   @BeforeEach
   void setUp() {
     assumeThat(browser().isFirefox()).isTrue();
-    WebDriverManager.firefoxdriver().setup();
   }
 
   @AfterEach
