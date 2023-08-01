@@ -97,6 +97,7 @@ public class Commands {
     add("append", new Append());
     add("paste", new Paste());
     add("clear", inject(Clear.class));
+    add("type", new Type());
   }
 
   private void addFindCommands() {

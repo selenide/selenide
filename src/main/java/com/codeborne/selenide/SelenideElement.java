@@ -82,6 +82,25 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement setValue(SetValueOptions options);
 
   /**
+   * Mimic how real user would type in a text field
+   * Useful to work with autosuggestion dropdown
+   * @see com.codeborne.selenide.commands.Type
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement type(CharSequence textToType);
+
+  /**
+   * Similar to {@link #type(java.lang.CharSequence)}
+   * @param typeOptions
+   * com.codeborne.selenide.commands.Type
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement type(TypeOptions typeOptions);
+
+
+  /**
    * Append given text to the text field and trigger "change" event.<p>
    *
    * <b>Applicable for:</b> {@code <input>} and {@code <textarea>}.<p>
