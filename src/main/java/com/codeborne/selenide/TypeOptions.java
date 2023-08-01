@@ -3,30 +3,28 @@ package com.codeborne.selenide;
 import java.time.Duration;
 
 public class TypeOptions {
-
-  private final CharSequence charSequence;
-  private boolean shouldClearFieldBeforeTyping;
-  private Duration timeDelayWhileTyping;
   private static final Duration DEFAULT_DELAY_WHILE_TYPING = Duration.ofMillis(200);
 
-  protected TypeOptions(CharSequence charSequence, Duration timeDelayWhileTyping, boolean shouldClearFieldBeforeTyping) {
+  private final String charSequence;
+  private final boolean shouldClearFieldBeforeTyping;
+  private final Duration timeDelayWhileTyping;
+
+  protected TypeOptions(String charSequence, Duration timeDelayWhileTyping, boolean shouldClearFieldBeforeTyping) {
     this.charSequence = charSequence;
     this.timeDelayWhileTyping = timeDelayWhileTyping;
     this.shouldClearFieldBeforeTyping = shouldClearFieldBeforeTyping;
   }
 
-  public static TypeOptions text(CharSequence textToType) {
+  public static TypeOptions text(String textToType) {
     return new TypeOptions(textToType, DEFAULT_DELAY_WHILE_TYPING, true);
   }
 
   public TypeOptions withDelay(Duration timeDelayWhileTyping) {
-    this.timeDelayWhileTyping = timeDelayWhileTyping;
-    return this;
+    return new TypeOptions(charSequence, timeDelayWhileTyping, shouldClearFieldBeforeTyping);
   }
 
   public TypeOptions clearFirst(boolean shouldClearFieldBeforeTyping) {
-    this.shouldClearFieldBeforeTyping = shouldClearFieldBeforeTyping;
-    return this;
+    return new TypeOptions(charSequence, timeDelayWhileTyping, shouldClearFieldBeforeTyping);
   }
 
   public String textToType() {
