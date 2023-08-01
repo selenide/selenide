@@ -2,7 +2,6 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -24,13 +23,6 @@ import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 @ParametersAreNonnullByDefault
 public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(EdgeDriverFactory.class);
-
-  @Override
-  public void setupWebdriverBinary() {
-    if (isSystemPropertyNotSet("webdriver.edge.driver")) {
-      WebDriverManager.edgedriver().setup();
-    }
-  }
 
   @Override
   @CheckReturnValue

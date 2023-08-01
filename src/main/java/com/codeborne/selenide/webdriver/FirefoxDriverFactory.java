@@ -2,7 +2,6 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.SessionNotCreatedException;
@@ -32,13 +31,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @ParametersAreNonnullByDefault
 public class FirefoxDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(FirefoxDriverFactory.class);
-
-  @Override
-  public void setupWebdriverBinary() {
-    if (isSystemPropertyNotSet("webdriver.gecko.driver")) {
-      WebDriverManager.firefoxdriver().setup();
-    }
-  }
 
   @Override
   @CheckReturnValue

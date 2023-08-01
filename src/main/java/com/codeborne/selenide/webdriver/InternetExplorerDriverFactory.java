@@ -2,7 +2,6 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -22,13 +21,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @ParametersAreNonnullByDefault
 public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(InternetExplorerDriverFactory.class);
-
-  @Override
-  public void setupWebdriverBinary() {
-    if (isSystemPropertyNotSet("webdriver.ie.driver")) {
-      WebDriverManager.iedriver().setup();
-    }
-  }
 
   @Override
   @CheckReturnValue

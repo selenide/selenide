@@ -4,7 +4,6 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -128,7 +127,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   protected static ChromeDriver openChrome(@Nullable SelenideProxyServer proxy) {
-    WebDriverManager.chromedriver().setup();
     return new ChromeDriver(chromeOptions(proxy == null ? null : proxy.getSeleniumProxy()));
   }
 
@@ -152,7 +150,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   protected static FirefoxDriver openFirefox(@Nullable SelenideProxyServer proxy) {
-    WebDriverManager.firefoxdriver().setup();
     return new FirefoxDriver(firefoxOptions(proxy));
   }
 
