@@ -11,7 +11,6 @@ import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
@@ -31,6 +30,8 @@ import static java.util.Collections.singletonList;
 @ParametersAreNonnullByDefault
 public class AppiumClick extends Click {
 
+  private static final String FINGER_1 = "finger1";
+
   @Override
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
@@ -44,12 +45,10 @@ public class AppiumClick extends Click {
       click(locator.driver(), webElement);
     } else if (args.length == 1) {
       Object options = firstOf(args);
-      if (options instanceof AppiumClickOptions) {
-        AppiumClickOptions appiumClickOptions = (AppiumClickOptions) options;
+      if (options instanceof AppiumClickOptions appiumClickOptions) {
         click(locator.driver(), webElement, appiumClickOptions);
       }
-      else if (options instanceof ClickOptions) {
-        ClickOptions clickOptions = (ClickOptions) options;
+      else if (options instanceof ClickOptions clickOptions) {
         click(locator.driver(), webElement, clickOptions);
       }
       else {
@@ -76,35 +75,17 @@ public class AppiumClick extends Click {
 
   protected void click(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
     switch (appiumClickOptions.appiumClickMethod()) {
-      case TAP_WITH_OFFSET: {
-        performTapWithOffset(driver, webElement, appiumClickOptions.offsetX(), appiumClickOptions.offsetY());
-        break;
-      }
-      case TAP: {
-        performTapWithOffset(driver, webElement, 0, 0);
-        break;
-      }
-      case DOUBLE_TAP: {
-        performDoubleTap(driver, webElement);
-        break;
-      }
-      case LONG_PRESS: {
-        performLongPress(driver, webElement);
-        break;
-      }
-      default: {
-        throw new IllegalArgumentException("Unknown click option: " + appiumClickOptions.appiumClickMethod());
-      }
+      case TAP_WITH_OFFSET -> performTapWithOffset(driver, webElement, appiumClickOptions.offsetX(), appiumClickOptions.offsetY());
+      case TAP -> performTapWithOffset(driver, webElement, 0, 0);
+      case DOUBLE_TAP -> performDoubleTap(driver, webElement);
+      case LONG_PRESS -> performLongPress(driver, webElement, appiumClickOptions);
+      default -> throw new IllegalArgumentException("Unknown click option: " + appiumClickOptions.appiumClickMethod());
     }
-  }
-
-  private void performLongPress(Driver driver, WebElement webElement) {
-    new Actions(driver.getWebDriver()).clickAndHold(webElement).perform();
   }
 
   private void performDoubleTap(Driver driver, WebElement webElement) {
     Point size = webElement.getLocation();
-    PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
+    PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
     Sequence doubleTapSequence = getSequenceToPerformTap(finger, size, 0, 0)
       .addAction(new Pause(finger, ofMillis(40)))
       .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
@@ -113,8 +94,20 @@ public class AppiumClick extends Click {
     perform(driver, doubleTapSequence);
   }
 
+  private void performLongPress(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
+    Point size = webElement.getLocation();
+    PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
+    Sequence doubleTapSequence = new Sequence(finger, 1)
+      .addAction(finger.createPointerMove(ofMillis(0),
+        PointerInput.Origin.viewport(), size.getX(), size.getY()))
+      .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
+      .addAction(new Pause(finger, appiumClickOptions.longPressHoldDuration()))
+      .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+    perform(driver, doubleTapSequence);
+  }
+
   private void performTapWithOffset(Driver driver, WebElement webElement, int offsetX, int offsetY) {
-    PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
+    PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
     Point size = getCenter(webElement);
 
     Sequence tapSequence = getSequenceToPerformTap(finger, size, offsetX, offsetY);

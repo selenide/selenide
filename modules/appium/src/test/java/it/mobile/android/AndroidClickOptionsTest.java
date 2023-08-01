@@ -5,16 +5,15 @@ import io.appium.java_client.AppiumBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static com.codeborne.selenide.ClickOptions.withTimeout;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
-import static com.codeborne.selenide.appium.AppiumClickOptions.doubleTap;
-import static com.codeborne.selenide.appium.AppiumClickOptions.longPress;
-import static com.codeborne.selenide.appium.AppiumClickOptions.tap;
-import static com.codeborne.selenide.appium.AppiumClickOptions.tapWithOffset;
+import static com.codeborne.selenide.appium.AppiumClickOptions.*;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
 import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -43,7 +42,7 @@ class AndroidClickOptionsTest extends BaseApiDemosTest {
     $(AppiumBy.xpath(".//*[@text='Views']")).click();
     $(AppiumBy.xpath(".//*[@text='Expandable Lists']")).click();
     $(AppiumBy.xpath(".//*[@text='1. Custom Adapter']")).click();
-    $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPress());
+    $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPressFor(Duration.ofSeconds(4)));
     $(AppiumBy.xpath(".//*[@text='Sample menu']")).shouldBe(visible);
   }
 
