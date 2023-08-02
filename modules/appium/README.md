@@ -11,7 +11,7 @@ Just add to pom.xml:
 <dependency>
     <groupId>com.codeborne</groupId>
     <artifactId>selenide-appium</artifactId>
-    <version>6.16.1</version>
+    <version>6.17.0</version>
 </dependency>
 ```
 

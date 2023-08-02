@@ -1,7 +1,16 @@
 # Changelog
 
-## 6.17.0 (work in progress)
-* ...
+## 6.17.0 (released 02.08.2023)
+* #2393 bump Selenium from 4.10.0 to 4.11.0, see https://www.selenium.dev/blog/2023/whats-new-in-selenium-manager-with-selenium-4.11.0/
+* #2385 #2402 replace WebDriverManager by Selenium built-in SeleniumManager  --  see PR #2400
+* #2385 support Java 8 again!  --  see PR #2400
+* #2191 Add method $.type()  --  thanks to Amuthan Sakthivel
+* #2370 added method for Appium: click with long press  --  thanks to Amuthan Sakthivel for PR #2381
+* #2369 added method for Appium: swipe right and left  --  thanks to Amuthan Sakthivel
+* #2394 un-deprecate methods $$.texts() and $$.attributes()
+* #2390 use more neutral sample in javadoc  --  see PR #2401
+* #2388 bump Netty from 4.1.95.Final to 4.1.96.Final
+* #2386 bump BrowserUpProxy from 2.2.10 to 2.2.11
 
 ## 6.16.1 (released 24.07.2023)
 * #2368 added `allOf` and `anyOf` conditions  --  thanks Evgenii Plugatar for PR #2368
