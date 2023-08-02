@@ -301,11 +301,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Gets all the texts in elements collection
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   * @deprecated Instead of getting attributes, verify them with {@code $$.shouldHave(texts(...));}.
+   * Instead of just getting texts, we highly recommend to verify them with {@code $$.shouldHave(texts(...));}.
    */
   @CheckReturnValue
   @Nonnull
-  @Deprecated
   public List<String> texts() {
     return communicator.texts(driver(), getElements());
   }
@@ -338,11 +337,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Gets all the specific attribute values in elements collection
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   * @deprecated Instead of getting attributes, verify them with {@code $$.shouldHave(attributes(...));}.
+   * Instead of just getting attributes, we highly recommend to verify them with {@code $$.shouldHave(attributes(...));}.
    */
   @CheckReturnValue
   @Nonnull
-  @Deprecated
   public List<String> attributes(String attribute) {
     return communicator.attributes(driver(), getElements(), attribute);
   }
