@@ -65,8 +65,8 @@ public final class AttributeTest extends ITest {
   void userCanFindElementByAttribute() {
     assertThat($(byAttribute("name", "domain")).getTagName())
       .isEqualTo("select");
-    assertThat($(byAttribute("value", "мыло.ру")).getText())
-      .isEqualTo("@мыло.ру");
+    assertThat($(byAttribute("value", "four.ee")).getText())
+      .isEqualTo("@four.ee");
     assertThat($(byAttribute("id", "radioButtons")).getTagName())
       .isEqualTo("div");
     assertThat($$(byAttribute("type", "radio")))
@@ -93,16 +93,16 @@ public final class AttributeTest extends ITest {
 
   @Test
   void userCanGetDataAttributes() {
-    assertThat($(byValue("livemail.ru")).getAttribute("data-mailServerId"))
+    assertThat($(byValue("one.io")).getAttribute("data-mailServerId"))
       .isEqualTo("111");
-    assertThat($(byValue("livemail.ru")).data("mailServerId"))
+    assertThat($(byValue("one.io")).data("mailServerId"))
       .isEqualTo("111");
 
-    assertThat($(byText("@myrambler.ru")).data("mailServerId"))
+    assertThat($(byText("@two.eu")).data("mailServerId"))
       .isEqualTo("222A");
-    assertThat($(byValue("rusmail.ru")).data("mailServerId"))
+    assertThat($(byValue("three.com")).data("mailServerId"))
       .isEqualTo("33333B");
-    assertThat($(byText("@мыло.ру")).data("mailServerId"))
+    assertThat($(byText("@four.ee")).data("mailServerId"))
       .isEqualTo("111АБВГД");
   }
 
@@ -126,8 +126,8 @@ public final class AttributeTest extends ITest {
 
   @Test
   void canCheckHyperReference() {
-    $("#non-clickable-element a").shouldHave(href("http://google.com"));
-    $("#clickable-element a").shouldHave(href("http://www.yandex.ru"));
+    $("#non-clickable-element a").shouldHave(href("https://google.com"));
+    $("#clickable-element a").shouldHave(href("https://duckduckgo.com"));
     $("#ajax-button").shouldHave(href("long_ajax_request.html"));
     $("#empty h3 a").shouldHave(href("#"));
   }

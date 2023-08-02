@@ -28,8 +28,8 @@ final class CollectionBecauseTest extends ITest {
       );
     })
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageStartingWith("Text #0 mismatch (expected: \"foo\", actual: \"@livemail.ru\")")
-      .hasMessageContaining("Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]")
+      .hasMessageStartingWith("Text #0 mismatch (expected: \"foo\", actual: \"@one.io\")")
+      .hasMessageContaining("Actual: [@one.io, @two.eu, @three.com, @four.ee]")
       .hasMessageContaining("Expected: [foo, bar, var, buzz]")
       .hasMessageContaining("Because: that's why");
   }
@@ -56,8 +56,8 @@ final class CollectionBecauseTest extends ITest {
       );
     })
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageStartingWith("Text #0 mismatch (expected: \"foo\", actual: \"@livemail.ru\")")
-      .hasMessageContaining("Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]")
+      .hasMessageStartingWith("Text #0 mismatch (expected: \"foo\", actual: \"@one.io\")")
+      .hasMessageContaining("Actual: [@one.io, @two.eu, @three.com, @four.ee]")
       .hasMessageContaining("Expected: [foo, bar, var, buzz]")
       .hasMessageContaining("Because: that's why");
   }

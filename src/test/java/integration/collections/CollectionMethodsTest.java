@@ -250,20 +250,20 @@ final class CollectionMethodsTest extends ITest {
   void canGetElementByIndex_fromFirstNElements() {
     ElementsCollection collection = $$x("//select[@name='domain']/option").first(3).shouldHave(size(3));
 
-    collection.get(0).shouldHave(text("@livemail.ru"));
-    collection.get(1).shouldHave(text("@myrambler.ru"));
-    collection.get(2).shouldHave(text("@rusmail.ru"));
+    collection.get(0).shouldHave(text("@one.io"));
+    collection.get(1).shouldHave(text("@two.eu"));
+    collection.get(2).shouldHave(text("@three.com"));
   }
 
   @Test
   void canGetElementByIndex_fromFirstNElements_ofFilteredCollection() {
     ElementsCollection collection = $$x("//select[@name='domain']/option")
-      .filterBy(partialText(".ru"))
+      .filterBy(partialText(".e"))
       .first(2)
       .shouldHave(size(2));
 
-    collection.get(0).shouldHave(text("@livemail.ru"));
-    collection.get(1).shouldHave(text("@myrambler.ru"));
+    collection.get(0).shouldHave(text("@two.eu"));
+    collection.get(1).shouldHave(text("@four.ee"));
     assertThatThrownBy(() -> collection.get(2).getText())
       .isInstanceOf(IndexOutOfBoundsException.class)
       .hasMessage("Index: 2, size: 2");
@@ -289,18 +289,19 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void canGetElementByIndex_fromLastNElements_ofFilteredCollection() {
     ElementsCollection collection = $$x("//select[@name='domain']/option")
-      .filterBy(partialText(".ru"))
+      .filterBy(partialText(".e"))
       .last(2)
       .shouldHave(size(2));
 
-    collection.get(0).shouldHave(text("@myrambler.ru"));
-    collection.get(1).shouldHave(text("@rusmail.ru"));
+    collection.get(0).shouldHave(text("@two.eu"));
+    collection.get(1).shouldHave(text("@four.ee"));
+
     assertThatThrownBy(() -> collection.get(2).getText())
       .isInstanceOf(IndexOutOfBoundsException.class)
-      .hasMessage("Index: 3");
+      .hasMessage("Index: 2");
     assertThatThrownBy(() -> collection.get(3).getText())
       .isInstanceOf(IndexOutOfBoundsException.class)
-      .hasMessage("Index: 4");
+      .hasMessage("Index: 3");
   }
 
   @Test

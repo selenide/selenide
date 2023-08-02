@@ -33,22 +33,22 @@ final class PageObjectTest extends IntegrationTest {
 
   @Test
   void userCanSelectOptionByValue() {
-    pageWithSelects.selectDomain("myrambler.ru");
+    pageWithSelects.selectDomain("two.eu");
 
     assertThat(pageWithSelects.getSelectedOption().getAttribute("value"))
-      .contains("myrambler.ru");
+      .contains("two.eu");
     assertThat(pageWithSelects.getSelectedOption().getText())
-      .contains("@myrambler.ru");
+      .contains("@two.eu");
   }
 
   @Test
   void userCanSelectOptionByText() {
-    pageWithSelects.selectDomainByText("@мыло.ру");
+    pageWithSelects.selectDomainByText("@four.ee");
 
     assertThat(pageWithSelects.getSelectedOption().getAttribute("value"))
-      .contains("мыло.ру");
+      .contains("four.ee");
     assertThat(pageWithSelects.getSelectedOption().getText())
-      .contains("@мыло.ру");
+      .contains("@four.ee");
   }
 
   @Test
