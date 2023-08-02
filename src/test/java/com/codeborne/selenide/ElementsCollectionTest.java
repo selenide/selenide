@@ -13,10 +13,12 @@ import java.time.Duration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Mocks.elementWithAttribute;
+import static com.codeborne.selenide.Mocks.mockCollection;
+import static com.codeborne.selenide.Mocks.mockWebElement;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -34,9 +36,9 @@ import static org.mockito.Mockito.when;
 final class ElementsCollectionTest {
   private final DriverStub driver = new DriverStub();
   private final CollectionSource source = mock();
-  private final WebElement element1 = element("h1");
-  private final WebElement element2 = element("h2");
-  private final WebElement element3 = element("h3");
+  private final WebElement element1 = mockWebElement("h1", "First");
+  private final WebElement element2 = mockWebElement("h2", "Second");
+  private final WebElement element3 = mockWebElement("h3", "Third");
 
   @BeforeEach
   void mockWebDriver() {
@@ -130,34 +132,39 @@ final class ElementsCollectionTest {
   }
 
   @Test
+  void attributes() {
+    ElementsCollection collection = mockCollection(
+      elementWithAttribute("data-test-id", "10001"),
+      elementWithAttribute("data-test-id", "20002")
+    );
+    List<String> elementsTexts = collection.attributes("data-test-id");
+    assertThat(elementsTexts).containsExactly("10001", "20002");
+  }
+
+  @Test
   void texts() {
     ElementsCollection collection = collection("Hello", "Mark");
     List<String> elementsTexts = collection.texts();
-    assertThat(elementsTexts).isEqualTo(asList("Hello", "Mark"));
+    assertThat(elementsTexts).containsExactly("Hello", "Mark");
   }
 
   @Test
   void staticGetTexts() {
-    when(source.getElements()).thenReturn(asList(element1, element2));
-    when(element1.getText()).thenReturn("Hello");
-    when(element2.getText()).thenReturn("Mark");
-    List<String> elementsTexts = ElementsCollection.texts(asList(element1, element2));
-    List<String> expectedTexts = asList("Hello", "Mark");
-    assertThat(elementsTexts)
-      .isEqualTo(expectedTexts);
+    List<WebElement> collection = asList(mockWebElement("div", "Hello"), mockWebElement("div", "Mark"));
+    List<String> elementsTexts = ElementsCollection.texts(collection);
+    assertThat(elementsTexts).containsExactly("Hello", "Mark");
   }
 
   @Test
   void staticGetTextsWithWebDriverException() {
     doThrow(new WebDriverException("Failed to fetch elements")).when(element1).getText();
     when(element2.getText()).thenReturn("Mark");
-    List<String> elementsTexts = ElementsCollection.texts(asList(element1, element2));
-    List<String> expectedTexts = asList("org.openqa.selenium.WebDriverException: Failed to fetch elements", "Mark");
-    assertThat(elementsTexts)
-      .hasSameSizeAs(expectedTexts);
-    IntStream.range(0, expectedTexts.size())
-      .forEach(index -> assertThat(elementsTexts.get(index))
-        .contains(expectedTexts.get(index)));
+
+    List<String> actualTexts = ElementsCollection.texts(asList(element1, element2));
+
+    assertThat(actualTexts).hasSize(2);
+    assertThat(actualTexts.get(0)).startsWith("org.openqa.selenium.WebDriverException: Failed to fetch elements");
+    assertThat(actualTexts.get(1)).isEqualTo("Mark");
   }
 
   @Test
@@ -258,22 +265,10 @@ final class ElementsCollectionTest {
     assertThat(new ElementsCollection(source).toArray()).hasOnlyElementsOfType(SelenideElement.class);
   }
 
-  private WebElement element(String tag) {
-    WebElement element = mock();
-    when(element.getTagName()).thenReturn(tag);
-    when(element.isDisplayed()).thenReturn(true);
-    when(element.isEnabled()).thenReturn(true);
-    return element;
-  }
-
-  private ElementsCollection collection(String first, String second) {
-    ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(asList(element1, element2));
-    when(source.getElement(0)).thenReturn(element1);
-    when(source.getElement(1)).thenReturn(element2);
-    when(element1.getText()).thenReturn(first);
-    when(element2.getText()).thenReturn(second);
-    return collection;
+  private static ElementsCollection collection(String firstText, String secondText) {
+    WebElement element1 = mockWebElement("h1", firstText);
+    WebElement element2 = mockWebElement("h2", secondText);
+    return mockCollection(element1, element2);
   }
 
   private ElementsCollection collection(String first, String second, String third) {
