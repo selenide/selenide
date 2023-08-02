@@ -142,7 +142,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Press ENTER. Useful for input field and textareas: <pre>
-   *  $("query").val("Aikido techniques").pressEnter();</pre>
+   *  $("query").val("Dear Santa").pressEnter();</pre>
    * <p>
    *
    * <b>Implementation details:</b>
@@ -156,8 +156,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement pressEnter();
 
   /**
-   * Press TAB. Useful for input field and textareas: <pre>
-   *  $("#to").val("stiven@seagal.com").pressTab();</pre>
+   * Press TAB. Useful for input field and text areas: <pre>
+   *  $("#to").val("santa@claus.fi").pressTab();</pre>
    * <p>
    * <b>Implementation details:</b><p>
    * Check that element is displayed and execute <pre>
@@ -397,7 +397,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Check if this element exists and visible.
    *
-   * @return false if element does not exists, is invisible, browser is closed or any WebDriver exception happened.
+   * @return false if element does not exist, is invisible, browser is closed or any WebDriver exception happened.
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
