@@ -28,11 +28,11 @@ final class ValueInAttributeTest extends ITest {
 
   @Test
   void errorMessage() {
-    assertThatThrownBy(() -> $("#non-clickable-element a").shouldHave(valueInAttribute("href", "yandex")))
+    assertThatThrownBy(() -> $("#non-clickable-element a").shouldHave(valueInAttribute("href", "duckduckgo.")))
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should have value 'yandex' in attribute 'href' {#non-clickable-element a}")
-      .hasMessageContaining("Element: '<a href=\"http://google.com\">non-clickable element</a>'")
-      .hasMessageContaining("Actual value: http://google.com/");
+      .hasMessageStartingWith("Element should have value 'duckduckgo.' in attribute 'href' {#non-clickable-element a}")
+      .hasMessageContaining("Element: '<a href=\"https://google.com\">non-clickable element</a>'")
+      .hasMessageContaining("Actual value: https://google.com/");
   }
 
   private static Condition valueInAttribute(String attributeName, String value) {

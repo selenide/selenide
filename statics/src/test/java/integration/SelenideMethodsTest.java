@@ -149,12 +149,12 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanGetInnerHtmlOfElement() {
-    assertThat($(byValue("livemail.ru")).innerHtml())
-      .isEqualTo("@livemail.ru");
-    assertThat($(byText("@myrambler.ru")).innerHtml())
-      .isEqualTo("@myrambler.ru");
-    assertThat($(byText("@мыло.ру")).innerHtml())
-      .isEqualTo("@мыло.ру");
+    assertThat($(byValue("one.io")).innerHtml())
+      .isEqualTo("@one.io");
+    assertThat($(byText("@two.eu")).innerHtml())
+      .isEqualTo("@two.eu");
+    assertThat($(byText("@four.ee")).innerHtml())
+      .isEqualTo("@four.ee");
     assertThat($("h2").innerHtml())
       .isEqualTo("Dropdown list");
 
@@ -231,14 +231,14 @@ final class SelenideMethodsTest extends IntegrationTest {
     assertThat($("h2").text())
       .isEqualTo("Dropdown list");
     assertThat($(By.name("domain")).find("option").text())
-      .isEqualTo("@livemail.ru");
+      .isEqualTo("@one.io");
     assertThat($("#radioButtons").text())
       .isEqualTo("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland");
 
     $("h1").shouldHave(partialText("Page "));
     $("h2").shouldHave(text("Dropdown list"));
-    $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
-    $(By.name("domain")).find("option").shouldHave(partialText("vemail.r"));
+    $(By.name("domain")).find("option").shouldHave(text("@one.io"));
+    $(By.name("domain")).find("option").shouldHave(partialText("ne.i"));
     $("#radioButtons").shouldHave(partialText("buttons"), partialText("Мастер"), partialText("Маргарита"));
   }
 
@@ -246,7 +246,7 @@ final class SelenideMethodsTest extends IntegrationTest {
   void userCanCheckIfElementHasExactText() {
     $("h1").shouldHave(exactText("Page with selects"));
     $("h2").shouldHave(exactText("Dropdown list"));
-    $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
+    $(By.name("domain")).find("option").shouldHave(text("@one.io"));
     $("#radioButtons").shouldHave(text("Radio buttons\n" +
                                        "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
   }
@@ -400,8 +400,8 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanFindFirstMatchingSubElement() {
-    $(By.name("domain")).find("option").shouldHave(value("livemail.ru"));
-    $(By.name("domain")).$("option").shouldHave(value("livemail.ru"));
+    $(By.name("domain")).find("option").shouldHave(value("one.io"));
+    $(By.name("domain")).$("option").shouldHave(value("one.io"));
   }
 
   @Test
@@ -428,14 +428,14 @@ final class SelenideMethodsTest extends IntegrationTest {
   void errorMessageShouldContainUrlIfBrowserFailedToOpenPage() {
     try {
       baseUrl = "http://localhost:8080";
-      open("www.yandex.ru");
+      open("www.duckduckgo.com");
       fail("expected WebDriverException");
     }
     catch (WebDriverException e) {
       assertThat(e.getAdditionalInformation())
         .contains("selenide.baseUrl: http://localhost:8080");
       assertThat(e.getAdditionalInformation())
-        .contains("selenide.url: http://localhost:8080www.yandex.ru");
+        .contains("selenide.url: http://localhost:8080www.duckduckgo.com");
     }
   }
 

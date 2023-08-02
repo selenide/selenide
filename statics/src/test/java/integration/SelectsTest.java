@@ -37,13 +37,13 @@ final class SelectsTest extends IntegrationTest {
   @Test
   void userCanSelectOptionByValue() {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
-    select.selectOptionByValue("myrambler.ru");
+    select.selectOptionByValue("two.eu");
 
     select.getSelectedOption().shouldBe(selected);
     assertThat(select.getSelectedOptionValue())
-      .isEqualTo("myrambler.ru");
+      .isEqualTo("two.eu");
     assertThat(select.getSelectedOptionText())
-      .isEqualTo("@myrambler.ru");
+      .isEqualTo("@two.eu");
   }
 
   @Test
@@ -131,7 +131,7 @@ final class SelectsTest extends IntegrationTest {
   void selectMultipleOptionsByText_optionsNotFound() {
     assertThatThrownBy(() -> {
       SelenideElement select = $(By.xpath("//select[@name='domain']"));
-      select.selectOption("wrong-text", "@livemail.ru", "another-wrong");
+      select.selectOption("wrong-text", "@one.io", "another-wrong");
     })
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {By.xpath: //select[@name='domain']/option[text:wrong-text,another-wrong]}")
@@ -144,19 +144,19 @@ final class SelectsTest extends IntegrationTest {
 
     select.selectOption(0);
     assertThat(select.getSelectedOptionText())
-      .isEqualTo("@livemail.ru");
+      .isEqualTo("@one.io");
 
     select.selectOption(1);
     assertThat(select.getSelectedOptionText())
-      .isEqualTo("@myrambler.ru");
+      .isEqualTo("@two.eu");
 
     select.selectOption(2);
     assertThat(select.getSelectedOptionText())
-      .isEqualTo("@rusmail.ru");
+      .isEqualTo("@three.com");
 
     select.selectOption(3);
     assertThat(select.getSelectedOptionText())
-      .isEqualTo("@мыло.ру");
+      .isEqualTo("@four.ee");
   }
 
   @Test
@@ -170,21 +170,21 @@ final class SelectsTest extends IntegrationTest {
   @Test
   void userCanSelectOptionByText() {
     SelenideElement select = $("select[name=domain]");
-    select.selectOption("@мыло.ру");
+    select.selectOption("@four.ee");
 
     select.shouldBe(visible);
     select.getSelectedOption().shouldBe(visible);
-    select.getSelectedOption().shouldHave(text("@мыло.ру"));
-    select.getSelectedOption().shouldHave(value("мыло.ру"));
+    select.getSelectedOption().shouldHave(text("@four.ee"));
+    select.getSelectedOption().shouldHave(value("four.ee"));
   }
 
   @Test
   void userCanSelectOptionByPartialText() {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
-    select.selectOptionContainingText("ыло.р");
+    select.selectOptionContainingText("our.e");
 
     assertThat(select.getSelectedOptionText())
-      .isEqualTo("@мыло.ру");
+      .isEqualTo("@four.ee");
   }
 
   @Test
@@ -303,11 +303,11 @@ final class SelectsTest extends IntegrationTest {
   void selectingOptionTriggersChangeEvent() {
     $("#selectedDomain").shouldBe(empty);
 
-    $(By.xpath("//select[@name='domain']")).selectOption("@мыло.ру");
-    $("#selectedDomain").shouldHave(text("@мыло.ру"));
+    $(By.xpath("//select[@name='domain']")).selectOption("@four.ee");
+    $("#selectedDomain").shouldHave(text("@four.ee"));
 
-    $(By.xpath("//select[@name='domain']")).selectOptionByValue("myrambler.ru");
-    $("#selectedDomain").shouldHave(text("@myrambler.ru"));
+    $(By.xpath("//select[@name='domain']")).selectOptionByValue("two.eu");
+    $("#selectedDomain").shouldHave(text("@two.eu"));
   }
 
   @Test
