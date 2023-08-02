@@ -114,9 +114,6 @@ public class WebDriverFactory {
       return remoteDriverFactory.create(config, capabilities);
     }
     else {
-      if (config.driverManagerEnabled()) {
-        webdriverFactory.setupWebdriverBinary();
-      }
       if (System.getProperty("webdriver.http.factory") == null) {
         System.setProperty("webdriver.http.factory", "selenide-netty-client-factory");
       }

@@ -12,9 +12,6 @@ import javax.annotation.Nullable;
 import java.io.File;
 
 public interface DriverFactory {
-  default void setupWebdriverBinary() {
-  }
-
   @CheckReturnValue
   @Nonnull
   MutableCapabilities createCapabilities(Config config, Browser browser,
