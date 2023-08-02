@@ -89,9 +89,6 @@ final class CommonCapabilitiesTest {
 
   @ParametersAreNonnullByDefault
   private static class DummyDriverFactory extends AbstractDriverFactory {
-    @Override
-    public void setupWebdriverBinary() {
-    }
 
     @Override
     @CheckReturnValue

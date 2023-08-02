@@ -17,7 +17,6 @@ public class SelenideConfig implements Config {
   private String browserSize = getProperty("selenide.browserSize", "1366x768");
   private String browserVersion = getProperty("selenide.browserVersion", null);
   private String browserPosition = getProperty("selenide.browserPosition", null);
-  private boolean driverManagerEnabled = Boolean.parseBoolean(getProperty("selenide.driverManagerEnabled", "false"));
   private boolean webdriverLogsEnabled = Boolean.parseBoolean(getProperty("selenide.webdriverLogsEnabled", "false"));
   private String browserBinary = getProperty("selenide.browserBinary", null);
   private String pageLoadStrategy = getProperty("selenide.pageLoadStrategy", "normal");
@@ -294,16 +293,6 @@ public class SelenideConfig implements Config {
 
   public SelenideConfig browserPosition(String browserPosition) {
     this.browserPosition = browserPosition;
-    return this;
-  }
-
-  @Override
-  public boolean driverManagerEnabled() {
-    return driverManagerEnabled;
-  }
-
-  public SelenideConfig driverManagerEnabled(boolean driverManagerEnabled) {
-    this.driverManagerEnabled = driverManagerEnabled;
     return this;
   }
 

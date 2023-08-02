@@ -18,9 +18,6 @@ import java.lang.reflect.InvocationTargetException;
 
 @ParametersAreNonnullByDefault
 public class DefaultDriverFactory extends AbstractDriverFactory {
-  @Override
-  public void setupWebdriverBinary() {
-  }
 
   @Override
   @CheckReturnValue
@@ -41,9 +38,6 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
     }
     else if (DriverFactory.class.isAssignableFrom(clazz)) {
       DriverFactory factory = createInstanceOf(DriverFactory.class, clazz);
-      if (config.driverManagerEnabled()) {
-        factory.setupWebdriverBinary();
-      }
       return factory.create(config, browser, proxy, browserDownloadsFolder);
     }
     else {

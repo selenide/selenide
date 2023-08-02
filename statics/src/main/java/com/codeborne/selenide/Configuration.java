@@ -307,19 +307,6 @@ public class Configuration {
   public static int proxyPort = defaults.proxyPort();
 
   /**
-   * Not used anymore.
-   * WebDriverManager was replaced by Selenium built-in SeleniumManager.
-   *
-   * See <a href="https://github.com/bonigarcia/webdrivermanager">WebDriverManager configuration details</a>.
-   *
-   * <p>
-   * Default: false
-   * @deprecated
-   */
-  @Deprecated
-  public static boolean driverManagerEnabled = defaults.driverManagerEnabled();
-
-  /**
    * <p>
    *  Whether webdriver logs should be enabled.
    * </p>

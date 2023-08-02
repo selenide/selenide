@@ -18,9 +18,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @ParametersAreNonnullByDefault
 public class SafariDriverFactory extends AbstractDriverFactory {
-  @Override
-  public void setupWebdriverBinary() {
-  }
 
   @Nonnull
   @CheckReturnValue
