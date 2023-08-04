@@ -109,6 +109,14 @@ final class LazyDriverTest {
   }
 
   @Test
+  void getProxy_throwsException_ifBrowserIsNotOpen() {
+    assertThatThrownBy(() -> driver.getProxy())
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessageStartingWith("No webdriver is bound to current thread")
+      .hasMessageEndingWith("You need to call open(url) first.");
+  }
+
+  @Test
   void getWebDriver_throwsException_ifBrowserHasBeenClosed() {
     driver.getAndCheckWebDriver();
     driver.close();

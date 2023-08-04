@@ -132,24 +132,21 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   @CheckReturnValue
   public boolean hasWebDriverStarted() {
-    return currentThreadDriver().map(driver -> driver.webDriver() != null).orElse(false);
+    return getCurrentThreadDriver().map(driver -> driver.webDriver() != null).orElse(false);
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public WebDriver getWebDriver() {
-    return currentThreadDriver().map(WebDriverInstance::webDriver)
-      .orElseThrow(() -> new IllegalStateException(
-        "No webdriver is bound to current thread: " + currentThread().getId() + ". You need to call open(url) first.")
-      );
+    return currentThreadDriver().webDriver();
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public WebDriver getAndCheckWebDriver() {
-    WebDriver webDriver = currentThreadDriver().map(WebDriverInstance::webDriver).orElse(null);
+    WebDriver webDriver = getCurrentThreadDriver().map(WebDriverInstance::webDriver).orElse(null);
     if (webDriver == null) {
       log.info("No webdriver is bound to current thread: {} - let's create a new webdriver", currentThread().getId());
       return createAndRegisterDriver().webDriver();
@@ -173,10 +170,17 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Nullable
   @Override
   public DownloadsFolder getBrowserDownloadsFolder() {
-    return currentThreadDriver().map(WebDriverInstance::downloadsFolder).orElse(null);
+    return currentThreadDriver().downloadsFolder();
   }
 
-  private Optional<WebDriverInstance> currentThreadDriver() {
+  @Nonnull
+  @CheckReturnValue
+  private WebDriverInstance currentThreadDriver() {
+    return getCurrentThreadDriver().orElseThrow(() -> new IllegalStateException(
+      "No webdriver is bound to current thread: " + currentThread().getId() + ". You need to call open(url) first."));
+  }
+
+  private Optional<WebDriverInstance> getCurrentThreadDriver() {
     return Optional.ofNullable(threadWebDriver.get(currentThread().getId()));
   }
 
@@ -206,7 +210,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @CheckReturnValue
   @Nullable
   public SelenideProxyServer getProxyServer() {
-    return currentThreadDriver().map(WebDriverInstance::proxy).orElse(null);
+    return currentThreadDriver().proxy();
   }
 
   @Override
@@ -236,7 +240,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   private void using(WebDriverInstance webDriverInstance, Runnable lambda) {
-    var previous = currentThreadDriver();
+    var previous = getCurrentThreadDriver();
     setWebDriver(webDriverInstance);
     try {
       lambda.run();
