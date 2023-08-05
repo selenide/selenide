@@ -93,8 +93,8 @@ public class LazyDriver implements Driver {
     return checkDriverIsStarted().webDriver();
   }
 
+  @Nonnull
   @Override
-  @Nullable
   public SelenideProxyServer getProxy() {
     return checkDriverIsStarted().proxy();
   }

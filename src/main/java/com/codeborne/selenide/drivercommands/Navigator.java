@@ -70,7 +70,7 @@ public class Navigator {
       try {
         WebDriver webDriver = driver.getAndCheckWebDriver();
         String url = applyBasicAuthIfNeeded(driver.config(), absoluteUrl, webDriver, authenticationType, credentials);
-        beforeNavigateTo(driver.config(), driver.getProxy(), authenticationType, credentials);
+        beforeNavigateTo(driver, authenticationType, credentials);
         webDriver.navigate().to(url);
       }
       catch (WebDriverException e) {
@@ -96,20 +96,12 @@ public class Navigator {
     }
   }
 
-  private void checkThatProxyIsStarted(@Nullable SelenideProxyServer selenideProxy) {
-    if (selenideProxy == null) {
-      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not created. " +
-        "You need to call `setWebDriver(webDriver, selenideProxy)` instead of `setWebDriver(webDriver)` if you need to use proxy.");
-    }
-    if (!selenideProxy.isStarted()) {
-      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not started.");
-    }
-  }
-
-  private void beforeNavigateTo(Config config, @Nullable SelenideProxyServer selenideProxy,
-                                @Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
+  private void beforeNavigateTo(SelenideDriver driver,
+                                @Nullable AuthenticationType authenticationType,
+                                @Nullable Credentials credentials) {
+    Config config = driver.config();
     if (config.proxyEnabled()) {
-      checkThatProxyIsStarted(selenideProxy);
+      SelenideProxyServer selenideProxy = driver.getProxy();
       beforeNavigateToWithProxy(selenideProxy, authenticationType, credentials);
     }
     else {

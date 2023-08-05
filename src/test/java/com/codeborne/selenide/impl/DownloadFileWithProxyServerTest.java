@@ -101,7 +101,7 @@ final class DownloadFileWithProxyServerTest {
 
     assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), click()))
       .isInstanceOf(IllegalStateException.class)
-      .hasMessageContaining("Cannot download file: proxy server is not started");
+      .hasMessageContaining("config.proxyEnabled == true but proxy server is not created.");
   }
 
   private void emulateServerResponseWithFiles(final File... files) {

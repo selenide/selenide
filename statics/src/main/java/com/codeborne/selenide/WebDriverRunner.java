@@ -132,11 +132,9 @@ public class WebDriverRunner {
 
   /**
    * Get selenide proxy. It's activated only if Configuration.proxyEnabled == true
-   *
-   * @return null if proxy server is not started
    */
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   public static SelenideProxyServer getSelenideProxy() {
     return webdriverContainer.getProxyServer();
   }
