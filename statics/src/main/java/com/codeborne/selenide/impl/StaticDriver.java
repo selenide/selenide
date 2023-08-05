@@ -53,7 +53,7 @@ class StaticDriver implements Driver {
 
   @Override
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   public SelenideProxyServer getProxy() {
     return WebDriverRunner.getSelenideProxy();
   }

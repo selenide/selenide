@@ -34,7 +34,7 @@ public interface WebDriverContainer {
   WebDriver getWebDriver();
 
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   SelenideProxyServer getProxyServer();
 
   void setProxy(@Nullable Proxy webProxy);

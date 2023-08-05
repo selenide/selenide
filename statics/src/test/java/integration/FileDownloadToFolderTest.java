@@ -267,4 +267,11 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThat(downloadedFile).hasSize(5 * 1024 * 1024);
   }
 
+  @Test
+  public void cannotDownloadUsingProxy_ifBrowserIsOpenedWithoutProxy() {
+    assertThatThrownBy(() -> $(byText("Download me")).download(using(PROXY)))
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessageStartingWith("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
+  }
+
 }

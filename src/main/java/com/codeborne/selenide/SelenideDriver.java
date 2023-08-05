@@ -200,7 +200,7 @@ public class SelenideDriver {
   }
 
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   public SelenideProxyServer getProxy() {
     return driver().getProxy();
   }

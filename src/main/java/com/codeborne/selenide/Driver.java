@@ -32,8 +32,8 @@ public interface Driver {
   @Nonnull
   WebDriver getWebDriver();
 
+  @Nonnull
   @CheckReturnValue
-  @Nullable
   SelenideProxyServer getProxy();
 
   @CheckReturnValue
