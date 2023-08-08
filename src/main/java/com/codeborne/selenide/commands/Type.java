@@ -6,6 +6,8 @@ import com.codeborne.selenide.TypeOptions;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
@@ -33,9 +35,15 @@ public class Type implements Command<SelenideElement> {
     TypeOptions typeOptions = extractOptions(requireNonNull(args));
     clearField(proxy, locator, typeOptions);
 
-    WebElement element = locator.findAndAssertElementIsEditable();
+    WebElement element = findElement(locator);
     typeIntoField(element, typeOptions);
     return proxy;
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  protected WebElement findElement(WebElementSource locator) {
+    return locator.findAndAssertElementIsEditable();
   }
 
   private TypeOptions extractOptions(Object[] args) {

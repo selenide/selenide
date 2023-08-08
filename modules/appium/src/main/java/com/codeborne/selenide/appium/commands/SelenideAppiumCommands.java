@@ -14,6 +14,7 @@ public class SelenideAppiumCommands extends Commands {
     add("clear", new AppiumClear());
     add("setValue", new AppiumSetValue());
     add("val", new AppiumVal());
+    add("type", new AppiumType());
     add("hideKeyboard", new HideKeyboard());
     add("scrollTo", new AppiumScrollTo());
     add("scroll", new AppiumScrollTo());
