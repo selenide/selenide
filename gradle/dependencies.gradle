@@ -1,5 +1,5 @@
 ext {
-  seleniumVersion = '4.11.0'
+  seleniumVersion = project.properties['seleniumVersion'] ?: '4.11.0'
   httpClientVersion = '5.2.1'
   junitVersion = '5.10.0'
   jettyVersion = '9.4.51.v20230217'
@@ -19,6 +19,12 @@ ext {
 subprojects {
   repositories {
     mavenCentral()
+    maven {
+      url uri('https://oss.sonatype.org/content/repositories/snapshots/')
+      mavenContent {
+        snapshotsOnly()
+      }
+    }
   }
 
   dependencies {
