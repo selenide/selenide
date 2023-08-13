@@ -1,5 +1,7 @@
 name: 'Run tests with Selenium nightly build'
 on:
+  push:
+  pull_request:
   schedule:
     - cron: '6 6 * * *'
 
