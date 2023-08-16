@@ -5,17 +5,17 @@ import java.time.Duration;
 public class TypeOptions {
   private static final Duration DEFAULT_DELAY_WHILE_TYPING = Duration.ofMillis(200);
 
-  private final String charSequence;
+  private final CharSequence charSequence;
   private final boolean shouldClearFieldBeforeTyping;
   private final Duration timeDelayWhileTyping;
 
-  protected TypeOptions(String charSequence, Duration timeDelayWhileTyping, boolean shouldClearFieldBeforeTyping) {
+  protected TypeOptions(CharSequence charSequence, Duration timeDelayWhileTyping, boolean shouldClearFieldBeforeTyping) {
     this.charSequence = charSequence;
     this.timeDelayWhileTyping = timeDelayWhileTyping;
     this.shouldClearFieldBeforeTyping = shouldClearFieldBeforeTyping;
   }
 
-  public static TypeOptions text(String textToType) {
+  public static TypeOptions text(CharSequence textToType) {
     return new TypeOptions(textToType, DEFAULT_DELAY_WHILE_TYPING, true);
   }
 
@@ -27,8 +27,8 @@ public class TypeOptions {
     return new TypeOptions(charSequence, timeDelayWhileTyping, shouldClearFieldBeforeTyping);
   }
 
-  public String textToType() {
-    return String.valueOf(this.charSequence);
+  public CharSequence textToType() {
+    return this.charSequence;
   }
 
   public boolean shouldClearFieldBeforeTyping() {

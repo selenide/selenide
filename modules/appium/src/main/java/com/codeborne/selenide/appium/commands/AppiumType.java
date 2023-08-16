@@ -6,9 +6,11 @@ import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.appium.WebdriverUnwrapper.isMobile;
 
+@ParametersAreNonnullByDefault
 public class AppiumType extends Type {
   public AppiumType() {
     super(new AppiumClear());

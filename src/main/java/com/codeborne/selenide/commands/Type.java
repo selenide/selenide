@@ -55,15 +55,16 @@ public class Type implements Command<SelenideElement> {
   }
 
   private void typeIntoField(WebElement element, TypeOptions typeOptions) {
-    for (char character : typeOptions.textToType().toCharArray()) {
-      element.sendKeys(String.valueOf(character));
+    for (int i = 0; i < typeOptions.textToType().length(); i++) {
+      CharSequence character = typeOptions.textToType().subSequence(i, i + 1);
+      element.sendKeys(character);
       sleepAtLeast(typeOptions.timeDelay().toMillis());
     }
   }
 
   private void clearField(SelenideElement proxy, WebElementSource locator, TypeOptions typeOptions) {
     if (typeOptions.shouldClearFieldBeforeTyping()) {
-      if (!typeOptions.textToType().isEmpty()) {
+      if (typeOptions.textToType().length() > 0) {
         clear.clear(locator.driver(), proxy);
       } else {
         clear.clearAndTrigger(locator.driver(), proxy);
