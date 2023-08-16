@@ -11,9 +11,13 @@ import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static com.codeborne.selenide.ClickOptions.withTimeout;
 import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
-import static com.codeborne.selenide.appium.AppiumClickOptions.*;
+import static com.codeborne.selenide.appium.AppiumClickOptions.doubleTap;
+import static com.codeborne.selenide.appium.AppiumClickOptions.longPressFor;
+import static com.codeborne.selenide.appium.AppiumClickOptions.tap;
+import static com.codeborne.selenide.appium.AppiumClickOptions.tapWithOffset;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
 import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -48,10 +52,10 @@ class AndroidClickOptionsTest extends BaseApiDemosTest {
 
   @Test
   void androidDoubleTap() {
-    $(AppiumBy.xpath(".//*[@text='Preference']")).click();
-    $(AppiumBy.xpath(".//*[@text='1. Preferences from XML']")).click();
-    $(AppiumBy.xpath(".//android.widget.CheckBox")).click(doubleTap());
-    $(AppiumBy.xpath(".//android.widget.CheckBox")).shouldHave(attribute("checked", "false"));
+    $(AppiumBy.xpath(".//*[@text='Views']")).shouldBe(visible).click();
+    $(AppiumBy.xpath(".//*[@text='TextSwitcher']")).scrollTo().shouldBe(visible).click();
+    $(AppiumBy.xpath(".//*[@text='Next']")).click(doubleTap());
+    $(AppiumBy.xpath("(.//android.widget.TextView)[2]")).shouldHave(text("2"));
   }
 
   @Test
