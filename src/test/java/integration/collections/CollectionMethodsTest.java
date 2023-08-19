@@ -205,6 +205,12 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
+  void getTextsOfElements() {
+    openFile("page_with_selects.html");
+    assertThat($$("#number option").texts()).containsExactly("Zero", "One", "Two", "Three", "Four");
+  }
+
+  @Test
   void canGetCollectionElementByIndex() {
     $$("#radioButtons input").get(0).shouldHave(value("master"));
     $$("#radioButtons input").get(1).shouldHave(value("margarita"));
