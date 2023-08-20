@@ -480,7 +480,7 @@ final class SelectsTest extends IntegrationTest {
   void canWaitUntilSelectsGetsEnabled() {
     timeout = 1000;
     $("#disabled-select").shouldBe(disabled);
-    $("#unfroze-me").click();
+    $("#unfreeze-me").click();
     $("#disabled-select").selectOption("Anna");
     $("#disabled-select").getSelectedOption().shouldHave(text("Anna"));
     $("#disabled-select").shouldBe(enabled);
