@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.17.1 (released 20.08.2023)
+* #2424 Fix hanging webdriver  --  see PR #2428
+* #2191 support command $.type() in mobile apps  --  see PR #2408
+* #2420 #2422 fix method $.type(Keys.*)  --  see PR #2421
+* #2398 throw a clear error message when user calls getProxyServer()  --  see PR #2406
+* #2419 remove leading and trailing spaces in $$.texts()  --  see PR #2427
+Full list: https://github.com/selenide/selenide/milestone/188?closed=1
+
 ## 6.17.0 (released 02.08.2023)
 * #2393 bump Selenium from 4.10.0 to 4.11.0, see https://www.selenium.dev/blog/2023/whats-new-in-selenium-manager-with-selenium-4.11.0/
 * #2385 #2402 replace WebDriverManager by Selenium built-in SeleniumManager  --  see PR #2400
