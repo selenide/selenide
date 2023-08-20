@@ -52,9 +52,9 @@ class AndroidClickOptionsTest extends BaseApiDemosTest {
 
   @Test
   void androidDoubleTap() {
-    $(AppiumBy.xpath(".//*[@text='Views']")).shouldBe(visible).click();
-    $(AppiumBy.xpath(".//*[@text='TextSwitcher']")).scrollTo().shouldBe(visible).click();
-    $(AppiumBy.xpath("//android.widget.Button")).shouldBe(visible).click(doubleTap());
+    $(AppiumBy.xpath(".//*[@text='Views']")).click();
+    $(AppiumBy.xpath(".//*[@text='TextSwitcher']")).scrollTo().click();
+    $(AppiumBy.xpath("//android.widget.Button")).click(doubleTap());
     $(AppiumBy.xpath("(.//android.widget.TextView)[2]")).shouldHave(text("2"));
   }
 
