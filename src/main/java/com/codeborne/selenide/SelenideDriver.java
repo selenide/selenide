@@ -121,14 +121,16 @@ public class SelenideDriver {
   @Nonnull
   public <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                 Class<PageObjectClass> pageObjectClassClass) {
-    return open(relativeOrAbsoluteUrl, "", "", "", pageObjectClassClass);
+    open(relativeOrAbsoluteUrl);
+    return page(pageObjectClassClass);
   }
 
   @CheckReturnValue
   @Nonnull
   public <PageObjectClass> PageObjectClass open(URL absoluteUrl,
                                                 Class<PageObjectClass> pageObjectClassClass) {
-    return open(absoluteUrl, "", "", "", pageObjectClassClass);
+    open(absoluteUrl);
+    return page(pageObjectClassClass);
   }
 
   @CheckReturnValue
