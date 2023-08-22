@@ -31,6 +31,7 @@ import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.TextCheck.FULL_TEXT;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
@@ -55,7 +56,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   @BeforeEach
   final void openBlankPage() {
     if (hasWebDriverStarted()) {
-      open("about:blank");
+      retry(() -> open("about:blank"), 5);
     }
   }
 
@@ -88,11 +89,12 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   protected void openFile(String fileName) {
-    open("/" + fileName);
+    retry(() -> open("/" + fileName), 5);
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
-    return open("/" + fileName, pageObjectClass);
+    retry(() -> open("/" + fileName), 5);
+    return page(pageObjectClass);
   }
 
   /**
