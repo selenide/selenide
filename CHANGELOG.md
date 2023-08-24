@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.17.2 (released 24.08.2023)
+* #2424 Avoid using authentication via CDP  --  see PR #2435
+* Bump nettyVersion from 4.1.96.Final to 4.1.97.Final
+Full list: https://github.com/selenide/selenide/milestone/189?closed=1
+
 ## 6.17.1 (released 20.08.2023)
 * #2424 Fix hanging webdriver  --  see PR #2428
 * #2191 support command $.type() in mobile apps  --  see PR #2408
