@@ -2,8 +2,6 @@ package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.BasicAuthCredentials;
 import com.codeborne.selenide.Credentials;
-import org.openqa.selenium.HasAuthentication;
-import org.openqa.selenium.UsernameAndPassword;
 import org.openqa.selenium.WebDriver;
 
 import javax.annotation.CheckReturnValue;
@@ -51,13 +49,6 @@ public class BasicAuthUtils {
 
   @CheckReturnValue
   public static boolean registerBasicAuth(WebDriver webDriver, @Nullable Credentials credentials) {
-    if (webDriver instanceof HasAuthentication hasAuthentication && credentials instanceof BasicAuthCredentials basicAuth) {
-      hasAuthentication.register(
-        uri -> uriMatchesDomain(uri, basicAuth.domain()),
-        UsernameAndPassword.of(basicAuth.login, basicAuth.password)
-      );
-      return true;
-    }
     return false;
   }
 
