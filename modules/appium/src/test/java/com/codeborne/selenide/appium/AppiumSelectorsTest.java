@@ -137,4 +137,12 @@ class AppiumSelectorsTest {
       .isInstanceOf(By.ByXPath.class)
       .hasToString("[content-desc*=selen'ide-app'ium]");
   }
+
+  @Test
+  void classNameAndIndex() {
+    By by = AppiumSelectors.byClassNameAndIndex("android.widget.TextView", 1);
+    assertThat(by)
+      .isInstanceOf(By.ByXPath.class)
+      .hasToString("(.//android.widget.TextView)[1]");
+  }
 }
