@@ -64,7 +64,7 @@ public class ElementFinder extends WebElementSource {
     return (T) Proxy.newProxyInstance(
       currentThread().getContextClassLoader(),
       new Class<?>[]{clazz},
-      new SelenideElementProxy(new ElementFinder(driver, parent, criteria, index, alias)));
+      new SelenideElementProxy<>(new ElementFinder(driver, parent, criteria, index, alias)));
   }
 
   @CheckReturnValue
@@ -75,7 +75,7 @@ public class ElementFinder extends WebElementSource {
     return (T) Proxy.newProxyInstance(
       currentThread().getContextClassLoader(),
       new Class<?>[]{clazz},
-      new SelenideElementProxy(element));
+      new SelenideElementProxy<>(element));
   }
 
   private final Driver driver;
@@ -87,7 +87,7 @@ public class ElementFinder extends WebElementSource {
     this(driver, parent, criteria, index, null);
   }
 
-  ElementFinder(Driver driver, @Nullable WebElementSource parent, By criteria, int index, @Nullable String alias) {
+  public ElementFinder(Driver driver, @Nullable WebElementSource parent, By criteria, int index, @Nullable String alias) {
     this.driver = driver;
     this.parent = parent;
     this.criteria = criteria;

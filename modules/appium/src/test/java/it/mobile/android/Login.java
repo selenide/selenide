@@ -3,6 +3,7 @@ package it.mobile.android;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.TypeOptions;
 import com.codeborne.selenide.appium.SelenideAppium;
+import com.codeborne.selenide.appium.SelenideAppiumElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,7 @@ class SauceLabLoginTest extends BaseSwagLabsAndroidTest {
 
 class LoginPage {
   @AndroidFindBy(accessibility = "Username input field")
-  SelenideElement login;
+  SelenideAppiumElement login;
 
   @AndroidFindBy(accessibility = "Password input field")
   SelenideElement password;
@@ -72,5 +73,5 @@ class LoginPage {
 
 class CheckoutPage {
   @AndroidFindBy(accessibility = "checkout address screen")
-  SelenideElement title;
+  SelenideAppiumElement title;
 }

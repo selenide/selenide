@@ -19,7 +19,7 @@ public class LastCollectionElement extends WebElementSource {
   public static SelenideElement wrap(CollectionSource collection) {
     return (SelenideElement) Proxy.newProxyInstance(
       collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
-      new SelenideElementProxy(new LastCollectionElement(collection)));
+      new SelenideElementProxy<>(new LastCollectionElement(collection)));
   }
 
   private final CollectionSource collection;
