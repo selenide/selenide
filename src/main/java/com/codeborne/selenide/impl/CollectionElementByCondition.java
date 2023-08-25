@@ -22,7 +22,7 @@ public class CollectionElementByCondition extends WebElementSource {
   public static SelenideElement wrap(CollectionSource collection, Condition condition) {
     return (SelenideElement) Proxy.newProxyInstance(
       collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
-      new SelenideElementProxy(new CollectionElementByCondition(collection, condition)));
+      new SelenideElementProxy<>(new CollectionElementByCondition(collection, condition)));
   }
 
   private final CollectionSource collection;

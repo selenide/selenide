@@ -17,7 +17,7 @@ public class GetSelectedOption implements Command<SelenideElement> {
   @CheckReturnValue
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource selectElement, @Nullable Object[] args) {
-    return wrap(selectElement.driver(), selectElement.description() + " :selected", selectElement,
+    return wrap(SelenideElement.class, selectElement.driver(), selectElement.description() + " :selected", selectElement,
       "return arguments[0].options[arguments[0].selectedIndex];");
   }
 }

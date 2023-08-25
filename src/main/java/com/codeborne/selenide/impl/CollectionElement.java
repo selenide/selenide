@@ -21,7 +21,7 @@ public class CollectionElement extends WebElementSource {
   public static SelenideElement wrap(CollectionSource collection, int index) {
     return (SelenideElement) Proxy.newProxyInstance(
       collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
-      new SelenideElementProxy(new CollectionElement(collection, index)));
+      new SelenideElementProxy<>(new CollectionElement(collection, index)));
   }
 
   private final CollectionSource collection;

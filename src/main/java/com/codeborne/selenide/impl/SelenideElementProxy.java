@@ -30,7 +30,7 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Arrays.asList;
 
 @ParametersAreNonnullByDefault
-class SelenideElementProxy implements InvocationHandler {
+class SelenideElementProxy<T extends SelenideElement> implements InvocationHandler {
   private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
     "as",
     "getAlias",

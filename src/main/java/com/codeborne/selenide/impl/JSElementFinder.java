@@ -20,11 +20,12 @@ public class JSElementFinder extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   @SuppressWarnings("unchecked")
-  public static <T extends SelenideElement> T wrap(Driver driver, String description, WebElementSource parent, String js) {
+  public static <T extends SelenideElement> T wrap(Class<T> clazz, Driver driver,
+                                                   String description, WebElementSource parent, String js) {
     return (T) Proxy.newProxyInstance(
       currentThread().getContextClassLoader(),
-      new Class<?>[]{SelenideElement.class},
-      new SelenideElementProxy(new JSElementFinder(driver, description, parent, js)));
+      new Class<?>[]{clazz},
+      new SelenideElementProxy<>(new JSElementFinder(driver, description, parent, js)));
   }
 
   private final Driver driver;

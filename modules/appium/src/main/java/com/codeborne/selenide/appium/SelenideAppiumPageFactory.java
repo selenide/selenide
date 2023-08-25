@@ -2,6 +2,9 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.impl.ElementFinder;
+import com.codeborne.selenide.impl.LazyWebElementSnapshot;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.HasBrowserCheck;
@@ -88,4 +91,15 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     }
     return appiumElement;
   }
+
+  @Nonnull
+  @Override
+  protected SelenideElement decorateWebElement(Driver driver, @Nullable WebElementSource searchContext, By selector,
+                                               Field field, @Nullable String alias) {
+    return shouldCache(field) ?
+      LazyWebElementSnapshot.wrap(new ElementFinder(driver, searchContext, selector, 0, alias)) :
+      ElementFinder.wrap(driver, SelenideAppiumElement.class, searchContext, selector, 0, alias);
+
+  }
+
 }
