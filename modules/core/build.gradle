@@ -18,7 +18,9 @@ dependencies {
 
   implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
 
-  compileOnly("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
+  compileOnly("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion") {
+    transitive false
+  }
   compileOnly("xyz.rogfam:littleproxy:$littleProxyVersion")
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
