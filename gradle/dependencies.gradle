@@ -28,6 +28,9 @@ subprojects {
   }
 
   dependencies {
+    constraints {
+      api("com.fasterxml.jackson.core:jackson-core:2.15.2")
+    }
     annotationProcessor("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
     annotationProcessor("net.bytebuddy:byte-buddy:${byteBuddyVersion}")
     annotationProcessor("net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}")
