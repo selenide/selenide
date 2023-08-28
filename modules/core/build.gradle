@@ -16,7 +16,6 @@ sourceSets {
 dependencies {
   api('org.opentest4j:opentest4j:1.3.0')
 
-  implementation('org.apache.commons:commons-compress:1.23.0') {because 'used by webdrivermanager'}
   implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
 
   compileOnly("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
