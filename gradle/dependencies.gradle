@@ -29,17 +29,13 @@ subprojects {
 
   dependencies {
     constraints {
-      api("com.fasterxml.jackson.core:jackson-core:2.15.2")
+      annotationProcessor("net.bytebuddy:byte-buddy-parent:${byteBuddyVersion}") {because 'used by jabel'}
+      api("com.fasterxml.jackson.core:jackson-core:2.15.2") {because 'used by browserup-proxy'}
+      testImplementation("xyz.rogfam:littleproxy:$littleProxyVersion") {because 'used by browserup-proxy'}
     }
     annotationProcessor("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
-    annotationProcessor("net.bytebuddy:byte-buddy:${byteBuddyVersion}")
-    annotationProcessor("net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}")
     compileOnly("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
     testCompileOnly("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
-    compileOnly("net.bytebuddy:byte-buddy:${byteBuddyVersion}")
-    compileOnly("net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}")
-    testCompileOnly("net.bytebuddy:byte-buddy:${byteBuddyVersion}")
-    testCompileOnly("net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}")
 
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
       exclude group: 'org.slf4j'
@@ -48,7 +44,6 @@ subprojects {
     implementation("org.apache.commons:commons-lang3:3.13.0")
     implementation("commons-io:commons-io:2.13.0")
     testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
-    testImplementation("xyz.rogfam:littleproxy:$littleProxyVersion")
     testImplementation("io.netty:netty-all:$nettyVersion")
     testImplementation("io.netty:netty-codec:$nettyVersion")
     testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
