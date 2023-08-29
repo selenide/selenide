@@ -1047,6 +1047,24 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   ElementsCollection getSelectedOptions();
 
   /**
+   * Find all options from this select field
+   * <p>
+   *
+   * <b>Applicable for:</b> <pre>{@code
+   * <select>
+   *   <option>...<option>
+   * </select>
+   * }</pre>
+   *
+   * @return ElementsCollection for all &lt;option&gt; elements
+   * @see com.codeborne.selenide.commands.GetOptions
+   * @since 6.18.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  ElementsCollection getOptions();
+
+  /**
    * Get value of selected option in select field
    * <p>
    *

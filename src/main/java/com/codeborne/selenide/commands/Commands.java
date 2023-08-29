@@ -123,6 +123,7 @@ public class Commands {
   }
 
   private void addSelectCommands() {
+    add("getOptions", new GetOptions());
     add("getSelectedOption", new GetSelectedOption());
     add("getSelectedOptions", new GetSelectedOptions());
     add("getSelectedText", new GetSelectedOptionText());
