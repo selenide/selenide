@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.enabled;
@@ -465,7 +466,17 @@ final class SelectsTest extends IntegrationTest {
   }
 
   @Test
+  void canCheckSelectOptions() {
+    $("#cars").getOptions().shouldHave(texts("Volvo", "Saab", "Opel", "Audi", "Zhiguli", "Lada"));
+
+    $("#cars").selectOption("Volvo");
+    $("#cars").getSelectedOptions().shouldHave(texts("Volvo"));
+  }
+
+  @Test
   void canCheckOptionsOfDisabledSelect() {
+    $("#disabled-select").getOptions().last(2).shouldHave(texts("Elsa", "Anna"));
+
     $("#disabled-select").getSelectedOptions().shouldHave(size(1));
     $("#disabled-select").getSelectedOption().shouldHave(exactValue(""));
     $("#disabled-select").getSelectedOption().shouldHave(text("-- Select the frozen --"));
