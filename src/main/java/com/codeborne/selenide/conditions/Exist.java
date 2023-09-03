@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
@@ -13,7 +13,7 @@ import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 
 @ParametersAreNonnullByDefault
-public class Exist extends Condition {
+public class Exist extends WebElementCondition {
   public Exist() {
     super("exist");
   }
@@ -32,7 +32,7 @@ public class Exist extends Condition {
 
   @Nonnull
   @Override
-  public Condition negate() {
+  public WebElementCondition negate() {
     return new Not(this, true);
   }
 }

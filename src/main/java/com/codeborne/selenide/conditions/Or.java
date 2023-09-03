@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -16,9 +16,9 @@ import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
-public class Or extends Condition {
+public class Or extends WebElementCondition {
 
-  private final List<? extends Condition> conditions;
+  private final List<? extends WebElementCondition> conditions;
 
   /**
    * Ctor.
@@ -27,12 +27,12 @@ public class Or extends Condition {
    * @param conditions conditions list
    * @throws IllegalArgumentException if {@code conditions} is empty
    */
-  public Or(String name, List<? extends Condition> conditions) {
-    super(name, checkedConditionsListCtorArg(conditions).stream().anyMatch(Condition::missingElementSatisfiesCondition));
+  public Or(String name, List<? extends WebElementCondition> conditions) {
+    super(name, checkedConditionsListCtorArg(conditions).stream().anyMatch(WebElementCondition::missingElementSatisfiesCondition));
     this.conditions = conditions;
   }
 
-  private static List<? extends Condition> checkedConditionsListCtorArg(List<? extends Condition> conditions) {
+  private static List<? extends WebElementCondition> checkedConditionsListCtorArg(List<? extends WebElementCondition> conditions) {
     if (conditions.isEmpty()) {
       throw new IllegalArgumentException("conditions list is empty");
     }
@@ -42,8 +42,10 @@ public class Or extends Condition {
   @Nonnull
   @CheckReturnValue
   @Override
-  public Condition negate() {
-    return new Not(this, conditions.stream().map(Condition::negate).anyMatch(Condition::missingElementSatisfiesCondition));
+  public WebElementCondition negate() {
+    return new Not(this,
+      conditions.stream().map(WebElementCondition::negate).anyMatch(WebElementCondition::missingElementSatisfiesCondition)
+    );
   }
 
   @Nonnull
@@ -51,7 +53,7 @@ public class Or extends Condition {
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     List<CheckResult> results = new ArrayList<>();
-    for (Condition c : conditions) {
+    for (WebElementCondition c : conditions) {
       CheckResult check = c.check(driver, element);
       if (check.verdict() == ACCEPT) {
         return check;
@@ -69,6 +71,6 @@ public class Or extends Condition {
   @CheckReturnValue
   @Override
   public String toString() {
-    return getName() + ": " + conditions.stream().map(Condition::toString).collect(joining(" or "));
+    return getName() + ": " + conditions.stream().map(WebElementCondition::toString).collect(joining(" or "));
   }
 }

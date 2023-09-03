@@ -25,7 +25,7 @@ import java.time.Duration;
 
 /**
  * Wrapper around {@link WebElement} with additional methods like
- * {@link #shouldBe(Condition...)} and {@link #shouldHave(Condition...)}
+ * {@link #shouldBe(WebElementCondition...)} and {@link #shouldHave(WebElementCondition...)}
  */
 @ParametersAreNonnullByDefault
 public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, Locatable, TakesScreenshot {
@@ -415,7 +415,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
-  boolean is(Condition condition);
+  boolean is(WebElementCondition condition);
 
   /**
    * immediately returns true if element matches given condition
@@ -427,7 +427,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
-  boolean has(Condition condition);
+  boolean has(WebElementCondition condition);
 
   /**
    * Set checkbox state to CHECKED or UNCHECKED.
@@ -458,56 +458,56 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement should(Condition... condition);
+  SelenideElement should(WebElementCondition... condition);
 
   /**
    * Wait until given element meets given condition (with given timeout)
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement should(Condition condition, Duration timeout);
+  SelenideElement should(WebElementCondition condition, Duration timeout);
 
   /**
-   * Synonym for {@link #should(com.codeborne.selenide.Condition...)}. Useful for better readability.<p>
+   * Synonym for {@link #should(WebElementCondition...)}. Useful for better readability.<p>
    *
    * For example: {@code
    * $("#errorMessage").shouldHave(text("Hello"), text("World"));
    * }
    *
-   * @see SelenideElement#should(com.codeborne.selenide.Condition...)
+   * @see SelenideElement#should(WebElementCondition...)
    * @see com.codeborne.selenide.commands.ShouldHave
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement shouldHave(Condition... condition);
+  SelenideElement shouldHave(WebElementCondition... condition);
 
   /**
    * Wait until given element meets given condition (with given timeout)
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement shouldHave(Condition condition, Duration timeout);
+  SelenideElement shouldHave(WebElementCondition condition, Duration timeout);
 
   /**
-   * Synonym for {@link #should(com.codeborne.selenide.Condition...)}. Useful for better readability.<p>
+   * Synonym for {@link #should(WebElementCondition...)}. Useful for better readability.<p>
    *
    * For example: {@code
    * $("#errorMessage").shouldBe(visible, enabled);
    * }
    *
-   * @see SelenideElement#should(com.codeborne.selenide.Condition...)
+   * @see SelenideElement#should(WebElementCondition...)
    * @see com.codeborne.selenide.commands.ShouldBe
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement shouldBe(Condition... condition);
+  SelenideElement shouldBe(WebElementCondition... condition);
 
   /**
    * Wait until given element meets given condition (with given timeout)
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement shouldBe(Condition condition, Duration timeout);
+  SelenideElement shouldBe(WebElementCondition condition, Duration timeout);
 
   /**
    * Sequentially checks that given element does not meet given conditions.<p>
@@ -526,56 +526,56 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement shouldNot(Condition... condition);
+  SelenideElement shouldNot(WebElementCondition... condition);
 
   /**
    * Wait until given element meets given condition (with given timeout)
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement shouldNot(Condition condition, Duration timeout);
+  SelenideElement shouldNot(WebElementCondition condition, Duration timeout);
 
   /**
-   * Synonym for {@link #shouldNot(com.codeborne.selenide.Condition...)}. Useful for better readability.<p>
+   * Synonym for {@link #shouldNot(WebElementCondition...)}. Useful for better readability.<p>
    *
    * For example: {@code
    * $("#errorMessage").shouldNotHave(text("Exception"), text("Error"));
    * }
    *
-   * @see SelenideElement#shouldNot(com.codeborne.selenide.Condition...)
+   * @see SelenideElement#shouldNot(WebElementCondition...)
    * @see com.codeborne.selenide.commands.ShouldNotHave
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement shouldNotHave(Condition... condition);
+  SelenideElement shouldNotHave(WebElementCondition... condition);
 
   /**
    * Wait until given element does NOT meet given condition (with given timeout)
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement shouldNotHave(Condition condition, Duration timeout);
+  SelenideElement shouldNotHave(WebElementCondition condition, Duration timeout);
 
   /**
-   * Synonym for {@link #shouldNot(com.codeborne.selenide.Condition...)}. Useful for better readability.<p>
+   * Synonym for {@link #shouldNot(WebElementCondition...)}. Useful for better readability.<p>
    *
    * For example: {@code
    * $("#errorMessage").shouldNotBe(visible, enabled);
    * }
    *
-   * @see SelenideElement#shouldNot(com.codeborne.selenide.Condition...)
+   * @see SelenideElement#shouldNot(WebElementCondition...)
    * @see com.codeborne.selenide.commands.ShouldNotBe
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement shouldNotBe(Condition... condition);
+  SelenideElement shouldNotBe(WebElementCondition... condition);
 
   /**
    * Wait until given element does NOT meet given condition (with given timeout)
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement shouldNotBe(Condition condition, Duration timeout);
+  SelenideElement shouldNotBe(WebElementCondition condition, Duration timeout);
 
   /**
    * Short description of WebElement, usually a selector.

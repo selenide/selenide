@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -11,7 +11,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
-public class CustomMatch extends Condition {
+public class CustomMatch extends WebElementCondition {
   protected final Predicate<WebElement> predicate;
 
   public CustomMatch(String description, Predicate<WebElement> predicate) {

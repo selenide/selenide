@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ex.WindowNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -95,7 +94,7 @@ final class TabsTest extends ITest {
     $(byText("Page3: jquery")).click();
 
     $("h1").shouldHave(text("Tabs"));
-    Condition oneOfTitles = or("one of titles", text("Tabs"), text("Page with alerts"), text("File uploads"), text("Page with JQuery"));
+    var oneOfTitles = or("one of titles", text("Tabs"), text("Page with alerts"), text("File uploads"), text("Page with JQuery"));
 
     switchTo().window(1);
     $("h1").shouldHave(oneOfTitles);

@@ -1,8 +1,8 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.Screenshot;
 import org.openqa.selenium.WebElement;
 
@@ -23,7 +23,7 @@ public interface ErrorFormatter {
 
   @CheckReturnValue
   @Nonnull
-  String actualValue(Condition condition, Driver driver,
+  String actualValue(WebElementCondition condition, Driver driver,
                      @Nullable WebElement element,
                      @Nullable CheckResult lastCheckResult);
 }

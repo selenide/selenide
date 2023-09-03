@@ -1,8 +1,8 @@
 package integration.customconditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import integration.ITest;
@@ -65,8 +65,8 @@ final class ChildElementTest extends ITest {
       .hasMessageContaining("Expected: child td with attribute class=\"first_row\"");
   }
 
-  public static Condition child(final String childCssSelector, final Condition condition) {
-    return new Condition("child " + childCssSelector + " with " + condition.getName()) {
+  public static WebElementCondition child(String childCssSelector, WebElementCondition condition) {
+    return new WebElementCondition("child " + childCssSelector + " with " + condition.getName()) {
       @Nonnull
       @Override
       public CheckResult check(Driver driver, WebElement element) {

@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
@@ -19,16 +19,16 @@ public class CollectionElementByCondition extends WebElementSource {
 
   @CheckReturnValue
   @Nonnull
-  public static SelenideElement wrap(CollectionSource collection, Condition condition) {
+  public static SelenideElement wrap(CollectionSource collection, WebElementCondition condition) {
     return (SelenideElement) Proxy.newProxyInstance(
       collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
       new SelenideElementProxy<>(new CollectionElementByCondition(collection, condition)));
   }
 
   private final CollectionSource collection;
-  private final Condition condition;
+  private final WebElementCondition condition;
 
-  CollectionElementByCondition(CollectionSource collection, Condition condition) {
+  CollectionElementByCondition(CollectionSource collection, WebElementCondition condition) {
     this.collection = collection;
     this.condition = condition;
   }

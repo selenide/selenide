@@ -1,8 +1,8 @@
 package integration.customconditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementShould;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,8 +39,8 @@ final class MoveAroundTest extends ITest {
       .hasMessageContaining("Actual value: Location: (");
   }
 
-  public static Condition moveAround(int movePeriodMs) {
-    return new Condition("moveAround") {
+  public static WebElementCondition moveAround(int movePeriodMs) {
+    return new WebElementCondition("moveAround") {
       @Nonnull
       @Override
       public CheckResult check(Driver driver, WebElement element) {

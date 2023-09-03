@@ -1,8 +1,8 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.Alias;
 import com.codeborne.selenide.impl.ElementDescriber;
 import org.openqa.selenium.WebElement;
@@ -18,7 +18,7 @@ public class ElementShouldNot extends UIAssertionError {
   private static final ElementDescriber describe = inject(ElementDescriber.class);
 
   public ElementShouldNot(Driver driver, Alias alias, String searchCriteria, String prefix,
-                          Condition expectedCondition, @Nullable CheckResult lastCheckResult,
+                          WebElementCondition expectedCondition, @Nullable CheckResult lastCheckResult,
                           WebElement element, @Nullable Throwable cause) {
     super(
       driver,

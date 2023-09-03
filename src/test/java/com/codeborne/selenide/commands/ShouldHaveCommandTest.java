@@ -1,7 +1,7 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,8 +27,8 @@ final class ShouldHaveCommandTest {
 
   @Test
   void checksEveryConditionFromGivenParameters() {
-    Condition condition1 = text("aaa");
-    Condition condition2 = attribute("readonly");
+    WebElementCondition condition1 = text("aaa");
+    WebElementCondition condition2 = attribute("readonly");
     SelenideElement returnedElement = shouldHaveCommand.execute(proxy, locator, new Object[]{condition1, condition2});
     assertThat(returnedElement).isEqualTo(proxy);
     verify(locator).checkCondition("have ", condition1, false);

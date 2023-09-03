@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -13,7 +13,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 @ParametersAreNonnullByDefault
-public class PseudoElementPropertyWithValue extends Condition {
+public class PseudoElementPropertyWithValue extends WebElementCondition {
 
   static final String JS_CODE = "return window.getComputedStyle(arguments[0], arguments[1])" +
     ".getPropertyValue(arguments[2]);";

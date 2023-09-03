@@ -16,7 +16,6 @@ import com.codeborne.selenide.conditions.ExactOwnTextCaseSensitive;
 import com.codeborne.selenide.conditions.ExactText;
 import com.codeborne.selenide.conditions.ExactTextCaseSensitive;
 import com.codeborne.selenide.conditions.Exist;
-import com.codeborne.selenide.conditions.ExplainedCondition;
 import com.codeborne.selenide.conditions.Focused;
 import com.codeborne.selenide.conditions.Hidden;
 import com.codeborne.selenide.conditions.Href;
@@ -26,7 +25,6 @@ import com.codeborne.selenide.conditions.IsImageLoaded;
 import com.codeborne.selenide.conditions.MatchAttributeWithValue;
 import com.codeborne.selenide.conditions.MatchText;
 import com.codeborne.selenide.conditions.NamedCondition;
-import com.codeborne.selenide.conditions.Not;
 import com.codeborne.selenide.conditions.Or;
 import com.codeborne.selenide.conditions.OwnText;
 import com.codeborne.selenide.conditions.OwnTextCaseSensitive;
@@ -49,28 +47,26 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
 
-import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
-import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.conditions.ConditionHelpers.merge;
 
 /**
  * Conditions to match web elements: checks for visibility, text etc.
  */
 @ParametersAreNonnullByDefault
-public abstract class Condition {
+public final class Condition {
   /**
    * Checks if element is visible
    *
    * <p>Sample: {@code $("input").shouldBe(visible);}</p>
    */
-  public static final Condition visible = new Visible();
+  public static final WebElementCondition visible = new Visible();
 
   /**
    * Check if element exist. It can be visible or hidden.
    *
    * <p>Sample: {@code $("input").should(exist);}</p>
    */
-  public static final Condition exist = new Exist();
+  public static final WebElementCondition exist = new Exist();
 
   /**
    * Checks that element is not visible or does not exist.
@@ -79,14 +75,14 @@ public abstract class Condition {
    *
    * <p>Sample: {@code $("input").shouldBe(hidden);}</p>
    */
-  public static final Condition hidden = new Hidden();
+  public static final WebElementCondition hidden = new Hidden();
 
   /**
    * Synonym for {@link #visible} - may be used for better readability
    *
    * <p>Sample: {@code $("#logoutLink").should(appear);}</p>
    */
-  public static final Condition appear = be(visible);
+  public static final WebElementCondition appear = be(visible);
 
   /**
    * Synonym for {@link #visible} - may be used for better readability
@@ -95,14 +91,14 @@ public abstract class Condition {
    * @deprecated use {@link #visible} or {@link #appear}
    */
   @Deprecated
-  public static final Condition appears = be(visible);
+  public static final WebElementCondition appears = be(visible);
 
   /**
    * Synonym for {@link #hidden} - may be used for better readability:
    *
    * <p>{@code $("#loginLink").should(disappear);}</p>
    */
-  public static final Condition disappear = be(hidden);
+  public static final WebElementCondition disappear = be(hidden);
 
   /**
    * Check if element is interactable:
@@ -121,7 +117,7 @@ public abstract class Condition {
    * <br/>
    * @since 6.5.0
    */
-  public static final Condition interactable = new Interactable();
+  public static final WebElementCondition interactable = new Interactable();
 
   /**
    * <p>
@@ -132,7 +128,7 @@ public abstract class Condition {
    * <p>{@code $("input").shouldBe(readonly);}</p>
    * <br>
    */
-  public static final Condition readonly = new Readonly();
+  public static final WebElementCondition readonly = new Readonly();
 
   /**
    * Check if element is "editable":
@@ -146,7 +142,7 @@ public abstract class Condition {
    * <br>
    * @since 6.5.0
    */
-  public static final Condition editable = new Editable();
+  public static final WebElementCondition editable = new Editable();
 
   /**
    * Check if element has given attribute (with any value)
@@ -154,11 +150,10 @@ public abstract class Condition {
    * <p>Sample: {@code $("#mydiv").shouldHave(attribute("fileId"));}</p>
    *
    * @param attributeName name of attribute, not null
-   * @return true iff attribute exists
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition attribute(String attributeName) {
+  public static WebElementCondition attribute(String attributeName) {
     return new Attribute(attributeName);
   }
 
@@ -170,7 +165,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition attribute(String attributeName, String expectedAttributeValue) {
+  public static WebElementCondition attribute(String attributeName, String expectedAttributeValue) {
     return new AttributeWithValue(attributeName, expectedAttributeValue);
   }
 
@@ -184,7 +179,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition attributeMatching(String attributeName, String attributeRegex) {
+  public static WebElementCondition attributeMatching(String attributeName, String attributeRegex) {
     return new MatchAttributeWithValue(attributeName, attributeRegex);
   }
 
@@ -198,7 +193,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition href(String href) {
+  public static WebElementCondition href(String href) {
     return new Href(href);
   }
 
@@ -212,7 +207,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition value(String expectedValue) {
+  public static WebElementCondition value(String expectedValue) {
     return new Value(expectedValue);
   }
 
@@ -227,7 +222,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition partialValue(String expectedValue) {
+  public static WebElementCondition partialValue(String expectedValue) {
     return new PartialValue(expectedValue);
   }
 
@@ -242,7 +237,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition pseudo(String pseudoElementName, String propertyName, String expectedValue) {
+  public static WebElementCondition pseudo(String pseudoElementName, String propertyName, String expectedValue) {
     return new PseudoElementPropertyWithValue(pseudoElementName, propertyName, expectedValue);
   }
 
@@ -255,7 +250,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition pseudo(String pseudoElementName, String expectedValue) {
+  public static WebElementCondition pseudo(String pseudoElementName, String expectedValue) {
     return new PseudoElementPropertyWithValue(pseudoElementName, "content", expectedValue);
   }
 
@@ -266,7 +261,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition exactValue(String value) {
+  public static WebElementCondition exactValue(String value) {
     return attribute("value", value);
   }
 
@@ -278,7 +273,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition name(String name) {
+  public static WebElementCondition name(String name) {
     return attribute("name", name);
   }
 
@@ -290,7 +285,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition type(String type) {
+  public static WebElementCondition type(String type) {
     return attribute("type", type);
   }
 
@@ -301,7 +296,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition id(String id) {
+  public static WebElementCondition id(String id) {
     return attribute("id", id);
   }
 
@@ -312,7 +307,7 @@ public abstract class Condition {
    * 2) For other elements, check that text is empty
    * <p>Sample: {@code $("h2").shouldBe(empty)}</p>
    */
-  public static final Condition empty = and("empty", exactValue(""), exactText(""));
+  public static final WebElementCondition empty = and("empty", exactValue(""), exactText(""));
 
   /**
    * Assert that given element's text matches given regular expression
@@ -323,33 +318,33 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition matchText(String regex) {
+  public static WebElementCondition matchText(String regex) {
     return new MatchText(regex);
   }
 
   /**
    * Assert that given element's text CONTAINS given text
    *
-   * <p>Sample: <code>$("h1").shouldHave(partialText("ello Joh"))</code></p>
+   * <p>Sample: {@code $("h1").shouldHave(partialText("ello Joh"))}</p>
    *
    * @since 6.7.0
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition partialText(String expectedText) {
+  public static WebElementCondition partialText(String expectedText) {
     return new PartialText(expectedText);
   }
 
   /**
    * Assert that given element's text CONTAINS given text (case-sensitive)
    *
-   * <p>Sample: <code>$("h1").should(partialTextCaseSensitive("ELLO jOH"))</code></p>
+   * <p>Sample: {@code $("h1").should(partialTextCaseSensitive("ELLO jOH"))}</p>
    *
    * @since 6.7.0
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition partialTextCaseSensitive(String expectedText) {
+  public static WebElementCondition partialTextCaseSensitive(String expectedText) {
     return new PartialTextCaseSensitive(expectedText);
   }
 
@@ -369,12 +364,12 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition text(String text) {
+  public static WebElementCondition text(String text) {
     return new Text(text);
   }
 
   /**
-   * Checks on a element that exactly given text is selected (=marked with mouse/keyboard)
+   * Checks on {@code <a>} element that exactly given text is selected (=marked with mouse/keyboard)
    *
    * <p>Sample: {@code $("input").shouldHave(selectedText("Text"))}</p>
    *
@@ -384,7 +379,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition selectedText(String expectedText) {
+  public static WebElementCondition selectedText(String expectedText) {
     return new SelectedText(expectedText);
   }
 
@@ -399,7 +394,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition textCaseSensitive(String text) {
+  public static WebElementCondition textCaseSensitive(String text) {
     return new CaseSensitiveText(text);
   }
 
@@ -414,7 +409,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition exactText(String text) {
+  public static WebElementCondition exactText(String text) {
     return new ExactText(text);
   }
 
@@ -429,7 +424,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition innerText(String text) {
+  public static WebElementCondition innerText(String text) {
     return new InnerText(text);
   }
 
@@ -444,7 +439,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition ownText(String text) {
+  public static WebElementCondition ownText(String text) {
     return new OwnText(text);
   }
 
@@ -460,7 +455,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition ownTextCaseSensitive(String text) {
+  public static WebElementCondition ownTextCaseSensitive(String text) {
     return new OwnTextCaseSensitive(text);
   }
 
@@ -475,7 +470,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition exactOwnText(String text) {
+  public static WebElementCondition exactOwnText(String text) {
     return new ExactOwnText(text);
   }
 
@@ -491,7 +486,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition exactOwnTextCaseSensitive(String text) {
+  public static WebElementCondition exactOwnTextCaseSensitive(String text) {
     return new ExactOwnTextCaseSensitive(text);
   }
 
@@ -505,7 +500,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition exactTextCaseSensitive(String text) {
+  public static WebElementCondition exactTextCaseSensitive(String text) {
     return new ExactTextCaseSensitive(text);
   }
 
@@ -516,7 +511,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition tagName(String cssClass) {
+  public static WebElementCondition tagName(String cssClass) {
     return new TagName(cssClass);
   }
 
@@ -526,7 +521,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition cssClass(String cssClass) {
+  public static WebElementCondition cssClass(String cssClass) {
     return new CssClass(cssClass);
   }
 
@@ -551,7 +546,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition cssValue(String propertyName, @Nullable String expectedValue) {
+  public static WebElementCondition cssValue(String propertyName, @Nullable String expectedValue) {
     return new CssValue(propertyName, expectedValue);
   }
 
@@ -565,47 +560,47 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition match(String description, Predicate<WebElement> predicate) {
+  public static WebElementCondition match(String description, Predicate<WebElement> predicate) {
     return new CustomMatch(description, predicate);
   }
 
   /**
    * Check if image is loaded.
    */
-  public static final Condition image = new IsImageLoaded();
+  public static final WebElementCondition image = new IsImageLoaded();
 
   /**
    * Check if browser focus is currently in given element.
    */
-  public static final Condition focused = new Focused();
+  public static final WebElementCondition focused = new Focused();
 
   /**
    * Checks that element is not disabled
    *
    * @see WebElement#isEnabled()
    */
-  public static final Condition enabled = new Enabled();
+  public static final WebElementCondition enabled = new Enabled();
 
   /**
    * Checks that element is disabled
    *
    * @see WebElement#isEnabled()
    */
-  public static final Condition disabled = new Disabled();
+  public static final WebElementCondition disabled = new Disabled();
 
   /**
    * Checks that element is selected (inputs like drop-downs etc.)
    *
    * @see WebElement#isSelected()
    */
-  public static final Condition selected = new Selected();
+  public static final WebElementCondition selected = new Selected();
 
   /**
    * Checks that checkbox is checked
    *
    * @see WebElement#isSelected()
    */
-  public static final Condition checked = new Checked();
+  public static final WebElementCondition checked = new Checked();
 
   /**
    * Negate given condition.
@@ -616,7 +611,7 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition not(final Condition condition) {
+  public static WebElementCondition not(WebElementCondition condition) {
     return condition.negate();
   }
 
@@ -632,25 +627,30 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition and(String name, Condition condition1, Condition condition2, Condition... conditions) {
+  public static WebElementCondition and(String name, WebElementCondition condition1, WebElementCondition condition2,
+                                        WebElementCondition... conditions) {
     return new And(name, merge(condition1, condition2, conditions));
   }
 
   /**
-   * Synonym for {@link #and(String, Condition, Condition, Condition...)}. Useful for better readability.
+   * Synonym for {@link #and(String, WebElementCondition, WebElementCondition, WebElementCondition...)}.
+   * Useful for better readability.
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition allOf(String name, Condition condition1, Condition condition2, Condition... conditions) {
+  public static WebElementCondition allOf(String name, WebElementCondition condition1, WebElementCondition condition2,
+                                          WebElementCondition... conditions) {
     return and(name, condition1, condition2, conditions);
   }
 
   /**
-   * Synonym for {@link #and(String, Condition, Condition, Condition...)} with "all of" name. Useful for better readability.
+   * Synonym for {@link #and(String, WebElementCondition, WebElementCondition, WebElementCondition...)}
+   * with "all of" name. Useful for better readability.
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition allOf(Condition condition1, Condition condition2, Condition... conditions) {
+  public static WebElementCondition allOf(WebElementCondition condition1, WebElementCondition condition2,
+                                          WebElementCondition... conditions) {
     return and("all of", condition1, condition2, conditions);
   }
 
@@ -666,25 +666,30 @@ public abstract class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition or(String name, Condition condition1, Condition condition2, Condition... conditions) {
+  public static WebElementCondition or(String name, WebElementCondition condition1, WebElementCondition condition2,
+                                       WebElementCondition... conditions) {
     return new Or(name, merge(condition1, condition2, conditions));
   }
 
   /**
-   * Synonym for {@link #or(String, Condition, Condition, Condition...)}. Useful for better readability.
+   * Synonym for {@link #or(String, WebElementCondition, WebElementCondition, WebElementCondition...)}.
+   * Useful for better readability.
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition anyOf(String name, Condition condition1, Condition condition2, Condition... conditions) {
+  public static WebElementCondition anyOf(String name, WebElementCondition condition1, WebElementCondition condition2,
+                                          WebElementCondition... conditions) {
     return or(name, condition1, condition2, conditions);
   }
 
   /**
-   * Synonym for {@link #or(String, Condition, Condition, Condition...)} with "any of" name. Useful for better readability.
+   * Synonym for {@link #or(String, WebElementCondition, WebElementCondition, WebElementCondition...)}
+   * with "any of" name. Useful for better readability.
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition anyOf(Condition condition1, Condition condition2, Condition... conditions) {
+  public static WebElementCondition anyOf(WebElementCondition condition1, WebElementCondition condition2,
+                                          WebElementCondition... conditions) {
     return or("any of", condition1, condition2, conditions);
   }
 
@@ -693,11 +698,11 @@ public abstract class Condition {
    * Example element.should(be(visible),have(text("abc"))
    *
    * @param delegate next condition to wrap
-   * @return Condition
+   * @return WebElementCondition
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition be(Condition delegate) {
+  public static WebElementCondition be(WebElementCondition delegate) {
     return wrap("be", delegate);
   }
 
@@ -706,106 +711,15 @@ public abstract class Condition {
    * Example element.should(be(visible),have(text("abc"))
    *
    * @param delegate next condition to wrap
-   * @return Condition
+   * @return WebElementCondition
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition have(Condition delegate) {
+  public static WebElementCondition have(WebElementCondition delegate) {
     return wrap("have", delegate);
   }
 
-  private static Condition wrap(String prefix, Condition delegate) {
+  private static WebElementCondition wrap(String prefix, WebElementCondition delegate) {
     return new NamedCondition(prefix, delegate);
   }
-
-  private final String name;
-  private final boolean missingElementSatisfiesCondition;
-
-  public Condition(String name) {
-    this(name, false);
-  }
-
-  public Condition(String name, boolean missingElementSatisfiesCondition) {
-    this.name = name;
-    this.missingElementSatisfiesCondition = missingElementSatisfiesCondition;
-  }
-
-  /**
-   * Check if given element matches this condition.
-   *
-   * @param element given WebElement
-   * @return true if element matches condition
-   * @deprecated replace by {@link #check(Driver, WebElement)}
-   */
-  @Deprecated
-  public boolean apply(Driver driver, WebElement element) {
-    throw new UnsupportedOperationException("Method 'apply' is deprecated. Please implement 'check' method.");
-  }
-
-  /**
-   * Check if given element matches this condition
-   *
-   * @param driver  selenide driver
-   * @param element given WebElement
-   * @return {@link CheckResult.Verdict#ACCEPT} if element matches condition, or
-   *         {@link CheckResult.Verdict#REJECT} if element doesn't match (and we should keep trying until timeout).
-   *
-   * @since 6.0.0
-   */
-  @Nonnull
-  @CheckReturnValue
-  public CheckResult check(Driver driver, WebElement element) {
-    boolean result = apply(driver, element);
-    return new CheckResult(result ? ACCEPT : REJECT, null);
-  }
-
-  /**
-   * If element didn't match the condition, returns the actual value of element.
-   * Used in error reporting.
-   * Optional. Makes sense only if you need to add some additional important info to error message.
-   *
-   * @param driver  given driver
-   * @param element given WebElement
-   * @return any string that needs to be appended to error message.
-   * @deprecated not needed anymore since the actual value is returned by method {@link #check(Driver, WebElement)}
-   */
-  @Nullable
-  @Deprecated
-  public String actualValue(Driver driver, WebElement element) {
-    return null;
-  }
-
-  @Nonnull
-  @CheckReturnValue
-  public Condition negate() {
-    return new Not(this, missingElementSatisfiesCondition);
-  }
-
-  /**
-   * Should be used for explaining the reason of condition
-   */
-  @Nonnull
-  @CheckReturnValue
-  public Condition because(String message) {
-    return new ExplainedCondition(this, message);
-  }
-
-  @Nonnull
-  @CheckReturnValue
-  @Override
-  public String toString() {
-    return name;
-  }
-
-  @Nonnull
-  @CheckReturnValue
-  public String getName() {
-    return name;
-  }
-
-  @CheckReturnValue
-  public boolean missingElementSatisfiesCondition() {
-    return missingElementSatisfiesCondition;
-  }
-
 }

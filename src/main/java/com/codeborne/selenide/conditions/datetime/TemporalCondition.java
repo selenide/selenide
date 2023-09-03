@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions.datetime;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -13,7 +13,7 @@ import java.time.temporal.TemporalAccessor;
 import static java.util.Objects.requireNonNull;
 
 @ParametersAreNonnullByDefault
-public abstract class TemporalCondition<T extends TemporalAccessor> extends Condition {
+public abstract class TemporalCondition<T extends TemporalAccessor> extends WebElementCondition {
   private final TemporalFormatCondition<T> formatCondition;
 
   protected TemporalCondition(String name, TemporalFormatCondition<T> format) {

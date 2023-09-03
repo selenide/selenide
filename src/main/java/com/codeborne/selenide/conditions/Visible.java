@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class Visible extends Condition {
+public class Visible extends WebElementCondition {
   public Visible() {
     super("visible");
   }
@@ -25,7 +25,7 @@ public class Visible extends Condition {
   @Override
   @CheckReturnValue
   @Nonnull
-  public Condition negate() {
+  public WebElementCondition negate() {
     return new Not(this, true);
   }
 }

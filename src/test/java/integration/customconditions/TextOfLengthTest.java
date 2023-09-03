@@ -1,8 +1,8 @@
 package integration.customconditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementShould;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,8 +35,8 @@ final class TextOfLengthTest extends ITest {
       .hasMessageContaining("Actual value: length(\"Page with moving elements\") = 25");
   }
 
-  public static Condition textOfLength(int expectedLength) {
-    return new Condition("text of length " + expectedLength) {
+  public static WebElementCondition textOfLength(int expectedLength) {
+    return new WebElementCondition("text of length " + expectedLength) {
       @Nonnull
       @Override
       public CheckResult check(Driver driver, WebElement webElement) {
