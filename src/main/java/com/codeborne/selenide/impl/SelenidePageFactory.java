@@ -60,6 +60,9 @@ public class SelenidePageFactory implements PageObjectFactory {
   @Nonnull
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(Driver driver, T pageObject) {
     Type[] types = pageObject.getClass().getGenericInterfaces();
+    if (pageObject instanceof ElementsContainer) {
+      throw new IllegalArgumentException("Page object should not be marked as ElementsContainer");
+    }
     initElements(driver, null, pageObject, types);
     return pageObject;
   }
@@ -227,8 +230,9 @@ public class SelenidePageFactory implements PageObjectFactory {
         return ElementFinder.wrap(SelenideElement.class, searchContext);
       }
       else {
-        logger.warn("Cannot initialize field {}", field);
-        return null;
+        String message = String.format("Cannot initialize field %s.%s: it's not bound to any page object",
+          field.getDeclaringClass().getSimpleName(), field.getName());
+        throw new IllegalArgumentException(message);
       }
     }
     if (WebElement.class.isAssignableFrom(field.getType())) {

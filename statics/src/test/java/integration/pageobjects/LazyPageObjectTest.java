@@ -27,28 +27,23 @@ public class LazyPageObjectTest extends IntegrationTest {
   }
 
   @Test
-  public void level1() {
-    MyForm subForm = page(MyForm.class);
-    subForm.h1.should(exist);
+  public void pageObject() {
+    MyPage myPage = page(MyPage.class);
+
+    // level 2
+    assertThat(myPage.myContent.forms).hasSize(1);
+
+    // level 3
+    MyForm subForm = myPage.myContent.forms.get(0);
+    subForm.h1.shouldBe(visible);
     assertThat(subForm.h11.isDisplayed()).isTrue();
     subForm.h3s.shouldHave(size(0));
     assertThat(subForm.h3ss).hasSize(0);
     assertThat(subForm.h3sss).hasSize(0);
     subForm.h2.shouldNot(exist);
     assertThat(subForm.h22.isDisplayed()).isFalse();
-  }
 
-  @Test
-  public void level2() {
-    MyContent myContent = page(MyContent.class);
-    assertThat(myContent.forms).hasSize(1);
-    myContent.forms.get(0).h1.shouldBe(visible);
-  }
-
-  @Test
-  public void level3() {
-    MyPage myPage = page(MyPage.class);
-    assertThat(myPage.myContent.forms).hasSize(1);
+    // level 1
     myPage.h1.should(exist);
     myPage.h3.shouldNot(exist);
   }
