@@ -725,11 +725,10 @@ public class Selenide {
   }
 
   /**
-   * @return WebElement, not SelenideElement! which has focus on it
+   * @return the element that currently is focused, or null if none of elements if focused
    */
   @CheckReturnValue
-  @Nullable
-  public static WebElement getFocusedElement() {
+  public static SelenideElement getFocusedElement() {
     return getSelenideDriver().getFocusedElement();
   }
 
