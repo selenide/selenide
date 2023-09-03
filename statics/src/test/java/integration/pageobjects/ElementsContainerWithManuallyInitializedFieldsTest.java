@@ -15,6 +15,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.page;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class ElementsContainerWithManuallyInitializedFieldsTest extends IntegrationTest {
 
@@ -25,7 +26,7 @@ final class ElementsContainerWithManuallyInitializedFieldsTest extends Integrati
 
   @Test
   void canInitializeElementsContainerFieldsWithoutFindByAnnotation() {
-    MyPage page = page(MyPage.class);
+    MyPage page = page();
 
     page.container.getSelf().should(exist, visible);
     page.container.headerLink.shouldHave(text("Options with 'apostrophes' and \"quotes\""));
@@ -34,6 +35,13 @@ final class ElementsContainerWithManuallyInitializedFieldsTest extends Integrati
     page.container.options.first(2).shouldHave(texts("-- Select your hero --", "John Mc'Lain"));
     page.container.options.last(3).shouldHave(texts("Arnold \"Schwarzenegger\"",
       "Mickey \"Rock'n'Roll\" Rourke", "Denzel Washington"));
+  }
+
+  @Test
+  void cannotInitializeElementsContainerOutsidePageObject() {
+    assertThatThrownBy(() -> page(MyContainer.class))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Page object should not be marked as ElementsContainer");
   }
 
   private static class MyPage {
