@@ -10,6 +10,7 @@ import com.codeborne.selenide.impl.PageObjectFactory;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import com.codeborne.selenide.selector.FocusedElementLocator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
@@ -241,9 +242,8 @@ public class SelenideDriver {
   }
 
   @CheckReturnValue
-  @Nullable
-  public WebElement getFocusedElement() {
-    return executeJavaScript("return document.activeElement");
+  public SelenideElement getFocusedElement() {
+    return $(new FocusedElementLocator());
   }
 
   /**

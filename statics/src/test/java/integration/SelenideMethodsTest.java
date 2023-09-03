@@ -33,8 +33,10 @@ import static com.codeborne.selenide.Condition.id;
 import static com.codeborne.selenide.Condition.innerText;
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.partialText;
+import static com.codeborne.selenide.Condition.partialValue;
 import static com.codeborne.selenide.Condition.readonly;
 import static com.codeborne.selenide.Condition.selected;
+import static com.codeborne.selenide.Condition.tagName;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.type;
 import static com.codeborne.selenide.Condition.value;
@@ -575,5 +577,13 @@ final class SelenideMethodsTest extends IntegrationTest {
 
     assertThat($$("div").findBy(id("theHiddenElement")).toString())
       .isEqualTo("div.findBy(attribute id=\"theHiddenElement\")");
+  }
+
+  @Test
+  void canCheckWhichElementIsFocusedNow() {
+    SelenideElement focusedElement = Selenide.getFocusedElement();
+
+    $("#username").sendKeys("focusing...");
+    focusedElement.shouldBe(visible).shouldHave(tagName("input"), partialValue("focusing"));
   }
 }
