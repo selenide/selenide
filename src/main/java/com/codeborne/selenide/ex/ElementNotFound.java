@@ -1,7 +1,7 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.Alias;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.By;
@@ -12,16 +12,16 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 public class ElementNotFound extends UIAssertionError {
-  public ElementNotFound(Driver driver, Alias alias, By searchCriteria, Condition expectedCondition) {
+  public ElementNotFound(Driver driver, Alias alias, By searchCriteria, WebElementCondition expectedCondition) {
     this(driver, alias, searchCriteria.toString(), expectedCondition, null);
   }
 
-  public ElementNotFound(Driver driver, Alias alias, String searchCriteria, Condition expectedCondition) {
+  public ElementNotFound(Driver driver, Alias alias, String searchCriteria, WebElementCondition expectedCondition) {
     super(driver, String.format("Element%s not found {%s}" +
       "%nExpected: %s", alias.appendable(), searchCriteria, expectedCondition));
   }
 
-  public ElementNotFound(Driver driver, Alias alias, String searchCriteria, Condition expectedCondition,
+  public ElementNotFound(Driver driver, Alias alias, String searchCriteria, WebElementCondition expectedCondition,
                          @Nullable Throwable cause) {
     super(driver, String.format("Element%s not found {%s}" +
       "%nExpected: %s", alias.appendable(), searchCriteria, expectedCondition), cause);

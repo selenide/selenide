@@ -1,6 +1,6 @@
 package integration;
 
-import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -130,13 +130,13 @@ final class ConditionsTest extends ITest {
 
   @Test
   void userCanUseOrCondition() {
-    Condition one_of_conditions = or("baskerville", partialText("Basker"), partialText("Walle"));
+    WebElementCondition one_of_conditions = or("baskerville", partialText("Basker"), partialText("Walle"));
     $("#baskerville").shouldBe(one_of_conditions);
 
-    Condition all_of_conditions = or("baskerville", partialText("Basker"), partialText("rville"));
+    WebElementCondition all_of_conditions = or("baskerville", partialText("Basker"), partialText("rville"));
     $("#baskerville").shouldBe(all_of_conditions);
 
-    Condition none_of_conditions = or("baskerville", partialText("pasker"), partialText("wille"));
+    WebElementCondition none_of_conditions = or("baskerville", partialText("pasker"), partialText("wille"));
     $("#baskerville").shouldNotBe(none_of_conditions);
 
     $("#baskerville").shouldHave(anyOf(partialText("Basker"), partialText("Walle")));

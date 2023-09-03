@@ -1,9 +1,9 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.TextCheck;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class Value extends Condition {
+public class Value extends WebElementCondition {
   private final String expectedValue;
 
   public Value(String expectedValue) {

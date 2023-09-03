@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -173,7 +173,7 @@ final class AndTest {
   }
 
   @ParametersAreNonnullByDefault
-  private static class SimpleCondition extends Condition {
+  private static class SimpleCondition extends WebElementCondition {
     private final boolean applyResult;
 
     SimpleCondition(boolean applyResult) {
@@ -195,7 +195,7 @@ final class AndTest {
     @Nonnull
     @CheckReturnValue
     @Override
-    public Condition negate() {
+    public WebElementCondition negate() {
       return new Not(this, !this.missingElementSatisfiesCondition());
     }
 

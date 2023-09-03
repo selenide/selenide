@@ -1,8 +1,8 @@
 package integration.customconditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementShould;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,8 +35,8 @@ final class ValueInAttributeTest extends ITest {
       .hasMessageContaining("Actual value: https://google.com/");
   }
 
-  private static Condition valueInAttribute(String attributeName, String value) {
-    return new Condition(String.format("value '%s' in attribute '%s'", value, attributeName)) {
+  private static WebElementCondition valueInAttribute(String attributeName, String value) {
+    return new WebElementCondition(String.format("value '%s' in attribute '%s'", value, attributeName)) {
       @Override
       @Nonnull
       public CheckResult check(Driver driver, WebElement element) {

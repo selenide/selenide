@@ -1,10 +1,10 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.conditions.And;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -84,7 +84,7 @@ public abstract class WebElementSource {
 
   @CheckReturnValue
   @Nonnull
-  public ElementNotFound createElementNotFoundError(Condition condition, Throwable cause) {
+  public ElementNotFound createElementNotFoundError(WebElementCondition condition, Throwable cause) {
     if (cause instanceof UIAssertionError) {
       throw new IllegalArgumentException("Unexpected UIAssertionError as a cause of ElementNotFound: " + cause, cause);
     }
@@ -100,14 +100,14 @@ public abstract class WebElementSource {
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
-  public void checkCondition(String prefix, Condition condition, boolean invert) {
+  public void checkCondition(String prefix, WebElementCondition condition, boolean invert) {
     checkConditionAndReturnElement(prefix, condition, invert);
   }
 
   @Nullable
   @CheckReturnValue
-  private WebElement checkConditionAndReturnElement(String prefix, Condition condition, boolean invert) {
-    Condition check = invert ? not(condition) : condition;
+  private WebElement checkConditionAndReturnElement(String prefix, WebElementCondition condition, boolean invert) {
+    WebElementCondition check = invert ? not(condition) : condition;
 
     Throwable lastError = null;
     WebElement element = null;
@@ -127,7 +127,7 @@ public abstract class WebElementSource {
     return handleError(prefix, condition, invert, check, lastError, element, checkResult);
   }
 
-  private WebElement handleError(String prefix, Condition condition, boolean invert, Condition check,
+  private WebElement handleError(String prefix, WebElementCondition condition, boolean invert, WebElementCondition check,
                                  @Nullable Throwable lastError, @Nullable WebElement element, @Nullable CheckResult checkResult) {
     if (lastError != null && Cleanup.of.isInvalidSelectorError(lastError)) {
       throw Cleanup.of.wrapInvalidSelectorException(lastError);

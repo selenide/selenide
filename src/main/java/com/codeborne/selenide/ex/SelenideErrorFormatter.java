@@ -1,8 +1,8 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.DurationFormat;
 import com.codeborne.selenide.impl.Screenshot;
@@ -36,7 +36,7 @@ public class SelenideErrorFormatter implements ErrorFormatter {
   @CheckReturnValue
   @Nonnull
   @Override
-  public String actualValue(Condition condition, Driver driver,
+  public String actualValue(WebElementCondition condition, Driver driver,
                             @Nullable WebElement element,
                             @Nullable CheckResult lastCheckResult) {
     if (lastCheckResult != null && lastCheckResult.actualValue() != null) {
@@ -53,7 +53,7 @@ public class SelenideErrorFormatter implements ErrorFormatter {
 
   @Nullable
   @CheckReturnValue
-  protected String extractActualValue(Condition condition, Driver driver, @Nullable WebElement element) {
+  protected String extractActualValue(WebElementCondition condition, Driver driver, @Nullable WebElement element) {
     if (element != null) {
       try {
         return condition.actualValue(driver, element);

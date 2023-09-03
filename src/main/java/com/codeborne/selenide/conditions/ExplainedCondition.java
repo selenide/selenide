@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -10,11 +10,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class ExplainedCondition extends Condition {
-  private final Condition delegate;
+public class ExplainedCondition<T extends WebElementCondition> extends WebElementCondition {
+  private final T delegate;
   private final String message;
 
-  public ExplainedCondition(Condition delegate, String message) {
+  public ExplainedCondition(T delegate, String message) {
     super(delegate.getName(), delegate.missingElementSatisfiesCondition());
     this.delegate = delegate;
     this.message = message;
@@ -30,7 +30,7 @@ public class ExplainedCondition extends Condition {
   @Nonnull
   @CheckReturnValue
   @Override
-  public Condition negate() {
+  public WebElementCondition negate() {
     return delegate.negate().because(message);
   }
 

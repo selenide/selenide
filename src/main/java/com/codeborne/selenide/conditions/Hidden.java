@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
@@ -12,7 +12,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 
 @ParametersAreNonnullByDefault
-public class Hidden extends Condition {
+public class Hidden extends WebElementCondition {
   public Hidden() {
     super("hidden", true);
   }
@@ -31,7 +31,7 @@ public class Hidden extends Condition {
 
   @Nonnull
   @Override
-  public Condition negate() {
+  public WebElementCondition negate() {
     return new Not(this, false);
   }
 }

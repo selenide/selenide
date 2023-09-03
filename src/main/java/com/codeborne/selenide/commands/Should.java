@@ -1,8 +1,8 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.WebElementSource;
 
 import javax.annotation.Nonnull;
@@ -26,7 +26,7 @@ public class Should implements Command<SelenideElement> {
   @Override
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    for (Condition condition : argsToConditions(args)) {
+    for (WebElementCondition condition : argsToConditions(args)) {
       locator.checkCondition(prefix, condition, false);
     }
     return proxy;

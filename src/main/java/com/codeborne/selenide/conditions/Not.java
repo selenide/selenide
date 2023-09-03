@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -13,10 +13,10 @@ import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 
 @ParametersAreNonnullByDefault
-public class Not extends Condition {
-  private final Condition condition;
+public class Not extends WebElementCondition {
+  private final WebElementCondition condition;
 
-  public Not(Condition originalCondition, boolean absentElementMatchesCondition) {
+  public Not(WebElementCondition originalCondition, boolean absentElementMatchesCondition) {
     super("not " + originalCondition.getName(), absentElementMatchesCondition);
     this.condition = originalCondition;
   }

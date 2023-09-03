@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions.datetime;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -17,7 +17,7 @@ import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 
 @ParametersAreNonnullByDefault
-public abstract class TemporalFormatCondition<T extends TemporalAccessor> extends Condition {
+public abstract class TemporalFormatCondition<T extends TemporalAccessor> extends WebElementCondition {
   private final String pattern;
   private final DateTimeFormatter format;
 

@@ -1,8 +1,8 @@
 package integration;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
@@ -15,7 +15,7 @@ import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static java.lang.Integer.parseInt;
 
 @ParametersAreNonnullByDefault
-class Coordinates extends Condition {
+class Coordinates extends WebElementCondition {
   private static final Pattern regex = Pattern.compile("\\((\\d+), (\\d+)\\)");
   private final int expectedX;
   private final int expectedY;
@@ -46,7 +46,7 @@ class Coordinates extends Condition {
     return new CheckResult(ACCEPT, text);
   }
 
-  public static Condition coordinates(int expectedX, int expectedY) {
+  public static WebElementCondition coordinates(int expectedX, int expectedY) {
     return new Coordinates(expectedX, expectedY);
   }
 }

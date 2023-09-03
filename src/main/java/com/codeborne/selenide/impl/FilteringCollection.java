@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -16,10 +16,10 @@ import static java.util.stream.Collectors.toList;
 @ParametersAreNonnullByDefault
 public class FilteringCollection implements CollectionSource {
   private final CollectionSource originalCollection;
-  private final Condition filter;
+  private final WebElementCondition filter;
   private Alias alias = NONE;
 
-  public FilteringCollection(CollectionSource originalCollection, Condition filter) {
+  public FilteringCollection(CollectionSource originalCollection, WebElementCondition filter) {
     this.originalCollection = originalCollection;
     this.filter = filter;
   }

@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -61,7 +61,7 @@ public class JSElementFinder extends WebElementSource {
   @Override
   @CheckReturnValue
   @Nonnull
-  public ElementNotFound createElementNotFoundError(Condition condition, Throwable cause) {
+  public ElementNotFound createElementNotFoundError(WebElementCondition condition, Throwable cause) {
     parent.checkCondition("", exist, false);
     return super.createElementNotFoundError(condition, cause);
   }

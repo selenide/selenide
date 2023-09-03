@@ -1,6 +1,6 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.WebElementCondition;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -20,23 +20,23 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 final class UtilCommandTest {
   @Test
   void extractsConditionsFromGivenArguments() {
-    List<Condition> conditions = argsToConditions(new Object[]{enabled, visible});
+    List<WebElementCondition> conditions = argsToConditions(new Object[]{enabled, visible});
     assertThat(conditions).isEqualTo(asList(enabled, visible));
   }
 
   @Test
   void supportsArraysOfConditions() {
-    List<Condition> conditions = argsToConditions(new Object[]{
+    List<WebElementCondition> conditions = argsToConditions(new Object[]{
       enabled,
-      new Condition[]{appear, exist},
-      new Condition[]{disabled, enabled, readonly}
+      new WebElementCondition[]{appear, exist},
+      new WebElementCondition[]{disabled, enabled, readonly}
     });
     assertThat(conditions).isEqualTo(asList(enabled, appear, exist, disabled, enabled, readonly));
   }
 
   @Test
   void ignores_String_Long_Duration_arguments() {
-    List<Condition> conditions = argsToConditions(new Object[]{42L, "Some text", exist, Duration.ofSeconds(3), visible});
+    List<WebElementCondition> conditions = argsToConditions(new Object[]{42L, "Some text", exist, Duration.ofSeconds(3), visible});
     assertThat(conditions).isEqualTo(asList(exist, visible));
   }
 

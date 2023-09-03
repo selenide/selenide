@@ -1,9 +1,9 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
@@ -90,7 +90,7 @@ final class CollectionElementByConditionTest {
     when(collection.getElements()).thenReturn(singletonList(mock()));
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, visible);
 
-    Condition mockedCollection = mock();
+    WebElementCondition mockedCollection = mock();
     when(mockedCollection.toString()).thenReturn("Reason description");
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 

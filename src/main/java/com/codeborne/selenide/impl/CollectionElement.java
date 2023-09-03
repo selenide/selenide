@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.WebElement;
 
@@ -56,7 +56,7 @@ public class CollectionElement extends WebElementSource {
   @Override
   @CheckReturnValue
   @Nonnull
-  public ElementNotFound createElementNotFoundError(Condition condition, Throwable cause) {
+  public ElementNotFound createElementNotFoundError(WebElementCondition condition, Throwable cause) {
     if (collection.getElements().isEmpty()) {
       return new ElementNotFound(driver(), getAlias(), getSearchCriteria(), visible, cause);
     }

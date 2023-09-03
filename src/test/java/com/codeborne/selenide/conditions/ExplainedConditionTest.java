@@ -1,14 +1,14 @@
 package com.codeborne.selenide.conditions;
 
-import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.WebElementCondition;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class ExplainedConditionTest {
-  private final Condition visible = new Visible().because("I see it");
-  private final Condition hidden = new Hidden().because("I don't see it");
-  private final Condition text = new Text("blah").because("I typed it");
+  private final WebElementCondition visible = new Visible().because("I see it");
+  private final WebElementCondition hidden = new Hidden().because("I don't see it");
+  private final WebElementCondition text = new Text("blah").because("I typed it");
 
   @Test
   void negate() {

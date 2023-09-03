@@ -1,8 +1,8 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -21,7 +21,7 @@ public class Matches implements Command<Boolean> {
   @Override
   @CheckReturnValue
   public Boolean execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    Condition condition = firstOf(args);
+    WebElementCondition condition = firstOf(args);
     WebElement element = getElementOrNull(locator);
     if (element != null) {
       return condition.check(locator.driver(), element).verdict() == ACCEPT;

@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.WebElementCondition;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
@@ -14,7 +14,7 @@ class ArgumentsTest {
   void extractsArgumentOfGivenType() {
     Arguments arguments = new Arguments(visible, "this", 42, "that");
     assertThat(arguments.ofType(String.class)).contains("this");
-    assertThat(arguments.ofType(Condition.class)).contains(visible);
+    assertThat(arguments.ofType(WebElementCondition.class)).contains(visible);
     assertThat(arguments.ofType(Boolean.class)).isEmpty();
   }
 

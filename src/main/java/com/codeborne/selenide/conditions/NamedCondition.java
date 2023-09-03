@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -10,11 +10,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class NamedCondition extends Condition {
+public class NamedCondition extends WebElementCondition {
   private final String prefix;
-  private final Condition delegate;
+  private final WebElementCondition delegate;
 
-  public NamedCondition(String prefix, Condition delegate) {
+  public NamedCondition(String prefix, WebElementCondition delegate) {
     super(delegate.getName(), delegate.missingElementSatisfiesCondition());
     this.prefix = prefix;
     this.delegate = delegate;
@@ -30,7 +30,7 @@ public class NamedCondition extends Condition {
   @Nonnull
   @CheckReturnValue
   @Override
-  public Condition negate() {
+  public WebElementCondition negate() {
     return delegate.negate();
   }
 

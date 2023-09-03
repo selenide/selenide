@@ -220,7 +220,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   @CheckReturnValue
   @Nonnull
-  public ElementsCollection filter(Condition condition) {
+  public ElementsCollection filter(WebElementCondition condition) {
     return new ElementsCollection(new FilteringCollection(collection, condition));
   }
 
@@ -229,12 +229,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    *
    * @param condition condition
    * @return ElementsCollection
-   * @see #filter(Condition)
+   * @see #filter(WebElementCondition)
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
-  public ElementsCollection filterBy(Condition condition) {
+  public ElementsCollection filterBy(WebElementCondition condition) {
     return filter(condition);
   }
 
@@ -247,7 +247,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   @CheckReturnValue
   @Nonnull
-  public ElementsCollection exclude(Condition condition) {
+  public ElementsCollection exclude(WebElementCondition condition) {
     return new ElementsCollection(new FilteringCollection(collection, not(condition)));
   }
 
@@ -256,12 +256,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    *
    * @param condition condition
    * @return ElementsCollection
-   * @see #exclude(Condition)
+   * @see #exclude(WebElementCondition)
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
-  public ElementsCollection excludeWith(Condition condition) {
+  public ElementsCollection excludeWith(WebElementCondition condition) {
     return exclude(condition);
   }
 
@@ -274,7 +274,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   @CheckReturnValue
   @Nonnull
-  public SelenideElement find(Condition condition) {
+  public SelenideElement find(WebElementCondition condition) {
     return CollectionElementByCondition.wrap(collection, condition);
   }
 
@@ -283,12 +283,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    *
    * @param condition condition
    * @return SelenideElement
-   * @see #find(Condition)
+   * @see #find(WebElementCondition)
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
-  public SelenideElement findBy(Condition condition) {
+  public SelenideElement findBy(WebElementCondition condition) {
     return find(condition);
   }
 

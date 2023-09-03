@@ -1,6 +1,6 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.DragAndDropOptions;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
@@ -44,7 +44,7 @@ class DragAndDropToTest {
     when(locator.driver()).thenReturn(driver);
     when(locator.getWebElement()).thenReturn(locatorWebElement);
     when(targetSelenideElement.getWrappedElement()).thenReturn(targetWebElement);
-    doNothing().when(locator).checkCondition(anyString(), any(Condition.class), anyBoolean());
+    doNothing().when(locator).checkCondition(anyString(), any(WebElementCondition.class), anyBoolean());
   }
 
   @Test

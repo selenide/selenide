@@ -116,7 +116,7 @@ final class ConditionTest {
 
   @Test
   void elementHasAttributeWithGivenValue() {
-    Condition condition = attribute("name", "selenide");
+    WebElementCondition condition = attribute("name", "selenide");
     assertThat(condition.check(driver, elementWithAttribute("name", "selenide")).verdict()).isEqualTo(ACCEPT);
     assertThat(condition.check(driver, elementWithAttribute("name", "selenide is great")).verdict()).isEqualTo(REJECT);
     assertThat(condition.check(driver, elementWithAttribute("id", "id2")).verdict()).isEqualTo(REJECT);
@@ -124,7 +124,7 @@ final class ConditionTest {
 
   @Test
   void matchingAttributeWithRegex() {
-    Condition condition = attributeMatching("name", "selenide.*");
+    WebElementCondition condition = attributeMatching("name", "selenide.*");
     assertThat(condition.check(driver, elementWithAttribute("name", "selenide")).verdict()).isEqualTo(ACCEPT);
     assertThat(condition.check(driver, elementWithAttribute("name", "selenide is great")).verdict()).isEqualTo(ACCEPT);
     assertThat(condition.check(driver, elementWithAttribute("id", "selenide")).verdict()).isEqualTo(REJECT);
@@ -265,7 +265,7 @@ final class ConditionTest {
   @Test
   void elementAndConditionActualValue() {
     WebElement element = mockElement(false, "text");
-    Condition condition = and("selected with text", be(selected), have(text("text")));
+    WebElementCondition condition = and("selected with text", be(selected), have(text("text")));
     assertThat(condition.check(driver, element).actualValue()).isEqualTo("not selected");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
   }
@@ -273,7 +273,7 @@ final class ConditionTest {
   @Test
   void elementAndConditionToString() {
     WebElement element = mockElement(false, "text");
-    Condition condition = and("selected with text", be(selected), have(text("text")));
+    WebElementCondition condition = and("selected with text", be(selected), have(text("text")));
     assertThat(condition).hasToString("selected with text: be selected and have text \"text\"");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
     assertThat(condition).hasToString("selected with text: be selected and have text \"text\"");
@@ -290,7 +290,7 @@ final class ConditionTest {
   @Test
   void elementAllOfConditionActualValue() {
     WebElement element = mockElement(false, "text");
-    Condition condition = allOf("selected with text", be(selected), have(text("text")));
+    WebElementCondition condition = allOf("selected with text", be(selected), have(text("text")));
     assertThat(condition.check(driver, element).actualValue()).isEqualTo("not selected");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
   }
@@ -298,7 +298,7 @@ final class ConditionTest {
   @Test
   void elementAllOfConditionToString() {
     WebElement element = mockElement(false, "text");
-    Condition condition = allOf("selected with text", be(selected), have(text("text")));
+    WebElementCondition condition = allOf("selected with text", be(selected), have(text("text")));
     assertThat(condition).hasToString("selected with text: be selected and have text \"text\"");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
     assertThat(condition).hasToString("selected with text: be selected and have text \"text\"");
@@ -315,7 +315,7 @@ final class ConditionTest {
   @Test
   void elementAllOfWithoutNameConditionActualValue() {
     WebElement element = mockElement(false, "text");
-    Condition condition = allOf(be(selected), have(text("text")));
+    WebElementCondition condition = allOf(be(selected), have(text("text")));
     assertThat(condition.check(driver, element).actualValue()).isEqualTo("not selected");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
   }
@@ -323,7 +323,7 @@ final class ConditionTest {
   @Test
   void elementAllOfWithoutNameConditionToString() {
     WebElement element = mockElement(false, "text");
-    Condition condition = allOf(be(selected), have(text("text")));
+    WebElementCondition condition = allOf(be(selected), have(text("text")));
     assertThat(condition).hasToString("all of: be selected and have text \"text\"");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(REJECT);
     assertThat(condition).hasToString("all of: be selected and have text \"text\"");
@@ -340,7 +340,7 @@ final class ConditionTest {
   @Test
   void elementOrConditionActualValue() {
     WebElement element = mockElement(false, "some text");
-    Condition condition = or("selected with text", be(selected), have(text("some text")));
+    WebElementCondition condition = or("selected with text", be(selected), have(text("some text")));
     assertThat(condition.check(driver, element).actualValue()).isEqualTo("text=\"some text\"");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
@@ -348,7 +348,7 @@ final class ConditionTest {
   @Test
   void elementOrConditionToString() {
     WebElement element = mockElement(false, "text");
-    Condition condition = or("selected with text", be(selected), have(text("text")));
+    WebElementCondition condition = or("selected with text", be(selected), have(text("text")));
     assertThat(condition).hasToString("selected with text: be selected or have text \"text\"");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
@@ -364,7 +364,7 @@ final class ConditionTest {
   @Test
   void elementAnyOfConditionActualValue() {
     WebElement element = mockElement(false, "some text");
-    Condition condition = anyOf("selected with text", be(selected), have(text("some text")));
+    WebElementCondition condition = anyOf("selected with text", be(selected), have(text("some text")));
     assertThat(condition.check(driver, element).actualValue()).isEqualTo("text=\"some text\"");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
@@ -372,7 +372,7 @@ final class ConditionTest {
   @Test
   void elementAnyOfConditionToString() {
     WebElement element = mockElement(false, "text");
-    Condition condition = anyOf("selected with text", be(selected), have(text("text")));
+    WebElementCondition condition = anyOf("selected with text", be(selected), have(text("text")));
     assertThat(condition).hasToString("selected with text: be selected or have text \"text\"");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
@@ -388,7 +388,7 @@ final class ConditionTest {
   @Test
   void elementAnyOfWithoutNameConditionActualValue() {
     WebElement element = mockElement(false, "some text");
-    Condition condition = anyOf(be(selected), have(text("some text")));
+    WebElementCondition condition = anyOf(be(selected), have(text("some text")));
     assertThat(condition.check(driver, element).actualValue()).isEqualTo("text=\"some text\"");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
@@ -396,32 +396,32 @@ final class ConditionTest {
   @Test
   void elementAnyOfWithoutNameConditionToString() {
     WebElement element = mockElement(false, "text");
-    Condition condition = anyOf(be(selected), have(text("text")));
+    WebElementCondition condition = anyOf(be(selected), have(text("text")));
     assertThat(condition).hasToString("any of: be selected or have text \"text\"");
     assertThat(condition.check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
 
   @Test
   void conditionBe() {
-    Condition condition = be(visible);
+    WebElementCondition condition = be(visible);
     assertThat(condition).hasToString("be visible");
   }
 
   @Test
   void conditionHave() {
-    Condition condition = have(attribute("name"));
+    WebElementCondition condition = have(attribute("name"));
     assertThat(condition).hasToString("have attribute name");
   }
 
   @Test
   void conditionMissingElementSatisfiesCondition() {
-    Condition condition = attribute("name");
+    WebElementCondition condition = attribute("name");
     assertThat(condition.missingElementSatisfiesCondition()).isFalse();
   }
 
   @Test
   void conditionToString() {
-    Condition condition = attribute("name").because("it's awesome");
+    WebElementCondition condition = attribute("name").because("it's awesome");
     assertThat(condition).hasToString("attribute name (because it's awesome)");
   }
 

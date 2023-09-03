@@ -1,6 +1,6 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.WebElementCondition;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -31,14 +31,14 @@ public class Util {
 
   @CheckReturnValue
   @Nonnull
-  public static List<Condition> argsToConditions(@Nullable Object[] args) {
+  public static List<WebElementCondition> argsToConditions(@Nullable Object[] args) {
     if (args == null) return emptyList();
 
-    List<Condition> conditions = new ArrayList<>(args.length);
+    List<WebElementCondition> conditions = new ArrayList<>(args.length);
     for (Object arg : args) {
-      if (arg instanceof Condition conditionArgument)
+      if (arg instanceof WebElementCondition conditionArgument)
         conditions.add(conditionArgument);
-      else if (arg instanceof Condition[] conditionsArray)
+      else if (arg instanceof WebElementCondition[] conditionsArray)
         conditions.addAll(asList(conditionsArray));
       else if (!(arg instanceof String || arg instanceof Long || arg instanceof Duration))
         throw new IllegalArgumentException("Unknown parameter: " + arg);

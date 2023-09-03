@@ -1,8 +1,8 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -13,7 +13,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 @ParametersAreNonnullByDefault
-public class CssValue extends Condition {
+public class CssValue extends WebElementCondition {
   private final String propertyName;
   private final String expectedValue;
 
