@@ -14,7 +14,8 @@ public class AppiumScrollOptions {
     this(scrollDirection, maxSwipeCounts, DEFAULT_TOP_POINT_HEIGHT_PERCENT, DEFAULT_BOTTOM_POINT_HEIGHT_PERCENT);
   }
 
-  private AppiumScrollOptions(ScrollDirection scrollDirection, int maxSwipeCounts, float topPointHeightPercent, float bottomPointHeightPercent) {
+  private AppiumScrollOptions(ScrollDirection scrollDirection, int maxSwipeCounts,
+                              float topPointHeightPercent, float bottomPointHeightPercent) {
     this.scrollDirection = scrollDirection;
     this.maxSwipeCounts = maxSwipeCounts;
     this.topPointHeightPercent = topPointHeightPercent;

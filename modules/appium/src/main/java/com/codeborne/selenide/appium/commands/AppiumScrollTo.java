@@ -72,7 +72,8 @@ public class AppiumScrollTo implements Command<SelenideElement> {
 
     while (isElementNotDisplayed(locator)
            && isLessThanMaxSwipeCount(currentSwipeCount, scrollOptions.getMaxSwipeCounts())) {
-      performScroll(appiumDriver, scrollOptions.getScrollDirection(), scrollOptions.getTopPointHeightPercent(), scrollOptions.getBottomPointHeightPercent());
+      performScroll(appiumDriver, scrollOptions.getScrollDirection(), scrollOptions.getTopPointHeightPercent(),
+                    scrollOptions.getBottomPointHeightPercent());
       currentSwipeCount++;
     }
   }
