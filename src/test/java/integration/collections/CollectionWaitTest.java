@@ -1,7 +1,6 @@
 package integration.collections;
 
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,8 +71,8 @@ final class CollectionWaitTest extends ITest {
       .isInstanceOf(TextsMismatch.class)
       .hasMessageStartingWith(
         String.format("Text #1 mismatch (expected: \"#wrong\", actual: \"Element #1\")%n" +
-                      "Actual: [Element #0, Element #1]%n" +
-                      "Expected: [Element, #wrong]%n" +
+                      "Actual (2): [Element #0, Element #1]%n" +
+                      "Expected (2): [Element, #wrong]%n" +
                       "Collection: #collection li:first(2)"))
       .hasMessageContaining("Timeout: 1 s.");
     assertTestTookMoreThan(1, SECONDS);
@@ -82,8 +81,10 @@ final class CollectionWaitTest extends ITest {
   @Test
   void firstNElements_TextsSizeMismatchErrorMessage() {
     assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element #wrong")))
-      .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageContaining("List size mismatch: expected: = 1, actual: 2, collection: #collection li:first(2)");
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("List size mismatch (expected: 1, actual: 2)")
+      .hasMessageContaining("Actual (2): [Element #0, Element #1]")
+      .hasMessageContaining("Expected (1): [Element #wrong]");
     assertTestTookMoreThan(1, SECONDS);
   }
 
@@ -91,8 +92,9 @@ final class CollectionWaitTest extends ITest {
   void lastNElements_errorMessage() {
     assertThatThrownBy(() -> $$("#collection li").last(2).shouldHave(texts("Element", "#wrong"), Duration.ofSeconds(1)))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageContaining(String.format("Actual: [Element #18, Element #19]%n" +
-        "Expected: [Element, #wrong]%n" +
+      .hasMessageStartingWith("Text #1 mismatch (expected: \"#wrong\", actual: \"Element #19\")")
+      .hasMessageContaining(String.format("Actual (2): [Element #18, Element #19]%n" +
+        "Expected (2): [Element, #wrong]%n" +
         "Collection: #collection li:last(2)"))
         .hasMessageContaining("Timeout: 1 s.");
     assertTestTookMoreThan(1, SECONDS);
@@ -112,8 +114,9 @@ final class CollectionWaitTest extends ITest {
       $$("#collection li").last(2).shouldHave(texts("Element #88888", "Element #99999"), Duration.ofMillis(999))
     )
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageContaining("Actual: [Element #18, Element #19]")
-      .hasMessageContaining("Expected: [Element #88888, Element #99999]")
+      .hasMessageContaining("Text #0 mismatch (expected: \"Element #88888\", actual: \"Element #18\")")
+      .hasMessageContaining("Actual (2): [Element #18, Element #19]")
+      .hasMessageContaining("Expected (2): [Element #88888, Element #99999]")
       .hasMessageContaining("Timeout: 999 ms.");
     assertTestTookMoreThan(999, MILLISECONDS);
   }

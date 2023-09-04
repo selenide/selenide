@@ -1,7 +1,6 @@
 package integration.collections;
 
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,8 +27,8 @@ public class ExactTextsCaseSensitiveTest extends ITest {
   void checksOrderOfTexts() {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitive("Two", "One", "Three")))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageContaining("Actual: [One, Two, Three]")
-      .hasMessageContaining("Expected: [Two, One, Three]");
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (3): [Two, One, Three]");
   }
 
   @Test
@@ -44,8 +43,8 @@ public class ExactTextsCaseSensitiveTest extends ITest {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitive("On", "Two", "Three")))
       .isInstanceOf(TextsMismatch.class)
       .hasMessageStartingWith("Text #0 mismatch (expected: \"On\", actual: \"One\")")
-      .hasMessageContaining("Actual: [One, Two, Three]")
-      .hasMessageContaining("Expected: [On, Two, Three]")
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (3): [On, Two, Three]")
       .hasMessageContaining("Collection: .element");
   }
 
@@ -53,15 +52,17 @@ public class ExactTextsCaseSensitiveTest extends ITest {
   void doesNotAcceptInvalidCase() {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitive("One", "two", "Three")))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageContaining("Actual: [One, Two, Three]")
-      .hasMessageContaining("Expected: [One, two, Three]");
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (3): [One, two, Three]");
   }
 
   @Test
   void checksElementsCount() {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitive("One", "Two", "Three", "Four")))
-      .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageStartingWith("List size mismatch: expected: = 4, actual: 3, collection: .element");
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("List size mismatch (expected: 4, actual: 3)")
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (4): [One, Two, Three, Four]");
   }
 
   @Test

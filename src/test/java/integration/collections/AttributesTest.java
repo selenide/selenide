@@ -25,8 +25,8 @@ public class AttributesTest extends ITest {
     assertThatThrownBy(() -> $$(".element").shouldHave(attributes("data-value", "1  uno", "2  duo", "3  trio")))
       .isInstanceOf(AttributesMismatch.class)
       .hasMessageStartingWith("Attribute \"data-value\" values mismatch (#0 expected: \"1  uno\", actual: \"1 uno\")")
-      .hasMessageContaining("Actual: [1 uno, 2 duo, 3 trio]")
-      .hasMessageContaining("Expected: [1  uno, 2  duo, 3  trio]")
+      .hasMessageContaining("Actual (3): [1 uno, 2 duo, 3 trio]")
+      .hasMessageContaining("Expected (3): [1  uno, 2  duo, 3  trio]")
       .hasMessageContaining("Collection: .element")
       .hasMessageContaining("Timeout: 1 ms.");
   }
@@ -47,7 +47,7 @@ public class AttributesTest extends ITest {
     assertThatThrownBy(() -> $$(".element").shouldHave(attributes("not-existing-attribute", "1 uno", "2 duo", "3 trio")))
       .isInstanceOf(AttributesMismatch.class)
       .hasMessageStartingWith("Attribute \"not-existing-attribute\" values mismatch")
-      .hasMessageContaining("Actual: [null, null, null]")
-      .hasMessageContaining("Expected: [1 uno, 2 duo, 3 trio]");
+      .hasMessageContaining("Actual (3): [null, null, null]")
+      .hasMessageContaining("Expected (3): [1 uno, 2 duo, 3 trio]");
   }
 }

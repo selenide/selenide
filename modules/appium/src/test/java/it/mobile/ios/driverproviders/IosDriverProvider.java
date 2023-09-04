@@ -19,8 +19,6 @@ public abstract class IosDriverProvider implements WebDriverProvider {
   @Nonnull
   @Override
   public WebDriver createDriver(@Nonnull Capabilities capabilities) {
-    Configuration.timeout = 10_000;
-    Configuration.pageLoadTimeout = -1;
     Configuration.remoteConnectionTimeout = Duration.ofSeconds(10).toMillis();
     Configuration.remoteReadTimeout = Duration.ofSeconds(30).toMillis();
     HttpClientTimeouts.defaultLocalReadTimeout = Duration.ofSeconds(20);

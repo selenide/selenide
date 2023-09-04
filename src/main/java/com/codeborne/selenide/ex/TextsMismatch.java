@@ -17,8 +17,8 @@ public class TextsMismatch extends UIAssertionError {
     super(
       collection.driver(),
       message +
-        lineSeparator() + "Actual: " + actualTexts +
-        lineSeparator() + "Expected: " + expectedTexts +
+        lineSeparator() + "Actual (" + actualTexts.size() + "): " + actualTexts +
+        lineSeparator() + "Expected (" + expectedTexts.size() + "): " + expectedTexts +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
         lineSeparator() + "Collection: " + collection.description(),
       expectedTexts, actualTexts,

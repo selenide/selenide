@@ -5,7 +5,6 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.AttributesMismatch;
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementCommunicator;
 import org.openqa.selenium.WebElement;
@@ -17,7 +16,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 
-import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Collections.unmodifiableList;
 
@@ -40,19 +38,20 @@ public class Attributes extends CollectionCondition {
   @Nonnull
   @CheckReturnValue
   public CheckResult check(Driver driver, List<WebElement> elements) {
-    if (elements.size() != expectedValues.size()) {
-      return new CheckResult(REJECT, elements.size());
+    List<String> actualValues = communicator.attributes(driver, elements, attribute);
+    if (actualValues.size() != expectedValues.size()) {
+      String message = String.format("List size mismatch (expected: %s, actual: %s)", expectedValues.size(), actualValues.size());
+      return CheckResult.rejected(message, actualValues);
     }
-    List<String> actualAttributeValues = communicator.attributes(driver, elements, attribute);
 
     for (int i = 0; i < expectedValues.size(); i++) {
       String expectedValue = expectedValues.get(i);
-      String actualValue = actualAttributeValues.get(i);
+      String actualValue = actualValues.get(i);
 
       if (!Objects.equals(actualValue, expectedValue)) {
         String message = String.format("Attribute \"%s\" values mismatch (#%s expected: \"%s\", actual: \"%s\")",
           attribute, i, expectedValue, actualValue);
-        return CheckResult.rejected(message, actualAttributeValues);
+        return CheckResult.rejected(message, actualValues);
       }
     }
     return CheckResult.accepted();
@@ -63,15 +62,6 @@ public class Attributes extends CollectionCondition {
                    CheckResult lastCheckResult,
                    @Nullable Exception cause,
                    long timeoutMs) {
-    if (lastCheckResult.actualValue() instanceof Integer actualSize) {
-      if (actualSize == 0) {
-        throw new ElementNotFound(collection, toString(), timeoutMs, cause);
-      }
-      else {
-        throw new ListSizeMismatch("=", expectedValues.size(), actualSize, explanation, collection, cause, timeoutMs);
-      }
-    }
-
     List<String> actualAttributeValues = lastCheckResult.requireActualValue();
 
     if (actualAttributeValues.isEmpty()) {

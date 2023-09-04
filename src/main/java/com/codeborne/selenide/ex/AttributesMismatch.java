@@ -15,8 +15,8 @@ public class AttributesMismatch extends UIAssertionError {
                             List<String> expectedValues, List<String> actualValues,
                             @Nullable String explanation, long timeoutMs, @Nullable Exception cause) {
     super(driver, message +
-        lineSeparator() + "Actual: " + actualValues +
-        lineSeparator() + "Expected: " + expectedValues +
+        lineSeparator() + "Actual (" + actualValues.size() + "): " + actualValues +
+        lineSeparator() + "Expected (" + expectedValues.size() + "): " + expectedValues +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
         lineSeparator() + "Collection: " + collection.description(),
       expectedValues, actualValues, cause, timeoutMs);

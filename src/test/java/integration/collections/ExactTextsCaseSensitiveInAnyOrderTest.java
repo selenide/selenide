@@ -1,7 +1,6 @@
 package integration.collections;
 
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +42,8 @@ class ExactTextsCaseSensitiveInAnyOrderTest extends ITest {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitiveInAnyOrder(expectedTexts)))
       .isInstanceOf(TextsMismatch.class)
       .hasMessageStartingWith(String.format("Text #0 not found: \"%s\"", expectedTexts.get(0)))
-      .hasMessageContaining("Actual: [One, Two, Three]")
-      .hasMessageContaining("Expected: " + expectedTexts)
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (3): " + expectedTexts)
       .hasMessageContaining("Collection: .element");
   }
 
@@ -59,8 +58,11 @@ class ExactTextsCaseSensitiveInAnyOrderTest extends ITest {
   @Test
   void checksElementsCount() {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitiveInAnyOrder("One", "Two", "Three", "Four")))
-      .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageStartingWith("List size mismatch: expected: = 4, actual: 3, collection: .element");
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("List size mismatch (expected: 4, actual: 3)")
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (4): [One, Two, Three, Four]")
+      .hasMessageContaining("Collection: .element");
   }
 
   @Test
