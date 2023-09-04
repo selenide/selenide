@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
+import static com.codeborne.selenide.CheckResult.rejected;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
@@ -28,11 +28,11 @@ public class TextsInAnyOrder extends ExactTexts {
   @Nonnull
   @Override
   public CheckResult check(Driver driver, List<WebElement> elements) {
-    if (elements.size() != expectedTexts.size()) {
-      return new CheckResult(REJECT, elements.size());
-    }
-
     List<String> actualTexts = communicator.texts(driver, elements);
+    if (actualTexts.size() != expectedTexts.size()) {
+      String message = String.format("List size mismatch (expected: %s, actual: %s)", expectedTexts.size(), actualTexts.size());
+      return rejected(message, actualTexts);
+    }
 
     for (int i = 0; i < expectedTexts.size(); i++) {
       String expectedText = expectedTexts.get(i);

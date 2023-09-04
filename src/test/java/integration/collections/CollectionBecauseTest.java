@@ -29,8 +29,8 @@ final class CollectionBecauseTest extends ITest {
     })
       .isInstanceOf(TextsMismatch.class)
       .hasMessageStartingWith("Text #0 mismatch (expected: \"foo\", actual: \"@one.io\")")
-      .hasMessageContaining("Actual: [@one.io, @two.eu, @three.com, @four.ee]")
-      .hasMessageContaining("Expected: [foo, bar, var, buzz]")
+      .hasMessageContaining("Actual (4): [@one.io, @two.eu, @three.com, @four.ee]")
+      .hasMessageContaining("Expected (4): [foo, bar, var, buzz]")
       .hasMessageContaining("Because: that's why");
   }
 
@@ -42,9 +42,12 @@ final class CollectionBecauseTest extends ITest {
           .because("that's why")
       );
     })
-      .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageStartingWith("List size mismatch")
-      .hasMessageContaining("expected: = 3 (because that's why), actual: 4, collection: #dropdown-list-container option");
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("List size mismatch (expected: 3, actual: 4)")
+      .hasMessageContaining("Actual (4): [@one.io, @two.eu, @three.com, @four.ee]")
+      .hasMessageContaining("Expected (3): [foo, bar, var, buzz]")
+      .hasMessageContaining("Because: that's why")
+      .hasMessageContaining("Collection: #dropdown-list-container option");
   }
 
   @Test
@@ -57,8 +60,8 @@ final class CollectionBecauseTest extends ITest {
     })
       .isInstanceOf(TextsMismatch.class)
       .hasMessageStartingWith("Text #0 mismatch (expected: \"foo\", actual: \"@one.io\")")
-      .hasMessageContaining("Actual: [@one.io, @two.eu, @three.com, @four.ee]")
-      .hasMessageContaining("Expected: [foo, bar, var, buzz]")
+      .hasMessageContaining("Actual (4): [@one.io, @two.eu, @three.com, @four.ee]")
+      .hasMessageContaining("Expected (4): [foo, bar, var, buzz]")
       .hasMessageContaining("Because: that's why");
   }
 
@@ -66,13 +69,14 @@ final class CollectionBecauseTest extends ITest {
   void canExplainWhyConditionIsExpected_exactTextsSizeMismatch() {
     assertThatThrownBy(() -> {
       $$("#dropdown-list-container option").shouldHave(
-        exactTexts("foo", "bar", "var, buzz")
-          .because("that's why")
-      );
+        exactTexts("foo", "bar", "var, buzz").because("that's why"));
     })
-      .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageStartingWith("List size mismatch")
-      .hasMessageContaining("expected: = 3 (because that's why), actual: 4, collection: #dropdown-list-container option");
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("List size mismatch (expected: 3, actual: 4)")
+      .hasMessageContaining("Actual (4): [@one.io, @two.eu, @three.com, @four.ee]")
+      .hasMessageContaining("Expected (3): [foo, bar, var, buzz]")
+      .hasMessageContaining("Because: that's why")
+      .hasMessageContaining("Collection: #dropdown-list-container option");
   }
 
   @Test

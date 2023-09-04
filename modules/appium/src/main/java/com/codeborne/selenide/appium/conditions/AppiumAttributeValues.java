@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
-import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
+import static com.codeborne.selenide.CheckResult.rejected;
 import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
@@ -34,21 +34,23 @@ public class AppiumAttributeValues extends ExactTexts {
   @Nonnull
   @CheckReturnValue
   public CheckResult check(Driver driver, List<WebElement> elements) {
-    if (elements.size() != this.expectedTexts.size()) {
-      return new CheckResult(REJECT, elements.size());
+    List<String> actualValues = getActualAttributes(driver, elements);
+    if (actualValues.size() != expectedTexts.size()) {
+      String message = String.format("List size mismatch (expected: %s, actual: %s)", expectedTexts.size(), actualValues.size());
+      return rejected(message, actualValues);
     }
-    else {
-      List<String> actualAttributeValues = getActualAttributes(driver, elements);
-      for (int i = 0; i < this.expectedTexts.size(); ++i) {
-        String expectedText = this.expectedTexts.get(i);
-        String actualAttributeValue = actualAttributeValues.get(i);
-        if (!Objects.equals(expectedText, actualAttributeValue)) {
-          return new CheckResult(REJECT, actualAttributeValues);
-        }
-      }
 
-      return new CheckResult(ACCEPT, null);
+    for (int i = 0; i < this.expectedTexts.size(); ++i) {
+      String expectedAttributeValue = this.expectedTexts.get(i);
+      String actualAttributeValue = actualValues.get(i);
+      if (!Objects.equals(expectedAttributeValue, actualAttributeValue)) {
+        String message = String.format("Attribute #%s mismatch (expected: \"%s\", actual: \"%s\")",
+          i, expectedAttributeValue, actualAttributeValue);
+        return CheckResult.rejected(message, actualValues);
+      }
     }
+
+    return new CheckResult(ACCEPT, null);
   }
 
   private List<String> getActualAttributes(Driver driver, List<WebElement> elements) {

@@ -2,7 +2,6 @@ package integration.collections;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,8 +29,8 @@ public class TextsTest extends ITest {
   void checksOrderOfTexts() {
     assertThatThrownBy(() -> $$(".element").shouldHave(texts("Two", "One", "Three")))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageContaining("Actual: [One, Two, Three]")
-      .hasMessageContaining("Expected: [Two, One, Three]");
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (3): [Two, One, Three]");
   }
 
   @Test
@@ -53,8 +52,8 @@ public class TextsTest extends ITest {
     assertThatThrownBy(() -> $$(".element").shouldHave(texts("Three", "Two", "One")))
       .isInstanceOf(TextsMismatch.class)
       .hasMessageStartingWith("Text #0 mismatch (expected: \"Three\", actual: \"One\")")
-      .hasMessageContaining("Actual: [One, Two, Three]")
-      .hasMessageContaining("Expected: [Three, Two, One]")
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (3): [Three, Two, One]")
       .hasMessageContaining("Collection: .element");
   }
 
@@ -68,8 +67,11 @@ public class TextsTest extends ITest {
   @Test
   void checksElementsCount() {
     assertThatThrownBy(() -> $$(".element").shouldHave(texts("One", "Two", "Three", "Four")))
-      .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageStartingWith("List size mismatch: expected: = 4, actual: 3, collection: .element");
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("List size mismatch (expected: 4, actual: 3)")
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (4): [One, Two, Three, Four]")
+      .hasMessageContaining("Collection: .element");
   }
 
   @Test
