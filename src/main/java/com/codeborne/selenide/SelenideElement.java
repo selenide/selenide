@@ -88,16 +88,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement type(CharSequence textToType);
+  SelenideElement type(CharSequence text);
 
   /**
    * Similar to {@link #type(java.lang.CharSequence)}
-   * @param typeOptions
-   * com.codeborne.selenide.commands.Type
+   * @param options parameters specifying how exactly you want to type the text
+   * @see com.codeborne.selenide.commands.Type
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement type(TypeOptions typeOptions);
+  SelenideElement type(TypeOptions options);
 
 
   /**

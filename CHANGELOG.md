@@ -1,5 +1,18 @@
 # Changelog
 
+## 6.18.0 (released 06.09.2023)
+* #2434 show actual texts in error message for collections text checks (#2456)
+* #2452 bump Selenium from 4.11.0 to 4.12.1
+* #2336 pass BasicAuth in Chromium-based browser using `HasAuthentication` mechanism - again (#2358)
+* #2445 add method $$.getOptions()  (#2446)
+* #2454 Make Selenide.getFocusedElement() return SelenideElement, not WebElement
+* #2437 support page object fields of type SelenideAppiumElement (#2438)
+* #2449 added ability to set top and bottom point coordinates for scroll in mobile apps  --  thanks to @qwez for PR
+* #2439 do not allow creating ElementsContainer outside of page object (#2455)
+* bump LittleProxy from 2.0.19 to 2.0.20 (fixes a memory leak in Selenide proxy)
+* #2442 update vulnerable jackson dependency
+Full list: https://github.com/selenide/selenide/milestone/190?closed=1
+
 ## 6.17.2 (released 24.08.2023)
 * #2424 Avoid using authentication via CDP  --  see PR #2435
 * Bump nettyVersion from 4.1.96.Final to 4.1.97.Final
