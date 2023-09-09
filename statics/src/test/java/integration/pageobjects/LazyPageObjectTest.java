@@ -1,7 +1,7 @@
 package integration.pageobjects;
 
+import com.codeborne.selenide.Container;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import integration.IntegrationTest;
@@ -77,7 +77,7 @@ public class LazyPageObjectTest extends IntegrationTest {
     private SelenideElement h3;
   }
 
-  static class MyContent extends ElementsContainer {
+  static class MyContent implements Container {
     @FindBy(tagName = "form")
     private List<MyForm> forms;
 
@@ -85,7 +85,7 @@ public class LazyPageObjectTest extends IntegrationTest {
     private SelenideElement h42;
   }
 
-  static class MyForm extends ElementsContainer {
+  static class MyForm implements Container {
     @FindBy(tagName = "h1")
     private SelenideElement h1;
 

@@ -1,23 +1,23 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Container;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.PageObjectException;
 import org.openqa.selenium.NoSuchElementException;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.util.AbstractList;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.AbstractList;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.impl.Alias.NONE;
 
 @ParametersAreNonnullByDefault
-public class ElementsContainerCollection extends AbstractList<ElementsContainer> {
+public class ElementsContainerCollection extends AbstractList<Container> {
   private final PageObjectFactory pageFactory;
   private final Driver driver;
   private final Field field;
@@ -42,7 +42,7 @@ public class ElementsContainerCollection extends AbstractList<ElementsContainer>
   @CheckReturnValue
   @Nonnull
   @Override
-  public ElementsContainer get(int index) {
+  public Container get(int index) {
     String searchCriteria = String.format("%s[%s]", collection.getSearchCriteria(), index);
     WebElementSource self = new WebElementWrapper(driver, collection.getElement(index), searchCriteria);
     try {
