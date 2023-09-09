@@ -1,6 +1,7 @@
 package integration.pageobjects;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Container;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
@@ -125,12 +126,11 @@ final class PageObjectTest extends IntegrationTest {
     assertThat(pageWithSelects.userInfoList)
       .hasSize(2);
 
-    pageWithSelects.userInfoList.get(0).getSelf().shouldBe(visible);
-    pageWithSelects.userInfoList.get(0).firstName.shouldHave(text("Bob"));
+    pageWithSelects.userInfoList.get(0).firstName.shouldHave(text("Bob"), visible);
     pageWithSelects.userInfoList.get(0).lastName.shouldHave(text("Dilan"));
     pageWithSelects.userInfoList.get(0).age.shouldHave(text("25"));
 
-    pageWithSelects.userInfoList.get(1).firstName.shouldHave(text("John"));
+    pageWithSelects.userInfoList.get(1).firstName.shouldHave(text("John"), visible);
     pageWithSelects.userInfoList.get(1).lastName.shouldHave(text("Smith"));
     pageWithSelects.userInfoList.get(1).age.shouldHave(text("28"));
   }
@@ -206,7 +206,7 @@ final class PageObjectTest extends IntegrationTest {
     SelenideElement lastLogin;
   }
 
-  static class UserInfo extends ElementsContainer {
+  static class UserInfo implements Container {
     @FindBy(className = "firstname")
     SelenideElement firstName;
     @FindBy(className = "lastname")

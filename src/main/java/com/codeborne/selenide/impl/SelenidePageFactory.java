@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.As;
+import com.codeborne.selenide.Container;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
@@ -15,8 +16,6 @@ import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -39,8 +38,6 @@ import java.util.List;
 @SuppressWarnings("ChainOfInstanceofChecks")
 @ParametersAreNonnullByDefault
 public class SelenidePageFactory implements PageObjectFactory {
-  private static final Logger logger = LoggerFactory.getLogger(SelenidePageFactory.class);
-
   @Override
   @CheckReturnValue
   @Nonnull
@@ -160,7 +157,7 @@ public class SelenidePageFactory implements PageObjectFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public ElementsContainer createElementsContainer(Driver driver, @Nullable WebElementSource searchContext, Field field, By selector) {
+  public Container createElementsContainer(Driver driver, @Nullable WebElementSource searchContext, Field field, By selector) {
     try {
       WebElementSource self = new ElementFinder(driver, searchContext, selector, 0);
       if (shouldCache(field)) {
@@ -175,7 +172,7 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   @CheckReturnValue
   @Nonnull
-  ElementsContainer initElementsContainer(Driver driver, Field field, WebElementSource self) throws ReflectiveOperationException {
+  Container initElementsContainer(Driver driver, Field field, WebElementSource self) throws ReflectiveOperationException {
     Type[] genericTypes = field.getGenericType() instanceof ParameterizedType parameterizedType ?
       parameterizedType.getActualTypeArguments() : new Type[0];
     return initElementsContainer(driver, field, self, field.getType(), genericTypes);
@@ -184,11 +181,11 @@ public class SelenidePageFactory implements PageObjectFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public ElementsContainer initElementsContainer(Driver driver,
-                                                 Field field,
-                                                 WebElementSource self,
-                                                 Class<?> type,
-                                                 Type[] genericTypes) throws ReflectiveOperationException {
+  public Container initElementsContainer(Driver driver,
+                                         Field field,
+                                         WebElementSource self,
+                                         Class<?> type,
+                                         Type[] genericTypes) throws ReflectiveOperationException {
     if (Modifier.isInterface(type.getModifiers())) {
       throw new IllegalArgumentException("Cannot initialize field " + field + ": " + type + " is interface");
     }
@@ -197,7 +194,7 @@ public class SelenidePageFactory implements PageObjectFactory {
     }
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
-    ElementsContainer result = (ElementsContainer) constructor.newInstance();
+    Container result = (Container) constructor.newInstance();
     initElements(driver, self, result, genericTypes);
     return result;
   }
@@ -226,14 +223,7 @@ public class SelenidePageFactory implements PageObjectFactory {
                          Field field, By selector, Type[] genericTypes) {
     String alias = alias(field);
     if (ElementsContainer.class.equals(field.getDeclaringClass()) && "self".equals(field.getName())) {
-      if (searchContext != null) {
-        return ElementFinder.wrap(SelenideElement.class, searchContext);
-      }
-      else {
-        String message = String.format("Cannot initialize field %s.%s: it's not bound to any page object",
-          field.getDeclaringClass().getSimpleName(), field.getName());
-        throw new IllegalArgumentException(message);
-      }
+      return decorateElementsContainer(searchContext, field);
     }
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return decorateWebElement(driver, searchContext, selector, field, alias);
@@ -242,14 +232,26 @@ public class SelenidePageFactory implements PageObjectFactory {
       isDecoratableList(field, genericTypes, WebElement.class)) {
       return createElementsCollection(driver, searchContext, selector, field, alias);
     }
-    else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
+    else if (Container.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(driver, searchContext, field, selector);
     }
-    else if (isDecoratableList(field, genericTypes, ElementsContainer.class)) {
+    else if (isDecoratableList(field, genericTypes, Container.class)) {
       return createElementsContainerList(driver, searchContext, field, genericTypes, selector);
     }
 
     return defaultFieldDecorator(driver, searchContext).decorate(loader, field);
+  }
+
+  @Nonnull
+  private static SelenideElement decorateElementsContainer(@Nullable WebElementSource searchContext, Field field) {
+    if (searchContext != null) {
+      return ElementFinder.wrap(SelenideElement.class, searchContext);
+    }
+    else {
+      String message = String.format("Cannot initialize field %s.%s: it's not bound to any page object",
+        field.getDeclaringClass().getSimpleName(), field.getName());
+      throw new IllegalArgumentException(message);
+    }
   }
 
   @Nonnull
@@ -282,8 +284,8 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   @CheckReturnValue
   @Nonnull
-  protected List<ElementsContainer> createElementsContainerList(Driver driver, @Nullable WebElementSource searchContext,
-                                                                Field field, Type[] genericTypes, By selector) {
+  protected List<Container> createElementsContainerList(Driver driver, @Nullable WebElementSource searchContext,
+                                                        Field field, Type[] genericTypes, By selector) {
     Class<?> listType = getListGenericType(field, genericTypes);
     if (listType == null) {
       throw new IllegalArgumentException("Cannot detect list type for " + field);
