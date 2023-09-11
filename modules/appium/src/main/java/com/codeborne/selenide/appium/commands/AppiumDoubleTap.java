@@ -15,7 +15,6 @@ public class AppiumDoubleTap extends AppiumClick {
   @Nonnull
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    args = new Object[] {doubleTap()};
-    return super.execute(proxy, locator, args);
+    return super.execute(proxy, locator, new Object[] {doubleTap()});
   }
 }
