@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.appium.AppiumSelectors.byAttribute;
+import static com.codeborne.selenide.appium.AppiumSelectors.byClassNameAndIndex;
 import static com.codeborne.selenide.appium.AppiumSelectors.byContentDescription;
 import static com.codeborne.selenide.appium.AppiumSelectors.byTagAndAttribute;
 import static com.codeborne.selenide.appium.AppiumSelectors.byTagAndContentDescription;
@@ -49,6 +50,7 @@ class AndroidSelectorsTest extends BaseApiDemosTest {
     testGraphicsLink(withTagAndText("android.widget.TextView", "Graphi"));
     testGraphicsLink(android(withText("Graphi")).ios(By.xpath("/")));
     testGraphicsLink(android(byText("Graphics")).ios(By.xpath("/")));
+    testGraphicsLink(byClassNameAndIndex("android.widget.TextView", 7));
   }
 
   private void testViewsLink(By selector) {
