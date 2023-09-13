@@ -20,5 +20,7 @@ public class SelenideAppiumCommands extends Commands {
     add("scroll", new AppiumScrollTo());
     add("swipe", new AppiumSwipeTo());
     add("swipeTo", new AppiumSwipeTo());
+    add("tap", new AppiumTap());
+    add("doubleTap", new AppiumDoubleTap());
   }
 }
