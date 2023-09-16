@@ -69,9 +69,12 @@ SelenideAppium.openIOSDeepLink("mydemoapprn://product-details/1");
 3. Wrapper methods
 ```java
    $(AppiumBy.xpath(".//*[@text='Views']")).click(tap()); //perform native event tap
+   $(AppiumBy.xpath(".//*[@text='Views']")).tap(); //perform native event tap
+   $(AppiumBy.xpath(".//*[@text='Views']")).doubleTap(); //perform native event double tap
    $(AppiumBy.xpath(".//*[@text='Views']")).click(tapWithOffset(100, -60)) //perform tap with offset from center of the element
    $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPress());
-  $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPressFor(ofSeconds(5)));
+   $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPressFor(ofSeconds(5)));
+   $(AppiumBy.xpath(".//*[@text='People Names']")).tap(longPressFor(ofSeconds(4)));
 
   //drag and drop
    SelenideElement from = $(By.id("io.appium.android.apis:id/drag_dot_1")).shouldBe(visible);
@@ -128,6 +131,8 @@ $$(AppiumBy.xpath("//android.widget.TextView"))
 $(By.xpath(".//*[@text='Tabs']")).scrollTo().click(); //scroll max of 30 times in downward direction to find element
 $(By.xpath(".//*[@text='Tabs']")).scroll(with(DOWN, 10)); //scroll max of 10 times in downward direction to find element
 $(By.xpath(".//*[@text='Animation']")).scroll(up()); //scroll max of 30 times in upward direction to find element
+$(By.xpath(".//*[@text='Animation']")).scroll(up(0.15f, 0.60f)); //scroll max of 30 times in upward direction with custom swiping height relative to device height
+$(By.xpath(".//*[@text='Animation']")).scroll(down(0.15f, 0.60f)); //scroll max of 30 times in downward direction with custom swiping height relative to device height
 ```
 
 7. We got covered you to the left and right

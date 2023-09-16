@@ -1,6 +1,7 @@
 package it.mobile.android;
 
 
+import com.codeborne.selenide.appium.AppiumScrollOptions;
 import com.codeborne.selenide.appium.SelenideAppium;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,14 @@ class AndroidScrollTest extends BaseApiDemosTest {
       .scroll(with(DOWN, 10));
     $(By.xpath(".//*[@text='Animation']"))
       .scroll(up())
+      .shouldBe(visible);
+  }
+
+  @Test
+  void testAndroidScrollOptionsWithCustomCoordinates() {
+    $(By.xpath(".//*[@text='Views']")).click();
+    $(By.xpath(".//*[@text='Tabs']"))
+      .scroll(AppiumScrollOptions.down(0.15f, 0.60f))
       .shouldBe(visible);
   }
 }
