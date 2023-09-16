@@ -25,12 +25,12 @@ public class AppiumScrollOptions {
   }
 
   private void checkCoordinateValues(float topPointHeightPercent, float bottomPointHeightPercent) {
-    if((topPointHeightPercent <= 0 || topPointHeightPercent >= 1) ||
-      (bottomPointHeightPercent <= 0 || bottomPointHeightPercent >= 1)){
+    if (topPointHeightPercent <= 0 || topPointHeightPercent >= 1 ||
+      bottomPointHeightPercent <= 0 || bottomPointHeightPercent >= 1) {
       throw new IllegalArgumentException("Percentage height should be greater than 0 and less than 1. Example: (0.2, 0.5)");
     }
 
-    if(topPointHeightPercent > bottomPointHeightPercent) {
+    if (topPointHeightPercent > bottomPointHeightPercent) {
       throw new IllegalArgumentException("Top point percentage should be less than bottom point percentage. Example: (0.1, 0.5)");
     }
   }
