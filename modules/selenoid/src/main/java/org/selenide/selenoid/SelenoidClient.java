@@ -34,9 +34,6 @@ public class SelenoidClient {
   private final String sessionId;
 
   public SelenoidClient(String hubUrl, String sessionId) {
-    if (!hubUrl.endsWith("/wd/hub")) {
-      throw new IllegalArgumentException("Expect hub url to end with /wd/hub, but received: " + hubUrl);
-    }
     this.baseUrl = hubUrl.replace("/wd/hub", "");
     this.sessionId = sessionId;
   }
