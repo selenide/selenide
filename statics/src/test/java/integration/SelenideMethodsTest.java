@@ -326,6 +326,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanFollowLinksUsingScrollIntoViewOptions() {
+    timeout = 1000;
     $(By.linkText("Want to see ajax in action?")).scrollIntoView("{behavior: \"smooth\", inline: \"center\"}").click();
     webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(1000));
   }
