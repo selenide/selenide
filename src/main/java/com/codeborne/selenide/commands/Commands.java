@@ -81,6 +81,7 @@ public class Commands {
     add("text", new GetText());
     add("getValue", new GetValue());
     add("pseudo", new GetPseudoValue());
+    add("highlight", new Highlight());
   }
 
   private void addClickCommands() {
