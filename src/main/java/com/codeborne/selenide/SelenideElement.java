@@ -607,6 +607,20 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String describe();
 
   /**
+   * @see com.codeborne.selenide.commands.Highlight
+   * @since 6.17.0
+   */
+  @Nonnull
+  SelenideElement highlight();
+
+  /**
+   * @see com.codeborne.selenide.commands.Highlight
+   * @since 6.17.0
+   */
+  @Nonnull
+  SelenideElement highlight(HighlightOptions options);
+
+  /**
    * Give this element a human-readable name
    *
    * Caution: you probably don't need this method.
