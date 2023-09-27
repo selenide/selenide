@@ -33,6 +33,7 @@ final class ElementTextTest extends IntegrationTest {
     $("#child_div1").shouldHave(text("Son"));
     $("#grandchild_div").shouldHave(exactText("Granddaughter"));
   }
+
   @Test
   void canCheckTextOfElement_partial() {
     Configuration.textCheck = PARTIAL_TEXT;
