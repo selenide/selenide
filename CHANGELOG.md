@@ -1,5 +1,19 @@
 # Changelog
 
+## 6.19.0 (released 28.09.2023)
+* #2479 bump Selenium from 4.12.1 to 4.13.0 (#2479), see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* #2469 strip invisible spaces from collection texts (#2482)
+* #1277 #2395 add method $.highlight() to highlight given element (#2481)
+* #2475 remove hub url condition (#2476)  --  thanks to Dmitry Plodukhin
+* #2439 introduce interface `Container` as a replacement for abstract class `ElementsContainer` (#2465)
+* #2467 [appium] added tap, doubleTap commands (#2467)  --  thanks to qwez
+* #2440 [appium] add new selector with className and Index (#2440)  --  thanks to Amuthan Sakthivel
+* #2474 [appium] update Appium Scroll Options and README.md (#2474)  --  thanks to Amuthan Sakthivel
+* bump LittleProxy from 2.0.20 to 2.0.21
+* Bump BrowserUpProxy from 2.2.12 to 2.2.13 (#2463)
+* Bump nettyVersion from 4.1.97.Final to 4.1.98.Final (#2477)
+Full list: https://github.com/selenide/selenide/milestone/192?closed=1
+
 ## 6.18.0 (released 06.09.2023)
 * #2434 show actual texts in error message for collections text checks (#2456)
 * #2452 bump Selenium from 4.11.0 to 4.12.1
