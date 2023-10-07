@@ -61,10 +61,10 @@ final class ChromeProfileByFactoryTest extends IntegrationTest {
 
     String args = "\"--proxy-bypass-list=\\u003C-loopback>\", \"--no-sandbox\", \"--disable-3d-apis\"";
     if (Configuration.headless) {
-      assertThat(log).contains("\"args\": [ \"--remote-allow-origins=*\", \"--headless=new\", " + args + " ]");
+      assertThat(log).contains("\"args\": [ \"--headless=new\", " + args + " ]");
     }
     else {
-      assertThat(log).contains("\"args\": [ \"--remote-allow-origins=*\", " + args + " ]");
+      assertThat(log).contains("\"args\": [ " + args + " ]");
     }
   }
 
