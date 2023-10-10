@@ -46,7 +46,7 @@ public abstract class IosDriverProvider implements WebDriverProvider {
 
   private static URL url() {
     try {
-      return new URL("http://127.0.0.1:4723/wd/hub");
+      return new URL("http://127.0.0.1:4723/");
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
