@@ -108,22 +108,6 @@ jobs:
           cd ~
           appium driver install uiautomator2
           appium-doctor
-          nohup appium \
-            --base-path /wd/hub \
-            --relaxed-security \
-            2>&1 > "$cwd/appium.log" &
-          popd
-      - name: Wait for Appium server startup
-        run: |
-          seconds_started=$(date +%s)
-          while ! nc -z $APPIUM_TEST_SERVER_HOST $APPIUM_TEST_SERVER_PORT; do
-            sleep 0.1
-            seconds_elapsed=$(( $(date +%s) - seconds_started ))
-            if [[ $seconds_elapsed -gt $APPIUM_STARTUP_TIMEOUT_SEC ]]; then
-              echo "Appium server was unable to start within $APPIUM_STARTUP_TIMEOUT_SEC seconds timeout"
-              exit 1
-            fi
-          done
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -183,22 +167,6 @@ jobs:
           appium driver install xcuitest
           appium driver install safari
           appium-doctor
-          nohup appium \
-            --base-path /wd/hub \
-            --relaxed-security \
-            2>&1 > "$cwd/appium.log" &
-          popd
-      - name: Wait for Appium server startup
-        run: |
-          seconds_started=$(date +%s)
-          while ! nc -z $APPIUM_TEST_SERVER_HOST $APPIUM_TEST_SERVER_PORT; do
-            sleep 0.1
-            seconds_elapsed=$(( $(date +%s) - seconds_started ))
-            if [[ $seconds_elapsed -gt $APPIUM_STARTUP_TIMEOUT_SEC ]]; then
-              echo "Appium server was unable to start within $APPIUM_STARTUP_TIMEOUT_SEC seconds timeout"
-              exit 1
-            fi
-          done
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:

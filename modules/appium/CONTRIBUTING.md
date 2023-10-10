@@ -50,12 +50,8 @@ To create a new emulator:
 
 NB! Use Pixel_3_XL device profile to match your local environment and our CI setup.
 For more details please read [official docs](https://developer.android.com/studio/run/managing-avds).
-#### 2. Run appium server:
-```
-> appium --base-path /wd/hub --relaxed-security
-```
 
-#### 3. And finally, run the test:
+#### 2. And finally, run the test:
 ```
 > ./gradlew test
 > ./gradlew android
