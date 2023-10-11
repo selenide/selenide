@@ -27,12 +27,16 @@ public record CheckResult(
 ) {
   private static final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss:SSS");
 
-  public static CheckResult rejected(String message, Object actualValue) {
+  public static CheckResult rejected(String message, @Nullable Object actualValue) {
     return new CheckResult(REJECT, message, actualValue, LocalDateTime.now());
   }
 
   public static CheckResult accepted() {
     return new CheckResult(ACCEPT, null);
+  }
+
+  public static CheckResult accepted(@Nullable Object actualValue) {
+    return new CheckResult(ACCEPT, actualValue);
   }
 
   public CheckResult(Verdict verdict, @Nullable Object actualValue) {

@@ -1,7 +1,5 @@
 package com.codeborne.selenide.conditions.webdriver;
 
-import org.openqa.selenium.WebDriver;
-
 import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -13,7 +11,7 @@ public class UrlStartingWith extends UrlCondition {
 
   @CheckReturnValue
   @Override
-  public boolean test(WebDriver webDriver) {
-    return webDriver.getCurrentUrl().startsWith(expectedUrl);
+  public boolean test(String url) {
+    return url.startsWith(expectedUrl);
   }
 }

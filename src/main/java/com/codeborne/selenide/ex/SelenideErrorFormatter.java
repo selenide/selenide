@@ -3,7 +3,6 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.DurationFormat;
 import com.codeborne.selenide.impl.Screenshot;
@@ -65,15 +64,6 @@ public class SelenideErrorFormatter implements ErrorFormatter {
       }
     }
     return null;
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  protected <T> String actualValue(ObjectCondition<T> condition, @Nullable T object) {
-    if (object == null) {
-      return "";
-    }
-    return formatActualValue(extractActualValue(condition, object));
   }
 
   @CheckReturnValue
