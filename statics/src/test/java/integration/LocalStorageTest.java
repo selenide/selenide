@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.LocalStorage;
 import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.ex.ConditionMetException;
@@ -13,6 +14,8 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.CheckResult.accepted;
+import static com.codeborne.selenide.CheckResult.rejected;
 import static com.codeborne.selenide.LocalStorageConditions.item;
 import static com.codeborne.selenide.LocalStorageConditions.itemWithValue;
 import static com.codeborne.selenide.Selenide.$;
@@ -165,7 +168,7 @@ final class LocalStorageTest extends IntegrationTest {
 
   @ParametersAreNonnullByDefault
   private ObjectCondition<LocalStorage> allItemsContaining(String expectedValue) {
-    return new ObjectCondition<LocalStorage>() {
+    return new ObjectCondition<>() {
       @Nonnull
       @Override
       public String description() {
@@ -180,15 +183,15 @@ final class LocalStorageTest extends IntegrationTest {
 
       @CheckReturnValue
       @Override
-      public boolean test(LocalStorage localStorage) {
+      public CheckResult check(LocalStorage localStorage) {
         return localStorage.getItems().values().stream()
-          .allMatch(value -> value.contains(expectedValue));
+          .allMatch(value -> value.contains(expectedValue)) ?
+          accepted() : rejected(message(localStorage), actualValue(localStorage));
       }
 
       @Nonnull
       @CheckReturnValue
-      @Override
-      public String actualValue(LocalStorage localStorage) {
+      private String actualValue(LocalStorage localStorage) {
         return localStorage.getItems().toString();
       }
 

@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions.localstorage;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.LocalStorage;
 import com.codeborne.selenide.ObjectCondition;
 
@@ -30,10 +31,9 @@ public class Item implements ObjectCondition<LocalStorage> {
     return String.format("should not have item '%s'", item);
   }
 
-  @Nullable
+  @Nonnull
   @CheckReturnValue
-  @Override
-  public String actualValue(LocalStorage localStorage) {
+  private String actualValue(LocalStorage localStorage) {
     return localStorage.getItems().toString();
   }
 
@@ -46,8 +46,8 @@ public class Item implements ObjectCondition<LocalStorage> {
 
   @CheckReturnValue
   @Override
-  public boolean test(LocalStorage localStorage) {
-    return localStorage.containsItem(item);
+  public CheckResult check(LocalStorage localStorage) {
+    return result(localStorage, localStorage.containsItem(item), actualValue(localStorage));
   }
 
   @Nonnull

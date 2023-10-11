@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions.clipboard;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Clipboard;
 import com.codeborne.selenide.ObjectCondition;
 
@@ -32,15 +33,9 @@ public class Content implements ObjectCondition<Clipboard> {
 
   @CheckReturnValue
   @Override
-  public boolean test(Clipboard clipboard) {
-    return clipboard.getText().equals(expectedContent);
-  }
-
-  @Nullable
-  @CheckReturnValue
-  @Override
-  public String actualValue(Clipboard clipboard) {
-    return clipboard.getText();
+  public CheckResult check(Clipboard clipboard) {
+    String clipboardText = clipboard.getText();
+    return result(clipboard, clipboardText.equals(expectedContent), clipboardText);
   }
 
   @Override

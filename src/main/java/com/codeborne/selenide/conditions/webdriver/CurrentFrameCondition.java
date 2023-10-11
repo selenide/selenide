@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions.webdriver;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.ObjectCondition;
 import org.openqa.selenium.WebDriver;
 
@@ -34,13 +35,6 @@ public abstract class CurrentFrameCondition implements ObjectCondition<WebDriver
     return "should not have url " + name + expectedUrl;
   }
 
-  @CheckReturnValue
-  @Nullable
-  @Override
-  public String actualValue(WebDriver webDriver) {
-    return getCurrentFrameUrl(webDriver);
-  }
-
   @Override
   @Nullable
   @CheckReturnValue
@@ -60,4 +54,13 @@ public abstract class CurrentFrameCondition implements ObjectCondition<WebDriver
   public String describe(WebDriver webDriver) {
     return "current frame";
   }
+
+  @CheckReturnValue
+  @Override
+  public CheckResult check(WebDriver webDriver) {
+    String url = getCurrentFrameUrl(webDriver);
+    return result(webDriver, test(url), url);
+  }
+
+  protected abstract boolean test(String url);
 }

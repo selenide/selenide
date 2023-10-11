@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions.sessionstorage;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.SessionStorage;
 
@@ -30,10 +31,9 @@ public class Item implements ObjectCondition<SessionStorage> {
     return String.format("should not have item '%s'", item);
   }
 
-  @Nullable
+  @Nonnull
   @CheckReturnValue
-  @Override
-  public String actualValue(SessionStorage sessionStorage) {
+  private String actualValue(SessionStorage sessionStorage) {
     return sessionStorage.getItems().toString();
   }
 
@@ -46,8 +46,9 @@ public class Item implements ObjectCondition<SessionStorage> {
 
   @CheckReturnValue
   @Override
-  public boolean test(SessionStorage sessionStorage) {
-    return sessionStorage.containsItem(item);
+  public CheckResult check(SessionStorage sessionStorage) {
+    boolean met = sessionStorage.containsItem(item);
+    return result(sessionStorage, met, actualValue(sessionStorage));
   }
 
   @Nonnull

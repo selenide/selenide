@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions.webdriver;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.ObjectCondition;
 import org.openqa.selenium.WebDriver;
 
@@ -16,13 +17,6 @@ public abstract class UrlCondition implements ObjectCondition<WebDriver> {
   protected UrlCondition(String name, String expectedUrl) {
     this.name = name;
     this.expectedUrl = expectedUrl;
-  }
-
-  @Nullable
-  @CheckReturnValue
-  @Override
-  public String actualValue(WebDriver webDriver) {
-    return webDriver.getCurrentUrl();
   }
 
   @Override
@@ -52,4 +46,13 @@ public abstract class UrlCondition implements ObjectCondition<WebDriver> {
   public String describe(WebDriver webDriver) {
     return "webdriver";
   }
+
+  @CheckReturnValue
+  @Override
+  public CheckResult check(WebDriver webDriver) {
+    String url = webDriver.getCurrentUrl();
+    return result(webDriver, test(url), url);
+  }
+
+  protected abstract boolean test(String url);
 }

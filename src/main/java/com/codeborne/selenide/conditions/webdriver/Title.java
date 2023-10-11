@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions.webdriver;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.ObjectCondition;
 import org.openqa.selenium.WebDriver;
 
@@ -11,35 +12,29 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class Title implements ObjectCondition<WebDriver> {
 
-  private final String title;
+  private final String expectedTitle;
 
-  public Title(String title) {
-    this.title = title;
-  }
-
-  @Nullable
-  @Override
-  public String actualValue(WebDriver webDriver) {
-    return webDriver.getTitle();
+  public Title(String expectedTitle) {
+    this.expectedTitle = expectedTitle;
   }
 
   @Override
   @Nullable
   @CheckReturnValue
   public String expectedValue() {
-    return title;
+    return expectedTitle;
   }
 
   @Nonnull
   @Override
   public String description() {
-    return "should have title " + title;
+    return "should have title " + expectedTitle;
   }
 
   @Nonnull
   @Override
   public String negativeDescription() {
-    return "should not have title " + title;
+    return "should not have title " + expectedTitle;
   }
 
   @Nonnull
@@ -50,8 +45,9 @@ public class Title implements ObjectCondition<WebDriver> {
 
   @CheckReturnValue
   @Override
-  public boolean test(WebDriver webDriver) {
-    return webDriver.getTitle().equals(title);
+  public CheckResult check(WebDriver webDriver) {
+    String title = webDriver.getTitle();
+    return result(webDriver, title.equals(expectedTitle), title);
   }
 
 }

@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions.webdriver;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.ObjectCondition;
 import org.openqa.selenium.WebDriver;
 
@@ -32,15 +33,9 @@ public class NumberOfWindows implements ObjectCondition<WebDriver> {
 
   @CheckReturnValue
   @Override
-  public boolean test(WebDriver webDriver) {
-    return webDriver.getWindowHandles().size() == expectedNumberOfWindows;
-  }
-
-  @Nullable
-  @CheckReturnValue
-  @Override
-  public String actualValue(WebDriver webDriver) {
-    return String.valueOf(webDriver.getWindowHandles().size());
+  public CheckResult check(WebDriver webDriver) {
+    int count = webDriver.getWindowHandles().size();
+    return result(webDriver, count == expectedNumberOfWindows, String.valueOf(count));
   }
 
   @Override

@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.ex.ConditionMetException;
@@ -15,6 +16,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.function.Supplier;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.lang.System.currentTimeMillis;
 
@@ -41,15 +44,24 @@ public class Waiter {
 
   private <T> void wait(Driver driver, T subject, ObjectCondition<T> condition, long timeout, long pollingInterval) {
     SelenideLog log = SelenideLogger.beginStep(condition.describe(subject), condition.description());
+    CheckResult result = null;
+    Exception error = null;
     for (long start = currentTimeMillis(); !isTimeoutExceeded(timeout, start); ) {
-      if (checkUnThrowable(subject, condition)) {
-        SelenideLogger.commitStep(log, PASS);
-        return;
+      try {
+        result = condition.check(subject);
+        if (result.verdict() == ACCEPT) {
+          SelenideLogger.commitStep(log, PASS);
+          return;
+        }
+      }
+      catch (Exception e) {
+        logger.info("Fail to check condition", e);
+        error = e;
       }
       sleep(pollingInterval);
     }
 
-    Error failure = UIAssertionError.wrap(driver, new ConditionNotMetException(driver, condition, subject), timeout);
+    Error failure = UIAssertionError.wrap(driver, new ConditionNotMetException(driver, condition, subject, result, error), timeout);
     SelenideLogger.commitStep(log, failure);
     throw failure;
   }
@@ -64,15 +76,24 @@ public class Waiter {
 
   private <T> void waitWhile(Driver driver, T subject, ObjectCondition<T> condition, long timeout, long pollingInterval) {
     SelenideLog log = SelenideLogger.beginStep(subject.toString(), condition.negativeDescription());
+    CheckResult result = null;
+    Exception error = null;
     for (long start = currentTimeMillis(); !isTimeoutExceeded(timeout, start); ) {
-      if (!checkUnThrowable(subject, condition)) {
-        SelenideLogger.commitStep(log, PASS);
-        return;
+      try {
+        result = condition.check(subject);
+        if (result.verdict() == REJECT) {
+          SelenideLogger.commitStep(log, PASS);
+          return;
+        }
+      }
+      catch (Exception e) {
+        logger.info("Fail to check condition", e);
+        error = e;
       }
       sleep(pollingInterval);
     }
 
-    Error failure = UIAssertionError.wrap(driver, new ConditionMetException(driver, condition, subject), timeout);
+    Error failure = UIAssertionError.wrap(driver, new ConditionMetException(driver, condition, subject, result, error), timeout);
     SelenideLogger.commitStep(log, failure);
     throw failure;
   }
@@ -88,16 +109,6 @@ public class Waiter {
     catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       throw new RuntimeException(e);
-    }
-  }
-
-  private <T> boolean checkUnThrowable(T subject, ObjectCondition<T> predicate) {
-    try {
-      return predicate.test(subject);
-    }
-    catch (Exception e) {
-      logger.info("Fail to check condition", e);
-      return false;
     }
   }
 }

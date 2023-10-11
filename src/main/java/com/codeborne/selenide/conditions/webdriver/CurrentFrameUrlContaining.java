@@ -1,7 +1,5 @@
 package com.codeborne.selenide.conditions.webdriver;
 
-import org.openqa.selenium.WebDriver;
-
 import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -13,7 +11,7 @@ public class CurrentFrameUrlContaining extends CurrentFrameCondition {
 
   @CheckReturnValue
   @Override
-  public boolean test(WebDriver webDriver) {
-    return getCurrentFrameUrl(webDriver).contains(expectedUrl);
+  public boolean test(String url) {
+    return url.contains(expectedUrl);
   }
 }

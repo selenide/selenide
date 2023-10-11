@@ -5,6 +5,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.CheckResult.accepted;
+import static com.codeborne.selenide.CheckResult.rejected;
+
 @ParametersAreNonnullByDefault
 public interface ObjectCondition<T> {
   @Nonnull
@@ -16,11 +19,7 @@ public interface ObjectCondition<T> {
   String negativeDescription();
 
   @CheckReturnValue
-  boolean test(T object);
-
-  @Nullable
-  @CheckReturnValue
-  String actualValue(T object);
+  CheckResult check(T object);
 
   @Nullable
   @CheckReturnValue
@@ -29,4 +28,12 @@ public interface ObjectCondition<T> {
   @Nonnull
   @CheckReturnValue
   String describe(T object);
+
+  default String message(T object) {
+    return describe(object) + " " + description();
+  }
+
+  default CheckResult result(T object, boolean met, @Nullable Object actualValue) {
+    return met ? accepted(actualValue) : rejected(message(object), actualValue);
+  }
 }

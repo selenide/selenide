@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
@@ -12,6 +13,8 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.CheckResult.accepted;
+import static com.codeborne.selenide.CheckResult.rejected;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -216,13 +219,15 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
       @CheckReturnValue
       @Override
-      public boolean test(WebDriver webdriver) {
-        return webdriver.manage().getCookieNamed(expectedCookieName) != null;
+      public CheckResult check(WebDriver webdriver) {
+        return webdriver.manage().getCookieNamed(expectedCookieName) != null ?
+          accepted(actualValue(webdriver)) :
+          rejected(message(webdriver), actualValue(webdriver));
       }
 
       @Nonnull
-      @Override
-      public String actualValue(WebDriver webdriver) {
+      @CheckReturnValue
+      private String actualValue(WebDriver webdriver) {
         return "Available cookies: " + webdriver.manage().getCookies();
       }
 
