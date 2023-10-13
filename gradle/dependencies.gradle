@@ -31,7 +31,7 @@ subprojects {
   dependencies {
     constraints {
       annotationProcessor("net.bytebuddy:byte-buddy-parent:${byteBuddyVersion}") {because 'used by jabel'}
-      api("com.fasterxml.jackson.core:jackson-core:2.15.2") {because 'used by browserup-proxy'}
+      api("com.fasterxml.jackson.core:jackson-core:2.15.3") {because 'used by browserup-proxy'}
       testImplementation("xyz.rogfam:littleproxy:$littleProxyVersion") {because 'used by browserup-proxy'}
     }
     annotationProcessor("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
