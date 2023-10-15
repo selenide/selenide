@@ -35,5 +35,7 @@ class ContextTest extends BaseSwagLabsAndroidTest {
       .contains("NATIVE_APP");
     assertThat(getCurrentContext())
       .isEqualTo("WEBVIEW_com.saucelabs.mydemoapp.rn");
+
+    $(AppiumBy.name("q")).type("I can type in mobile as well");
   }
 }

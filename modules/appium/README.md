@@ -11,7 +11,7 @@ Just add to pom.xml:
 <dependency>
     <groupId>com.codeborne</groupId>
     <artifactId>selenide-appium</artifactId>
-    <version>6.15.0</version>
+    <version>6.19.0</version>
 </dependency>
 ```
 
@@ -54,13 +54,13 @@ public class AndroidDriverForApiDemos implements WebDriverProvider {
     Configuration.browser = AndroidDriverWithCalculator.class.getName();
     SelenideAppium.launchApp();
     $(AppiumBy.xpath(".//*[@text='Views']")).shouldBe(visible).click(tap());
-    $(AppiumBy.xpath(".//*[@text='Animation']")).shouldHave(visible);
+    $(AppiumBy.xpath(".//*[@text='Animation']")).shouldBe(visible);
   }
 ```
 
 ### Features
 
-1. Additional Locators - Please refer [here](https://github.com/selenide/selenide/blob/main/src/test/java/it/mobile/android/AndroidSelectorsTest.java)
+1. Additional [Android Locators](https://github.com/selenide/selenide/blob/main/modules/appium/src/test/java/it/mobile/android/AndroidSelectorsTest.java) and [iOS selectors](https://github.com/selenide/selenide/blob/main/modules/appium/src/test/java/it/mobile/ios/IosSelectorsTest.java) 
 2. Working with Deep links is easier than ever
 ```java
 SelenideAppium.openAndroidDeepLink("mydemoapprn://product-details/1", "com.saucelabs.mydemoapp.rn");
@@ -69,10 +69,14 @@ SelenideAppium.openIOSDeepLink("mydemoapprn://product-details/1");
 3. Wrapper methods
 ```java
    $(AppiumBy.xpath(".//*[@text='Views']")).click(tap()); //perform native event tap
+   $(AppiumBy.xpath(".//*[@text='Views']")).tap(); //perform native event tap
+   $(AppiumBy.xpath(".//*[@text='Views']")).doubleTap(); //perform native event double tap
    $(AppiumBy.xpath(".//*[@text='Views']")).click(tapWithOffset(100, -60)) //perform tap with offset from center of the element
-   $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPress()); 
-   
-   //drag and drop
+   $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPress());
+   $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPressFor(ofSeconds(5)));
+   $(AppiumBy.xpath(".//*[@text='People Names']")).tap(longPressFor(ofSeconds(4)));
+
+  //drag and drop
    SelenideElement from = $(By.id("io.appium.android.apis:id/drag_dot_1")).shouldBe(visible);
    SelenideElement to = $(By.id("io.appium.android.apis:id/drag_dot_2")).shouldBe(visible);
    from.dragAndDropTo(to);
@@ -104,16 +108,21 @@ Assertions.assertThat(getAttribute()).isEqualTo("expected-value")
 
 _Selenide-Appium way:_
 ```java
-$(mobileElement)
-      .shouldHave(AppiumCondition.attributeWithValue("content-desc", "name", "expected-value"));
+  /*
+    if android, fetch text attribute and assert with value 
+    if ios, fetch name attribute and assert with value
+  */
+CombinedAttribute combinedAttribute = CombinedAttribute.android("text").ios("name");
+$(element).shouldHave(AppiumCondition.attribute(combinedAttribute, "value"));
 ```
 
 We can also assert collection
 ```java
+CombinedAttribute combinedAttribute = CombinedAttribute.android("content-desc").ios("label");
 List<String> expectedList = Arrays.asList("API Demos", "KeyEventText", "Linkify", "LogTextBox", "Marquee", "Unicode");
 
 $$(AppiumBy.xpath("//android.widget.TextView"))
-      .shouldHave(AppiumCollectionCondition.exactAttributes("text", "name", expectedList));
+      .shouldHave(AppiumCollectionCondition.attributes(combinedAttribute, expectedList));
 ```
 
 6. We handle the scrolling for you
@@ -122,7 +131,30 @@ $$(AppiumBy.xpath("//android.widget.TextView"))
 $(By.xpath(".//*[@text='Tabs']")).scrollTo().click(); //scroll max of 30 times in downward direction to find element
 $(By.xpath(".//*[@text='Tabs']")).scroll(with(DOWN, 10)); //scroll max of 10 times in downward direction to find element
 $(By.xpath(".//*[@text='Animation']")).scroll(up()); //scroll max of 30 times in upward direction to find element
+$(By.xpath(".//*[@text='Animation']")).scroll(up(0.15f, 0.60f)); //scroll max of 30 times in upward direction with custom swiping height relative to device height
+$(By.xpath(".//*[@text='Animation']")).scroll(down(0.15f, 0.60f)); //scroll max of 30 times in downward direction with custom swiping height relative to device height
 ```
+
+7. We got covered you to the left and right
+
+```java
+$(By.xpath(".//*[@text='Tabs']")).swipeTo().click(); //swipe max of 30 times in right direction to find element
+$(By.xpath(".//*[@text='Tabs']")).swipe(left()).click(); //swipe max of 30 times in left direction to find element
+$(By.xpath(".//*[@text='Tabs']")).swipe(left(10)).click(); //swipe max of 10 times in left direction to find element
+```
+
+8. Not able to use page factory for dynamic elements? We got you covered with CombinedBy for writing dynamic locators for both android and ios platforms
+
+```java
+int index = 1;
+CombinedBy username = CombinedBy
+      .android(AppiumBy.xpath("(//android.widget.EditText)["+index+"]"))
+      .ios(AppiumBy.xpath("(//XCUIElementTypeTextField)["+index+"]"));
+
+$(username).setValue("selenide-rocks");
+```
+
+
 
 ### Changelog
 

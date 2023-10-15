@@ -332,4 +332,16 @@ final class SelenideElementProxyTest {
     assertThat(isSelenideElementMethod(WebElement.class.getMethod("click"))).isFalse();
     assertThat(isSelenideElementMethod(WebElement.class.getMethod("findElements", By.class))).isFalse();
   }
+
+  @Test
+  void supportsSubclassesOfSelenideElement() throws NoSuchMethodException {
+    assertThat(isSelenideElementMethod(WebElement.class.getMethod("sendKeys", CharSequence[].class))).isFalse();
+    assertThat(isSelenideElementMethod(SelenideElement.class.getMethod("click"))).isTrue();
+    assertThat(isSelenideElementMethod(SelenideChildElement.class.getMethod("hook"))).isTrue();
+  }
+
+  @ParametersAreNonnullByDefault
+  private interface SelenideChildElement extends SelenideElement {
+    SelenideChildElement hook();
+  }
 }

@@ -20,4 +20,24 @@ public interface SelenideAppiumElement extends SelenideElement {
   @Nonnull
   @CanIgnoreReturnValue
   SelenideAppiumElement scroll(AppiumScrollOptions appiumScrollOptions);
+
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideAppiumElement swipeTo();
+
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideAppiumElement swipe(AppiumSwipeOptions appiumSwipeOptions);
+
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideAppiumElement tap();
+
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideAppiumElement tap(AppiumClickOptions appiumClickOptions);
+
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideAppiumElement doubleTap();
 }

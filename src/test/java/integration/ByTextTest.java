@@ -30,7 +30,7 @@ final class ByTextTest extends ITest {
   void userCanFindElementByText() {
     $(byText("Page with selects")).shouldHave(text("Page with selects"));
     $(byText("Dropdown list")).shouldHave(text("Dropdown list"));
-    $(byText("@livemail.ru")).shouldHave(text("@livemail.ru"));
+    $(byText("@one.io")).shouldHave(text("@one.io"));
   }
 
   @Test
@@ -77,14 +77,14 @@ final class ByTextTest extends ITest {
   void canFindElementContainingText() {
     $(withText("age with s")).shouldHave(text("Page with selects"));
     $(withText("Dropdown")).shouldHave(text("Dropdown list"));
-    $(withText("@livemail.r")).shouldHave(text("@livemail.ru"));
+    $(withText("@one.i")).shouldHave(text("@one.io"));
   }
 
   @Test
   void canFindElementWithTagContainingText() {
     $(withTagAndText("h1", "age with s")).shouldHave(text("Page with selects"));
     $(withTagAndText("h2", "Dropdown")).shouldHave(text("Dropdown list"));
-    $(withTagAndText("option", "@livemail.r")).shouldHave(text("@livemail.ru"));
+    $(withTagAndText("option", "@one.i")).shouldHave(text("@one.io"));
   }
 
   @Test

@@ -153,11 +153,6 @@ class StaticConfig implements Config {
   }
 
   @Override
-  public boolean driverManagerEnabled() {
-    return Configuration.driverManagerEnabled;
-  }
-
-  @Override
   public boolean webdriverLogsEnabled() {
     return Configuration.webdriverLogsEnabled;
   }

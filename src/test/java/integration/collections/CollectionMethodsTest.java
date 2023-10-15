@@ -162,10 +162,6 @@ final class CollectionMethodsTest extends ITest {
       .hasMessageContaining("expected: = 0, actual: 1")
       .hasMessageContaining("""
         collection: #multirowTable tr.filter(condition name: partial text "Chack" and partial text "Baskerville")""")
-      .hasMessageContaining("""
-        Elements: [
-        \t<tr id="multirowTableSecondRow">Chack L'a Baskerville</tr>
-        ]""")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: ");
@@ -206,6 +202,12 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void shouldMethodsCanCheckMultipleConditions() {
     $$("#multirowTable tr td").shouldHave(size(4), texts(asList("Chack", "Norris", "Chack", "L'a Baskerville")));
+  }
+
+  @Test
+  void getTextsOfElements() {
+    openFile("page_with_selects.html");
+    assertThat($$("#number option").texts()).containsExactly("Zero", "One", "Two", "Three", "Four");
   }
 
   @Test
@@ -254,20 +256,20 @@ final class CollectionMethodsTest extends ITest {
   void canGetElementByIndex_fromFirstNElements() {
     ElementsCollection collection = $$x("//select[@name='domain']/option").first(3).shouldHave(size(3));
 
-    collection.get(0).shouldHave(text("@livemail.ru"));
-    collection.get(1).shouldHave(text("@myrambler.ru"));
-    collection.get(2).shouldHave(text("@rusmail.ru"));
+    collection.get(0).shouldHave(text("@one.io"));
+    collection.get(1).shouldHave(text("@two.eu"));
+    collection.get(2).shouldHave(text("@three.com"));
   }
 
   @Test
   void canGetElementByIndex_fromFirstNElements_ofFilteredCollection() {
     ElementsCollection collection = $$x("//select[@name='domain']/option")
-      .filterBy(partialText(".ru"))
+      .filterBy(partialText(".e"))
       .first(2)
       .shouldHave(size(2));
 
-    collection.get(0).shouldHave(text("@livemail.ru"));
-    collection.get(1).shouldHave(text("@myrambler.ru"));
+    collection.get(0).shouldHave(text("@two.eu"));
+    collection.get(1).shouldHave(text("@four.ee"));
     assertThatThrownBy(() -> collection.get(2).getText())
       .isInstanceOf(IndexOutOfBoundsException.class)
       .hasMessage("Index: 2, size: 2");
@@ -293,18 +295,19 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void canGetElementByIndex_fromLastNElements_ofFilteredCollection() {
     ElementsCollection collection = $$x("//select[@name='domain']/option")
-      .filterBy(partialText(".ru"))
+      .filterBy(partialText(".e"))
       .last(2)
       .shouldHave(size(2));
 
-    collection.get(0).shouldHave(text("@myrambler.ru"));
-    collection.get(1).shouldHave(text("@rusmail.ru"));
+    collection.get(0).shouldHave(text("@two.eu"));
+    collection.get(1).shouldHave(text("@four.ee"));
+
     assertThatThrownBy(() -> collection.get(2).getText())
       .isInstanceOf(IndexOutOfBoundsException.class)
-      .hasMessage("Index: 3");
+      .hasMessage("Index: 2");
     assertThatThrownBy(() -> collection.get(3).getText())
       .isInstanceOf(IndexOutOfBoundsException.class)
-      .hasMessage("Index: 4");
+      .hasMessage("Index: 3");
   }
 
   @Test
@@ -350,9 +353,8 @@ final class CollectionMethodsTest extends ITest {
     assertThat(collection).hasToString("$$(5 elements).filter(attribute value)");
     assertThatThrownBy(() -> collection.shouldHave(size(999), Duration.ofMillis(0)))
       .hasMessageStartingWith("List size mismatch")
-      .hasMessageContaining("Elements: [")
-      .hasMessageContaining("<option value selected:true>-- Select your hero --</option>")
-      .hasMessageContaining("<option value=\"arnold \"schwarzenegger\"\">Arnold \"Schwarzenegger\"</option>");
+      .hasMessageContaining("expected: = 999, actual: 5")
+      .hasMessageContaining("collection: $$(5 elements).filter(attribute value)");
   }
 
   @Test

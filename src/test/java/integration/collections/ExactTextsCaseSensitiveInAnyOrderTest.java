@@ -2,7 +2,6 @@ package integration.collections;
 
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
-import com.codeborne.selenide.ex.TextsSizeMismatch;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,9 +41,9 @@ class ExactTextsCaseSensitiveInAnyOrderTest extends ITest {
   void shouldNotMatchWithSameOrderAndDifferentCase(List<String> expectedTexts) {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitiveInAnyOrder(expectedTexts)))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageStartingWith("Texts mismatch")
-      .hasMessageContaining("Actual: [One, Two, Three]")
-      .hasMessageContaining("Expected: " + expectedTexts)
+      .hasMessageStartingWith(String.format("Text #0 not found: \"%s\"", expectedTexts.get(0)))
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (3): " + expectedTexts)
       .hasMessageContaining("Collection: .element");
   }
 
@@ -59,10 +58,10 @@ class ExactTextsCaseSensitiveInAnyOrderTest extends ITest {
   @Test
   void checksElementsCount() {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitiveInAnyOrder("One", "Two", "Three", "Four")))
-      .isInstanceOf(TextsSizeMismatch.class)
-      .hasMessageStartingWith("Texts size mismatch")
-      .hasMessageContaining("Actual: [One, Two, Three], List size: 3")
-      .hasMessageContaining("Expected: [One, Two, Three, Four], List size: 4")
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("List size mismatch (expected: 4, actual: 3)")
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (4): [One, Two, Three, Four]")
       .hasMessageContaining("Collection: .element");
   }
 
@@ -89,5 +88,13 @@ class ExactTextsCaseSensitiveInAnyOrderTest extends ITest {
     assertThatThrownBy(() -> $$(".element").shouldHave(exactTextsCaseSensitiveInAnyOrder(emptyList())))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("No expected texts given");
+  }
+
+  @Test
+  void textsInsideSvg() {
+    openFile("page_with_svg.html");
+    $$("#banana svg tspan").shouldHave(exactTextsCaseSensitiveInAnyOrder("the Fruit", "apple", "not"));
+    $$("#banana svg text").shouldHave(exactTextsCaseSensitiveInAnyOrder(
+      "You are not a banana!", "You are the Fruit.", "You are not an apple;"));
   }
 }

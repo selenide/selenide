@@ -7,7 +7,9 @@ import com.codeborne.selenide.ex.ElementShouldNot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.Condition.allOf;
 import static com.codeborne.selenide.Condition.and;
+import static com.codeborne.selenide.Condition.anyOf;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Condition.attribute;
@@ -136,6 +138,19 @@ final class ConditionsTest extends ITest {
 
     Condition none_of_conditions = or("baskerville", partialText("pasker"), partialText("wille"));
     $("#baskerville").shouldNotBe(none_of_conditions);
+
+    $("#baskerville").shouldHave(anyOf(partialText("Basker"), partialText("Walle")));
+    $("#baskerville").shouldHave(anyOf(partialText("Basker"), partialText("rville")));
+  }
+
+  @Test
+  void userCanUseAndCondition() {
+    $("#baskerville").shouldHave(and("baskerville", partialText("Basker"), partialText("ville")));
+    $("#baskerville").shouldHave(and("baskerville", partialText("Basker"), partialText("rville")));
+    $("#baskerville").shouldNotBe(and("baskerville", partialText("pasker"), partialText("wille")));
+
+    $("#baskerville").shouldHave(allOf(partialText("Basker"), partialText("ville")));
+    $("#baskerville").shouldHave(allOf(partialText("ask"), partialText("rvil")));
   }
 
   @Test

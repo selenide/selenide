@@ -10,6 +10,7 @@ import com.codeborne.selenide.impl.PageObjectFactory;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import com.codeborne.selenide.selector.FocusedElementLocator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
@@ -121,14 +122,16 @@ public class SelenideDriver {
   @Nonnull
   public <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                 Class<PageObjectClass> pageObjectClassClass) {
-    return open(relativeOrAbsoluteUrl, "", "", "", pageObjectClassClass);
+    open(relativeOrAbsoluteUrl);
+    return page(pageObjectClassClass);
   }
 
   @CheckReturnValue
   @Nonnull
   public <PageObjectClass> PageObjectClass open(URL absoluteUrl,
                                                 Class<PageObjectClass> pageObjectClassClass) {
-    return open(absoluteUrl, "", "", "", pageObjectClassClass);
+    open(absoluteUrl);
+    return page(pageObjectClassClass);
   }
 
   @CheckReturnValue
@@ -200,7 +203,7 @@ public class SelenideDriver {
   }
 
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   public SelenideProxyServer getProxy() {
     return driver().getProxy();
   }
@@ -239,9 +242,8 @@ public class SelenideDriver {
   }
 
   @CheckReturnValue
-  @Nullable
-  public WebElement getFocusedElement() {
-    return executeJavaScript("return document.activeElement");
+  public SelenideElement getFocusedElement() {
+    return $(new FocusedElementLocator());
   }
 
   /**

@@ -5,9 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.appium.AppiumSelectors.byAttribute;
+import static com.codeborne.selenide.appium.AppiumSelectors.byClassNameAndIndex;
 import static com.codeborne.selenide.appium.AppiumSelectors.byContentDescription;
 import static com.codeborne.selenide.appium.AppiumSelectors.byTagAndAttribute;
 import static com.codeborne.selenide.appium.AppiumSelectors.byTagAndContentDescription;
@@ -35,29 +36,32 @@ class AndroidSelectorsTest extends BaseApiDemosTest {
 
   @Test
   void appiumSelectorsInAndroidApp() {
-    $(byAttribute("content-desc", VIEWS)).click();
+    testViewsLink(byAttribute("content-desc", VIEWS));
+    testViewsLink(byContentDescription(VIEWS));
+    testViewsLink(byTagAndAttribute("*", "text", VIEWS));
+    testViewsLink(byTagAndContentDescription("*", VIEWS));
+    testViewsLink(byTagAndText("*", VIEWS));
+    testViewsLink(byText(VIEWS));
+
+    testGraphicsLink(withAttribute("text", "Graphi"));
+    testGraphicsLink(withContentDescription("Graphi"));
+    testGraphicsLink(withTagAndAttribute("*", "text", "Graphi"));
+    testGraphicsLink(withTagAndContentDescription("*", "Graphi"));
+    testGraphicsLink(withTagAndText("android.widget.TextView", "Graphi"));
+    testGraphicsLink(android(withText("Graphi")).ios(By.xpath("/")));
+    testGraphicsLink(android(byText("Graphics")).ios(By.xpath("/")));
+    testGraphicsLink(byClassNameAndIndex("android.widget.TextView", 7));
+  }
+
+  private void testViewsLink(By selector) {
+    $(selector).click();
+    $(byText("Auto Complete")).should(appear);
     back();
-    $(byContentDescription(VIEWS)).click();
+  }
+
+  private void testGraphicsLink(By selector) {
+    $(selector).click();
+    $(byText("AlphaBitmap")).should(appear);
     back();
-    $(byTagAndAttribute("*", "text", VIEWS)).click();
-    back();
-    $(byTagAndContentDescription("*", VIEWS)).click();
-    back();
-    $(byTagAndText("*", VIEWS)).click();
-    back();
-    $(byText(VIEWS)).click();
-    back();
-    $(withAttribute("text", "Graphi")).click();
-    back();
-    $(withContentDescription("Graphi")).click();
-    back();
-    $(withTagAndAttribute("*", "text", "Graphi")).click();
-    back();
-    $(withTagAndContentDescription("*", "Graphi")).click();
-    back();
-    $(withTagAndText("android.widget.TextView", "Graphi")).click();
-    back();
-    $(android(withText("Graphi")).ios(By.xpath("/"))).shouldHave(text("Graphics"));
-    $(android(byText("Graphics")).ios(By.xpath("/"))).shouldHave(text("Graphics"));
   }
 }

@@ -20,13 +20,13 @@ import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.AuthenticationType.BASIC;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
+import static com.codeborne.selenide.drivercommands.BasicAuthUtils.appendBasicAuthToURL;
+import static com.codeborne.selenide.drivercommands.BasicAuthUtils.registerBasicAuth;
 import static java.util.regex.Pattern.DOTALL;
 
 @ParametersAreNonnullByDefault
 public class Navigator {
   private static final Pattern ABSOLUTE_URL_REGEX = Pattern.compile("^[a-zA-Z-]+:.*", DOTALL);
-
-  private final BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 
   public void open(SelenideDriver driver, String relativeOrAbsoluteUrl) {
     navigateTo(driver, relativeOrAbsoluteUrl, null, null);
@@ -65,16 +65,16 @@ public class Navigator {
     checkThatProxyIsEnabled(driver.config());
 
     String absoluteUrl = absoluteUrl(driver.config(), relativeOrAbsoluteUrl);
-    String url = appendBasicAuthIfNeeded(driver.config(), absoluteUrl, authenticationType, credentials);
 
-    SelenideLogger.run("open", url, () -> {
+    SelenideLogger.run("open", absoluteUrl, () -> {
       try {
         WebDriver webDriver = driver.getAndCheckWebDriver();
-        beforeNavigateTo(driver.config(), driver.getProxy(), authenticationType, credentials);
+        String url = applyBasicAuthIfNeeded(driver.config(), absoluteUrl, webDriver, authenticationType, credentials);
+        beforeNavigateTo(driver, authenticationType, credentials);
         webDriver.navigate().to(url);
       }
       catch (WebDriverException e) {
-        e.addInfo("selenide.url", url);
+        e.addInfo("selenide.url", absoluteUrl);
         e.addInfo("selenide.baseUrl", driver.config().baseUrl());
         if (driver.config().remote() != null) {
           e.addInfo("selenide.remote", driver.config().remote());
@@ -96,20 +96,12 @@ public class Navigator {
     }
   }
 
-  private void checkThatProxyIsStarted(@Nullable SelenideProxyServer selenideProxy) {
-    if (selenideProxy == null) {
-      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not created. " +
-        "You need to call `setWebDriver(webDriver, selenideProxy)` instead of `setWebDriver(webDriver)` if you need to use proxy.");
-    }
-    if (!selenideProxy.isStarted()) {
-      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not started.");
-    }
-  }
-
-  private void beforeNavigateTo(Config config, @Nullable SelenideProxyServer selenideProxy,
-                                @Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
+  private void beforeNavigateTo(SelenideDriver driver,
+                                @Nullable AuthenticationType authenticationType,
+                                @Nullable Credentials credentials) {
+    Config config = driver.config();
     if (config.proxyEnabled()) {
-      checkThatProxyIsStarted(selenideProxy);
+      SelenideProxyServer selenideProxy = driver.getProxy();
       beforeNavigateToWithProxy(selenideProxy, authenticationType, credentials);
     }
     else {
@@ -133,12 +125,16 @@ public class Navigator {
     }
   }
 
-  private String appendBasicAuthIfNeeded(Config config,
-                                         String url,
-                                         @Nullable AuthenticationType authType,
-                                         @Nullable Credentials credentials) {
+  private String applyBasicAuthIfNeeded(Config config,
+                                        String url,
+                                        WebDriver webDriver,
+                                        @Nullable AuthenticationType authType,
+                                        @Nullable Credentials credentials) {
+    if (registerBasicAuth(webDriver, credentials)) {
+      return url;
+    }
     return passBasicAuthThroughUrl(config, authType, credentials)
-      ? basicAuthUrl.appendBasicAuthToURL(url, (BasicAuthCredentials) credentials)
+      ? appendBasicAuthToURL(url, (BasicAuthCredentials) credentials)
       : url;
   }
 

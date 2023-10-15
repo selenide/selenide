@@ -14,20 +14,13 @@ sourceSets {
 }
 
 dependencies {
-  api('org.opentest4j:opentest4j:1.2.0')
+  api('org.opentest4j:opentest4j:1.3.0')
 
-  api('io.github.bonigarcia:webdrivermanager:5.3.3') {
-    exclude group: 'org.apache.httpcomponents.core5'
-    exclude group: 'org.apache.httpcomponents.client5'
-    exclude group: 'com.github.docker-java'
-    exclude group: 'org.rauschig'
-    exclude group: 'commons-lang'
-    exclude group: 'org.slf4j'
-  }
-  implementation('org.apache.commons:commons-compress:1.23.0') {because 'used by webdrivermanager'}
   implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
 
-  compileOnly("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
+  compileOnly("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion") {
+    transitive false
+  }
   compileOnly("xyz.rogfam:littleproxy:$littleProxyVersion")
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")

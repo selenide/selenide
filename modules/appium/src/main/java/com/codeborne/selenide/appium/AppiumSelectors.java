@@ -1,5 +1,6 @@
 package com.codeborne.selenide.appium;
 
+import com.codeborne.selenide.appium.selector.ByClassNameAndIndex;
 import com.codeborne.selenide.appium.selector.ByTagAndAttribute;
 import com.codeborne.selenide.appium.selector.ByTagAndText;
 import com.codeborne.selenide.appium.selector.ByText;
@@ -120,5 +121,11 @@ public class AppiumSelectors {
   @Nonnull
   public static By withContentDescription(String contentDescriptionValue) {
     return new WithContentDescription(contentDescriptionValue);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static By byClassNameAndIndex(String className, int index) {
+    return new ByClassNameAndIndex(className, index);
   }
 }

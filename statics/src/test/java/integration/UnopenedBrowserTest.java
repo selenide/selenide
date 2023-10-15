@@ -82,4 +82,31 @@ final class UnopenedBrowserTest extends IntegrationTest {
       driver.quit();
     }
   }
+
+  @Test
+  void getWebDriver_throws_IllegalStateException() {
+    assertThatThrownBy(() ->
+      WebDriverRunner.getWebDriver()
+    ).isInstanceOf(IllegalStateException.class)
+      .hasMessageStartingWith("No webdriver is bound to current thread")
+      .hasMessageEndingWith("You need to call open(url) first.");
+  }
+
+  @Test
+  void getSelenideProxy_throws_IllegalStateException() {
+    assertThatThrownBy(() ->
+      WebDriverRunner.getSelenideProxy()
+    ).isInstanceOf(IllegalStateException.class)
+      .hasMessageStartingWith("No webdriver is bound to current thread")
+      .hasMessageEndingWith("You need to call open(url) first.");
+  }
+
+  @Test
+  void getBrowserDownloadsFolder_throws_IllegalStateException() {
+    assertThatThrownBy(() ->
+      WebDriverRunner.getBrowserDownloadsFolder()
+    ).isInstanceOf(IllegalStateException.class)
+      .hasMessageStartingWith("No webdriver is bound to current thread")
+      .hasMessageEndingWith("You need to call open(url) first.");
+  }
 }

@@ -80,9 +80,14 @@ public class Mocks {
 
   @Nonnull
   @CheckReturnValue
+  public static ElementsCollection mockCollection(WebElement... elements) {
+    return new ElementsCollection(mockCollection("", elements));
+  }
+
+  @Nonnull
+  @CheckReturnValue
   public static CollectionSource mockCollection(String description, WebElement... elements) {
-    Driver driver = mock();
-    when(driver.config()).thenReturn(new SelenideConfig());
+    Driver driver = new DriverStub(new SelenideConfig());
 
     CollectionSource collection = mock();
     when(collection.driver()).thenReturn(driver);

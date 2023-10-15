@@ -28,9 +28,10 @@ public class DownloadFileInSelenoid extends com.codeborne.selenide.impl.Download
   }
 
   @Nullable
+  @Override
   protected DownloadsFolder getDownloadsFolder(Driver driver) {
-    return isLocalBrowser(driver) ? 
-      super.getDownloadsFolder(driver) : 
+    return isLocalBrowser(driver) ?
+      super.getDownloadsFolder(driver) :
       new SelenoidDownloadsFolder(driver);
   }
 

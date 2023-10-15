@@ -8,6 +8,7 @@ import com.codeborne.selenide.impl.CollectionElement;
 import com.codeborne.selenide.impl.CollectionElementByCondition;
 import com.codeborne.selenide.impl.CollectionSnapshot;
 import com.codeborne.selenide.impl.CollectionSource;
+import com.codeborne.selenide.impl.ElementCommunicator;
 import com.codeborne.selenide.impl.FilteringCollection;
 import com.codeborne.selenide.impl.HeadOfCollection;
 import com.codeborne.selenide.impl.LastCollectionElement;
@@ -40,6 +41,7 @@ import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Collections.emptyList;
@@ -47,6 +49,8 @@ import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
 public class ElementsCollection extends AbstractList<SelenideElement> {
+  private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
+
   private final CollectionSource collection;
 
   public ElementsCollection(CollectionSource collection) {
@@ -297,11 +301,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Gets all the texts in elements collection
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   * Instead of just getting texts, we highly recommend to verify them with {@code $$.shouldHave(texts(...));}.
    */
   @CheckReturnValue
   @Nonnull
   public List<String> texts() {
-    return texts(getElements());
+    return communicator.texts(driver(), getElements());
   }
 
   /**
@@ -309,13 +314,16 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    *
    * @param elements Any collection of WebElements
    * @return Texts (or exceptions in case of any WebDriverExceptions)
+   * @deprecated Use method {@link ElementsCollection#texts()} instead (or even better, don't use it at all)
    */
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   public static List<String> texts(@Nullable Collection<WebElement> elements) {
     return elements == null ? emptyList() : elements.stream().map(ElementsCollection::getText).collect(toList());
   }
 
+  @Deprecated
   private static String getText(WebElement element) {
     try {
       return element.getText();
@@ -329,13 +337,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Gets all the specific attribute values in elements collection
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   * @deprecated Instead of getting attributes, verify them with {@code $$.shouldHave(attributes(...));}.
+   * Instead of just getting attributes, we highly recommend to verify them with {@code $$.shouldHave(attributes(...));}.
    */
   @CheckReturnValue
   @Nonnull
-  @Deprecated
   public List<String> attributes(String attribute) {
-    return attributes(attribute, getElements());
+    return communicator.attributes(driver(), getElements(), attribute);
   }
 
   /**

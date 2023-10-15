@@ -9,7 +9,6 @@ public interface Config {
   String browserSize();
   String browserVersion();
   String browserPosition();
-  boolean driverManagerEnabled();
   boolean webdriverLogsEnabled();
   String browserBinary();
   String pageLoadStrategy();

@@ -14,28 +14,28 @@ final class TextsSizeMismatchTest {
 
   @Test
   void errorMessage() {
-    TextsSizeMismatch textsMismatch = new TextsSizeMismatch(mockCollection(".characters"),
-        expectedTexts, actualTexts,
-        null, 9000, null);
+    ListSizeMismatch textsMismatch = new ListSizeMismatch("=", expectedTexts.size(), actualTexts.size(),
+      null, mockCollection(".characters"), null, 9000);
 
-    assertThat(textsMismatch).hasMessage(String.format("Texts size mismatch%n" +
-      "Actual: [Niff, Naff, Nuff%%], List size: 3%n" +
-      "Expected: [Piff, Paff, Puff'\"bro], List size: 3%n" +
-      "Collection: .characters%n" +
-      "Timeout: 9 s."));
+    assertThat(textsMismatch).hasMessageContaining(
+      "List size mismatch",
+      "expected: = 3, actual: 3",
+      "Collection: .characters",
+      "Timeout: 9 s."
+    );
   }
 
   @Test
   void errorMessage_withExplanation() {
-    TextsSizeMismatch textsMismatch = new TextsSizeMismatch(mockCollection(".characters"),
-        expectedTexts, actualTexts,
-        "we expect favorite characters", 9000, null);
+    ListSizeMismatch textsMismatch = new ListSizeMismatch("=", expectedTexts.size(), actualTexts.size(),
+      "we expect favorite characters", mockCollection(".characters"), null, 9000);
 
-    assertThat(textsMismatch).hasMessage(String.format("Texts size mismatch%n" +
-      "Actual: [Niff, Naff, Nuff%%], List size: 3%n" +
-      "Expected: [Piff, Paff, Puff'\"bro], List size: 3%n" +
-      "Because: we expect favorite characters%n" +
-      "Collection: .characters%n" +
-      "Timeout: 9 s."));
+    assertThat(textsMismatch).hasMessageContaining(
+      "List size mismatch",
+      "expected: = 3, actual: 3",
+      "Because: we expect favorite characters",
+      "Collection: .characters",
+      "Timeout: 9 s."
+    );
   }
 }

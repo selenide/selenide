@@ -1,6 +1,6 @@
 package integration.pageobjects;
 
-import com.codeborne.selenide.ElementsContainer;
+import com.codeborne.selenide.Container;
 import com.codeborne.selenide.ex.ElementNotFound;
 import integration.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +41,7 @@ public class DynamicListOfWebElementsTest extends IntegrationTest {
     DynamicContentContainer container;
   }
 
-  private static class DynamicContentContainer extends ElementsContainer {
+  private static class DynamicContentContainer implements Container {
     @FindBy(css = "span")
     List<WebElement> spans;
   }

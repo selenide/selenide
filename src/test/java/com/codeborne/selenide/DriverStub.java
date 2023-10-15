@@ -103,7 +103,15 @@ public class DriverStub implements Driver {
   }
 
   @Override
+  @Nonnull
   public SelenideProxyServer getProxy() {
+    if (!config.proxyEnabled()) {
+      throw new IllegalStateException("Proxy server is not enabled. You need to set proxyEnabled=true before opening a browser.");
+    }
+    if (proxy == null) {
+      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not created.");
+    }
+
     return proxy;
   }
 

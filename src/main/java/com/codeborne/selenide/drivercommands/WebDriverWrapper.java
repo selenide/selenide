@@ -65,7 +65,7 @@ public class WebDriverWrapper implements Driver {
 
   @Override
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   public SelenideProxyServer getProxy() {
     return wd.proxy();
   }

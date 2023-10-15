@@ -81,6 +81,7 @@ public class Commands {
     add("text", new GetText());
     add("getValue", new GetValue());
     add("pseudo", new GetPseudoValue());
+    add("highlight", new Highlight());
   }
 
   private void addClickCommands() {
@@ -97,6 +98,7 @@ public class Commands {
     add("append", new Append());
     add("paste", new Paste());
     add("clear", inject(Clear.class));
+    add("type", new Type());
   }
 
   private void addFindCommands() {
@@ -122,6 +124,7 @@ public class Commands {
   }
 
   private void addSelectCommands() {
+    add("getOptions", new GetOptions());
     add("getSelectedOption", new GetSelectedOption());
     add("getSelectedOptions", new GetSelectedOptions());
     add("getSelectedText", new GetSelectedOptionText());

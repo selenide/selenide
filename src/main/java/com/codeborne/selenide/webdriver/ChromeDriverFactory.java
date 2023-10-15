@@ -2,7 +2,6 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -25,13 +24,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @ParametersAreNonnullByDefault
 public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(ChromeDriverFactory.class);
-
-  @Override
-  public void setupWebdriverBinary() {
-    if (isSystemPropertyNotSet("webdriver.chrome.driver")) {
-      WebDriverManager.chromedriver().setup();
-    }
-  }
 
   @Override
   @CheckReturnValue

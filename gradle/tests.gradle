@@ -58,6 +58,15 @@ subprojects {
     outputs.upToDateWhen {false}
   }
 
+  tasks.register("chrome_headless_smoke", Test) {
+    systemProperties['selenide.browser'] = 'chrome'
+    systemProperties['selenide.headless'] = 'true'
+    include 'integration/**/*Download*'
+    exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
+    outputs.upToDateWhen {false}
+  }
+
   tasks.register("chrome_remote", Test) {
     systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
     systemProperties['selenide.browser'] = 'chrome'

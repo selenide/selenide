@@ -8,13 +8,13 @@ dependencies {
   testImplementation project(':modules:core').sourceSets.test.output
   testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 
-  api("io.appium:java-client:8.5.0") {
+  api("io.appium:java-client:8.5.1") {
     exclude group: 'io.opentelemetry'
     exclude group: 'org.slf4j'
     exclude group: 'org.seleniumhq'
     exclude group: 'cglib'
   }
-  implementation('commons-io:commons-io:2.12.0')
+  implementation('commons-io:commons-io:2.14.0')
   testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
   testImplementation("org.assertj:assertj-core:$assertjVersion")

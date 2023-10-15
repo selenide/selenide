@@ -32,7 +32,7 @@ final class SelenideElementToStringTest extends ITest {
       .isEqualTo("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\"></input>");
 
     assertThat($(By.name("domain")).find("option").describe())
-      .isEqualTo("<option data-mailserverid=\"111\" value=\"livemail.ru\" selected:true>@livemail.ru</option>");
+      .isEqualTo("<option data-mailserverid=\"111\" value=\"one.io\" selected:true>@one.io</option>");
 
     assertThat($(byText("Want to see ajax in action?")).describe())
       .contains("<a href=");

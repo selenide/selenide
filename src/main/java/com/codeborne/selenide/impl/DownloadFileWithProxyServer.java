@@ -58,9 +58,6 @@ public class DownloadFileWithProxyServer {
     }
 
     SelenideProxyServer proxyServer = driver.getProxy();
-    if (proxyServer == null) {
-      throw new IllegalStateException("Cannot download file: proxy server is not started");
-    }
 
     FileDownloadFilter filter = proxyServer.responseFilter("download");
     if (filter == null) {

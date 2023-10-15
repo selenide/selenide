@@ -6,19 +6,23 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.WebElement;
 
-import java.lang.reflect.Proxy;
-import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.lang.reflect.Proxy;
+import java.util.List;
 
 @ParametersAreNonnullByDefault
 public class LazyWebElementSnapshot extends WebElementSource {
-
   public static SelenideElement wrap(WebElementSource delegate) {
-    return (SelenideElement) Proxy.newProxyInstance(
+    return wrap(SelenideElement.class, delegate);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T extends SelenideElement> T wrap(Class<T> clazz, WebElementSource delegate) {
+    return (T) Proxy.newProxyInstance(
       Thread.currentThread().getContextClassLoader(),
-      new Class<?>[] {SelenideElement.class},
-      new SelenideElementProxy(new LazyWebElementSnapshot(delegate))
+      new Class<?>[] {clazz},
+      new SelenideElementProxy<>(new LazyWebElementSnapshot(delegate))
     );
   }
 

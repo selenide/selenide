@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import org.testng.internal.ConstructorOrMethod;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
@@ -94,13 +95,14 @@ public final class SoftAssertsTest {
     ErrorsCollector errorsCollector = mock();
     SelenideLogger.addListener(LISTENER_SOFT_ASSERT, errorsCollector);
     AssertionError softAssertionError = new AssertionError("fail1, fail2, fail3");
-    doReturn(softAssertionError).when(errorsCollector).cleanAndGetAssertionError(any(), any());
+    doReturn(softAssertionError).when(errorsCollector).cleanAndGetAssertionError(any(), any(), anyBoolean());
 
     listener.onTestFailure(result);
 
     verify(result).setStatus(FAILURE);
     verify(result).setThrowable(softAssertionError);
-    verify(errorsCollector).cleanAndGetAssertionError("com.codeborne.selenide.testng.SoftAssertsTest$SoftTest.someTestMethod", null);
+    verify(errorsCollector).cleanAndGetAssertionError(
+      "com.codeborne.selenide.testng.SoftAssertsTest$SoftTest.someTestMethod", null, true);
     assertFalse(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT));
   }
 
@@ -120,7 +122,7 @@ public final class SoftAssertsTest {
     ErrorsCollector errorsCollector = mock();
     SelenideLogger.addListener(LISTENER_SOFT_ASSERT, errorsCollector);
     doNothing().when(errorsCollector)
-      .cleanAndThrowAssertionError("com.codeborne.selenide.testng.SoftAssertsTest.SoftTest.someTestMethod", null);
+      .cleanAndThrowAssertionError("com.codeborne.selenide.testng.SoftAssertsTest.SoftTest.someTestMethod", null, true);
 
     listener.onTestFailure(result);
 

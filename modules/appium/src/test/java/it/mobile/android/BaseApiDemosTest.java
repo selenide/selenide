@@ -1,20 +1,23 @@
 package it.mobile.android;
 
-import static com.codeborne.selenide.Selenide.closeWebDriver;
-
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import it.mobile.ITTest;
 import it.mobile.android.driverproviders.AndroidDriverWithDemos;
 import org.junit.jupiter.api.BeforeAll;
-import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
+
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 
 public abstract class BaseApiDemosTest extends ITTest {
+
+  private static final EmptyListener listener = new EmptyListener();
+
   @BeforeAll
-  public static void setup() {
+  @SuppressWarnings("deprecation")
+  public static void setupMobileWebdriver() {
     closeWebDriver();
-    WebDriverRunner.addListener(new AbstractWebDriverEventListener() {
-    });
+    WebDriverRunner.removeListener(listener);
+    WebDriverRunner.addListener(listener);
     Configuration.browser = AndroidDriverWithDemos.class.getName();
   }
 }

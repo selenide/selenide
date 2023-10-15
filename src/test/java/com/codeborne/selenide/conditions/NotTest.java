@@ -60,9 +60,9 @@ class NotTest {
     Driver driver = mock();
     WebElement webElement = mock();
     LocalDateTime timestamp = LocalDateTime.parse("2020-12-31T23:58:59");
-    when(originalCondition.check(any(Driver.class), any(WebElement.class))).thenReturn(new CheckResult(ACCEPT, "displayed", timestamp));
+    when(originalCondition.check(any(), any())).thenReturn(new CheckResult(ACCEPT, null, "displayed", timestamp));
 
-    assertThat(notCondition.check(driver, webElement)).isEqualTo(new CheckResult(REJECT, "displayed", timestamp));
+    assertThat(notCondition.check(driver, webElement)).isEqualTo(new CheckResult(REJECT, null, "displayed", timestamp));
     verify(originalCondition).check(driver, webElement);
   }
 
@@ -71,9 +71,9 @@ class NotTest {
     Driver driver = mock();
     WebElement webElement = mock();
     LocalDateTime timestamp = LocalDateTime.parse("2020-12-31T23:58:59");
-    when(originalCondition.check(any(Driver.class), any(WebElement.class))).thenReturn(new CheckResult(REJECT, "hidden", timestamp));
+    when(originalCondition.check(any(), any())).thenReturn(new CheckResult(REJECT, null, "hidden", timestamp));
 
-    assertThat(notCondition.check(driver, webElement)).isEqualTo(new CheckResult(ACCEPT, "hidden", timestamp));
+    assertThat(notCondition.check(driver, webElement)).isEqualTo(new CheckResult(ACCEPT, null, "hidden", timestamp));
     verify(originalCondition).check(driver, webElement);
   }
 

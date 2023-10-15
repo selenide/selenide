@@ -2,7 +2,6 @@ package integration.collections;
 
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
-import com.codeborne.selenide.ex.TextsSizeMismatch;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,19 +46,19 @@ public class TextsInAnyOrderTest extends ITest {
   void errorMessage() {
     assertThatThrownBy(() -> $$(".element").shouldHave(textsInAnyOrder("One", "Two", "Four")))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageStartingWith("Texts mismatch")
-      .hasMessageContaining("Actual: [One, Two, Three]")
-      .hasMessageContaining("Expected: [One, Two, Four]")
+      .hasMessageStartingWith("Text #2 not found: \"Four\"")
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (3): [One, Two, Four]")
       .hasMessageContaining("Collection: .element");
   }
 
   @Test
   void checksElementsCount() {
     assertThatThrownBy(() -> $$(".element").shouldHave(textsInAnyOrder("One", "Two", "Three", "Four")))
-      .isInstanceOf(TextsSizeMismatch.class)
-      .hasMessageStartingWith("Texts size mismatch")
-      .hasMessageContaining("Actual: [One, Two, Three], List size: 3")
-      .hasMessageContaining("Expected: [One, Two, Three, Four], List size: 4")
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("List size mismatch (expected: 4, actual: 3)")
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (4): [One, Two, Three, Four]")
       .hasMessageContaining("Collection: .element");
   }
 
@@ -82,5 +81,12 @@ public class TextsInAnyOrderTest extends ITest {
     assertThatThrownBy(() -> $$(".element").shouldHave(textsInAnyOrder(emptyList())))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("No expected texts given");
+  }
+
+  @Test
+  void textsInsideSvg() {
+    openFile("page_with_svg.html");
+    $$("#banana svg tspan").shouldHave(textsInAnyOrder("not", "appl", "fruit"));
+    $$("#banana svg text").shouldHave(textsInAnyOrder("the Fruit", "not a banana", "not an apple"));
   }
 }

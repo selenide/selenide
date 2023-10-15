@@ -3,7 +3,6 @@ package com.codeborne.selenide.proxy;
 import com.browserup.bup.util.HttpMessageContents;
 import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.BasicAuthCredentials;
-import com.codeborne.selenide.BearerTokenCredentials;
 import io.netty.handler.codec.http.DefaultHttpRequest;
 import org.junit.jupiter.api.Test;
 
@@ -68,39 +67,6 @@ final class AuthenticationFilterTest {
     filter.filterRequest(request, contents, info);
 
     assertThat(request.headers().entries().size()).isEqualTo(0);
-  }
-
-  @Test
-  void shouldAddHeaderOnlyOnSameDomain() {
-    filter.setAuthentication(BEARER, new BasicAuthCredentials("burger-queen.com", "username", "password"));
-    assertThat(filter.needsHeader("http://burger-queen.com")).isTrue();
-    assertThat(filter.needsHeader("https://burger-queen.com/")).isTrue();
-    assertThat(filter.needsHeader("https://burger-queen.com/")).isTrue();
-    assertThat(filter.needsHeader("https://burger-queen.com/dashboard")).isTrue();
-    assertThat(filter.needsHeader("ftp://burger-queen.com/dashboard")).isTrue();
-    assertThat(filter.needsHeader("https://other.burger-queen.com")).isFalse();
-    assertThat(filter.needsHeader("https://burger-queen.com.eu/")).isFalse();
-    assertThat(filter.needsHeader("https://burger-queen-com/dashboard")).isFalse();
-    assertThat(filter.needsHeader("https://s3.aws.com")).isFalse();
-    assertThat(filter.needsHeader("file:///foo/bar")).isFalse();
-    assertThat(filter.needsHeader("foo")).isFalse();
-  }
-
-  @Test
-  void shouldAddHeaderIfDomainIsEmpty_legacyMode() {
-    filter.setAuthentication(BEARER, new BearerTokenCredentials("", "password"));
-    assertThat(filter.needsHeader("https://burger-queen.com")).isTrue();
-    assertThat(filter.needsHeader("https://s3.aws.com")).isTrue();
-    assertThat(filter.needsHeader("file:///foo/bar")).isTrue();
-    assertThat(filter.needsHeader("foo")).isTrue();
-  }
-
-  @Test
-  void extractsHostName() {
-    assertThat(filter.getHostname("http://burger-queen.com")).isEqualTo("burger-queen.com");
-    assertThat(filter.getHostname("https://burger-queen.com.eu/zoo")).isEqualTo("burger-queen.com.eu");
-    assertThat(filter.getHostname("file:///foo/bar")).isNull();
-    assertThat(filter.getHostname("foobar")).isNull();
   }
 
   private HttpMessageInfo info(String url) {

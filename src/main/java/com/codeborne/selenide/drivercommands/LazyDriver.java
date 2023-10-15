@@ -90,20 +90,25 @@ public class LazyDriver implements Driver {
   @Override
   @Nonnull
   public WebDriver getWebDriver() {
+    return checkDriverIsStarted().webDriver();
+  }
+
+  @Nonnull
+  @Override
+  public SelenideProxyServer getProxy() {
+    return checkDriverIsStarted().proxy();
+  }
+
+  @Nonnull
+  private WebDriverInstance checkDriverIsStarted() {
     if (closed) {
       throw new IllegalStateException("Webdriver has been closed. You need to call open(url) to open a browser again.");
     }
     if (wd == null || wd.webDriver() == null) {
       throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
-        ". You need to call open(url) first.");
+                                      ". You need to call open(url) first.");
     }
-    return wd.webDriver();
-  }
-
-  @Override
-  @Nullable
-  public SelenideProxyServer getProxy() {
-    return wd == null ? null : wd.proxy();
+    return wd;
   }
 
   @Override

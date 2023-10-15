@@ -11,13 +11,12 @@ import static java.lang.System.lineSeparator;
 
 @ParametersAreNonnullByDefault
 public class AttributesMismatch extends UIAssertionError {
-  public AttributesMismatch(Driver driver, String attribute, CollectionSource collection,
+  public AttributesMismatch(Driver driver, String message, CollectionSource collection,
                             List<String> expectedValues, List<String> actualValues,
                             @Nullable String explanation, long timeoutMs, @Nullable Exception cause) {
-    super(driver,
-      "Attribute '" + attribute + "' values mismatch" +
-        lineSeparator() + "Actual: " + actualValues +
-        lineSeparator() + "Expected: " + expectedValues +
+    super(driver, message +
+        lineSeparator() + "Actual (" + actualValues.size() + "): " + actualValues +
+        lineSeparator() + "Expected (" + expectedValues.size() + "): " + expectedValues +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
         lineSeparator() + "Collection: " + collection.description(),
       expectedValues, actualValues, cause, timeoutMs);

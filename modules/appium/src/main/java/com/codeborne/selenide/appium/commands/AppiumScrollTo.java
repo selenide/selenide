@@ -72,7 +72,8 @@ public class AppiumScrollTo implements Command<SelenideElement> {
 
     while (isElementNotDisplayed(locator)
            && isLessThanMaxSwipeCount(currentSwipeCount, scrollOptions.getMaxSwipeCounts())) {
-      performScroll(appiumDriver, scrollOptions.getScrollDirection());
+      performScroll(appiumDriver, scrollOptions.getScrollDirection(), scrollOptions.getTopPointHeightPercent(),
+                    scrollOptions.getBottomPointHeightPercent());
       currentSwipeCount++;
     }
   }
@@ -93,21 +94,21 @@ public class AppiumScrollTo implements Command<SelenideElement> {
     return appiumDriver.manage().window().getSize();
   }
 
-  private void performScroll(AppiumDriver appiumDriver, ScrollDirection scrollDirection) {
+  private void performScroll(AppiumDriver appiumDriver, ScrollDirection scrollDirection, float top, float bottom) {
     Dimension size = getMobileDeviceSize(appiumDriver);
-    AppiumScrollCoordinates scrollCoordinates = getScrollCoordinates(scrollDirection, size);
+    AppiumScrollCoordinates scrollCoordinates = getScrollCoordinates(scrollDirection, size, top, bottom);
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
     Sequence sequenceToPerformScroll = getSequenceToPerformScroll(finger, scrollCoordinates);
     appiumDriver.perform(singletonList(sequenceToPerformScroll));
   }
 
-  private AppiumScrollCoordinates getScrollCoordinates(ScrollDirection scrollDirection, Dimension size) {
+  private AppiumScrollCoordinates getScrollCoordinates(ScrollDirection scrollDirection, Dimension size, float top, float bottom) {
     if (scrollDirection == ScrollDirection.UP) {
-      return new AppiumScrollCoordinates(size.getWidth() / 2, (int) (size.getHeight() * 0.25),
-                                         size.getWidth() / 2, size.getHeight() / 2);
+      return new AppiumScrollCoordinates(size.getWidth() / 2, (int) (size.getHeight() * top),
+                                         size.getWidth() / 2, (int) (size.getHeight() * bottom));
     } else {
-      return new AppiumScrollCoordinates(size.getWidth() / 2, size.getHeight() / 2,
-                                         size.getWidth() / 2, (int) (size.getHeight() * 0.25));
+      return new AppiumScrollCoordinates(size.getWidth() / 2, (int) (size.getHeight() * bottom),
+                                         size.getWidth() / 2, (int) (size.getHeight() * top));
     }
   }
 

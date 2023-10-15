@@ -82,6 +82,25 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement setValue(SetValueOptions options);
 
   /**
+   * Mimic how real user would type in a text field
+   * Useful to work with autosuggestion dropdown
+   * @see com.codeborne.selenide.commands.Type
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement type(CharSequence text);
+
+  /**
+   * Similar to {@link #type(java.lang.CharSequence)}
+   * @param options parameters specifying how exactly you want to type the text
+   * @see com.codeborne.selenide.commands.Type
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement type(TypeOptions options);
+
+
+  /**
    * Append given text to the text field and trigger "change" event.<p>
    *
    * <b>Applicable for:</b> {@code <input>} and {@code <textarea>}.<p>
@@ -123,7 +142,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Press ENTER. Useful for input field and textareas: <pre>
-   *  $("query").val("Aikido techniques").pressEnter();</pre>
+   *  $("query").val("Dear Santa").pressEnter();</pre>
    * <p>
    *
    * <b>Implementation details:</b>
@@ -137,8 +156,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement pressEnter();
 
   /**
-   * Press TAB. Useful for input field and textareas: <pre>
-   *  $("#to").val("stiven@seagal.com").pressTab();</pre>
+   * Press TAB. Useful for input field and text areas: <pre>
+   *  $("#to").val("santa@claus.fi").pressTab();</pre>
    * <p>
    * <b>Implementation details:</b><p>
    * Check that element is displayed and execute <pre>
@@ -378,7 +397,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Check if this element exists and visible.
    *
-   * @return false if element does not exists, is invisible, browser is closed or any WebDriver exception happened.
+   * @return false if element does not exist, is invisible, browser is closed or any WebDriver exception happened.
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
@@ -421,7 +440,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement setSelected(boolean selected);
 
   /**
-   * Checks that given element meets all given conditions.<p>
+   * Sequentially checks that given element meets all given conditions.<p>
    *
    * IMPORTANT: If element does not match then conditions immediately, waits up to
    * 4 seconds until element meets the conditions. It's extremely useful for dynamic content.<p>
@@ -491,7 +510,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldBe(Condition condition, Duration timeout);
 
   /**
-   * Checks that given element does not meet given conditions.<p>
+   * Sequentially checks that given element does not meet given conditions.<p>
    *
    * IMPORTANT: If element does match the conditions, waits up to
    * 4 seconds until element does not meet the conditions. It's extremely useful for dynamic content.<p>
@@ -586,6 +605,20 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @CheckReturnValue
   @Nonnull
   String describe();
+
+  /**
+   * @see com.codeborne.selenide.commands.Highlight
+   * @since 6.17.0
+   */
+  @Nonnull
+  SelenideElement highlight();
+
+  /**
+   * @see com.codeborne.selenide.commands.Highlight
+   * @since 6.17.0
+   */
+  @Nonnull
+  SelenideElement highlight(HighlightOptions options);
 
   /**
    * Give this element a human-readable name
@@ -1026,6 +1059,24 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @CheckReturnValue
   @Nonnull
   ElementsCollection getSelectedOptions();
+
+  /**
+   * Find all options from this select field
+   * <p>
+   *
+   * <b>Applicable for:</b> <pre>{@code
+   * <select>
+   *   <option>...<option>
+   * </select>
+   * }</pre>
+   *
+   * @return ElementsCollection for all &lt;option&gt; elements
+   * @see com.codeborne.selenide.commands.GetOptions
+   * @since 6.18.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  ElementsCollection getOptions();
 
   /**
    * Get value of selected option in select field

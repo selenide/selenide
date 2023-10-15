@@ -21,11 +21,10 @@ public class CloseDriverCommand {
 
   public void close(WebDriverInstance wd) {
     WebDriver webDriver = wd.webDriver();
-    SelenideProxyServer proxy = wd.proxy();
     DownloadsFolder downloadsFolder = wd.downloadsFolder();
     long threadId = Thread.currentThread().getId();
     if (wd.config().holdBrowserOpen()) {
-      log.info("Hold browser and proxy open: {} -> {}, {}", threadId, webDriver, proxy);
+      log.info("Hold browser open: {} -> {}", threadId, webDriver);
       return;
     }
 
@@ -40,8 +39,9 @@ public class CloseDriverCommand {
       log.info("Closed webdriver {} in {} ms", threadId, currentTimeMillis() - start);
     }
 
-    if (proxy != null) {
+    if (wd.config().proxyEnabled()) {
       long start = currentTimeMillis();
+      SelenideProxyServer proxy = wd.proxy();
       log.info("Close proxy server: {} -> {}...", threadId, proxy);
       proxy.shutdown();
       log.info("Closed proxy server {} in {} ms", threadId, currentTimeMillis() - start);

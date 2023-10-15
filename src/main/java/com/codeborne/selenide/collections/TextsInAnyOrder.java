@@ -1,15 +1,22 @@
 package com.codeborne.selenide.collections;
 
+import com.codeborne.selenide.CheckResult;
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.impl.ElementCommunicator;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.codeborne.selenide.CheckResult.rejected;
+import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
 public class TextsInAnyOrder extends ExactTexts {
+  private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
+
   public TextsInAnyOrder(String... expectedTexts) {
     super(expectedTexts);
   }
@@ -18,27 +25,33 @@ public class TextsInAnyOrder extends ExactTexts {
     super(expectedTexts);
   }
 
-  @CheckReturnValue
+  @Nonnull
   @Override
-  public boolean test(List<WebElement> elements) {
-    if (elements.size() != expectedTexts.size()) {
-      return false;
+  public CheckResult check(Driver driver, List<WebElement> elements) {
+    List<String> actualTexts = communicator.texts(driver, elements);
+    if (actualTexts.size() != expectedTexts.size()) {
+      String message = String.format("List size mismatch (expected: %s, actual: %s)", expectedTexts.size(), actualTexts.size());
+      return rejected(message, actualTexts);
     }
 
-    List<String> elementsTexts = elements.stream().map(WebElement::getText).collect(Collectors.toList());
-
-    for (String expectedText : expectedTexts) {
-      boolean found = false;
-      for (String elementText : elementsTexts) {
-        if (Html.text.contains(elementText, expectedText)) {
-          found = true;
-        }
-      }
+    for (int i = 0; i < expectedTexts.size(); i++) {
+      String expectedText = expectedTexts.get(i);
+      boolean found = find(actualTexts, expectedText);
       if (!found) {
-        return false;
+        String message = String.format("Text #%s not found: \"%s\"", i, expectedText);
+        return CheckResult.rejected(message, actualTexts);
       }
     }
-    return true;
+    return CheckResult.accepted();
+  }
+
+  private boolean find(List<String> texts, String text) {
+    for (String elementText : texts) {
+      if (Html.text.contains(elementText, text)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override

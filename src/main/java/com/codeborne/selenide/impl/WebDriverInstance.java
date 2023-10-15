@@ -7,6 +7,8 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.github.bsideup.jabel.Desugar;
 import org.openqa.selenium.WebDriver;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -29,6 +31,22 @@ public record WebDriverInstance(
   public WebDriverInstance {
     requireNonNull(config, "config must not be null");
     requireNonNull(webDriver, "webDriver must not be null");
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  @Override
+  public SelenideProxyServer proxy() {
+    if (!config.proxyEnabled()) {
+      throw new IllegalStateException("Proxy server is not enabled. You need to set proxyEnabled=true before opening a browser.");
+    }
+    if (proxy == null) {
+      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not created.");
+    }
+    if (!proxy.isStarted()) {
+      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not started.");
+    }
+    return proxy;
   }
 
   @Override

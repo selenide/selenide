@@ -42,11 +42,11 @@
 <div style="display: none">abcd</div>
 <div id="non-clickable-element"
      style="z-index: -100; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
-  <a href="http://google.com">non-clickable element</a>
+  <a href="https://google.com">non-clickable element</a>
 </div>
 <div id="clickable-element"
      style="z-index: -90; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
-  <a href="http://www.yandex.ru/">clickable element</a>
+  <a href="https://duckduckgo.com">clickable element</a>
 </div>
 
 <h1>Page with selects</h1>
@@ -59,10 +59,10 @@
       <h6 id="selectedDomain"></h6>
       <div id="dropdown-list-container" class="container">
         <select id="domain" name="domain" onchange="onDomainChanged(this);">
-          <option value="livemail.ru" data-mailServerId="111">@livemail.ru</option>
-          <option value="myrambler.ru" data-mailServerId="222A">@myrambler.ru</option>
-          <option value="rusmail.ru" data-mailServerId="33333B">@rusmail.ru</option>
-          <option value="мыло.ру" data-mailServerId="111АБВГД">@мыло.ру</option>
+          <option value="one.io" data-mailServerId="111">@one.io</option>
+          <option value="two.eu" data-mailServerId="222A">@two.eu</option>
+          <option value="three.com" data-mailServerId="33333B">@three.com</option>
+          <option value="four.ee" data-mailServerId="111АБВГД">@four.ee</option>
         </select>
       </div>
     </div>
@@ -244,11 +244,11 @@
     <option value="elsa">Elsa</option>
     <option value="anna">Anna</option>
   </select>
-  <button id="unfroze-me">Unfroze me</button>
+  <button id="unfreeze-me">Unfreeze me</button>
 </div>
 
 <script>
-  document.getElementById('unfroze-me').addEventListener('click', () => {
+  document.getElementById('unfreeze-me').addEventListener('click', () => {
     setTimeout(() => {
       document.getElementById('disabled-select').removeAttribute('disabled')
     }, 200)

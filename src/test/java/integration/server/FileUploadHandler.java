@@ -30,6 +30,9 @@ class FileUploadHandler extends BaseHandler {
     factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
     ServletFileUpload upload = new ServletFileUpload(factory);
     upload.setHeaderEncoding(UTF_8.name());
+    upload.setFileCountMax(20);
+    upload.setSizeMax(10 * 1024 * 1024); // 10mb
+    upload.setFileSizeMax(3 * 1024 * 1024); // 3mb
     try {
       List<FileItem> items = upload.parseRequest(request);
       for (FileItem item : items) {

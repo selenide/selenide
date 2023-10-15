@@ -1,6 +1,7 @@
 package org.selenide.selenoid;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -29,15 +29,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @ParametersAreNonnullByDefault
 public class SelenoidClient {
   private static final Logger log = LoggerFactory.getLogger(SelenoidClient.class);
-  private static final Type listType = new StringListType().getType();
-  private static final Gson gson = new Gson();
+  private static final ObjectMapper json = new ObjectMapper();
   final String baseUrl;
   private final String sessionId;
 
   public SelenoidClient(String hubUrl, String sessionId) {
-    if (!hubUrl.endsWith("/wd/hub")) {
-      throw new IllegalArgumentException("Expect hub url to end with /wd/hub, but received: " + hubUrl);
-    }
     this.baseUrl = hubUrl.replace("/wd/hub", "");
     this.sessionId = sessionId;
   }
@@ -47,9 +43,18 @@ public class SelenoidClient {
   public List<String> downloads() {
     URL url = url(baseUrl + "/download/" + sessionId + "/?json");
     String fileNamesJson = readToString(url);
-    List<String> fileNames = gson.fromJson(fileNamesJson, listType);
+    List<String> fileNames = parseJson(fileNamesJson);
     log.debug("Retrieved files from {}: {}", url, fileNames);
     return fileNames;
+  }
+
+  List<String> parseJson(String fileNamesJson) {
+    try {
+      return json.readerForListOf(String.class).readValue(fileNamesJson);
+    }
+    catch (JsonProcessingException e) {
+      throw new RuntimeException("Failed to parse Selenoid response: " + fileNamesJson, e);
+    }
   }
 
   @CheckReturnValue
@@ -182,5 +187,10 @@ public class SelenoidClient {
       connection.setRequestProperty("Authorization", basicAuth);
     }
     return connection;
+  }
+
+  @Override
+  public String toString() {
+    return "SelenoidClient{" + sessionId + "}";
   }
 }

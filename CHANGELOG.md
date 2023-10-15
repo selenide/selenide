@@ -1,8 +1,83 @@
 # Changelog
 
+## 6.19.0 (released 28.09.2023)
+* #2479 bump Selenium from 4.12.1 to 4.13.0 (#2479), see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* #2469 strip invisible spaces from collection texts (#2482)
+* #1277 #2395 add method $.highlight() to highlight given element (#2481)
+* #2475 remove hub url condition (#2476)  --  thanks to Dmitry Plodukhin
+* #2439 introduce interface `Container` as a replacement for abstract class `ElementsContainer` (#2465)
+* #2467 [appium] added tap, doubleTap commands (#2467)  --  thanks to qwez
+* #2440 [appium] add new selector with className and Index (#2440)  --  thanks to Amuthan Sakthivel
+* #2474 [appium] update Appium Scroll Options and README.md (#2474)  --  thanks to Amuthan Sakthivel
+* bump LittleProxy from 2.0.20 to 2.0.21
+* Bump BrowserUpProxy from 2.2.12 to 2.2.13 (#2463)
+* Bump nettyVersion from 4.1.97.Final to 4.1.98.Final (#2477)
+Full list: https://github.com/selenide/selenide/milestone/192?closed=1
+
+## 6.18.0 (released 06.09.2023)
+* #2434 show actual texts in error message for collections text checks (#2456)
+* #2452 bump Selenium from 4.11.0 to 4.12.1
+* #2336 pass BasicAuth in Chromium-based browser using `HasAuthentication` mechanism - again (#2358)
+* #2445 add method $$.getOptions()  (#2446)
+* #2454 Make Selenide.getFocusedElement() return SelenideElement, not WebElement
+* #2437 support page object fields of type SelenideAppiumElement (#2438)
+* #2449 added ability to set top and bottom point coordinates for scroll in mobile apps  --  thanks to @qwez for PR
+* #2439 do not allow creating ElementsContainer outside of page object (#2455)
+* bump LittleProxy from 2.0.19 to 2.0.20 (fixes a memory leak in Selenide proxy)
+* #2442 update vulnerable jackson dependency
+Full list: https://github.com/selenide/selenide/milestone/190?closed=1
+
+## 6.17.2 (released 24.08.2023)
+* #2424 Avoid using authentication via CDP  --  see PR #2435
+* Bump nettyVersion from 4.1.96.Final to 4.1.97.Final
+Full list: https://github.com/selenide/selenide/milestone/189?closed=1
+
+## 6.17.1 (released 20.08.2023)
+* #2424 Fix hanging webdriver  --  see PR #2428
+* #2191 support command $.type() in mobile apps  --  see PR #2408
+* #2420 #2422 fix method $.type(Keys.*)  --  see PR #2421
+* #2398 throw a clear error message when user calls getProxyServer()  --  see PR #2406
+* #2419 remove leading and trailing spaces in $$.texts()  --  see PR #2427
+Full list: https://github.com/selenide/selenide/milestone/188?closed=1
+
+## 6.17.0 (released 02.08.2023)
+* #2393 bump Selenium from 4.10.0 to 4.11.0, see https://www.selenium.dev/blog/2023/whats-new-in-selenium-manager-with-selenium-4.11.0/
+* #2385 #2402 replace WebDriverManager by Selenium built-in SeleniumManager  --  see PR #2400
+* #2385 support Java 8 again!  --  see PR #2400
+* #2191 Add method $.type()  --  thanks to Amuthan Sakthivel
+* #2370 added method for Appium: click with long press  --  thanks to Amuthan Sakthivel for PR #2381
+* #2369 added method for Appium: swipe right and left  --  thanks to Amuthan Sakthivel
+* #2394 un-deprecate methods $$.texts() and $$.attributes()
+* #2390 use more neutral sample in javadoc  --  see PR #2401
+* #2388 bump Netty from 4.1.95.Final to 4.1.96.Final
+* #2386 bump BrowserUpProxy from 2.2.10 to 2.2.11
+
+## 6.16.1 (released 24.07.2023)
+* #2368 added `allOf` and `anyOf` conditions  --  thanks Evgenii Plugatar for PR #2368
+* #2367 Add conditions to check cookies  --  thanks adorne for PR #2367
+* #2374 bump WebDriverManager from 5.4.0 to 5.4.1 (incl. support for Chrome 115) 
+* #2377 support <tspan> elements in SVG  --  see PR #2379
+* #2382 bump junitVersion from 5.9.3 to 5.10.0
+* #2383 bump org.opentest4j:opentest4j from 1.2.0 to 1.3.0
+
+## 6.16.0 (released 02.07.2023)
+* #2362 Speed up collection conditions
+* #2268 Add conditions `date(...)` and `datetime(...)` to check date values  --  thanks to Maksim @Au6ojlut for PR #2281
+* #2357 add methods `$.setValue(withDateTime)` and `$.setValue(withTime)`
+* #2350 show full stack trace in soft asserts  --  see PR #2354
+* #2336 pass BasicAuth in Chromium-based browser using `HasAuthentication` mechanism  --  see PR #2358
+* #2336 user can set multiple domains for BasicAuth
+* #2346 fix `$.doubleClick()` in Appium  --  see PR #2347
+* #2352 take screenshot even if webdriver has been closed in `@AfterEach` method  --  see PR #2356
+* #2318 use latest version of geckodriver for FF 102+  --  see PR #2319
+* #2328 bump Selenium from 4.9.1 to 4.10.0
+* #2324 Bump io.appium:java-client from 8.5.0 to 8.5.1
+* #2349 Bump Netty from 4.1.93.Final to 4.1.94.Final
+* bump WebDriverManager from 5.3.3 to 5.4.0
+
 ## 6.15.0 (released 29.05.2023)
-* #2292 Project "selenide-appium" was merged into project "selenide".
-* #2291 Project "selenide-selenoid" was merged into project "selenide".
+* #2291 Project "selenide-appium" was merged into project "selenide".
+* #2292 Project "selenide-selenoid" was merged into project "selenide".
 * #2288 Clicking a disabled element now fails --  thanks to Maksim @Au6ojlut for PR #2290
 * #2283 Escape special characters in subject in text report  --  thanks to Maksim @Au6ojlut for PR #2284
 * #2300 Add few collection conditions for mobile apps  --  thanks to Amuthan Sakthivel for https://github.com/selenide/selenide-appium/pull/135, also see PR #2315
