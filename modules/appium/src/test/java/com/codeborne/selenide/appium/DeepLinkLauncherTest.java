@@ -21,7 +21,7 @@ class DeepLinkLauncherTest {
 
     deepLinkLauncher.openDeepLinkOnAndroid(androidDriver, "mydemoapprn://product-details/1", "com.saucelabs.mydemoapp.rn");
 
-    assertThat(script.getValue()).isEqualTo("mobile:deepLink");
+    assertThat(script.getValue()).isEqualTo("mobile: deepLink");
     assertThat(params.getValue()).hasSize(2);
     assertThat(params.getValue().get("url")).isEqualTo("mydemoapprn://product-details/1");
     assertThat(params.getValue().get("package")).isEqualTo("com.saucelabs.mydemoapp.rn");
