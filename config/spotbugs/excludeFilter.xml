@@ -59,6 +59,9 @@
     <Bug pattern="SS_SHOULD_BE_STATIC"/>
   </Match>
   <Match>
+    <Bug pattern="RV_EXCEPTION_NOT_THROWN"/>
+  </Match>
+  <Match>
     <Bug pattern="PA_PUBLIC_PRIMITIVE_ATTRIBUTE"/>
   </Match>
   <Match>
