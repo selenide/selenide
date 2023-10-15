@@ -71,7 +71,7 @@ public class DeepLinkLauncher {
         "url", deepLinkUrl,
         "package", appPackage
       );
-      driver.executeScript("mobile:deepLink", params);
+      driver.executeScript("mobile: deepLink", params);
     });
   }
 
