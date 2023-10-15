@@ -99,7 +99,7 @@ jobs:
           node-version: '18'
       - name: Install Appium
         run: |
-          npm install -g appium@next
+          npm install -g appium
           npm install -g appium-doctor
       - name: Start Appium server
         run: |
@@ -167,7 +167,7 @@ jobs:
           node-version: '18'
       - name: Install Appium
         run: |
-          npm install -g appium@next
+          npm install -g appium
           npm install -g appium-doctor
       - name: Log Xcode Version
         run: xcodebuild -version
