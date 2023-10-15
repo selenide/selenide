@@ -56,6 +56,9 @@
     <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
   </Match>
   <Match>
+    <Bug pattern="PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_CLASS_NAMES"/>
+  </Match>
+  <Match>
     <Class name="com.codeborne.selenide.SelenideDriver"/>
     <Bug pattern="NM_METHOD_NAMING_CONVENTION"/>
   </Match>
