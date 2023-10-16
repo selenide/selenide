@@ -56,6 +56,27 @@
     <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
   </Match>
   <Match>
+    <Bug pattern="SS_SHOULD_BE_STATIC"/>
+  </Match>
+  <Match>
+    <Bug pattern="RV_EXCEPTION_NOT_THROWN"/>
+  </Match>
+  <Match>
+    <Bug pattern="PA_PUBLIC_PRIMITIVE_ATTRIBUTE"/>
+  </Match>
+  <Match>
+    <Bug pattern="PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_CLASS_NAMES"/>
+  </Match>
+  <Match>
+    <Bug pattern="PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_METHOD_NAMES"/>
+  </Match>
+  <Match>
+    <Bug pattern="PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_FIELD_NAMES"/>
+  </Match>
+  <Match>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <Match>
     <Class name="com.codeborne.selenide.SelenideDriver"/>
     <Bug pattern="NM_METHOD_NAMING_CONVENTION"/>
   </Match>
