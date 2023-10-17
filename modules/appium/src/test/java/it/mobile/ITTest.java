@@ -6,12 +6,14 @@ import com.codeborne.selenide.webdriver.HttpClientTimeouts;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXED_SECURITY;
 import static java.time.Duration.ofSeconds;
 
@@ -41,5 +43,10 @@ public abstract class ITTest {
     Configuration.remoteReadTimeout = Duration.ofMinutes(5).toMillis();
     HttpClientTimeouts.defaultLocalReadTimeout = Duration.ofMinutes(4);
     HttpClientTimeouts.defaultLocalConnectTimeout = Duration.ofMinutes(3);
+  }
+
+  @AfterEach
+  final void shutdownApp() {
+    closeWebDriver();
   }
 }
