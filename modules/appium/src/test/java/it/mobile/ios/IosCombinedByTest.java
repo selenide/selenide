@@ -18,7 +18,7 @@ class IosCombinedByTest extends BaseSwagLabsAppIosTest {
     .ios(AppiumSelectors.withAttribute("name", "Username input field"));
 
   @BeforeEach
-  void openLoginScreen() {
+  final void openLoginScreen() {
     openIOSDeepLink("mydemoapprn://login");
   }
 

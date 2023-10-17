@@ -15,7 +15,7 @@ import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXED_SECURITY;
-import static java.time.Duration.ofSeconds;
+import static java.time.Duration.ofMinutes;
 
 @ExtendWith(TextReportExtension.class)
 public abstract class ITTest {
@@ -25,14 +25,18 @@ public abstract class ITTest {
   static void startAppium() {
     AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder()
       .withArgument(RELAXED_SECURITY)
-      .withTimeout(ofSeconds(30));
+      .withIPAddress("127.0.0.1")
+      .withTimeout(ofMinutes(3));
     service = AppiumDriverLocalService.buildService(appiumServiceBuilder);
     service.start();
   }
 
   @AfterAll
   static void stopAppium() {
-    service.stop();
+    if (service != null) {
+      service.stop();
+      service = null;
+    }
   }
 
   @BeforeEach

@@ -11,10 +11,8 @@ import static com.codeborne.selenide.appium.SelenideAppium.openAndroidDeepLink;
 import static java.time.Duration.ofSeconds;
 
 class AndroidCombinedByTest extends BaseSwagLabsAndroidTest {
-
-
   @BeforeEach
-  void openLoginScreen() {
+  final void openLoginScreen() {
     openAndroidDeepLink("mydemoapprn://login", "com.saucelabs.mydemoapp.rn");
   }
 

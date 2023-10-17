@@ -14,7 +14,7 @@ import static com.codeborne.selenide.appium.ScreenObject.screen;
 
 public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
   @BeforeEach
-  void openLoginScreen() {
+  final void openLoginScreen() {
     SelenideAppium.openAndroidDeepLink("mydemoapprn://login", "com.saucelabs.mydemoapp.rn");
   }
 

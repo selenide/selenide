@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class WebTest {
   @BeforeEach
-  void setUp() {
+  final void setUp() {
     closeWebDriver();
     Configuration.browser = "chrome";
   }

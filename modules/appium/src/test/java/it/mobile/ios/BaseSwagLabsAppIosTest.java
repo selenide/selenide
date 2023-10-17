@@ -10,9 +10,9 @@ import it.mobile.ios.driverproviders.SwagLabsIosDriverProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 
-class BaseSwagLabsAppIosTest extends ITTest {
+abstract class BaseSwagLabsAppIosTest extends ITTest {
   @BeforeEach
-  public void setUp() {
+  public final void setUp() {
     closeWebDriver();
     Configuration.browser = SwagLabsIosDriverProvider.class.getName();
     WebDriverRunner.addListener(new AbstractWebDriverEventListener() {
