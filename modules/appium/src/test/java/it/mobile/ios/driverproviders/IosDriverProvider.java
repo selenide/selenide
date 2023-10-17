@@ -25,7 +25,7 @@ public abstract class IosDriverProvider implements WebDriverProvider {
   public WebDriver createDriver(@Nonnull Capabilities capabilities) {
     Configuration.remoteConnectionTimeout = Duration.ofSeconds(10).toMillis();
     Configuration.remoteReadTimeout = Duration.ofSeconds(30).toMillis();
-    HttpClientTimeouts.defaultLocalReadTimeout = Duration.ofSeconds(20);
+    HttpClientTimeouts.defaultLocalReadTimeout = Duration.ofMinutes(2);
     XCUITestOptions options = getXcuiTestOptions();
     options.setApp(getApplicationUnderTest().getAbsolutePath());
     try {
