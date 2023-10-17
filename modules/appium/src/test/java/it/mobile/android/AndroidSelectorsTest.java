@@ -1,12 +1,9 @@
 package it.mobile.android;
 
-import com.codeborne.selenide.appium.SelenideAppium;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.appium.AppiumSelectors.byAttribute;
 import static com.codeborne.selenide.appium.AppiumSelectors.byClassNameAndIndex;
 import static com.codeborne.selenide.appium.AppiumSelectors.byContentDescription;
@@ -27,12 +24,6 @@ import static com.codeborne.selenide.appium.selector.CombinedBy.android;
 class AndroidSelectorsTest extends BaseApiDemosTest {
 
   private static final String VIEWS = "Views";
-
-  @BeforeEach
-  void setUp() {
-    closeWebDriver();
-    SelenideAppium.launchApp();
-  }
 
   @Test
   void appiumSelectorsInAndroidApp() {

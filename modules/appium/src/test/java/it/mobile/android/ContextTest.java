@@ -2,11 +2,9 @@ package it.mobile.android;
 
 import com.codeborne.selenide.Stopwatch;
 import io.appium.java_client.AppiumBy;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
 import static com.codeborne.selenide.appium.SelenideAppium.getContextHandles;
 import static com.codeborne.selenide.appium.SelenideAppium.getCurrentContext;
@@ -15,11 +13,6 @@ import static com.codeborne.selenide.appium.SelenideAppium.switchTo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ContextTest extends BaseSwagLabsAndroidTest {
-
-  @BeforeEach
-  void setUp() {
-    closeWebDriver();
-  }
 
   @Test
   void contexts() {

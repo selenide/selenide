@@ -11,7 +11,6 @@ import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
 import static io.appium.java_client.AppiumBy.accessibilityId;
@@ -21,8 +20,7 @@ import static java.time.Duration.ofSeconds;
 class SauceLabLoginTest extends BaseSwagLabsAndroidTest {
 
   @BeforeEach
-  void openLoginScreen() {
-    closeWebDriver();
+  final void openLoginScreen() {
     SelenideAppium.openAndroidDeepLink("mydemoapprn://login", "com.saucelabs.mydemoapp.rn");
   }
 

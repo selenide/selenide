@@ -2,25 +2,16 @@ package it.mobile.android;
 
 
 import com.codeborne.selenide.appium.AppiumScrollOptions;
-import com.codeborne.selenide.appium.SelenideAppium;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.up;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.with;
 import static com.codeborne.selenide.appium.ScrollDirection.DOWN;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
 
 class AndroidScrollTest extends BaseApiDemosTest {
-
-  @BeforeEach
-  void setUp() {
-    closeWebDriver();
-    SelenideAppium.launchApp();
-  }
 
   @Test
   void testScrollToElement() {
