@@ -41,6 +41,7 @@ public abstract class IosDriverProvider implements WebDriverProvider {
     options.setWdaLaunchTimeout(Duration.ofMinutes(10));
     options.setDeviceName("iPhone 14");
     options.setFullReset(false);
+    options.setShouldTerminateApp(true);
     return options;
   }
 
