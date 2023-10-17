@@ -20,12 +20,13 @@ dependencies {
   testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
 }
 
-task selenoidTests(type: Test) {
+tasks.register('selenoidTests', Test) {
   systemProperties['selenide.browser'] = 'chrome'
   include 'it/selenoid/**/*'
   exclude 'org/selenide/**/*'
   exclude 'com/codeborne/**/*'
   outputs.upToDateWhen { false }
+  maxParallelForks = 1
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')

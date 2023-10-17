@@ -22,16 +22,18 @@ dependencies {
   testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
 }
 
-task android(type: Test) {
+tasks.register('android', Test) {
   include 'it/mobile/android/**/*'
   exclude 'com/codeborne/selenide/**/*'
   outputs.upToDateWhen { false }
+  maxParallelForks = 1
 }
 
-task ios(type: Test) {
+tasks.register('ios', Test) {
   include 'it/mobile/ios/**/*'
   exclude 'com/codeborne/selenide/**/*'
   outputs.upToDateWhen { false }
+  maxParallelForks = 1
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')
