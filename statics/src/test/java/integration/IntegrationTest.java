@@ -23,6 +23,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.time.Duration;
 
 import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Browsers.CHROME;
@@ -86,6 +87,8 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "false"));
     Configuration.textCheck = FULL_TEXT;
     Configuration.browserCapabilities = new MutableCapabilities();
+    Configuration.remoteConnectionTimeout = Duration.ofSeconds(10).toMillis();
+    Configuration.remoteReadTimeout = Duration.ofSeconds(90).toMillis();
   }
 
   protected void openFile(String fileName) {

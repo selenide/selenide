@@ -1,8 +1,6 @@
 package it.mobile.ios.driverproviders;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
-import com.codeborne.selenide.webdriver.HttpClientTimeouts;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
 import org.openqa.selenium.Capabilities;
@@ -23,9 +21,6 @@ public abstract class IosDriverProvider implements WebDriverProvider {
   @Nonnull
   @Override
   public WebDriver createDriver(@Nonnull Capabilities capabilities) {
-    Configuration.remoteConnectionTimeout = Duration.ofSeconds(10).toMillis();
-    Configuration.remoteReadTimeout = Duration.ofSeconds(30).toMillis();
-    HttpClientTimeouts.defaultLocalReadTimeout = Duration.ofMinutes(2);
     XCUITestOptions options = getXcuiTestOptions();
     options.setApp(getApplicationUnderTest().getAbsolutePath());
     try {
