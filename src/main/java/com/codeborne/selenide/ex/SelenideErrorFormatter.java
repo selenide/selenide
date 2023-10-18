@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.ex.Strings.join;
-import static org.apache.commons.lang3.StringUtils.substring;
 
 @ParametersAreNonnullByDefault
 public class SelenideErrorFormatter implements ErrorFormatter {
@@ -43,27 +42,7 @@ public class SelenideErrorFormatter implements ErrorFormatter {
       return String.format("Actual value: %s", lastCheckResult.actualValue());
     }
 
-    // Deprecated branch for custom condition (not migrated to CheckResult):
-    String actualValue = extractActualValue(condition, driver, element);
-    if (actualValue != null) {
-      return String.format("Actual value: %s", actualValue);
-    }
     return "";
-  }
-
-  @Nullable
-  @CheckReturnValue
-  protected String extractActualValue(WebElementCondition condition, Driver driver, @Nullable WebElement element) {
-    if (element != null) {
-      try {
-        return condition.actualValue(driver, element);
-      }
-      catch (RuntimeException failedToGetValue) {
-        String failedActualValue = failedToGetValue.getClass().getSimpleName() + ": " + failedToGetValue.getMessage();
-        return substring(failedActualValue, 0, 50);
-      }
-    }
-    return null;
   }
 
   @CheckReturnValue
