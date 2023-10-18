@@ -1,5 +1,21 @@
 # Changelog
 
+## 7.0.0 (planned to 2x.10.2023)
+* bump Selenium from 4.13.0 to 4.14.1 (#2505)
+* bump Appium from 8.6.0 to 9.0.0 (#2505)
+* #2372 Deadlock in static initialization (#2453)
+* #2485 Rename some "*Exception" classes to "*Error"
+* #2500 report actual value at the moment of check (#2501)
+
+## 6.19.1 (released 18.10.2023)
+* bump Appium from 8.5.1 to 8.6.0 (#2494)  -- thanks to Aliaksandr Rasolka and Boris Osipov for help
+* Bump com.github.valfirst.browserup-proxy:browserup-proxy-core (#2510)
+* Bump Netty from 4.1.98.Final to 4.1.100.Final (#2484) (#2498)
+* Bump xyz.rogfam:littleproxy from 2.0.21 to 2.0.22 (#2491)
+* Bump com.google.guava:guava from 32.1.2-jre to 32.1.3-jre (#2499)
+* Bump com.fasterxml.jackson.core:jackson-core from 2.15.2 to 2.15.3 (#2502) (#2503)
+* Bump commons-io:commons-io from 2.13.0 to 2.14.0 (#2486)
+
 ## 6.19.0 (released 28.09.2023)
 * #2479 bump Selenium from 4.12.1 to 4.13.0 (#2479), see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
 * #2469 strip invisible spaces from collection texts (#2482)
