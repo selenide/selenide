@@ -38,7 +38,7 @@ public class LazyPageObjectTest extends IntegrationTest {
     subForm.h1.shouldBe(visible);
     assertThat(subForm.h11.isDisplayed()).isTrue();
     subForm.h3s.shouldHave(size(0));
-    assertThat(subForm.h3ss).hasSize(0);
+    assertThat(subForm.h3ss.size()).isEqualTo(0);
     assertThat(subForm.h3sss).hasSize(0);
     subForm.h2.shouldNot(exist);
     assertThat(subForm.h22.isDisplayed()).isFalse();
@@ -102,7 +102,7 @@ public class LazyPageObjectTest extends IntegrationTest {
     private ElementsCollection h3s;
 
     @FindBy(tagName = "h3")
-    private List<SelenideElement> h3ss;
+    private ElementsCollection h3ss;
 
     @FindBy(tagName = "h3")
     private List<WebElement> h3sss;

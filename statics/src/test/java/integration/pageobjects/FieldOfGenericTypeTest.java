@@ -1,5 +1,6 @@
 package integration.pageobjects;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import integration.IntegrationTest;
@@ -27,7 +28,7 @@ public class FieldOfGenericTypeTest extends IntegrationTest {
     assertThat(page).isInstanceOf(DummyPage.class);
     assertThat(page.body).isInstanceOf(DummyTypedElement.class);
     assertThat(page.body.names).isNull();
-    assertThat(page.body.selects).isInstanceOf(List.class);
+    assertThat(page.body.selects).isInstanceOf(ElementsCollection.class);
     assertThat(page.body.selects).hasSize(6);
     assertThat(page.body.getSelf()).isEqualTo($("body"));
     assertThat(page.body.selects.get(0)).isEqualTo($("select[name=domain]"));

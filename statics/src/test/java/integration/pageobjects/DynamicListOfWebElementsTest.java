@@ -1,14 +1,12 @@
 package integration.pageobjects;
 
 import com.codeborne.selenide.Container;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ex.ElementNotFound;
 import integration.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Configuration.timeout;
@@ -43,6 +41,6 @@ public class DynamicListOfWebElementsTest extends IntegrationTest {
 
   private static class DynamicContentContainer implements Container {
     @FindBy(css = "span")
-    List<WebElement> spans;
+    ElementsCollection spans;
   }
 }

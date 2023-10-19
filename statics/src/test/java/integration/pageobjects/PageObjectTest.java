@@ -76,8 +76,8 @@ final class PageObjectTest extends IntegrationTest {
   void canInjectListOfSelenideElements() {
     pageWithSelects.h1.shouldHave(Condition.text("Page with selects"));
 
-    assertThat(pageWithSelects.h2s)
-      .hasSize(4);
+    assertThat(pageWithSelects.h2s.size())
+      .isEqualTo(4);
     pageWithSelects.h2s.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
     pageWithSelects.h2s.get(1).shouldBe(visible).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
     pageWithSelects.h2s.get(2).shouldBe(visible).shouldHave(text("Radio buttons"));
@@ -168,7 +168,7 @@ final class PageObjectTest extends IntegrationTest {
     SelenideElement h1;
 
     @FindBy(tagName = "h2")
-    List<SelenideElement> h2s;
+    ElementsCollection h2s;
 
     @FindBy(tagName = "h2")
     List<WebElement> listOfWebElements;
