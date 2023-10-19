@@ -69,8 +69,8 @@ public final class AttributeTest extends ITest {
       .isEqualTo("@four.ee");
     assertThat($(byAttribute("id", "radioButtons")).getTagName())
       .isEqualTo("div");
-    assertThat($$(byAttribute("type", "radio")))
-      .hasSize(4);
+    assertThat($$(byAttribute("type", "radio")).size())
+      .isEqualTo(4);
     assertThat($(byAttribute("readonly", "readonly")).getAttribute("name"))
       .isEqualTo("username");
     assertThat($(byAttribute("http-equiv", "Content-Type")).getTagName())

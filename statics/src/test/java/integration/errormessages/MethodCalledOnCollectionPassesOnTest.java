@@ -43,8 +43,7 @@ final class MethodCalledOnCollectionPassesOnTest extends IntegrationTest {
   void actionWithoutWaiting_When$$Collection_WithNonExistentWebElements() {
     ElementsCollection collection = $$("ul .nonexistent");
 
-    assertThat(collection)
-      .isEmpty();
+    assertThat(collection.size()).isEqualTo(0);
         /*
             there is no exceptions - when collection.isEmpty();
         */
@@ -54,8 +53,7 @@ final class MethodCalledOnCollectionPassesOnTest extends IntegrationTest {
   void actionWithoutWaiting_WhenInnerCollection_WithNonExistentInnerWebElements() {
     ElementsCollection collection = $("ul").findAll(".nonexistent");
 
-    assertThat(collection)
-      .hasSize(0);
+    assertThat(collection.size()).isEqualTo(0);
         /*
             there is no exceptions - when collection.isEmpty();
         */

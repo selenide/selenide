@@ -1,12 +1,11 @@
 package integration.pageobjects;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import integration.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -26,14 +25,14 @@ final class PageObjectWithManuallyInitializedFieldsTest extends IntegrationTest 
     MyPage page = page(MyPage.class);
 
     page.h1.shouldHave(Condition.text("Page with selects"));
-    assertThat(page.h2s).hasSize(4);
+    assertThat(page.h2s.size()).isEqualTo(4);
     page.h2s.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
     page.h2First.shouldBe(visible).shouldHave(text("Dropdown list"));
   }
 
   private static class MyPage {
     SelenideElement h1 = $("h1");
-    List<SelenideElement> h2s = $$("h2");
+    ElementsCollection h2s = $$("h2");
     SelenideElement h2First = $$("h2").get(0);
   }
 }

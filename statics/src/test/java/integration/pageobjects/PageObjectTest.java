@@ -96,8 +96,8 @@ final class PageObjectTest extends IntegrationTest {
   void canInjectElementsCollection() {
     pageWithSelects.h1.shouldHave(Condition.text("Page with selects"));
 
-    assertThat(pageWithSelects.h2sElementsCollection)
-      .hasSize(4);
+    assertThat(pageWithSelects.h2sElementsCollection.size())
+      .isEqualTo(4);
     pageWithSelects.h2sElementsCollection.get(0)
       .shouldBe(visible)
       .shouldHave(text("Dropdown list"));

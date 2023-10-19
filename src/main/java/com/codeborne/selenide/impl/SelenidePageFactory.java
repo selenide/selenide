@@ -228,8 +228,7 @@ public class SelenidePageFactory implements PageObjectFactory {
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return decorateWebElement(driver, searchContext, selector, field, alias);
     }
-    if (ElementsCollection.class.isAssignableFrom(field.getType()) ||
-      isDecoratableList(field, genericTypes, WebElement.class)) {
+    if (ElementsCollection.class.isAssignableFrom(field.getType())) {
       return createElementsCollection(driver, searchContext, selector, field, alias);
     }
     else if (Container.class.isAssignableFrom(field.getType())) {

@@ -2,7 +2,6 @@ package integration.collections;
 
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.CollectionSource;
 import integration.ITest;
@@ -15,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static java.lang.System.lineSeparator;
@@ -62,7 +62,7 @@ final class CustomCollectionConditionTest extends ITest {
     @Override
     public CheckResult check(CollectionSource collection) {
       List<WebElement> elements = collection.getElements();
-      List<String> actualTexts = ElementsCollection.texts(elements);
+      List<String> actualTexts = elements.stream().map(WebElement::getText).collect(Collectors.toList());
       return new CheckResult(elements.stream()
         .map(webElement -> webElement.getText().startsWith(prefix))
         .reduce(true, (x, y) -> x && y), actualTexts);
