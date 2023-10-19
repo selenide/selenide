@@ -26,6 +26,7 @@ final class CollectionWithChangingTextsTest extends ITest {
   void snapshotDoesNotReloadElements() {
     Iterator<SelenideElement> it = $$("#collection li").snapshot()
       .shouldHave(size(3))
+      .asFixedIterable()
       .iterator();
     it.next().shouldHave(partialText("Item #1"));
     it.next().shouldHave(partialText("Item #2"));
@@ -35,7 +36,7 @@ final class CollectionWithChangingTextsTest extends ITest {
 
   @Test
   void iteratorReloadsCollectionOnEveryCall() {
-    Iterator<SelenideElement> it = $$("#collection li").iterator();
+    Iterator<SelenideElement> it = $$("#collection li").asFixedIterable().iterator();
     it.next().shouldHave(text("Item #1"));
     it.next().shouldHave(text("Item #2"));
     it.next().shouldHave(text("Item #3"));

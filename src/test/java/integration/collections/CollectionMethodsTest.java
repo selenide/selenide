@@ -65,11 +65,11 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void canUseSizeMethod() {
-    assertThat($$(By.name("domain"))).hasSize(1);
-    assertThat($$("#theHiddenElement")).hasSize(1);
-    assertThat($$("#radioButtons input")).hasSize(4);
-    assertThat($$(By.xpath("//select[@name='domain']/option"))).hasSize(4);
-    assertThat($$(By.name("non-existing-element"))).hasSize(0);
+    assertThat($$(By.name("domain")).size()).isEqualTo(1);
+    assertThat($$("#theHiddenElement").size()).isEqualTo(1);
+    assertThat($$("#radioButtons input").size()).isEqualTo(4);
+    assertThat($$(By.xpath("//select[@name='domain']/option")).size()).isEqualTo(4);
+    assertThat($$(By.name("non-existing-element")).size()).isEqualTo(0);
   }
 
   @Test
@@ -91,7 +91,7 @@ final class CollectionMethodsTest extends ITest {
       .shouldBe(sizeLessThan(1))
       .shouldBe(sizeLessThanOrEqual(0));
 
-    assertThat($$("not-existing-locator").last().$$("#multirowTable").isEmpty()).isTrue();
+    assertThat($$("not-existing-locator").last().$$("#multirowTable").size()).isEqualTo(0);
   }
 
   @Test
@@ -113,7 +113,7 @@ final class CollectionMethodsTest extends ITest {
 
       spans.shouldHave(size(2)); // appears after 2 seconds
 
-      assertThat(spans).hasSize(2);
+      assertThat(spans.size()).isEqualTo(2);
       assertThat(spans.texts()).isEqualTo(asList("dynamic content", "dynamic content2"));
     });
   }

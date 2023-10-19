@@ -13,7 +13,6 @@ import com.codeborne.selenide.impl.FilteringCollection;
 import com.codeborne.selenide.impl.HeadOfCollection;
 import com.codeborne.selenide.impl.LastCollectionElement;
 import com.codeborne.selenide.impl.SelenideElementIterator;
-import com.codeborne.selenide.impl.SelenideElementListIterator;
 import com.codeborne.selenide.impl.TailOfCollection;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 import com.codeborne.selenide.logevents.SelenideLog;
@@ -25,15 +24,10 @@ import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
-import java.util.AbstractList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -44,11 +38,9 @@ import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
-public class ElementsCollection extends AbstractList<SelenideElement> {
+public class ElementsCollection {
   private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
 
   private final CollectionSource collection;
@@ -136,6 +128,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   @Nonnull
+  @SuppressWarnings("ErrorNotRethrown")
   protected ElementsCollection should(String prefix, Duration timeout, CollectionCondition... conditions) {
     validateAssertionMode(driver().config());
 
@@ -150,12 +143,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     catch (Error error) {
       Error wrappedError = UIAssertionError.wrap(driver(), error, timeout.toMillis());
       SelenideLogger.commitStep(log, wrappedError);
-      switch (driver().config().assertionMode()) {
-        case SOFT:
-          return this;
-        default:
-          throw wrappedError;
-      }
+      return switch (driver().config().assertionMode()) {
+        case SOFT -> this;
+        default -> throw wrappedError;
+      };
     }
     catch (RuntimeException e) {
       SelenideLogger.commitStep(log, e);
@@ -163,6 +154,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     }
   }
 
+  @SuppressWarnings("ErrorNotRethrown")
   protected void waitUntil(CollectionCondition condition, Duration timeout) {
     Throwable lastError = null;
     CheckResult lastCheckResult = new CheckResult(REJECT, null);
@@ -310,31 +302,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Fail-safe method for retrieving texts of given elements.
-   *
-   * @param elements Any collection of WebElements
-   * @return Texts (or exceptions in case of any WebDriverExceptions)
-   * @deprecated Use method {@link ElementsCollection#texts()} instead (or even better, don't use it at all)
-   */
-  @CheckReturnValue
-  @Nonnull
-  @Deprecated
-  public static List<String> texts(@Nullable Collection<WebElement> elements) {
-    return elements == null ? emptyList() : elements.stream().map(ElementsCollection::getText).collect(toList());
-  }
-
-  @Deprecated
-  private static String getText(WebElement element) {
-    try {
-      return element.getText();
-    }
-    catch (WebDriverException elementDisappeared) {
-      return elementDisappeared.toString();
-    }
-  }
-
-
-  /**
    * Gets all the specific attribute values in elements collection
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * Instead of just getting attributes, we highly recommend to verify them with {@code $$.shouldHave(attributes(...));}.
@@ -346,30 +313,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Fail-safe method for retrieving specific attribute values of given elements.
-   *
-   * @param elements Any collection of WebElements
-   * @return Texts (or exceptions in case of any WebDriverExceptions)
-   * @deprecated Instead of getting attributes, verify them with {@code $$.shouldHave(attributes(...));}.
-   */
-  @CheckReturnValue
-  @Nonnull
-  @Deprecated
-  public static List<String> attributes(String attribute, Collection<WebElement> elements) {
-    return elements.stream().map(e -> getAttribute(e, attribute)).collect(toList());
-  }
-
-  @Deprecated
-  private static String getAttribute(WebElement element, String attribute) {
-    try {
-      return element.getAttribute(attribute);
-    }
-    catch (WebDriverException elementDisappeared) {
-      return elementDisappeared.toString();
-    }
-  }
-
-  /**
    * Gets the n-th element of collection (lazy evaluation)
    *
    * @param index 0..N
@@ -378,7 +321,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   @CheckReturnValue
   @Nonnull
-  @Override
   public SelenideElement get(int index) {
     return CollectionElement.wrap(collection, index);
   }
@@ -416,7 +358,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * returns the first n elements of the collection (lazy evaluation)
    *
-   * @param elements number of elements 1..N
+   * @param elements number of elements 1…N
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
@@ -428,7 +370,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * returns the last n elements of the collection (lazy evaluation)
    *
-   * @param elements number of elements 1..N
+   * @param elements number of elements 1…N
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
@@ -446,7 +388,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
-  @Override
   public int size() {
     try {
       return getElements().size();
@@ -454,129 +395,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     catch (IndexOutOfBoundsException outOfCollection) {
       return 0;
     }
-  }
-
-  /**
-   * Not recommended: As a rule, tests should not iterate collection elements.
-   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
-   *
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   *
-   * @deprecated Use either {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
-   */
-  @Override
-  @Deprecated
-  public Stream<SelenideElement> stream() {
-    return super.stream();
-  }
-
-  /**
-   * Not recommended: As a rule, tests should not iterate collection elements.
-   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
-   *
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   *
-   * @deprecated Use either {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
-   */
-  @Override
-  @Deprecated
-  public Stream<SelenideElement> parallelStream() {
-    return super.parallelStream();
-  }
-
-  /**
-   * Not recommended: As a rule, tests should not iterate collection elements.
-   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
-   *
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   *
-   * @deprecated Use either {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
-   */
-  @Override
-  @Deprecated
-  public void forEach(Consumer<? super SelenideElement> action) {
-    super.forEach(action);
-  }
-
-  /**
-   * Does not reload collection elements while iterating it.
-   *
-   * Not recommended: As a rule, tests should not iterate collection elements.
-   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
-   *
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   *
-   * @deprecated use method {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
-   */
-  @Override
-  @CheckReturnValue
-  @Nonnull
-  @Deprecated
-  public Iterator<SelenideElement> iterator() {
-    return asFixedIterable().iterator();
-  }
-
-  /**
-   * Does not reload collection elements while iterating it.
-   *
-   * Not recommended: As a rule, tests should not iterate collection elements.
-   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
-   *
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   *
-   * @deprecated use method {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
-   */
-  @Override
-  @CheckReturnValue
-  @Nonnull
-  @Deprecated
-  public ListIterator<SelenideElement> listIterator(int index) {
-    return new SelenideElementListIterator(new CollectionSnapshot(collection), index);
-  }
-
-  @Override
-  @CheckReturnValue
-  @Nonnull
-  @Deprecated
-  public ListIterator<SelenideElement> listIterator() {
-    return listIterator(0);
-  }
-
-  @Override
-  @Deprecated
-  protected void removeRange(int fromIndex, int toIndex) {
-    throw new UnsupportedOperationException("You cannot remove elements from web page");
-  }
-
-  @Override
-  @Deprecated
-  public void clear() {
-    throw new UnsupportedOperationException("You cannot remove elements from web page");
-  }
-
-  @Override
-  @CheckReturnValue
-  @Nonnull
-  @Deprecated
-  public List<SelenideElement> subList(int fromIndex, int toIndex) {
-    return super.subList(fromIndex, toIndex);
-  }
-
-  /**
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   * @deprecated use method {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
-   */
-  @Override
-  @CheckReturnValue
-  @Nonnull
-  @Deprecated
-  public Object[] toArray() {
-    List<WebElement> fetchedElements = collection.getElements();
-    Object[] result = new Object[fetchedElements.size()];
-    for (int i = 0; i < result.length; i++) {
-      result[i] = CollectionElement.wrap(collection, i);
-    }
-    return result;
   }
 
   /**
@@ -597,7 +415,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Returns a "static" {@link Iterable} which doesn't reload web elements during iteration.
    *
-   * It's faster than {@link #asDynamicIterable()} ()},
+   * It's faster than {@link #asDynamicIterable()}},
    * but can sometimes can cause {@link org.openqa.selenium.StaleElementReferenceException} etc.
    * if elements are re-rendered during the iteration.
    *
@@ -653,6 +471,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return collection.driver();
   }
 
+  @FunctionalInterface
   public interface SelenideElementIterable extends Iterable<SelenideElement> {
     default Stream<SelenideElement> stream() {
       return StreamSupport.stream(spliterator(), false);

@@ -2,17 +2,14 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.SelenideElementIterator;
-import com.codeborne.selenide.impl.SelenideElementListIterator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptException;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
@@ -91,7 +88,7 @@ final class ElementsCollectionTest {
   void filter() {
     ElementsCollection filteredCollection = collection("Hello", "Mark").filter(text("Hello"));
 
-    assertThat(filteredCollection).hasSize(1);
+    assertThat(filteredCollection.size()).isEqualTo(1);
     assertThat(filteredCollection.get(0).getText()).isEqualTo("Hello");
   }
 
@@ -99,7 +96,7 @@ final class ElementsCollectionTest {
   void filterBy() {
     ElementsCollection filteredCollection = collection("Hello", "Mark").filterBy(text("Hello"));
 
-    assertThat(filteredCollection).hasSize(1);
+    assertThat(filteredCollection.size()).isEqualTo(1);
     assertThat(filteredCollection.get(0).getText()).isEqualTo("Hello");
   }
 
@@ -107,7 +104,7 @@ final class ElementsCollectionTest {
   void exclude() {
     ElementsCollection filteredCollection = collection("Hello", "Mark").exclude(text("Mark"));
 
-    assertThat(filteredCollection).hasSize(1);
+    assertThat(filteredCollection.size()).isEqualTo(1);
     assertThat(filteredCollection.get(0).getText()).isEqualTo("Hello");
   }
 
@@ -115,7 +112,7 @@ final class ElementsCollectionTest {
   void excludeWith() {
     ElementsCollection filteredCollection = collection("Hello", "Mark").excludeWith(text("Mark"));
 
-    assertThat(filteredCollection).hasSize(1);
+    assertThat(filteredCollection.size()).isEqualTo(1);
     assertThat(filteredCollection.get(0).getText()).isEqualTo("Hello");
   }
 
@@ -149,25 +146,6 @@ final class ElementsCollectionTest {
   }
 
   @Test
-  void staticGetTexts() {
-    List<WebElement> collection = asList(mockWebElement("div", "Hello"), mockWebElement("div", "Mark"));
-    List<String> elementsTexts = ElementsCollection.texts(collection);
-    assertThat(elementsTexts).containsExactly("Hello", "Mark");
-  }
-
-  @Test
-  void staticGetTextsWithWebDriverException() {
-    doThrow(new WebDriverException("Failed to fetch elements")).when(element1).getText();
-    when(element2.getText()).thenReturn("Mark");
-
-    List<String> actualTexts = ElementsCollection.texts(asList(element1, element2));
-
-    assertThat(actualTexts).hasSize(2);
-    assertThat(actualTexts.get(0)).startsWith("org.openqa.selenium.WebDriverException: Failed to fetch elements");
-    assertThat(actualTexts.get(1)).isEqualTo("Mark");
-  }
-
-  @Test
   void firstMethod() {
     assertThat(collection("Hello", "Mark").first().getText()).isEqualTo("Hello");
   }
@@ -176,11 +154,10 @@ final class ElementsCollectionTest {
   void firstNElementsMethod() {
     ElementsCollection collection = collection("Hello", "Mark", "Twen");
     ElementsCollection firstTwoElements = collection.first(2);
-    assertThat(firstTwoElements)
-      .hasSize(2);
-    assertThat(firstTwoElements)
-      .extracting(SelenideElement::getText)
-      .contains("Hello", "Mark");
+    assertThat(firstTwoElements.texts()).isEqualTo(List.of("Hello", "Mark"));
+    assertThat(firstTwoElements.size()).isEqualTo(2);
+    assertThat(firstTwoElements.get(0).getText()).isEqualTo("Hello");
+    assertThat(firstTwoElements.get(1).getText()).isEqualTo("Mark");
   }
 
   @Test
@@ -192,11 +169,7 @@ final class ElementsCollectionTest {
   void lastNElementsMethod() {
     ElementsCollection collection = collection("Hello", "Mark", "Twen");
     ElementsCollection firstTwoElements = collection.last(2);
-    assertThat(firstTwoElements)
-      .hasSize(2);
-    assertThat(firstTwoElements)
-      .extracting(SelenideElement::getText)
-      .contains("Mark", "Twen");
+    assertThat(firstTwoElements.texts()).isEqualTo(List.of("Mark", "Twen"));
   }
 
   @Test
@@ -205,22 +178,10 @@ final class ElementsCollectionTest {
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
-    Iterator<SelenideElement> iterator = new ElementsCollection(source).iterator();
+    Iterator<SelenideElement> iterator = new ElementsCollection(source).asFixedIterable().iterator();
     assertThat(iterator).isNotNull();
     assertThat(iterator).isInstanceOf(SelenideElementIterator.class);
     assertThat(iterator.hasNext()).isTrue();
-  }
-
-  @Test
-  void iteratorListMethod() {
-    when(source.getElements()).thenReturn(asList(element1, element2, element3));
-    when(element1.getText()).thenReturn("Hello");
-    when(element2.getText()).thenReturn("Mark");
-    when(element3.getText()).thenReturn("Twen");
-    ListIterator<SelenideElement> iteratorList = new ElementsCollection(source).listIterator(1);
-    assertThat(iteratorList).isNotNull();
-    assertThat(iteratorList).isInstanceOf(SelenideElementListIterator.class);
-    assertThat(iteratorList.hasNext()).isTrue();
   }
 
   @Test
@@ -257,12 +218,6 @@ final class ElementsCollectionTest {
 
     collection.shouldHave(size(3));
     verify(collection, times(2)).sleep(anyLong());
-  }
-
-  @Test
-  void toArray() {
-    when(source.getElements()).thenReturn(asList(element1, element2));
-    assertThat(new ElementsCollection(source).toArray()).hasOnlyElementsOfType(SelenideElement.class);
   }
 
   private static ElementsCollection collection(String firstText, String secondText) {

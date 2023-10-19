@@ -381,7 +381,7 @@ public class SelenideDriver {
   @CheckReturnValue
   @Nullable
   public SelenideElement getSelectedRadio(By radioField) {
-    for (WebElement radio : $$(radioField)) {
+    for (WebElement radio : $$(radioField).asFixedIterable()) {
       if (radio.getAttribute("checked") != null) {
         return $(radio);
       }

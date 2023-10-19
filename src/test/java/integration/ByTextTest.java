@@ -65,10 +65,10 @@ final class ByTextTest extends ITest {
 
   @Test
   void canFindElementByTextInsideParentElement() {
-    assertThat($("#multirowTable").findAll(byText("Chack")))
-      .hasSize(2);
-    assertThat($("#multirowTable tr").findAll(byText("Chack")))
-      .hasSize(1);
+    assertThat($("#multirowTable").findAll(byText("Chack")).size())
+      .isEqualTo(2);
+    assertThat($("#multirowTable tr").findAll(byText("Chack")).size())
+      .isEqualTo(1);
     assertThat($("#multirowTable tr").find(byText("Chack")).getAttribute("class"))
       .isEqualTo("first_row");
   }

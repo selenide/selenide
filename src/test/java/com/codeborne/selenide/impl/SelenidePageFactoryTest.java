@@ -45,17 +45,6 @@ final class SelenidePageFactoryTest {
 
   @Test
   void decoratesElementsCollection() throws NoSuchFieldException {
-    TestPageWithElementsCollection page = new TestPageWithElementsCollection();
-
-    Object decoratedField = pageFactory.decorate(cl, driver, null,
-      getField(page, "rows"), By.cssSelector("table tbody tr"));
-
-    assertThat(decoratedField).isInstanceOf(ElementsCollection.class);
-    verifyNoMoreInteractions(webDriver);
-  }
-
-  @Test
-  void decoratesListOfSelenideElements() throws NoSuchFieldException {
     WebElement element1 = mock();
     WebElement element2 = mock();
     when(webDriver.findElements(any(By.class))).thenReturn(asList(element1, element2));
@@ -65,11 +54,10 @@ final class SelenidePageFactoryTest {
     verifyNoMoreInteractions(webDriver);
 
     ElementsCollection elementsCollection = (ElementsCollection) decoratedField;
-    Object[] elements = elementsCollection.toArray();
-    assertThat(elements).hasSize(2);
+    assertThat(elementsCollection.size()).isEqualTo(2);
     verify(webDriver).findElements(By.cssSelector("table tbody tr"));
-    assertThat(elements[0]).isInstanceOf(SelenideElement.class);
-    assertThat(elements[0]).isInstanceOf(SelenideElement.class);
+    assertThat(elementsCollection.get(0)).isInstanceOf(SelenideElement.class);
+    assertThat(elementsCollection.get(1)).isInstanceOf(SelenideElement.class);
   }
 
   @Test
@@ -93,8 +81,7 @@ final class SelenidePageFactoryTest {
 
     assertThat(elements).hasSize(2);
     verify(webDriver).findElements(By.cssSelector("table tbody tr"));
-    assertThat(elements.get(0)).isInstanceOf(SelenideElement.class);
-    assertThat(elements.get(1)).isInstanceOf(SelenideElement.class);
+    assertThat(elements).containsExactly(element1, element2);
   }
 
   @Test
@@ -180,7 +167,7 @@ final class SelenidePageFactoryTest {
   static class TestPage {
     SelenideElement username;
     @FindBy(css = "table tbody tr")
-    List<SelenideElement> rows;
+    ElementsCollection rows;
 
     WebElement someDiv;
 
@@ -201,11 +188,5 @@ final class SelenidePageFactoryTest {
 
     @FindBy(className = "name")
     SelenideElement name;
-  }
-
-  @SuppressWarnings("unused")
-  static class TestPageWithElementsCollection {
-    @FindBy(css = "table tbody tr")
-    ElementsCollection rows;
   }
 }
