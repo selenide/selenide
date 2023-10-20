@@ -12,7 +12,6 @@ public final class TextReportTest {
   @Test
   void classesMarkedWith_TextReport_shouldGeneratedReport() {
     assertTrue(listener.isClassAnnotatedWithReport(BaseTestWithTextReport.class));
-    assertTrue(listener.isClassAnnotatedWithReport(BaseTestWithGlobalTextReport.class));
     assertTrue(listener.isClassAnnotatedWithReport(TestWithCustomTextReport.class));
   }
 
@@ -25,11 +24,6 @@ public final class TextReportTest {
   void allChildrenClassesInherit_TextReport() {
     assertTrue(listener.isClassAnnotatedWithReport(SomeTestWithTextReport.class));
     assertTrue(listener.isClassAnnotatedWithReport(TestWithOwnListeners.class));
-  }
-
-  @Test
-  void allChildrenClassesInherit_GlobalTextReport() {
-    assertTrue(listener.isClassAnnotatedWithReport(SomeTestWithGlobalTextReport.class));
   }
 
   @Listeners(TextReport.class)
@@ -45,13 +39,6 @@ public final class TextReportTest {
 
   @Listeners(CustomTextReport.class)
   private abstract static class TestWithCustomTextReport {
-  }
-
-  @Listeners(GlobalTextReport.class)
-  private abstract static class BaseTestWithGlobalTextReport {
-  }
-
-  private abstract static class SomeTestWithGlobalTextReport extends BaseTestWithGlobalTextReport {
   }
 
   private abstract static class AnotherTestWithoutTextReport {

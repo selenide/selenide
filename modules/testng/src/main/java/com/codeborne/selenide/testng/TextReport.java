@@ -66,6 +66,6 @@ public class TextReport implements IInvokedMethodListener {
   }
 
   private boolean isTextReportListener(Class<? extends ITestNGListener> listener) {
-    return TextReport.class.isAssignableFrom(listener) || GlobalTextReport.class.isAssignableFrom(listener);
+    return TextReport.class.isAssignableFrom(listener);
   }
 }
