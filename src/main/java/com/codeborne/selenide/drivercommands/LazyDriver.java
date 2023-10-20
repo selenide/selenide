@@ -9,7 +9,6 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,6 @@ import static java.lang.Thread.currentThread;
  */
 @ParametersAreNonnullByDefault
 @NotThreadSafe
-@SuppressWarnings("deprecation")
 public class LazyDriver implements Driver {
   private static final Logger log = LoggerFactory.getLogger(LazyDriver.class);
 
@@ -41,7 +39,6 @@ public class LazyDriver implements Driver {
   private final WebDriverFactory factory;
   private final CreateDriverCommand createDriverCommand;
   private final Proxy userProvidedProxy;
-  private final List<WebDriverEventListener> eventListeners;
   private final List<WebDriverListener> listeners;
   private final Browser browser;
 
@@ -50,20 +47,17 @@ public class LazyDriver implements Driver {
   @Nullable
   private WebDriverInstance wd;
 
-  public LazyDriver(Config config, @Nullable Proxy userProvidedProxy,
-                    List<WebDriverEventListener> eventListeners, List<WebDriverListener> listeners) {
-    this(config, userProvidedProxy, eventListeners, listeners, new WebDriverFactory(), new BrowserHealthChecker(),
+  public LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverListener> listeners) {
+    this(config, userProvidedProxy, listeners, new WebDriverFactory(), new BrowserHealthChecker(),
       new CreateDriverCommand());
   }
 
-  LazyDriver(Config config, @Nullable Proxy userProvidedProxy,
-             List<WebDriverEventListener> eventListeners, List<WebDriverListener> listeners,
+  LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverListener> listeners,
              WebDriverFactory factory, BrowserHealthChecker browserHealthChecker,
              CreateDriverCommand createDriverCommand) {
     this.config = config;
     this.browser = new Browser(config.browser(), config.headless());
     this.userProvidedProxy = userProvidedProxy;
-    this.eventListeners = new ArrayList<>(eventListeners);
     this.listeners = new ArrayList<>(listeners);
     this.factory = factory;
     this.browserHealthChecker = browserHealthChecker;
@@ -142,7 +136,7 @@ public class LazyDriver implements Driver {
   }
 
   void createDriver() {
-    this.wd = createDriverCommand.createDriver(config, factory, userProvidedProxy, eventListeners, listeners);
+    this.wd = createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
     this.closed = false;
   }
 

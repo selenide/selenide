@@ -8,14 +8,11 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 import org.openqa.selenium.support.events.EventFiringDecorator;
-import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.net.MalformedURLException;
@@ -29,20 +26,11 @@ public abstract class AndroidDriverProvider implements WebDriverProvider {
     options.setApp(getApplicationUnderTest().getAbsolutePath());
     try {
       AndroidDriver androidDriver = new AndroidDriver(url(), options);
-      return addOldSchoolListener(addListener(androidDriver));
+      return addListener(androidDriver);
     } catch (SessionNotCreatedException e) {
       AndroidDriver androidDriver = new AndroidDriver(url(), options);
-      return addOldSchoolListener(addListener(androidDriver));
+      return addListener(androidDriver);
     }
-  }
-
-  @Nonnull
-  @CheckReturnValue
-  @SuppressWarnings("deprecation")
-  private WebDriver addOldSchoolListener(WebDriver webDriver) {
-    EventFiringWebDriver eventFiringWebDriver = new EventFiringWebDriver(webDriver);
-    eventFiringWebDriver.register(new OldSchoolListener());
-    return eventFiringWebDriver;
   }
 
   private WebDriver addListener(WebDriver webDriver) {
@@ -65,16 +53,6 @@ public abstract class AndroidDriverProvider implements WebDriverProvider {
       return new URL("http://127.0.0.1:4723/");
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
-    }
-  }
-
-  @SuppressWarnings("deprecation")
-  private static class OldSchoolListener extends AbstractWebDriverEventListener {
-    private static final Logger log = LoggerFactory.getLogger(OldSchoolListener.class);
-
-    @Override
-    public void beforeClickOn(WebElement element, WebDriver driver) {
-      log.info("before click {}", element);
     }
   }
 

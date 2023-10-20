@@ -14,7 +14,6 @@ public abstract class BaseSwagLabsAndroidTest extends ITTest {
   private static final EmptyListener listener = new EmptyListener();
 
   @BeforeAll
-  @SuppressWarnings("deprecation")
   public static void setup() {
     closeWebDriver();
     Configuration.browser = AndroidDriverWithSwagLabs.class.getName();
