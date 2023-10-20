@@ -15,6 +15,8 @@ import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
+import org.openqa.selenium.support.pagefactory.ElementLocator;
+import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import javax.annotation.CheckReturnValue;
@@ -237,8 +239,19 @@ public class SelenidePageFactory implements PageObjectFactory {
     else if (isDecoratableList(field, genericTypes, Container.class)) {
       return createElementsContainerList(driver, searchContext, field, genericTypes, selector);
     }
+    else if (isDecoratableList(field, genericTypes, WebElement.class)) {
+      return createWebElementsList(loader, driver, searchContext, field);
+    }
 
     return defaultFieldDecorator(driver, searchContext).decorate(loader, field);
+  }
+
+  private List<WebElement> createWebElementsList(ClassLoader loader, Driver driver, @Nullable WebElementSource searchContext,
+                                                 Field field) {
+    ElementLocatorFactory factory = fieldLocatorFactory(driver, searchContext);
+    ElementLocator locator = factory.createLocator(field);
+    SelenideFieldDecorator decorator = new SelenideFieldDecorator(factory);
+    return decorator.proxyForListLocator(loader, locator);
   }
 
   @Nonnull
@@ -277,8 +290,13 @@ public class SelenidePageFactory implements PageObjectFactory {
   @CheckReturnValue
   @Nonnull
   protected DefaultFieldDecorator defaultFieldDecorator(Driver driver, @Nullable WebElementSource searchContext) {
+    return new DefaultFieldDecorator(fieldLocatorFactory(driver, searchContext));
+  }
+
+  @Nonnull
+  private DefaultElementLocatorFactory fieldLocatorFactory(Driver driver, @Nullable WebElementSource searchContext) {
     SearchContext context = searchContext == null ? driver.getWebDriver() : searchContext.getWebElement();
-    return new DefaultFieldDecorator(new DefaultElementLocatorFactory(context));
+    return new DefaultElementLocatorFactory(context);
   }
 
   @CheckReturnValue
@@ -304,8 +322,11 @@ public class SelenidePageFactory implements PageObjectFactory {
 
     Class<?> listType = getListGenericType(field, genericTypes);
 
-    return listType != null && type.isAssignableFrom(listType)
-      && (field.getAnnotation(FindBy.class) != null || field.getAnnotation(FindBys.class) != null);
+    return listType != null && type.isAssignableFrom(listType) && annotatedWithFindBy(field);
+  }
+
+  private boolean annotatedWithFindBy(Field field) {
+    return field.getAnnotation(FindBy.class) != null || field.getAnnotation(FindBys.class) != null;
   }
 
   @CheckReturnValue
