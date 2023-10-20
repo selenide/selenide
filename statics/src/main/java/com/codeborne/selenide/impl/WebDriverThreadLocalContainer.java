@@ -100,11 +100,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   /**
    * Remove links to webdriver/proxy, but DON'T CLOSE the webdriver/proxy itself.
-   * @deprecated Use method {@link #using(WebDriver, SelenideProxyServer, DownloadsFolder, Runnable)} instead.
    */
-  @Deprecated
-  @Override
-  public void resetWebDriver() {
+  private void resetWebDriver() {
     threadWebDriver.remove(currentThread().getId());
   }
 

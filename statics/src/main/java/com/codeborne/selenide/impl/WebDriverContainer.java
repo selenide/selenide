@@ -19,12 +19,6 @@ public interface WebDriverContainer {
   void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy);
   void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder);
 
-  /**
-   * @deprecated This method is intended only for private usage.
-   * Use method {@link #using(WebDriver, SelenideProxyServer, DownloadsFolder, Runnable)} instead.
-   */
-  @Deprecated
-  void resetWebDriver();
 
   @CheckReturnValue
   @Nonnull
