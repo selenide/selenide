@@ -63,15 +63,6 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     return pageSource;
   }
 
-  /**
-   * @deprecated use method {#{@link #createFile(Config, WebDriver, String)}} instead
-   */
-  @Nonnull
-  @Deprecated
-  protected File createFile(Config config, String fileName) {
-    return new File(config.reportsFolder(), fileName + ".html").getAbsoluteFile();
-  }
-
   @Nonnull
   protected File createFile(Config config, WebDriver driver, String fileName) {
     return new File(config.reportsFolder(), fileName + ".html").getAbsoluteFile();
@@ -92,7 +83,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
       printedErrors.add(action);
     }
     else {
-      log.error("Failed to {}: {}", action, error);
+      log.error("Failed to {}: {}", action, error.toString());
     }
   }
 
