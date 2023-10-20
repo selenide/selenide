@@ -6,7 +6,6 @@ import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.openqa.selenium.support.events.WebDriverListener;
 
 import javax.annotation.CheckReturnValue;
@@ -24,22 +23,6 @@ import static com.codeborne.selenide.Configuration.headless;
 public class WebDriverRunner {
   public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
   private static final SelenideDriver staticSelenideDriver = new ThreadLocalSelenideDriver();
-
-  /**
-   * @deprecated Use {@link #addListener(WebDriverListener)} instead
-   */
-  @Deprecated
-  public static void addListener(WebDriverEventListener listener) {
-    webdriverContainer.addListener(listener);
-  }
-
-  /**
-   * @deprecated Use {@link #removeListener(WebDriverListener)} instead
-   */
-  @Deprecated
-  public static void removeListener(WebDriverEventListener listener) {
-    webdriverContainer.removeListener(listener);
-  }
 
   /**
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.

@@ -3,7 +3,6 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.testng.SoftAsserts;
-import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
@@ -26,8 +25,6 @@ public class TestNgSoftTest extends BaseTest {
     public void beforeAnyCall(Object target, Method method, Object[] args) {
     }
   };
-  private final AbstractWebDriverEventListener listener2 = new AbstractWebDriverEventListener() {
-  };
 
   @Override
   @BeforeSuite
@@ -36,7 +33,6 @@ public class TestNgSoftTest extends BaseTest {
     SoftAsserts.fullStacktraces = false;
     closeWebDriver();
     WebDriverRunner.addListener(listener1);
-    WebDriverRunner.addListener(listener2);
   }
 
   @BeforeMethod
@@ -47,7 +43,6 @@ public class TestNgSoftTest extends BaseTest {
   @AfterClass
   public void afterClass() {
     WebDriverRunner.removeListener(listener1);
-    WebDriverRunner.removeListener(listener2);
     closeWebDriver();
   }
 

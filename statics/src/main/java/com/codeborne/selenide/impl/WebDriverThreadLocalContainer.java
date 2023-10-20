@@ -10,7 +10,6 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +30,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static java.lang.Thread.currentThread;
 
-@SuppressWarnings("deprecation")
 @ParametersAreNonnullByDefault
 public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private static final Logger log = LoggerFactory.getLogger(WebDriverThreadLocalContainer.class);
 
-  private final List<WebDriverEventListener> eventListeners = new ArrayList<>();
   private final List<WebDriverListener> listeners = new ArrayList<>();
   final Collection<Thread> allWebDriverThreads = new ConcurrentLinkedQueue<>();
   final Map<Long, WebDriverInstance> threadWebDriver = new ConcurrentHashMap<>(4);
@@ -60,18 +57,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   @Override
-  public void addListener(WebDriverEventListener listener) {
-    eventListeners.add(listener);
-  }
-
-  @Override
   public void addListener(WebDriverListener listener) {
     listeners.add(listener);
-  }
-
-  @Override
-  public void removeListener(WebDriverEventListener listener) {
-    eventListeners.remove(listener);
   }
 
   @Override
@@ -202,7 +189,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @CheckReturnValue
   @Nonnull
   private WebDriverInstance createDriver() {
-    return createDriverCommand.createDriver(config, factory, userProvidedProxy, eventListeners, listeners);
+    return createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
   }
 
   @Override

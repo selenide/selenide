@@ -16,7 +16,6 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.SessionId;
-import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.openqa.selenium.support.events.WebDriverListener;
 
 import javax.annotation.CheckReturnValue;
@@ -49,22 +48,14 @@ public class SelenideDriver {
   private final Driver driver;
 
   public SelenideDriver(Config config) {
-    this(config, emptyList(), emptyList());
-  }
-
-  /**
-   * @deprecated Class {@link WebDriverEventListener} is deprecated since Selenium 4.0.0
-   */
-  @Deprecated
-  public SelenideDriver(Config config, List<WebDriverEventListener> eventListeners) {
-    this(config, eventListeners, emptyList());
+    this(config, emptyList());
   }
 
   /**
    * @since 6.0.0
    */
-  public SelenideDriver(Config config, List<WebDriverEventListener> eventListeners, List<WebDriverListener> listeners) {
-    this(config, new LazyDriver(config, null, eventListeners, listeners));
+  public SelenideDriver(Config config, List<WebDriverListener> listeners) {
+    this(config, new LazyDriver(config, null, listeners));
   }
 
   public SelenideDriver(Config config, Driver driver) {
@@ -515,7 +506,7 @@ public class SelenideDriver {
   }
 
   public Conditional<WebDriver> webdriver() {
-    return new Conditional<WebDriver>() {
+    return new Conditional<>() {
       @Nonnull
       @Override
       public Driver driver() {

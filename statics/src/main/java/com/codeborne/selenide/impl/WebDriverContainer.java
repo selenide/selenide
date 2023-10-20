@@ -4,7 +4,6 @@ import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.openqa.selenium.support.events.WebDriverListener;
 
 import javax.annotation.CheckReturnValue;
@@ -14,9 +13,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public interface WebDriverContainer {
-  void addListener(WebDriverEventListener listener);
   void addListener(WebDriverListener listener);
-  void removeListener(WebDriverEventListener listener);
   void removeListener(WebDriverListener listener);
   void setWebDriver(WebDriver webDriver);
   void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy);

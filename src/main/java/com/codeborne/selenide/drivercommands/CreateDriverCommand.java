@@ -13,8 +13,6 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.net.HostIdentifier;
 import org.openqa.selenium.support.events.EventFiringDecorator;
-import org.openqa.selenium.support.events.EventFiringWebDriver;
-import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +27,6 @@ import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static com.codeborne.selenide.logevents.SelenideLogger.getReadableSubject;
 import static java.lang.Thread.currentThread;
 
-@SuppressWarnings("deprecation")
 @ParametersAreNonnullByDefault
 public class CreateDriverCommand {
   private static final Logger log = LoggerFactory.getLogger(CreateDriverCommand.class);
@@ -47,7 +44,6 @@ public class CreateDriverCommand {
   public WebDriverInstance createDriver(Config config,
                                         WebDriverFactory factory,
                                         @Nullable Proxy userProvidedProxy,
-                                        List<WebDriverEventListener> eventListeners,
                                         List<WebDriverListener> listeners) {
     return SelenideLogger.get("webdriver", getReadableSubject("create"), () -> {
       log.debug("Creating webdriver in thread {} (ip: {}, host: {})...",
@@ -78,7 +74,7 @@ public class CreateDriverCommand {
       log.info("Created webdriver in thread {}: {} -> {}",
         currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
 
-      WebDriver webDriver = addListeners(webdriver, eventListeners, listeners);
+      WebDriver webDriver = addListeners(webdriver, listeners);
       WebDriverInstance result = new WebDriverInstance(config, webDriver, selenideProxyServer, downloadsFolder);
       WebdriversRegistry.register(result);
       return result;
@@ -86,36 +82,13 @@ public class CreateDriverCommand {
   }
 
   @Nonnull
-  private WebDriver addListeners(WebDriver webdriver,
-                                 List<WebDriverEventListener> eventListeners,
-                                 List<WebDriverListener> listeners) {
-    return addWebDriverListeners(
-      addEventListeners(webdriver, eventListeners),
-      listeners
-    );
-  }
-
-  @Nonnull
-  private WebDriver addEventListeners(WebDriver webdriver, List<WebDriverEventListener> eventListeners) {
-    if (eventListeners.isEmpty()) {
-      return webdriver;
-    }
-    EventFiringWebDriver wrapper = new EventFiringWebDriver(webdriver);
-    for (WebDriverEventListener listener : eventListeners) {
-      log.info("Add listener to webdriver: {}", listener);
-      wrapper.register(listener);
-    }
-    return wrapper;
-  }
-
-  @Nonnull
-  private WebDriver addWebDriverListeners(WebDriver webdriver, List<WebDriverListener> listeners) {
+  private WebDriver addListeners(WebDriver webdriver, List<WebDriverListener> listeners) {
     if (listeners.isEmpty()) {
       return webdriver;
     }
 
     log.info("Add listeners to webdriver: {}", listeners);
-    EventFiringDecorator<WebDriver> wrapper = new EventFiringDecorator<>(listeners.toArray(new WebDriverListener[]{}));
+    EventFiringDecorator<WebDriver> wrapper = new EventFiringDecorator<>(listeners.toArray(new WebDriverListener[0]));
     return wrapper.decorate(webdriver);
   }
 }

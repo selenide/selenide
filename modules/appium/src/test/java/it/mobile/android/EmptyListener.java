@@ -1,7 +1,6 @@
 package it.mobile.android;
 
-import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
+import org.openqa.selenium.support.events.WebDriverListener;
 
-@SuppressWarnings("deprecation")
-class EmptyListener extends AbstractWebDriverEventListener {
+class EmptyListener implements WebDriverListener {
 }

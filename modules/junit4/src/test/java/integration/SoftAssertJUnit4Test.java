@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 import org.openqa.selenium.support.events.WebDriverListener;
 
 import java.lang.reflect.Method;
@@ -34,14 +33,11 @@ public class SoftAssertJUnit4Test extends IntegrationTest {
     public void beforeAnyCall(Object target, Method method, Object[] args) {
     }
   };
-  private static final AbstractWebDriverEventListener listener2 = new AbstractWebDriverEventListener() {
-  };
 
   @BeforeClass
   public static void beforeClass() {
     closeWebDriver();
     WebDriverRunner.addListener(listener1);
-    WebDriverRunner.addListener(listener2);
   }
 
   @Before
@@ -77,7 +73,6 @@ public class SoftAssertJUnit4Test extends IntegrationTest {
     $("#soft-assert-logout").shouldNot(exist);
 
     WebDriverRunner.removeListener(listener1);
-    WebDriverRunner.removeListener(listener2);
     closeWebDriver();
   }
 }

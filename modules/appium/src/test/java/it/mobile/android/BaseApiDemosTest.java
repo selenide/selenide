@@ -15,7 +15,6 @@ public abstract class BaseApiDemosTest extends ITTest {
   private static final EmptyListener listener = new EmptyListener();
 
   @BeforeAll
-  @SuppressWarnings("deprecation")
   public static void setupMobileWebdriver() {
     closeWebDriver();
     WebDriverRunner.removeListener(listener);
