@@ -11,7 +11,6 @@ import static com.codeborne.selenide.Condition.allOf;
 import static com.codeborne.selenide.Condition.and;
 import static com.codeborne.selenide.Condition.anyOf;
 import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.checked;
@@ -325,13 +324,6 @@ final class ConditionsTest extends ITest {
   @Test
   void appear_errorMessage() {
     assertThatThrownBy(() -> $("#theHiddenElement").should(appear))
-      .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be visible {#theHiddenElement}");
-  }
-
-  @Test
-  void appears_errorMessage() {
-    assertThatThrownBy(() -> $("#theHiddenElement").should(appears))
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("Element should be visible {#theHiddenElement}");
   }
