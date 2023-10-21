@@ -11,7 +11,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.ACTIONS;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.JS;
-import static com.codeborne.selenide.DragAndDropOptions.DragAndDropTarget.Deprecated.DEPRECATED;
 
 @ParametersAreNonnullByDefault
 public class DragAndDropOptions {
@@ -47,26 +46,6 @@ public class DragAndDropOptions {
     return new DragAndDropOptions(target, ACTIONS);
   }
 
-  /**
-   * @deprecated use {@link DragAndDropOptions#to(WebElement)}.{@link DragAndDropOptions#usingJS()} instead
-   */
-  @CheckReturnValue
-  @Nonnull
-  @Deprecated
-  public static DragAndDropOptions usingJavaScript() {
-    return new DragAndDropOptions(DEPRECATED, JS);
-  }
-
-  /**
-   * @deprecated use {@link DragAndDropOptions#to(WebElement)}.{@link DragAndDropOptions#usingSeleniumActions()} instead
-   */
-  @CheckReturnValue
-  @Nonnull
-  @Deprecated
-  public static DragAndDropOptions usingActions() {
-    return new DragAndDropOptions(DEPRECATED, ACTIONS);
-  }
-
   @CheckReturnValue
   @Nonnull
   public DragAndDropMethod getMethod() {
@@ -92,6 +71,7 @@ public class DragAndDropOptions {
     JS
   }
 
+  @FunctionalInterface
   public interface DragAndDropTarget {
 
     SelenideElement toSelenideElement(Driver driver);
@@ -134,8 +114,6 @@ public class DragAndDropOptions {
 
     // Remove after all deprecated methods are gone
     class Deprecated implements DragAndDropTarget {
-
-      public static final Deprecated DEPRECATED = new Deprecated();
 
       @Override
       public SelenideElement toSelenideElement(Driver driver) {
