@@ -139,12 +139,6 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @CheckReturnValue
-  @Deprecated
-  protected boolean isInitialized(Object page, Field field) {
-    return getFieldValue(page, field) != null;
-  }
-
-  @CheckReturnValue
   @Nullable
   protected Object getFieldValue(Object page, Field field) {
     try {
