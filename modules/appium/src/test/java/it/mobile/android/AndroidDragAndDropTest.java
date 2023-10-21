@@ -30,7 +30,7 @@ class AndroidDragAndDropTest extends BaseApiDemosTest {
     $(dragText).shouldHave(exactText(""));
     $$(dragText).shouldHave(exactTexts(""));
 
-    from.dragAndDropTo(to);
+    from.dragAndDrop(to(to));
 
     $(dragText)
         .shouldBe(visible)

@@ -1402,53 +1402,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement hover(HoverOptions options);
 
   /**
-   * Drag and drop this element to the target<p>
-   *
-   * Before dropping, waits until target element gets visible.
-   *
-   * @param targetCssSelector CSS selector defining target element
-   * @return this element
-   * @see com.codeborne.selenide.commands.DragAndDropTo
-   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  @Deprecated
-  SelenideElement dragAndDropTo(String targetCssSelector);
-
-  /**
-   * Drag and drop this element to the target<p>
-   *
-   * Before dropping, waits until target element gets visible.
-   *
-   * @param target target element
-   * @return this element
-   * @see com.codeborne.selenide.commands.DragAndDropTo
-   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  @Deprecated
-  SelenideElement dragAndDropTo(WebElement target);
-
-  /**
-   * Drag and drop this element to the target<p>
-   *
-   * Before dropping, waits until target element gets visible.
-   *
-   * @param targetCssSelector target css selector
-   * @param options drag and drop options to define which way it will be executed
-   *
-   * @return this element
-   * @see com.codeborne.selenide.commands.DragAndDropTo
-   * @deprecated Use {@link SelenideElement#dragAndDrop(DragAndDropOptions)} instead
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  @Deprecated
-  SelenideElement dragAndDropTo(String targetCssSelector, DragAndDropOptions options);
-
-  /**
    * Drag and drop this element to the target
    * <br>
    * Before dropping, waits until target element gets visible.
