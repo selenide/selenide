@@ -85,15 +85,6 @@ public final class Condition {
   public static final WebElementCondition appear = be(visible);
 
   /**
-   * Synonym for {@link #visible} - may be used for better readability
-   * <p>{@code $("#logoutLink").should(appear, 10000);}</p>
-   *
-   * @deprecated use {@link #visible} or {@link #appear}
-   */
-  @Deprecated
-  public static final WebElementCondition appears = be(visible);
-
-  /**
    * Synonym for {@link #hidden} - may be used for better readability:
    *
    * <p>{@code $("#loginLink").should(disappear);}</p>
