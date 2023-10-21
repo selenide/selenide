@@ -93,26 +93,6 @@ public class Selenide {
    *
    * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Proxy-Authorization">Web HTTP reference</a>
    * @see AuthenticationType
-   * @deprecated AFAIK "login+password" combination is only used in BASIC authentication. If you need basic auth, use
-   * {@link #open(String, AuthenticationType, Credentials)} with {@link BasicAuthCredentials} parameter.
-   */
-  @Deprecated
-  public static void open(String relativeOrAbsoluteUrl, AuthenticationType authenticationType, String login, String password) {
-    Credentials credentials = new BasicAuthCredentials(login, password);
-    open(relativeOrAbsoluteUrl, authenticationType, credentials);
-  }
-
-  /**
-   * The main starting point in your tests.
-   * <p>
-   * Open browser and pass authentication using build-in proxy.
-   * <p>
-   * A common authenticationType is "Basic". See Web HTTP reference for other types.
-   * <p>
-   * This method can only work if - {@code Configuration.proxyEnabled == true}
-   *
-   * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Proxy-Authorization">Web HTTP reference</a>
-   * @see AuthenticationType
    * @see Credentials
    */
   public static void open(String relativeOrAbsoluteUrl, AuthenticationType authenticationType, Credentials credentials) {
@@ -315,7 +295,7 @@ public class Selenide {
 
   /**
    * Wrap standard Selenium WebElement into SelenideElement
-   * to use additional methods like {@link SelenideElement#shouldHave(Condition...)},
+   * to use additional methods like {@link SelenideElement#should(WebElementCondition...)},
    * {@link SelenideElement#selectOption(String, String...)} etc.
    *
    * @param webElement standard Selenium WebElement
@@ -451,7 +431,7 @@ public class Selenide {
 
   /**
    * Wrap standard Selenium WebElement into SelenideElement
-   * to use additional methods like {@link SelenideElement#shouldHave(Condition...)},
+   * to use additional methods like {@link SelenideElement#shouldHave(WebElementCondition...)},
    * {@link SelenideElement#selectOption(String, String...)} etc.
    *
    * @param webElement standard Selenium WebElement
@@ -519,7 +499,7 @@ public class Selenide {
 
   /**
    * Wrap standard Selenium WebElement collection into SelenideElement collection
-   * to use additional methods like {@link SelenideElement#shouldHave(Condition...)} etc.
+   * to use additional methods like {@link SelenideElement#shouldHave(WebElementCondition...)} etc.
    *
    * @param elements standard Selenium WebElement collection
    * @return given WebElement collection wrapped into SelenideElement collection
@@ -773,6 +753,7 @@ public class Selenide {
    */
   @CheckReturnValue
   @Nonnull
+  @SafeVarargs
   public static <PageObjectClass> PageObjectClass page(PageObjectClass... reified) {
     return getSelenideDriver().page(reified);
   }
@@ -787,7 +768,7 @@ public class Selenide {
   }
 
   /**
-   * Create a org.openqa.selenium.support.ui.FluentWait instance with Selenide timeout/polling.
+   * Create an instance of {@link org.openqa.selenium.support.ui.FluentWait} with Selenide timeout/polling.
    * <p>
    * Sample usage:
    * {@code
@@ -854,12 +835,6 @@ public class Selenide {
    * </pre>
    * <br>
    * Be aware that currently "manage().logs()" is in the Beta stage, but it is beta-then-nothing :)
-   * <br>
-   * List of the unsupported browsers and issues:
-   * <br>
-   * http://bit.ly/RZcmrM
-   * <br>
-   * http://bit.ly/1nZTaqu
    * <br>
    *
    * @param logType  WebDriver supported log types
@@ -1012,7 +987,7 @@ public class Selenide {
   }
 
   /**
-   * Get current browser session Id
+   * Get current browser session id
    *
    * @return SessionId
    */

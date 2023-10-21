@@ -9,14 +9,6 @@ public class BearerTokenCredentials implements Credentials {
   public final String domain;
   public final String token;
 
-  /**
-   * @deprecated Use constructor with domain and token
-   */
-  @Deprecated
-  public BearerTokenCredentials(String token) {
-    this("", token);
-  }
-
   public BearerTokenCredentials(String domain, String token) {
     this.domain = domain;
     this.token = token;
