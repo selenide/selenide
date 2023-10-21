@@ -18,7 +18,6 @@ import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import com.codeborne.selenide.impl.CollectionSource;
-import com.github.bsideup.jabel.Desugar;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -27,28 +26,16 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
-import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static java.util.Arrays.asList;
 
 @ParametersAreNonnullByDefault
 public abstract class CollectionCondition {
   protected String explanation;
 
-  /**
-   * @deprecated Please implement method {@link #check(CollectionSource)} instead.
-   */
-  @Deprecated
-  @CheckReturnValue
-  public boolean test(List<WebElement> elements) {
-    throw new UnsupportedOperationException("Implement method 'check' (powerful) or 'test' (simple)");
-  }
-
   @Nonnull
   @CheckReturnValue
   public CheckResult check(Driver driver, List<WebElement> elements) {
-    boolean result = test(elements);
-    return result ? new CheckResult(ACCEPT, null) : new CheckResult(REJECT, new ActualElementsHolder(elements));
+    throw new UnsupportedOperationException("Implement one of 'check' methods in your condition");
   }
 
   /**
@@ -63,26 +50,14 @@ public abstract class CollectionCondition {
     return check(collection.driver(), elements);
   }
 
-  @Deprecated
-  public void fail(CollectionSource collection,
-                   @Nullable List<WebElement> elements,
-                   @Nullable Exception cause,
-                   long timeoutMs) {
-    throw new UnsupportedOperationException(
-      "Implement method 'fail(..CheckResult..)' (powerful) or 'fail(..List<WebElement>..)' (simple)");
-  }
-
   /**
    * Every subclass should implement this method.
    * We left here the default implementation only because of backward compatibility.
    */
-  public void fail(CollectionSource collection,
-                   CheckResult lastCheckResult,
-                   @Nullable Exception cause,
-                   long timeoutMs) {
-    List<WebElement> actualElements = lastCheckResult.actualValue() instanceof ActualElementsHolder holder ? holder.elements() : null;
-    fail(collection, actualElements, cause, timeoutMs);
-  }
+  public abstract void fail(CollectionSource collection,
+                            CheckResult lastCheckResult,
+                            @Nullable Exception cause,
+                            long timeoutMs);
 
   public static CollectionCondition empty = size(0);
 
@@ -367,24 +342,8 @@ public abstract class CollectionCondition {
     }
 
     @Override
-    @Deprecated
-    public void fail(CollectionSource collection,
-                     @Nullable List<WebElement> elements,
-                     @Nullable Exception cause,
-                     long timeoutMs) {
-      delegate.fail(collection, elements, cause, timeoutMs);
-    }
-
-    @Override
     public boolean missingElementSatisfiesCondition() {
       return delegate.missingElementSatisfiesCondition();
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public boolean test(List<WebElement> input) {
-      return delegate.test(input);
     }
 
     @Nonnull
@@ -404,16 +363,4 @@ public abstract class CollectionCondition {
   }
 
   public abstract boolean missingElementSatisfiesCondition();
-
-  /**
-   * A temporary solution for keeping backward compatibility
-   * until we throw away old method {@link #test(List)} and {@link #fail(CollectionSource, List, Exception, long)}
-   */
-  @Desugar
-  private record ActualElementsHolder(List<WebElement> elements) {
-    @Override
-    public String toString() {
-      return "Elements: " + elements;
-    }
-  }
 }
