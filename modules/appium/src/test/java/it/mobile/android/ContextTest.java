@@ -1,10 +1,11 @@
 package it.mobile.android;
 
-import com.codeborne.selenide.Stopwatch;
 import io.appium.java_client.AppiumBy;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Stopwatch.sleepAtLeast;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
 import static com.codeborne.selenide.appium.SelenideAppium.getContextHandles;
 import static com.codeborne.selenide.appium.SelenideAppium.getCurrentContext;
@@ -15,11 +16,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ContextTest extends BaseSwagLabsAndroidTest {
 
   @Test
+  @Disabled("Saucelabs app fails with timeout trying to load www.google.com")
   void contexts() {
     openAndroidDeepLink("mydemoapprn://webview", "com.saucelabs.mydemoapp.rn");
     $(AppiumBy.accessibilityId("URL input field")).shouldBe(visible).setValue("www.google.com");
     $(AppiumBy.accessibilityId("Go To Site button")).shouldBe(visible).click();
-    Stopwatch.sleepAtLeast(4000);
+    sleepAtLeast(4000);
     switchTo().context("WEBVIEW_com.saucelabs.mydemoapp.rn");
 
     assertThat(getContextHandles())
