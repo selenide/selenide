@@ -2,7 +2,7 @@ package com.codeborne.selenide.appium.commands;
 
 import com.codeborne.selenide.DragAndDropOptions;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.commands.DragAndDropTo;
+import com.codeborne.selenide.commands.DragAndDrop;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.Point;
@@ -26,8 +26,8 @@ import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
 @ParametersAreNonnullByDefault
-public class AppiumDragAndDropTo extends DragAndDropTo {
-  private static final Logger log = LoggerFactory.getLogger(AppiumDragAndDropTo.class);
+public class AppiumDragAndDrop extends DragAndDrop {
+  private static final Logger log = LoggerFactory.getLogger(AppiumDragAndDrop.class);
 
   @Override
   @Nonnull

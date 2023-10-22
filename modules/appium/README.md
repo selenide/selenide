@@ -75,14 +75,16 @@ SelenideAppium.openIOSDeepLink("mydemoapprn://product-details/1");
    $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPress());
    $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPressFor(ofSeconds(5)));
    $(AppiumBy.xpath(".//*[@text='People Names']")).tap(longPressFor(ofSeconds(4)));
-
-  //drag and drop
-   SelenideElement from = $(By.id("io.appium.android.apis:id/drag_dot_1")).shouldBe(visible);
-   SelenideElement to = $(By.id("io.appium.android.apis:id/drag_dot_2")).shouldBe(visible);
-   from.dragAndDropTo(to);
 ```
 
-4. Don't worry about casts
+4. Drag and drop
+```java
+  SelenideElement source = $(By.id("io.appium.android.apis:id/drag_dot_1")).shouldBe(visible);
+  SelenideElement target = $(By.id("io.appium.android.apis:id/drag_dot_2")).shouldBe(visible);
+  source.dragAndDrop(to(target));
+```
+
+5. Don't worry about casts
 ```java
 AndroidDriver androidDriver = AppiumDriverRunner.getAndroidDriver();
 IOSDriver iosDriver = AppiumDriverRunner.getIosDriver();
@@ -90,7 +92,7 @@ boolean isAndroid = AppiumDriverRunner.isAndroidDriver();
 boolean isIos = AppiumDriverRunner.isIosDriver();
 ```
 
-5. Rich Assertions
+6. Rich Assertions
 
 In Appium, it is common that we want to extract values from different attributes.
 
@@ -125,7 +127,7 @@ $$(AppiumBy.xpath("//android.widget.TextView"))
       .shouldHave(AppiumCollectionCondition.attributes(combinedAttribute, expectedList));
 ```
 
-6. We handle the scrolling for you
+7. We handle the scrolling for you
 
 ```java
 $(By.xpath(".//*[@text='Tabs']")).scrollTo().click(); //scroll max of 30 times in downward direction to find element
@@ -135,7 +137,7 @@ $(By.xpath(".//*[@text='Animation']")).scroll(up(0.15f, 0.60f)); //scroll max of
 $(By.xpath(".//*[@text='Animation']")).scroll(down(0.15f, 0.60f)); //scroll max of 30 times in downward direction with custom swiping height relative to device height
 ```
 
-7. We got covered you to the left and right
+8. We got covered you to the left and right
 
 ```java
 $(By.xpath(".//*[@text='Tabs']")).swipeTo().click(); //swipe max of 30 times in right direction to find element
@@ -143,7 +145,7 @@ $(By.xpath(".//*[@text='Tabs']")).swipe(left()).click(); //swipe max of 30 times
 $(By.xpath(".//*[@text='Tabs']")).swipe(left(10)).click(); //swipe max of 10 times in left direction to find element
 ```
 
-8. Not able to use page factory for dynamic elements? We got you covered with CombinedBy for writing dynamic locators for both android and ios platforms
+9. Not able to use page factory for dynamic elements? We got you covered with CombinedBy for writing dynamic locators for both android and ios platforms
 
 ```java
 int index = 1;
