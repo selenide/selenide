@@ -10,6 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,6 +27,7 @@ import static java.util.Collections.singletonList;
 
 @ParametersAreNonnullByDefault
 public class AppiumDragAndDropTo extends DragAndDropTo {
+  private static final Logger log = LoggerFactory.getLogger(AppiumDragAndDropTo.class);
 
   @Override
   @Nonnull
@@ -37,7 +40,7 @@ public class AppiumDragAndDropTo extends DragAndDropTo {
 
     DragAndDropOptions options = dragAndDropOptions(args, ACTIONS);
     if (options.getMethod() == JS) {
-      throw new UnsupportedOperationException("Drag'n'Drop with JavaScript is not supported in mobile apps");
+      log.debug("Drag'n'Drop with JavaScript is not supported in mobile apps");
     }
     SelenideElement target = options.getTarget(locator.driver());
     target.shouldBe(visible);
