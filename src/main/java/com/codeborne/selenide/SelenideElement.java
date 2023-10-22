@@ -1098,14 +1098,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String getSelectedOptionValue();
 
   /**
-   * @deprecated Use {@link #getSelectedOptionValue()} instead
-   */
-  @Deprecated
-  @CheckReturnValue
-  @Nullable
-  String getSelectedValue();
-
-  /**
    * Get text of selected option in select field
    * <p>
    *
@@ -1123,14 +1115,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @CheckReturnValue
   @Nullable
   String getSelectedOptionText();
-
-  /**
-   * @deprecated Use {@link #getSelectedOptionText()} instead
-   */
-  @Deprecated
-  @CheckReturnValue
-  @Nullable
-  String getSelectedText();
 
   /**
    * Ask browser to scroll to this element
