@@ -1,8 +1,5 @@
 package com.codeborne.selenide;
 
-import com.github.bsideup.jabel.Desugar;
-
-@Desugar
 public record HighlightOptions(String style) {
   private static final String DEFAULT_BACKGROUND = """
     background: linear-gradient(45deg, rgb(244,187,56), rgb(85, 180, 250), rgb(150, 30, 160));

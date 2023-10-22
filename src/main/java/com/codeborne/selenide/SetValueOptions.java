@@ -1,7 +1,5 @@
 package com.codeborne.selenide;
 
-import com.github.bsideup.jabel.Desugar;
-
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -119,7 +117,6 @@ public class SetValueOptions {
       return String.format("\"%s\" (feat. %s)", displayedText, method);
   }
 
-  @Desugar
   private record Formats(DateTimeFormatter valueFormat, DateTimeFormatter displayFormat) {
     String value(TemporalAccessor date) {
       return valueFormat.format(date);

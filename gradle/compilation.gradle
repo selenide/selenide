@@ -6,12 +6,11 @@ subprojects {
   tasks.withType(JavaCompile).configureEach {
     options.encoding = encoding
     options.debug = true
-    options.release = 11
     sourceCompatibility = 17
     options.debugOptions.debugLevel = "source,lines,vars"
   }
 
-  sourceCompatibility = '11'
+  sourceCompatibility = '17'
 
   java {
     toolchain {

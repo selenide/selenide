@@ -4,7 +4,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.Photographer;
 import com.codeborne.selenide.impl.WebdriverPhotographer;
-import com.github.bsideup.jabel.Desugar;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
@@ -142,7 +141,6 @@ public class FullSizePhotographer implements Photographer {
     return new Options((long) size.get("fullWidth"), (long) size.get("fullHeight"), (boolean) size.get("exceedViewport"));
   }
 
-  @Desugar
   private record Options(long fullWidth, long fullHeight, boolean exceedViewport) {
   }
 }

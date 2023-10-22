@@ -30,13 +30,9 @@ subprojects {
 
   dependencies {
     constraints {
-      annotationProcessor("net.bytebuddy:byte-buddy-parent:${byteBuddyVersion}") {because 'used by jabel'}
       api("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}") {because 'used by browserup-proxy'}
       testImplementation("xyz.rogfam:littleproxy:$littleProxyVersion") {because 'used by browserup-proxy'}
     }
-    annotationProcessor("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
-    compileOnly("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
-    testCompileOnly("com.github.bsideup.jabel:jabel-javac-plugin:${jabelVersion}")
 
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
       exclude group: 'org.slf4j'

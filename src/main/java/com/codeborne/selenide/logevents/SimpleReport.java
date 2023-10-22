@@ -1,6 +1,5 @@
 package com.codeborne.selenide.logevents;
 
-import com.github.bsideup.jabel.Desugar;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -217,10 +216,8 @@ public class SimpleReport {
     }
   }
 
-  @Desugar
   private record LogEventWithNestingLevel(int nestingLevel, SimpleLogEvent event) {
 
-    @Desugar
     private record SimpleLogEvent(
       String getElement,
       String getSubject,
