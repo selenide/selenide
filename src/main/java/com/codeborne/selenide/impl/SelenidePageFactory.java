@@ -4,7 +4,6 @@ import com.codeborne.selenide.As;
 import com.codeborne.selenide.Container;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.PageObjectException;
 import org.openqa.selenium.By;
@@ -59,9 +58,6 @@ public class SelenidePageFactory implements PageObjectFactory {
   @Nonnull
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(Driver driver, T pageObject) {
     Type[] types = pageObject.getClass().getGenericInterfaces();
-    if (pageObject instanceof ElementsContainer) {
-      throw new IllegalArgumentException("Page object should not be marked as ElementsContainer");
-    }
     initElements(driver, null, pageObject, types);
     return pageObject;
   }
@@ -218,9 +214,6 @@ public class SelenidePageFactory implements PageObjectFactory {
                          Driver driver, @Nullable WebElementSource searchContext,
                          Field field, By selector, Type[] genericTypes) {
     String alias = alias(field);
-    if (ElementsContainer.class.equals(field.getDeclaringClass()) && "self".equals(field.getName())) {
-      return decorateElementsContainer(searchContext, field);
-    }
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return decorateWebElement(driver, searchContext, selector, field, alias);
     }
@@ -246,18 +239,6 @@ public class SelenidePageFactory implements PageObjectFactory {
     ElementLocator locator = factory.createLocator(field);
     SelenideFieldDecorator decorator = new SelenideFieldDecorator(factory);
     return decorator.proxyForListLocator(loader, locator);
-  }
-
-  @Nonnull
-  private static SelenideElement decorateElementsContainer(@Nullable WebElementSource searchContext, Field field) {
-    if (searchContext != null) {
-      return ElementFinder.wrap(SelenideElement.class, searchContext);
-    }
-    else {
-      String message = String.format("Cannot initialize field %s.%s: it's not bound to any page object",
-        field.getDeclaringClass().getSimpleName(), field.getName());
-      throw new IllegalArgumentException(message);
-    }
   }
 
   @Nonnull

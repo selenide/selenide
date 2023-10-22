@@ -1,7 +1,7 @@
 package integration.pageobjects;
 
+import com.codeborne.selenide.Container;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -55,13 +55,10 @@ public class CacheLookupPageObjectTest extends IntegrationTest {
 
   @Test
   void cachedElementContainerShouldThrowStaleElementReferenceException() {
-    assertThatCode(() -> pageWithSelects.elementsContainer.getSelf().getText()).doesNotThrowAnyException();
+    assertThatCode(() -> pageWithSelects.elementsContainer.lastLogin.getText())
+      .doesNotThrowAnyException();
 
     removeElements(SelectsPage.ELEMENTS_CONTAINER_LOCATOR);
-
-    assertThatExceptionOfType(ElementNotFound.class)
-      .isThrownBy(() -> pageWithSelects.elementsContainer.getSelf().getText())
-      .withRootCauseInstanceOf(StaleElementReferenceException.class);
 
     assertThatExceptionOfType(ElementShould.class)
       .isThrownBy(() -> pageWithSelects.elementsContainer.lastLogin.getText())
@@ -92,10 +89,6 @@ public class CacheLookupPageObjectTest extends IntegrationTest {
     assertThat(pageWithSelects.elementsContainerCollection)
       .isNotEmpty()
       .allSatisfy(it -> {
-        assertThatExceptionOfType(ElementNotFound.class)
-          .isThrownBy(() -> it.getSelf().getText())
-          .withRootCauseInstanceOf(StaleElementReferenceException.class);
-
         assertThatExceptionOfType(ElementShould.class)
           .isThrownBy(() -> it.firstName.getText())
           .withMessageContaining(StaleElementReferenceException.class.getSimpleName());
@@ -139,7 +132,7 @@ public class CacheLookupPageObjectTest extends IntegrationTest {
     List<UserInfo> elementsContainerCollection;
   }
 
-  static class StatusBlock extends ElementsContainer {
+  static class StatusBlock implements Container {
 
     @FindBy(className = "name")
     SelenideElement name;
@@ -148,7 +141,7 @@ public class CacheLookupPageObjectTest extends IntegrationTest {
     SelenideElement lastLogin;
   }
 
-  static class UserInfo extends ElementsContainer {
+  static class UserInfo implements Container {
 
     @FindBy(className = "firstname")
     SelenideElement firstName;
