@@ -7,11 +7,6 @@ import io.appium.java_client.remote.AutomationName;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.events.EventFiringDecorator;
-import org.openqa.selenium.support.events.WebDriverListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -25,17 +20,10 @@ public abstract class AndroidDriverProvider implements WebDriverProvider {
     UiAutomator2Options options = getUiAutomator2Options();
     options.setApp(getApplicationUnderTest().getAbsolutePath());
     try {
-      AndroidDriver androidDriver = new AndroidDriver(url(), options);
-      return addListener(androidDriver);
+      return new AndroidDriver(url(), options);
     } catch (SessionNotCreatedException e) {
-      AndroidDriver androidDriver = new AndroidDriver(url(), options);
-      return addListener(androidDriver);
+      return new AndroidDriver(url(), options);
     }
-  }
-
-  private WebDriver addListener(WebDriver webDriver) {
-    WebDriverListener listener = new ClickListener();
-    return new EventFiringDecorator<>(listener).decorate(webDriver);
   }
 
   protected abstract File getApplicationUnderTest();
@@ -56,12 +44,4 @@ public abstract class AndroidDriverProvider implements WebDriverProvider {
     }
   }
 
-  public static class ClickListener implements WebDriverListener {
-    private static final Logger log = LoggerFactory.getLogger(ClickListener.class);
-
-    @Override
-    public void beforeClick(WebElement element) {
-      log.info("before click {}", element);
-    }
-  }
 }
