@@ -7,8 +7,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class SelenideAppiumCommands extends Commands {
   public SelenideAppiumCommands() {
-    add("dragAndDropTo", new AppiumDragAndDropTo());
-    add("dragAndDrop", new AppiumDragAndDropTo());
+    add("dragAndDrop", new AppiumDragAndDrop());
     add("click", new AppiumClick());
     add("doubleClick", new AppiumDoubleClick());
     add("clear", new AppiumClear());

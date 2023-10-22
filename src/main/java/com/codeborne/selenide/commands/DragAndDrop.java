@@ -20,7 +20,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.JS;
 
 @ParametersAreNonnullByDefault
-public class DragAndDropTo implements Command<SelenideElement> {
+public class DragAndDrop implements Command<SelenideElement> {
   private static final JavaScript js = new JavaScript("drag_and_drop_script.js");
 
   @Override

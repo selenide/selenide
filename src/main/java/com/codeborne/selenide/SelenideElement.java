@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.commands.DragAndDrop;
 import com.codeborne.selenide.commands.GetSelectedOptionText;
 import com.codeborne.selenide.commands.GetSelectedOptionValue;
 import com.codeborne.selenide.files.FileFilter;
@@ -1411,28 +1412,28 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <br>
    * using a CSS selector defining the target element:
    * <br>
-   * {@code $("#element").dragAndDropTo(to("#target")) }
+   * {@code $("#element").dragAndDrop(to("#target")) }
    * <br>
    * using a SelenideElement defining the target element:
    * <br>
-   * {@code $("#element").dragAndDropTo(to($("#target"))) }
+   * {@code $("#element").dragAndDrop(to($("#target"))) }
    * <br>
    * <br>
    * define which way it will be executed:
    * <br>
    * using {@code JavaScript } (by default):
    * <br>
-   * {@code $("#element").dragAndDropTo(to("#target").usingJS()) }
+   * {@code $("#element").dragAndDrop(to("#target").usingJS()) }
    * <br>
    * using {@code Actions }:
    * <br>
-   * {@code $("#element").dragAndDropTo(to("#target").usingSeleniumActions()) }
+   * {@code $("#element").dragAndDrop(to("#target").usingSeleniumActions()) }
    * <br>
   / *
    * @param options drag and drop options to define target and which way it will be executed
    *
    * @return this element
-   * @see com.codeborne.selenide.commands.DragAndDropTo
+   * @see DragAndDrop
    */
   @Nonnull
   @CanIgnoreReturnValue

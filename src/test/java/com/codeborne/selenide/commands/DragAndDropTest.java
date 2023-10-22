@@ -28,7 +28,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class DragAndDropToTest {
+class DragAndDropTest {
 
   private final JSWebDriver webDriver = mock();
   private final DriverStub driver = new DriverStub(webDriver);
@@ -36,7 +36,7 @@ class DragAndDropToTest {
   private final WebElement locatorWebElement = mock();
   private final SelenideElement targetSelenideElement = mock();
   private final WebElement targetWebElement = mock();
-  private final DragAndDropTo command = new DragAndDropTo();
+  private final DragAndDrop command = new DragAndDrop();
   private final FileContent jsSource = new FileContent("drag_and_drop_script.js");
 
   @BeforeEach
