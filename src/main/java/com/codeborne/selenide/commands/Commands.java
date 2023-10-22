@@ -126,9 +126,7 @@ public class Commands {
     add("getOptions", new GetOptions());
     add("getSelectedOption", new GetSelectedOption());
     add("getSelectedOptions", new GetSelectedOptions());
-    add("getSelectedText", new GetSelectedOptionText());
     add("getSelectedOptionText", new GetSelectedOptionText());
-    add("getSelectedValue", new GetSelectedOptionValue());
     add("getSelectedOptionValue", new GetSelectedOptionValue());
     add("selectOption", new SelectOptionByTextOrIndex());
     add("selectOptionContainingText", new SelectOptionContainingText());

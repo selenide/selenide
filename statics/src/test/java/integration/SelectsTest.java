@@ -189,7 +189,7 @@ final class SelectsTest extends IntegrationTest {
   }
 
   @Test
-  void getSelectedText_cannotBeNull() {
+  void getSelectedOptionText_cannotBeNull() {
     SelenideElement select = $("select#gender");
     assertThat(select.getSelectedOptionText()).isEqualTo("");
 
