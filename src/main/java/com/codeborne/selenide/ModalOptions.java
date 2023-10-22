@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.HasTimeout;
-import com.github.bsideup.jabel.Desugar;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -9,7 +8,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 
-@Desugar
 @ParametersAreNonnullByDefault
 public record ModalOptions(
   @Nullable String expectedText,

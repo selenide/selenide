@@ -5,7 +5,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
-import com.github.bsideup.jabel.Desugar;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -148,7 +147,6 @@ public class DownloadFileWithHttpRequest {
     }
   }
 
-  @Desugar
   @ParametersAreNonnullByDefault
   record Resource(URI uri, String credentials) {
   }

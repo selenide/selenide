@@ -1,7 +1,5 @@
 package com.codeborne.selenide;
 
-import com.github.bsideup.jabel.Desugar;
-
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,7 +15,6 @@ import static java.util.Objects.requireNonNull;
 /**
  * @since 6.0.0
  */
-@Desugar
 @ParametersAreNonnullByDefault
 public record CheckResult(
   Verdict verdict,

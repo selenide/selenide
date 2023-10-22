@@ -86,7 +86,7 @@ jobs:
         with:
           distribution: 'temurin'
           cache: 'gradle'
-          java-version: '11'
+          java-version: '17'
       - uses: actions/cache@v3
         with:
           path: build/apps
@@ -172,7 +172,7 @@ jobs:
         with:
           distribution: 'temurin'
           cache: 'gradle'
-          java-version: '11'
+          java-version: '17'
       - name: Run iOS tests
         run: ./gradlew ios --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v3
@@ -193,7 +193,7 @@ jobs:
         with:
           distribution: 'temurin'
           cache: 'gradle'
-          java-version: '11'
+          java-version: '17'
       - name: Start selenoid
         uses: Xotabu4/selenoid-github-action@v2
       - name: Run integration tests
