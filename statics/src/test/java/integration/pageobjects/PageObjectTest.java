@@ -3,7 +3,6 @@ package integration.pageobjects;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Container;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import integration.IntegrationTest;
@@ -116,8 +115,7 @@ final class PageObjectTest extends IntegrationTest {
 
   @Test
   void canComposePageFromReusableBlocks() {
-    pageWithSelects.status.getSelf().shouldBe(visible);
-    pageWithSelects.status.name.shouldHave(text("Bob Smith"));
+    pageWithSelects.status.name.shouldHave(text("Bob Smith"), visible);
     pageWithSelects.status.lastLogin.shouldHave(text("01.01.1970"));
   }
 
@@ -198,7 +196,7 @@ final class PageObjectTest extends IntegrationTest {
     }
   }
 
-  static class StatusBlock extends ElementsContainer {
+  static class StatusBlock implements Container {
     @FindBy(className = "name")
     SelenideElement name;
 

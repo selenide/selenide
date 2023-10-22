@@ -1,6 +1,6 @@
 package integration.pageobjects;
 
-import com.codeborne.selenide.ElementsContainer;
+import com.codeborne.selenide.Container;
 import integration.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,6 @@ public class FieldOfGenericTypeTest extends IntegrationTest {
     assertThat(page.body.names).isNull();
     assertThat(page.body.selects).isInstanceOf(List.class);
     assertThat(page.body.selects).hasSize(6);
-    assertThat(page.body.getSelf()).isEqualTo($("body"));
     assertThat(page.body.selects.get(0)).isEqualTo($("select[name=domain]"));
     assertThat(page.body.selects.get(1)).isEqualTo($("select#hero"));
     assertThat(page.body.selects.get(2)).isEqualTo($("select#gender"));
@@ -41,8 +40,6 @@ public class FieldOfGenericTypeTest extends IntegrationTest {
   void injectsFoundSelenideElementAsSelf2() {
     AnotherPage page = page(AnotherPage.class);
     assertThat(page.body.selects).hasSize(6);
-    assertThat(page.body).isInstanceOf(ElementsContainer.class);
-    assertThat(page.body.getSelf()).isEqualTo($("body"));
     assertThat(page.body.selects.get(0)).isInstanceOf(WebElement.class);
     assertThat(page.body.selects.get(0)).isEqualTo($("select[name=domain]"));
     assertThat(page.body.selects.get(1)).isEqualTo($("select#hero"));
@@ -60,10 +57,10 @@ public class FieldOfGenericTypeTest extends IntegrationTest {
 
     assertThatThrownBy(() -> page.body.selects.get(0))
       .isInstanceOf(RuntimeException.class)
-      .hasMessageMatching("Cannot initialize field .*List .*DummyTypedElement.selects: .*ElementsContainer is abstract");
+      .hasMessageMatching("Cannot initialize field .*List .*DummyTypedElement.selects: .*Container is interface");
   }
 
-  static class DummyTypedElement<S, T> extends ElementsContainer {
+  static class DummyTypedElement<S, T> implements Container {
     private List<S> names;
 
     @FindBy(tagName = "select")
@@ -82,6 +79,6 @@ public class FieldOfGenericTypeTest extends IntegrationTest {
 
   static class YetAnotherPage {
     @FindBy(tagName = "body")
-    DummyTypedElement<Boolean, ElementsContainer> body;
+    DummyTypedElement<Boolean, Container> body;
   }
 }

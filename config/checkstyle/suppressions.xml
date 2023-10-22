@@ -16,7 +16,6 @@
     <suppress checks="JavadocMethod" files=".*[/\\]conditions[/\\].*.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]webdriver[/\\].*.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]Command.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]ElementsContainer.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]Selectors.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]Screenshots.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]Selectors.java"/>
