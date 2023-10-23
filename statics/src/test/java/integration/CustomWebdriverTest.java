@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
-import java.io.IOException;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -108,7 +107,7 @@ final class CustomWebdriverTest extends IntegrationTest {
   }
 
   @Test
-  void canDownloadFilesAfterUsing() throws IOException {
+  void canDownloadFilesAfterUsing() {
     openFile("page_with_uploads.html");
     using(browser2, () -> {
       openFile("page_with_selects_without_jquery.html");

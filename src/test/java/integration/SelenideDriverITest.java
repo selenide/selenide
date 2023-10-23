@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
@@ -44,7 +43,7 @@ final class SelenideDriverITest extends ITest {
   }
 
   @Test
-  void canDownloadFilesInDifferentBrowsersViaDifferentProxies() throws FileNotFoundException {
+  void canDownloadFilesInDifferentBrowsersViaDifferentProxies() {
     browser1.open("/page_with_uploads.html?browser=" + browser1.config().browser());
     browser2.open("/page_with_uploads.html?browser=" + browser2.config().browser());
 

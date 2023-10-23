@@ -11,8 +11,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.io.FileNotFoundException;
-
 
 @ParametersAreNonnullByDefault
 public class DownloadFileInSelenoid extends com.codeborne.selenide.impl.DownloadFileToFolder {
@@ -47,7 +45,7 @@ public class DownloadFileInSelenoid extends com.codeborne.selenide.impl.Download
 
   @Override
   protected void failFastIfNoChanges(Driver driver, DownloadsFolder folder, FileFilter filter,
-                                     long start, long timeout, long incrementTimeout) throws FileNotFoundException {
+                                     long start, long timeout, long incrementTimeout) {
     if (isLocalBrowser(driver)) {
       super.failFastIfNoChanges(driver, folder, filter, start, timeout, incrementTimeout);
     }

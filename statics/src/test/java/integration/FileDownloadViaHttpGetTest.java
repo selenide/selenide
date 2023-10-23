@@ -2,7 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.ex.TimeoutException;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.logevents.EventsCollector;
 import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -11,9 +11,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -25,6 +26,7 @@ import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.nio.file.Files.createTempDirectory;
+import static java.util.regex.Pattern.DOTALL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -47,7 +49,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsFiles() throws IOException {
+  void downloadsFiles() {
     File downloadedFile = $(byText("Download me")).download();
 
     assertThat(downloadedFile).hasName("hello_world.txt");
@@ -63,7 +65,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsFileWithAlert() throws IOException {
+  void downloadsFileWithAlert() {
     File downloadedFile = $(byText("Download me with alert")).download();
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
@@ -71,7 +73,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsFileWithCyrillicName() throws IOException {
+  void downloadsFileWithCyrillicName() {
     File downloadedFile = $(byText("Download file with cyrillic name")).download();
 
     assertThat(downloadedFile.getName())
@@ -83,7 +85,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsFileWithForbiddenCharactersInName() throws IOException {
+  void downloadsFileWithForbiddenCharactersInName() {
     File downloadedFile = $(byText("Download file with \"forbidden\" characters in name"))
       .download(withExtension("txt"));
 
@@ -103,7 +105,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
       File unexpected = $(byText("Download missing file")).download();
       assertThat(unexpected).content().isEqualTo("This file should not be downloaded");
     })
-      .isInstanceOf(FileNotFoundException.class)
+      .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageMatching("(?s)Failed to download file http.+/files/unexisting_file.png: .+");
 
     assertThat(collector.events()).hasSize(1);
@@ -117,9 +119,11 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   @Test
   void downloadFileByName() {
     assertThatThrownBy(() -> $(byText("Download me")).download(withName("good_bye_world.txt")))
-      .isInstanceOf(FileNotFoundException.class)
-      .hasMessageMatching("Failed to download file from http.+/files/hello_world.txt in 1000 ms." +
-        " with name \"good_bye_world.txt\";" + System.lineSeparator() + " actually downloaded: .+hello_world.txt");
+      .isInstanceOf(FileNotDownloadedError.class)
+      .hasMessageMatching(Pattern.compile("""
+        Failed to download file from http.+/files/hello_world\\.txt in 1000 ms\\. with name "good_bye_world\\.txt";.*""", DOTALL))
+      .hasMessageMatching(Pattern.compile("""
+        .*actually downloaded: .+hello_world\\.txt.*""", DOTALL));
 
     assertThat(collector.events()).hasSize(1);
 
@@ -130,7 +134,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void downloadWithCustomTimeout() throws IOException {
+  void downloadWithCustomTimeout() {
     File downloadedFile = $(byText("Download me slowly")).download(3000);
 
     assertThat(downloadedFile).hasName("hello_world.txt");
@@ -143,13 +147,13 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
       File downloadedFile = $(byText("Start download after delay (2000 ms)")).download(100);
       assertThat(downloadedFile).hasContent("File downloading should fail with timeout");
     })
-      .isInstanceOf(TimeoutException.class)
+      .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageStartingWith("Failed to download ")
-      .hasMessageEndingWith("/files/hello_world.txt?pause=2000 in 100 ms.");
+      .hasMessageContaining("/files/hello_world.txt?pause=2000 in 100 ms.");
   }
 
   @Test
-  void downloadWithQueryParamsWithoutHeaders() throws FileNotFoundException {
+  void downloadWithQueryParamsWithoutHeaders() {
     openFile("download.html");
     File downloadedFile = $("#link").download();
     assertThat(downloadedFile).hasName("hello_world.txt");
@@ -170,7 +174,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsPdfFile() throws FileNotFoundException {
+  void downloadsPdfFile() {
     File downloadedFile = $(byText("Download a PDF")).download(withExtension("pdf"));
 
     assertThat(downloadedFile).hasName("minimal.pdf");
@@ -178,7 +182,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void downloadWithOptions() throws IOException {
+  void downloadWithOptions() {
     Configuration.fileDownload = PROXY;
     Configuration.timeout = 1;
 
@@ -191,7 +195,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void downloadWithCustomMethodButStandardTimeout() throws IOException {
+  void downloadWithCustomMethodButStandardTimeout() {
     Configuration.fileDownload = PROXY;
     Configuration.timeout = 4000;
 
@@ -202,7 +206,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  public void download_super_slowly() throws FileNotFoundException {
+  public void download_super_slowly() {
     File downloadedFile = $(byText("Download me super slowly"))
       .download(4000, withName("hello_world.txt"));
 
@@ -211,7 +215,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  public void download_super_slowly_without_filter() throws FileNotFoundException {
+  public void download_super_slowly_without_filter() {
     File downloadedFile = $(byText("Download me super slowly")).download(4000);
 
     assertThat(downloadedFile).hasName("hello_world.txt");
@@ -219,7 +223,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void downloadLargeFile() throws IOException {
+  void downloadLargeFile() {
     File downloadedFile = $(byText("Download large file")).download(withExtension("txt"));
 
     assertThat(downloadedFile).hasName("large_file.txt");
@@ -227,7 +231,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void canDownloadResourceProtectedByBasicAuth() throws IOException, URISyntaxException {
+  void canDownloadResourceProtectedByBasicAuth() throws UnsupportedEncodingException, URISyntaxException {
     String urlWithCredentials = getProtectedUrl("scott", scottPassword(), "/basic-auth/hello");
     File f = Selenide.download(urlWithCredentials, 2000);
     assertThat(f).content()

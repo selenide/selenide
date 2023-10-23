@@ -8,16 +8,16 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 public class WindowsCloser {
   private static final Logger log = LoggerFactory.getLogger(WindowsCloser.class);
 
   @CheckReturnValue
-  public <T> T runAndCloseArisedWindows(WebDriver webDriver, SupplierWithException<T> lambda) throws FileNotFoundException {
+  public <T> T runAndCloseArisedWindows(WebDriver webDriver, Supplier<T> lambda) {
     String originalWindowHandle = webDriver.getWindowHandle();
     Set<String> windowsBefore = webDriver.getWindowHandles();
 
@@ -67,10 +67,5 @@ public class WindowsCloser {
     catch (Exception e) {
       log.warn("  Failed to close {}", window, e);
     }
-  }
-
-  @FunctionalInterface
-  interface SupplierWithException<T> {
-    T get() throws FileNotFoundException;
   }
 }

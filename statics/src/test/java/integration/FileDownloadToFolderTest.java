@@ -2,13 +2,13 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import org.apache.commons.lang3.SystemUtils;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.regex.Pattern;
@@ -50,7 +50,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsFiles() throws IOException {
+  void downloadsFiles() {
     File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
@@ -59,7 +59,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsFileWithAlert() throws IOException {
+  void downloadsFileWithAlert() {
     File downloadedFile = $(byText("Download me with alert")).download(
       using(FOLDER).withFilter(withExtension("txt")).withAction(
         clickAndConfirm("Are you sure to download it?")
@@ -73,7 +73,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsFileWithCyrillicName() throws IOException {
+  void downloadsFileWithCyrillicName() {
     File downloadedFile = $(byText("Download file with cyrillic name")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName()).isEqualTo("файл-с-русским-названием.txt");
@@ -85,20 +85,20 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   void downloadMissingFile() {
     timeout = 888;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
-      .isInstanceOf(FileNotFoundException.class)
-      .hasMessage("Failed to download file with extension \"txt\" in 888 ms.");
+      .isInstanceOf(FileNotDownloadedError.class)
+      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 888 ms.");
   }
 
   @Test
   void downloadMissingFileWithExtension() {
     timeout = 888;
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
-      .isInstanceOf(FileNotFoundException.class)
+      .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 888 ms");
   }
 
   @Test
-  public void download_byName() throws FileNotFoundException {
+  public void download_byName() {
     File downloadedFile = $(byText("Download me")).download(withName("hello_world.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
@@ -106,7 +106,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  public void download_byNameRegex() throws FileNotFoundException {
+  public void download_byNameRegex() {
     File downloadedFile = $(byText("Download me")).download(withNameMatching("hello_.+\\.txt"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
@@ -114,7 +114,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  public void download_byExtension() throws FileNotFoundException {
+  public void download_byExtension() {
     File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
@@ -141,7 +141,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsPdfFile() throws IOException {
+  void downloadsPdfFile() {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).matches("minimal.*.pdf");
@@ -171,7 +171,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadWithOptions() throws IOException {
+  void downloadWithOptions() {
     Configuration.fileDownload = PROXY;
     Configuration.timeout = 1;
 
@@ -186,7 +186,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadEmptyFile() throws IOException {
+  void downloadEmptyFile() {
     File downloadedFile = $(byText("Download empty file")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName()).matches("empty-file.*\\.txt");
@@ -195,7 +195,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsFileWithPartExtension() throws IOException {
+  void downloadsFileWithPartExtension() {
     File downloadedFile = $(byText("Download file *part")).download(withExtension("part"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.part");
@@ -204,7 +204,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsFileWithCrdownloadExtension() throws IOException {
+  void downloadsFileWithCrdownloadExtension() {
     File downloadedFile = $(byText("Download file *crdownload")).download(300, withName("hello_world.crdownload"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.crdownload");
@@ -220,11 +220,11 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .withFilter(withName("hello_world.txt"));
     assertThatThrownBy(() -> $("h1")
       .download(shortIncrementTimeout))
-      .isInstanceOf(FileNotFoundException.class)
+      .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(Pattern.compile(".+files in .+ haven't been modified for \\d+ ms. " +
+      .hasMessageMatching(Pattern.compile("(?s).+files in .+ haven't been modified for \\d+ ms\\. +" +
         "\\(started at: \\d+, lastFileUpdate: -?\\d+, now: \\d+, incrementTimeout: \\d+\\)\\s*" +
-        "Modification times: \\{.*}", DOTALL));
+        "Modification times: \\{.*}.*", DOTALL));
   }
 
   @Test
@@ -237,13 +237,13 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       File file = $(byText("Download me super slowly")).download(shortIncrementTimeout);
       assertThat(file).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     })
-      .isInstanceOf(FileNotFoundException.class)
+      .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(Pattern.compile(".+files in .+ haven't been modified for \\d+ ms\\..*", DOTALL));
+      .hasMessageMatching(Pattern.compile("(?s).+files in .+ haven't been modified for \\d+ ms\\..*", DOTALL));
   }
 
   @Test
-  public void download_slowly() throws FileNotFoundException {
+  public void download_slowly() {
     File downloadedFile = $(byText("Download me slowly"))
       .download(4000, withName("hello_world.txt"));
 
@@ -252,7 +252,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  public void download_super_slowly() throws FileNotFoundException {
+  public void download_super_slowly() {
     File downloadedFile = $(byText("Download me super slowly")).download(6000, withExtension("txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
@@ -260,8 +260,8 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadLargeFile() throws IOException {
-    File downloadedFile = $(byText("Download large file")).download(withExtension("txt"));
+  void downloadLargeFile() {
+    File downloadedFile = $(byText("Download large file")).download(8000, withExtension("txt"));
 
     assertThat(downloadedFile).hasName("large_file.txt");
     assertThat(downloadedFile).hasSize(5 * 1024 * 1024);

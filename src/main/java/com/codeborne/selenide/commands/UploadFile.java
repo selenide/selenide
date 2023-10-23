@@ -9,6 +9,8 @@ import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -24,12 +26,13 @@ import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
 public class UploadFile implements Command<File> {
+  private static final Logger log = LoggerFactory.getLogger(UploadFile.class);
   private final ElementDescriber describe = inject(ElementDescriber.class);
 
   @Override
   @CheckReturnValue
   @Nonnull
-  public File execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) throws IOException {
+  public File execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     File[] file = getFiles(args);
     checkFilesGiven(file);
     checkFilesExist(file);
@@ -40,7 +43,19 @@ public class UploadFile implements Command<File> {
 
     String fileNames = Stream.of(file).map(this::canonicalPath).collect(joining("\n"));
     uploadFiles(driver.config(), inputField, fileNames);
-    return file[0].getCanonicalFile();
+    return getCanonicalFile(file[0]);
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  private File getCanonicalFile(File f) {
+    try {
+      return f.getCanonicalFile();
+    }
+    catch (IOException e) {
+      log.warn("Failed to get canonical representation of file {}", f, e);
+      return f;
+    }
   }
 
   private void checkFilesGiven(File[] file) {

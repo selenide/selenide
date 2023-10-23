@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.commands.DragAndDrop;
 import com.codeborne.selenide.commands.GetSelectedOptionText;
 import com.codeborne.selenide.commands.GetSelectedOptionValue;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.WebElementSource;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
@@ -21,7 +22,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.time.Duration;
 
 /**
@@ -1187,25 +1187,25 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
    *
    * @throws RuntimeException      if 50x status code was returned from server
-   * @throws FileNotFoundException if 40x status code was returned from server
+   * @throws FileNotDownloadedError     if 40x status code was returned from server
    * @see FileDownloadMode
    * @see com.codeborne.selenide.commands.DownloadFile
    */
   @CheckReturnValue
   @Nonnull
-  File download() throws FileNotFoundException;
+  File download() throws FileNotDownloadedError;
 
   /**
    * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
    *
    * @param timeout download operations timeout.
    * @throws RuntimeException      if 50x status code was returned from server
-   * @throws FileNotFoundException if 40x status code was returned from server
+   * @throws FileNotDownloadedError     if 40x status code was returned from server
    * @see com.codeborne.selenide.commands.DownloadFile
    */
   @CheckReturnValue
   @Nonnull
-  File download(long timeout) throws FileNotFoundException;
+  File download(long timeout) throws FileNotDownloadedError;
 
   /**
    * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
@@ -1215,14 +1215,14 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *                   {@link com.codeborne.selenide.files.FileFilters#withNameMatching(String)},
    *                   {@link com.codeborne.selenide.files.FileFilters#withName(String)}
    *                   ).
-   * @throws RuntimeException      if 50x status code was returned from server
-   * @throws FileNotFoundException if 40x status code was returned from server, or the downloaded file didn't match given filter.
+   * @throws RuntimeException   if 50x status code was returned from server
+   * @throws FileNotDownloadedError  if 40x status code was returned from server, or the downloaded file didn't match given filter.
    * @see com.codeborne.selenide.files.FileFilters
    * @see com.codeborne.selenide.commands.DownloadFile
    */
   @CheckReturnValue
   @Nonnull
-  File download(FileFilter fileFilter) throws FileNotFoundException;
+  File download(FileFilter fileFilter) throws FileNotDownloadedError;
 
   /**
    * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
@@ -1234,17 +1234,17 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *                   {@link com.codeborne.selenide.files.FileFilters#withName(String)}
    *                   ).
    * @throws RuntimeException      if 50x status code was returned from server
-   * @throws FileNotFoundException if 40x status code was returned from server, or the downloaded file didn't match given filter.
+   * @throws FileNotDownloadedError     if 40x status code was returned from server, or the downloaded file didn't match given filter.
    * @see com.codeborne.selenide.files.FileFilters
    * @see com.codeborne.selenide.commands.DownloadFile
    */
   @CheckReturnValue
   @Nonnull
-  File download(long timeout, FileFilter fileFilter) throws FileNotFoundException;
+  File download(long timeout, FileFilter fileFilter) throws FileNotDownloadedError;
 
   @CheckReturnValue
   @Nonnull
-  File download(DownloadOptions options) throws FileNotFoundException;
+  File download(DownloadOptions options) throws FileNotDownloadedError;
 
   /**
    * Return criteria by which this element is located

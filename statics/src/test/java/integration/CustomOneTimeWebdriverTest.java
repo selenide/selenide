@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.DownloadOptions.using;
@@ -48,7 +46,7 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
   }
 
   @Test
-  void canDownloadFilesToFolder_inNewBrowser() throws IOException {
+  void canDownloadFilesToFolder_inNewBrowser() {
     openFile("page_with_uploads.html");
 
     inNewBrowser(() -> {
@@ -61,7 +59,7 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
   }
 
   @Test
-  void canDownloadFilesViaProxy_inNewBrowser() throws IOException {
+  void canDownloadFilesViaProxy_inNewBrowser() {
     closeWebDriver();
     Configuration.proxyEnabled = true;
     openFile("page_with_uploads.html");
@@ -83,15 +81,10 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
   }
 
   private void checkDownload(FileDownloadMode mode, String fileName, String referenceFile) {
-    try {
-      File text = $("#multiple-downloads").download(
-        using(mode).withFilter(withNameMatching(fileName))
-      );
-      assertThat(text.getName()).matches(fileName);
-      assertThat(text.length()).isEqualTo(new FileContent(referenceFile).content().length());
-    }
-    catch (FileNotFoundException e) {
-      throw new RuntimeException(e);
-    }
+    File text = $("#multiple-downloads").download(
+      using(mode).withFilter(withNameMatching(fileName))
+    );
+    assertThat(text.getName()).matches(fileName);
+    assertThat(text.length()).isEqualTo(new FileContent(referenceFile).content().length());
   }
 }

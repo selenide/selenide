@@ -7,10 +7,12 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
 import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
 
+@ParametersAreNonnullByDefault
 public class HideKeyboard implements Command<Object> {
 
   @Override

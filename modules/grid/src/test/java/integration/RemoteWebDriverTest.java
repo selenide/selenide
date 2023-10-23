@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -25,7 +24,7 @@ public class RemoteWebDriverTest extends AbstractGridTest {
   }
 
   @Test
-  void canOpenCustomRemoteWebDriver() throws FileNotFoundException {
+  void canOpenCustomRemoteWebDriver() {
     driver = new RemoteWebDriver(gridUrl, chromeOptions(null));
     WebDriverRunner.setWebDriver(driver);
     openFile("page_with_uploads.html");

@@ -5,6 +5,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Stopwatch;
 import com.codeborne.selenide.commands.Commands;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -16,7 +17,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -161,7 +161,7 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
 
   @CheckReturnValue
   static boolean shouldRetryAfterError(Throwable e) {
-    if (e instanceof FileNotFoundException) return false;
+    if (e instanceof FileNotDownloadedError) return false;
     if (e instanceof IllegalArgumentException) return false;
     if (e instanceof ReflectiveOperationException) return false;
     if (e instanceof JavascriptException) return false;

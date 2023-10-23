@@ -10,7 +10,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
 
 import static com.codeborne.selenide.Stopwatch.sleepAtLeast;
 import static com.codeborne.selenide.commands.Util.firstOf;
@@ -31,7 +30,7 @@ public class Type implements Command<SelenideElement> {
 
   @Nullable
   @Override
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) throws IOException {
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     TypeOptions typeOptions = extractOptions(requireNonNull(args));
     clearField(proxy, locator, typeOptions);
 

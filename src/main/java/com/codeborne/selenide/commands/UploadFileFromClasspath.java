@@ -28,7 +28,7 @@ public class UploadFileFromClasspath implements Command<File> {
   @Override
   @CheckReturnValue
   @Nonnull
-  public File execute(SelenideElement proxy, WebElementSource inputField, @Nullable Object[] args) throws IOException {
+  public File execute(SelenideElement proxy, WebElementSource inputField, @Nullable Object[] args) {
     String[] fileName = firstOf(args);
     File[] files = new File[fileName.length];
     for (int i = 0; i < fileName.length; i++) {

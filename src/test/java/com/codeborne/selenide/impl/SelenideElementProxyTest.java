@@ -1,11 +1,13 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.SharedDownloadsFolder;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
@@ -26,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.FileNotFoundException;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.enabled;
@@ -84,7 +85,7 @@ final class SelenideElementProxyTest {
 
   @Test
   void elementNotFound() {
-    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException("web element not found"));
     assertThatThrownBy(() -> driver.find("#firstName").shouldBe(visible)).isInstanceOf(ElementNotFound.class);
     verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
@@ -115,35 +116,35 @@ final class SelenideElementProxyTest {
 
   @Test
   void elementNotFoundAsExpected_case1() {
-    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException("web element not found"));
     driver.find("#firstName").shouldNotBe(exist);
     verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void elementNotFoundAsExpected_case2() {
-    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException("web element not found"));
     driver.find("#firstName").should(disappear);
     verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void elementNotFoundAsExpected_case3() {
-    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException("web element not found"));
     driver.find("#firstName").shouldNotBe(visible);
     verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void elementNotFoundAsExpected_case4() {
-    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException("web element not found"));
     assertThatThrownBy(() -> driver.find("#firstName").shouldNotBe(enabled)).isInstanceOf(ElementNotFound.class);
     verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void elementNotFoundAsExpected_case5() {
-    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException("web element not found"));
     assertThatThrownBy(() -> driver.find("#firstName").shouldNotHave(text("goodbye"))).isInstanceOf(ElementNotFound.class);
     verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
@@ -283,8 +284,8 @@ final class SelenideElementProxyTest {
   }
 
   @Test
-  void shouldNotRetry_onFileNotFoundException() {
-    FileNotFoundException exception = new FileNotFoundException("bla");
+  void shouldNotRetry_onFileNotDownloadedError() {
+    FileNotDownloadedError exception = new FileNotDownloadedError(new DriverStub(webdriver), "bla", 2000);
     assertThat(shouldRetryAfterError(exception)).isFalse();
   }
 
