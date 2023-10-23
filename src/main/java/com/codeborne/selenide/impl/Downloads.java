@@ -1,5 +1,7 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 
@@ -7,7 +9,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -77,11 +78,12 @@ public class Downloads {
 
   @CheckReturnValue
   @Nonnull
-  public File firstDownloadedFile(long timeout, FileFilter fileFilter) throws FileNotFoundException {
+  public File firstDownloadedFile(Driver driver, long timeout, FileFilter fileFilter) {
     return firstMatchingFile(fileFilter)
-      .orElseThrow(() -> new FileNotFoundException(String.format("Failed to download file%s in %d ms.",
-          fileFilter.description(), timeout).trim()
-        )
+      .orElseThrow(() -> {
+        String message = String.format("Failed to download file%s in %d ms.", fileFilter.description(), timeout);
+          return new FileNotDownloadedError(driver, message.trim(), timeout);
+        }
       ).getFile();
   }
 }

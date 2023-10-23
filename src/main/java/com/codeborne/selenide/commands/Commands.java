@@ -8,7 +8,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -157,7 +156,7 @@ public class Commands {
 
   @Nullable
   public <T> T execute(Object proxy, WebElementSource webElementSource, String methodName,
-                       @Nullable Object[] args) throws IOException {
+                       @Nullable Object[] args) {
     Command<T> command = getCommand(methodName);
     return command.execute((SelenideElement) proxy, webElementSource, args);
   }

@@ -19,7 +19,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.io.IOException;
 import java.time.Duration;
 
 import static com.codeborne.selenide.DownloadOptions.using;
@@ -38,8 +37,8 @@ public class DownloadFile implements Command<File> {
     this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer(), inject(DownloadFileToFolder.class));
   }
 
-  DownloadFile(DownloadFileWithHttpRequest httpget, DownloadFileWithProxyServer proxy, DownloadFileToFolder folder) {
-    downloadFileWithHttpRequest = httpget;
+  DownloadFile(DownloadFileWithHttpRequest httpGet, DownloadFileWithProxyServer proxy, DownloadFileToFolder folder) {
+    downloadFileWithHttpRequest = httpGet;
     downloadFileWithProxyServer = proxy;
     downloadFileToFolder = folder;
   }
@@ -47,7 +46,7 @@ public class DownloadFile implements Command<File> {
   @Override
   @CheckReturnValue
   @Nonnull
-  public File execute(SelenideElement selenideElement, WebElementSource linkWithHref, @Nullable Object[] args) throws IOException {
+  public File execute(SelenideElement selenideElement, WebElementSource linkWithHref, @Nullable Object[] args) {
     WebElement link = linkWithHref.findAndAssertElementIsInteractable();
     Config config = linkWithHref.driver().config();
     DownloadOptions options = getDownloadOptions(config, args);
@@ -61,7 +60,7 @@ public class DownloadFile implements Command<File> {
         return downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, options.getFilter());
       }
       case PROXY: {
-        return downloadFileWithProxyServer.download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
+        return downloadFileWithProxyServer.download(linkWithHref, link, timeout,           options.getFilter(), options.getAction());
       }
       case FOLDER: {
         return downloadFileToFolder.download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());

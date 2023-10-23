@@ -6,7 +6,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
@@ -17,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MultipleDownloadsTest extends ProxyIntegrationTest {
   @ParameterizedTest
   @ValueSource(strings = {"empty.html", "hello_world.txt", "download.html"})
-  void downloadMultipleFiles(String fileName) throws FileNotFoundException {
+  void downloadMultipleFiles(String fileName) {
     openFile("downloadMultipleFiles.html");
 
     File text = $("#multiple-downloads").download(

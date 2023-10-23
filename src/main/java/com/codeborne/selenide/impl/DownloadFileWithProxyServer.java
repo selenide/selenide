@@ -15,7 +15,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
@@ -39,7 +38,7 @@ public class DownloadFileWithProxyServer {
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout,
                        FileFilter fileFilter,
-                       DownloadAction action) throws FileNotFoundException {
+                       DownloadAction action) {
 
     WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     return windowsCloser.runAndCloseArisedWindows(webDriver, () ->
@@ -50,7 +49,7 @@ public class DownloadFileWithProxyServer {
   @Nonnull
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
                                                   long timeout, FileFilter fileFilter,
-                                                  DownloadAction action) throws FileNotFoundException {
+                                                  DownloadAction action) {
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
     if (!config.proxyEnabled()) {
@@ -78,7 +77,7 @@ public class DownloadFileWithProxyServer {
         log.info("Downloaded {}", filter.downloads().filesAsString());
         log.info("Just in case, intercepted {}", filter.responsesAsString());
       }
-      return filter.downloads().firstDownloadedFile(timeout, fileFilter);
+      return filter.downloads().firstDownloadedFile(driver, timeout, fileFilter);
     }
     finally {
       filter.deactivate();

@@ -12,7 +12,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
 
 import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.appium.WebdriverUnwrapper.isMobile;
@@ -25,7 +24,7 @@ public class AppiumDoubleClick implements Command<SelenideElement> {
 
   @Override
   @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) throws IOException {
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     if (!isMobile(locator.driver())) {
       return defaultDoubleClick.execute(proxy, locator, args);
     }

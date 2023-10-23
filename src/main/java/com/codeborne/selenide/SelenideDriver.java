@@ -23,7 +23,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -460,22 +459,22 @@ public class SelenideDriver {
   }
 
   @Nonnull
-  public File download(String url) throws IOException, URISyntaxException {
+  public File download(String url) throws URISyntaxException {
     return download(new URI(url), config.timeout());
   }
 
   @Nonnull
-  public File download(String url, long timeoutMs) throws IOException, URISyntaxException {
+  public File download(String url, long timeoutMs) throws URISyntaxException {
     return download(new URI(url), timeoutMs);
   }
 
   @Nonnull
-  public File download(URI url) throws IOException {
+  public File download(URI url) {
     return download(url, config.timeout());
   }
 
   @Nonnull
-  public File download(URI url, long timeoutMs) throws IOException {
+  public File download(URI url, long timeoutMs) {
     return downloadFileWithHttpRequest().download(driver(), url, timeoutMs, none());
   }
 

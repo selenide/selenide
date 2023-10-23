@@ -6,7 +6,9 @@ import com.codeborne.selenide.commands.Val;
 import com.codeborne.selenide.impl.WebElementSource;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class AppiumVal extends Val {
   private final GetValue getValue = new GetValue();
   private final AppiumSetValue setValue = new AppiumSetValue();

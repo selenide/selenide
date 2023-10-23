@@ -4,6 +4,7 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
@@ -18,7 +19,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,7 +50,7 @@ public class DownloadFileToFolder {
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
-                       DownloadAction action) throws FileNotFoundException {
+                       DownloadAction action) {
 
     WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     long minimalIncrementTimeout = Math.max(incrementTimeout, 1000);
@@ -64,7 +64,7 @@ public class DownloadFileToFolder {
   private File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource anyClickableElement, WebElement clickable,
                                                         long timeout, long incrementTimeout,
                                                         FileFilter fileFilter,
-                                                        DownloadAction action) throws FileNotFoundException {
+                                                        DownloadAction action) {
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
     long pollingInterval = Math.max(config.pollingInterval(), 50);
@@ -90,7 +90,7 @@ public class DownloadFileToFolder {
       log.debug("All downloaded files: {}", folder.filesAsString());
     }
 
-    File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
+    File downloadedFile = newDownloads.firstDownloadedFile(driver, timeout, fileFilter);
     return archiveFile(driver, downloadedFile);
   }
 
@@ -100,7 +100,7 @@ public class DownloadFileToFolder {
   }
 
   private void waitUntilDownloadsCompleted(Driver driver, DownloadsFolder folder, FileFilter filter,
-                                           long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
+                                           long timeout, long incrementTimeout, long pollingInterval) {
     Browser browser = driver.browser();
     if (browser.isChrome() || browser.isEdge()) {
       waitUntilFileDisappears(driver, folder, CHROMIUM_TEMPORARY_FILES, filter, timeout, incrementTimeout, pollingInterval);
@@ -114,7 +114,7 @@ public class DownloadFileToFolder {
   }
 
   private void waitUntilFileDisappears(Driver driver, DownloadsFolder folder, Set<String> extension, FileFilter filter,
-                                       long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
+                                       long timeout, long incrementTimeout, long pollingInterval) {
     for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       if (!folder.hasFiles(extension, filter)) {
         log.debug("No {} files found, conclude download is completed (filter: {})", extension, filter);
@@ -127,7 +127,7 @@ public class DownloadFileToFolder {
     if (folder.hasFiles(extension, filter)) {
       String message = String.format("Folder %s still contains files %s after %s ms. " +
                                      "Apparently, the downloading hasn't completed in time.", folder, extension, timeout);
-      throw new FileNotFoundException(message);
+      throw new FileNotDownloadedError(driver, message, timeout);
     }
   }
 
@@ -154,7 +154,7 @@ public class DownloadFileToFolder {
   }
 
   private void waitForNewFiles(Driver driver, FileFilter fileFilter, DownloadsFolder folder, long clickMoment,
-                               long timeout, long incrementTimeout, long pollingInterval) throws FileNotFoundException {
+                               long timeout, long incrementTimeout, long pollingInterval) {
     if (log.isDebugEnabled()) {
       log.debug("Waiting for files in {}...", folder);
     }
@@ -178,7 +178,7 @@ public class DownloadFileToFolder {
   }
 
   protected void failFastIfNoChanges(Driver driver, DownloadsFolder folder, FileFilter filter,
-                                     long start, long timeout, long incrementTimeout) throws FileNotFoundException {
+                                     long start, long timeout, long incrementTimeout) {
     long lastFileUpdate = folder.lastModificationTime().orElse(-1L);
     long now = currentTimeMillis();
     long filesHasNotBeenUpdatedForMs = filesHasNotBeenUpdatedForMs(start, now, lastFileUpdate);
@@ -190,7 +190,7 @@ public class DownloadFileToFolder {
         filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs,
         start, lastFileUpdate, now, incrementTimeout,
         folder.modificationTimes());
-      throw new FileNotFoundException(message);
+      throw new FileNotDownloadedError(driver, message, timeout);
     }
   }
 

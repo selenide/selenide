@@ -15,7 +15,7 @@ import org.openqa.selenium.interactions.Sequence;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -26,12 +26,13 @@ import static com.codeborne.selenide.commands.Util.firstOf;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
+@ParametersAreNonnullByDefault
 public class AppiumSwipeTo implements Command<SelenideElement> {
   private static final AppiumSwipeOptions DEFAULT_OPTIONS = right();
 
   @Nullable
   @Override
-  public SelenideElement execute(SelenideElement element, WebElementSource locator, @Nullable Object[] args) throws IOException {
+  public SelenideElement execute(SelenideElement element, WebElementSource locator, @Nullable Object[] args) {
     AppiumSwipeOptions appiumSwipeOptions = extractOptions(args);
     Optional<AppiumDriver> driver = cast(locator.driver(), AppiumDriver.class);
 

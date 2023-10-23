@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class FirefoxWithSystemPropertiesTest extends ITest {
   @BeforeEach
-  void setUp() throws IOException {
+  void setUp() {
     assumeThat(browser().isFirefox()).isTrue();
     driver().close();
   }

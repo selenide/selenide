@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.By;
@@ -17,7 +18,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -897,7 +897,7 @@ public class Selenide {
    */
   @Nonnull
   @CheckReturnValue
-  public static File download(String url) throws IOException, URISyntaxException {
+  public static File download(String url) throws URISyntaxException {
     return getSelenideDriver().download(url);
   }
 
@@ -906,7 +906,7 @@ public class Selenide {
    */
   @Nonnull
   @CheckReturnValue
-  public static File download(URI url) throws IOException {
+  public static File download(URI url) {
     return getSelenideDriver().download(url);
   }
 
@@ -915,7 +915,7 @@ public class Selenide {
    */
   @Nonnull
   @CheckReturnValue
-  public static File download(URI url, long timeoutMs) throws IOException {
+  public static File download(URI url, long timeoutMs) {
     return getSelenideDriver().download(url, timeoutMs);
   }
 
@@ -931,12 +931,12 @@ public class Selenide {
    *                  E.g. instead of "/files/ж.txt", it should be "/files/%D0%B6.txt"
    * @param timeoutMs specific timeout in ms
    * @return downloaded File in folder `Configuration.reportsFolder`
-   * @throws IOException        if failed to download file
+   * @throws FileNotDownloadedError        if failed to download file
    * @throws URISyntaxException if given url has invalid syntax
    */
   @Nonnull
   @CheckReturnValue
-  public static File download(String url, long timeoutMs) throws IOException, URISyntaxException {
+  public static File download(String url, long timeoutMs) throws URISyntaxException {
     return getSelenideDriver().download(new URI(url), timeoutMs);
   }
 

@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
-import java.io.IOException;
 
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
@@ -33,10 +32,10 @@ import static org.mockito.Mockito.when;
 final class DownloadFileTest {
   private final SelenideConfig config = new SelenideConfig();
   private final Driver driver = mock();
-  private final DownloadFileWithHttpRequest httpget = mock();
+  private final DownloadFileWithHttpRequest httpGet = mock();
   private final DownloadFileWithProxyServer proxy = mock();
   private final DownloadFileToFolder folder = mock();
-  private final DownloadFile command = new DownloadFile(httpget, proxy, folder);
+  private final DownloadFile command = new DownloadFile(httpGet, proxy, folder);
   private final SelenideElement seLink = mock();
   private final WebElementSource linkWithHref = mock();
   private final WebElement link = mock();
@@ -50,20 +49,20 @@ final class DownloadFileTest {
   }
 
   @Test
-  void canDownloadFile_withHttpGetRequest() throws IOException {
+  void canDownloadFile_withHttpGetRequest() {
     config.fileDownload(HTTPGET);
 
-    when(httpget.download(any(), any(WebElement.class), anyLong(), any())).thenReturn(file);
+    when(httpGet.download(any(), any(WebElement.class), anyLong(), any())).thenReturn(file);
 
     File f = command.execute(seLink, linkWithHref, new Object[]{8000L});
 
     assertThat(f).isSameAs(file);
-    verify(httpget).download(driver, link, 8000L, none());
+    verify(httpGet).download(driver, link, 8000L, none());
     verifyNoMoreInteractions(proxy);
   }
 
   @Test
-  void canDownloadFile_withProxyServer() throws IOException {
+  void canDownloadFile_withProxyServer() {
     config.proxyEnabled(true).fileDownload(PROXY);
     SelenideProxyServer selenideProxy = mock();
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, selenideProxy));
@@ -73,7 +72,7 @@ final class DownloadFileTest {
 
     assertThat(f).isSameAs(file);
     verify(proxy).download(linkWithHref, link, 9000L, none(), click());
-    verifyNoMoreInteractions(httpget);
+    verifyNoMoreInteractions(httpGet);
   }
 
   @Test

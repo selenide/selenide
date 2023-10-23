@@ -4,6 +4,7 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
@@ -13,8 +14,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
@@ -54,7 +53,7 @@ final class DownloadFileWithProxyServerTest {
   }
 
   @Test
-  void canInterceptFileViaProxyServer() throws IOException {
+  void canInterceptFileViaProxyServer() {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
     File file = command.download(linkWithHref, link, 3000, none(), click());
@@ -66,7 +65,7 @@ final class DownloadFileWithProxyServerTest {
   }
 
   @Test
-  void closesNewWindowIfFileWasOpenedInSeparateWindow() throws IOException {
+  void closesNewWindowIfFileWasOpenedInSeparateWindow() {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
     File file = command.download(linkWithHref, link, 3000, none(), click());
@@ -76,11 +75,11 @@ final class DownloadFileWithProxyServerTest {
   }
 
   @Test
-  void throwsFileNotFoundExceptionIfNoFilesHaveBeenDownloadedAfterClick() {
+  void throws_FileNotDownloaded_ifNoFilesHaveBeenDownloadedAfterClick() {
     emulateServerResponseWithFiles();
 
     assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), click()))
-      .isInstanceOf(FileNotFoundException.class)
+      .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageStartingWith("Failed to download file in 3000 ms.");
   }
 

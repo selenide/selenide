@@ -2,7 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.ex.TimeoutException;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import com.github.bsideup.jabel.Desugar;
@@ -36,11 +36,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
 import java.util.Optional;
@@ -75,7 +74,7 @@ public class DownloadFileWithHttpRequest {
 
   @CheckReturnValue
   @Nonnull
-  public File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter) throws IOException {
+  public File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter) {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
       throw new IllegalArgumentException("The element does not have href attribute: " + describe.fully(driver, element));
@@ -86,17 +85,17 @@ public class DownloadFileWithHttpRequest {
 
   @CheckReturnValue
   @Nonnull
-  public File download(Driver driver, URI url, long timeout, FileFilter fileFilter) throws IOException {
+  public File download(Driver driver, URI url, long timeout, FileFilter fileFilter) {
     return download(driver, url.toASCIIString(), timeout, fileFilter);
   }
 
   @CheckReturnValue
   @Nonnull
-  public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout, FileFilter fileFilter) throws IOException {
+  public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout, FileFilter fileFilter) {
     String url = makeAbsoluteUrl(driver.config(), relativeOrAbsoluteUrl);
-    Resource resource = parseUrl(url);
 
     try (CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : createDefaultHttpClient()) {
+      Resource resource = parseUrl(url);
       HttpGet httpGet = new HttpGet(resource.uri());
       configureHttpGet(httpGet, timeout);
       addHttpHeaders(driver, httpGet, resource.credentials());
@@ -105,8 +104,8 @@ public class DownloadFileWithHttpRequest {
         }
       );
     }
-    catch (SocketTimeoutException timeoutException) {
-      throw new TimeoutException("Failed to download " + url + " in " + timeout + " ms.", timeoutException);
+    catch (IOException e) {
+      throw new FileNotDownloadedError(driver, "Failed to download " + url + " in " + timeout + " ms.", timeout, e);
     }
   }
 
@@ -117,7 +116,7 @@ public class DownloadFileWithHttpRequest {
       throw new RuntimeException("Failed to download file " + url + ": " + response);
     }
     if (response.getCode() >= 400) {
-      throw new FileNotFoundException("Failed to download file " + url + ": " + response);
+      throw new FileNotDownloadedError(driver, "Failed to download file " + url + ": " + response, timeout);
     }
 
     String fileName = getFileName(url, response);
@@ -125,9 +124,9 @@ public class DownloadFileWithHttpRequest {
     saveContentToFile(response, downloadedFile);
 
     if (!fileFilter.match(new DownloadedFile(downloadedFile, emptyMap()))) {
-      throw new FileNotFoundException(String.format("Failed to download file from %s in %d ms.%s;%n actually downloaded: %s",
-        url, timeout, fileFilter.description(), downloadedFile.getAbsolutePath())
-      );
+      String message = String.format("Failed to download file from %s in %d ms.%s;%n actually downloaded: %s",
+        url, timeout, fileFilter.description(), downloadedFile.getAbsolutePath());
+      throw new FileNotDownloadedError(driver, message, timeout);
     }
     return downloadedFile;
   }
@@ -203,7 +202,7 @@ public class DownloadFileWithHttpRequest {
       builder.setConnectionManager(connMgr);
       return builder.build();
     }
-    catch (Exception e) {
+    catch (GeneralSecurityException e) {
       throw new IOException(e);
     }
   }
