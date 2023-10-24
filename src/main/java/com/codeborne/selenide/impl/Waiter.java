@@ -4,7 +4,7 @@ import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.ex.ConditionMetError;
-import com.codeborne.selenide.ex.ConditionNotMetException;
+import com.codeborne.selenide.ex.ConditionNotMetError;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -61,7 +61,7 @@ public class Waiter {
       sleep(pollingInterval);
     }
 
-    Error failure = UIAssertionError.wrap(driver, new ConditionNotMetException(driver, condition, subject, result, error), timeout);
+    Error failure = UIAssertionError.wrap(driver, new ConditionNotMetError(driver, condition, subject, result, error), timeout);
     SelenideLogger.commitStep(log, failure);
     throw failure;
   }

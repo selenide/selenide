@@ -3,7 +3,7 @@ package integration;
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.ex.ConditionMetError;
-import com.codeborne.selenide.ex.ConditionNotMetException;
+import com.codeborne.selenide.ex.ConditionNotMetError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Cookie;
@@ -52,7 +52,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     assertThatThrownBy(() ->
       webdriver().shouldHave(url("page_with_frames.html"), ofMillis(10))
     )
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("webdriver should have url page_with_frames.html")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
@@ -90,7 +90,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     assertThatThrownBy(() ->
       webdriver().shouldHave(urlStartingWith("https://google.ee/"), ofMillis(10))
     )
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("webdriver should have url starting with https://google.ee/")
       .hasMessageContaining("Actual value: " + baseUrl + "/page_with_frames_with_delays.html")
       .hasMessageContaining("Screenshot: ")
@@ -108,7 +108,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     assertThatThrownBy(() ->
       webdriver().shouldHave(currentFrameUrl("https://google.ee/"), ofMillis(20))
     )
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("current frame should have url https://google.ee/")
       .hasMessageContaining("Actual value: " + baseUrl + "/page_with_frames_with_delays.html")
       .hasMessageContaining("Screenshot: ")
@@ -131,7 +131,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     assertThatThrownBy(() ->
       webdriver().shouldHave(currentFrameUrlStartingWith("https://google.ee/"), ofMillis(5))
     )
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("current frame should have url starting with https://google.ee/")
       .hasMessageContaining("Actual value: " + baseUrl + "/page_with_frames_with_delays.html")
       .hasMessageContaining("Screenshot: ")
@@ -160,7 +160,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   void errorMessageForNumberOfWindows() {
     assertThatThrownBy(() ->
       webdriver().shouldHave(numberOfWindows(2)))
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageContaining("webdriver should have 2 window(s)")
       .hasMessageContaining("Actual value: 1");
 
@@ -181,7 +181,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     assertThatThrownBy(() ->
       webdriver().shouldHave(title("Selenide-test-page"), ofMillis(10))
     )
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageContaining("Actual value: Test::frames with delays");
   }
 
@@ -259,7 +259,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
     $("#button-put").click();
     assertThatThrownBy(() -> webdriver().shouldHave(cookie("WRONG_COOKIE")))
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("webdriver should have a cookie with name \"WRONG_COOKIE\"")
       .hasMessageContaining("Actual value: Available cookies: [TEST_COOKIE=AF33892F98ABC39A")
       .hasMessageContaining("Screenshot: ")
@@ -281,7 +281,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
     $("#button-put").click();
     assertThatThrownBy(() -> webdriver().shouldHave(cookie("WRONG_COOKIE", VALUE)))
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("webdriver should have a cookie with name \"WRONG_COOKIE\" and value \"AF33892F98ABC39A\"")
       .hasMessageContaining("Actual value: Available cookies: [TEST_COOKIE=AF33892F98ABC39A");
   }

@@ -1,7 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.ex.ConditionMetError;
-import com.codeborne.selenide.ex.ConditionNotMetException;
+import com.codeborne.selenide.ex.ConditionNotMetError;
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +68,7 @@ final class SessionStorageTest extends IntegrationTest {
     assertThatThrownBy(() ->
       sessionStorage().shouldHave(item("foo"), ofMillis(10))
     )
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("sessionStorage should have item 'foo'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
@@ -82,7 +82,7 @@ final class SessionStorageTest extends IntegrationTest {
     assertThatThrownBy(() ->
       sessionStorage().shouldHave(itemWithValue("it", "wrong"))
     )
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("sessionStorage should have item 'it' with value 'wrong'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
