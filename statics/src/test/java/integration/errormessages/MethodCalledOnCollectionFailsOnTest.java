@@ -78,7 +78,7 @@ final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {.nonexistent/li}")
       .hasMessageContaining("Expected: Exact texts [Miller, Julie Mao]")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .is(webElementNotFound(".nonexistent"));
   }
@@ -125,7 +125,7 @@ final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul.findBy(text \"NOPE\")}")
       .hasMessageContaining("Expected: visible")
       .hasCauseInstanceOf(NoSuchElementException.class)
-      .getCause()
+      .cause()
       .hasMessageStartingWith("Cannot locate an element ul.findBy(text \"NOPE\")");
   }
 
@@ -138,7 +138,7 @@ final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul.findBy(text \"NOPE\")}")
       .hasMessageContaining("Expected: exist")
       .hasCauseInstanceOf(NoSuchElementException.class)
-      .getCause()
+      .cause()
       .hasMessageStartingWith("Cannot locate an element ul.findBy(text \"NOPE\")");
   }
 

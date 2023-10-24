@@ -59,7 +59,7 @@ public class LazyPageObjectTest extends IntegrationTest {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {By.className: wrong-content/By.tagName: form}")
       .hasMessageContaining("Timeout: 0 ms.")
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class);
   }
 

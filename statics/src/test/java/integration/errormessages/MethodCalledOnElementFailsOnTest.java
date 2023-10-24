@@ -41,7 +41,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul .nonexistent}")
       .hasMessageContaining("Expected: text \"Miller\"")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .is(webElementNotFound("ul .nonexistent"));
   }
@@ -55,7 +55,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul .nonexistent[1]}")
       .hasMessageContaining("Expected: visible")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(IndexOutOfBoundsException.class)
       .hasMessageMatching("Index\\D+1\\D+0");
   }
@@ -69,7 +69,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul li[10]}")
       .hasMessageContaining("Expected: text \"Miller\"")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(IndexOutOfBoundsException.class)
       .hasMessageMatching("Index\\D+10\\D+2");
   }
@@ -83,7 +83,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul li[10]}")
       .hasMessageContaining("Expected: clickable: interactable and enabled")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(IndexOutOfBoundsException.class)
       .hasMessageMatching("Index\\D+10\\D+2");
   }
@@ -97,7 +97,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {.nonexistent.findBy(css class \"the-expanse\")}")
       .hasMessageContaining("Expected: exist")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .hasMessageStartingWith("Cannot locate an element .nonexistent.findBy(css class \"the-expanse\")");
   }
@@ -111,7 +111,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {li.findBy(css class \"nonexistent\")}")
       .hasMessageContaining("Expected: visible")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .hasMessageStartingWith("Cannot locate an element li.findBy(css class \"nonexistent\")");
   }
@@ -125,7 +125,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {li.findBy(css class \"nonexistent\")}")
       .hasMessageContaining("Expected: exist")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .hasMessageStartingWith("Cannot locate an element li.findBy(css class \"nonexistent\")");
   }
@@ -139,7 +139,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {.nonexistent}")
       .hasMessageContaining("Expected: exist")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .is(webElementNotFound(".nonexistent"));
   }
@@ -153,7 +153,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul/.nonexistent}")
       .hasMessageContaining("Expected: visible")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .is(webElementNotFound(".nonexistent"));
   }
@@ -167,7 +167,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul/.nonexistent}")
       .hasMessageContaining("Expected: clickable: interactable and enabled")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .is(webElementNotFound(".nonexistent"));
   }
@@ -185,7 +185,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
         "{ul .nonexistent.filter(css class \"the-expanse\").findBy(css class \"detective\")}")
       .hasMessageContaining("Expected: exist")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .hasMessageStartingWith("Cannot locate an element" +
         " ul .nonexistent.filter(css class \"the-expanse\").findBy(css class \"detective\")");
@@ -200,7 +200,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul li.filter(css class \"nonexistent\").findBy(css class \"detective\")}")
       .hasMessageContaining("Expected: exist")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .hasMessageStartingWith("Cannot locate an element ul li.filter(css class \"nonexistent\").findBy(css class \"detective\")");
   }
@@ -214,7 +214,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul li.filter(css class \"the-expanse\").findBy(css class \"nonexistent\")}")
       .hasMessageContaining("css class \"nonexistent\"")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .hasMessageStartingWith("Cannot locate an element ul li.filter(css class \"the-expanse\").findBy(css class \"nonexistent\")");
   }
@@ -229,7 +229,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
         "{ul li.filter(css class \"the-expanse\").findBy(css class \"detective\")/.nonexistent}")
       .hasMessageContaining("Expected: exact text \"detective\"")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .is(webElementNotFound(".nonexistent"));
   }
@@ -243,7 +243,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul .nonexistent.filter(css class \"the-expanse\")[0]}")
       .hasMessageContaining("Expected: visible")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(IndexOutOfBoundsException.class)
       .hasMessageMatching("Index: 0");
   }
@@ -257,7 +257,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul li.filter(css class \"nonexistent\")[0]}")
       .hasMessageContaining("Expected: visible")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(IndexOutOfBoundsException.class)
       .hasMessageMatching("Index: 0");
   }
@@ -271,7 +271,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul li.filter(css class \"the-expanse\")[2]}")
       .hasMessageContaining("Expected: exist")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(IndexOutOfBoundsException.class)
       .hasMessageMatching("Index: 2");
   }
@@ -285,7 +285,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {ul li.filter(css class \"the-expanse\")[0]/.nonexistent}")
       .hasMessageContaining("Expected: exact text \"detective\"")
       .has(screenshot())
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .is(webElementNotFound(".nonexistent"));
   }
