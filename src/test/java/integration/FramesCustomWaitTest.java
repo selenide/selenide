@@ -3,7 +3,7 @@ package integration;
 import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.codeborne.selenide.ex.FrameNotFoundException;
+import com.codeborne.selenide.ex.FrameNotFoundError;
 import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,14 +27,14 @@ final class FramesCustomWaitTest extends ITest {
   void waitsUntilFrameAppears_withoutCustomTimeout() {
     $("#btn").click();
     assertThatThrownBy(() -> switchTo().frame(1))
-      .isInstanceOf(FrameNotFoundException.class);
+      .isInstanceOf(FrameNotFoundError.class);
   }
 
   @Test
   void waitsUntilFrameAppears_withLowerTimeout() {
     $("#btn").click();
     assertThatThrownBy(() -> switchTo().frame(1, Duration.ofSeconds(1)))
-      .isInstanceOf(FrameNotFoundException.class);
+      .isInstanceOf(FrameNotFoundError.class);
   }
 
 }
