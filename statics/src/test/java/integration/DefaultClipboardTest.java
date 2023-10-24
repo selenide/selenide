@@ -1,7 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.ex.ConditionMetError;
-import com.codeborne.selenide.ex.ConditionNotMetException;
+import com.codeborne.selenide.ex.ConditionNotMetError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -44,7 +44,7 @@ public class DefaultClipboardTest extends IntegrationTest {
     assertThatThrownBy(() ->
       clipboard().shouldHave(content("Goodbye World"), ofMillis(22))
     )
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("clipboard should have content 'Goodbye World'")
       .hasMessageContaining("Actual value: Hello World")
       .hasMessageContaining("Timeout: 22 ms.");

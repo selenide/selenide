@@ -4,7 +4,7 @@ import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.LocalStorage;
 import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.ex.ConditionMetError;
-import com.codeborne.selenide.ex.ConditionNotMetException;
+import com.codeborne.selenide.ex.ConditionNotMetError;
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -90,7 +90,7 @@ final class LocalStorageTest extends IntegrationTest {
     assertThatThrownBy(() ->
       localStorage().shouldHave(item("foo"), ofMillis(10))
     )
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("localStorage should have item 'foo'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
@@ -104,7 +104,7 @@ final class LocalStorageTest extends IntegrationTest {
     assertThatThrownBy(() ->
       localStorage().shouldHave(itemWithValue("it", "wrong"))
     )
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("localStorage should have item 'it' with value 'wrong'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
