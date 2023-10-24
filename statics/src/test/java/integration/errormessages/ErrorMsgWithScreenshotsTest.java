@@ -53,7 +53,7 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
     )
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining("Element not found {#nonexisting-form/by text: mymail@gmail.com.findBy(css class \"trash\")}")
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .hasMessageContainingAll("Unable to locate element", "#nonexisting-form");
   }

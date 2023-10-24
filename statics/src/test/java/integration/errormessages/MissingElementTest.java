@@ -62,12 +62,12 @@ final class MissingElementTest extends IntegrationTest {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageMatching(String.format("Element not found \\{#h9}%n" +
         "Expected: text \"expected text\"%n" +
-        "Screenshot: " + path + png() + "%n" +
-        "Page source: " + path + html() + "%n" +
+        "Screenshot: %s%s%n" +
+        "Page source: %s%s%n" +
         "Timeout: 15 ms.%n" +
-        "Caused by: NoSuchElementException:.*"))
+        "Caused by: NoSuchElementException:.*", path, png(), path, html()))
       .has(screenshot(path("elementNotFound")))
-      .getCause()
+      .cause()
       .isInstanceOf(NoSuchElementException.class)
       .is(webElementNotFound("#h9"));
   }
@@ -82,9 +82,9 @@ final class MissingElementTest extends IntegrationTest {
       .hasMessageMatching(String.format("Element should have text \"expected text\" \\{h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Actual value: text=\"Dropdown list\"%n" +
-        "Screenshot: " + path + png() + "%n" +
-        "Page source: " + path + html() + "%n" +
-        "Timeout: 15 ms."));
+        "Screenshot: %s%s%n" +
+        "Page source: %s%s%n" +
+        "Timeout: 15 ms.", path, png(), path, html()));
   }
 
   @Test
@@ -97,9 +97,9 @@ final class MissingElementTest extends IntegrationTest {
       .hasMessageMatching(String.format("Element should have attribute name=\"header\" \\{h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Actual value: name=\"\"%n" +
-        "Screenshot: " + path + png() + "%n" +
-        "Page source: " + path + html() + "%n" +
-        "Timeout: 15 ms."));
+        "Screenshot: %s%s%n" +
+        "Page source: %s%s%n" +
+        "Timeout: 15 ms.", path, png(), path, html()));
   }
 
   @Test
@@ -112,9 +112,9 @@ final class MissingElementTest extends IntegrationTest {
       .hasMessageMatching(String.format("Element should have text \"expected text\" \\{By.tagName: h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Actual value: text=\"Dropdown list\"%n" +
-        "Screenshot: " + path + png() + "%n" +
-        "Page source: " + path + html() + "%n" +
-        "Timeout: 15 ms."));
+        "Screenshot: %s%s%n" +
+        "Page source: %s%s%n" +
+        "Timeout: 15 ms.", path, png(), path, html()));
   }
 
   @Test
@@ -128,9 +128,9 @@ final class MissingElementTest extends IntegrationTest {
         "Element should be clickable: interactable and enabled \\{#theHiddenElement}%n" +
           "Element: '<div id=\"theHiddenElement\" displayed:false></div>'%n" +
           "Actual value: hidden, opacity=1%n" +
-          "Screenshot: " + path + png() + "%n" +
-          "Page source: " + path + html() + "%n" +
-          "Timeout: 15 ms."));
+          "Screenshot: %s%s%n" +
+          "Page source: %s%s%n" +
+          "Timeout: 15 ms.", path, png(), path, html()));
   }
 
   @Test
@@ -143,9 +143,9 @@ final class MissingElementTest extends IntegrationTest {
       .hasMessageMatching(String.format("Element should have text \"expected text\" \\{By.tagName: h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Actual value: text=\"Dropdown list\"%n" +
-        "Screenshot: " + path + png() + "%n" +
-        "Page source: " + path + html() + "%n" +
-        "Timeout: 15 ms."));
+        "Screenshot: %s%s%n" +
+        "Page source: %s%s%n" +
+        "Timeout: 15 ms.", path, png(), path, html()));
   }
 
   @Test
@@ -158,9 +158,9 @@ final class MissingElementTest extends IntegrationTest {
       .hasMessageMatching(String.format("Element should have text \"expected text\" \\{By.tagName: h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Actual value: text=\"Dropdown list\"%n" +
-        "Screenshot: " + path + png() + "%n" +
-        "Page source: " + path + html() + "%n" +
-        "Timeout: 15 ms."));
+        "Screenshot: %s%s%n" +
+        "Page source: %s%s%n" +
+        "Timeout: 15 ms.", path, png(), path, html()));
   }
 
   @Test
@@ -196,9 +196,9 @@ final class MissingElementTest extends IntegrationTest {
       .hasMessageMatching(String.format("Element should not exist \\{h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Actual value: exists%n" +
-        "Screenshot: " + path + png() + "%n" +
-        "Page source: " + path + html() + "%n" +
-        "Timeout: 15 ms."));
+        "Screenshot: %s%s%n" +
+        "Page source: %s%s%n" +
+        "Timeout: 15 ms.", path, png(), path, html()));
   }
 
   @Test
@@ -210,10 +210,10 @@ final class MissingElementTest extends IntegrationTest {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageMatching(String.format("Element not found \\{h14}%n" +
         "Expected: not hidden%n" +
-        "Screenshot: " + path + png() + "%n" +
-        "Page source: " + path + html() + "%n" +
+        "Screenshot: %s%s%n" +
+        "Page source: %s%s%n" +
         "Timeout: 15 ms.%n" +
-        "Caused by: NoSuchElementException:.*"));
+        "Caused by: NoSuchElementException:.*", path, png(), path, html()));
   }
 
   @Test

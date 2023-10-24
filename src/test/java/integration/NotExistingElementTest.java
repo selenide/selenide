@@ -56,7 +56,7 @@ final class NotExistingElementTest extends ITest {
   @Test
   void shouldNot_match() {
     assertThatThrownBy(() ->
-      $("#not_exist").shouldNot(match("border=1", el -> el.getAttribute("border").equals("1")))
+      $("#not_exist").shouldNot(match("border=1", el -> "1".equals(el.getAttribute("border"))))
     ).isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {#not_exist}");
   }
@@ -93,7 +93,7 @@ final class NotExistingElementTest extends ITest {
   }
 
   @Test
-  void getWrappedElement_waits_untilElementApears() {
+  void getWrappedElement_waits_untilElementAppears() {
     setTimeout(1000);
     long start = System.nanoTime();
     try {
@@ -101,7 +101,7 @@ final class NotExistingElementTest extends ITest {
         .isInstanceOf(ElementNotFound.class)
         .hasMessageStartingWith("Element not found {#not_exist}")
         .hasCauseExactlyInstanceOf(org.openqa.selenium.NoSuchElementException.class)
-        .getCause()
+        .cause()
         .hasMessageContainingAll("Unable to locate element:", "#not_exist");
     }
     finally {
