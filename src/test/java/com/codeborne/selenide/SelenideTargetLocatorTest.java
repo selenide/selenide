@@ -1,6 +1,6 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.ex.FrameNotFoundException;
+import com.codeborne.selenide.ex.FrameNotFoundError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
@@ -42,7 +42,7 @@ final class SelenideTargetLocatorTest {
     when(targetLocator.frame(anyInt())).thenThrow(new NoSuchElementException("ups"));
 
     assertThatThrownBy(() -> switchTo.frame(666))
-      .isInstanceOf(FrameNotFoundException.class)
+      .isInstanceOf(FrameNotFoundError.class)
       .hasMessageStartingWith("No frame found with index: 666");
 
     verify(targetLocator).frame(666);
@@ -53,7 +53,7 @@ final class SelenideTargetLocatorTest {
     when(targetLocator.frame(anyInt())).thenThrow(new TimeoutException("ups"));
 
     assertThatThrownBy(() -> switchTo.frame(666))
-      .isInstanceOf(FrameNotFoundException.class)
+      .isInstanceOf(FrameNotFoundError.class)
       .hasMessageStartingWith("No frame found with index: 666");
 
     verify(targetLocator).frame(666);
@@ -66,7 +66,7 @@ final class SelenideTargetLocatorTest {
         "  (Session info: headless chrome=75.0.3770.90)\n"));
 
     assertThatThrownBy(() -> switchTo.frame(666))
-      .isInstanceOf(FrameNotFoundException.class)
+      .isInstanceOf(FrameNotFoundError.class)
       .hasMessageStartingWith("No frame found with index: 666");
 
     verify(targetLocator).frame(666);
@@ -79,7 +79,7 @@ final class SelenideTargetLocatorTest {
         "  (Session info: headless chrome=75.0.3770.90)\n"));
 
     assertThatThrownBy(() -> switchTo.frame(666))
-      .isInstanceOf(FrameNotFoundException.class)
+      .isInstanceOf(FrameNotFoundError.class)
       .hasMessageStartingWith("No frame found with index: 666");
 
     verify(targetLocator).frame(666);

@@ -1,6 +1,6 @@
 package integration;
 
-import com.codeborne.selenide.ex.FrameNotFoundException;
+import com.codeborne.selenide.ex.FrameNotFoundError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -90,7 +90,7 @@ final class FramesTest extends ITest {
       // $("#log") is present, but not frame.
       switchTo().frame($("#log"));
     })
-      .isInstanceOf(FrameNotFoundException.class)
+      .isInstanceOf(FrameNotFoundError.class)
       .hasMessageStartingWith("No frame found with element: {#log}");
   }
 
@@ -98,7 +98,7 @@ final class FramesTest extends ITest {
   void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByTitle() {
     assertThat(driver().title()).isEqualTo("Test::frames");
     assertThatThrownBy(() -> switchTo().frame("absentFrame"))
-      .isInstanceOf(FrameNotFoundException.class)
+      .isInstanceOf(FrameNotFoundError.class)
       .hasMessageStartingWith("No frame found with id/name: absentFrame");
   }
 
@@ -107,14 +107,14 @@ final class FramesTest extends ITest {
     assertThat(driver().title()).isEqualTo("Test::frames");
 
     assertThatThrownBy(() -> switchTo().frame(Integer.MAX_VALUE))
-      .isInstanceOf(FrameNotFoundException.class)
+      .isInstanceOf(FrameNotFoundError.class)
       .hasMessageStartingWith("No frame found with index: " + Integer.MAX_VALUE);
   }
 
   @Test
   void attachesScreenshotWhenCannotFrameNotFound() {
     assertThatThrownBy(() -> switchTo().frame(33))
-      .isInstanceOf(FrameNotFoundException.class)
+      .isInstanceOf(FrameNotFoundError.class)
       .hasMessageStartingWith("No frame found with index: 33")
       .hasMessageContaining("Screenshot: file:")
       .hasMessageContaining("Page source: file:")

@@ -5,8 +5,8 @@ import com.codeborne.selenide.Driver;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class FrameNotFoundException extends UIAssertionError {
-  public FrameNotFoundException(Driver driver, String message, Throwable cause) {
+public class FrameNotFoundError extends UIAssertionError {
+  public FrameNotFoundError(Driver driver, String message, Throwable cause) {
     super(driver, message, cause);
   }
 }
