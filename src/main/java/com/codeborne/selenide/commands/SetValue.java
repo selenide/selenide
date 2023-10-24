@@ -5,7 +5,7 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.SetValueOptions;
-import com.codeborne.selenide.ex.InvalidStateException;
+import com.codeborne.selenide.ex.InvalidStateError;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
@@ -62,7 +62,7 @@ public class SetValue implements Command<SelenideElement> {
       String error = setValueByJs(driver, element, value);
       if (isNotEmpty(error)) {
         String elementDescription = locator.description();
-        throw new InvalidStateException(driver, elementDescription, error);
+        throw new InvalidStateError(driver, elementDescription, error);
       }
     }
     else {

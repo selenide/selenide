@@ -4,7 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
-import com.codeborne.selenide.ex.InvalidStateException;
+import com.codeborne.selenide.ex.InvalidStateError;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -112,19 +112,19 @@ final class ReadonlyElementsTest extends IntegrationTest {
   @Test
   void cannotChangeValueOfDisabledCheckbox() {
     assertThatThrownBy(() -> $(By.name("disabledCheckbox")).setSelected(false))
-      .isInstanceOf(InvalidStateException.class);
+      .isInstanceOf(InvalidStateError.class);
   }
 
   @Test
   void cannotSetValueToReadonlyCheckbox() {
     assertThatThrownBy(() -> $(By.name("rememberMe")).setSelected(true))
-      .isInstanceOf(InvalidStateException.class);
+      .isInstanceOf(InvalidStateError.class);
   }
 
   @Test
   void cannotSetValueToReadonlyRadiobutton() {
     assertThatThrownBy(() -> $(By.name("me")).selectRadio("margarita"))
-      .isInstanceOf(InvalidStateException.class);
+      .isInstanceOf(InvalidStateError.class);
   }
 
   @Test
