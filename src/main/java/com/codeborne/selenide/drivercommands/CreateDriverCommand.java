@@ -71,8 +71,8 @@ public class CreateDriverCommand {
 
       WebDriver webdriver = factory.createWebDriver(config, browserProxy, browserDownloadsFolder);
 
-      log.info("Created webdriver in thread {}: {} -> {}",
-        currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
+      log.info("Created webdriver in thread {}: {} -> {}, downloadsFolder: {}",
+        currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver, downloadsFolder);
 
       WebDriver webDriver = addListeners(webdriver, listeners);
       WebDriverInstance result = new WebDriverInstance(config, webDriver, selenideProxyServer, downloadsFolder);
