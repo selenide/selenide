@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.tagName;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.page;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,6 +36,7 @@ public class LazyPageObjectTest extends IntegrationTest {
 
     // level 3
     MyForm subForm = myPage.myContent.forms.get(0);
+    subForm.self.shouldBe(visible).shouldHave(tagName("form"));
     subForm.h1.shouldBe(visible);
     assertThat(subForm.h11.isDisplayed()).isTrue();
     subForm.h3s.shouldHave(size(0));
@@ -86,6 +88,9 @@ public class LazyPageObjectTest extends IntegrationTest {
   }
 
   static class MyForm implements Container {
+    @FindBy(xpath = ".")
+    private SelenideElement self;
+
     @FindBy(tagName = "h1")
     private SelenideElement h1;
 
