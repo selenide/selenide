@@ -1,6 +1,6 @@
 package integration;
 
-import com.codeborne.selenide.ex.WindowNotFoundException;
+import com.codeborne.selenide.ex.WindowNotFoundError;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -139,7 +139,7 @@ final class TabsTest extends ITest {
       .isEqualTo("Test::tabs");
 
     assertThatThrownBy(() -> switchTo().window("absentWindow"))
-      .isInstanceOf(WindowNotFoundException.class)
+      .isInstanceOf(WindowNotFoundError.class)
       .hasMessageStartingWith("No window found with name or handle or title: absentWindow")
       .hasMessageContaining("Screenshot: file:")
       .hasMessageContaining("Page source: file:")
@@ -152,7 +152,7 @@ final class TabsTest extends ITest {
       .isEqualTo("Test::tabs");
 
     assertThatThrownBy(() -> switchTo().window(Integer.MAX_VALUE))
-      .isInstanceOf(WindowNotFoundException.class)
+      .isInstanceOf(WindowNotFoundError.class)
       .hasMessageStartingWith("No window found with index: " + Integer.MAX_VALUE)
       .hasMessageContaining("Screenshot: file:")
       .hasMessageContaining("Page source: file:")

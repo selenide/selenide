@@ -1,6 +1,6 @@
 package integration;
 
-import com.codeborne.selenide.ex.WindowNotFoundException;
+import com.codeborne.selenide.ex.WindowNotFoundError;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ final class TabsCustomWaitTest extends ITest {
     driver().webdriver().shouldHave(numberOfWindows(1));
 
     assertThatThrownBy(() -> switchTo().window(1))
-      .isInstanceOf(WindowNotFoundException.class);
+      .isInstanceOf(WindowNotFoundError.class);
   }
 
   @Test
@@ -43,7 +43,7 @@ final class TabsCustomWaitTest extends ITest {
     driver().webdriver().shouldHave(numberOfWindows(1));
 
     assertThatThrownBy(() -> switchTo().window(1, Duration.ofSeconds(1)))
-      .isInstanceOf(WindowNotFoundException.class);
+      .isInstanceOf(WindowNotFoundError.class);
   }
 
   @AfterEach
