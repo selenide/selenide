@@ -3,7 +3,7 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.InvalidStateException;
+import com.codeborne.selenide.ex.InvalidStateError;
 import com.codeborne.selenide.impl.Arguments;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -36,12 +36,12 @@ public class SelectOptionByValue implements Command<Void> {
       throw new IllegalArgumentException("Cannot select option from a non-select element");
     }
     if (error.containsKey("disabledSelect")) {
-      throw new InvalidStateException(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
+      throw new InvalidStateError(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
     }
     if (error.containsKey("disabledOptions")) {
       List<String> value = cast(error.get("disabledOptions"));
       String elementDescription = String.format("%s/option[value:%s]", selectField.description(), arrayToString(value));
-      throw new InvalidStateException(selectField.driver(), elementDescription, "Cannot select a disabled option");
+      throw new InvalidStateError(selectField.driver(), elementDescription, "Cannot select a disabled option");
     }
     if (error.containsKey("optionsNotFound")) {
       List<String> value = cast(error.get("optionsNotFound"));

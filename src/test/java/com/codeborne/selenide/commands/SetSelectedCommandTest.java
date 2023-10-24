@@ -2,7 +2,7 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.InvalidStateException;
+import com.codeborne.selenide.ex.InvalidStateError;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ final class SetSelectedCommandTest {
     assertThatThrownBy(() -> {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
     })
-      .isInstanceOf(InvalidStateException.class)
+      .isInstanceOf(InvalidStateError.class)
       .hasMessageStartingWith("Invalid element state [.btn.btn-primary]: Cannot change invisible element");
   }
 
@@ -63,7 +63,7 @@ final class SetSelectedCommandTest {
     assertThatThrownBy(() -> {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
     })
-      .isInstanceOf(InvalidStateException.class)
+      .isInstanceOf(InvalidStateError.class)
       .hasMessageStartingWith("Invalid element state [input#username]: Only use setSelected on checkbox/option/radio");
   }
 
@@ -86,7 +86,7 @@ final class SetSelectedCommandTest {
     assertThatThrownBy(() ->
       setSelectedCommand.execute(proxy, locator, new Object[]{true})
     )
-      .isInstanceOf(InvalidStateException.class)
+      .isInstanceOf(InvalidStateError.class)
       .hasMessageStartingWith("Invalid element state [input[name=q]]: Cannot change value of readonly/disabled element");
   }
 

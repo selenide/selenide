@@ -3,7 +3,7 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.InvalidStateException;
+import com.codeborne.selenide.ex.InvalidStateError;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ final class SelectRadioCommandTest {
     givenRadioInput("input.gender", "female", true);
 
     assertThatThrownBy(() -> command.execute(proxy, locator, new Object[]{"female"}))
-      .isInstanceOf(InvalidStateException.class)
+      .isInstanceOf(InvalidStateError.class)
       .hasMessageStartingWith("Invalid element state [input.gender]: Cannot select readonly radio button");
 
     verifyNoInteractions(click);

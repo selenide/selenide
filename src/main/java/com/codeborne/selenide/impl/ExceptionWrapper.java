@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.ex.ElementIsNotClickableException;
-import com.codeborne.selenide.ex.InvalidStateException;
+import com.codeborne.selenide.ex.InvalidStateError;
 import com.codeborne.selenide.ex.UIAssertionError;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.NotFoundException;
@@ -23,7 +23,7 @@ class ExceptionWrapper {
       return error;
     }
     else if (error instanceof InvalidElementStateException) {
-      return new InvalidStateException(webElementSource.driver(), webElementSource.description(), error);
+      return new InvalidStateError(webElementSource.driver(), webElementSource.description(), error);
     }
     else if (isElementNotClickableException(error)) {
       return new ElementIsNotClickableException(webElementSource.driver(), webElementSource.description(), error);

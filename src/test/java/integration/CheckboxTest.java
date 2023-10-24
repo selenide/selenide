@@ -1,7 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.ex.ElementShould;
-import com.codeborne.selenide.ex.InvalidStateException;
+import com.codeborne.selenide.ex.InvalidStateError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -73,18 +73,18 @@ final class CheckboxTest extends ITest {
   @Test
   void userCannotSetSelectOnTextInput() {
     assertThatThrownBy(() -> $("#username").setSelected(false))
-      .isInstanceOf(InvalidStateException.class);
+      .isInstanceOf(InvalidStateError.class);
   }
 
   @Test
   void userCannotSetSelectOnArbitraryElement() {
     assertThatThrownBy(() -> $("#username-mirror").setSelected(false))
-      .isInstanceOf(InvalidStateException.class);
+      .isInstanceOf(InvalidStateError.class);
   }
 
   @Test
   void userCannotCheckInvisibleCheckbox() {
     assertThatThrownBy(() -> $(By.name("invisibleCheckbox")).setSelected(false))
-      .isInstanceOf(InvalidStateException.class);
+      .isInstanceOf(InvalidStateError.class);
   }
 }
