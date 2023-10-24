@@ -1,6 +1,6 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.ex.AlertNotFoundException;
+import com.codeborne.selenide.ex.AlertNotFoundError;
 import com.codeborne.selenide.ex.FrameNotFoundException;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.ex.WindowNotFoundException;
@@ -307,7 +307,7 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   private Error alertNotFoundError(Throwable cause, long timeoutMs) {
-    var error = new AlertNotFoundException(driver, cause);
+    var error = new AlertNotFoundError(driver, cause);
     return UIAssertionError.wrap(driver, error, timeoutMs);
   }
 }

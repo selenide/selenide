@@ -2,7 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.ex.AlertNotFoundException;
+import com.codeborne.selenide.ex.AlertNotFoundError;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.jupiter.api.AfterAll;
@@ -116,7 +116,7 @@ final class AlertTest extends IntegrationTest {
   @Test
   void alertThrowsNoAlertPresentExceptionWhenAlertIsNotPresent() {
     assertThatThrownBy(() -> switchTo().alert())
-      .isInstanceOf(AlertNotFoundException.class)
+      .isInstanceOf(AlertNotFoundError.class)
       .hasMessageStartingWith("Alert not found")
       .hasMessageContaining("Screenshot: file:")
       .hasMessageContaining("Page source: file:")
@@ -126,7 +126,7 @@ final class AlertTest extends IntegrationTest {
   @Test
   void confirmThrowsNoAlertPresentExceptionWhenAlertIsNotPresent() {
     assertThatThrownBy(Selenide::confirm)
-      .isInstanceOf(AlertNotFoundException.class)
+      .isInstanceOf(AlertNotFoundError.class)
       .hasMessageStartingWith("Alert not found")
       .hasMessageContaining("Screenshot: file:")
       .hasMessageContaining("Page source: file:")
@@ -136,7 +136,7 @@ final class AlertTest extends IntegrationTest {
   @Test
   void promptThrowsNoAlertPresentExceptionWhenAlertIsNotPresent() {
     assertThatThrownBy(Selenide::prompt)
-      .isInstanceOf(AlertNotFoundException.class)
+      .isInstanceOf(AlertNotFoundError.class)
       .hasMessageStartingWith("Alert not found")
       .hasMessageContaining("Screenshot: file:")
       .hasMessageContaining("Page source: file:")
