@@ -3,7 +3,7 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.ex.AlertNotFoundError;
 import com.codeborne.selenide.ex.FrameNotFoundError;
 import com.codeborne.selenide.ex.UIAssertionError;
-import com.codeborne.selenide.ex.WindowNotFoundException;
+import com.codeborne.selenide.ex.WindowNotFoundError;
 import com.codeborne.selenide.impl.windows.FrameByIdOrName;
 import com.codeborne.selenide.impl.windows.WindowByIndex;
 import com.codeborne.selenide.impl.windows.WindowByNameOrHandle;
@@ -302,7 +302,7 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   private Error windowNotFoundError(String message, Throwable cause) {
-    WindowNotFoundException error = new WindowNotFoundException(driver, message, cause);
+    WindowNotFoundError error = new WindowNotFoundError(driver, message, cause);
     return UIAssertionError.wrap(driver, error, config.timeout());
   }
 
