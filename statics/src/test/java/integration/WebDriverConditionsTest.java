@@ -2,7 +2,7 @@ package integration;
 
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.ObjectCondition;
-import com.codeborne.selenide.ex.ConditionMetException;
+import com.codeborne.selenide.ex.ConditionMetError;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,7 +67,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     assertThatThrownBy(() ->
       webdriver().shouldNotHave(urlStartingWith(url), ofMillis(11))
     )
-      .isInstanceOf(ConditionMetException.class)
+      .isInstanceOf(ConditionMetError.class)
       .hasMessageStartingWith("webdriver should not have url starting with " + url)
       .hasMessageContaining("Actual value: " + url)
       .hasMessageContaining("Screenshot: ")
@@ -166,7 +166,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
     assertThatThrownBy(() ->
       webdriver().shouldNotHave(numberOfWindows(1)))
-      .isInstanceOf(ConditionMetException.class)
+      .isInstanceOf(ConditionMetError.class)
       .hasMessageContaining("webdriver should not have 1 window(s)")
       .hasMessageContaining("Actual value: 1");
   }
@@ -190,7 +190,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     assertThatThrownBy(() ->
       webdriver().shouldNotHave(title("Test::frames with delays"), ofMillis(10))
     )
-      .isInstanceOf(ConditionMetException.class)
+      .isInstanceOf(ConditionMetError.class)
       .hasMessageStartingWith("Page should not have title Test::frames with delays")
       .hasMessageContaining("Actual value: Test::frames with delays");
   }
@@ -300,7 +300,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     openPageWithCookies();
     addCustomCookie();
     assertThatThrownBy(() -> webdriver().shouldNotHave(cookie(NAME)))
-      .isInstanceOf(ConditionMetException.class)
+      .isInstanceOf(ConditionMetError.class)
       .hasMessageStartingWith("webdriver should not have cookie with name \"TEST_COOKIE\"")
       .hasMessageContaining("Actual value: Available cookies: [TEST_COOKIE=AF33892F98ABC39A");
   }
@@ -319,7 +319,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     openPageWithCookies();
     addCustomCookie();
     assertThatThrownBy(() -> webdriver().shouldNotHave(cookie(NAME, VALUE)))
-      .isInstanceOf(ConditionMetException.class)
+      .isInstanceOf(ConditionMetError.class)
       .hasMessageStartingWith("webdriver should not have cookie with name \"TEST_COOKIE\" and value \"AF33892F98ABC39A\"")
       .hasMessageContaining("Actual value: Available cookies: [TEST_COOKIE=AF33892F98ABC39A");
   }

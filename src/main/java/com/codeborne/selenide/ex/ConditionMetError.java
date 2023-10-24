@@ -8,9 +8,9 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class ConditionMetException extends ObjectConditionError {
-  public <T> ConditionMetException(Driver driver, ObjectCondition<T> condition, T subject,
-                                   @Nullable CheckResult checkResult, @Nullable Exception cause) {
+public class ConditionMetError extends ObjectConditionError {
+  public <T> ConditionMetError(Driver driver, ObjectCondition<T> condition, T subject,
+                               @Nullable CheckResult checkResult, @Nullable Exception cause) {
     super(
       driver,
       condition.describe(subject) + " " + condition.negativeDescription(),
