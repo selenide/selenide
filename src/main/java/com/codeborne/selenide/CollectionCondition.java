@@ -17,6 +17,7 @@ import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
+import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
 
@@ -26,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
 
 @ParametersAreNonnullByDefault
@@ -51,13 +53,29 @@ public abstract class CollectionCondition {
   }
 
   /**
-   * Every subclass should implement this method.
-   * We left here the default implementation only because of backward compatibility.
+   * Override this method if you want to customize error class or description
    */
-  public abstract void fail(CollectionSource collection,
-                            CheckResult lastCheckResult,
-                            @Nullable Exception cause,
-                            long timeoutMs);
+  public void fail(CollectionSource collection, CheckResult lastCheckResult, @Nullable Exception cause, long timeoutMs) {
+    throw new UIAssertionError(collection.driver(),
+      errorMessage() +
+      lineSeparator() + "Actual: " + lastCheckResult.getActualValue() +
+      lineSeparator() + "Expected: " + expectedValue() +
+      (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
+      lineSeparator() + "Collection: " + collection.description(),
+      toString(), lastCheckResult.getActualValue()
+    );
+  }
+
+  public String errorMessage() {
+    return "Collection check failed";
+  }
+
+  public String expectedValue() {
+    return toString();
+  }
+
+  @Override
+  public abstract String toString();
 
   public static CollectionCondition empty = size(0);
 
