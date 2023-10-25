@@ -1,11 +1,29 @@
 # Changelog
 
-## 7.0.0 (planned to 2x.10.2023)
+## 7.0.0 (released 25.10.2023)
+Dependency updates:
+* upgrade to Java 17 (#2522)
 * bump Selenium from 4.13.0 to 4.14.1 (#2505)
 * bump Appium from 8.6.0 to 9.0.0 (#2505)
-* #2372 Deadlock in static initialization (#2453)
-* #2485 Rename some "*Exception" classes to "*Error"
+* bump TestNG from 7.4.0 to 7.8.0 (#2515)
+
+Fixes:
+* #2372 Fix deadlock in static initialization (#2453)
 * #2500 report actual value at the moment of check (#2501)
+
+Refactorings:
+* #2372 rename base class for conditions from `Condition` to `WebElementCondition` (#2453)
+* remove deprecated methods `Condition.apply()` and `Condition.actualValue()` (#2512)
+* remove deprecated methods from collection conditions (#2520)
+* remove deprecated methods from `ElementsCollection` (#2513)
+* remove deprecated abstract class `ElementsContainer` - use `Container` instead (#2523)
+* Replace `FileNotFoundException` by `FileNotDownloadedError` (#2526)
+* #2485 Rename some `*Exception` classes to `*Error` (#2530)
+* remove usages of deprecated class `WebDriverEventListener` (#2516)
+* remove deprecated Drag'n'drop methods (#2519)
+* Remove deprecated methods `$.getSelectedValue()` and `$.getSelectedText()` (#2521)
+* remove deprecated TestNG annotations `@Report` and `@GlobalTextReport` (#2517)
+* Remove some deprecated methods (#2518)
 
 ## 6.19.1 (released 18.10.2023)
 * bump Appium from 8.5.1 to 8.6.0 (#2494)  -- thanks to Aliaksandr Rasolka and Boris Osipov for help
