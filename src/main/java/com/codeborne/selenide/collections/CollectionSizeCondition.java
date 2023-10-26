@@ -41,7 +41,7 @@ abstract class CollectionSizeCondition extends WebElementsCondition {
   }
 
   @Override
-  public boolean missingElementSatisfiesCondition() {
+  public boolean missingElementsSatisfyCondition() {
     return apply(0);
   }
 

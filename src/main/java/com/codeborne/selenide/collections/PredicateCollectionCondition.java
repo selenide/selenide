@@ -43,11 +43,6 @@ public abstract class PredicateCollectionCondition extends WebElementsCondition 
   }
 
   @Override
-  public boolean missingElementSatisfiesCondition() {
-    return false;
-  }
-
-  @Override
   public String toString() {
     return String.format("%s elements to match [%s] predicate", matcher, description);
   }

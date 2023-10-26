@@ -75,11 +75,6 @@ public class ExactTexts extends WebElementsCondition {
   }
 
   @Override
-  public boolean missingElementSatisfiesCondition() {
-    return false;
-  }
-
-  @Override
   public String toString() {
     return "Exact texts " + expectedTexts;
   }

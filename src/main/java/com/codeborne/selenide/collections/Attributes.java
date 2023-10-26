@@ -74,11 +74,6 @@ public class Attributes extends WebElementsCondition {
   }
 
   @Override
-  public boolean missingElementSatisfiesCondition() {
-    return false;
-  }
-
-  @Override
   public String toString() {
     return "Attribute: '" + attribute + "' values " + expectedValues;
   }

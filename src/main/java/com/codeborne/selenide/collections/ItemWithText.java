@@ -46,12 +46,6 @@ public class ItemWithText extends WebElementsCondition {
 
   @CheckReturnValue
   @Override
-  public boolean missingElementSatisfiesCondition() {
-    return false;
-  }
-
-  @CheckReturnValue
-  @Override
   public String toString() {
     return "Text " + expectedText;
   }
