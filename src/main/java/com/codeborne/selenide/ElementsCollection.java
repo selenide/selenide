@@ -382,7 +382,7 @@ public class ElementsCollection implements Iterable<SelenideElement> {
 
   /**
    * <p>
-   * return actual size of the collection, doesn't wait on collection to be loaded.
+   * return actual size of the collection, doesn't wait until collection is fully loaded.
    * </p>
    *
    * @return actual size of the collection
@@ -396,6 +396,18 @@ public class ElementsCollection implements Iterable<SelenideElement> {
     catch (IndexOutOfBoundsException outOfCollection) {
       return 0;
     }
+  }
+
+  /**
+   * <p>
+   * return actual state of the collection, doesn't wait until collection is fully loaded.
+   * </p>
+   *
+   * @return actual size of the collection
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
+  public boolean isEmpty() {
+    return size() == 0;
   }
 
   /**
