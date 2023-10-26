@@ -1,9 +1,10 @@
 # Changelog
 
 ## 7.0.1 (planned to 26.10.2023)
-* restore for loop for collections (method `$$.iterator()`)
-* restore method `$$.isEmpty()`
-* #2372 Fix deadlock in static initialization of collection conditions
+* restore for loop for collections (method `$$.iterator()`) (#2533)
+* restore method `$$.isEmpty()` (#2533) 
+* #2372 rename `CollectionCondition` to `WebElementsCondition` (#2533)
+* restore "self" field in containers (#2534)
 
 ## 7.0.0 (released 25.10.2023)
 Dependency updates:
