@@ -1,6 +1,7 @@
 # Changelog
 
 ## 7.0.1 (planned to 26.10.2023)
+* restore for loop for collections (method `$$.iterator()`)
 * #2372 Fix deadlock in static initialization of collection conditions
 
 ## 7.0.0 (released 25.10.2023)
