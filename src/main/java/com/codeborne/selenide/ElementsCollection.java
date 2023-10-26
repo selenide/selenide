@@ -173,7 +173,7 @@ public class ElementsCollection {
         if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
           throw Cleanup.of.wrapInvalidSelectorException(elementNotFound);
         }
-        if (condition.missingElementSatisfiesCondition()) {
+        if (condition.missingElementsSatisfyCondition()) {
           return;
         }
         lastError = elementNotFound;

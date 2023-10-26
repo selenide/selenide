@@ -67,5 +67,7 @@ public abstract class WebElementsCondition {
     return this;
   }
 
-  public abstract boolean missingElementSatisfiesCondition();
+  public boolean missingElementsSatisfyCondition() {
+    return false;
+  }
 }

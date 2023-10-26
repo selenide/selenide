@@ -77,11 +77,6 @@ final class CustomCollectionConditionTest extends ITest {
     }
 
     @Override
-    public boolean missingElementSatisfiesCondition() {
-      return false;
-    }
-
-    @Override
     public String toString() {
       return "All texts starting with " + prefix;
     }

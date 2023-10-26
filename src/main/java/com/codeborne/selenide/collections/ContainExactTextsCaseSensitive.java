@@ -73,11 +73,6 @@ public class ContainExactTextsCaseSensitive extends WebElementsCondition {
   }
 
   @Override
-  public boolean missingElementSatisfiesCondition() {
-    return false;
-  }
-
-  @Override
   public String toString() {
     return "Contains exact texts case-sensitive " + expectedTexts;
   }
