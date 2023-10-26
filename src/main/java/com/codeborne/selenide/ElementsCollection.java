@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -40,7 +41,7 @@ import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertion
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 @ParametersAreNonnullByDefault
-public class ElementsCollection {
+public class ElementsCollection implements Iterable<SelenideElement> {
   private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
 
   private final CollectionSource collection;
@@ -410,6 +411,23 @@ public class ElementsCollection {
   @Nonnull
   public ElementsCollection snapshot() {
     return new ElementsCollection(new CollectionSnapshot(collection));
+  }
+
+  /**
+   * Does not reload collection elements while iterating it.
+   *
+   * Not recommended: As a rule, tests should not iterate collection elements.
+   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
+   *
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   *
+   * To make it explicit, we recommend to use method {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
+   */
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public Iterator<SelenideElement> iterator() {
+    return asFixedIterable().iterator();
   }
 
   /**
