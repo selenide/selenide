@@ -14,6 +14,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.page;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class ElementsContainerWithManuallyInitializedFieldsTest extends IntegrationTest {
 
@@ -34,6 +35,13 @@ final class ElementsContainerWithManuallyInitializedFieldsTest extends Integrati
       "Mickey \"Rock'n'Roll\" Rourke", "Denzel Washington"));
   }
 
+  @Test
+  void cannotInitializeElementsContainerOutsidePageObject() {
+    assertThatThrownBy(() -> page(InvalidContainer.class))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Cannot initialize field InvalidContainer.self: it's not bound to any page object");
+  }
+
   private static class MyPage {
     @FindBy(css = "#apostrophes-and-quotes")
     MyContainer container;
@@ -42,5 +50,13 @@ final class ElementsContainerWithManuallyInitializedFieldsTest extends Integrati
   private static class MyContainer implements Container {
     SelenideElement headerLink = $("h2>a");
     ElementsCollection options = $$("#hero>option");
+  }
+
+  private static class InvalidContainer implements Container {
+    @Self
+    SelenideElement self;
+
+    @FindBy(css = "h2 a")
+    SelenideElement headerLink;
   }
 }

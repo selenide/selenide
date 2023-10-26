@@ -115,6 +115,7 @@ final class PageObjectTest extends IntegrationTest {
 
   @Test
   void canComposePageFromReusableBlocks() {
+    pageWithSelects.status.self.shouldBe(visible);
     pageWithSelects.status.name.shouldHave(text("Bob Smith"), visible);
     pageWithSelects.status.lastLogin.shouldHave(text("01.01.1970"));
   }
@@ -197,6 +198,9 @@ final class PageObjectTest extends IntegrationTest {
   }
 
   static class StatusBlock implements Container {
+    @Self
+    SelenideElement self;
+
     @FindBy(className = "name")
     SelenideElement name;
 

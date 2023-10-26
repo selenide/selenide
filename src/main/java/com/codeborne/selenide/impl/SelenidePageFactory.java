@@ -214,6 +214,10 @@ public class SelenidePageFactory implements PageObjectFactory {
                          Driver driver, @Nullable WebElementSource searchContext,
                          Field field, By selector, Type[] genericTypes) {
     String alias = alias(field);
+
+    if (field.isAnnotationPresent(Container.Self.class)) {
+      return injectSelf(searchContext, field);
+    }
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return decorateWebElement(driver, searchContext, selector, field, alias);
     }
@@ -231,6 +235,19 @@ public class SelenidePageFactory implements PageObjectFactory {
     }
 
     return defaultFieldDecorator(driver, searchContext).decorate(loader, field);
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  private SelenideElement injectSelf(@Nullable WebElementSource searchContext, Field field) {
+    if (searchContext != null) {
+      return ElementFinder.wrap(SelenideElement.class, searchContext);
+    }
+    else {
+      String message = String.format("Cannot initialize field %s.%s: it's not bound to any page object",
+        field.getDeclaringClass().getSimpleName(), field.getName());
+      throw new IllegalArgumentException(message);
+    }
   }
 
   private List<WebElement> createWebElementsList(ClassLoader loader, Driver driver, @Nullable WebElementSource searchContext,
