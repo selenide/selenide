@@ -1,6 +1,6 @@
 package integration.collections;
 
-import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.MatcherError;
 import integration.ITest;
@@ -12,8 +12,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class AnyMatchTest extends ITest {
 
-  private final CollectionCondition containCat = anyMatch("value==cat", el -> "cat".equals(el.getAttribute("value")));
-  private final CollectionCondition containDog = anyMatch("value==dog", el -> "dog".equals(el.getAttribute("value")));
+  private final WebElementsCondition containCat = anyMatch("value==cat", el -> "cat".equals(el.getAttribute("value")));
+  private final WebElementsCondition containDog = anyMatch("value==dog", el -> "dog".equals(el.getAttribute("value")));
 
   @BeforeEach
   void openPage() {

@@ -1,7 +1,7 @@
 package integration.collections;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.CollectionSource;
 import integration.ITest;
@@ -46,11 +46,11 @@ final class CustomCollectionConditionTest extends ITest {
       .hasMessageContaining("Collection: .element");
   }
 
-  private CollectionCondition allTextsStartingWith(String prefix) {
+  private WebElementsCondition allTextsStartingWith(String prefix) {
     return new AllTextsStartingWith(prefix);
   }
 
-  private static class AllTextsStartingWith extends CollectionCondition {
+  private static class AllTextsStartingWith extends WebElementsCondition {
     private final String prefix;
 
     private AllTextsStartingWith(String prefix) {

@@ -1,8 +1,8 @@
 package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
@@ -22,7 +22,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
 @ParametersAreNonnullByDefault
-public class ExactTexts extends CollectionCondition {
+public class ExactTexts extends WebElementsCondition {
   private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
 
   protected final List<String> expectedTexts;

@@ -1,7 +1,7 @@
 package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementCommunicator;
@@ -17,7 +17,7 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Collections.singletonList;
 
 @ParametersAreNonnullByDefault
-public class ItemWithText extends CollectionCondition {
+public class ItemWithText extends WebElementsCondition {
   private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
   private final String expectedText;
 
