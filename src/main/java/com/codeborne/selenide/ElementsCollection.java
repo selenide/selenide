@@ -74,7 +74,7 @@ public class ElementsCollection {
    * </pre>
    */
   @Nonnull
-  public ElementsCollection should(CollectionCondition... conditions) {
+  public ElementsCollection should(WebElementsCondition... conditions) {
     return should("", Duration.ofMillis(driver().config().timeout()), conditions);
   }
 
@@ -84,7 +84,7 @@ public class ElementsCollection {
    * @param timeout maximum waiting time
    */
   @Nonnull
-  public ElementsCollection should(CollectionCondition condition, Duration timeout) {
+  public ElementsCollection should(WebElementsCondition condition, Duration timeout) {
     return should("", timeout, toArray(condition));
   }
 
@@ -92,12 +92,12 @@ public class ElementsCollection {
    * For example: {@code $$(".error").shouldBe(empty)}
    */
   @Nonnull
-  public ElementsCollection shouldBe(CollectionCondition... conditions) {
+  public ElementsCollection shouldBe(WebElementsCondition... conditions) {
     return should("be", Duration.ofMillis(driver().config().timeout()), conditions);
   }
 
   @Nonnull
-  public ElementsCollection shouldBe(CollectionCondition condition, Duration timeout) {
+  public ElementsCollection shouldBe(WebElementsCondition condition, Duration timeout) {
     return should("be", timeout, toArray(condition));
   }
 
@@ -107,7 +107,7 @@ public class ElementsCollection {
    * {@code $$(".error").shouldHave(texts("Error1", "Error2"))}
    */
   @Nonnull
-  public ElementsCollection shouldHave(CollectionCondition... conditions) {
+  public ElementsCollection shouldHave(WebElementsCondition... conditions) {
     return should("have", Duration.ofMillis(driver().config().timeout()), conditions);
   }
 
@@ -117,24 +117,24 @@ public class ElementsCollection {
    * @param timeout maximum waiting time
    */
   @Nonnull
-  public ElementsCollection shouldHave(CollectionCondition condition, Duration timeout) {
+  public ElementsCollection shouldHave(WebElementsCondition condition, Duration timeout) {
     return should("have", timeout, toArray(condition));
   }
 
   @CheckReturnValue
   @Nonnull
-  private CollectionCondition[] toArray(CollectionCondition condition) {
-    return new CollectionCondition[]{condition};
+  private WebElementsCondition[] toArray(WebElementsCondition condition) {
+    return new WebElementsCondition[]{condition};
   }
 
   @Nonnull
   @SuppressWarnings("ErrorNotRethrown")
-  protected ElementsCollection should(String prefix, Duration timeout, CollectionCondition... conditions) {
+  protected ElementsCollection should(String prefix, Duration timeout, WebElementsCondition... conditions) {
     validateAssertionMode(driver().config());
 
     SelenideLog log = SelenideLogger.beginStep(collection.shortDescription(), "should " + prefix, (Object[]) conditions);
     try {
-      for (CollectionCondition condition : conditions) {
+      for (WebElementsCondition condition : conditions) {
         waitUntil(condition, timeout);
       }
       SelenideLogger.commitStep(log, PASS);
@@ -155,7 +155,7 @@ public class ElementsCollection {
   }
 
   @SuppressWarnings("ErrorNotRethrown")
-  protected void waitUntil(CollectionCondition condition, Duration timeout) {
+  protected void waitUntil(WebElementsCondition condition, Duration timeout) {
     Throwable lastError = null;
     CheckResult lastCheckResult = new CheckResult(REJECT, null);
     Stopwatch stopwatch = new Stopwatch(timeout.toMillis());

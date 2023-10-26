@@ -1,8 +1,8 @@
 package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
@@ -14,7 +14,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-abstract class CollectionSizeCondition extends CollectionCondition {
+abstract class CollectionSizeCondition extends WebElementsCondition {
   private final String operator;
   protected final int expectedSize;
 

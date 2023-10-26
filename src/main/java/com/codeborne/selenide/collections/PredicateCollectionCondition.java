@@ -1,7 +1,7 @@
 package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.CheckResult;
-import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.impl.CollectionSource;
@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
-public abstract class PredicateCollectionCondition extends CollectionCondition {
+public abstract class PredicateCollectionCondition extends WebElementsCondition {
   private static final ElementDescriber describe = inject(ElementDescriber.class);
 
   protected final String matcher;
