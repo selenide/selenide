@@ -1,6 +1,9 @@
 # Changelog
 
-## 7.0.1 (planned to 26.10.2023)
+## 7.0.2 (released 01.11.2023)
+* bump Selenium from 4.14.1 to 4.15.0 (#2540)
+
+## 7.0.1 (released 26.10.2023)
 * restore for loop for collections (method `$$.iterator()`) (#2533)
 * restore method `$$.isEmpty()` (#2533) 
 * #2372 rename `CollectionCondition` to `WebElementsCondition` (#2533)
