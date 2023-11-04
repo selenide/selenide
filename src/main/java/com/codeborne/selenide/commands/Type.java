@@ -45,11 +45,21 @@ public class Type implements Command<SelenideElement> {
     return locator.findAndAssertElementIsEditable();
   }
 
-  private TypeOptions extractOptions(Object[] args) {
+  protected TypeOptions extractOptions(Object[] args) {
     if (args[0] instanceof TypeOptions options) {
       return options;
     } else {
       return TypeOptions.text(firstOf(args));
+    }
+  }
+
+  protected void clearField(SelenideElement proxy, WebElementSource locator, TypeOptions typeOptions) {
+    if (typeOptions.shouldClearFieldBeforeTyping()) {
+      if (typeOptions.textToType().length() > 0) {
+        clear.clear(locator.driver(), proxy);
+      } else {
+        clear.clearAndTrigger(locator.driver(), proxy);
+      }
     }
   }
 
@@ -58,16 +68,6 @@ public class Type implements Command<SelenideElement> {
       CharSequence character = typeOptions.textToType().subSequence(i, i + 1);
       element.sendKeys(character);
       sleepAtLeast(typeOptions.timeDelay().toMillis());
-    }
-  }
-
-  private void clearField(SelenideElement proxy, WebElementSource locator, TypeOptions typeOptions) {
-    if (typeOptions.shouldClearFieldBeforeTyping()) {
-      if (typeOptions.textToType().length() > 0) {
-        clear.clear(locator.driver(), proxy);
-      } else {
-        clear.clearAndTrigger(locator.driver(), proxy);
-      }
     }
   }
 }
