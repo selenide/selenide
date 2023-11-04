@@ -38,8 +38,9 @@ public class AppiumType extends Type {
     Actions actions = new Actions(locator.driver().getWebDriver());
     for (int i = 0; i < typeOptions.textToType().length(); i++) {
       CharSequence character = typeOptions.textToType().subSequence(i, i + 1);
-      if(AppiumDriverRunner.isAndroidDriver()) {
-        actions.click(element).sendKeys(character).perform();
+      if (AppiumDriverRunner.isAndroidDriver()) {
+        element.click();
+        actions.sendKeys(character).perform();
       } else {
         element.sendKeys(character);
       }
