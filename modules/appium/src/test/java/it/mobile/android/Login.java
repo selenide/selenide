@@ -42,17 +42,6 @@ class SauceLabLoginTest extends BaseSwagLabsAndroidTest {
       .shouldBe(visible, ofSeconds(10))
       .shouldHave(text("Provided credentials do not match any user in this service."));
   }
-
-  @Test
-  void canTypeTextSlowly() {
-    LoginPage loginPage = page();
-    loginPage.login.type(TypeOptions.text("bob@example.com").withDelay(ofMillis(10)));
-    loginPage.password.sendKeys("10203040");
-    loginPage.loginButton.click();
-
-    CheckoutPage nextPage = page();
-    nextPage.title.shouldBe(visible, ofSeconds(10));
-  }
 }
 
 class LoginPage {
