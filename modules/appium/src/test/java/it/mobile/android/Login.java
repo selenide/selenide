@@ -1,7 +1,6 @@
 package it.mobile.android;
 
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.TypeOptions;
 import com.codeborne.selenide.appium.SelenideAppium;
 import com.codeborne.selenide.appium.SelenideAppiumElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
@@ -14,7 +13,6 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
 import static io.appium.java_client.AppiumBy.accessibilityId;
-import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
 
 class SauceLabLoginTest extends BaseSwagLabsAndroidTest {
