@@ -13,7 +13,7 @@ ext {
   commonsFileuploadVersion = '1.5'
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.9'
-  archunitVersion = '1.1.0'
+  archunitVersion = '1.2.0'
   jacksonVersion = '2.15.3'
 }
 
