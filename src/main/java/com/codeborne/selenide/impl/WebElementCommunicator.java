@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebElement;
 
@@ -20,7 +21,7 @@ public class WebElementCommunicator implements ElementCommunicator {
                                       ".replace(/[\\u200b\\u200e\\u200f]/g, '')" +
                                       ".trim())", elements);
     }
-    catch (UnsupportedCommandException javascriptNotSupported) {
+    catch (UnsupportedCommandException | JavascriptException cannotUseJs) {
       return textsOneByOne(elements);
     }
   }
@@ -41,7 +42,7 @@ public class WebElementCommunicator implements ElementCommunicator {
         elements, attributeName
       );
     }
-    catch (UnsupportedCommandException javascriptNotSupported) {
+    catch (UnsupportedCommandException | JavascriptException cannotUseJs) {
       return attributesOneByOne(elements, attributeName);
     }
   }
