@@ -153,6 +153,7 @@ final class NavigatorTest {
 
     assertThatThrownBy(() -> navigator.open(selenideDriver, "https://some.com/login"))
       .isInstanceOf(IllegalStateException.class)
-      .hasMessage("config.proxyEnabled == false but config.fileDownload == PROXY. You need to enable proxy server automatically.");
+      .hasMessage("config.proxyEnabled == false but config.fileDownload == PROXY. " +
+                  "You need to enable proxy server to download file using PROXY mode.");
   }
 }
