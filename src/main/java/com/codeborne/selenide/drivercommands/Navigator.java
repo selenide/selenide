@@ -92,7 +92,7 @@ public class Navigator {
   private void checkThatProxyIsEnabled(Config config) {
     if (!config.proxyEnabled() && config.fileDownload() == PROXY) {
       throw new IllegalStateException("config.proxyEnabled == false but config.fileDownload == PROXY. " +
-        "You need to enable proxy server automatically.");
+        "You need to enable proxy server to download file using PROXY mode.");
     }
   }
 
