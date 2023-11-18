@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.0.3 (released ...)
+* add `oneOfTexts(Collection)`- like Conditions (#2130) -- thanks to Yury Yurchenko
+
 ## 7.0.2 (released 01.11.2023)
 * bump Selenium from 4.14.1 to 4.15.0 (#2540)
 
