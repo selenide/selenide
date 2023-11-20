@@ -3,6 +3,7 @@ package it.mobile.android;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.appium.SelenideAppium;
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,14 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
     loginPage.inputFields.get(1).setValue("wrongpassword");
     loginPage.loginButton.click();
     loginPage.errorMessage.shouldHave(text("Provided credentials do not match any user in this service."));
+  }
+
+  @Test
+  public void loginTestPageObjectChainElement() {
+    LoginPageWithCollections loginPage = screen(LoginPageWithCollections.class);
+    loginPage.inputFields.shouldHave(size(2));
+    loginPage.loginButton.click();
+    loginPage.inputFields.get(1).$x("./following-sibling::android.view.ViewGroup").shouldHave(text("Username is required"));
   }
 }
 
