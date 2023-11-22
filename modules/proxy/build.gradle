@@ -10,6 +10,7 @@ dependencies {
   }
   implementation("xyz.rogfam:littleproxy:${littleProxyVersion}")
   implementation("io.netty:netty-all:$nettyVersion") {because 'used by browserup-proxy'}
+  api("io.netty:netty-codec-http:$nettyVersion") {because 'allows Selenide users to add request/response interceptors'}
 
   testImplementation project(':statics')
   testImplementation project(':statics').sourceSets.test.output
