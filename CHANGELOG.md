@@ -1,7 +1,10 @@
 # Changelog
 
 ## 7.0.3 (released ...)
-* add `oneOfTexts(Collection)`- like Conditions (#2130) -- thanks to Yury Yurchenko
+* #2130 add checks `oneOfTexts*(Collection)` (#2557) -- thanks to Yury Yurchenko
+* #2459 fix method `$.type()` in Android (#2544)  --  thanks to Amuthan Sakthivel
+* #2551 fix `$$.shouldHave(texts)` in WebKit (#2553)  --  thanks to Boris Osipov
+* #2562 allow customizing requests/responses without additional dependencies (#2563)
 
 ## 7.0.2 (released 01.11.2023)
 * bump Selenium from 4.14.1 to 4.15.0 (#2540)
