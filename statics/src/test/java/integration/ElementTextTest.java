@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
 import static com.codeborne.selenide.Condition.exactOwnText;
@@ -11,6 +12,10 @@ import static com.codeborne.selenide.Condition.exactOwnTextCaseSensitive;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
 import static com.codeborne.selenide.Condition.matchText;
+import static com.codeborne.selenide.Condition.oneOfExactTexts;
+import static com.codeborne.selenide.Condition.oneOfExactTextsCaseSensitive;
+import static com.codeborne.selenide.Condition.oneOfTexts;
+import static com.codeborne.selenide.Condition.oneOfTextsCaseSensitive;
 import static com.codeborne.selenide.Condition.ownText;
 import static com.codeborne.selenide.Condition.ownTextCaseSensitive;
 import static com.codeborne.selenide.Condition.partialText;
@@ -192,5 +197,37 @@ final class ElementTextTest extends IntegrationTest {
     $("#upper-case").shouldNotHave(exactTextCaseSensitive("this is sparta!"));
     $("#upper-case").shouldHave(exactTextCaseSensitive("THIS IS SPARTA!"));
     $("#upper-case").shouldNotHave(exactTextCaseSensitive("IS IS SPA"));
+  }
+
+  @Test
+  void oneOfTextsTest() {
+    $("#upper-case").shouldHave(oneOfTexts(List.of("foo", "THIS IS SPARTA!", "bar")));
+    $("#upper-case").shouldHave(oneOfTexts(List.of("foo", "this is sparta!", "bar")).because("case-insensitive"));
+    $("#upper-case").shouldHave(oneOfTexts(List.of("foo", "IS spart", "bar")).because("accepts substrings"));
+    $("#upper-case").shouldNotHave(oneOfTexts(List.of("foo", "bar")));
+  }
+
+  @Test
+  void oneOfTextsCaseSensitiveTest() {
+    $("#upper-case").shouldHave(oneOfTextsCaseSensitive(List.of("foo", "THIS IS SPARTA!", "bar")));
+    $("#upper-case").shouldNotHave(oneOfTextsCaseSensitive(List.of("foo", "this is sparta!", "bar")).because("case-sensitive"));
+    $("#upper-case").shouldHave(oneOfTextsCaseSensitive(List.of("foo", "IS SPARTA", "bar")).because("accepts substrings"));
+    $("#upper-case").shouldNotHave(oneOfTextsCaseSensitive(List.of("foo", "bar")));
+  }
+
+  @Test
+  void oneOfExactTextsTest() {
+    $("#upper-case").shouldHave(oneOfExactTexts(List.of("foo", "THIS IS SPARTA!", "bar")));
+    $("#upper-case").shouldHave(oneOfExactTexts(List.of("foo", "this is sparta!", "bar")).because("case-insensitive"));
+    $("#upper-case").shouldNotHave(oneOfExactTexts(List.of("foo", "SPARTA", "bar")).because("only full text match"));
+    $("#upper-case").shouldNotHave(oneOfExactTexts(List.of("foo", "bar")));
+  }
+
+  @Test
+  void oneOfExactTextsCaseSensitiveTest() {
+    $("#upper-case").shouldHave(oneOfExactTextsCaseSensitive(List.of("foo", "THIS IS SPARTA!", "bar")));
+    $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive(List.of("foo", "this is sparta!", "bar")).because("case-sensitive"));
+    $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive(List.of("foo", "Sparta", "bar")).because("only full text match"));
+    $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive(List.of("foo", "bar")));
   }
 }

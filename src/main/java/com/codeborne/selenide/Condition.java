@@ -25,6 +25,10 @@ import com.codeborne.selenide.conditions.IsImageLoaded;
 import com.codeborne.selenide.conditions.MatchAttributeWithValue;
 import com.codeborne.selenide.conditions.MatchText;
 import com.codeborne.selenide.conditions.NamedCondition;
+import com.codeborne.selenide.conditions.OneOfExactTexts;
+import com.codeborne.selenide.conditions.OneOfExactTextsCaseSensitive;
+import com.codeborne.selenide.conditions.OneOfTexts;
+import com.codeborne.selenide.conditions.OneOfTextsCaseSensitive;
 import com.codeborne.selenide.conditions.Or;
 import com.codeborne.selenide.conditions.OwnText;
 import com.codeborne.selenide.conditions.OwnTextCaseSensitive;
@@ -45,6 +49,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collection;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.conditions.ConditionHelpers.merge;
@@ -311,6 +316,66 @@ public final class Condition {
   @Nonnull
   public static WebElementCondition matchText(String regex) {
     return new MatchText(regex);
+  }
+
+  /**
+   * Assert that given element's TEXT case-insensitively CONTAINS at least
+   * one of the given {@code texts}. Assertion fails if specified collection is empty.
+   *
+   * <p>NB! Ignores multiple whitespaces between words.</p>
+   * <p>NB! Nulls and blank strings are not allowed in the specified collection
+   * (because any element does contain an empty text).</p>
+   * @throws IllegalArgumentException If specified collection contains {@code null}s or blank strings.
+   * @since 7.0.3
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static WebElementCondition oneOfTexts(Collection<String> texts) {
+    return new OneOfTexts(texts);
+  }
+
+  /**
+   * Assert that given element's TEXT case-sensitively CONTAINS at least
+   * one of the given {@code texts}. Assertion fails if specified collection is empty.
+   *
+   * <p>NB! Ignores multiple whitespaces between words.</p>
+   * <p>NB! Nulls and blank strings are not allowed in the specified collection
+   * (because any element does contain an empty text).</p>
+   * @throws IllegalArgumentException If specified collection contains {@code null}s or blank strings.
+   * @since 7.0.3
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static WebElementCondition oneOfTextsCaseSensitive(Collection<String> texts) {
+    return new OneOfTextsCaseSensitive(texts);
+  }
+
+  /**
+   * Assert that given element's TEXT case-insensitively EQUALS to
+   * one of the given {@code texts}. Assertion fails if specified collection is empty.
+   *
+   * <p>NB! Ignores multiple whitespaces between words.</p>
+   * @throws IllegalArgumentException If specified collection contains {@code null} elements.
+   * @since 7.0.3
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static WebElementCondition oneOfExactTexts(Collection<String> texts) {
+    return new OneOfExactTexts(texts);
+  }
+
+  /**
+   * Assert that given element's TEXT case-sensitively EQUALS to
+   * one of the given {@code texts}. Assertion fails if specified collection is empty.
+   *
+   * <p>NB! Ignores multiple whitespaces between words.</p>
+   * @throws IllegalArgumentException If specified collection contains {@code null} elements.
+   * @since 7.0.3
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static WebElementCondition oneOfExactTextsCaseSensitive(Collection<String> texts) {
+    return new OneOfExactTextsCaseSensitive(texts);
   }
 
   /**
