@@ -127,11 +127,7 @@ public class DownloadFileToFolderCdp {
       devTools.createSession();
       devTools.send(Page.enable());
     } else {
-      try {
-        throw new Exception("The browser that you choose doesn't have such functionality.");
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
+        throw new RuntimeException("The browser that you choose doesn't have such functionality.");
     }
   }
 
