@@ -201,33 +201,33 @@ final class ElementTextTest extends IntegrationTest {
 
   @Test
   void oneOfTextsTest() {
-    $("#upper-case").shouldHave(oneOfTexts(List.of("foo", "THIS IS SPARTA!", "bar")));
-    $("#upper-case").shouldHave(oneOfTexts(List.of("foo", "this is sparta!", "bar")).because("case-insensitive"));
-    $("#upper-case").shouldHave(oneOfTexts(List.of("foo", "IS spart", "bar")).because("accepts substrings"));
-    $("#upper-case").shouldNotHave(oneOfTexts(List.of("foo", "bar")));
+    $("#upper-case").shouldHave(oneOfTexts("foo", "THIS IS SPARTA!", "bar"));
+    $("#upper-case").shouldHave(oneOfTexts("foo", "this is sparta!", "bar").because("case-insensitive"));
+    $("#upper-case").shouldHave(oneOfTexts("foo", "IS spart", "bar").because("accepts substrings"));
+    $("#upper-case").shouldNotHave(oneOfTexts("foo", "bar"));
   }
 
   @Test
   void oneOfTextsCaseSensitiveTest() {
-    $("#upper-case").shouldHave(oneOfTextsCaseSensitive(List.of("foo", "THIS IS SPARTA!", "bar")));
-    $("#upper-case").shouldNotHave(oneOfTextsCaseSensitive(List.of("foo", "this is sparta!", "bar")).because("case-sensitive"));
-    $("#upper-case").shouldHave(oneOfTextsCaseSensitive(List.of("foo", "IS SPARTA", "bar")).because("accepts substrings"));
-    $("#upper-case").shouldNotHave(oneOfTextsCaseSensitive(List.of("foo", "bar")));
+    $("#upper-case").shouldHave(oneOfTextsCaseSensitive("foo", "THIS IS SPARTA!", "bar"));
+    $("#upper-case").shouldNotHave(oneOfTextsCaseSensitive("foo", "this is sparta!", "bar").because("case-sensitive"));
+    $("#upper-case").shouldHave(oneOfTextsCaseSensitive("foo", "IS SPARTA", "bar").because("accepts substrings"));
+    $("#upper-case").shouldNotHave(oneOfTextsCaseSensitive("foo", "bar"));
   }
 
   @Test
   void oneOfExactTextsTest() {
-    $("#upper-case").shouldHave(oneOfExactTexts(List.of("foo", "THIS IS SPARTA!", "bar")));
-    $("#upper-case").shouldHave(oneOfExactTexts(List.of("foo", "this is sparta!", "bar")).because("case-insensitive"));
-    $("#upper-case").shouldNotHave(oneOfExactTexts(List.of("foo", "SPARTA", "bar")).because("only full text match"));
-    $("#upper-case").shouldNotHave(oneOfExactTexts(List.of("foo", "bar")));
+    $("#upper-case").shouldHave(oneOfExactTexts("foo", "THIS IS SPARTA!", "bar"));
+    $("#upper-case").shouldHave(oneOfExactTexts("foo", "this is sparta!", "bar").because("case-insensitive"));
+    $("#upper-case").shouldNotHave(oneOfExactTexts("foo", "SPARTA", "bar").because("only full text match"));
+    $("#upper-case").shouldNotHave(oneOfExactTexts("foo", "bar"));
   }
 
   @Test
   void oneOfExactTextsCaseSensitiveTest() {
-    $("#upper-case").shouldHave(oneOfExactTextsCaseSensitive(List.of("foo", "THIS IS SPARTA!", "bar")));
-    $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive(List.of("foo", "this is sparta!", "bar")).because("case-sensitive"));
-    $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive(List.of("foo", "Sparta", "bar")).because("only full text match"));
-    $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive(List.of("foo", "bar")));
+    $("#upper-case").shouldHave(oneOfExactTextsCaseSensitive("foo", "THIS IS SPARTA!", "bar"));
+    $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive("foo", "this is sparta!", "bar").because("case-sensitive"));
+    $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive("foo", "Sparta", "bar").because("only full text match"));
+    $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive("foo", "bar"));
   }
 }

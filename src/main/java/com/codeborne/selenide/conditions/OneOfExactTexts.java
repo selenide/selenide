@@ -13,6 +13,9 @@ public class OneOfExactTexts extends TextCondition {
 
   public OneOfExactTexts(Collection<String> targets) {
     super("one of exact texts", targets.toString());
+    if (targets.isEmpty()) {
+      throw new IllegalArgumentException("No expected texts given");
+    }
     if (targets.stream().anyMatch(Objects::isNull)) {
       throw new IllegalArgumentException("The collection must not contain null");
     }

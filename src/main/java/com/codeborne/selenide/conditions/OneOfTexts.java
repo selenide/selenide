@@ -13,6 +13,9 @@ public class OneOfTexts extends TextCondition {
 
   public OneOfTexts(Collection<String> targets) {
     super("one of texts", targets.toString());
+    if (targets.isEmpty()) {
+      throw new IllegalArgumentException("No expected texts given");
+    }
     if (targets.stream().anyMatch(target -> Objects.isNull(target) || target.isBlank())) {
       throw new IllegalArgumentException("The collection must not contain null or blank strings");
     }
