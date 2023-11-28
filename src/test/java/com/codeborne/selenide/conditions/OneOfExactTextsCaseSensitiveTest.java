@@ -3,19 +3,23 @@ package com.codeborne.selenide.conditions;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
-import com.codeborne.selenide.TextCheck;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Mocks.mockElement;
-import static org.assertj.core.api.Assertions.*;
+import static com.codeborne.selenide.TextCheck.FULL_TEXT;
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 class OneOfExactTextsCaseSensitiveTest {
-  private final Driver driver = new DriverStub(new SelenideConfig().textCheck(TextCheck.FULL_TEXT));
-  private final Collection<String> collectionWithNull = new HashSet<>(Arrays.asList("John", "Lucy", null, "Banana"));
+  private final Driver driver = new DriverStub(new SelenideConfig().textCheck(FULL_TEXT));
+  private final Collection<String> collectionWithNull = Arrays.asList("John", "Lucy", null, "Banana");
   private final Collection<String> collectionWithEmptyString = List.of("John", "Lucy", "", "Banana");
   private final Collection<String> collectionWithBlankString = List.of("John", "Lucy", "   ", "Banana");
   private final Collection<String> regularCollection = List.of(" John  ", " Lucy", "Vodka", "  Banana    ");
@@ -45,11 +49,8 @@ class OneOfExactTextsCaseSensitiveTest {
   }
 
   @Test
-  void shouldNotMatchEmptyCollection() {
-    assertThat(new OneOfExactTextsCaseSensitive(Collections.emptyList())
-      .check(driver, mockElement("")).verdict()).isEqualTo(REJECT);
-    assertThat(new OneOfExactTextsCaseSensitive(Collections.emptyList())
-      .check(driver, mockElement("Hi")).verdict()).isEqualTo(REJECT);
+  void shouldThrowExceptionForEmptyCollection() {
+    assertThatIllegalArgumentException().isThrownBy(() -> new OneOfExactTextsCaseSensitive(emptyList()));
   }
 
   @Test

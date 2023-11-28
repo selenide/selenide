@@ -6,11 +6,15 @@ import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.TextCheck;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Mocks.mockElement;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
@@ -55,11 +59,8 @@ class OneOfTextsCaseSensitiveTest {
   }
 
   @Test
-  void shouldNotMatchEmptyCollection() {
-    assertThat(new OneOfTextsCaseSensitive(Collections.emptyList())
-      .check(driver, mockElement("")).verdict()).isEqualTo(REJECT);
-    assertThat(new OneOfTextsCaseSensitive(Collections.emptyList())
-      .check(driver, mockElement("Hi")).verdict()).isEqualTo(REJECT);
+  void shouldThrowExceptionForEmptyCollection() {
+    assertThatIllegalArgumentException().isThrownBy(() -> new OneOfTextsCaseSensitive(emptyList()));
   }
 
   @Test
