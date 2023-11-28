@@ -1,7 +1,7 @@
 # Changelog
 
-## 7.0.3 (released ...)
-* #2130 add checks `oneOfTexts*(Collection)` (#2557) -- thanks to Yury Yurchenko
+## 7.0.3 (released 28.11.2023)
+* #2130 add checks `$.shouldHave(oneOfTexts*)` (#2557) -- thanks to Yury Yurchenko
 * #2459 fix method `$.type()` in Android (#2544)  --  thanks to Amuthan Sakthivel
 * #2551 fix `$$.shouldHave(texts)` in WebKit (#2553)  --  thanks to Boris Osipov
 * #2562 allow customizing requests/responses without additional dependencies (#2563)
