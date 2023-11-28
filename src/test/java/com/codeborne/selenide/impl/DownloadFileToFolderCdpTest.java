@@ -53,7 +53,7 @@ final class DownloadFileToFolderCdpTest {
       return null;
     }).when(link).click();
 
-    File downloadedFile = command.download(linkWithHref, link, 3000,
+    File downloadedFile = command.download(linkWithHref, link, 3000, 300,
       FileFilters.none(), click());
 
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);

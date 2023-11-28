@@ -71,7 +71,8 @@ public class DownloadFile implements Command<File> {
         return downloadFileToFolder.download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
       }
       case CDP: {
-        return downloadFileToFolderCdp.download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
+        return downloadFileToFolderCdp
+          .download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
       }
       default: {
         throw new IllegalArgumentException("Unknown file download mode: " + options.getMethod());
