@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Mocks.mockElement;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
@@ -51,9 +51,8 @@ class OneOfTextsTest {
   }
 
   @Test
-  void shouldNotMatchEmptyCollection() {
-    assertThat(new OneOfTexts(Collections.emptyList()).check(driver, mockElement("")).verdict()).isEqualTo(REJECT);
-    assertThat(new OneOfTexts(Collections.emptyList()).check(driver, mockElement("Hi")).verdict()).isEqualTo(REJECT);
+  void shouldThrowExceptionForEmptyCollection() {
+    assertThatIllegalArgumentException().isThrownBy(() -> new OneOfTexts(emptyList()));
   }
 
   @Test
