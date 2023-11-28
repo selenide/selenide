@@ -124,7 +124,7 @@ public class DownloadFileToFolderCdp {
       devTools.createSessionIfThereIsNotOne();
       devTools.send(Page.enable());
     } else {
-      throw new RuntimeException("The browser you selected \"%s\" doesn't have Chrome Devtools protocol functionality."
+      throw new IllegalArgumentException("The browser you selected \"%s\" doesn't have Chrome Devtools protocol functionality."
         .formatted(driver.browser().name));
     }
   }
