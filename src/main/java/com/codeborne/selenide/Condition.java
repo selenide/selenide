@@ -49,10 +49,10 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.conditions.ConditionHelpers.merge;
+import static java.util.Arrays.asList;
 
 /**
  * Conditions to match web elements: checks for visibility, text etc.
@@ -330,8 +330,8 @@ public final class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static WebElementCondition oneOfTexts(Collection<String> texts) {
-    return new OneOfTexts(texts);
+  public static WebElementCondition oneOfTexts(String... texts) {
+    return new OneOfTexts(asList(texts));
   }
 
   /**
@@ -346,8 +346,8 @@ public final class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static WebElementCondition oneOfTextsCaseSensitive(Collection<String> texts) {
-    return new OneOfTextsCaseSensitive(texts);
+  public static WebElementCondition oneOfTextsCaseSensitive(String... texts) {
+    return new OneOfTextsCaseSensitive(asList(texts));
   }
 
   /**
@@ -360,8 +360,8 @@ public final class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static WebElementCondition oneOfExactTexts(Collection<String> texts) {
-    return new OneOfExactTexts(texts);
+  public static WebElementCondition oneOfExactTexts(String... texts) {
+    return new OneOfExactTexts(asList(texts));
   }
 
   /**
@@ -374,8 +374,8 @@ public final class Condition {
    */
   @CheckReturnValue
   @Nonnull
-  public static WebElementCondition oneOfExactTextsCaseSensitive(Collection<String> texts) {
-    return new OneOfExactTextsCaseSensitive(texts);
+  public static WebElementCondition oneOfExactTextsCaseSensitive(String... texts) {
+    return new OneOfExactTextsCaseSensitive(asList(texts));
   }
 
   /**
