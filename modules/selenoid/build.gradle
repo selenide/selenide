@@ -5,7 +5,7 @@ ext {
 dependencies {
   api project(":statics")
   implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
-  implementation("commons-io:commons-io:2.15.0")
+  implementation("commons-io:commons-io:2.15.1")
   implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
 
   testImplementation project(':statics').sourceSets.test.output
