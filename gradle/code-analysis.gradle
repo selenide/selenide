@@ -5,7 +5,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.13"
+    classpath "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.2.1"
   }
 }
 
@@ -14,7 +14,8 @@ subprojects {
   apply plugin: "com.github.spotbugs"
 
   spotbugs {
-    effort = 'max'
+    // Doesn't work after upgrading Spotbugs from 5.x to 6.0.2 :(
+    // effort = com.github.spotbugs.snom.Effort.valueOf('MAX')
     excludeFilter = rootProject.file('config/spotbugs/excludeFilter.xml')
   }
 
