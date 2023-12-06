@@ -36,6 +36,7 @@ subprojects {
 
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
       exclude group: 'org.slf4j'
+      exclude group: 'org.seleniumhq.selenium', module: 'selenium-devtools-v119' // bug in Selenium 4.16.0: artifact "selenium-devtools-v119:4.16.0" was not released.
     }
     implementation("com.google.guava:guava:32.1.3-jre")
     implementation("org.apache.commons:commons-lang3:3.14.0")
