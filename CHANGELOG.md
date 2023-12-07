@@ -1,7 +1,7 @@
 # Changelog
 
 ## 7.0.4 (released 07.12.2023)
-* bump Selenium from 4.15.0 to 4.16.0 (#2580)
+* bump Selenium from 4.15.0 to 4.16.1 (#2580)
 
 ## 7.0.3 (released 28.11.2023)
 * #2130 add checks `$.shouldHave(oneOfTexts*)` (#2557) -- thanks to Yury Yurchenko
