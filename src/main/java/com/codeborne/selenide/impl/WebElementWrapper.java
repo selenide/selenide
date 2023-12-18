@@ -64,6 +64,13 @@ public class WebElementWrapper extends WebElementSource {
   @Override
   @CheckReturnValue
   @Nonnull
+  public String getSearchLocator() {
+    return locator();
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
   public String toString() {
     return getAlias().getOrElse(() -> describe.fully(driver(), delegate));
   }

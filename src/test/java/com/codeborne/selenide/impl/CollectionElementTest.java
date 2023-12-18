@@ -49,6 +49,16 @@ final class CollectionElementTest {
   }
 
   @Test
+  void getSearchLocator() {
+    String collectionLocator = "Collection locator";
+    CollectionSource collection = mock();
+    when(collection.getSearchLocator()).thenReturn(collectionLocator);
+    CollectionElement collectionElement = new CollectionElement(collection, 1);
+    assertThat(collectionElement.getSearchLocator())
+      .isEqualTo(collectionLocator);
+  }
+
+  @Test
   void testToString() {
     CollectionSource collection = mock();
     String collectionDescription = "Collection description";

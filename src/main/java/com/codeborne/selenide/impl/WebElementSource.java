@@ -47,6 +47,10 @@ public abstract class WebElementSource {
   @Nonnull
   public abstract String getSearchCriteria();
 
+  @CheckReturnValue
+  @Nonnull
+  public abstract String getSearchLocator();
+
   public void setAlias(String alias) {
     this.alias = new Alias(alias);
   }
@@ -61,6 +65,12 @@ public abstract class WebElementSource {
   @Nonnull
   public String description() {
     return alias.getOrElse(this::getSearchCriteria);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public String locator() {
+    return alias.getOrElse(this::getSearchLocator);
   }
 
   @Override
@@ -97,6 +107,13 @@ public abstract class WebElementSource {
     if (arg instanceof By by) return by;
     if (arg instanceof String cssSelector) return By.cssSelector(cssSelector);
     throw new IllegalArgumentException("Unsupported selector type: " + arg);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static String getLocator(Object arg) {
+    final By.Remotable.Parameters remoteParameters = ((By.Remotable) arg).getRemoteParameters();
+    return String.valueOf(remoteParameters.value());
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")

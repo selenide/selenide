@@ -55,6 +55,12 @@ public class LazyWebElementSnapshot extends WebElementSource {
     return delegate.getSearchCriteria();
   }
 
+  @Nonnull
+  @Override
+  public String getSearchLocator() {
+    return delegate.getSearchLocator();
+  }
+
   @Override
   public void setAlias(String alias) {
     delegate.setAlias(alias);

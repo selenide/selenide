@@ -151,6 +151,13 @@ public class ElementFinder extends WebElementSource {
       parent.getSearchCriteria() + "/" + elementCriteria();
   }
 
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public String getSearchLocator() {
+    return describe.locator(criteria);
+  }
+
   @Nonnull
   private String elementCriteria() {
     return index == 0 ?

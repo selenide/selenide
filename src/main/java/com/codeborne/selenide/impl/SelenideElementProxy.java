@@ -37,6 +37,7 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     "toWebElement",
     "toString",
     "getSearchCriteria",
+    "getSearchLocator",
     "$",
     "$x",
     "find",

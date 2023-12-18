@@ -61,4 +61,11 @@ public class CollectionElementByCondition extends WebElementSource {
   public String getSearchCriteria() {
     return collection.description() + ".findBy(" + condition + ")";
   }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public String getSearchLocator() {
+    return collection.getSearchLocator();
+  }
 }

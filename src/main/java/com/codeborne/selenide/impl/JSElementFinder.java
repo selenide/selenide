@@ -76,6 +76,13 @@ public class JSElementFinder extends WebElementSource {
   @Override
   @CheckReturnValue
   @Nonnull
+  public String getSearchLocator() {
+    return locator();
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
   public String toString() {
     return "{" + description() + '}';
   }

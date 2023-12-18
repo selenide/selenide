@@ -52,6 +52,13 @@ public class TailOfCollection implements CollectionSource {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
+  public String getSearchLocator() {
+    return originalCollection.getSearchLocator();
+  }
+
+  @Override
   public String toString() {
     return originalCollection + ":last(" + size + ')';
   }

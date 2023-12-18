@@ -45,6 +45,13 @@ public class WebElementsCollectionWrapper implements CollectionSource {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
+  public String getSearchLocator() {
+    return locator();
+  }
+
+  @Override
   public String toString() {
     return getSearchCriteria();
   }
@@ -53,7 +60,7 @@ public class WebElementsCollectionWrapper implements CollectionSource {
   @CheckReturnValue
   @Nonnull
   public String description() {
-    return alias.getOrElse(() -> getSearchCriteria());
+    return alias.getOrElse(this::getSearchCriteria);
   }
 
   @Override

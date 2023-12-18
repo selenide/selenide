@@ -56,6 +56,13 @@ public class LastCollectionElement extends WebElementSource {
   @Override
   @CheckReturnValue
   @Nonnull
+  public String getSearchLocator() {
+    return collection.getSearchLocator();
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
   public ElementNotFound createElementNotFoundError(WebElementCondition condition, Throwable cause) {
     if (collection.getElements().isEmpty()) {
       return new ElementNotFound(driver(), getAlias(), getSearchCriteria(), visible, cause);

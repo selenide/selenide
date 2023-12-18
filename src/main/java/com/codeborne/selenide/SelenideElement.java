@@ -1257,6 +1257,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String getSearchCriteria();
 
   /**
+   * Return locator of criteria by which this element is located
+   *
+   * @return e.g. "//div[data-test-id='sample']"
+   * @see com.codeborne.selenide.commands.GetSearchLocator
+   */
+  @CheckReturnValue
+  @Nonnull
+  String getSearchLocator();
+
+  /**
    * @return the original Selenium {@link WebElement} wrapped by this object
    * @throws org.openqa.selenium.NoSuchElementException if element does not exist (without waiting for the element)
    * @see com.codeborne.selenide.commands.ToWebElement

@@ -40,6 +40,12 @@ public class LazyCollectionSnapshot implements CollectionSource {
     return delegate.getSearchCriteria();
   }
 
+  @Nonnull
+  @Override
+  public String getSearchLocator() {
+    return delegate.getSearchLocator();
+  }
+
   @Override
   public String toString() {
     return delegate.toString();

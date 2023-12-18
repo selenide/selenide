@@ -27,6 +27,19 @@ public interface ElementDescriber {
   String selector(By selector);
 
   /**
+   * Returns locator value of element selector
+   *
+   * @param selector An element selector
+   * @return A locator of element selector
+   */
+  @CheckReturnValue
+  @Nonnull
+  default String locator(By selector) {
+    final By.Remotable.Parameters remoteParameters = ((By.Remotable) selector).getRemoteParameters();
+    return String.valueOf(remoteParameters.value());
+  }
+
+  /**
    * Outputs string presentation of the element's collection
    *
    * @param elements elements of string

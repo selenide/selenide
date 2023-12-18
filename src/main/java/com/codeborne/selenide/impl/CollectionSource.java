@@ -30,14 +30,24 @@ public interface CollectionSource {
 
   @CheckReturnValue
   @Nonnull
+  String getSearchLocator();
+
+  @CheckReturnValue
+  @Nonnull
   default String description() {
-    return getAlias().get(() -> getSearchCriteria());
+    return getAlias().get(this::getSearchCriteria);
   }
 
   @CheckReturnValue
   @Nonnull
   default String shortDescription() {
-    return getAlias().getOrElse(() -> getSearchCriteria());
+    return getAlias().getOrElse(this::getSearchCriteria);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  default String locator() {
+    return getAlias().get(this::getSearchLocator);
   }
 
   @CheckReturnValue

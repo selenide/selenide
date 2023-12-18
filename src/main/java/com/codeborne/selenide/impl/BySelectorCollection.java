@@ -55,6 +55,13 @@ public class BySelectorCollection implements CollectionSource {
       parent.getSearchCriteria() + "/" + describe.selector(selector);
   }
 
+  @Nonnull
+  @CheckReturnValue
+  @Override
+  public String getSearchLocator() {
+    return describe.locator(selector);
+  }
+
   @Override
   public String toString() {
     return parent == null ? '[' + describe.selector(selector) + ']' :

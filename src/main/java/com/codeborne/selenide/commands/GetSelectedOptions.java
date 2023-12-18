@@ -58,6 +58,13 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     }
 
     @Override
+    @CheckReturnValue
+    @Nonnull
+    public String getSearchLocator() {
+      return selectElement.getSearchLocator();
+    }
+
+    @Override
     public String toString() {
       return selectElement + " selected options";
     }

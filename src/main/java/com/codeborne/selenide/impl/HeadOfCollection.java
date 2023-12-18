@@ -54,6 +54,13 @@ public class HeadOfCollection implements CollectionSource {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
+  public String getSearchLocator() {
+    return originalCollection.getSearchLocator();
+  }
+
+  @Override
   public String toString() {
     return originalCollection + ":first(" + size + ')';
   }

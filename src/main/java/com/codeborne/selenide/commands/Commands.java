@@ -51,6 +51,7 @@ public class Commands {
     add("screenshot", new TakeScreenshot());
     add("screenshotAsImage", new TakeScreenshotAsImage());
     add("getSearchCriteria", new GetSearchCriteria());
+    add("getSearchLocator", new GetSearchLocator());
     add("execute", new Execute<>());
   }
 
