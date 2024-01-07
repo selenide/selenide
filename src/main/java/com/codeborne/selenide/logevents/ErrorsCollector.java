@@ -7,16 +7,38 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.codeborne.selenide.AssertionMode.SOFT;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
 @ParametersAreNonnullByDefault
 public class ErrorsCollector implements LogEventListener {
+  private static final AtomicLong counter = new AtomicLong(0);
   public static final String LISTENER_SOFT_ASSERT = "softAssert";
 
-  private final List<Throwable> errors = new ArrayList<>();
+  private final String id;
+  private final List<Throwable> errors;
+
+  public ErrorsCollector() {
+    this(String.valueOf(counter.incrementAndGet()), emptyList());
+  }
+
+  private ErrorsCollector(String id, List<Throwable> errors) {
+    this.id = id;
+    this.errors = new ArrayList<>(errors);
+  }
+
+  /**
+   * Make a copy of this collector.
+   * Used to take over errors collected in "before all" to each test.
+   * @return A new collector that contains all errors collected by this collector
+   */
+  public ErrorsCollector copy() {
+    return new ErrorsCollector(id + "." + counter.incrementAndGet(), errors);
+  }
 
   protected boolean isEnabled() {
     return true;
@@ -84,6 +106,6 @@ public class ErrorsCollector implements LogEventListener {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + " [" + errors + "]";
+    return "%s #%s [%d errors]".formatted(getClass().getSimpleName(), id, errors.size());
   }
 }
