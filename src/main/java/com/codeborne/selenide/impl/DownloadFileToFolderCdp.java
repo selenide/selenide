@@ -69,7 +69,7 @@ public class DownloadFileToFolderCdp extends DownloadFileToFolder {
   }
 
   private void initDevTools(Driver driver) {
-    if (driver.browser().isChromium()) {
+    if (driver.getWebDriver() instanceof HasDevTools) {
       devTools = ((HasDevTools) driver.getWebDriver()).getDevTools();
       devTools.createSessionIfThereIsNotOne();
       devTools.send(Page.enable());
@@ -82,11 +82,13 @@ public class DownloadFileToFolderCdp extends DownloadFileToFolder {
   private void prepareDownloadWithCdp(Driver driver) {
     initDevTools(driver);
 
-    devTools.send(Browser.setDownloadBehavior(
-      Browser.SetDownloadBehaviorBehavior.ALLOW,
-      Optional.empty(),
-      Optional.of(getDownloadsFolder(driver).toString()),
-      Optional.of(true)));
+    if (driver.browser().isChromium()) {
+      devTools.send(Browser.setDownloadBehavior(
+        Browser.SetDownloadBehaviorBehavior.ALLOW,
+        Optional.empty(),
+        Optional.of(getDownloadsFolder(driver).toString()),
+        Optional.of(true)));
+    }
 
     devTools.addListener(Browser.downloadWillBegin(), handler -> {
       fileName.set(handler.getSuggestedFilename());
