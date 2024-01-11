@@ -9,6 +9,7 @@ import com.codeborne.selenide.files.FileFilters;
 import com.codeborne.selenide.impl.DownloadFileToFolder;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.DownloadFileWithProxyServer;
+import com.codeborne.selenide.impl.DownloadFileToFolderCdp;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -32,15 +33,19 @@ public class DownloadFile implements Command<File> {
   private final DownloadFileWithHttpRequest downloadFileWithHttpRequest;
   private final DownloadFileWithProxyServer downloadFileWithProxyServer;
   private final DownloadFileToFolder downloadFileToFolder;
+  private final DownloadFileToFolderCdp downloadFileToFolderCdp;
 
   public DownloadFile() {
-    this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer(), inject(DownloadFileToFolder.class));
+    this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer(),
+      inject(DownloadFileToFolder.class), inject(DownloadFileToFolderCdp.class));
   }
 
-  DownloadFile(DownloadFileWithHttpRequest httpGet, DownloadFileWithProxyServer proxy, DownloadFileToFolder folder) {
+  DownloadFile(DownloadFileWithHttpRequest httpGet, DownloadFileWithProxyServer proxy,
+               DownloadFileToFolder folder, DownloadFileToFolderCdp cdp) {
     downloadFileWithHttpRequest = httpGet;
     downloadFileWithProxyServer = proxy;
     downloadFileToFolder = folder;
+    downloadFileToFolderCdp = cdp;
   }
 
   @Override
@@ -60,10 +65,14 @@ public class DownloadFile implements Command<File> {
         return downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, options.getFilter());
       }
       case PROXY: {
-        return downloadFileWithProxyServer.download(linkWithHref, link, timeout,           options.getFilter(), options.getAction());
+        return downloadFileWithProxyServer.download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
       }
       case FOLDER: {
         return downloadFileToFolder.download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
+      }
+      case CDP: {
+        return downloadFileToFolderCdp
+          .download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
       }
       default: {
         throw new IllegalArgumentException("Unknown file download mode: " + options.getMethod());
@@ -86,8 +95,7 @@ public class DownloadFile implements Command<File> {
   long getTimeout(Config config, @Nullable Object[] args) {
     if (args != null && args.length > 0 && args[0] instanceof Long timeoutArgument) {
       return timeoutArgument;
-    }
-    else {
+    } else {
       return config.timeout();
     }
   }
@@ -100,8 +108,7 @@ public class DownloadFile implements Command<File> {
     }
     if (args != null && args.length > 1 && args[1] instanceof FileFilter fileFilter) {
       return fileFilter;
-    }
-    else {
+    } else {
       return FileFilters.none();
     }
   }
