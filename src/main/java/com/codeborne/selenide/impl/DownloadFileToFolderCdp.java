@@ -24,71 +24,30 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.openqa.selenium.devtools.v119.browser.model.DownloadProgress.State.COMPLETED;
 
 @ParametersAreNonnullByDefault
-public class DownloadFileToFolderCdp extends DownloadFileToFolder {
+public class DownloadFileToFolderCdp {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolderCdp.class);
-  private AtomicBoolean downloadComplete = new AtomicBoolean(false);
-  private AtomicReference<String> fileName = new AtomicReference<>();
-
-  private DevTools devTools;
-
-  DownloadFileToFolderCdp(Downloader downloader) {
-    super(downloader, new WindowsCloser());
-  }
-
-  public DownloadFileToFolderCdp() {
-    this(new Downloader());
-  }
+  private final Downloader downloader = new Downloader();
+  private final WindowsCloser windowsCloser = new WindowsCloser();
 
   @CheckReturnValue
   @Nonnull
-  @Override
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
-    prepareDownloadWithCdp(anyClickableElement.driver());
-    return clickAndWaitForNewFilesInDownloadsFolder(anyClickableElement, clickable,
-      timeout, incrementTimeout, fileFilter, action);
-  }
-
-  @Override
-  void waitUntilDownloadsCompleted(Driver driver, DownloadsFolder folder, FileFilter filter,
-                                   long timeout, long incrementTimeout, long pollingInterval) {
-    waitUntilDownloadsCompleted(timeout, pollingInterval);
-  }
-
-  private void waitUntilDownloadsCompleted(long timeout, long pollingInterval) {
-    Stopwatch stopwatch = new Stopwatch(timeout);
-    do {
-      if (downloadComplete.get()) {
-        log.debug("File {} download is complete", fileName.get());
-        return;
-      }
-      stopwatch.sleep(pollingInterval);
-    } while (!stopwatch.isTimeoutReached());
-  }
-
-  private void initDevTools(Driver driver) {
-    if (driver.getWebDriver() instanceof HasDevTools) {
-      devTools = ((HasDevTools) driver.getWebDriver()).getDevTools();
-      devTools.createSessionIfThereIsNotOne();
-      devTools.send(Page.enable());
-    } else {
-      throw new IllegalArgumentException("The browser you selected \"%s\" doesn't have Chrome Devtools protocol functionality."
-        .formatted(driver.browser().name));
-    }
-  }
-
-  private void prepareDownloadWithCdp(Driver driver) {
-    initDevTools(driver);
+    Driver driver = anyClickableElement.driver();
+    DevTools devTools = initDevTools(driver);
 
     if (driver.browser().isChromium()) {
-      devTools.send(Browser.setDownloadBehavior(
-        Browser.SetDownloadBehaviorBehavior.ALLOW,
-        Optional.empty(),
-        Optional.of(getDownloadsFolder(driver).toString()),
-        Optional.of(true)));
+//      devTools.send(Browser.setDownloadBehavior(
+//        Browser.SetDownloadBehaviorBehavior.ALLOW,
+//        Optional.empty(),
+//        Optional.of(getDownloadsFolder(driver).toString()),
+//        Optional.of(true)));
     }
+
+    final AtomicBoolean downloadComplete = new AtomicBoolean(false);
+    final AtomicReference<String> fileName = new AtomicReference<>();
 
     devTools.addListener(Browser.downloadWillBegin(), handler -> {
       fileName.set(handler.getSuggestedFilename());
@@ -100,5 +59,35 @@ public class DownloadFileToFolderCdp extends DownloadFileToFolder {
         downloadComplete.set(e.getState() == COMPLETED);
         log.debug("Download is in progress");
       });
+//    return clickAndWaitForNewFilesInDownloadsFolder(anyClickableElement, clickable,
+//      timeout, incrementTimeout, fileFilter, action);
+
+    // folder.cleanupBeforeDownload();
+    action.perform(driver, clickable);
+  }
+
+  @Override
+  void waitUntilDownloadsCompleted(Driver driver, DownloadsFolder folder, FileFilter filter,
+                                   long timeout, long incrementTimeout, long pollingInterval) {
+    Stopwatch stopwatch = new Stopwatch(timeout);
+    do {
+      if (downloadComplete.get()) {
+        log.debug("File {} download is complete", fileName.get());
+        return;
+      }
+      stopwatch.sleep(pollingInterval);
+    } while (!stopwatch.isTimeoutReached());
+  }
+
+  private DevTools initDevTools(Driver driver) {
+    if (driver.getWebDriver() instanceof HasDevTools) {
+      DevTools devTools = ((HasDevTools) driver.getWebDriver()).getDevTools();
+      devTools.createSessionIfThereIsNotOne();
+      devTools.send(Page.enable());
+      return devTools;
+    } else {
+      throw new IllegalArgumentException("The browser you selected \"%s\" doesn't have Chrome Devtools protocol functionality."
+        .formatted(driver.browser().name));
+    }
   }
 }
