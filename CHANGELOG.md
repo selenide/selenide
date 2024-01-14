@@ -1,10 +1,17 @@
 # Changelog
 
-## 7.0.3 (released ...)
-* #2130 add checks `oneOfTexts*(Collection)` (#2557) -- thanks to Yury Yurchenko
+## 7.0.4 (released 07.12.2023)
+* bump Selenium from 4.15.0 to 4.16.1 (#2580)
+* Bump httpclient5 from 5.2.3 to 5.3 (#2581)
+See https://github.com/selenide/selenide/milestone/197?closed=1
+
+## 7.0.3 (released 28.11.2023)
+* #2130 add checks `$.shouldHave(oneOfTexts*)` (#2557) -- thanks to Yury Yurchenko
 * #2459 fix method `$.type()` in Android (#2544)  --  thanks to Amuthan Sakthivel
 * #2551 fix `$$.shouldHave(texts)` in WebKit (#2553)  --  thanks to Boris Osipov
 * #2562 allow customizing requests/responses without additional dependencies (#2563)
+
+See https://github.com/selenide/selenide/milestone/196?closed=1
 
 ## 7.0.2 (released 01.11.2023)
 * bump Selenium from 4.14.1 to 4.15.0 (#2540)

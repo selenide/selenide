@@ -5,18 +5,13 @@ import com.codeborne.selenide.impl.Html;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
-import java.util.Objects;
+
+import static com.codeborne.selenide.conditions.MultipleTextsCondition.BlankPolicy.BLANK_ALLOWED;
 
 @ParametersAreNonnullByDefault
-public class OneOfExactTexts extends TextCondition {
-  private final Collection<String> targets;
-
+public class OneOfExactTexts extends MultipleTextsCondition {
   public OneOfExactTexts(Collection<String> targets) {
-    super("one of exact texts", targets.toString());
-    if (targets.stream().anyMatch(Objects::isNull)) {
-      throw new IllegalArgumentException("The collection must not contain null");
-    }
-    this.targets = targets;
+    super("one of exact texts", targets, BLANK_ALLOWED);
   }
 
   @CheckReturnValue
