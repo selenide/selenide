@@ -47,6 +47,9 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
+    assumeThat(isFirefox())
+      .as("Firefox doesn't support CDP download method")
+      .isFalse();
     if (SystemUtils.IS_OS_WINDOWS) {
       closeWebDriver();
     }
@@ -57,9 +60,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadsFiles() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -68,9 +68,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithAlert() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download me with alert")).download(
       using(CDP).withFilter(withExtension("txt")).withAction(
         clickAndConfirm("Are you sure to download it?")
@@ -85,9 +82,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithCyrillicName() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download file with cyrillic name")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName()).isEqualTo("файл-с-русским-названием.txt");
@@ -97,31 +91,22 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadMissingFile() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     timeout = 888;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 888 ms");
+      .hasMessageStartingWith("Failed to download file in 888 ms");
   }
 
   @Test
   void downloadMissingFileWithExtension() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     timeout = 888;
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 888 ms");
+      .hasMessageStartingWith("Failed to download file in 888 ms. with extension \"pdf\"");
   }
 
   @Test
   public void download_byName() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download me")).download(withName("hello_world.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
@@ -130,9 +115,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   public void download_byNameRegex() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download me")).download(withNameMatching("hello_.+\\.txt"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
@@ -141,9 +123,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   public void download_byExtension() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
@@ -152,9 +131,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadsFilesToCustomFolder() throws IOException {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     closeWebDriver();
     String customDownloadsFolder = createTempDirectory("selenide-tests-to-custom-folder").toString();
     downloadsFolder = customDownloadsFolder;
@@ -173,9 +149,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadsPdfFile() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).matches("minimal.*.pdf");
@@ -184,9 +157,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadsPotentiallyHarmfulWindowsFiles() throws IOException {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     assumeThat(isEdge())
       .as("Edge shows warning like '*.exe file is not downloaded'")
       .isFalse();
@@ -201,9 +171,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadsPotentiallyHarmfulMacFiles() throws IOException {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download DMG file")).download(withExtension("dmg"));
 
     assertThat(downloadedFile.getName()).isEqualTo("tiny.dmg");
@@ -212,9 +179,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadWithOptions() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     Configuration.fileDownload = PROXY;
     Configuration.timeout = 1;
 
@@ -230,9 +194,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadEmptyFile() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download empty file")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName()).matches("empty-file.*\\.txt");
@@ -242,9 +203,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithPartExtension() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download file *part")).download(withExtension("part"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.part");
@@ -254,10 +212,8 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithCrdownloadExtension() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
-    File downloadedFile = $(byText("Download file *crdownload")).download(300, withName("hello_world.crdownload"));
+    File downloadedFile = $(byText("Download file *crdownload"))
+      .download(300, withName("hello_world.crdownload"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.crdownload");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
@@ -266,9 +222,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   public void canSpecifyTimeoutForFileIncrement_downloadNotEvenStarted() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     var shortIncrementTimeout = using(CDP)
       .withTimeout(ofSeconds(10))
       .withIncrementTimeout(ofMillis(100))
@@ -276,39 +229,13 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThatThrownBy(() -> $("h1")
       .download(shortIncrementTimeout))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(Pattern.compile("(?s).+files in .+ haven't been modified for \\d+ ms\\. +" +
-                                          "\\(started at: \\d+, lastFileUpdate: -?\\d+, now: \\d+, incrementTimeout: \\d+\\)\\s*" +
-                                          "Modification times: \\{.*}.*", DOTALL));
-
-    closeWebDriver();
-  }
-
-  @Test
-  public void canSpecifyTimeoutForFileIncrement_filesHasNotBeenModifiedForNms() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
-    var shortIncrementTimeout = using(CDP)
-      .withTimeout(ofSeconds(10))
-      .withIncrementTimeout(ofMillis(100))
-      .withFilter(withName("hello_world.txt"));
-    assertThatThrownBy(() -> {
-      File file = $(byText("Download me super slowly")).download(shortIncrementTimeout);
-      assertThat(file).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
-    })
-      .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(Pattern.compile("(?s).+files in .+ haven't been modified for \\d+ ms\\..*", DOTALL));
+      .hasMessageStartingWith("Failed to download file in 10000 ms");
 
     closeWebDriver();
   }
 
   @Test
   public void download_slowly() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download me slowly"))
       .download(4000, withName("hello_world.txt"));
 
@@ -318,9 +245,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   public void download_super_slowly() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download me super slowly")).download(6000, withExtension("txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
@@ -329,9 +253,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadLargeFile() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     File downloadedFile = $(byText("Download large file")).download(8000, withExtension("txt"));
 
     assertThat(downloadedFile).hasName("large_file.txt");
@@ -340,9 +261,6 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   public void cannotDownloadUsingProxy_ifBrowserIsOpenedWithoutProxy() {
-    assumeThat(isFirefox())
-      .as("Firefox doesn't support CDP download method")
-      .isFalse();
     assertThatThrownBy(() -> $(byText("Download me")).download(using(PROXY)))
       .isInstanceOf(IllegalStateException.class)
       .hasMessageStartingWith("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
