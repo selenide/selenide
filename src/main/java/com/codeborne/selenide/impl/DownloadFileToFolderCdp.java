@@ -43,7 +43,7 @@ public class DownloadFileToFolderCdp {
   @CheckReturnValue
   @Nonnull
   public File download(WebElementSource anyClickableElement,
-                       WebElement clickable, long timeout, long incrementTimeout,
+                       WebElement clickable, long timeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
 
@@ -56,13 +56,11 @@ public class DownloadFileToFolderCdp {
     // Init download behaviour and listeners
     prepareDownloadWithCdp(driver, devTools, fileName, downloadComplete);
 
-   // logs.get().forEach(System.out::println);
-
     // Perform action an element that begins download process
     action.perform(anyClickableElement.driver(), clickable);
 
     // Wait until download
-    File file = waitUntilDownloadsCompleted(anyClickableElement.driver(), timeout, incrementTimeout, downloadComplete, fileName);
+    File file = waitUntilDownloadsCompleted(anyClickableElement.driver(), timeout, downloadComplete, fileName);
 
     //
     if (!fileFilter.match(new DownloadedFile(file, emptyMap()))) {
@@ -84,16 +82,16 @@ public class DownloadFileToFolderCdp {
     return archivedFile;
   }
 
-  private File waitUntilDownloadsCompleted(Driver driver, long timeout, long incrementTimeout,
+  private File waitUntilDownloadsCompleted(Driver driver, long timeout,
                                            AtomicBoolean downloadComplete, AtomicReference<String> fileName) {
-    long pollingInterval = Math.max(incrementTimeout, 50);
+    long pollingInterval = Math.max(driver.config().pollingInterval(), 100);
     Stopwatch stopwatch = new Stopwatch(timeout);
     do {
       if (downloadComplete.get()) {
         log.debug("File {} download is complete", fileName);
         return new File(driver.browserDownloadsFolder().toString(), fileName.get());
       }
-     // stopwatch.sleep(pollingInterval);
+      stopwatch.sleep(pollingInterval);
     } while (!stopwatch.isTimeoutReached());
 
     String message = "Failed to download file in %d ms".formatted(timeout);
@@ -130,7 +128,7 @@ public class DownloadFileToFolderCdp {
       e -> {
         if (e.getState() == CANCELED) {
           Number receivedBytes = e.getReceivedBytes();
-          if (receivedBytes.longValue() == 0L){
+          if (receivedBytes.longValue() == 0L) {
             throw new FileNotDownloadedError(driver, "Failed to download file. Received 0 bytes.", 0);
           }
           throw new FileNotDownloadedError(driver, "File download is canceled", 0);

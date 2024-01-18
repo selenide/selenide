@@ -72,7 +72,7 @@ public class DownloadFile implements Command<File> {
       }
       case CDP: {
         return downloadFileToFolderCdp
-          .download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
+          .download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
       }
       default: {
         throw new IllegalArgumentException("Unknown file download mode: " + options.getMethod());
