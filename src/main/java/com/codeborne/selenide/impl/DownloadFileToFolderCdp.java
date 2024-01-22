@@ -101,7 +101,7 @@ public class DownloadFileToFolderCdp {
   private DevTools initDevTools(Driver driver) {
     DevTools devTools;
     if (driver.browser().isChromium()) {
-      devTools = (((HasDevTools) driver.getWebDriver()).getDevTools());
+      devTools = ((HasDevTools) driver.getWebDriver()).getDevTools();
       devTools.createSessionIfThereIsNotOne();
       devTools.send(Page.enable());
       return devTools;
