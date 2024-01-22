@@ -10,7 +10,7 @@ class IosScrollTest extends BaseSwagLabsAppIosTest {
   @Test
   void testScrollToElementOnIos() {
 
-    $x("//XCUIElementTypeStaticText[@name='© 2023 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy.']")
+    $x("//XCUIElementTypeStaticText[contains(@name, 'Sauce Labs. All Rights Reserved')]")
       .scrollTo()
       .shouldBe(visible);
   }
