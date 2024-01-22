@@ -87,7 +87,7 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
           java-version: '17'
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: build/apps
           key: ${{ runner.os }}-android-tests-${{ hashFiles('**/*.zip*') }}
@@ -139,7 +139,7 @@ jobs:
           model: 'iPhone 14'
           os: 'iOS'
           os_version: '16.2'
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: build/apps
           key: ${{ runner.os }}-ios-tests-${{ hashFiles('**/*.zip*') }}
