@@ -2,89 +2,69 @@ package com.selenide.videorecorder;
 
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.io.FileUtils;
+import org.bytedeco.ffmpeg.ffmpeg;
 import org.bytedeco.javacpp.Loader;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v121.page.Page;
+import org.openqa.selenium.devtools.v120.page.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.webdriver;
+import static com.codeborne.selenide.Selenide.*;
 
-public class VideoRecorder extends Thread {
+public class VideoRecorder{
   private static final Logger log = LoggerFactory.getLogger(VideoRecorder.class);
 
   private DevTools devTools;
   private Process process;
   private OutputStream inputStream;
-  static final String ffmpeg = "%s -loglevel error -f image2pipe -avioflags direct -fpsprobesize 0 -probesize 32 -analyzeduration 0 -c:v mjpeg -i - -y -an -r 25 -c:v vp8 -qmin 0 -qmax 50 -crf 8 -deadline realtime -speed 8 -b:v 1M -threads 1  %s";
+
+  private List<String> screens = new LinkedList<>();
+
+  static final String ffmpeg = "%s -f image2pipe -i - -y %s";
 
   static final String defaultRecordsFolder = "build/records";
+
   final String ffmpegExecutable = Loader.load(org.bytedeco.ffmpeg.ffmpeg.class);
 
-  private AtomicReference<Long> prev_timestamp = new AtomicReference<>();
-
-  private byte[] lastImage;
-
-  private File recordFile;
+  private String defaultVideoName = new Date().getTime() + "";
 
 
-  public VideoRecorder(WebDriver driver) {
-    //prepareRecordsFolder();
-//    if (!WebDriverRunner.hasWebDriverStarted()) {
-//      log.warn("Webdriver is not started yet!!! So we will start it!");
-//      open();
-//    }
-    devTools = ((HasDevTools) driver).getDevTools();
+  public VideoRecorder() {
+    prepareRecordsFolder();
+    if (!WebDriverRunner.hasWebDriverStarted()) {
+      log.warn("There is no opened browser. We will start one.");
+      open();
+    }
+    devTools = ((HasDevTools) webdriver().object()).getDevTools();
     devTools.createSessionIfThereIsNotOne();
     devTools.send(Page.enable());
   }
 
 
-  public void startRecording(String fileName) throws IOException {
-    recordFile = new File(defaultRecordsFolder, fileName + ".webm");
+  public void startRecording() {
+    File recordFileName = new File(defaultRecordsFolder, defaultVideoName + ".webm");
+    try {
+      process = Runtime.getRuntime().exec(ffmpeg.formatted(ffmpegExecutable, recordFileName.getAbsolutePath()));
+      inputStream = process.getOutputStream();
 
-    process = Runtime.getRuntime().exec(ffmpeg.formatted(ffmpegExecutable, recordFile.getAbsolutePath()));
-//    ProcessBuilder processBuilder = new ProcessBuilder(
-//      Arrays.asList(ffmpeg.formatted(ffmpegExecutable, recordFile.getAbsolutePath()).split(" "))
-//    );
-//    process = processBuilder.start();
-
-    inputStream = process.getOutputStream();
-    //   inputStream = (ByteArrayOutputStream) process.getOutputStream();
-    prev_timestamp.set(new Date().getTime() / 1000);
-    devTools.addListener(Page.screencastFrame(), frame -> {
-      devTools.send(Page.screencastFrameAck(frame.getSessionId()));
-      long current_timestamp = frame.getMetadata().getTimestamp().get().toJson().longValue();
-      log.info("Current timestamp: {}", current_timestamp);
-      lastImage = Base64.getDecoder().decode(frame.getData());
-      log.info("Prev timestamp: {}", prev_timestamp.get());
-      long duration = current_timestamp - prev_timestamp.get();
-      log.info("Duration: {}", duration);
-      prev_timestamp.set(current_timestamp);
-      log.info("Prev timestamp: {}", prev_timestamp.get());
-      long repeatCount = Math.max(1, Math.round(25 * duration));
-      log.info("Repeat count: {}\n\n", repeatCount);
-
-      for (long i = 0; i < repeatCount; i++) {
-        try {
-          inputStream.write(lastImage);
-        } catch (IOException e) {
-          throw new RuntimeException(e);
+      devTools.addListener(Page.screencastFrame(), frame -> {
+        for (int i = 0; i < 15; i++) {
+          devTools.send(Page.screencastFrameAck(frame.getSessionId()));
+          screens.add(frame.getData());
         }
-      }
-    });
+      });
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
 
     devTools.send(Page.startScreencast(
-      Optional.of(Page.StartScreencastFormat.JPEG),
+      Optional.of(Page.StartScreencastFormat.PNG),
       Optional.of(50),
       Optional.empty(),
       Optional.empty(),
@@ -92,24 +72,21 @@ public class VideoRecorder extends Thread {
     ));
   }
 
-  public void startRecording() {
+  public void startRecording(String videoName){
+    this.defaultVideoName = videoName;
+    startRecording();
+  }
+
+  public void stopRecording() {
     try {
-      startRecording(new Date().getTime() + "");
+      for (String screen : screens) {
+        inputStream.write(Base64.getDecoder().decode(screen));
+      }
+      inputStream.flush();
+      inputStream.close();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  public void stopRecording() throws IOException {
-    devTools.send(Page.stopScreencast());
-    inputStream.write(lastImage);
-    inputStream.flush();
-    inputStream.close();
-    //inputStream.reset();
-  }
-
-  public File getRecordFile() {
-    return recordFile;
   }
 
   private void prepareRecordsFolder() {
@@ -125,9 +102,4 @@ public class VideoRecorder extends Thread {
     }
   }
 
-  @Override
-  public void run() {
-    super.run();
-    startRecording();
-  }
 }
