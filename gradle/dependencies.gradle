@@ -5,7 +5,7 @@ ext {
   junitVersion = '5.10.1'
   jettyVersion = '9.4.53.v20231009'
   nettyVersion = '4.1.106.Final'
-  assertjVersion = '3.25.1'
+  assertjVersion = '3.25.2'
   mockitoVersion = '5.10.0'
   slf4jVersion = '2.0.11'
   browserupProxyVersion = '2.2.15'
