@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.5 (released 25.01.2024)
+* bump Selenium from 4.16.0 to 4.17.0 (#2614)
+* #2595 fix soft assertions in parallel tests in JUnit5 (#2603)
+* Bump LittleProxy from 2.1.0 to 2.1.1 (#2592)
+* Bump Netty from 4.1.101.Final to 4.1.106.Final
+
+See https://github.com/selenide/selenide/milestone/198?closed=1
+
 ## 7.0.4 (released 07.12.2023)
 * bump Selenium from 4.15.0 to 4.16.1 (#2580)
 * Bump httpclient5 from 5.2.3 to 5.3 (#2581)
