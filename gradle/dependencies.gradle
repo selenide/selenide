@@ -10,7 +10,7 @@ ext {
   slf4jVersion = '2.0.11'
   browserupProxyVersion = '2.2.15'
   littleProxyVersion = '2.1.1'
-  commonsFileuploadVersion = '1.5'
+  commonsFileuploadVersion = '1.5.0.redhat-00001'
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.9'
   archunitVersion = '1.2.1'
@@ -25,6 +25,9 @@ subprojects {
       mavenContent {
         snapshotsOnly()
       }
+    }
+    maven {
+      url "https://maven.repository.redhat.com/ga/"
     }
   }
 
