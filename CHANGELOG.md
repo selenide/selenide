@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.0.6 (released 27.01.2024)
+* bump Appium java client from 9.0.0 to 9.1.0 (#2623)
+
 ## 7.0.5 (released 25.01.2024)
 * bump Selenium from 4.16.0 to 4.17.0 (#2614)
 * #2595 fix soft assertions in parallel tests in JUnit5 (#2603)
