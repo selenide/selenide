@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import static java.lang.System.lineSeparator;
@@ -32,6 +33,11 @@ public class SimpleReport {
 
   public void start() {
     checkThatSlf4jIsConfigured();
+
+    EventsCollector logEventListener = SelenideLogger.getListener("simpleReport");
+    if (logEventListener != null && logEventListener.events().isEmpty()) {
+      throw new ConcurrentModificationException("Concurrent usage of the listener, lost events: " + logEventListener.events());
+    }
     SelenideLogger.addListener("simpleReport", new EventsCollector());
   }
 
@@ -49,6 +55,8 @@ public class SimpleReport {
 
     String report = generateReport(title, events);
     log.info(report);
+
+    logEventListener.clear();
   }
 
   @Nonnull

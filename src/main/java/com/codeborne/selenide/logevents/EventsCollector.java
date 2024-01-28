@@ -26,4 +26,8 @@ public class EventsCollector implements LogEventListener {
   public List<LogEvent> events() {
     return Collections.unmodifiableList(logEvents);
   }
+
+  void clear() {
+    logEvents.clear();
+  }
 }
