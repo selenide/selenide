@@ -1,7 +1,7 @@
 package integration.server;
 
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.fileupload.FileItem;
+import jakarta.servlet.MultipartConfigElement;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -10,6 +10,9 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.net.BindException;
 import java.util.List;
@@ -20,9 +23,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
+@ParametersAreNonnullByDefault
 public class LocalHttpServer {
   private static final Logger log = LoggerFactory.getLogger(LocalHttpServer.class);
-  private final List<FileItem> uploadedFiles = new CopyOnWriteArrayList<>();
+  private final List<UploadedFile> uploadedFiles = new CopyOnWriteArrayList<>();
   private final Set<String> sessions = new ConcurrentSkipListSet<>();
   private final Server server;
   private final int port;
@@ -49,7 +53,7 @@ public class LocalHttpServer {
     server.setHandler(context);
 
     context.addServlet(new ServletHolder(new FileDownloadHandler(sessions)), "/files/*");
-    context.addServlet(new ServletHolder(new FileUploadHandler(uploadedFiles)), "/upload");
+    context.addServlet(uploadServletHolder(), "/upload");
     context.addServlet(new ServletHolder(new BasicAuthHandler()), "/basic-auth/*");
     context.addServlet(new ServletHolder(new BearerTokenHandler()), "/bearer-token-auth/*");
     context.addServlet(new ServletHolder(new HeadersPrinterHandler()), "/headers/*");
@@ -57,11 +61,29 @@ public class LocalHttpServer {
     context.addServlet(new ServletHolder(new FileRenderHandler(sessions)), "/*");
   }
 
+  @Nonnull
+  @CheckReturnValue
+  private ServletHolder uploadServletHolder() {
+    ServletHolder uploadServlet = new ServletHolder(new FileUploadHandler(uploadedFiles));
+    uploadServlet.getRegistration().setMultipartConfig(multipartConfig());
+    return uploadServlet;
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  private MultipartConfigElement multipartConfig() {
+    String location = System.getProperty("java.io.tmpdir");
+    long maxFileSize = 3 * 1024 * 1024; // 3mb - limit for a single file
+    long maxRequestSize = 10 * 1024 * 1024; // 10mb - limit for a whole request
+    int fileSizeThreshold = 1024 * 1024; // 1mb files greater than 1mb will be written to disk
+    return new MultipartConfigElement(location, maxFileSize, maxRequestSize, fileSizeThreshold);
+  }
+
   public int getPort() {
     return port;
   }
 
-  public List<FileItem> getUploadedFiles() {
+  public List<UploadedFile> getUploadedFiles() {
     return uploadedFiles;
   }
 

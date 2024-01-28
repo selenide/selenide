@@ -1,51 +1,53 @@
 package integration.server;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import org.apache.commons.io.IOUtils;
+import org.eclipse.jetty.server.MultiPartFormInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
+import static jakarta.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static org.apache.hc.core5.http.HttpStatus.SC_OK;
 
 class FileUploadHandler extends BaseHandler {
   private static final Logger log = LoggerFactory.getLogger(FileUploadHandler.class);
-  private final List<FileItem> uploadedFiles;
+  private final List<UploadedFile> uploadedFiles;
 
-  FileUploadHandler(List<FileItem> uploadedFiles) {
+  FileUploadHandler(List<UploadedFile> uploadedFiles) {
     this.uploadedFiles = uploadedFiles;
   }
 
   @Override
   public Result post(HttpServletRequest request, HttpServletResponse response) {
-    DiskFileItemFactory factory = new DiskFileItemFactory();
-    factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
-    ServletFileUpload upload = new ServletFileUpload(factory);
-    upload.setHeaderEncoding(UTF_8.name());
-    upload.setFileCountMax(20);
-    upload.setSizeMax(10 * 1024 * 1024); // 10mb
-    upload.setFileSizeMax(3 * 1024 * 1024); // 3mb
     try {
-      List<FileItem> items = upload.parseRequest(request);
-      for (FileItem item : items) {
+      Collection<Part> parts = request.getParts();
+      for (Part item : parts) {
         if (item.getSize() > 0) {
-          uploadedFiles.add(item);
+          uploadedFiles.add(multipartToFile(item));
         }
       }
 
-      String message = "<h3>Uploaded " + uploadedFiles.size() + " files</h3>" + items;
+      String message = "<h3>Uploaded %s files</h3>%s".formatted(uploadedFiles.size(), parts);
       return new Result(SC_OK, CONTENT_TYPE_HTML_TEXT, message.getBytes(UTF_8));
-    } catch (FileUploadException e) {
+    } catch (IOException | ServletException e) {
       log.error(e.getMessage(), e);
       return new Result(SC_INTERNAL_SERVER_ERROR, CONTENT_TYPE_HTML_TEXT, e.toString());
     }
+  }
+
+  @Nonnull
+  private static UploadedFile multipartToFile(Part item) throws IOException {
+    MultiPartFormInputStream.MultiPart i = (MultiPartFormInputStream.MultiPart) item;
+    byte[] content = IOUtils.toByteArray(i.getInputStream());
+    return new UploadedFile(i.getContentDispositionFilename(), content);
   }
 }

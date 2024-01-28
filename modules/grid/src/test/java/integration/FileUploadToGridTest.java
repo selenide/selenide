@@ -39,11 +39,11 @@ final class FileUploadToGridTest extends AbstractGridTest {
 
     assertThat(server.getUploadedFiles()).hasSize(2);
 
-    assertThat(server.getUploadedFiles().get(0).getName()).endsWith("hello_grid_world.txt");
-    assertThat(server.getUploadedFiles().get(1).getName()).endsWith("goodbye_grid_world.txt");
+    assertThat(server.getUploadedFiles().get(0).name()).endsWith("hello_grid_world.txt");
+    assertThat(server.getUploadedFiles().get(1).name()).endsWith("goodbye_grid_world.txt");
 
-    assertThat(server.getUploadedFiles().get(0).getString()).contains("Hello, Selenium Grid!");
-    assertThat(server.getUploadedFiles().get(1).getString()).contains("Goodbye, Selenium Grid!");
+    assertThat(server.getUploadedFiles().get(0).content()).contains("Hello, Selenium Grid!");
+    assertThat(server.getUploadedFiles().get(1).content()).contains("Goodbye, Selenium Grid!");
   }
 
   @Test
@@ -55,11 +55,11 @@ final class FileUploadToGridTest extends AbstractGridTest {
     $("h3").shouldHave(text("Uploaded 3 files").because("Actual files: " + server.getUploadedFiles()));
 
     assertThat(server.getUploadedFiles())
-      .extracting(f -> f.getName())
+      .extracting(f -> f.name())
       .containsExactlyInAnyOrder("файл.txt", "hello_grid_world.txt", "goodbye_grid_world.txt");
 
     assertThat(server.getUploadedFiles())
-      .extracting(f -> f.getString("UTF-8").trim())
+      .extracting(f -> f.content().trim())
       .containsExactlyInAnyOrder("коромысло", "Hello, Selenium Grid!", "Goodbye, Selenium Grid!");
   }
 }

@@ -37,9 +37,9 @@ final class FileUploadTest extends ITest {
     assertThat(f2.getName()).isEqualTo("firebug-1.11.4.xpi");
 
     assertThat(server.getUploadedFiles()).hasSize(2);
-    assertThat(server.getUploadedFiles().get(0).getName()).endsWith("hello_world.txt");
-    assertThat(server.getUploadedFiles().get(1).getName()).endsWith("firebug-1.11.4.xpi");
-    assertThat(server.getUploadedFiles().get(0).getString()).isEqualTo("Hello, WinRar!");
+    assertThat(server.getUploadedFiles().get(0).name()).endsWith("hello_world.txt");
+    assertThat(server.getUploadedFiles().get(1).name()).endsWith("firebug-1.11.4.xpi");
+    assertThat(server.getUploadedFiles().get(0).content()).isEqualTo("Hello, WinRar!");
   }
 
   @Test
@@ -49,7 +49,7 @@ final class FileUploadTest extends ITest {
     $("h3").shouldHave(text("Uploaded 1 files"));
     assertThat(file).exists();
     assertThat(file.getPath()).endsWith("hello_world.txt");
-    assertThat(server.getUploadedFiles().get(0).getName()).endsWith("hello_world.txt");
+    assertThat(server.getUploadedFiles().get(0).name()).endsWith("hello_world.txt");
   }
 
   @Test
@@ -69,15 +69,15 @@ final class FileUploadTest extends ITest {
     $("h3").shouldHave(text("Uploaded 9 files"));
     assertThat(server.getUploadedFiles()).hasSize(9);
 
-    assertThat(server.getUploadedFiles().get(0).getName()).endsWith("hello_world.txt");
-    assertThat(server.getUploadedFiles().get(1).getName()).endsWith("jquery.min.js");
-    assertThat(server.getUploadedFiles().get(2).getName()).endsWith("jquery-ui.min.css");
-    assertThat(server.getUploadedFiles().get(3).getName()).endsWith("long_ajax_request.html");
-    assertThat(server.getUploadedFiles().get(8).getName()).endsWith("selenide-logo-big.png");
+    assertThat(server.getUploadedFiles().get(0).name()).endsWith("hello_world.txt");
+    assertThat(server.getUploadedFiles().get(1).name()).endsWith("jquery.min.js");
+    assertThat(server.getUploadedFiles().get(2).name()).endsWith("jquery-ui.min.css");
+    assertThat(server.getUploadedFiles().get(3).name()).endsWith("long_ajax_request.html");
+    assertThat(server.getUploadedFiles().get(8).name()).endsWith("selenide-logo-big.png");
 
-    assertThat(server.getUploadedFiles().get(0).getString()).contains("Hello, WinRar!");
-    assertThat(server.getUploadedFiles().get(1).getString()).contains("jQuery JavaScript Library");
-    assertThat(server.getUploadedFiles().get(2).getString()).contains("jQuery UI");
+    assertThat(server.getUploadedFiles().get(0).content()).contains("Hello, WinRar!");
+    assertThat(server.getUploadedFiles().get(1).content()).contains("jQuery JavaScript Library");
+    assertThat(server.getUploadedFiles().get(2).content()).contains("jQuery UI");
   }
 
   @Test
@@ -91,8 +91,8 @@ final class FileUploadTest extends ITest {
     $("h3").shouldHave(text("Uploaded 2 files"));
     assertThat(server.getUploadedFiles()).hasSize(2);
 
-    assertThat(server.getUploadedFiles().get(0).getName()).endsWith("Logger.class");
-    assertThat(server.getUploadedFiles().get(1).getName()).endsWith("LoggerFactory.class");
+    assertThat(server.getUploadedFiles().get(0).name()).endsWith("Logger.class");
+    assertThat(server.getUploadedFiles().get(1).name()).endsWith("LoggerFactory.class");
   }
 
   @Test
@@ -109,11 +109,11 @@ final class FileUploadTest extends ITest {
 
     assertThat(server.getUploadedFiles()).hasSize(2);
 
-    assertThat(server.getUploadedFiles().get(0).getName()).endsWith("hello_world.txt");
-    assertThat(server.getUploadedFiles().get(1).getName()).endsWith("jquery.min.js");
+    assertThat(server.getUploadedFiles().get(0).name()).endsWith("hello_world.txt");
+    assertThat(server.getUploadedFiles().get(1).name()).endsWith("jquery.min.js");
 
-    assertThat(server.getUploadedFiles().get(0).getString()).contains("Hello, WinRar!");
-    assertThat(server.getUploadedFiles().get(1).getString()).contains("jQuery JavaScript Library v1.8.3");
+    assertThat(server.getUploadedFiles().get(0).content()).contains("Hello, WinRar!");
+    assertThat(server.getUploadedFiles().get(1).content()).contains("jQuery JavaScript Library v1.8.3");
   }
 
   @Test
@@ -128,11 +128,11 @@ final class FileUploadTest extends ITest {
     $("h3").shouldHave(text("Uploaded 3 files").because("Actual files: " + server.getUploadedFiles()));
 
     assertThat(server.getUploadedFiles())
-      .extracting(f -> f.getName())
+      .extracting(f -> f.name())
       .containsExactlyInAnyOrder("файл-с-русским-названием.txt", "hello_world.txt", "child_frame.txt");
 
     assertThat(server.getUploadedFiles())
-      .extracting(f -> f.getString("UTF-8"))
+      .extracting(f -> f.content())
       .containsExactlyInAnyOrder("Превед медвед!", "Hello, WinRar!", "This is last frame!");
   }
 
