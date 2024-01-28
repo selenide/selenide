@@ -15,7 +15,7 @@ public class AppiumNavigator {
 
   public void launchApp(Supplier<Runnable> driverSupplier) {
     Configuration.browserSize = null;
-    Configuration.pageLoadTimeout = 0;
+    Configuration.pageLoadTimeout = -1;
     SelenideLogger.run("launch app", "", driverSupplier.get());
   }
 
