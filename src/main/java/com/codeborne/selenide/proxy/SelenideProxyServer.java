@@ -116,15 +116,14 @@ public class SelenideProxyServer {
    * @param requestFilter the filter
    */
   public void addRequestFilter(String name, RequestFilter requestFilter) {
-    if (isRequestFilterAdded(name)) {
+    RequestFilter currentFilter = requestFilter(name);
+    if (currentFilter != null && !currentFilter.equals(requestFilter)) {
       throw new IllegalArgumentException("Duplicate request filter: " + name);
     }
-    proxy.addRequestFilter(requestFilter);
-    requestFilters.put(name, requestFilter);
-  }
-
-  private boolean isRequestFilterAdded(String name) {
-    return requestFilters.containsKey(name);
+    if (currentFilter == null) {
+      proxy.addRequestFilter(requestFilter);
+      requestFilters.put(name, requestFilter);
+    }
   }
 
   /**
@@ -134,11 +133,14 @@ public class SelenideProxyServer {
    * @param responseFilter the filter
    */
   public void addResponseFilter(String name, ResponseFilter responseFilter) {
-    if (responseFilters.containsKey(name)) {
+    ResponseFilter currentFilter = responseFilter(name);
+    if (currentFilter != null && !currentFilter.equals(responseFilter)) {
       throw new IllegalArgumentException("Duplicate response filter: " + name);
     }
-    proxy.addResponseFilter(responseFilter);
-    responseFilters.put(name, responseFilter);
+    if (currentFilter == null) {
+      proxy.addResponseFilter(responseFilter);
+      responseFilters.put(name, responseFilter);
+    }
   }
 
   static InetSocketAddress getProxyAddress(Proxy proxy) {
