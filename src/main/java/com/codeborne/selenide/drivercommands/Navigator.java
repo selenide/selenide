@@ -8,7 +8,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.AuthenticationFilter;
-import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
@@ -49,8 +48,8 @@ public class Navigator {
     navigateTo(driver, relativeOrAbsoluteUrl, authenticationType, credentials);
   }
 
-  private AuthenticationFilter basicAuthRequestFilter(SelenideProxyServer selenideProxy) {
-    return selenideProxy.requestFilter("authentication");
+  private AuthenticationFilter basicAuthRequestFilter(SelenideDriver driver) {
+    return driver.getProxy().requestFilter("authentication");
   }
 
   @Nonnull
@@ -69,8 +68,7 @@ public class Navigator {
     SelenideLogger.run("open", absoluteUrl, () -> {
       try {
         WebDriver webDriver = driver.getAndCheckWebDriver();
-        String url = applyBasicAuthIfNeeded(driver.config(), absoluteUrl, webDriver, authenticationType, credentials);
-        beforeNavigateTo(driver, authenticationType, credentials);
+        String url = prepareAuthentication(driver, absoluteUrl, authenticationType, credentials);
         webDriver.navigate().to(url);
       }
       catch (WebDriverException e) {
@@ -96,52 +94,36 @@ public class Navigator {
     }
   }
 
-  private void beforeNavigateTo(SelenideDriver driver,
-                                @Nullable AuthenticationType authenticationType,
-                                @Nullable Credentials credentials) {
-    Config config = driver.config();
-    if (config.proxyEnabled()) {
-      SelenideProxyServer selenideProxy = driver.getProxy();
-      beforeNavigateToWithProxy(selenideProxy, authenticationType, credentials);
+  private String prepareAuthentication(SelenideDriver driver,
+                                       String requestUrl,
+                                       @Nullable AuthenticationType authenticationType,
+                                       @Nullable Credentials credentials) {
+
+    if (driver.config().proxyEnabled()) {
+      // reset previous credentials
+      basicAuthRequestFilter(driver).removeAuthentication();
+    }
+
+    if (credentials == null || authenticationType == null) {
+      // no authentication needed
+      return requestUrl;
+    }
+    else if (driver.config().proxyEnabled()) {
+      // credentials sent via proxy
+      basicAuthRequestFilter(driver).setAuthentication(authenticationType, credentials);
+      return requestUrl;
+    }
+    else if (registerBasicAuth(driver.getWebDriver(), credentials)) {
+      // credentials sent via CDP
+      return requestUrl;
+    }
+    else if (authenticationType == BASIC) {
+      // credentials are prepended to the URL
+      return appendBasicAuthToURL(requestUrl, (BasicAuthCredentials) credentials);
     }
     else {
-      beforeNavigateToWithoutProxy(authenticationType, credentials);
-    }
-  }
-
-  private void beforeNavigateToWithProxy(SelenideProxyServer selenideProxy,
-                                         @Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
-    if (authenticationType != null && credentials != null) {
-      basicAuthRequestFilter(selenideProxy).setAuthentication(authenticationType, credentials);
-    }
-    else {
-      basicAuthRequestFilter(selenideProxy).removeAuthentication();
-    }
-  }
-
-  private void beforeNavigateToWithoutProxy(@Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
-    if (credentials != null && authenticationType != BASIC) {
       throw new UnsupportedOperationException("Cannot use " + authenticationType + " authentication without proxy server");
     }
-  }
-
-  private String applyBasicAuthIfNeeded(Config config,
-                                        String url,
-                                        WebDriver webDriver,
-                                        @Nullable AuthenticationType authType,
-                                        @Nullable Credentials credentials) {
-    if (registerBasicAuth(webDriver, credentials)) {
-      return url;
-    }
-    return passBasicAuthThroughUrl(config, authType, credentials)
-      ? appendBasicAuthToURL(url, (BasicAuthCredentials) credentials)
-      : url;
-  }
-
-  private boolean passBasicAuthThroughUrl(Config config,
-                                          @Nullable AuthenticationType authenticationType,
-                                          @Nullable Credentials credentials) {
-    return authenticationType == BASIC && credentials != null && !config.proxyEnabled();
   }
 
   boolean isAbsoluteUrl(String relativeOrAbsoluteUrl) {
