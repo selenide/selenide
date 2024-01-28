@@ -1,10 +1,14 @@
 package integration.proxy;
 
+import com.browserup.bup.filters.RequestFilter;
+import com.browserup.bup.filters.ResponseFilter;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import integration.ProxyIntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +23,10 @@ import static com.codeborne.selenide.proxy.RequestMatcher.HttpMethod.GET;
 import static com.codeborne.selenide.proxy.RequestMatchers.urlEndsWith;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class ProxyServerUsageTest extends ProxyIntegrationTest {
+  private static final Logger log = LoggerFactory.getLogger(ProxyServerUsageTest.class);
   private final List<String> requests = new ArrayList<>();
   private final List<String> responses = new ArrayList<>();
 
@@ -85,6 +91,67 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
 
   private String mockedResponse() {
     return "<html><body><h1>This is a fake response</h1></body></html>";
+  }
+
+  @Test
+  void canAddSameRequestFilterMultipleTimes() {
+    openFile("file_upload_form.html");
+    SelenideProxyServer selenideProxy = getSelenideProxy();
+    RequestFilter requestLogger = (request, contents, messageInfo) -> {
+      log.info("Request {} {}", messageInfo.getUrl(), contents.getTextContents());
+      return null;
+    };
+
+    selenideProxy.addRequestFilter("proxy-usages.request-logger", requestLogger);
+    selenideProxy.addRequestFilter("proxy-usages.request-logger", requestLogger);
+  }
+
+  @Test
+  void canAddSameResponseFilterMultipleTimes() {
+    openFile("file_upload_form.html");
+    SelenideProxyServer selenideProxy = getSelenideProxy();
+    ResponseFilter responseFilter = (response, contents, messageInfo) -> {
+      log.info("Response {} {}", messageInfo.getUrl(), contents.getTextContents());
+    };
+
+    selenideProxy.addResponseFilter("proxy-usages.response-logger", responseFilter);
+    selenideProxy.addResponseFilter("proxy-usages.response-logger", responseFilter);
+  }
+
+  @Test
+  void cannotAddDifferentRequestFiltersWithSameName() {
+    openFile("file_upload_form.html");
+    SelenideProxyServer selenideProxy = getSelenideProxy();
+    RequestFilter requestLogger1 = (request, contents, messageInfo) -> {
+      log.info("Request {} {}", messageInfo.getUrl(), contents.getTextContents());
+      return null;
+    };
+    RequestFilter requestLogger2 = (request, contents, messageInfo) -> {
+      log.info("Request {} {}", messageInfo.getUrl(), contents.getTextContents());
+      return null;
+    };
+
+    selenideProxy.addRequestFilter("proxy-usages.auth-request", requestLogger1);
+    assertThatThrownBy(() -> selenideProxy.addRequestFilter("proxy-usages.auth-request", requestLogger2))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Duplicate request filter: proxy-usages.auth-request");
+  }
+
+  @Test
+  void cannotAddDifferentResponseFiltersWithSameName() {
+    openFile("file_upload_form.html");
+    SelenideProxyServer selenideProxy = getSelenideProxy();
+    ResponseFilter responseLogger1 = (request, contents, messageInfo) -> {
+      log.info("Response {} {}", messageInfo.getUrl(), contents.getTextContents());
+    };
+    ResponseFilter responseLogger2 = (request, contents, messageInfo) -> {
+      log.info("Response {} {}", messageInfo.getUrl(), contents.getTextContents());
+    };
+
+    selenideProxy.addResponseFilter("proxy-usages.auth-response", responseLogger1);
+    assertThatThrownBy(() -> selenideProxy.addResponseFilter("proxy-usages.auth-response", responseLogger2))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Duplicate response filter: proxy-usages.auth-response");
   }
 
   private boolean isBrowserOwnTechnicalRequest(String url) {
