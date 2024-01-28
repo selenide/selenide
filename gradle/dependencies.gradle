@@ -3,14 +3,13 @@ ext {
   seleniumVersion = project.properties['seleniumVersionNightlyBuild'] ?: seleniumVersionStable
   httpClientVersion = '5.3.1'
   junitVersion = '5.10.1'
-  jettyVersion = '9.4.53.v20231009'
+  jettyVersion = '11.0.19'
   nettyVersion = '4.1.106.Final'
   assertjVersion = '3.25.2'
   mockitoVersion = '5.10.0'
   slf4jVersion = '2.0.11'
   browserupProxyVersion = '2.2.15'
   littleProxyVersion = '2.1.1'
-  commonsFileuploadVersion = '1.5.0.redhat-00001'
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.9'
   archunitVersion = '1.2.1'
@@ -47,7 +46,6 @@ subprojects {
     testImplementation("io.netty:netty-all:$nettyVersion")
     testImplementation("io.netty:netty-codec:$nettyVersion")
     testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
-    testImplementation("commons-fileupload:commons-fileupload:${commonsFileuploadVersion}")
     testImplementation("org.apache.commons:commons-text:1.11.0")
     testImplementation("com.tngtech.archunit:archunit-junit5:${archunitVersion}")
     api("org.slf4j:slf4j-api:$slf4jVersion")
