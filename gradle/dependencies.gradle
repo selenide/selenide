@@ -25,9 +25,6 @@ subprojects {
         snapshotsOnly()
       }
     }
-    maven {
-      url "https://maven.repository.redhat.com/ga/"
-    }
   }
 
   dependencies {
