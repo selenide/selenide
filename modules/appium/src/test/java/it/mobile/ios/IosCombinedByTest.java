@@ -1,6 +1,5 @@
 package it.mobile.ios;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.appium.AppiumSelectors;
 import com.codeborne.selenide.appium.selector.CombinedBy;
 import io.appium.java_client.AppiumBy;
