@@ -17,6 +17,7 @@ abstract class BaseSwagLabsAppIosTest extends ITTest {
     Configuration.browser = SwagLabsIosDriverProvider.class.getName();
     WebDriverRunner.addListener(new WebDriverListener() {
     });
+    Configuration.timeout = 16_000;
     launchApp();
   }
 }

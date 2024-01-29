@@ -20,7 +20,6 @@ class IosCombinedByTest extends BaseSwagLabsAppIosTest {
 
   @BeforeEach
   final void openLoginScreen() {
-    Configuration.timeout = 16_000;
     openIOSDeepLink("mydemoapprn://login");
   }
 
