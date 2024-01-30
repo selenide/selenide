@@ -45,9 +45,8 @@ public class DeepLinkLauncher {
       // iOS 13 now has the keyboard open by default because the URL field has focus when opening the Safari browser
 
       addressBar.shouldBe(visible);
-      if (!keyboard.isKeyboardShown()) {
-        addressBar.click();
-      }
+      addressBar.click();
+
       // Submit the url and add a break
       urlField.shouldBe(visible, SAFARI_ELEMENTS_TIMEOUT).setValue(deepLinkUrl + "\uE007");
       // if you started the iOS device with `autoAcceptAlerts:true` in the capabilities

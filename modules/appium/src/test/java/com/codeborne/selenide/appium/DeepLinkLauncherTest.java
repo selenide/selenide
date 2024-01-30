@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 class DeepLinkLauncherTest {
-  DeepLinkLauncher deepLinkLauncher = new DeepLinkLauncher();
+  private final DeepLinkLauncher deepLinkLauncher = new DeepLinkLauncher();
 
   @Test
   void shouldSendAppIdForAndroid() {
