@@ -73,7 +73,7 @@ jobs:
 
 
   run-android-tests:
-    runs-on: macOS-12
+    runs-on: macOS-14
     env:
       APPIUM_TEST_SERVER_PORT: 4723
       APPIUM_TEST_SERVER_HOST: 127.0.0.1
@@ -126,7 +126,7 @@ jobs:
             **/appium.log
 
   run-ios-tests:
-    runs-on: macOS-12
+    runs-on: macOS-14
     env:
       APPIUM_TEST_SERVER_PORT: 4723
       APPIUM_TEST_SERVER_HOST: 127.0.0.1
