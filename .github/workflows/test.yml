@@ -136,9 +136,9 @@ jobs:
       - name: Setup iOS simulator
         uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 14'
+          model: 'iPhone 15'
           os: 'iOS'
-          os_version: '16.2'
+          os_version: '17.2'
       - uses: actions/cache@v4
         with:
           path: build/apps
