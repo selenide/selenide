@@ -133,8 +133,6 @@
   </form>
 </div>
 
-<div id="container"></div>
-
 <table id="user-table">
   <thead>
   <tr>
@@ -158,13 +156,6 @@
 </table>
 
 <a href="long_ajax_request.html" id="ajax-button">Want to see ajax in action?</a>
-
-<script type="text/javascript">
-  const delay = 50;
-  setTimeout(function() {document.getElementById('container').innerHTML = '<div id="dynamic-content-container"></div>';}, delay);
-  setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, delay*2);
-  setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML += '<span id="dynamic-content2">dynamic content2</span>';}, delay*3);
-</script>
 
 <h1>Now typing: </h1>
 <h3 id="username-mirror">_</h3>
@@ -254,5 +245,15 @@
     }, 200)
   })
 </script>
+
+<div id="container"></div>
+
+<script type="text/javascript">
+  const delay = 50;
+  setTimeout(function() {document.getElementById('container').innerHTML = '<div id="dynamic-content-container"></div>';}, delay);
+  setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, delay*2);
+  setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML += '<span id="dynamic-content2">dynamic content2</span>';}, delay*3);
+</script>
+
 </body>
 </html>

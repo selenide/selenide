@@ -314,7 +314,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanFollowLinks() {
-    $(By.linkText("Want to see ajax in action?")).scrollTo().click();
+    $(By.linkText("Want to see ajax in action?")).click();
     webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(1000));
   }
 
