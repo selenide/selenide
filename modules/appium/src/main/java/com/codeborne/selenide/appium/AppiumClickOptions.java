@@ -17,7 +17,7 @@ public class AppiumClickOptions extends ClickOptions {
   private static final Duration DEFAULT_LONG_PRESS_DURATION = ofSeconds(3);
 
   private AppiumClickOptions(AppiumClickMethod appiumClickMethod, int offsetX, int offsetY, Duration longPressHoldDuration) {
-    super(ClickMethod.DEFAULT, offsetX, offsetY, null);
+    super(ClickMethod.DEFAULT, offsetX, offsetY, null, true);
     this.appiumClickMethod = appiumClickMethod;
     this.longPressHoldDuration = longPressHoldDuration;
   }

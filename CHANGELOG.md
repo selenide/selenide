@@ -4,6 +4,7 @@
 * #2550 Implement downloading files via CDP or BiDi (#2567) - thanks to Sergey Brit!
 * #2612 don't set page load timeout in mobile tests (#2628)
 * #2617 User can safely add the same proxy filter many times (#2630)
+* #2635 Add ability to perform click at disabled elements (#2636)
 * #2624 fix duplicate authentication (#2626)
 * mask BasicAuth password in logs (#2626)
 * #2609 detect case when an event collect is reused by different threads

@@ -39,7 +39,7 @@ public class AppiumClick extends Click {
       return super.execute(proxy, locator, args);
     }
 
-    WebElement webElement = findElement(locator);
+    WebElement webElement = findElement(locator, true);
 
     if (args == null || args.length == 0) {
       click(locator.driver(), webElement);
@@ -139,11 +139,11 @@ public class AppiumClick extends Click {
   @Override
   @Nonnull
   @CheckReturnValue
-  protected WebElement findElement(WebElementSource locator) {
+  protected WebElement findElement(WebElementSource locator, boolean disabledElementAllowed) {
     if (isMobile(locator.driver())) {
       return locator.getWebElement();
     } else {
-      return super.findElement(locator);
+      return super.findElement(locator, disabledElementAllowed);
     }
   }
 }
