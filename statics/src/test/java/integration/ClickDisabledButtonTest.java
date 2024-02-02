@@ -23,7 +23,7 @@ final class ClickDisabledButtonTest extends IntegrationTest {
   @Test
   void clickingDisabledButtonMayBeAllowed() {
     assertThatNoException().isThrownBy(() ->
-      $("#submit").click(usingDefaultMethod().allowDisabled())
+      $("#submit").click(usingDefaultMethod().force())
     );
   }
 
@@ -36,7 +36,7 @@ final class ClickDisabledButtonTest extends IntegrationTest {
   @Test
   void doubleClickingDisabledButtonMayBeAllowed() {
     assertThatNoException().isThrownBy(() ->
-      $("#submit").doubleClick(usingDefaultMethod().allowDisabled())
+      $("#submit").doubleClick(usingDefaultMethod().force())
     );
   }
 }
