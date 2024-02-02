@@ -1,5 +1,14 @@
 # Changelog
 
+## 7.1.0 (under construction)
+* #2550 Implement downloading files via CDP or BiDi (#2567) - thanks to Sergey Brit!
+* #2612 don't set page load timeout in mobile tests (#2628)
+* #2617 User can safely add the same proxy filter many times (#2630)
+* #2624 fix duplicate authentication (#2626)
+* mask BasicAuth password in logs (#2626)
+* #2609 detect case when an event collect is reused by different threads
+* bump TestNG from 7.8.0 to 7.9.0
+
 ## 7.0.6 (released 27.01.2024)
 * bump Appium java client from 9.0.0 to 9.1.0 (#2623)
 

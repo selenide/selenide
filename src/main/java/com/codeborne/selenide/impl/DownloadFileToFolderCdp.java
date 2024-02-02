@@ -119,6 +119,8 @@ public class DownloadFileToFolderCdp {
       Optional.of(driver.browserDownloadsFolder().toString()),
       Optional.of(true)));
 
+    devTools.clearListeners();
+
     devTools.addListener(Browser.downloadWillBegin(), handler -> {
       fileName.set(handler.getSuggestedFilename());
     });
