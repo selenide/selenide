@@ -13,11 +13,35 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.readonly;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.commands.Util.argsToConditions;
+import static com.codeborne.selenide.commands.Util.firstOf;
+import static com.codeborne.selenide.commands.Util.size;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class UtilCommandTest {
+  @Test
+  void sizeOfArray() {
+    assertThat(size(null)).isEqualTo(0);
+    assertThat(size(new String[]{})).isEqualTo(0);
+    assertThat(size(new String[]{"one"})).isEqualTo(1);
+    assertThat(size(new String[]{"one", "two"})).isEqualTo(2);
+  }
+
+  @Test
+  void firstElementOfArray() {
+    assertThatThrownBy(() -> firstOf(null))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Missing arguments");
+
+    assertThatThrownBy(() -> firstOf(new String[]{}))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Missing arguments");
+
+    String firstElement = firstOf(new String[]{"one", "two"});
+    assertThat(firstElement).isEqualTo("one");
+  }
+
   @Test
   void extractsConditionsFromGivenArguments() {
     List<WebElementCondition> conditions = argsToConditions(new Object[]{enabled, visible});

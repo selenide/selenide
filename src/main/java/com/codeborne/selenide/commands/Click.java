@@ -16,7 +16,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.Arrays;
 
+import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.commands.Util.firstOf;
+import static com.codeborne.selenide.commands.Util.size;
 
 @ParametersAreNonnullByDefault
 public class Click implements Command<SelenideElement> {
@@ -25,25 +27,22 @@ public class Click implements Command<SelenideElement> {
   @Override
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    WebElement webElement = findElement(locator);
+    ClickOptions clickOptions = switch (size(args)) {
+      case 0 -> usingDefaultMethod();
+      case 1 -> firstOf(args);
+      default -> throw new IllegalArgumentException("Unsupported click arguments: " + Arrays.toString(args));
+    };
 
-    if (args == null || args.length == 0) {
-      click(locator.driver(), webElement);
-    }
-    else if (args.length == 1) {
-      ClickOptions clickOptions = firstOf(args);
-      click(locator.driver(), webElement, clickOptions);
-    }
-    else {
-      throw new IllegalArgumentException("Unsupported click arguments: " + Arrays.toString(args));
-    }
+    click(locator.driver(), findElement(locator, clickOptions.isDisabledElementAllowed()), clickOptions);
     return proxy;
   }
 
   @Nonnull
   @CheckReturnValue
-  protected WebElement findElement(WebElementSource locator) {
-    return locator.findAndAssertElementIsClickable();
+  protected WebElement findElement(WebElementSource locator, boolean disabledElementAllowed) {
+    return disabledElementAllowed ?
+      locator.findAndAssertElementIsInteractable() :
+      locator.findAndAssertElementIsClickable();
   }
 
   protected void click(Driver driver, WebElement element) {

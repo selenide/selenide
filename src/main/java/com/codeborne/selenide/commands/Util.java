@@ -19,6 +19,11 @@ import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
 public class Util {
+  @CheckReturnValue
+  public static int size(@Nullable Object[] args) {
+    return args == null ? 0 : args.length;
+  }
+
   @SuppressWarnings("unchecked")
   @CheckReturnValue
   @Nonnull
