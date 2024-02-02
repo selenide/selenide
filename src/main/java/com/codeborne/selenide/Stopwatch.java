@@ -3,6 +3,8 @@ package com.codeborne.selenide;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import java.time.Duration;
+
 import static java.lang.System.nanoTime;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -23,6 +25,10 @@ public class Stopwatch {
   @CheckReturnValue
   public boolean isTimeoutReached() {
     return isTimeoutReached(nanoTime());
+  }
+
+  public long getElapsedTimeMs() {
+    return Duration.ofNanos(nanoTime() - startTimeNano).toMillis();
   }
 
   boolean isTimeoutReached(long now) {

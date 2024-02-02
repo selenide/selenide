@@ -54,7 +54,7 @@ public class DownloadFileToFolderCdp {
     AtomicReference<String> fileName = new AtomicReference<>();
 
     // Init download behaviour and listeners
-    prepareDownloadWithCdp(driver, devTools, fileName, downloadComplete);
+    prepareDownloadWithCdp(driver, devTools, fileName, downloadComplete, timeout);
 
     // Perform action an element that begins download process
     action.perform(anyClickableElement.driver(), clickable);
@@ -88,7 +88,7 @@ public class DownloadFileToFolderCdp {
     Stopwatch stopwatch = new Stopwatch(timeout);
     do {
       if (downloadComplete.get()) {
-        log.debug("File {} download is complete", fileName);
+        log.debug("File {} download is complete after {} ms.", fileName, stopwatch.getElapsedTimeMs());
         return new File(driver.browserDownloadsFolder().toString(), fileName.get());
       }
       stopwatch.sleep(pollingInterval);
@@ -112,7 +112,7 @@ public class DownloadFileToFolderCdp {
   }
 
   private void prepareDownloadWithCdp(Driver driver, DevTools devTools,
-                                      AtomicReference<String> fileName, AtomicBoolean downloadComplete) {
+                                      AtomicReference<String> fileName, AtomicBoolean downloadComplete, long timeout) {
     devTools.send(Browser.setDownloadBehavior(
       Browser.SetDownloadBehaviorBehavior.ALLOW,
       Optional.empty(),
@@ -122,6 +122,8 @@ public class DownloadFileToFolderCdp {
     devTools.clearListeners();
 
     devTools.addListener(Browser.downloadWillBegin(), handler -> {
+      log.debug("Download will begin with suggested file name \"{}\" (url: \"{}\", frameId: {}, guid: {})",
+        handler.getSuggestedFilename(), handler.getUrl(), handler.getFrameId(), handler.getGuid());
       fileName.set(handler.getSuggestedFilename());
     });
 
@@ -129,14 +131,13 @@ public class DownloadFileToFolderCdp {
       Browser.downloadProgress(),
       e -> {
         if (e.getState() == CANCELED) {
-          Number receivedBytes = e.getReceivedBytes();
-          if (receivedBytes.longValue() == 0L) {
-            throw new FileNotDownloadedError(driver, "Failed to download file. Received 0 bytes.", 0);
-          }
-          throw new FileNotDownloadedError(driver, "File download is canceled", 0);
+          String message = "File download is %s (received bytes: %s, total bytes: %s, guid: %s)".formatted(
+            e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
+          throw new FileNotDownloadedError(driver, message, timeout);
         }
         downloadComplete.set(e.getState() == COMPLETED);
-        log.debug("Download is in progress");
+        log.debug("Download is {} (received bytes: {}, total bytes: {}, guid: {})",
+          e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
       });
 
   }
