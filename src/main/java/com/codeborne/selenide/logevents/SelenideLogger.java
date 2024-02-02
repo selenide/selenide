@@ -163,6 +163,11 @@ public class SelenideLogger {
     return listeners == null ? null : (T) listeners.remove(name);
   }
 
+  static <T extends LogEventListener> T getListener(String name) {
+    Map<String, LogEventListener> listeners = SelenideLogger.listeners.get();
+    return listeners == null ? null : (T) listeners.get(name);
+  }
+
   public static void removeAllListeners() {
     listeners.remove();
   }

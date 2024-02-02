@@ -28,7 +28,7 @@ jobs:
         shell: pwsh
         run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v4
@@ -59,7 +59,7 @@ jobs:
         if: ${{ matrix.gradle-task != 'check' }}
         uses: browser-actions/setup-firefox@latest
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v4
@@ -71,9 +71,8 @@ jobs:
             **/build/reports
             **/build/test-results
 
-
   run-android-tests:
-    runs-on: macOS-12
+    runs-on: ubuntu-latest
     env:
       APPIUM_TEST_SERVER_PORT: 4723
       APPIUM_TEST_SERVER_HOST: 127.0.0.1
@@ -81,22 +80,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - name: AVD cache
+        uses: actions/cache@v4
         with:
-          distribution: 'temurin'
-          cache: 'gradle'
-          java-version: '17'
-      - uses: actions/cache@v3
-        with:
-          path: build/apps
+          path: |
+            build/apps
+            ~/.android/avd/*
+            ~/.android/adb*
           key: ${{ runner.os }}-android-tests-${{ hashFiles('**/*.zip*') }}
           restore-keys: |
             ${{ runner.os }}-android-tests-
       - name: Setup NodeJS
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
       - name: Install Appium
         run: |
           npm install -g appium
@@ -108,10 +105,15 @@ jobs:
           cd ~
           appium driver install uiautomator2
           appium-doctor
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 28
+          api-level: 29
           profile: pixel_3_xl
           disable-animations: true
           emulator-options: -no-snapshot -no-window -no-boot-anim -camera-back emulated -camera-front emulated -gpu swiftshader_indirect
@@ -126,7 +128,7 @@ jobs:
             **/appium.log
 
   run-ios-tests:
-    runs-on: macOS-12
+    runs-on: macOS-14
     env:
       APPIUM_TEST_SERVER_PORT: 4723
       APPIUM_TEST_SERVER_HOST: 127.0.0.1
@@ -136,10 +138,10 @@ jobs:
       - name: Setup iOS simulator
         uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 14'
+          model: 'iPhone 15'
           os: 'iOS'
-          os_version: '16.2'
-      - uses: actions/cache@v3
+          os_version: '17.2'
+      - uses: actions/cache@v4
         with:
           path: build/apps
           key: ${{ runner.os }}-ios-tests-${{ hashFiles('**/*.zip*') }}
@@ -148,7 +150,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
       - name: Install Appium
         run: |
           npm install -g appium
@@ -197,7 +199,7 @@ jobs:
       - name: Start selenoid
         uses: Xotabu4/selenoid-github-action@v2
       - name: Run integration tests
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: selenoidTests
       - uses: actions/upload-artifact@v4

@@ -4,11 +4,14 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Base64;
+import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @ParametersAreNonnullByDefault
 public class BasicAuthCredentials implements Credentials {
+  private static final Pattern REGEX_ANY_CHAR = Pattern.compile(".");
+
   public final String domain;
   public final String login;
   public final String password;
@@ -58,6 +61,6 @@ public class BasicAuthCredentials implements Credentials {
   @CheckReturnValue
   @Nonnull
   public String toString() {
-    return String.format("%s:%s:%s", domain, login, password);
+    return String.format("%s:%s:%s", domain, login, REGEX_ANY_CHAR.matcher(password).replaceAll("*"));
   }
 }

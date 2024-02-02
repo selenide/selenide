@@ -52,12 +52,13 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
 
   @Test
   void downloadsFileWithAlert() {
-    File downloadedFile = $(byText("Download me with alert")).download(using(PROXY).withAction((driver, link) -> {
-      link.click();
-      Alert alert = driver.switchTo().alert();
-      assertThat(alert.getText()).isEqualTo("Are you sure to download it?");
-      alert.dismiss();
-    }));
+    File downloadedFile = $(byText("Download me with alert")).download(
+      using(PROXY).withFilter(withExtension("txt")).withAction((driver, link) -> {
+        link.click();
+        Alert alert = driver.switchTo().alert();
+        assertThat(alert.getText()).isEqualTo("Are you sure to download it?");
+        alert.dismiss();
+      }));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");

@@ -43,9 +43,9 @@ public class DeepLinkLauncher {
       SelenideElement urlField = $(iOSNsPredicateString("type == 'XCUIElementTypeTextField' && name CONTAINS 'URL'"));
       // Wait for the url button to appear and click on it so the text field will appear
       // iOS 13 now has the keyboard open by default because the URL field has focus when opening the Safari browser
-      if (!keyboard.isKeyboardShown()) {
-        addressBar.click();
-      }
+
+      addressBar.shouldBe(visible).click();
+
       // Submit the url and add a break
       urlField.shouldBe(visible, SAFARI_ELEMENTS_TIMEOUT).setValue(deepLinkUrl + "\uE007");
       // if you started the iOS device with `autoAcceptAlerts:true` in the capabilities

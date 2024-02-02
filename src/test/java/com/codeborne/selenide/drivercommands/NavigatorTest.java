@@ -10,7 +10,6 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.openqa.selenium.WebDriver;
 
 import static com.codeborne.selenide.AuthenticationType.BASIC;
@@ -22,6 +21,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 final class NavigatorTest {
   private final Navigator navigator = new Navigator();
@@ -98,7 +98,7 @@ final class NavigatorTest {
   void open_withoutAuthentication() {
     navigator.open(selenideDriver, "https://some.com/login");
 
-    Mockito.verify(navigation).to("https://some.com/login");
+    verify(navigation).to("https://some.com/login");
   }
 
   @Test
@@ -108,8 +108,8 @@ final class NavigatorTest {
 
     navigator.open(selenideDriver, "https://some.com/login");
 
-    Mockito.verify(navigation).to("https://some.com/login");
-    Mockito.verify(listener).afterEvent(ArgumentMatchers.argThat(log ->
+    verify(navigation).to("https://some.com/login");
+    verify(listener).afterEvent(ArgumentMatchers.argThat(log ->
       "open".equals(log.getElement()) && "https://some.com/login".equals(log.getSubject())));
   }
 
@@ -120,8 +120,8 @@ final class NavigatorTest {
 
     navigator.open(selenideDriver, "https://some.com/login");
 
-    Mockito.verify(navigation).to("https://some.com/login");
-    Mockito.verify(authenticationFilter).removeAuthentication();
+    verify(navigation).to("https://some.com/login");
+    verify(authenticationFilter).removeAuthentication();
   }
 
   @Test
@@ -131,7 +131,7 @@ final class NavigatorTest {
 
     navigator.open(selenideDriver, "https://some.com/login", "", "basic-auth-login", "basic-auth-password");
 
-    Mockito.verify(navigation).to("https://basic-auth-login:basic-auth-password@some.com/login");
+    verify(navigation).to("https://basic-auth-login:basic-auth-password@some.com/login");
   }
 
   @Test
@@ -141,8 +141,8 @@ final class NavigatorTest {
 
     navigator.open(selenideDriver, "https://some.com/login", "some.eu", "basic-auth-login", "basic-auth-password");
 
-    Mockito.verify(navigation).to("https://some.com/login");
-    Mockito.verify(authenticationFilter)
+    verify(navigation).to("https://some.com/login");
+    verify(authenticationFilter)
       .setAuthentication(eq(BASIC), refEq(new BasicAuthCredentials("some.eu", "basic-auth-login", "basic-auth-password")));
   }
 

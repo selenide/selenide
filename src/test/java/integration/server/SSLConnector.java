@@ -20,12 +20,12 @@ public class SSLConnector extends ServerConnector {
 
   private static HttpConfiguration https() {
     HttpConfiguration https = new HttpConfiguration();
-    https.addCustomizer(new SecureRequestCustomizer());
+    https.addCustomizer(new SecureRequestCustomizer(false));
     return https;
   }
 
-  private static SslContextFactory createSslContextFactory() {
-    SslContextFactory sslContextFactory = new SslContextFactory.Server();
+  private static SslContextFactory.Server createSslContextFactory() {
+    SslContextFactory.Server sslContextFactory = new SslContextFactory.Server();
 
     // created with "keytool -genkey -alias test.selenide.org -keyalg RSA -keystore src/test/resources/test-selenide.jks"
     sslContextFactory.setKeyStorePath(SSLConnector.class.getResource("/test-selenide.jks").toExternalForm());
