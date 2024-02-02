@@ -61,10 +61,10 @@ public class DownloadFileToFolder {
 
   @CheckReturnValue
   @Nonnull
-  private File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource anyClickableElement, WebElement clickable,
-                                                        long timeout, long incrementTimeout,
-                                                        FileFilter fileFilter,
-                                                        DownloadAction action) {
+  File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource anyClickableElement, WebElement clickable,
+                                                long timeout, long incrementTimeout,
+                                                FileFilter fileFilter,
+                                                DownloadAction action) {
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
     long pollingInterval = Math.max(config.pollingInterval(), 50);
@@ -99,16 +99,14 @@ public class DownloadFileToFolder {
     return driver.browserDownloadsFolder();
   }
 
-  private void waitUntilDownloadsCompleted(Driver driver, DownloadsFolder folder, FileFilter filter,
-                                           long timeout, long incrementTimeout, long pollingInterval) {
+  void waitUntilDownloadsCompleted(Driver driver, DownloadsFolder folder, FileFilter filter,
+                                   long timeout, long incrementTimeout, long pollingInterval) {
     Browser browser = driver.browser();
     if (browser.isChrome() || browser.isEdge()) {
       waitUntilFileDisappears(driver, folder, CHROMIUM_TEMPORARY_FILES, filter, timeout, incrementTimeout, pollingInterval);
-    }
-    else if (browser.isFirefox()) {
+    } else if (browser.isFirefox()) {
       waitUntilFileDisappears(driver, folder, FIREFOX_TEMPORARY_FILES, filter, timeout, incrementTimeout, pollingInterval);
-    }
-    else {
+    } else {
       waitWhileFilesAreBeingModified(driver, folder, timeout, pollingInterval);
     }
   }
@@ -141,8 +139,7 @@ public class DownloadFileToFolder {
         log.debug("Files has been modified - old: {}, new: {}", times, newTimes);
         lastModifiedAt = currentTimeMillis();
         times = newTimes;
-      }
-      else {
+      } else {
         log.debug("Files has not been modified in last {} ms: {}", pollingInterval, times);
         if (currentTimeMillis() - lastModifiedAt > 1000) {
           log.debug("Files has not been modified during last {} ms.", currentTimeMillis() - lastModifiedAt);
@@ -153,8 +150,8 @@ public class DownloadFileToFolder {
     log.warn("Files are still being modified during last {} ms.", currentTimeMillis() - lastModifiedAt);
   }
 
-  private void waitForNewFiles(Driver driver, FileFilter fileFilter, DownloadsFolder folder, long clickMoment,
-                               long timeout, long incrementTimeout, long pollingInterval) {
+  void waitForNewFiles(Driver driver, FileFilter fileFilter, DownloadsFolder folder, long clickMoment,
+                       long timeout, long incrementTimeout, long pollingInterval) {
     if (log.isDebugEnabled()) {
       log.debug("Waiting for files in {}...", folder);
     }
@@ -185,8 +182,8 @@ public class DownloadFileToFolder {
     if (filesHasNotBeenUpdatedForMs > incrementTimeout) {
       String message = String.format(
         "Failed to download file%s in %d ms: files in %s haven't been modified for %s ms. " +
-          "(started at: %s, lastFileUpdate: %s, now: %s, incrementTimeout: %s)" +
-          "%nModification times: %s",
+        "(started at: %s, lastFileUpdate: %s, now: %s, incrementTimeout: %s)" +
+        "%nModification times: %s",
         filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs,
         start, lastFileUpdate, now, incrementTimeout,
         folder.modificationTimes());
@@ -201,8 +198,7 @@ public class DownloadFileToFolder {
   private void pause(long milliseconds) {
     try {
       sleep(milliseconds);
-    }
-    catch (InterruptedException e) {
+    } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       throw new RuntimeException(e);
     }

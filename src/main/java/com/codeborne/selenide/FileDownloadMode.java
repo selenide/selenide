@@ -18,5 +18,11 @@ public enum FileDownloadMode {
   /**
    * Download files to a local "downloads" folder
    */
-  FOLDER
+  FOLDER,
+
+  /**
+   * Download files to a local "downloads" folder using CDP
+   * <b>Works only for chromium based browsers</b>
+   */
+  CDP
 }
