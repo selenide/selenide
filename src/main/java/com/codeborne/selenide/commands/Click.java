@@ -33,15 +33,15 @@ public class Click implements Command<SelenideElement> {
       default -> throw new IllegalArgumentException("Unsupported click arguments: " + Arrays.toString(args));
     };
 
-    click(locator.driver(), findElement(locator, clickOptions.isDisabledElementAllowed()), clickOptions);
+    click(locator.driver(), findElement(locator, clickOptions.isForce()), clickOptions);
     return proxy;
   }
 
   @Nonnull
   @CheckReturnValue
-  protected WebElement findElement(WebElementSource locator, boolean disabledElementAllowed) {
-    return disabledElementAllowed ?
-      locator.findAndAssertElementIsInteractable() :
+  protected WebElement findElement(WebElementSource locator, boolean force) {
+    return force ?
+      locator.getWebElement() :
       locator.findAndAssertElementIsClickable();
   }
 

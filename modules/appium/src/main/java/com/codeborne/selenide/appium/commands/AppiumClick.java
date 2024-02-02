@@ -139,11 +139,11 @@ public class AppiumClick extends Click {
   @Override
   @Nonnull
   @CheckReturnValue
-  protected WebElement findElement(WebElementSource locator, boolean disabledElementAllowed) {
+  protected WebElement findElement(WebElementSource locator, boolean force) {
     if (isMobile(locator.driver())) {
       return locator.getWebElement();
     } else {
-      return super.findElement(locator, disabledElementAllowed);
+      return super.findElement(locator, force);
     }
   }
 }

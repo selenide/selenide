@@ -18,16 +18,14 @@ public class ClickOptions implements HasTimeout {
   private final ClickMethod clickMethod;
   @Nullable
   private final Duration timeout;
-  private final boolean disabledElementAllowed;
+  private final boolean force;
 
-  protected ClickOptions(ClickMethod clickMethod, int offsetX, int offsetY,
-                         @Nullable Duration timeout,
-                         boolean disabledElementAllowed) {
+  protected ClickOptions(ClickMethod clickMethod, int offsetX, int offsetY, @Nullable Duration timeout, boolean force) {
     this.clickMethod = clickMethod;
     this.offsetX = offsetX;
     this.offsetY = offsetY;
     this.timeout = timeout;
-    this.disabledElementAllowed = disabledElementAllowed;
+    this.force = force;
   }
 
   @CheckReturnValue
@@ -78,26 +76,26 @@ public class ClickOptions implements HasTimeout {
   }
 
   @CheckReturnValue
-  public boolean isDisabledElementAllowed() {
-    return disabledElementAllowed;
+  public boolean isForce() {
+    return force;
   }
 
   @CheckReturnValue
   @Nonnull
   public ClickOptions offsetX(int offsetX) {
-    return new ClickOptions(clickMethod, offsetX, offsetY, timeout, disabledElementAllowed);
+    return new ClickOptions(clickMethod, offsetX, offsetY, timeout, force);
   }
 
   @CheckReturnValue
   @Nonnull
   public ClickOptions offsetY(int offsetY) {
-    return new ClickOptions(clickMethod, offsetX, offsetY, timeout, disabledElementAllowed);
+    return new ClickOptions(clickMethod, offsetX, offsetY, timeout, force);
   }
 
   @CheckReturnValue
   @Nonnull
   public ClickOptions offset(int offsetX, int offsetY) {
-    return new ClickOptions(clickMethod, offsetX, offsetY, timeout, disabledElementAllowed);
+    return new ClickOptions(clickMethod, offsetX, offsetY, timeout, force);
   }
 
   /**
@@ -118,7 +116,7 @@ public class ClickOptions implements HasTimeout {
   @CheckReturnValue
   @Nonnull
   public ClickOptions timeout(Duration timeout) {
-    return new ClickOptions(clickMethod, offsetX, offsetY, timeout, disabledElementAllowed);
+    return new ClickOptions(clickMethod, offsetX, offsetY, timeout, force);
   }
 
   /**
@@ -126,7 +124,7 @@ public class ClickOptions implements HasTimeout {
    */
   @CheckReturnValue
   @Nonnull
-  public ClickOptions allowDisabled() {
+  public ClickOptions force() {
     return new ClickOptions(clickMethod, offsetX, offsetY, timeout, true);
   }
 
