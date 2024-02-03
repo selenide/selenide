@@ -65,18 +65,23 @@ public class DownloadFileToFolderCdp {
     // Perform action an element that begins download process
     action.perform(anyClickableElement.driver(), clickable);
 
-    // Wait until download
-    File file = waitUntilDownloadsCompleted(anyClickableElement.driver(), timeout, downloadComplete, fileName);
+    try {
+      // Wait until download
+      File file = waitUntilDownloadsCompleted(anyClickableElement.driver(), timeout, downloadComplete, fileName);
 
-    //
-    if (!fileFilter.match(new DownloadedFile(file, emptyMap()))) {
-      String message = String.format("Failed to download file in %d ms.%s;%n actually downloaded: %s",
-        timeout, fileFilter.description(), file.getAbsolutePath());
-      throw new FileNotDownloadedError(driver, message, timeout);
+      //
+      if (!fileFilter.match(new DownloadedFile(file, emptyMap()))) {
+        String message = String.format("Failed to download file in %d ms.%s;%n actually downloaded: %s",
+          timeout, fileFilter.description(), file.getAbsolutePath());
+        throw new FileNotDownloadedError(driver, message, timeout);
+      }
+
+      // Move file to unique folder
+      return archiveFile(anyClickableElement.driver(), file);
     }
-
-    // Move file to unique folder
-    return archiveFile(anyClickableElement.driver(), file);
+    finally {
+      devTools.clearListeners();
+    }
   }
 
   @Nonnull
