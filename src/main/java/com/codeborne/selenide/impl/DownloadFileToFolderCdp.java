@@ -10,6 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v120.browser.Browser;
+import org.openqa.selenium.devtools.v120.browser.model.DownloadProgress;
+import org.openqa.selenium.devtools.v120.browser.model.DownloadWillBegin;
 import org.openqa.selenium.devtools.v120.page.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,16 +22,22 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.util.Collections.emptyMap;
+import static org.openqa.selenium.devtools.v120.browser.Browser.downloadProgress;
+import static org.openqa.selenium.devtools.v120.browser.Browser.downloadWillBegin;
 import static org.openqa.selenium.devtools.v120.browser.model.DownloadProgress.State.CANCELED;
 import static org.openqa.selenium.devtools.v120.browser.model.DownloadProgress.State.COMPLETED;
 
 @ParametersAreNonnullByDefault
 public class DownloadFileToFolderCdp {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolderCdp.class);
+  private static final AtomicLong SEQUENCE = new AtomicLong();
+
   private final Downloader downloader;
 
   DownloadFileToFolderCdp(Downloader downloader) {
@@ -120,25 +128,45 @@ public class DownloadFileToFolderCdp {
       Optional.of(true)));
 
     devTools.clearListeners();
+    devTools.addListener(downloadWillBegin(), new DownloadWillBeginListener(id(), fileName));
+    devTools.addListener(downloadProgress(), new DownloadProgressListener(id(), driver, downloadComplete, timeout));
+  }
 
-    devTools.addListener(Browser.downloadWillBegin(), handler -> {
+  private static long id() {
+    return SEQUENCE.incrementAndGet();
+  }
+
+  private record DownloadWillBeginListener(long id, AtomicReference<String> fileName) implements Consumer<DownloadWillBegin> {
+    @Override
+    public void accept(DownloadWillBegin e) {
       log.debug("Download will begin with suggested file name \"{}\" (url: \"{}\", frameId: {}, guid: {})",
-        handler.getSuggestedFilename(), handler.getUrl(), handler.getFrameId(), handler.getGuid());
-      fileName.set(handler.getSuggestedFilename());
-    });
+        e.getSuggestedFilename(), e.getUrl(), e.getFrameId(), e.getGuid());
+      fileName.set(e.getSuggestedFilename());
+    }
 
-    devTools.addListener(
-      Browser.downloadProgress(),
-      e -> {
-        if (e.getState() == CANCELED) {
-          String message = "File download is %s (received bytes: %s, total bytes: %s, guid: %s)".formatted(
-            e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
-          throw new FileNotDownloadedError(driver, message, timeout);
-        }
-        downloadComplete.set(e.getState() == COMPLETED);
-        log.debug("Download is {} (received bytes: {}, total bytes: {}, guid: {})",
+    @Override
+    public String toString() {
+      return getClass().getSimpleName() + "#" + id;
+    }
+  }
+
+  private record DownloadProgressListener(long id, Driver driver, AtomicBoolean downloadComplete, long timeout)
+    implements Consumer<DownloadProgress> {
+    @Override
+    public void accept(DownloadProgress e) {
+      if (e.getState() == CANCELED) {
+        String message = "File download is %s (received bytes: %s, total bytes: %s, guid: %s)".formatted(
           e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
-      });
+        throw new FileNotDownloadedError(driver, message, timeout);
+      }
+      downloadComplete.set(e.getState() == COMPLETED);
+      log.debug("Download is {} (received bytes: {}, total bytes: {}, guid: {})",
+        e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
+    }
 
+    @Override
+    public String toString() {
+      return getClass().getSimpleName() + "#" + id;
+    }
   }
 }
