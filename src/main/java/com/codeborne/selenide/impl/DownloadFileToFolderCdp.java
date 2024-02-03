@@ -118,9 +118,8 @@ public class DownloadFileToFolderCdp {
   }
 
   private DevTools initDevTools(Driver driver) {
-    DevTools devTools;
-    if (driver.browser().isChromium()) {
-      devTools = ((HasDevTools) driver.getWebDriver()).getDevTools();
+    if (driver.browser().isChromium() && driver.getWebDriver() instanceof HasDevTools cdpBrowser) {
+      DevTools devTools = cdpBrowser.getDevTools();
       devTools.createSessionIfThereIsNotOne();
       devTools.send(Page.enable());
       return devTools;
@@ -231,8 +230,8 @@ public class DownloadFileToFolderCdp {
     }
   }
 
-  protected void failFastIfNoChanges(Driver driver, CdpDownloads downloads, FileFilter filter,
-                                     long downloadStartedAt, long timeout, long incrementTimeout) {
+  private void failFastIfNoChanges(Driver driver, CdpDownloads downloads, FileFilter filter,
+                                   long downloadStartedAt, long timeout, long incrementTimeout) {
     long now = currentTimeMillis();
     long lastModifiedAt = downloads.lastModificationTime().orElse(downloadStartedAt);
     long filesHasNotBeenUpdatedForMs = now - lastModifiedAt;
