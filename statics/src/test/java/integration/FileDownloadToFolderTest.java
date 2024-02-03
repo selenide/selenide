@@ -216,14 +216,14 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   public void canSpecifyTimeoutForFileIncrement_downloadNotEvenStarted() {
     var shortIncrementTimeout = using(FOLDER)
       .withTimeout(ofSeconds(10))
-      .withIncrementTimeout(ofMillis(100))
+      .withIncrementTimeout(ofMillis(1001))
       .withFilter(withName("hello_world.txt"));
     assertThatThrownBy(() -> $("h1")
       .download(shortIncrementTimeout))
       .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
       .hasMessageMatching(Pattern.compile("(?s).+files in .+ haven't been modified for \\d+ ms\\. +" +
-        "\\(started at: \\d+, lastFileUpdate: -?\\d+, now: \\d+, incrementTimeout: \\d+\\)\\s*" +
+        "\\(started at: \\d+, lastFileUpdate: -?\\d+, now: \\d+, incrementTimeout: 1001\\)\\s*" +
         "Modification times: \\{.*}.*", DOTALL));
 
     closeWebDriver();
