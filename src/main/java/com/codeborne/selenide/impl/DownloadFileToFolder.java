@@ -176,7 +176,7 @@ public class DownloadFileToFolder {
 
   protected void failFastIfNoChanges(Driver driver, DownloadsFolder folder, FileFilter filter,
                                      long start, long timeout, long incrementTimeout) {
-    long lastFileUpdate = folder.lastModificationTime().orElse(-1L);
+    long lastFileUpdate = folder.lastModificationTime().orElse(start);
     long now = currentTimeMillis();
     long filesHasNotBeenUpdatedForMs = filesHasNotBeenUpdatedForMs(start, now, lastFileUpdate);
     if (filesHasNotBeenUpdatedForMs > incrementTimeout) {
