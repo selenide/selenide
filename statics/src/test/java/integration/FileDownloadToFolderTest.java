@@ -1,10 +1,13 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.impl.FileContent;
 import org.apache.commons.lang3.SystemUtils;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -278,4 +281,14 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .hasMessageStartingWith("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
   }
 
+  @ParameterizedTest
+  @ValueSource(strings = {"empty.html", "hello_world.txt", "download.html"})
+  void downloadMultipleFiles(String fileName) {
+    openFile("downloadMultipleFiles.html");
+
+    File text = $("#multiple-downloads").download(withName(fileName));
+
+    assertThat(text.getName()).isEqualTo(fileName);
+    assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
+  }
 }

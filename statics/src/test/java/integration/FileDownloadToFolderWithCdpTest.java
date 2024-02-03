@@ -2,9 +2,12 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
+import com.codeborne.selenide.impl.FileContent;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,7 +98,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     timeout = 888;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file in 888 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 888 ms");
   }
 
   @Test
@@ -103,7 +106,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     timeout = 888;
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file in 888 ms. with extension \"pdf\"");
+      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 888 ms");
   }
 
   @Test
@@ -231,10 +234,9 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
       .download(shortIncrementTimeout))
       .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageStartingWith("""
-        Failed to download file with name "hello_world.txt" in 10000 ms
-        """.trim())
+        Failed to download file with name "hello_world.txt" in 10000 ms""")
       .hasMessageMatching(Pattern.compile("""
-        (?s).+: file hasn't been modified for \\d+ ms\\. +\\(lastFileUpdate: -?\\d+, now: \\d+, incrementTimeout: 201\\).*
+        (?s).+: files in .+ haven't been modified for \\d+ ms\\. +\\(lastUpdate: -?\\d+, now: \\d+, incrementTimeout: 201\\).*
         """.trim(), DOTALL));
 
     closeWebDriver();
@@ -272,4 +274,14 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
       .hasMessageStartingWith("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
   }
 
+  @ParameterizedTest
+  @ValueSource(strings = {"empty.html", "hello_world.txt", "download.html"})
+  void downloadMultipleFiles(String fileName) {
+    openFile("downloadMultipleFiles.html");
+
+    File text = $("#multiple-downloads").download(withName(fileName));
+
+    assertThat(text.getName()).isEqualTo(fileName);
+    assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
+  }
 }
