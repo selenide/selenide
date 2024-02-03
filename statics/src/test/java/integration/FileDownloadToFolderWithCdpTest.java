@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
@@ -29,6 +30,7 @@ import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static java.nio.file.Files.createTempDirectory;
 import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
+import static java.util.regex.Pattern.DOTALL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
@@ -223,12 +225,17 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   public void canSpecifyTimeoutForFileIncrement_downloadNotEvenStarted() {
     var shortIncrementTimeout = using(CDP)
       .withTimeout(ofSeconds(10))
-      .withIncrementTimeout(ofMillis(100))
+      .withIncrementTimeout(ofMillis(201))
       .withFilter(withName("hello_world.txt"));
     assertThatThrownBy(() -> $("h1")
       .download(shortIncrementTimeout))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file in 10000 ms");
+      .hasMessageStartingWith("""
+        Failed to download file with name "hello_world.txt" in 10000 ms
+        """.trim())
+      .hasMessageMatching(Pattern.compile("""
+        (?s).+: file hasn't been modified for \\d+ ms\\. +\\(lastFileUpdate: -?\\d+, now: \\d+, incrementTimeout: 201\\).*
+        """.trim(), DOTALL));
 
     closeWebDriver();
   }
