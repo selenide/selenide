@@ -30,8 +30,6 @@ import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.util.Collections.emptyMap;
 import static org.openqa.selenium.devtools.v120.browser.Browser.downloadProgress;
 import static org.openqa.selenium.devtools.v120.browser.Browser.downloadWillBegin;
-import static org.openqa.selenium.devtools.v120.browser.model.DownloadProgress.State.CANCELED;
-import static org.openqa.selenium.devtools.v120.browser.model.DownloadProgress.State.COMPLETED;
 
 @ParametersAreNonnullByDefault
 public class DownloadFileToFolderCdp {
@@ -139,8 +137,8 @@ public class DownloadFileToFolderCdp {
   private record DownloadWillBeginListener(long id, AtomicReference<String> fileName) implements Consumer<DownloadWillBegin> {
     @Override
     public void accept(DownloadWillBegin e) {
-      log.debug("Download will begin with suggested file name \"{}\" (url: \"{}\", frameId: {}, guid: {})",
-        e.getSuggestedFilename(), e.getUrl(), e.getFrameId(), e.getGuid());
+      log.debug("[{}] Download will begin with suggested file name \"{}\" (url: \"{}\", frameId: {}, guid: {})",
+        id, e.getSuggestedFilename(), e.getUrl(), e.getFrameId(), e.getGuid());
       fileName.set(e.getSuggestedFilename());
     }
 
@@ -154,14 +152,19 @@ public class DownloadFileToFolderCdp {
     implements Consumer<DownloadProgress> {
     @Override
     public void accept(DownloadProgress e) {
-      if (e.getState() == CANCELED) {
-        String message = "File download is %s (received bytes: %s, total bytes: %s, guid: %s)".formatted(
-          e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
-        throw new FileNotDownloadedError(driver, message, timeout);
+      log.debug("[{}] Download is {} (received bytes: {}, total bytes: {}, guid: {})",
+        id, e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
+
+      switch (e.getState()) {
+        case CANCELED -> {
+          String message = "File download is %s (received bytes: %s, total bytes: %s, guid: %s)".formatted(
+            e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
+          throw new FileNotDownloadedError(driver, message, timeout);
+        }
+        case COMPLETED -> downloadComplete.set(true);
+        case INPROGRESS -> {
+        }
       }
-      downloadComplete.set(e.getState() == COMPLETED);
-      log.debug("Download is {} (received bytes: {}, total bytes: {}, guid: {})",
-        e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
     }
 
     @Override
