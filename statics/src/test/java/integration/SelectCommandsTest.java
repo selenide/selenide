@@ -2,6 +2,7 @@ package integration;
 
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.Condition.focused;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
@@ -56,10 +57,13 @@ public class SelectCommandsTest extends IntegrationTest {
     $("select").selectOptionByValue("2");
     $("#onchange").shouldHave(text("after change"));
     $("#onclick").shouldHave(text("after click"));
-    $("body").click();
+    $("select")
+      .shouldBe(focused)
+      .unfocus()
+      .shouldNotBe(focused);
+
     $("#onblur").shouldHave(text("after blur"));
   }
-
 
   @Test
   void multipleSelectByIndexEventsTest() {

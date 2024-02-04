@@ -171,6 +171,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement pressTab();
 
   /**
+   * Remove focus from this element
+   * @since 7.1.0
+   *
+   * @see com.codeborne.selenide.commands.Unfocus
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement unfocus();
+
+  /**
    * Press ESCAPE. Useful for input field and textareas: <pre>
    *  $(".edit").click().pressEscape();</pre>
    * <p>
