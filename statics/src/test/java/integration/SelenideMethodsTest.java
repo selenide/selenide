@@ -219,6 +219,18 @@ final class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  void userCanUnfocusElement() {
+    $("#username-blur-counter").shouldHave(text("___"));
+    $("#username").sendKeys(" x ");
+    $("#username").unfocus();
+
+    $("#username").shouldNotBe(focused);
+    $("#password").shouldNotBe(focused);
+    $("#username-mirror").shouldHave(text("x (1)"));
+    $("#username-blur-counter").shouldHave(text("blur: 1"));
+  }
+
+  @Test
   void userCanPressAnyKeys() {
     $("#username")
       .press(" method $.press() is chainable ")

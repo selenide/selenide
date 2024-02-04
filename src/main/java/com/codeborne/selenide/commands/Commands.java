@@ -59,6 +59,7 @@ public class Commands {
     add("hover", new Hover());
     add("scrollTo", new ScrollTo());
     add("scrollIntoView", new ScrollIntoView());
+    add("unfocus", new Unfocus());
   }
 
   private void addInfoCommands() {
