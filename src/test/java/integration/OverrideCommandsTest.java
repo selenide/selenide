@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.commands.Click;
 import com.codeborne.selenide.commands.Commands;
@@ -37,8 +38,8 @@ final class OverrideCommandsTest extends ITest {
   @ParametersAreNonnullByDefault
   private class MyClick extends Click {
     @Override
-    protected void click(Driver driver, WebElement element) {
-      super.click(driver, element);
+    protected void click(Driver driver, WebElement element, ClickOptions clickOptions) {
+      super.click(driver, element, clickOptions);
       clickCounter.incrementAndGet();
     }
   }

@@ -27,14 +27,19 @@ public class Click implements Command<SelenideElement> {
   @Override
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    ClickOptions clickOptions = switch (size(args)) {
+    ClickOptions clickOptions = options(args);
+    click(locator.driver(), findElement(locator, clickOptions.isForce()), clickOptions);
+    return proxy;
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  protected ClickOptions options(@Nullable Object[] args) {
+    return switch (size(args)) {
       case 0 -> usingDefaultMethod();
       case 1 -> firstOf(args);
       default -> throw new IllegalArgumentException("Unsupported click arguments: " + Arrays.toString(args));
     };
-
-    click(locator.driver(), findElement(locator, clickOptions.isForce()), clickOptions);
-    return proxy;
   }
 
   @Nonnull
@@ -43,15 +48,6 @@ public class Click implements Command<SelenideElement> {
     return force ?
       locator.getWebElement() :
       locator.findAndAssertElementIsClickable();
-  }
-
-  protected void click(Driver driver, WebElement element) {
-    if (driver.config().clickViaJs()) {
-      clickViaJS(driver, element, 0, 0);
-    }
-    else {
-      defaultClick(driver, element);
-    }
   }
 
   protected void click(Driver driver, WebElement webElement, ClickOptions clickOptions) {
@@ -92,15 +88,20 @@ public class Click implements Command<SelenideElement> {
     }
   }
 
-  protected void defaultClick(Driver driver, WebElement element) {
-    element.click();
+  protected void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY) {
+    if (isCenter(offsetX, offsetY)) {
+      element.click();
+    }
+    else {
+      driver.actions()
+        .moveToElement(element, offsetX, offsetY)
+        .click()
+        .perform();
+    }
   }
 
-  protected void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY) {
-    driver.actions()
-      .moveToElement(element, offsetX, offsetY)
-      .click()
-      .perform();
+  protected boolean isCenter(int offsetX, int offsetY) {
+    return offsetX == 0 && offsetY == 0;
   }
 
   protected void clickViaJS(Driver driver, WebElement element, int offsetX, int offsetY) {
