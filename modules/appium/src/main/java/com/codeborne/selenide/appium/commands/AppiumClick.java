@@ -19,11 +19,9 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Arrays;
 
 import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.appium.WebdriverUnwrapper.isMobile;
-import static com.codeborne.selenide.commands.Util.firstOf;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
@@ -39,23 +37,14 @@ public class AppiumClick extends Click {
       return super.execute(proxy, locator, args);
     }
 
-    WebElement webElement = findElement(locator, true);
+    ClickOptions options = options(args);
+    WebElement webElement = findElement(locator, options.isForce());
 
-    if (args == null || args.length == 0) {
-      click(locator.driver(), webElement);
-    } else if (args.length == 1) {
-      Object options = firstOf(args);
-      if (options instanceof AppiumClickOptions appiumClickOptions) {
-        click(locator.driver(), webElement, appiumClickOptions);
-      }
-      else if (options instanceof ClickOptions clickOptions) {
-        click(locator.driver(), webElement, clickOptions);
-      }
-      else {
-        throw new UnsupportedOperationException("Unsupported click argument: " + options);
-      }
-    } else {
-      throw new IllegalArgumentException("Unsupported click arguments: " + Arrays.toString(args));
+    if (options instanceof AppiumClickOptions appiumClickOptions) {
+      click(locator.driver(), webElement, appiumClickOptions);
+    }
+    else {
+      click(locator.driver(), webElement, options);
     }
     return proxy;
   }

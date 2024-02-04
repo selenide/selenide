@@ -9,11 +9,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.refEq;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -58,7 +61,7 @@ final class SelectRadioCommandTest {
 
     SelenideElement clickedElement = command.execute(proxy, locator, new Object[]{"Submit payment"});
     assertThat(clickedElement.getWrappedElement()).isEqualTo(input);
-    verify(click).click(driver, input);
+    verify(click).click(same(driver), same(input), refEq(usingDefaultMethod()));
   }
 
   private WebElement givenRadioInput(String selector, String value, boolean readonly) {

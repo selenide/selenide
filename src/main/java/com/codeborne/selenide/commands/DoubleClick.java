@@ -17,17 +17,17 @@ public class DoubleClick extends Click {
   }
 
   @Override
-  protected void defaultClick(Driver driver, WebElement element) {
-    driver.actions()
-      .doubleClick(element)
-      .build().perform();
-  }
-
-  @Override
   protected void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY) {
-    driver.actions()
-      .moveToElement(element, offsetX, offsetY)
-      .doubleClick()
-      .build().perform();
+    if (isCenter(offsetX, offsetY)) {
+      driver.actions()
+        .doubleClick(element)
+        .build().perform();
+    }
+    else {
+      driver.actions()
+        .moveToElement(element, offsetX, offsetY)
+        .doubleClick()
+        .build().perform();
+    }
   }
 }

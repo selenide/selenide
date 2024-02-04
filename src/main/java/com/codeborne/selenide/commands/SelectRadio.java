@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
@@ -39,7 +40,7 @@ public class SelectRadio implements Command<SelenideElement> {
           throw new InvalidStateError(locator.driver(), locator.description(), "Cannot select readonly radio button");
         }
 
-        click.click(locator.driver(), radio);
+        click.click(locator.driver(), radio, usingDefaultMethod());
         return wrap(locator.driver(), radio, locator.getSearchCriteria());
       }
     }
