@@ -411,7 +411,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * WARNING: This method can help implementing crooks, but it is not needed for typical ui tests.
    *
-   * @see #has
+   * @see #has(WebElementCondition)
    * @see com.codeborne.selenide.commands.Matches
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
@@ -419,16 +419,42 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   boolean is(WebElementCondition condition);
 
   /**
+   * Checks if element matches given condition (with the given timeout)
+   * <ol>
+   * <li>If matches, immediately returns {@code true}</li>
+   * <li>If no, waits (up to given timeout), and if still no, returns {@code false}.</li>
+   * </ol>
+   * <p>
+   *   WARNING: This method can help implementing crooks, but we highly recommend to create a proper solution.
+   * </p>
+   * <p>
+   *   Once again: We DO NOT RECOMMEND using this method.
+   * </p>
+   *
+   * @see com.codeborne.selenide.commands.Matches
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   * @see <a href="https://selenide.org/2019/12/02/advent-calendar-how-to-abuse-selenide/">How to abuse Selenide</a>
+   * @since 7.1.0
+   */
+  boolean is(WebElementCondition condition, Duration timeout);
+
+  /**
    * immediately returns true if element matches given condition
    * Method doesn't wait!
    * WARNING: This method can help implementing crooks, but it is not needed for typical ui tests.
    *
-   * @see #is
+   * @see #is(WebElementCondition)
    * @see com.codeborne.selenide.commands.Matches
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   boolean has(WebElementCondition condition);
+
+  /**
+   * @see #is(WebElementCondition, Duration)
+   */
+  @CheckReturnValue
+  boolean has(WebElementCondition condition, Duration timeout);
 
   /**
    * Set checkbox state to CHECKED or UNCHECKED.
