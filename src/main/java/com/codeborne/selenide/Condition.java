@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.conditions.And;
 import com.codeborne.selenide.conditions.Attribute;
 import com.codeborne.selenide.conditions.AttributeWithValue;
+import com.codeborne.selenide.conditions.Animated;
 import com.codeborne.selenide.conditions.CaseSensitiveText;
 import com.codeborne.selenide.conditions.Checked;
 import com.codeborne.selenide.conditions.CssClass;
@@ -139,6 +140,19 @@ public final class Condition {
    * @since 6.5.0
    */
   public static final WebElementCondition editable = new Editable();
+
+  /**
+   * <p>
+   *  Check that the element is animated. An animated element changes its position or size over time.
+   *  Implemented for web browser context only.
+   * </p>
+   * <br>
+   * <p>Sample:</p>
+   * <p>{@code $("popup").shouldBe(animated);}</p>
+   * <br>
+   * @since v7.0.7
+   */
+  public static final WebElementCondition animated = new Animated();
 
   /**
    * Check if element has given attribute (with any value)
