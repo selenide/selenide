@@ -28,7 +28,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static io.appium.java_client.remote.options.SupportsAutomationNameOption.AUTOMATION_NAME_OPTION;
 
 @ParametersAreNonnullByDefault

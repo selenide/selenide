@@ -8,7 +8,7 @@ import io.appium.java_client.InteractsWithApps;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
 
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 
 @ParametersAreNonnullByDefault
 public class AppiumNavigator {

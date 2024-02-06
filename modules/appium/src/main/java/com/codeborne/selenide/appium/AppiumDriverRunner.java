@@ -4,11 +4,13 @@ import com.codeborne.selenide.WebDriverRunner;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
-import javax.annotation.Nonnull;
 import org.slf4j.helpers.CheckReturnValue;
 
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
+import javax.annotation.Nonnull;
+
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isAndroid;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isIos;
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 
 public class AppiumDriverRunner {
 
@@ -54,7 +56,7 @@ public class AppiumDriverRunner {
    */
   @CheckReturnValue
   public static boolean isAndroidDriver() {
-    return instanceOf(WebDriverRunner.getWebDriver(), AndroidDriver.class);
+    return isAndroid(WebDriverRunner.getWebDriver());
   }
 
   /**
@@ -63,6 +65,6 @@ public class AppiumDriverRunner {
    */
   @CheckReturnValue
   public static boolean isIosDriver() {
-    return instanceOf(WebDriverRunner.getWebDriver(), IOSDriver.class);
+    return isIos(WebDriverRunner.getWebDriver());
   }
 }

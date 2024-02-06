@@ -4,7 +4,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.HasOnScreenKeyboard;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ import java.util.Map;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static io.appium.java_client.AppiumBy.iOSNsPredicateString;
 import static io.appium.java_client.ios.options.wda.SupportsAutoAcceptAlertsOption.AUTO_ACCEPT_ALERTS_OPTION;
 
@@ -32,8 +31,6 @@ public class DeepLinkLauncher {
   // see also https://appiumpro.com/editions/84-reliably-opening-deep-links-across-platforms-and-devices
   public void openDeepLinkOnIos(AppiumDriver driver, String deepLinkUrl) {
     SelenideLogger.run("open ios deeplink", deepLinkUrl, () -> {
-      HasOnScreenKeyboard keyboard = cast(driver, HasOnScreenKeyboard.class)
-        .orElseThrow(() -> new IllegalArgumentException("Driver doesn't support HasOnScreenKeyboard"));
       openSafari(driver);
       // Add the deep link url in Safari in the `URL`-field
       // This can be 2 different elements, or the button, or the text field

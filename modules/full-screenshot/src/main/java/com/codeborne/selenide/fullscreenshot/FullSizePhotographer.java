@@ -8,15 +8,12 @@ import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.chromium.HasCdp;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v120.page.Page;
 import org.openqa.selenium.devtools.v120.page.model.Viewport;
 import org.openqa.selenium.firefox.HasFullPageScreenshot;
-import org.openqa.selenium.remote.Augmenter;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +22,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.unwrap;
 
 /**
  * Implementation of {@link Photographer} which can take full-size screenshots.
@@ -63,7 +62,7 @@ public class FullSizePhotographer implements Photographer {
 
   @Nonnull
   private <T> Optional<T> takeFullSizeScreenshot(Driver driver, OutputType<T> outputType) {
-    WebDriver webDriver = unwrap(driver);
+    WebDriver webDriver = unwrap(driver.getWebDriver());
 
     if (webDriver instanceof HasFullPageScreenshot firefoxDriver) {
       return Optional.of(firefoxDriver.getFullPageScreenshotAs(outputType));
@@ -75,17 +74,6 @@ public class FullSizePhotographer implements Photographer {
       return takeScreenshot((WebDriver & HasDevTools) webDriver, outputType);
     }
     return Optional.empty();
-  }
-
-  private WebDriver unwrap(Driver driver) {
-    WebDriver webDriver = driver.getWebDriver();
-    if (webDriver instanceof WrapsDriver wrapper) {
-      webDriver = wrapper.getWrappedDriver();
-    }
-    if (webDriver instanceof RemoteWebDriver remoteWebDriver) {
-      webDriver = new Augmenter().augment(remoteWebDriver);
-    }
-    return webDriver;
   }
 
   @Nonnull

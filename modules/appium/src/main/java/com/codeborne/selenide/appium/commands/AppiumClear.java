@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.isMobile;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
 
 @ParametersAreNonnullByDefault
 public class AppiumClear extends Clear {

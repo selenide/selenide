@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 
 /**
  * @since 1.6.10
