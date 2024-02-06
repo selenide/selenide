@@ -18,19 +18,25 @@ final class IfWithTimeoutTest extends IntegrationTest {
 
   @Test
   void is_waits_and_returns_false() {
-    boolean isDisplayed = $("#dynamic-content2").is(visible, Duration.ofMillis(100));
-    assertThat(isDisplayed).isFalse();
+    boolean isDisplayed = $("#dynamic-content2").is(visible, Duration.ofMillis(22));
+    assertThat(isDisplayed)
+      .as("Expect element #dynamic-content2 to appear after ~150ms")
+      .isFalse();
   }
 
   @Test
   void is_waits_and_returns_true() {
-    boolean isDisplayed = $("#dynamic-content2").is(visible, Duration.ofSeconds(4));
-    assertThat(isDisplayed).isTrue();
+    boolean isDisplayed = $("#dynamic-content2").is(visible, Duration.ofSeconds(2));
+    assertThat(isDisplayed)
+      .as("Expect element #dynamic-content2 to appear after ~150ms")
+      .isTrue();
   }
 
   @Test
   void has_waits() {
-    boolean hasText = $("#dynamic-content2").has(text("dynamic content2"), Duration.ofSeconds(4));
-    assertThat(hasText).isTrue();
+    boolean hasText = $("#dynamic-content2").has(text("dynamic content2"), Duration.ofSeconds(2));
+    assertThat(hasText)
+      .as("Expect element #dynamic-content2 to appear after ~150ms")
+      .isTrue();
   }
 }
