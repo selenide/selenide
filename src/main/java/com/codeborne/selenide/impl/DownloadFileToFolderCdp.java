@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
@@ -118,16 +119,17 @@ public class DownloadFileToFolderCdp {
   }
 
   private DevTools initDevTools(Driver driver) {
-    if (driver.browser().isChromium() && driver.getWebDriver() instanceof HasDevTools cdpBrowser) {
-      DevTools devTools = cdpBrowser.getDevTools();
-      devTools.createSessionIfThereIsNotOne();
-      devTools.send(Page.enable());
-      return devTools;
+    if (driver.browser().isChromium()) {
+      Optional<HasDevTools> cdpBrowser = cast(driver.getWebDriver(), HasDevTools.class);
+      if (cdpBrowser.isPresent()) {
+        DevTools devTools = cdpBrowser.get().getDevTools();
+        devTools.createSessionIfThereIsNotOne();
+        devTools.send(Page.enable());
+        return devTools;
+      }
     }
-    else {
-      throw new IllegalArgumentException("The browser you selected \"%s\" doesn't have Chrome Devtools protocol functionality."
-        .formatted(driver.browser().name));
-    }
+    throw new IllegalArgumentException("The browser you selected \"%s\" doesn't have Chrome Devtools protocol functionality."
+      .formatted(driver.browser().name));
   }
 
   private void prepareDownloadWithCdp(Driver driver, DevTools devTools,
