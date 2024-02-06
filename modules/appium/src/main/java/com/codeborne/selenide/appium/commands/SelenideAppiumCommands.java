@@ -21,5 +21,6 @@ public class SelenideAppiumCommands extends Commands {
     add("swipeTo", new AppiumSwipeTo());
     add("tap", new AppiumTap());
     add("doubleTap", new AppiumDoubleTap());
+    add("unfocus", new AppiumUnfocus());
   }
 }
