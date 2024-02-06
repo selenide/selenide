@@ -19,11 +19,7 @@
       const rect1 = element.getBoundingClientRect();
       window.requestAnimationFrame(() => {
         const rect2 = element.getBoundingClientRect();
-        if (isEqual(rect1, rect2)) {
-          resolve(false);
-        } else {
-          resolve(true);
-        }
+        resolve(!isEqual(rect1, rect2))
       });
     });
   });
