@@ -1,9 +1,9 @@
 package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
-import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -13,31 +13,41 @@ import org.openqa.selenium.support.events.WebDriverListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isAndroid;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isIos;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class WebdriverUnwrapperTest {
-  @Test
-  void shouldUnwrapWebDriverWithDriverListener() {
-    WebDriver pureDriver = new FakeIOSDriver();
-    WebDriver wrappedDriver = addWebDriverListeners(pureDriver, new EmptyWebDriverListener());
-    Driver driver = mock(Driver.class);
+class AppiumDriverUnwrapperTest {
+  private final WebDriver pureDriver = new FakeIOSDriver();
+  private final WebDriver wrappedDriver = addWebDriverListeners(pureDriver, new EmptyWebDriverListener());
+  private final Driver driver = mock(Driver.class);
+
+  @BeforeEach
+  void setUp() {
     when(driver.getWebDriver()).thenReturn(wrappedDriver);
     assertThat(wrappedDriver).isNotInstanceOf(IOSDriver.class);
-
-    assertThat(WebdriverUnwrapper.instanceOf(wrappedDriver, IOSDriver.class)).isTrue();
-    assertThat(WebdriverUnwrapper.cast(wrappedDriver, IOSDriver.class).get()).isInstanceOf(IOSDriver.class);
-
-    assertThat(WebdriverUnwrapper.instanceOf(driver, IOSDriver.class)).isTrue();
-    assertThat(WebdriverUnwrapper.cast(driver, IOSDriver.class).get()).isInstanceOf(IOSDriver.class);
+    assertThat(driver).isNotInstanceOf(IOSDriver.class);
   }
 
   @Test
-  void shouldHandleIncompatibleDriverTypes() {
-    WebDriver pureDriver = new FakeIOSDriver();
-    assertThat(WebdriverUnwrapper.instanceOf(pureDriver, AndroidDriver.class)).isFalse();
-    assertThat(WebdriverUnwrapper.cast(pureDriver, AndroidDriver.class)).isEmpty();
+  void test_isMobile() {
+    assertThat(isMobile(wrappedDriver)).isTrue();
+    assertThat(isMobile(driver)).isTrue();
+  }
+
+  @Test
+  void test_isIos() {
+    assertThat(isIos(wrappedDriver)).isTrue();
+    assertThat(isIos(driver)).isTrue();
+  }
+
+  @Test
+  void test_isAndroid() {
+    assertThat(isAndroid(wrappedDriver)).isFalse();
+    assertThat(isAndroid(driver)).isFalse();
   }
 
   private WebDriver addWebDriverListeners(WebDriver webdriver, WebDriverListener listener) {

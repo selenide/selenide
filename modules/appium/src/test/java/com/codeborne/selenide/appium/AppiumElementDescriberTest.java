@@ -8,6 +8,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.appium.AppiumElementDescriber.isUnsupportedAttributeError;
 import static com.codeborne.selenide.appium.AppiumElementDescriber.removePackage;
@@ -25,11 +26,15 @@ public class AppiumElementDescriberTest {
   private final WebElement element = mock(WebElement.class);
 
   void givenAndroidDriver() {
-    when(driver.getWebDriver()).thenReturn(mock(AndroidDriver.class));
+    AndroidDriver webdriver = mock(AndroidDriver.class);
+    when(webdriver.getCapabilities()).thenReturn(new DesiredCapabilities());
+    when(driver.getWebDriver()).thenReturn(webdriver);
   }
 
   void givenIosDriver() {
-    when(driver.getWebDriver()).thenReturn(mock(IOSDriver.class));
+    IOSDriver webdriver = mock(IOSDriver.class);
+    when(webdriver.getCapabilities()).thenReturn(new DesiredCapabilities());
+    when(driver.getWebDriver()).thenReturn(webdriver);
   }
 
   @Test
@@ -154,7 +159,9 @@ public class AppiumElementDescriberTest {
   @Test
   public void ignoresErrorsWhenGettingAnyOfAttributes_ios() {
     givenIosDriver();
-    when(driver.getWebDriver()).thenReturn(mock(IOSDriver.class));
+    IOSDriver webdriver = mock(IOSDriver.class);
+    when(webdriver.getCapabilities()).thenReturn(new DesiredCapabilities());
+    when(driver.getWebDriver()).thenReturn(webdriver);
     when(element.getTagName()).thenReturn("XCUIElementTypeImage");
     when(element.getAttribute(anyString())).thenThrow(new WebDriverException("Not implemented"));
     doReturn("Hello, world").when(element).getAttribute("label");

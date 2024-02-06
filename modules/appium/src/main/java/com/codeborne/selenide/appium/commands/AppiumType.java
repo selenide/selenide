@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.Stopwatch.sleepAtLeast;
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.isMobile;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
 import static java.util.Objects.requireNonNull;
 
 @ParametersAreNonnullByDefault

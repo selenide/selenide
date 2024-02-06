@@ -21,7 +21,7 @@ import java.util.Optional;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.ACTIONS;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.JS;
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 

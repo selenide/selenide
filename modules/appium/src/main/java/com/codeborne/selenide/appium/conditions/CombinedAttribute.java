@@ -2,15 +2,14 @@ package com.codeborne.selenide.appium.conditions;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebDriverRunner;
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isAndroid;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isIos;
 import static java.util.Objects.requireNonNull;
 
 @ParametersAreNonnullByDefault
@@ -43,10 +42,10 @@ public class CombinedAttribute {
   }
 
   private String getAttributeName(Driver driver) {
-    if (instanceOf(driver, AndroidDriver.class)) {
+    if (isAndroid(driver)) {
       return requireNonNull(androidAttribute, "Android selector not given");
     }
-    if (instanceOf(driver, IOSDriver.class)) {
+    if (isIos(driver)) {
       return requireNonNull(iosAttribute, "iOS selector not given");
     }
     throw new UnsupportedOperationException("Unsupported webdriver: " + WebDriverRunner.getWebDriver());

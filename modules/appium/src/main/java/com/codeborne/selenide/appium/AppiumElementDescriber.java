@@ -2,8 +2,6 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.ElementDescriber;
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -23,7 +21,8 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.instanceOf;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isAndroid;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isIos;
 import static java.util.Arrays.asList;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.compile;
@@ -64,10 +63,10 @@ public class AppiumElementDescriber implements ElementDescriber {
   }
 
   protected List<String> supportedAttributes(Driver driver) {
-    if (instanceOf(driver, AndroidDriver.class)) {
+    if (isAndroid(driver)) {
       return androidAttributes();
     }
-    else if (instanceOf(driver, IOSDriver.class)) {
+    else if (isIos(driver)) {
       return iosAttributes();
     }
     else {
@@ -129,7 +128,7 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
 
     private Builder appendTagName() {
-      if (instanceOf(webDriver, AndroidDriver.class)) {
+      if (isAndroid(webDriver)) {
         getAttribute("class", className -> {
           tagName = removePackage(className);
         });

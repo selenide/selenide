@@ -21,8 +21,8 @@ import java.util.Optional;
 
 import static com.codeborne.selenide.appium.AppiumSwipeDirection.RIGHT;
 import static com.codeborne.selenide.appium.AppiumSwipeOptions.right;
-import static com.codeborne.selenide.appium.WebdriverUnwrapper.cast;
 import static com.codeborne.selenide.commands.Util.firstOf;
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
