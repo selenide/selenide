@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.1.1 (under construction)
+* ...
+
+See https://github.com/selenide/selenide/milestone/201
+
 ## 7.1.0 (released 07.02.2024)
 * #2550 Implement downloading files via CDP or BiDi (#2567) - thanks to Sergey Brit!
 * #2556 Add Animated Condition - thanks to Boris Osipov!
