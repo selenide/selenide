@@ -1,7 +1,9 @@
 # Changelog
 
-## 7.1.0 (under construction)
+## 7.1.0 (released 07.02.2024)
 * #2550 Implement downloading files via CDP or BiDi (#2567) - thanks to Sergey Brit!
+* #2556 Add Animated Condition - thanks to Boris Osipov!
+* #2590 Add method `$.is(visible, timeout)` ¯¯\_(ツ)_/¯¯ (#2640)
 * #2635 Add the ability to skip checks before clicking an element (#2636)
 * #2638 Add the ability to unfocus an element (#2639)
 * #2612 don't set page load timeout in mobile tests (#2628)
@@ -9,7 +11,12 @@
 * #2624 fix duplicate authentication (#2626)
 * mask BasicAuth password in logs (#2626)
 * #2609 detect case when an event collect is reused by different threads
+* bump JUnit from 5.10.1 to 5.10.2
 * bump TestNG from 7.8.0 to 7.9.0
+* Bump slf4jVersion from 2.0.11 to 2.0.12
+* Bump LittleProxy from 2.1.1 to 2.1.2
+
+See https://github.com/selenide/selenide/milestone/199?closed=1
 
 ## 7.0.6 (released 27.01.2024)
 * bump Appium java client from 9.0.0 to 9.1.0 (#2623)
