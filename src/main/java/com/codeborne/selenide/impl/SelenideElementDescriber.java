@@ -65,6 +65,8 @@ public class SelenideElementDescriber implements ElementDescriber {
   public String selector(By selector) {
     return selector.toString()
       .replace("By.selector: ", "")
-      .replace("By.cssSelector: ", "");
+      .replace("By.cssSelector: ", "")
+      .replace("By.tagName: ", "")
+      .replace("By.id: ", "#");
   }
 }

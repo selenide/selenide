@@ -36,7 +36,7 @@ public class PageObjectWithAliasesTest extends IntegrationTest {
     )
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("""
-          Element "Tiny header" should have text "expected text" {By.tagName: h6}
+          Element "Tiny header" should have text "expected text" {h6}
           """.trim()
       );
   }
@@ -48,7 +48,7 @@ public class PageObjectWithAliasesTest extends IntegrationTest {
     )
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageStartingWith("""
-          Element "Large header" should not have text "Page with selects" {By.tagName: h1}
+          Element "Large header" should not have text "Page with selects" {h1}
           """.trim()
       );
   }
@@ -60,7 +60,7 @@ public class PageObjectWithAliasesTest extends IntegrationTest {
     )
       .isInstanceOf(ListSizeMismatch.class)
       .hasMessageStartingWith("""
-          List size mismatch: expected: = 666, actual: 4, collection: Middle headers {By.tagName: h2}
+          List size mismatch: expected: = 666, actual: 4, collection: Middle headers {h2}
           """.trim()
       );
   }
