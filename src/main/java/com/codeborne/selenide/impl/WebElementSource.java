@@ -3,7 +3,6 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.conditions.And;
 import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -21,12 +20,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.Condition.clickable;
 import static com.codeborne.selenide.Condition.editable;
-import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.interactable;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.impl.Alias.NONE;
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
@@ -170,7 +168,7 @@ public abstract class WebElementSource {
   @Nonnull
   @CheckReturnValue
   public WebElement findAndAssertElementIsClickable() {
-    return requireNonNull(checkConditionAndReturnElement("be ", new And("clickable", asList(interactable, enabled)), false));
+    return requireNonNull(checkConditionAndReturnElement("be ", clickable, false));
   }
 
   /**

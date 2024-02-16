@@ -764,6 +764,20 @@ public final class Condition {
   }
 
   /**
+   * Check if element is clickable: {@link #interactable} AND {@link #enabled}.
+   *
+   * Usually you don't need to use this condition.
+   * When you just call {@code $("button").click()}, Selenide automatically checks that the element is clickable.
+   *
+   * <br/>
+   * <p>Example:</p>
+   * <p>{@code $("input[type=button]").shouldBe(clickable);}</p>
+   * <br/>
+   * @since 7.1.1
+   */
+  public static final WebElementCondition clickable = and("clickable", interactable, enabled);
+
+  /**
    * Used to form human-readable condition expression
    * Example element.should(be(visible),have(text("abc"))
    *
