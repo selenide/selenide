@@ -76,7 +76,12 @@ public class DownloadFileWithHttpRequest {
   public File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter) {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
-      throw new IllegalArgumentException("The element does not have href attribute: " + describe.fully(driver, element));
+      String link = "https://selenide.org/javadoc/current/com/codeborne/selenide/FileDownloadMode.html";
+      throw new IllegalArgumentException((
+        "The element does not have \"href\" attribute: %s, so method HTTPGET cannot download the file.%n" +
+        "Please try another download method: FOLDER, CDP or PROXY.%n" +
+        "Read more about possible download methods: %s"
+      ).formatted(describe.fully(driver, element), link).trim());
     }
 
     return download(driver, fileToDownloadLocation, timeout, fileFilter);

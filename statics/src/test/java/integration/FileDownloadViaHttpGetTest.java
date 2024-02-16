@@ -65,6 +65,19 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
+  void cannotDownloadFilesIfLinkHasNoHrefAttribute() {
+    assertThatThrownBy(() -> $("h1").download())
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("The element does not have \"href\" attribute: <h1>File uploads</h1>, so method HTTPGET cannot download the file." +
+                  System.lineSeparator() +
+                  "Please try another download method: FOLDER, CDP or PROXY." +
+                  System.lineSeparator() +
+                  "Read more about possible download methods: " +
+                  "https://selenide.org/javadoc/current/com/codeborne/selenide/FileDownloadMode.html"
+      );
+  }
+
+  @Test
   void downloadsFileWithAlert() {
     File downloadedFile = $(byText("Download me with alert")).download();
 
