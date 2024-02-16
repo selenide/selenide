@@ -14,13 +14,13 @@ final class ElementFinderTest {
   void toStringForFinderByCssSelectors() {
     ElementFinder parent = new ElementFinder(driver, null, By.tagName("table"), 0);
     assertThat(new ElementFinder(driver, null, By.id("app"), 0))
-      .hasToString("{By.id: app}");
+      .hasToString("{#app}");
     assertThat(new ElementFinder(driver, null, By.id("app"), 3))
-      .hasToString("{By.id: app[3]}");
+      .hasToString("{#app[3]}");
     assertThat(new ElementFinder(driver, parent, By.id("app"), 0))
-      .hasToString("{By.tagName: table/By.id: app}");
+      .hasToString("{table/#app}");
     assertThat(new ElementFinder(driver, parent, By.id("app"), 3))
-      .hasToString("{By.tagName: table/By.id: app[3]}");
+      .hasToString("{table/#app[3]}");
   }
 
   @Test

@@ -8,7 +8,7 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 @ParametersAreNonnullByDefault
-public class SelenideWait extends FluentWait<WebDriver> {
+public final class SelenideWait extends FluentWait<WebDriver> {
   public SelenideWait(WebDriver input, long timeout, long pollingInterval) {
     super(input);
     withTimeout(Duration.of(timeout, ChronoUnit.MILLIS));

@@ -109,7 +109,7 @@ final class MissingElementTest extends IntegrationTest {
       $(element(By.tagName("h2"))).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching(String.format("Element should have text \"expected text\" \\{By.tagName: h2}%n" +
+      .hasMessageMatching(String.format("Element should have text \"expected text\" \\{h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Actual value: text=\"Dropdown list\"%n" +
         "Screenshot: %s%s%n" +
@@ -140,7 +140,7 @@ final class MissingElementTest extends IntegrationTest {
       $(pageObject.header1).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching(String.format("Element should have text \"expected text\" \\{By.tagName: h2}%n" +
+      .hasMessageMatching(String.format("Element should have text \"expected text\" \\{h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Actual value: text=\"Dropdown list\"%n" +
         "Screenshot: %s%s%n" +
@@ -155,7 +155,7 @@ final class MissingElementTest extends IntegrationTest {
       $(pageObject.header2).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching(String.format("Element should have text \"expected text\" \\{By.tagName: h2}%n" +
+      .hasMessageMatching(String.format("Element should have text \"expected text\" \\{h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Actual value: text=\"Dropdown list\"%n" +
         "Screenshot: %s%s%n" +
@@ -168,7 +168,7 @@ final class MissingElementTest extends IntegrationTest {
     assertThatThrownBy(() ->
       $(pageObject.categoryDropdown).selectOption("SomeOption")
     ).isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {By.id: invalid_id}")
+      .hasMessageContaining("Element not found {#invalid_id}")
       .hasMessageContaining("Expected: exist");
   }
 
@@ -178,7 +178,7 @@ final class MissingElementTest extends IntegrationTest {
     assertThatThrownBy(() ->
       $(pageObject.categoryDropdown).click()
     ).isInstanceOf(ElementNotFound.class)
-      .hasMessageMatching(String.format("Element not found \\{By.id: invalid_id}%n" +
+      .hasMessageMatching(String.format("Element not found \\{#invalid_id}%n" +
         "Expected: clickable: interactable and enabled%n" +
         "Screenshot: %s%s%n" +
         "Page source: %s%s%n" +

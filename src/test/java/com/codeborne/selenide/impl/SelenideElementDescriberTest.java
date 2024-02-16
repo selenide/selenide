@@ -27,18 +27,28 @@ final class SelenideElementDescriberTest {
 
   @Test
   void selectorIsReportedAsIs() {
-    assertThat(describe.selector(By.id("firstName"))).isEqualTo("By.id: firstName");
     assertThat(describe.selector(By.className("bootstrap-active"))).isEqualTo("By.className: bootstrap-active");
     assertThat(describe.selector(By.name("firstName"))).isEqualTo("By.name: firstName");
     assertThat(describe.selector(By.linkText("tere"))).isEqualTo("By.linkText: tere");
     assertThat(describe.selector(By.partialLinkText("tere"))).isEqualTo("By.partialLinkText: tere");
-    assertThat(describe.selector(By.tagName("tere"))).isEqualTo("By.tagName: tere");
     assertThat(describe.selector(By.xpath("tere"))).isEqualTo("By.xpath: tere");
   }
 
   @Test
   void cssSelectorIsShortened() {
     assertThat(describe.selector(By.cssSelector("#firstName"))).isEqualTo("#firstName");
+  }
+
+  @Test
+  void byTagNameSelectorIsShortened() {
+    assertThat(describe.selector(By.tagName("div"))).isEqualTo("div");
+    assertThat(describe.selector(By.tagName("h1"))).isEqualTo("h1");
+    assertThat(describe.selector(By.tagName("tere"))).isEqualTo("tere");
+  }
+
+  @Test
+  void byIdSelectorIsShortened() {
+    assertThat(describe.selector(By.id("firstName"))).isEqualTo("#firstName");
   }
 
   @Test

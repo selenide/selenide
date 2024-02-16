@@ -55,7 +55,7 @@ final class RadioTest extends IntegrationTest {
   void selenideElement_selectRadio_elementNotFound() {
     assertThatThrownBy(() -> $(By.id("unknownId")).selectRadio("margarita"))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith(String.format("Element not found {By.id: unknownId}%nExpected: value=\"margarita\""));
+      .hasMessageStartingWith(String.format("Element not found {#unknownId}%nExpected: value=\"margarita\""));
   }
 
   @Test

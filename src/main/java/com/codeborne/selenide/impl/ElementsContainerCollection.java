@@ -61,4 +61,9 @@ public class ElementsContainerCollection extends AbstractList<Container> {
       throw new ElementNotFound(driver, NONE, collection.getSearchCriteria(), exist, e);
     }
   }
+
+  @Override
+  public String toString() {
+    return collection.description();
+  }
 }

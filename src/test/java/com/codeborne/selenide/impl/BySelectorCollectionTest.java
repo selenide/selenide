@@ -20,6 +20,6 @@ final class BySelectorCollectionTest {
   @Test
   void constructorWithParent() {
     BySelectorCollection bySelectorCollection = new BySelectorCollection(driver, webElement, By.name("query"));
-    assertThat(bySelectorCollection.description()).isEqualTo("By.tagName: table[3]/By.name: query");
+    assertThat(bySelectorCollection.description()).isEqualTo("table[3]/By.name: query");
   }
 }

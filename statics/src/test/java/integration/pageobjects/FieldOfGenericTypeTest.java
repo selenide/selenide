@@ -54,6 +54,7 @@ public class FieldOfGenericTypeTest extends IntegrationTest {
     YetAnotherPage page = page(YetAnotherPage.class);
     assertThat(page.body).isNotNull();
     assertThat(page.body.selects).hasSize(6);
+    assertThat(page.body.selects).hasToString("body/select");
 
     assertThatThrownBy(() -> page.body.selects.get(0))
       .isInstanceOf(RuntimeException.class)
