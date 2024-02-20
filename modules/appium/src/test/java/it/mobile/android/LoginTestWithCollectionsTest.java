@@ -1,8 +1,8 @@
 package it.mobile.android;
 
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.appium.SelenideAppium;
+import com.codeborne.selenide.appium.SelenideAppiumElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,5 +36,5 @@ class LoginPageWithCollections {
   WebElement loginButton;
 
   @AndroidFindBy(xpath = "//*[@content-desc='generic-error-message']/android.widget.TextView")
-  SelenideElement errorMessage;
+  SelenideAppiumElement errorMessage;
 }
