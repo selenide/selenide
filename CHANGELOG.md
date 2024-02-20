@@ -1,7 +1,10 @@
 # Changelog
 
 ## 7.1.1 (under construction)
-* bump Selenium from 4.17.0 to 4.18.0
+* bump Selenium from 4.17.0 to 4.18.0 (#2655), see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* Improve error message for download without "href" (#2653)
+* fix "toString()" method for page object fields (#2652)
+* bump Netty from 4.1.106.Final to 4.1.107.Final (#2647)
 * ...
 
 See https://github.com/selenide/selenide/milestone/201
