@@ -1,6 +1,7 @@
 # Changelog
 
 ## 7.1.1 (under construction)
+* bump Selenium from 4.17.0 to 4.18.0
 * ...
 
 See https://github.com/selenide/selenide/milestone/201
