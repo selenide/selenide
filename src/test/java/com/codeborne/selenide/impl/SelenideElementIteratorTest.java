@@ -15,7 +15,7 @@ final class SelenideElementIteratorTest {
   @Test
   void hasNext() {
     CollectionSource collection = mockCollection("collection with 1 element", webElement);
-    SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
+    SelenideElementIterator<SelenideElement> selenideElementIterator = new SelenideElementIterator<>(collection);
 
     assertThat(selenideElementIterator.hasNext()).isTrue();
   }

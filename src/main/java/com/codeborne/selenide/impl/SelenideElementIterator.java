@@ -8,13 +8,18 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static com.codeborne.selenide.commands.Util.classOf;
+
 @ParametersAreNonnullByDefault
-public class SelenideElementIterator implements Iterator<SelenideElement> {
+public class SelenideElementIterator<T extends SelenideElement> implements Iterator<T> {
   protected final CollectionSource collection;
+  private final Class<T> clazz;
   protected int index;
 
-  public SelenideElementIterator(CollectionSource collection) {
+  @SafeVarargs
+  public SelenideElementIterator(CollectionSource collection, T... clazz) {
     this.collection = collection;
+    this.clazz = classOf(clazz);
   }
 
   @Override
@@ -26,11 +31,11 @@ public class SelenideElementIterator implements Iterator<SelenideElement> {
   @Override
   @CheckReturnValue
   @Nonnull
-  public SelenideElement next() {
+  public T next() {
     if (!hasNext()) {
-      throw new NoSuchElementException();
+      throw new NoSuchElementException("No next element present in collection %s at index %d".formatted(collection, index));
     }
-    return CollectionElement.wrap(collection, index++);
+    return CollectionElement.wrap(clazz, collection, index++);
   }
 
   @Override

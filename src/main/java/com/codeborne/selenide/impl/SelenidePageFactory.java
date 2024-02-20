@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.As;
+import com.codeborne.selenide.BaseElementsCollection;
 import com.codeborne.selenide.Container;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
@@ -39,6 +40,8 @@ import java.util.List;
 @SuppressWarnings("ChainOfInstanceofChecks")
 @ParametersAreNonnullByDefault
 public class SelenidePageFactory implements PageObjectFactory {
+  private static final Type[] NO_TYPE = new Type[0];
+
   @Override
   @CheckReturnValue
   @Nonnull
@@ -104,7 +107,7 @@ public class SelenidePageFactory implements PageObjectFactory {
     if (as != null && fieldValue instanceof SelenideElement element) {
       return element.as(as.value());
     }
-    if (as != null && fieldValue instanceof ElementsCollection collection) {
+    if (as != null && fieldValue instanceof BaseElementsCollection<?, ?> collection) {
       return collection.as(as.value());
     }
     return null;
@@ -166,7 +169,7 @@ public class SelenidePageFactory implements PageObjectFactory {
   @Nonnull
   Container initElementsContainer(Driver driver, Field field, WebElementSource self) throws ReflectiveOperationException {
     Type[] genericTypes = field.getGenericType() instanceof ParameterizedType parameterizedType ?
-      parameterizedType.getActualTypeArguments() : new Type[0];
+      parameterizedType.getActualTypeArguments() : NO_TYPE;
     return initElementsContainer(driver, field, self, field.getType(), genericTypes);
   }
 
@@ -191,16 +194,6 @@ public class SelenidePageFactory implements PageObjectFactory {
     return result;
   }
 
-
-  @CheckReturnValue
-  @Nullable
-  public final Object decorate(ClassLoader loader,
-                               Driver driver, @Nullable WebElementSource searchContext,
-                               Field field, By selector) {
-    Type[] classGenericTypes = field.getDeclaringClass().getGenericInterfaces();
-    return decorate(loader, driver, searchContext, field, selector, classGenericTypes);
-  }
-
   @Nullable
   @CheckReturnValue
   private String alias(Field field) {
@@ -221,7 +214,7 @@ public class SelenidePageFactory implements PageObjectFactory {
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return decorateWebElement(driver, searchContext, selector, field, alias);
     }
-    if (ElementsCollection.class.isAssignableFrom(field.getType())) {
+    if (BaseElementsCollection.class.isAssignableFrom(field.getType())) {
       return createElementsCollection(driver, searchContext, selector, field, alias);
     }
     else if (Container.class.isAssignableFrom(field.getType())) {
@@ -267,8 +260,9 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @Nonnull
-  protected ElementsCollection createElementsCollection(Driver driver, @Nullable WebElementSource searchContext,
-                                                        By selector, Field field, @Nullable String alias) {
+  protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createElementsCollection(
+    Driver driver, @Nullable WebElementSource searchContext,
+    By selector, Field field, @Nullable String alias) {
     CollectionSource collection = new BySelectorCollection(driver, searchContext, selector);
     if (alias != null) {
       collection.setAlias(alias);
@@ -276,6 +270,13 @@ public class SelenidePageFactory implements PageObjectFactory {
     if (shouldCache(field)) {
       collection = new LazyCollectionSnapshot(collection);
     }
+    return createCollection(collection);
+  }
+
+  @Nonnull
+  protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createCollection(
+    CollectionSource collection
+  ) {
     return new ElementsCollection(collection);
   }
 

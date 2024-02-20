@@ -29,6 +29,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
+import static com.codeborne.selenide.commands.Util.classOf;
 import static com.codeborne.selenide.files.FileFilters.none;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
@@ -155,10 +156,7 @@ public class SelenideDriver {
   @Nonnull
   @SuppressWarnings("unchecked")
   public <PageObjectClass> PageObjectClass page(PageObjectClass... reified) {
-    if (reified.length > 0) {
-      throw new IllegalArgumentException("Please don't pass any values here. Java will detect page object class automagically.");
-    }
-    return pageFactory.page(driver(), (Class<PageObjectClass>) reified.getClass().getComponentType());
+    return pageFactory.page(driver(), classOf(reified));
   }
 
   @CheckReturnValue
@@ -505,18 +503,6 @@ public class SelenideDriver {
   }
 
   public Conditional<WebDriver> webdriver() {
-    return new Conditional<>() {
-      @Nonnull
-      @Override
-      public Driver driver() {
-        return SelenideDriver.this.driver();
-      }
-
-      @Nonnull
-      @Override
-      public WebDriver object() {
-        return SelenideDriver.this.getWebDriver();
-      }
-    };
+    return new WebDriverConditional(driver);
   }
 }

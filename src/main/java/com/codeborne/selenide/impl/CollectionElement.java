@@ -19,8 +19,15 @@ public class CollectionElement extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public static SelenideElement wrap(CollectionSource collection, int index) {
-    return (SelenideElement) Proxy.newProxyInstance(
-      collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
+    return wrap(SelenideElement.class, collection, index);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  @SuppressWarnings("unchecked")
+  public static <T extends SelenideElement> T wrap(Class<T> clazz, CollectionSource collection, int index) {
+    return (T) Proxy.newProxyInstance(
+      collection.getClass().getClassLoader(), new Class<?>[]{clazz},
       new SelenideElementProxy<>(new CollectionElement(collection, index)));
   }
 

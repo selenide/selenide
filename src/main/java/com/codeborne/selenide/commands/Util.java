@@ -78,4 +78,12 @@ public class Util {
   public static <T> String arrayToString(List<T> values) {
     return values.stream().map(Objects::toString).collect(joining(","));
   }
+
+  @SuppressWarnings("unchecked")
+  public static <T> Class<T> classOf(T... reified) {
+    if (reified.length > 0) {
+      throw new IllegalArgumentException("Please don't pass any values here. Java will detect page object class automagically.");
+    }
+    return (Class<T>) reified.getClass().getComponentType();
+  }
 }
