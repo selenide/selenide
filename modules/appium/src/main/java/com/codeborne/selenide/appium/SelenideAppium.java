@@ -3,7 +3,9 @@ package com.codeborne.selenide.appium;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.impl.ElementFinder;
+import com.codeborne.selenide.impl.WebElementWrapper;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -97,5 +99,11 @@ public class SelenideAppium {
   @Nonnull
   public static SelenideAppiumElement $(By seleniumSelector, int index) {
     return ElementFinder.wrap(driver(), SelenideAppiumElement.class, null, seleniumSelector, index);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static SelenideAppiumElement $(WebElement webElement) {
+    return WebElementWrapper.wrap(SelenideAppiumElement.class, driver(), webElement);
   }
 }
