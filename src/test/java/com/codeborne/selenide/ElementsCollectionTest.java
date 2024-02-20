@@ -102,7 +102,7 @@ final class ElementsCollectionTest {
 
   @Test
   void exclude() {
-    ElementsCollection filteredCollection = collection("Hello", "Mark").exclude(text("Mark"));
+    var filteredCollection = collection("Hello", "Mark").exclude(text("Mark"));
 
     assertThat(filteredCollection.size()).isEqualTo(1);
     assertThat(filteredCollection.get(0).getText()).isEqualTo("Hello");
@@ -110,7 +110,7 @@ final class ElementsCollectionTest {
 
   @Test
   void excludeWith() {
-    ElementsCollection filteredCollection = collection("Hello", "Mark").excludeWith(text("Mark"));
+    var filteredCollection = collection("Hello", "Mark").excludeWith(text("Mark"));
 
     assertThat(filteredCollection.size()).isEqualTo(1);
     assertThat(filteredCollection.get(0).getText()).isEqualTo("Hello");
@@ -153,7 +153,7 @@ final class ElementsCollectionTest {
   @Test
   void firstNElementsMethod() {
     ElementsCollection collection = collection("Hello", "Mark", "Twen");
-    ElementsCollection firstTwoElements = collection.first(2);
+    var firstTwoElements = collection.first(2);
     assertThat(firstTwoElements.texts()).isEqualTo(List.of("Hello", "Mark"));
     assertThat(firstTwoElements.size()).isEqualTo(2);
     assertThat(firstTwoElements.get(0).getText()).isEqualTo("Hello");
@@ -168,7 +168,7 @@ final class ElementsCollectionTest {
   @Test
   void lastNElementsMethod() {
     ElementsCollection collection = collection("Hello", "Mark", "Twen");
-    ElementsCollection firstTwoElements = collection.last(2);
+    var firstTwoElements = collection.last(2);
     assertThat(firstTwoElements.texts()).isEqualTo(List.of("Mark", "Twen"));
   }
 

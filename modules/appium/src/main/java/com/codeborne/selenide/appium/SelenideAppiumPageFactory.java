@@ -3,6 +3,7 @@ package com.codeborne.selenide.appium;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.LazyWebElementSnapshot;
 import com.codeborne.selenide.impl.SelenidePageFactory;
@@ -11,7 +12,6 @@ import io.appium.java_client.HasBrowserCheck;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.DefaultElementByBuilder;
 import io.appium.java_client.pagefactory.bys.builder.AppiumByBuilder;
-import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.time.Duration;
 import java.util.Optional;
 
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
@@ -99,7 +100,11 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     return shouldCache(field) ?
       LazyWebElementSnapshot.wrap(new ElementFinder(driver, searchContext, selector, 0, alias)) :
       ElementFinder.wrap(driver, SelenideAppiumElement.class, searchContext, selector, 0, alias);
-
   }
 
+  @Override
+  @Nonnull
+  protected SelenideAppiumCollection createCollection(CollectionSource collection) {
+    return new SelenideAppiumCollection(collection);
+  }
 }

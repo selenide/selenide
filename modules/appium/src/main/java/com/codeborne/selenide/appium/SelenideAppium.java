@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.Set;
 
 import static com.codeborne.selenide.WebDriverRunner.driver;
@@ -105,5 +106,17 @@ public class SelenideAppium {
   @Nonnull
   public static SelenideAppiumElement $(WebElement webElement) {
     return WebElementWrapper.wrap(SelenideAppiumElement.class, driver(), webElement);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static SelenideAppiumCollection $$(By selector) {
+    return new SelenideAppiumCollection(driver(), selector);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static SelenideAppiumCollection $$(Collection<? extends WebElement> elements) {
+    return new SelenideAppiumCollection(driver(), elements);
   }
 }
