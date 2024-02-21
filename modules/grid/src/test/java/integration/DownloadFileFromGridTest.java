@@ -1,9 +1,8 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.impl.FileContent;
-import org.apache.commons.lang3.SystemUtils;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
+import com.codeborne.selenide.impl.FileContent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,46 +13,36 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
-import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.Files.createTempDirectory;
-import static java.time.Duration.ofMillis;
-import static java.time.Duration.ofSeconds;
-import static java.util.regex.Pattern.DOTALL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-final class FileDownloadToFolderTest extends IntegrationTest {
-  private static final Logger log = LoggerFactory.getLogger(FileDownloadToFolderTest.class);
+final class DownloadFileFromGridTest extends AbstractGridTest {
+  private static final Logger log = LoggerFactory.getLogger(DownloadFileFromGridTest.class);
   private final File folder = new File(downloadsFolder).getAbsoluteFile();
 
   @BeforeEach
-  void setUp() {
-    if (SystemUtils.IS_OS_WINDOWS) {
-      closeWebDriver();
-    }
+  void openFileUploadForm() {
+    Configuration.remote = gridUrl.toString();
+    Configuration.browserCapabilities.setCapability("se:downloadsEnabled", true);
     Configuration.fileDownload = FOLDER;
     openFile("page_with_uploads.html");
-    timeout = 5000;
   }
 
   @Test
-  void downloadsFiles() {
+  void downloadFile() {
     File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
@@ -93,41 +82,6 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  public void download_byName() {
-    File downloadedFile = $(byText("Download me")).download(withName("hello_world.txt"));
-
-    assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
-  }
-
-  @Test
-  public void download_byNameRegex() {
-    File downloadedFile = $(byText("Download me")).download(withNameMatching("hello_.+\\.txt"));
-
-    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
-  }
-
-  @Test
-  void downloadsFilesToCustomFolder() throws IOException {
-    closeWebDriver();
-    String customDownloadsFolder = createTempDirectory("selenide-tests-to-custom-folder").toString();
-    downloadsFolder = customDownloadsFolder;
-
-    try {
-      openFile("page_with_uploads.html");
-      File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
-
-      assertThat(downloadedFile.getAbsolutePath())
-        .startsWith(new File(customDownloadsFolder).getAbsolutePath());
-      assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
-    }
-    finally {
-      closeWebDriver();
-    }
-  }
-
-  @Test
   void downloadsPdfFile() {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
@@ -158,21 +112,6 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadWithOptions() {
-    Configuration.fileDownload = PROXY;
-    Configuration.timeout = 1;
-
-    File downloadedFile = $(byText("Download me")).download(using(FOLDER)
-      .withFilter(withExtension("txt"))
-      .withTimeout(4000)
-    );
-
-    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
-    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
-  }
-
-  @Test
   void downloadEmptyFile() {
     File downloadedFile = $(byText("Download empty file")).download(withExtension("txt"));
 
@@ -200,40 +139,6 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  public void canSpecifyTimeoutForFileIncrement_downloadNotEvenStarted() {
-    var shortIncrementTimeout = using(FOLDER)
-      .withTimeout(ofSeconds(10))
-      .withIncrementTimeout(ofMillis(1001))
-      .withFilter(withName("hello_world.txt"));
-    assertThatThrownBy(() -> $("h1")
-      .download(shortIncrementTimeout))
-      .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(Pattern.compile("(?s).+files in .+ haven't been modified for \\d+ ms\\. +" +
-        "\\(started at: \\d+, lastFileUpdate: -?\\d+, now: \\d+, incrementTimeout: 1001\\)\\s*" +
-        "Modification times: \\{.*}.*", DOTALL));
-
-    closeWebDriver();
-  }
-
-  @Test
-  public void canSpecifyTimeoutForFileIncrement_filesHasNotBeenModifiedForNms() {
-    var shortIncrementTimeout = using(FOLDER)
-      .withTimeout(ofSeconds(10))
-      .withIncrementTimeout(ofMillis(100))
-      .withFilter(withName("hello_world.txt"));
-    assertThatThrownBy(() -> {
-      File file = $(byText("Download me super slowly")).download(shortIncrementTimeout);
-      assertThat(file).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
-    })
-      .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(Pattern.compile("(?s).+files in .+ haven't been modified for \\d+ ms\\..*", DOTALL));
-
-    closeWebDriver();
-  }
-
-  @Test
   public void download_slowly() {
     File downloadedFile = $(byText("Download me slowly"))
       .download(4000, withName("hello_world.txt"));
@@ -256,13 +161,6 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
     assertThat(downloadedFile).hasName("large_file.txt");
     assertThat(downloadedFile).hasSize(5 * 1024 * 1024);
-  }
-
-  @Test
-  public void cannotDownloadUsingProxy_ifBrowserIsOpenedWithoutProxy() {
-    assertThatThrownBy(() -> $(byText("Download me")).download(using(PROXY)))
-      .isInstanceOf(IllegalStateException.class)
-      .hasMessageStartingWith("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
   }
 
   @ParameterizedTest
