@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static java.time.Duration.ofSeconds;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.openqa.selenium.json.Json.JSON_UTF_8;
 import static org.openqa.selenium.remote.http.HttpClient.Factory.createDefault;
 import static org.openqa.selenium.remote.http.HttpMethod.DELETE;
@@ -64,7 +65,7 @@ public class GridClient {
       String uri = "%s/session/%s/se/files".formatted(baseUrl, sessionId);
       HttpRequest request = new HttpRequest(GET, uri);
       HttpResponse response = client.execute(request);
-      List<String> fileNames = parseDownloadedFiles(Contents.string(response)).names();
+      List<String> fileNames = verifyNoErrors(parseDownloadedFiles(Contents.string(response))).names();
       log.debug("Retrieved files from {}: {}", uri, fileNames);
       return fileNames;
     }
@@ -78,6 +79,13 @@ public class GridClient {
     return downloadedFiles.value();
   }
 
+  private <T extends GridResponse> T verifyNoErrors(T response) {
+    if (isNotBlank(response.error())) {
+      throw new RuntimeException("%s: %s".formatted(response.error(), response.message()));
+    }
+    return response;
+  }
+
   @CheckReturnValue
   @Nonnull
   public File download(String fileName, File targetFolder) {
@@ -87,8 +95,8 @@ public class GridClient {
         .addHeader("Content-Type", JSON_UTF_8)
         .setContent(toJson(new FileRequest(fileName)));
       HttpResponse response = client.execute(request);
-      FileContentResponse fileContent = parseDownloadedFile(Contents.string(response));
-      Zip.unzip(fileContent.value().contents(), targetFolder);
+      FileContent fileContent = verifyNoErrors(parseDownloadedFile(Contents.string(response)));
+      Zip.unzip(fileContent.contents(), targetFolder);
       File file = new File(targetFolder, fileName);
       log.debug("Downloaded file from {} to {}", uri, file.getAbsolutePath());
       return file;
@@ -110,8 +118,8 @@ public class GridClient {
     };
   }
 
-  FileContentResponse parseDownloadedFile(String responseJson) throws JsonProcessingException {
-    return json.readValue(responseJson, FileContentResponse.class);
+  FileContent parseDownloadedFile(String responseJson) throws JsonProcessingException {
+    return json.readValue(responseJson, FileContentResponse.class).value();
   }
 
   public void deleteDownloadedFiles() {

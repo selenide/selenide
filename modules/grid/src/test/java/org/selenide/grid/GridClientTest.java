@@ -8,7 +8,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GridClientTest {
-  private final GridClient client = new GridClient("", "");
+  private final GridClient client = new GridClient("https://my.hub.com", "sid12345");
 
   @Test
   void parsesDownloadedFilesResponse() throws JsonProcessingException {
@@ -54,12 +54,12 @@ class GridClientTest {
           "contents": "%s"
         }
       }""".formatted(base64zip);
-    FileContentResponse response = client.parseDownloadedFile(responseJson);
-    assertThat(response.value().error()).isNull();
-    assertThat(response.value().message()).isNull();
-    assertThat(response.value().stacktrace()).isNull();
-    assertThat(response.value().filename()).isEqualTo("hello_world.txt");
-    assertThat(response.value().contents()).startsWith("UEsDBBQACAg").endsWith("AAAA==");
+    FileContent response = client.parseDownloadedFile(responseJson);
+    assertThat(response.error()).isNull();
+    assertThat(response.message()).isNull();
+    assertThat(response.stacktrace()).isNull();
+    assertThat(response.filename()).isEqualTo("hello_world.txt");
+    assertThat(response.contents()).startsWith("UEsDBBQACAg").endsWith("AAAA==");
   }
 
   @Test
@@ -72,12 +72,12 @@ class GridClientTest {
           "stacktrace": ""
         }
       }""";
-    FileContentResponse response = client.parseDownloadedFile(responseJson);
-    assertThat(response.value().error()).isEqualTo("unknown error");
-    assertThat(response.value().message()).isEqualTo("Content-Type header is missing");
-    assertThat(response.value().stacktrace()).isEqualTo("");
-    assertThat(response.value().filename()).isNull();
-    assertThat(response.value().contents()).isNull();
+    FileContent response = client.parseDownloadedFile(responseJson);
+    assertThat(response.error()).isEqualTo("unknown error");
+    assertThat(response.message()).isEqualTo("Content-Type header is missing");
+    assertThat(response.stacktrace()).isEqualTo("");
+    assertThat(response.filename()).isNull();
+    assertThat(response.contents()).isNull();
   }
 
   @Test
@@ -90,11 +90,11 @@ class GridClientTest {
            "error": "unknown error"
          }
       }""";
-    FileContentResponse response = client.parseDownloadedFile(responseJson);
-    assertThat(response.value().error()).isEqualTo("unknown error");
-    assertThat(response.value().message()).startsWith("Please specify file to download");
-    assertThat(response.value().stacktrace()).startsWith("org.openqa.selenium.WebDriverException");
-    assertThat(response.value().filename()).isNull();
-    assertThat(response.value().contents()).isNull();
+    FileContent response = client.parseDownloadedFile(responseJson);
+    assertThat(response.error()).isEqualTo("unknown error");
+    assertThat(response.message()).startsWith("Please specify file to download");
+    assertThat(response.stacktrace()).startsWith("org.openqa.selenium.WebDriverException");
+    assertThat(response.filename()).isNull();
+    assertThat(response.contents()).isNull();
   }
 }
