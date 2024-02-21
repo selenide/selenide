@@ -10,7 +10,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -41,12 +40,7 @@ public class BasicAuthUtils {
   @Nonnull
   @CheckReturnValue
   private static String encode(String value) {
-    try {
-      return URLEncoder.encode(value, UTF_8.name());
-    }
-    catch (UnsupportedEncodingException e) {
-      throw new RuntimeException(e);
-    }
+    return URLEncoder.encode(value, UTF_8);
   }
 
   @CheckReturnValue

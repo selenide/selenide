@@ -12,7 +12,6 @@ import org.openqa.selenium.SessionNotCreatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.Duration;
 import java.util.Locale;
@@ -80,12 +79,12 @@ public abstract class BaseIntegrationTest {
     return protocol + domain() + ":" + server.getPort();
   }
 
-  protected static String getProtectedUrl(String username, String password, String path) throws UnsupportedEncodingException {
+  protected static String getProtectedUrl(String username, String password, String path) {
     return protocol + encode(username) + ':' + encode(password) + '@' + domain() + ":" + server.getPort() + path;
   }
 
-  private static String encode(String value) throws UnsupportedEncodingException {
-    return URLEncoder.encode(value, UTF_8.name());
+  protected static String encode(String value) {
+    return URLEncoder.encode(value, UTF_8);
   }
 
   protected static Browser browser() {

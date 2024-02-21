@@ -35,13 +35,17 @@ abstract class AbstractGridTest extends IntegrationTest {
       for (int tries = 0; tries < 3; tries++) {
         int port = findFreePort();
         try {
+          String username = "secret";
+          String password = "Love.Is.Stronger.Than.Fear";
           Main.main(new String[]{
             "standalone",
             "--port", String.valueOf(port),
             "--enable-managed-downloads", "true",
-            "--selenium-manager", "true"
+            "--selenium-manager", "true",
+            "--username", username,
+            "--password", password
           });
-          gridUrl = new URL("http://localhost:" + port + "/wd/hub");
+          gridUrl = new URL("http://%s:%s@localhost:%s/wd/hub".formatted(encode(username), encode(password), port));
           break;
         }
         catch (UncheckedIOException portAlreadyUsed) {
