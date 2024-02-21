@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.grid.Main;
 import org.slf4j.Logger;
@@ -16,37 +17,37 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 abstract class AbstractGridTest extends IntegrationTest {
-  private final Logger log = LoggerFactory.getLogger(getClass());
+  private static final Logger log = LoggerFactory.getLogger(AbstractGridTest.class);
 
-  protected URL gridUrl;
+  protected static URL gridUrl;
 
   @BeforeEach
-  final void setUpGrid() throws MalformedURLException {
+  @AfterEach
+  final void resetWebDriver() {
     closeWebDriver();
-
-    for (int tries = 0; tries < 3; tries++) {
-      int port = findFreePort();
-      try {
-        Main.main(new String[]{"standalone",
-          "--port", String.valueOf(port),
-          "--enable-managed-downloads", "true",
-          "--selenium-manager", "true"
-        });
-        gridUrl = new URL("http://localhost:" + port + "/wd/hub");
-        break;
-      }
-      catch (UncheckedIOException portAlreadyUsed) {
-        log.warn("Failed to start Selenium Grid on port {}", port, portAlreadyUsed);
-      }
-    }
-
     timeout = 4000;
+    Configuration.remote = null;
   }
 
-  @AfterEach
-  final void tearDownGrid() {
-    closeWebDriver();
-    gridUrl = null;
-    Configuration.remote = null;
+  @BeforeAll
+  static synchronized void setUpGrid() throws MalformedURLException {
+    if (gridUrl == null) {
+      for (int tries = 0; tries < 3; tries++) {
+        int port = findFreePort();
+        try {
+          Main.main(new String[]{
+            "standalone",
+            "--port", String.valueOf(port),
+            "--enable-managed-downloads", "true",
+            "--selenium-manager", "true"
+          });
+          gridUrl = new URL("http://localhost:" + port + "/wd/hub");
+          break;
+        }
+        catch (UncheckedIOException portAlreadyUsed) {
+          log.warn("Failed to start Selenium Grid on port {}", port, portAlreadyUsed);
+        }
+      }
+    }
   }
 }
