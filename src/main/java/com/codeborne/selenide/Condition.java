@@ -773,7 +773,7 @@ public final class Condition {
    * <p>Example:</p>
    * <p>{@code $("input[type=button]").shouldBe(clickable);}</p>
    * <br/>
-   * @since 7.1.1
+   * @since 7.2.0
    */
   public static final WebElementCondition clickable = and("clickable", interactable, enabled);
 
