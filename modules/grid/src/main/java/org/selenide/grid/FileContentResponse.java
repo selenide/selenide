@@ -11,5 +11,5 @@ record FileContent(
   @Nullable String error,
   @Nullable String message,
   @Nullable String stacktrace
-) {
+) implements GridResponse {
 }
