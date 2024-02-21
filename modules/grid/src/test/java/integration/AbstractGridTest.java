@@ -27,7 +27,11 @@ abstract class AbstractGridTest extends IntegrationTest {
     for (int tries = 0; tries < 3; tries++) {
       int port = findFreePort();
       try {
-        Main.main(new String[]{"standalone", "--port", String.valueOf(port)});
+        Main.main(new String[]{"standalone",
+          "--port", String.valueOf(port),
+          "--enable-managed-downloads", "true",
+          "--selenium-manager", "true"
+        });
         gridUrl = new URL("http://localhost:" + port + "/wd/hub");
         break;
       }

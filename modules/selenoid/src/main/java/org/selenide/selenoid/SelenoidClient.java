@@ -89,13 +89,13 @@ public class SelenoidClient {
       connection.setRequestMethod("DELETE");
       int responseCode = connection.getResponseCode();
       if (responseCode != 200) {
-        throw new RuntimeException("Failed to deleted downloaded file " + fileName +
+        throw new RuntimeException("Failed to delete downloaded file " + fileName +
                                    ", received http status " + responseCode);
       }
       log.debug("Deleted downloaded file {}", url);
     }
     catch (IOException e) {
-      throw new RuntimeException("Failed to download file " + url, e);
+      throw new RuntimeException("Failed to delete downloaded file " + url, e);
     }
   }
 
