@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
@@ -244,7 +243,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void canDownloadResourceProtectedByBasicAuth() throws UnsupportedEncodingException, URISyntaxException {
+  void canDownloadResourceProtectedByBasicAuth() throws URISyntaxException {
     String urlWithCredentials = getProtectedUrl("scott", scottPassword(), "/basic-auth/hello");
     File f = Selenide.download(urlWithCredentials, 2000);
     assertThat(f).content()
