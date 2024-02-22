@@ -36,6 +36,9 @@ You can use Selenide for testing mobile applications. See plugin [selenide-appiu
 #### Selenide with Selenoid
 You can use Selenide for running tests in Selenoid containers. See plugin [selenide-selenoid](https://github.com/selenide/selenide/tree/main/modules/selenoid).
 
+#### Selenide with Selenium Grid
+You can use Selenide for running tests in Selenium Grid. See plugin [selenide-grid](https://github.com/selenide/selenide/tree/main/modules/grid).
+
 
 ## Changelog
 

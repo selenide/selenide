@@ -1,3 +1,7 @@
+ext {
+  artifactId = 'selenide-grid'
+}
+
 dependencies {
   api project(":statics")
   implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
@@ -15,3 +19,5 @@ dependencies {
   }
   testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}
 }
+
+apply from: rootProject.file('gradle/publish-module.gradle')
