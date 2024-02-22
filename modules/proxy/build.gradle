@@ -8,7 +8,7 @@ dependencies {
     exclude group: 'io.netty'
     exclude group: 'org.seleniumhq.selenium'
   }
-  implementation("xyz.rogfam:littleproxy:${littleProxyVersion}")
+  implementation("io.github.littleproxy:littleproxy:${littleProxyVersion}")
   implementation("io.netty:netty-all:$nettyVersion") {because 'used by browserup-proxy'}
   api("io.netty:netty-codec-http:$nettyVersion") {because 'allows Selenide users to add request/response interceptors'}
 

@@ -7,6 +7,7 @@
 * Improve error message for download without "href" (#2653)
 * fix "toString()" method for page object fields (#2652)
 * bump Netty from 4.1.106.Final to 4.1.107.Final (#2647)
+* Bump LittleProxy from 2.1.2 to 2.2.0
 * ...
 
 See https://github.com/selenide/selenide/milestone/201

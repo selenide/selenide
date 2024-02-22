@@ -21,7 +21,7 @@ dependencies {
   compileOnly("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion") {
     transitive false
   }
-  compileOnly("xyz.rogfam:littleproxy:$littleProxyVersion")
+  compileOnly("io.github.littleproxy:littleproxy:$littleProxyVersion")
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
