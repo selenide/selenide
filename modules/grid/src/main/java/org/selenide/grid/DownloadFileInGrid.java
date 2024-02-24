@@ -2,8 +2,10 @@ package org.selenide.grid;
 
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.Downloader;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +13,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
+import java.io.IOException;
+
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.unwrapRemoteWebDriver;
 
 @ParametersAreNonnullByDefault
 public class DownloadFileInGrid extends com.codeborne.selenide.impl.DownloadFileToFolder {
@@ -60,11 +65,17 @@ public class DownloadFileInGrid extends com.codeborne.selenide.impl.DownloadFile
     if (isLocalBrowser(driver)) {
       return super.archiveFile(driver, downloadedFile);
     }
-    GridClient gridClient = new GridClient(driver.config().remote(), driver.getSessionId().toString());
+    RemoteWebDriver webDriver = unwrapRemoteWebDriver(driver.getWebDriver());
     File uniqueFolder = downloader.prepareTargetFolder(driver.config());
-    File localFile = gridClient.download(downloadedFile.getName(), uniqueFolder);
-    log.debug("Copied the downloaded file {} from Grid to {}", downloadedFile, localFile);
-    return localFile;
+    try {
+      webDriver.downloadFile(downloadedFile.getName(), uniqueFolder.toPath());
+      File localFile = new File(uniqueFolder, downloadedFile.getName());
+      log.debug("Copied the downloaded file {} from Grid to {}", downloadedFile, localFile);
+      return localFile;
+    }
+    catch (IOException e) {
+      throw new FileNotDownloadedError(driver, "Failed to copy downloaded file from grid", driver.config().timeout(), e);
+    }
   }
 
   private boolean isLocalBrowser(Driver driver) {

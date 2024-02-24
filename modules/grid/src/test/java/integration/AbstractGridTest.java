@@ -1,14 +1,17 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.grid.Main;
+import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.UncheckedIOException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -27,6 +30,12 @@ abstract class AbstractGridTest extends IntegrationTest {
     closeWebDriver();
     timeout = 4000;
     Configuration.remote = null;
+    WebDriverRunner.addListener(new WebDriverListener() {
+      @Override
+      public void beforeAnyCall(Object target, Method method, Object[] args) {
+        log.debug("before call {}", method);
+      }
+    });
   }
 
   @BeforeAll

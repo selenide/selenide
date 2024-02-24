@@ -10,6 +10,7 @@ import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
@@ -58,5 +59,12 @@ public class WebdriverUnwrapper {
       return new Augmenter().augment(remoteWebDriver);
     }
     return null;
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  public static RemoteWebDriver unwrapRemoteWebDriver(WebDriver driver) {
+    return driver instanceof WrapsDriver wrapper ?
+      (RemoteWebDriver) wrapper.getWrappedDriver() : (RemoteWebDriver) driver;
   }
 }
