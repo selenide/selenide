@@ -10,6 +10,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.unwrapRemoteWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class SeleniumGridTest extends AbstractGridTest {
@@ -33,7 +34,7 @@ final class SeleniumGridTest extends AbstractGridTest {
   @Test
   void shouldUseLocalFileDetector() {
     openFile("page_with_selects_without_jquery.html");
-    RemoteWebDriver webDriver = (RemoteWebDriver) getWebDriver();
+    RemoteWebDriver webDriver = unwrapRemoteWebDriver(getWebDriver());
 
     assertThat(webDriver.getFileDetector()).isInstanceOf(LocalFileDetector.class);
   }

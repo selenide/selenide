@@ -4,7 +4,6 @@ ext {
 
 dependencies {
   api project(":statics")
-  implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
 
   testImplementation project(':statics').sourceSets.test.output
   testImplementation project(':modules:core').sourceSets.test.output
