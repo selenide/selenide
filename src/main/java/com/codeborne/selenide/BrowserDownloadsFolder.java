@@ -99,6 +99,12 @@ public class BrowserDownloadsFolder implements DownloadsFolder {
     FileHelper.deleteFolderIfEmpty(folder);
   }
 
+  @Nonnull
+  @Override
+  public String getPath() {
+    return folder.getPath();
+  }
+
   @Override
   public String toString() {
     return folder.getPath();

@@ -1,5 +1,6 @@
 package org.selenide.selenoid;
 
+import com.codeborne.selenide.Driver;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
@@ -32,6 +33,10 @@ public class SelenoidClient {
   private static final ObjectMapper json = new ObjectMapper();
   final String baseUrl;
   private final String sessionId;
+
+  public static SelenoidClient clientFor(Driver driver) {
+    return new SelenoidClient(driver.config().remote(), driver.getSessionId().toString());
+  }
 
   public SelenoidClient(String hubUrl, String sessionId) {
     this.baseUrl = hubUrl.replace("/wd/hub", "");

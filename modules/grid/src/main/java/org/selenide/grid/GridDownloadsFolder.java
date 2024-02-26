@@ -1,5 +1,6 @@
 package org.selenide.grid;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.DownloadedFile;
@@ -17,8 +18,10 @@ import static java.util.stream.Collectors.toList;
 
 public class GridDownloadsFolder implements DownloadsFolder {
   private final RemoteWebDriver webDriver;
+  private final Config config;
 
   public GridDownloadsFolder(Driver driver) {
+    config = driver.config();
     webDriver = unwrapRemoteWebDriver(driver.getWebDriver());
   }
 
@@ -47,8 +50,14 @@ public class GridDownloadsFolder implements DownloadsFolder {
       .collect(toList());
   }
 
+  @Nonnull
+  @Override
+  public String getPath() {
+    return config.downloadsFolder();
+  }
+
   @Override
   public String toString() {
-    return "GridDownloadsFolder{" + webDriver.getSessionId() + "}";
+    return "GridDownloadsFolder{" + getPath() + "}";
   }
 }

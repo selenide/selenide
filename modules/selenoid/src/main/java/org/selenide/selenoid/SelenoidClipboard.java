@@ -9,6 +9,8 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static org.selenide.selenoid.SelenoidClient.clientFor;
+
 @ParametersAreNonnullByDefault
 public class SelenoidClipboard extends DefaultClipboard {
   private static final Logger log = LoggerFactory.getLogger(SelenoidClipboard.class);
@@ -26,7 +28,7 @@ public class SelenoidClipboard extends DefaultClipboard {
       return super.getText();
     }
     else {
-      return selenoidClient().getClipboardText();
+      return clientFor(driver()).getClipboardText();
     }
   }
 
@@ -37,18 +39,12 @@ public class SelenoidClipboard extends DefaultClipboard {
       super.setText(text);
     }
     else {
-      selenoidClient().setClipboardText(text);
+      clientFor(driver()).setClipboardText(text);
     }
   }
 
   @CheckReturnValue
   private boolean isLocalWebdriver() {
     return driver().config().remote() == null;
-  }
-
-  @Nonnull
-  @CheckReturnValue
-  private SelenoidClient selenoidClient() {
-    return new SelenoidClient(driver().config().remote(), driver().getSessionId().toString());
   }
 }

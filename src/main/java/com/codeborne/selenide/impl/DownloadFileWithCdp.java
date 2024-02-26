@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.Optional;
@@ -36,18 +37,23 @@ import static org.openqa.selenium.devtools.v122.browser.Browser.downloadProgress
 import static org.openqa.selenium.devtools.v122.browser.Browser.downloadWillBegin;
 
 @ParametersAreNonnullByDefault
-public class DownloadFileToFolderCdp {
-  private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolderCdp.class);
+public class DownloadFileWithCdp {
+  private static final Logger log = LoggerFactory.getLogger(DownloadFileWithCdp.class);
   private static final AtomicLong SEQUENCE = new AtomicLong();
 
-  private final Downloader downloader;
+  protected final Downloader downloader;
 
-  DownloadFileToFolderCdp(Downloader downloader) {
+  DownloadFileWithCdp(Downloader downloader) {
     this.downloader = downloader;
   }
 
-  public DownloadFileToFolderCdp() {
+  public DownloadFileWithCdp() {
     this(new Downloader());
+  }
+
+  @Nullable
+  protected DownloadsFolder getDownloadsFolder(Driver driver) {
+    return driver.browserDownloadsFolder();
   }
 
   @CheckReturnValue
@@ -59,7 +65,7 @@ public class DownloadFileToFolderCdp {
 
     Driver driver = anyClickableElement.driver();
     DevTools devTools = initDevTools(driver);
-    DownloadsFolder downloadsFolder = requireNonNull(driver.browserDownloadsFolder(), "Webdriver downloads folder is not configured");
+    DownloadsFolder downloadsFolder = requireNonNull(getDownloadsFolder(driver), "Webdriver downloads folder is not configured");
     CdpDownloads downloads = new CdpDownloads(downloadsFolder, new ConcurrentHashMap<>(1));
 
     // Init download behaviour and listeners
@@ -114,7 +120,7 @@ public class DownloadFileToFolderCdp {
     }
     while (!stopwatch.isTimeoutReached());
 
-    String message = "Failed to download file%s in %d ms".formatted(fileFilter.description(), timeout);
+    String message = "Failed to download file%s in %d ms.".formatted(fileFilter.description(), timeout);
     throw new FileNotDownloadedError(driver, message, timeout);
   }
 
@@ -136,13 +142,16 @@ public class DownloadFileToFolderCdp {
                                       CdpDownloads downloads,
                                       long timeout) {
     devTools.send(Browser.setDownloadBehavior(
-      Browser.SetDownloadBehaviorBehavior.ALLOW,
+      Browser.SetDownloadBehaviorBehavior.DEFAULT,
       Optional.empty(),
-      Optional.of(downloads.folder.toString()),
+      Optional.empty(),
       Optional.of(true)));
 
+    log.debug("clear devtools listeners");
     devTools.clearListeners();
+    log.debug("add devtools listener for 'downloadWillBegin'");
     devTools.addListener(downloadWillBegin(), new DownloadWillBeginListener(id(), downloads));
+    log.debug("add devtools listener for 'downloadProgress'");
     devTools.addListener(downloadProgress(), new DownloadProgressListener(id(), driver, downloads, timeout));
   }
 
@@ -186,7 +195,7 @@ public class DownloadFileToFolderCdp {
     }
 
     private File file() {
-      return new File(folder.toString(), fileName);
+      return new File(folder.getPath(), fileName);
     }
   }
 

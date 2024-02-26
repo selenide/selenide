@@ -33,7 +33,9 @@ abstract class AbstractGridTest extends IntegrationTest {
     WebDriverRunner.addListener(new WebDriverListener() {
       @Override
       public void beforeAnyCall(Object target, Method method, Object[] args) {
-        log.debug("before call {}", method);
+        if ("quit".equals(method.getName())) {
+          log.debug("before call {}", method);
+        }
       }
     });
   }

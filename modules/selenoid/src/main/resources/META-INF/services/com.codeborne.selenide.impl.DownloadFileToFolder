@@ -1,1 +1,1 @@
-org.selenide.selenoid.DownloadFileInSelenoid
+org.selenide.selenoid.DownloadFileFromSelenoidToFolder

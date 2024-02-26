@@ -47,4 +47,8 @@ public interface DownloadsFolder {
   default String filesAsString() {
     return '[' + files().stream().map(f -> f.getName()).collect(joining(", ")) + ']';
   }
+
+  @CheckReturnValue
+  @Nonnull
+  String getPath();
 }

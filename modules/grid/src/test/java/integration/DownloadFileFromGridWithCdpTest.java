@@ -17,10 +17,11 @@ import java.nio.file.Files;
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.DownloadOptions.using;
-import static com.codeborne.selenide.FileDownloadMode.FOLDER;
+import static com.codeborne.selenide.FileDownloadMode.CDP;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
@@ -29,15 +30,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-final class DownloadFileFromGridTest extends AbstractGridTest {
-  private static final Logger log = LoggerFactory.getLogger(DownloadFileFromGridTest.class);
+final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
+  private static final Logger log = LoggerFactory.getLogger(DownloadFileFromGridWithCdpTest.class);
   private final File folder = new File(downloadsFolder).getAbsoluteFile();
 
   @BeforeEach
   void openFileUploadForm() {
+    assumeThat(isFirefox())
+      .as("Firefox doesn't support CDP download method")
+      .isFalse();
     Configuration.remote = gridUrl.toString();
     Configuration.browserCapabilities.setCapability("se:downloadsEnabled", true);
-    Configuration.fileDownload = FOLDER;
+    Configuration.fileDownload = CDP;
     openFile("page_with_uploads.html");
   }
 
@@ -53,7 +57,7 @@ final class DownloadFileFromGridTest extends AbstractGridTest {
   @Test
   void downloadsFileWithAlert() {
     File downloadedFile = $(byText("Download me with alert")).download(
-      using(FOLDER).withFilter(withExtension("txt")).withAction(
+      using(CDP).withFilter(withExtension("txt")).withAction(
         clickAndConfirm("Are you sure to download it?")
       )
     );

@@ -9,7 +9,7 @@ import com.codeborne.selenide.files.FileFilters;
 import com.codeborne.selenide.impl.DownloadFileToFolder;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.DownloadFileWithProxyServer;
-import com.codeborne.selenide.impl.DownloadFileToFolderCdp;
+import com.codeborne.selenide.impl.DownloadFileWithCdp;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -33,19 +33,19 @@ public class DownloadFile implements Command<File> {
   private final DownloadFileWithHttpRequest downloadFileWithHttpRequest;
   private final DownloadFileWithProxyServer downloadFileWithProxyServer;
   private final DownloadFileToFolder downloadFileToFolder;
-  private final DownloadFileToFolderCdp downloadFileToFolderCdp;
+  private final DownloadFileWithCdp downloadFileWithCdp;
 
   public DownloadFile() {
     this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer(),
-      inject(DownloadFileToFolder.class), inject(DownloadFileToFolderCdp.class));
+      inject(DownloadFileToFolder.class), inject(DownloadFileWithCdp.class));
   }
 
   DownloadFile(DownloadFileWithHttpRequest httpGet, DownloadFileWithProxyServer proxy,
-               DownloadFileToFolder folder, DownloadFileToFolderCdp cdp) {
+               DownloadFileToFolder folder, DownloadFileWithCdp cdp) {
     downloadFileWithHttpRequest = httpGet;
     downloadFileWithProxyServer = proxy;
     downloadFileToFolder = folder;
-    downloadFileToFolderCdp = cdp;
+    downloadFileWithCdp = cdp;
   }
 
   @Override
@@ -71,7 +71,7 @@ public class DownloadFile implements Command<File> {
         return downloadFileToFolder.download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
       }
       case CDP: {
-        return downloadFileToFolderCdp
+        return downloadFileWithCdp
           .download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
       }
       default: {
