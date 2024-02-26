@@ -112,4 +112,8 @@ public interface Driver {
     }
     return ((RemoteWebDriver) driver).getSessionId();
   }
+
+  default boolean isLocalBrowser() {
+    return config().remote() == null;
+  }
 }

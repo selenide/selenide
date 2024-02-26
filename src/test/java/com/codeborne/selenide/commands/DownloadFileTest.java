@@ -32,7 +32,7 @@ final class DownloadFileTest {
   private final DownloadFileWithHttpRequest httpGet = mock();
   private final DownloadFileWithProxyServer proxy = mock();
   private final DownloadFileToFolder folder = mock();
-  private final DownloadFileToFolderCdp cdp = mock();
+  private final DownloadFileWithCdp cdp = mock();
   private final DownloadFile command = new DownloadFile(httpGet, proxy, folder, cdp);
   private final SelenideElement seLink = mock();
   private final WebElementSource linkWithHref = mock();
