@@ -47,8 +47,9 @@ final class ChromeDriverFactoryTest {
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(prefsMap).hasSizeGreaterThanOrEqualTo(4);
+    assertThat(prefsMap).hasSizeGreaterThanOrEqualTo(5);
     assertThat(prefsMap).containsEntry("credentials_enable_service", false);
+    assertThat(prefsMap).containsEntry("profile.password_manager_enabled", false);
     assertThat(prefsMap).containsEntry("plugins.always_open_pdf_externally", true);
     assertThat(prefsMap).containsEntry("profile.default_content_setting_values.automatic_downloads", 1);
     assertThat(prefsMap).containsEntry("download.default_directory",
@@ -91,6 +92,7 @@ final class ChromeDriverFactoryTest {
 
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
     assertThat(prefsMap).containsEntry("credentials_enable_service", false);
+    assertThat(prefsMap).containsEntry("profile.password_manager_enabled", false);
     assertThat(prefsMap).doesNotContainKey("download.default_directory");
   }
 
