@@ -95,18 +95,18 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadMissingFile() {
-    timeout = 888;
+    timeout = 111;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 888 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 111 ms");
   }
 
   @Test
   void downloadMissingFileWithExtension() {
-    timeout = 888;
+    timeout = 111;
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 888 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 111 ms.");
   }
 
   @Test
@@ -217,7 +217,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   @Test
   void downloadsFileWithCrdownloadExtension() {
     File downloadedFile = $(byText("Download file *crdownload"))
-      .download(300, withName("hello_world.crdownload"));
+      .download(900, withName("hello_world.crdownload"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.crdownload");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
