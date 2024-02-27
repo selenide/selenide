@@ -1,16 +1,23 @@
 # Changelog
 
-## 7.2.0 (under construction)
-* #1687 implement downloading files in Selenium Grid (#2659)
-* #2333 add element collections for mobile tests (#2656)
-* bump Selenium from 4.17.0 to 4.18.1 (#2655), see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
-* Improve error message for download without "href" (#2653)
-* fix "toString()" method for page object fields (#2652)
-* bump Netty from 4.1.106.Final to 4.1.107.Final (#2647)
-* Bump LittleProxy from 2.1.2 to 2.2.0
+## 7.2.1 (under construction)
 * ...
 
-See https://github.com/selenide/selenide/milestone/201
+See https://github.com/selenide/selenide/milestone/202
+
+## 7.2.0 (released 27.02.2024)
+* #1687 implement downloading files in Selenium Grid (#2659) (#2660)
+* #1687 #2550 implement downloading files using CDP in Selenoid and Selenium Grid (#2661)
+* #2333 add element collections for mobile tests (#2656)
+* #2333 add method `$(WebElement)` that returns SelenideAppiumElement (#2656)
+* bump Selenium from 4.17.0 to 4.18.1 (#2655), see https://github.com/SeleniumHQ/selenium/blob/trunk/java/CHANGELOG
+* Improve error message for download without "href" (#2653)
+* #2658 disable Chrome warning about stolen passwords (#2662)
+* fix `toString()` method for page object fields (#2652)
+* bump Netty from 4.1.106.Final to 4.1.107.Final (#2647)
+* Bump LittleProxy from 2.1.2 to 2.2.0
+
+See https://github.com/selenide/selenide/milestone/201?closed=1
 
 ## 7.1.0 (released 07.02.2024)
 * #2550 Implement downloading files via CDP or BiDi (#2567) - thanks to Sergey Brit!
