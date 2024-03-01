@@ -1,21 +1,19 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideConfig;
-import com.codeborne.selenide.WebDriverRunner;
-import com.codeborne.selenide.impl.WebdriverUnwrapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.WebDriver;
-
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.impl.WebdriverUnwrapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
 
 final class ReopenBrowserTest extends IntegrationTest {
   @BeforeEach
@@ -43,8 +41,7 @@ final class ReopenBrowserTest extends IntegrationTest {
     WebDriver diedWebdriver = WebDriverRunner.getWebDriver();
     diedWebdriver.quit();
 
-    assertThatThrownBy(() -> open("about:blank"))
-      .isInstanceOf(IllegalStateException.class)
+    assertThatThrownBy(() -> open("about:blank")).isInstanceOf(IllegalStateException.class)
       .hasMessageContaining("has been closed meanwhile")
       .hasMessageContaining("cannot create a new webdriver because reopenBrowserOnFail=false");
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
