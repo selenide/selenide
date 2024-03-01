@@ -12,9 +12,11 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.impl.WebdriverUnwrapper;
+import java.lang.reflect.Method;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.events.WebDriverListener;
 
 final class ReopenBrowserTest extends IntegrationTest {
   @BeforeEach
@@ -59,11 +61,10 @@ final class ReopenBrowserTest extends IntegrationTest {
   @Test
   void open_new_browser_with_custom_config() {
     var url = "about:blank";
-    open(url);
     var config = new SelenideConfig();
     config.browser("firefox");
     config.pageLoadStrategy("none");
-    WebDriverRunner.replaceBrowser(config);
+    WebDriverRunner.getOrCreateNewBrowser(config);
     var webDriver = WebDriverRunner.getWebDriver();
     var capabilities = WebdriverUnwrapper.unwrapRemoteWebDriver(webDriver).getCapabilities();
     assertThat(capabilities.getBrowserName()).isEqualTo(config.browser());
@@ -86,12 +87,13 @@ final class ReopenBrowserTest extends IntegrationTest {
   }
 
   @Test
-  void open_new_browser_with_custom_config_and_open_relative_page() {
+  void open_new_browser_when_exists_old() {
+    open();
     var config = new SelenideConfig();
     config.pageLoadTimeout(10000);
     Selenide.open("/start_page.html", config);
     assertThat(Selenide.$("h1").text()).isEqualTo("Selenide");
     var secondsTimeout = WebDriverRunner.getWebDriver().manage().timeouts().getPageLoadTimeout().getSeconds();
-    assertThat(secondsTimeout * 1000).isEqualTo(config.pageLoadTimeout());
+    assertThat(secondsTimeout * 1000).isEqualTo(Configuration.pageLoadTimeout);
   }
 }

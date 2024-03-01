@@ -133,7 +133,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     WebDriver webDriver = getCurrentThreadDriver().map(WebDriverInstance::webDriver).orElse(null);
     if (webDriver == null) {
       log.info("No webdriver is bound to current thread: {} - let's create a new webdriver", currentThread().getId());
-      return createAndRegisterDriver().webDriver();
+      return newBrowser(config).webDriver();
     }
 
     if (browserHealthChecker.isBrowserStillOpen(webDriver)) {
@@ -148,7 +148,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
     log.info("Webdriver has been closed meanwhile. Let's re-create it.");
     closeWebDriver();
-    return createAndRegisterDriver().webDriver();
+    return newBrowser(config).webDriver();
   }
 
   @Nullable
@@ -166,13 +166,6 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   private Optional<WebDriverInstance> getCurrentThreadDriver() {
     return Optional.ofNullable(threadWebDriver.get(currentThread().getId()));
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private WebDriverInstance createAndRegisterDriver() {
-    WebDriverInstance driver = createDriver();
-    return registerDriver(driver);
   }
 
   @CheckReturnValue
@@ -199,6 +192,13 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Nonnull
   private WebDriverInstance createDriver(Config config) {
     return createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public WebDriverInstance newBrowser(Config config) {
+    var instance = createDriver(config);
+    return registerDriver(instance);
   }
 
   @Override
@@ -284,14 +284,6 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   public String getCurrentFrameUrl() {
     //noinspection ConstantConditions
     return executeJavaScript("return window.location.href").toString();
-  }
-
-  @Override
-  public WebDriver replaceBrowser(Config config) {
-    closeWebDriver();
-    var driver = createDriver(config);
-    var webDriverInstance = registerDriver(driver);
-    return webDriverInstance.webDriver();
   }
 
   boolean isDeadThreadsWatchdogStarted() {

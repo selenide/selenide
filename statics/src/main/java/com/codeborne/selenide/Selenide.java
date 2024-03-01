@@ -114,19 +114,22 @@ public class Selenide {
   }
 
   /**
-   * Replace browser with a new one, using given Config
-   * Please note that config would affect only browser startup props.
+   * If browser window was already opened before, it will be reused. Config will be ignored.
+   * Otherwise, a new browser window will be opened.
+   * Please note:
+   * config will be ignored if browser window was already opened before.
+   * that config would affect only browser startup props.
    * Such as: browser, browserCapabilities, remote, browserSize, browserVersion, startMaximized, etc.
    * Global configs will be the same (timeout, pollingInterval, baseUrl, etc.).
    * Also default WebDriverRunner setup would be applied to your browser: proxy, listeners
    */
   public static void open(String url, Config config) {
-    WebDriverRunner.replaceBrowser(config);
+    WebDriverRunner.getOrCreateNewBrowser(config);
     open(url);
   }
 
   public static void open(Config config) {
-    WebDriverRunner.replaceBrowser(config);
+    WebDriverRunner.getOrCreateNewBrowser(config);
   }
 
   /**

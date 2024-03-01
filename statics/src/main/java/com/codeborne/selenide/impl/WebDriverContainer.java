@@ -46,7 +46,7 @@ public interface WebDriverContainer {
   void using(WebDriver driver, @Nullable SelenideProxyServer proxy, @Nullable DownloadsFolder downloadsFolder, Runnable lambda);
   void inNewBrowser(Runnable lambda);
 
-  WebDriver replaceBrowser(Config config);
+  WebDriverInstance newBrowser(Config config);
 
   void clearBrowserCache();
 

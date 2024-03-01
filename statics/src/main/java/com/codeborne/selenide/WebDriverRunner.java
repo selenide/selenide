@@ -1,28 +1,27 @@
 package com.codeborne.selenide;
 
+import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.Configuration.headless;
+
 import com.codeborne.selenide.impl.ThreadLocalSelenideDriver;
 import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import org.openqa.selenium.Proxy;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.events.WebDriverListener;
-
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.headless;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.events.WebDriverListener;
 
 /**
  * A static facade for accessing WebDriver instance for current threads
  */
 @ParametersAreNonnullByDefault
 public class WebDriverRunner {
-  public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
   private static final SelenideDriver staticSelenideDriver = new ThreadLocalSelenideDriver();
+  public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
 
   /**
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
@@ -39,6 +38,25 @@ public class WebDriverRunner {
    */
   public static void removeListener(WebDriverListener listener) {
     webdriverContainer.removeListener(listener);
+  }
+
+  public static void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
+    webdriverContainer.setWebDriver(webDriver, selenideProxy);
+  }
+
+  public static void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
+                                  DownloadsFolder browserDownloadsFolder) {
+    webdriverContainer.setWebDriver(webDriver, selenideProxy, browserDownloadsFolder);
+  }
+
+  /**
+   * Get the underlying instance of Selenium WebDriver.
+   * This can be used for any operations directly with WebDriver.
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static WebDriver getWebDriver() {
+    return webdriverContainer.getWebDriver();
   }
 
   /**
@@ -73,26 +91,6 @@ public class WebDriverRunner {
    */
   public static void setWebDriver(WebDriver webDriver) {
     webdriverContainer.setWebDriver(webDriver);
-  }
-
-  public static void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
-    webdriverContainer.setWebDriver(webDriver, selenideProxy);
-  }
-
-  public static void setWebDriver(WebDriver webDriver,
-                                  @Nullable SelenideProxyServer selenideProxy,
-                                  DownloadsFolder browserDownloadsFolder) {
-    webdriverContainer.setWebDriver(webDriver, selenideProxy, browserDownloadsFolder);
-  }
-
-  /**
-   * Get the underlying instance of Selenium WebDriver.
-   * This can be used for any operations directly with WebDriver.
-   */
-  @CheckReturnValue
-  @Nonnull
-  public static WebDriver getWebDriver() {
-    return webdriverContainer.getWebDriver();
   }
 
   /**
@@ -270,9 +268,13 @@ public class WebDriverRunner {
 
 
   /**
-   * Replace Webdriver in the current thread with the new built with the given config
+   * Get current already created driver or create a new one
+   * If old browser is not alive, it will be closed and a new one will be created with default config
    */
-  public static void replaceBrowser(Config config) {
-    webdriverContainer.replaceBrowser(config);
+  public static WebDriver getOrCreateNewBrowser(Config config) {
+    if (hasWebDriverStarted()) {
+      return WebDriverRunner.getAndCheckWebDriver();
+    }
+    return webdriverContainer.newBrowser(config).webDriver();
   }
 }
