@@ -12,11 +12,9 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.impl.WebdriverUnwrapper;
-import java.lang.reflect.Method;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.events.WebDriverListener;
 
 final class ReopenBrowserTest extends IntegrationTest {
   @BeforeEach
