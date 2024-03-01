@@ -267,4 +267,12 @@ public class WebDriverRunner {
   public static String currentFrameUrl() {
     return webdriverContainer.getCurrentFrameUrl();
   }
+
+
+  /**
+   * Replace Webdriver in the current thread with the new built with the given config
+   */
+  public static void setDriver(Config config) {
+    webdriverContainer.replaceBrowser(config);
+  }
 }

@@ -1,9 +1,13 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.impl.WebdriverUnwrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 
 import static com.codeborne.selenide.Condition.exactText;
@@ -52,5 +56,21 @@ final class ReopenBrowserTest extends IntegrationTest {
 
     open("about:blank");
     $("body").shouldHave(exactText(""));
+  }
+
+  @Test
+  void open_new_browser_with_custom_config() {
+    var url = "about:blank";
+    open(url);
+    var config = new SelenideConfig();
+    config.browser("firefox");
+    config.pageLoadStrategy("none");
+    WebDriverRunner.setDriver(config);
+    var webDriver = WebDriverRunner.getWebDriver();
+    var capabilities = WebdriverUnwrapper.unwrapRemoteWebDriver(webDriver).getCapabilities();
+    assertThat(capabilities.getBrowserName()).isEqualTo(config.browser());
+    assertThat(capabilities.getCapability("pageLoadStrategy")).isEqualTo(config.pageLoadStrategy());
+    open(url);
+    assertThat(webDriver.getCurrentUrl()).isEqualTo(url);
   }
 }

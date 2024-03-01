@@ -172,6 +172,12 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Nonnull
   private WebDriverInstance createAndRegisterDriver() {
     WebDriverInstance driver = createDriver();
+    return registerDriver(driver);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  private WebDriverInstance registerDriver(WebDriverInstance driver) {
     long threadId = setWebDriver(driver);
 
     if (config.holdBrowserOpen()) {
@@ -186,6 +192,12 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @CheckReturnValue
   @Nonnull
   private WebDriverInstance createDriver() {
+    return createDriver(config);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  private WebDriverInstance createDriver(Config config) {
     return createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
   }
 
@@ -272,6 +284,14 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   public String getCurrentFrameUrl() {
     //noinspection ConstantConditions
     return executeJavaScript("return window.location.href").toString();
+  }
+
+  @Override
+  public WebDriver replaceBrowser(Config config) {
+    closeWebDriver();
+    var driver = createDriver(config);
+    var webDriverInstance = registerDriver(driver);
+    return webDriverInstance.webDriver();
   }
 
   boolean isDeadThreadsWatchdogStarted() {
