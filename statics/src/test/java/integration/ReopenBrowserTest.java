@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.impl.WebdriverUnwrapper;
@@ -62,12 +63,35 @@ final class ReopenBrowserTest extends IntegrationTest {
     var config = new SelenideConfig();
     config.browser("firefox");
     config.pageLoadStrategy("none");
-    WebDriverRunner.setDriver(config);
+    WebDriverRunner.replaceBrowser(config);
     var webDriver = WebDriverRunner.getWebDriver();
     var capabilities = WebdriverUnwrapper.unwrapRemoteWebDriver(webDriver).getCapabilities();
     assertThat(capabilities.getBrowserName()).isEqualTo(config.browser());
     assertThat(capabilities.getCapability("pageLoadStrategy")).isEqualTo(config.pageLoadStrategy());
     open(url);
     assertThat(webDriver.getCurrentUrl()).isEqualTo(url);
+  }
+
+  @Test
+  void open_new_browser_with_custom_window_size() {
+    var height = 800;
+    var width = 544;
+    var config = new SelenideConfig();
+    config.browserSize("%sx%s".formatted(width, height));
+    Selenide.open(config);
+    var driver = WebDriverRunner.getWebDriver();
+    var size = driver.manage().window().getSize();
+    assertThat(size.height).isEqualTo(height);
+    assertThat(size.width).isEqualTo(width);
+  }
+
+  @Test
+  void open_new_browser_with_custom_config_and_open_relative_page() {
+    var config = new SelenideConfig();
+    config.pageLoadTimeout(10000);
+    Selenide.open("/start_page.html", config);
+    assertThat(Selenide.$("h1").text()).isEqualTo("Selenide");
+    var secondsTimeout = WebDriverRunner.getWebDriver().manage().timeouts().getPageLoadTimeout().getSeconds();
+    assertThat(secondsTimeout * 1000).isEqualTo(config.pageLoadTimeout());
   }
 }

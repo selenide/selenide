@@ -1,9 +1,24 @@
 package com.codeborne.selenide;
 
+import static com.codeborne.selenide.ModalOptions.withExpectedText;
+import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
+import static com.codeborne.selenide.logevents.SelenideLogger.getReadableSubject;
+
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Level;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -12,22 +27,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.remote.SessionId;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Collection;
-import java.util.List;
-import java.util.logging.Level;
-
-import static com.codeborne.selenide.ModalOptions.withExpectedText;
-import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
-import static com.codeborne.selenide.logevents.SelenideLogger.getReadableSubject;
 
 /**
  * The main starting point of Selenide.
@@ -76,7 +75,7 @@ public class Selenide {
    * @param domain Name of domain to apply Basic Auth.
    *               1. If empty, Basic Auth will be applied to all domains.
    *               2. If non-empty, Basic Auth will be applied only to URLs containing this domain.
-   *                 2.1. May contain multiple domain names (delimited by "," or "|").
+   *               2.1. May contain multiple domain names (delimited by "," or "|").
    */
   public static void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
     getSelenideDriver().open(relativeOrAbsoluteUrl, domain, login, password);
@@ -115,6 +114,22 @@ public class Selenide {
   }
 
   /**
+   * Replace browser with a new one, using given Config
+   * Please note that config would affect only browser startup props.
+   * Such as: browser, browserCapabilities, remote, browserSize, browserVersion, startMaximized, etc.
+   * Global configs will be the same (timeout, pollingInterval, baseUrl, etc.).
+   * Also default WebDriverRunner setup would be applied to your browser: proxy, listeners
+   */
+  public static void open(String url, Config config) {
+    WebDriverRunner.replaceBrowser(config);
+    open(url);
+  }
+
+  public static void open(Config config) {
+    WebDriverRunner.replaceBrowser(config);
+  }
+
+  /**
    * @since 5.23.0
    */
   @CheckReturnValue
@@ -135,8 +150,9 @@ public class Selenide {
    * Open a new browser (with the same settings as the default browser),
    * and run given code block in this browser.
    * <p>
-   *
+   * <p>
    * In the end, the browser will be closed.
+   *
    * @since 6.13.0
    */
   public static void inNewBrowser(Runnable lambda) {
@@ -160,8 +176,7 @@ public class Selenide {
    */
   @CheckReturnValue
   @Nonnull
-  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
-                                                       Class<PageObjectClass> pageObjectClassClass) {
+  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl, Class<PageObjectClass> pageObjectClassClass) {
     return getSelenideDriver().open(relativeOrAbsoluteUrl, pageObjectClassClass);
   }
 
@@ -172,8 +187,7 @@ public class Selenide {
    */
   @CheckReturnValue
   @Nonnull
-  public static <PageObjectClass> PageObjectClass open(URL absoluteUrl,
-                                                       Class<PageObjectClass> pageObjectClassClass) {
+  public static <PageObjectClass> PageObjectClass open(URL absoluteUrl, Class<PageObjectClass> pageObjectClassClass) {
     return getSelenideDriver().open(absoluteUrl, pageObjectClassClass);
   }
 
@@ -184,8 +198,7 @@ public class Selenide {
    */
   @CheckReturnValue
   @Nonnull
-  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
-                                                       String domain, String login, String password,
+  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl, String domain, String login, String password,
                                                        Class<PageObjectClass> pageObjectClassClass) {
     return getSelenideDriver().open(relativeOrAbsoluteUrl, domain, login, password, pageObjectClassClass);
   }
@@ -419,6 +432,7 @@ public class Selenide {
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
    * </p>
+   *
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return empty list if element was no found
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
@@ -643,8 +657,8 @@ public class Selenide {
   /**
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'prompt').
    *
-   * @param options parameters: timeout, expected texts etc.
-   * @param inputText          if not null, sets value in prompt dialog input
+   * @param options   parameters: timeout, expected texts etc.
+   * @param inputText if not null, sets value in prompt dialog input
    * @return actual dialog text
    * @throws DialogTextMismatch if confirmation message differs from expected message
    * @since 6.6.0
@@ -728,7 +742,6 @@ public class Selenide {
    * Copy selected text or empty string if no text is selected to clipboard.
    *
    * @return the copied text
-   *
    * @see #clipboard()
    * @see Clipboard
    * @since 6.11.0
@@ -748,8 +761,9 @@ public class Selenide {
 
   /**
    * Create a Page Object instance
-   * @since 6.8.0
+   *
    * @param reified Don't pass any values here. It's Java Magic :)
+   * @since 6.8.0
    */
   @CheckReturnValue
   @Nonnull
@@ -931,8 +945,8 @@ public class Selenide {
    *                  E.g. instead of "/files/ж.txt", it should be "/files/%D0%B6.txt"
    * @param timeoutMs specific timeout in ms
    * @return downloaded File in folder `Configuration.reportsFolder`
-   * @throws FileNotDownloadedError        if failed to download file
-   * @throws URISyntaxException if given url has invalid syntax
+   * @throws FileNotDownloadedError if failed to download file
+   * @throws URISyntaxException     if given url has invalid syntax
    */
   @Nonnull
   @CheckReturnValue
@@ -972,12 +986,12 @@ public class Selenide {
    * <p>
    * Remote runs support can be implemented via plugins.
    * Plugin for Selenoid supports clipboard since v1.1.0.
+   *
+   * @return Clipboard
    * @see <a href="https://github.com/selenide/selenide/tree/main/modules/selenoid">selenide-selenoid</a>
    * <p>
    * Pay attention that Clipboard is shared resource for instance where tests runs
    * and keep in mind while developing test suite with multiple tests for clipboard.
-   *
-   * @return Clipboard
    * @since 5.20.0
    */
   @Nonnull
