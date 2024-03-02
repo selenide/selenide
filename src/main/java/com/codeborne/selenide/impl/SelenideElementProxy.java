@@ -10,6 +10,7 @@ import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.JavascriptException;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriverException;
 
@@ -166,6 +167,7 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     if (e instanceof ReflectiveOperationException) return false;
     if (e instanceof JavascriptException) return false;
     if (e instanceof UnhandledAlertException) return false;
+    if (e instanceof NoSuchSessionException) return false;
 
     return e instanceof Exception || e instanceof AssertionError;
   }
