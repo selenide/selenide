@@ -56,7 +56,7 @@ public class SelenideElementDescriber implements ElementDescriber {
 
   @Nonnull
   private String failedToDescribe(String s2) {
-    return "Ups, failed to described the element [caused by: " + s2 + ']';
+    return "Ups, failed to describe the element [caused by: " + s2 + ']';
   }
 
   @Override
