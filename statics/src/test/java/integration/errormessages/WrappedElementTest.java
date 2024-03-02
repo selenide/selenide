@@ -41,7 +41,7 @@ final class WrappedElementTest extends IntegrationTest {
     assertThatThrownBy(() ->
       $(pageObject.categoryDropdown).selectOption("SomeOption")
     ).isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {Ups, failed to described the element [caused by: NoSuchElementException")
+      .hasMessageContaining("Element not found {Ups, failed to describe the element [caused by: NoSuchElementException")
       .hasMessageContaining("Expected: exist");
   }
 

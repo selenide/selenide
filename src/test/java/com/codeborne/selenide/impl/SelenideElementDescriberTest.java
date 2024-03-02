@@ -61,7 +61,7 @@ final class SelenideElementDescriberTest {
     doThrow(new ElementShould(driver, Alias.NONE, "div", "", visible, null, webElement, null)).when(selenideElement).getTagName();
 
     assertThat(describe.briefly(driver, selenideElement))
-      .isEqualTo("Ups, failed to described the element [caused by: StaleElementReferenceException: disappeared]");
+      .isEqualTo("Ups, failed to describe the element [caused by: StaleElementReferenceException: disappeared]");
   }
 
   @Test
@@ -84,7 +84,7 @@ final class SelenideElementDescriberTest {
     doThrow(new StaleElementReferenceException("Booo")).when(selenideElement).getTagName();
 
     assertThat(describe.fully(driver, selenideElement))
-      .isEqualTo("Ups, failed to described the element [caused by: StaleElementReferenceException: Booo]");
+      .isEqualTo("Ups, failed to describe the element [caused by: StaleElementReferenceException: Booo]");
   }
 
   @Test
@@ -93,7 +93,7 @@ final class SelenideElementDescriberTest {
     doThrow(new IndexOutOfBoundsException("Fooo")).when(selenideElement).getTagName();
 
     assertThat(describe.fully(driver, selenideElement))
-      .isEqualTo("Ups, failed to described the element [caused by: java.lang.IndexOutOfBoundsException: Fooo]");
+      .isEqualTo("Ups, failed to describe the element [caused by: java.lang.IndexOutOfBoundsException: Fooo]");
   }
 
   @Test
