@@ -3,6 +3,7 @@ package com.codeborne.selenide.conditions;
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
@@ -24,7 +25,7 @@ public class Hidden extends WebElementCondition {
       boolean hidden = !element.isDisplayed();
       return new CheckResult(hidden, hidden ? "hidden" : "visible");
     }
-    catch (StaleElementReferenceException elementHasDisappeared) {
+    catch (StaleElementReferenceException | NoSuchElementException elementHasDisappeared) {
       return new CheckResult(ACCEPT, "hidden:true");
     }
   }

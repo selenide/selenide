@@ -5,17 +5,11 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,27 +31,40 @@ final class WebElementWrapperTest {
   }
 
   @Test
-  void toStringPrintsTagNameWithAllAttributes() {
-    config.browser("chrome");
-    Map<String, String> map = new HashMap<>();
-    map.put("id", "id1");
-    map.put("class", "class1 class2");
-    map.put("data-binding", "to-name");
-    when(((JavascriptExecutor) webDriver)
-      .executeScript(anyString(), any()))
-      .thenReturn(map);
-
-    assertThat(new WebElementWrapper(driver, element, null))
-      .hasToString("<h2 class=\"class1 class2\" data-binding=\"to-name\" id=\"id1\"></h2>");
+  void toString_chrome() {
+    when(element.toString()).thenReturn("[[ChromeDriver: chrome on mac (2c8a03051b8f1cb7223ea944947460fc)] -> name: domain]");
+    assertThat(new WebElementWrapper(driver, element, null)).hasToString("{name: domain}");
   }
 
   @Test
-  void toStringFallbacksToMinimalImplementation_ifFailedToCallJavaScript() {
-    when(((JavascriptExecutor) webDriver)
-      .executeScript(anyString(), any()))
-      .thenThrow(new UnsupportedOperationException("You must be using WebDriver that supports executing javascript"));
+  void toString_edge() {
+    when(element.toString()).thenReturn("[[EdgeDriver: MicrosoftEdge on mac (1adc8dc1a31b5b7a5d0d0084967c8881)] -> name: domain]");
+    assertThat(new WebElementWrapper(driver, element, null)).hasToString("{name: domain}");
+  }
+
+  @Test
+  void toString_firefox() {
+    when(element.toString()).thenReturn("[[FirefoxDriver: firefox on mac (76d4bbf3-542a-4bf3-848f-98b2e1645e2b)] -> name: domain]");
+    assertThat(new WebElementWrapper(driver, element, null)).hasToString("{name: domain}");
+  }
+
+  @Test
+  void toString_safari() {
+    when(element.toString()).thenReturn("[[SafariDriver: Safari on mac (B14E03E3-9AE3-4906-93C0-1A82F4347669)] -> name: domain]");
+    assertThat(new WebElementWrapper(driver, element, null)).hasToString("{name: domain}");
+  }
+
+  @Test
+  void toString_decorated() {
+    when(element.toString()).thenReturn("Decorated {[[ChromeDriver: chrome on mac (d3340...e2c)] -> tag name: h2]}");
+    assertThat(new WebElementWrapper(driver, element, null)).hasToString("{tag name: h2}");
+  }
+
+  @Test
+  void toStringForWrappedSelenideElement() {
+    when(element.toString()).thenReturn("Proxy element for: DefaultElementLocator 'By.xpath: //select[@name='wrong-select-name']'");
 
     assertThat(new WebElementWrapper(driver, element, null))
-      .hasToString("<h2 class=\"class1 class2\" id=\"id1\"></h2>");
+      .hasToString("{By.xpath: //select[@name='wrong-select-name']}");
   }
 }

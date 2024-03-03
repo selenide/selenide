@@ -32,7 +32,7 @@ final class WrappedElementTest extends IntegrationTest {
       $(pageObject.header).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith(String.format("Element should have text \"expected text\" {<h2 id>}%n" +
+      .hasMessageStartingWith(String.format("Element should have text \"expected text\" {{tag name: h2}}%n" +
         "Element: '<h2>Dropdown list</h2>'"));
   }
 
@@ -41,7 +41,7 @@ final class WrappedElementTest extends IntegrationTest {
     assertThatThrownBy(() ->
       $(pageObject.categoryDropdown).selectOption("SomeOption")
     ).isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {Ups, failed to describe the element [caused by: NoSuchElementException")
+      .hasMessageContaining("Element not found {{By.id: invalid_id}}")
       .hasMessageContaining("Expected: exist");
   }
 
