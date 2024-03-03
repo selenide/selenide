@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.enabled;
@@ -83,4 +84,19 @@ final class SelenideElementToStringTest extends ITest {
       .startsWith("NoSuchElementException: Cannot locate an element ul li.findBy(css class \"nonexistent\")");
   }
 
+  @Test
+  void toString_wrappedWebElement_byName() {
+    openFile("page_with_selects_without_jquery.html");
+    WebElement webElement = driver().getWebDriver().findElement(By.name("domain"));
+    SelenideElement element = driver().$(webElement);
+    assertThat(element).hasToString("{name: domain}");
+  }
+
+  @Test
+  void toString_wrappedWebElement_byXpath() {
+    openFile("page_with_selects_without_jquery.html");
+    WebElement webElement = driver().getWebDriver().findElement(By.xpath("//*[@name='domain']"));
+    SelenideElement element = driver().$(webElement);
+    assertThat(element).hasToString("{xpath: //*[@name='domain']}");
+  }
 }

@@ -2,7 +2,9 @@ package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebElementCondition;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
@@ -22,10 +24,11 @@ public class Exist extends WebElementCondition {
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     try {
-      element.isDisplayed();
+      WebElement originalWebElement = (element instanceof SelenideElement se) ? se.toWebElement() : element;
+      originalWebElement.isDisplayed();
       return new CheckResult(ACCEPT, "exists");
     }
-    catch (StaleElementReferenceException e) {
+    catch (StaleElementReferenceException | NoSuchElementException e) {
       return new CheckResult(REJECT, "does not exist");
     }
   }

@@ -9,11 +9,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
 public class WebElementWrapper extends WebElementSource {
+
+  private static final Pattern RE_REMOTE_WEB_ELEMENT = Pattern.compile(".+->\\s*([^]]+)].*");
+  private static final Pattern RE_WRAPPED_SELENIDE_ELEMENT = Pattern.compile(".+'(By\\..+)'");
+
   public static SelenideElement wrap(Driver driver, WebElement element) {
     return wrap(SelenideElement.class, driver, element);
   }
@@ -36,7 +42,6 @@ public class WebElementWrapper extends WebElementSource {
         new SelenideElementProxy<>(new WebElementWrapper(driver, element, searchCriteria)));
   }
 
-  private final ElementDescriber describe = inject(ElementDescriber.class);
   private final Driver driver;
   private final WebElement delegate;
   @Nullable private final String searchCriteria;
@@ -58,14 +63,23 @@ public class WebElementWrapper extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public String getSearchCriteria() {
-    return searchCriteria != null ? searchCriteria : describe.briefly(driver, delegate);
+    String elementToString = delegate.toString();
+    return Optional.ofNullable(searchCriteria)
+      .orElseGet(() -> replaceIfMatches(elementToString, RE_REMOTE_WEB_ELEMENT, "{$1}")
+        .orElseGet(() -> replaceIfMatches(elementToString, RE_WRAPPED_SELENIDE_ELEMENT, "{$1}")
+          .orElse(elementToString)));
+  }
+
+  private Optional<String> replaceIfMatches(String text, Pattern regex, String replacement) {
+    Matcher matcher = regex.matcher(text);
+    return matcher.matches() ? Optional.of(matcher.replaceFirst(replacement)) : Optional.empty();
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public String toString() {
-    return getAlias().getOrElse(() -> describe.fully(driver(), delegate));
+    return getAlias().getOrElse(() -> getSearchCriteria());
   }
 
   @Override
