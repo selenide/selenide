@@ -37,6 +37,12 @@ final class WebElementWrapperTest {
   }
 
   @Test
+  void toString_chrome_xpath() {
+    when(element.toString()).thenReturn("[[ChromeDriver: chrome on mac (39e72c8...896afef)] -> xpath: //*[@name='domain']]");
+    assertThat(new WebElementWrapper(driver, element, null)).hasToString("{xpath: //*[@name='domain']}");
+  }
+
+  @Test
   void toString_edge() {
     when(element.toString()).thenReturn("[[EdgeDriver: MicrosoftEdge on mac (1adc8dc1a31b5b7a5d0d0084967c8881)] -> name: domain]");
     assertThat(new WebElementWrapper(driver, element, null)).hasToString("{name: domain}");

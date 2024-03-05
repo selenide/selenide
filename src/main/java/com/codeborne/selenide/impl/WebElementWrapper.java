@@ -9,7 +9,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,8 +16,9 @@ import java.util.regex.Pattern;
 @ParametersAreNonnullByDefault
 public class WebElementWrapper extends WebElementSource {
 
-  private static final Pattern RE_REMOTE_WEB_ELEMENT = Pattern.compile(".+->\\s*([^]]+)].*");
-  private static final Pattern RE_WRAPPED_SELENIDE_ELEMENT = Pattern.compile(".+'(By\\..+)'");
+  private static final Pattern RE_DECORATED = Pattern.compile("Decorated \\{(.+)}");
+  private static final Pattern RE_WRAPPED_SELENIDE_ELEMENT = Pattern.compile("Proxy element for: DefaultElementLocator '(.+)'");
+  private static final Pattern RE_REMOTE_WEB_ELEMENT = Pattern.compile("\\[\\[.+] -> (.+)]");
 
   public static SelenideElement wrap(Driver driver, WebElement element) {
     return wrap(SelenideElement.class, driver, element);
@@ -63,16 +63,18 @@ public class WebElementWrapper extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public String getSearchCriteria() {
+    if (searchCriteria != null) return searchCriteria;
     String elementToString = delegate.toString();
-    return Optional.ofNullable(searchCriteria)
-      .orElseGet(() -> replaceIfMatches(elementToString, RE_REMOTE_WEB_ELEMENT, "{$1}")
-        .orElseGet(() -> replaceIfMatches(elementToString, RE_WRAPPED_SELENIDE_ELEMENT, "{$1}")
-          .orElse(elementToString)));
-  }
+    Matcher m1 = RE_DECORATED.matcher(elementToString);
+    String undecorated = m1.matches() ? m1.replaceFirst("$1") : elementToString;
 
-  private Optional<String> replaceIfMatches(String text, Pattern regex, String replacement) {
-    Matcher matcher = regex.matcher(text);
-    return matcher.matches() ? Optional.of(matcher.replaceFirst(replacement)) : Optional.empty();
+    Matcher m2 = RE_REMOTE_WEB_ELEMENT.matcher(undecorated);
+    if (m2.matches()) return m2.replaceFirst("{$1}");
+
+    Matcher m3 = RE_WRAPPED_SELENIDE_ELEMENT.matcher(undecorated);
+    if (m3.matches()) return m3.replaceFirst("{$1}");
+
+    return undecorated;
   }
 
   @Override
