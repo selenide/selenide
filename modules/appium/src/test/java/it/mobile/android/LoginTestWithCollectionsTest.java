@@ -1,5 +1,6 @@
 package it.mobile.android;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.appium.SelenideAppium;
 import com.codeborne.selenide.appium.SelenideAppiumCollection;
 import com.codeborne.selenide.appium.SelenideAppiumElement;
@@ -34,6 +35,14 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
   }
 
   @Test
+  public void pageObjectWithSelenideCollection() {
+    LoginPageWithSelenideCollection loginPage = page();
+    loginPage.selenideElements.shouldHave(size(2));
+    loginPage.selenideElements.first().setValue("bob@example.com");
+    loginPage.selenideElements.last().setValue("secret");
+  }
+
+  @Test
   public void loginTestWithoutPageObject() {
     SelenideAppiumCollection inputFields = $$(By.xpath("//android.widget.EditText"));
     inputFields.shouldHave(size(2)).get(0).setValue("bob@example.com");
@@ -57,4 +66,9 @@ class LoginPageWithCollections {
 
   @AndroidFindBy(xpath = "//*[@content-desc='generic-error-message']/android.widget.TextView")
   SelenideAppiumElement errorMessage;
+}
+
+class LoginPageWithSelenideCollection {
+  @AndroidFindBy(xpath = "//android.widget.EditText")
+  ElementsCollection selenideElements;
 }
