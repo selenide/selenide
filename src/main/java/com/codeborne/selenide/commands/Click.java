@@ -1,5 +1,6 @@
 package com.codeborne.selenide.commands;
 
+import com.codeborne.selenide.ClickMethod;
 import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
@@ -16,6 +17,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.Arrays;
 
+import static com.codeborne.selenide.ClickMethod.DEFAULT;
+import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.commands.Util.size;
@@ -73,7 +76,9 @@ public class Click implements Command<SelenideElement> {
   }
 
   private void doClick(Driver driver, WebElement webElement, ClickOptions clickOptions) {
-    switch (clickOptions.clickMethod()) {
+    ClickMethod method = detectMethod(driver, clickOptions);
+
+    switch (method) {
       case DEFAULT: {
         defaultClick(driver, webElement, clickOptions.offsetX(), clickOptions.offsetY());
         break;
@@ -83,9 +88,17 @@ public class Click implements Command<SelenideElement> {
         break;
       }
       default: {
-        throw new IllegalArgumentException("Unknown click option: " + clickOptions.clickMethod());
+        throw new IllegalArgumentException("Unknown click option: " + method);
       }
     }
+  }
+
+  @Nonnull
+  private ClickMethod detectMethod(Driver driver, ClickOptions clickOptions) {
+    ClickMethod method = clickOptions.clickMethod();
+    return method == DEFAULT && driver.config().clickViaJs() ?
+      JS :
+      method;
   }
 
   protected void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY) {
