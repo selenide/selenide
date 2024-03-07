@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
 @ParametersAreNonnullByDefault
@@ -62,7 +63,7 @@ public class Attributes extends WebElementsCondition {
                    CheckResult lastCheckResult,
                    @Nullable Exception cause,
                    long timeoutMs) {
-    List<String> actualAttributeValues = lastCheckResult.requireActualValue();
+    List<String> actualAttributeValues = lastCheckResult.getActualValueOrElse(emptyList());
 
     if (actualAttributeValues.isEmpty()) {
       throw new ElementNotFound(collection, toString(), timeoutMs, cause);

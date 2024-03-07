@@ -12,6 +12,7 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.UnhandledAlertException;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 
 import javax.annotation.CheckReturnValue;
@@ -168,6 +169,7 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     if (e instanceof JavascriptException) return false;
     if (e instanceof UnhandledAlertException) return false;
     if (e instanceof NoSuchSessionException) return false;
+    if (e instanceof UnsupportedCommandException) return false;
 
     return e instanceof Exception || e instanceof AssertionError;
   }
