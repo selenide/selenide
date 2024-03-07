@@ -1,9 +1,17 @@
 # Changelog
 
-## 7.2.1 (under construction)
+## 7.2.2 (under construction)
 * ...
 
-See https://github.com/selenide/selenide/milestone/202
+See https://github.com/selenide/selenide/milestone/203
+
+## 7.2.1 (released 07.03.2024)
+* Fix Appium browser when browser is Remote (#2664) - thanks to Petr Ovcharenko 
+* #2665 fix `SelenideAppium.$(SelenideElement).shouldNot(exist)` for a missing element (#2669)
+* #2670 support mobile page object fields of type ElementsCollection (#2677)
+* #2679 Consider setting Configuration.clickViaJs when clicking an element (#2678)
+
+See https://github.com/selenide/selenide/milestone/202?closed=1
 
 ## 7.2.0 (released 27.02.2024)
 * #1687 implement downloading files in Selenium Grid (#2659) (#2660)
