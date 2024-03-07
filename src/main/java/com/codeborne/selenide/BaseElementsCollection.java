@@ -19,6 +19,7 @@ import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptException;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -181,7 +182,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
           return;
         }
       }
-      catch (JavascriptException e) {
+      catch (JavascriptException | UnsupportedCommandException e) {
         throw e;
       }
       catch (WebDriverException | IndexOutOfBoundsException | UIAssertionError elementNotFound) {
