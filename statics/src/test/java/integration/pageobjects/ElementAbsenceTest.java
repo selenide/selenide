@@ -23,6 +23,7 @@ final class ElementAbsenceTest extends IntegrationTest {
   void checkThatElementIsAbsent() {
     MissingPage missingPage = page();
     $(missingPage.element).shouldNot(exist);
+    assertThat(missingPage.element).hasToString("{By.xpath: //select[@name='wrong-select-name']}");
   }
 
   @Test
