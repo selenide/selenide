@@ -21,6 +21,7 @@ jobs:
           model: 'iPhone 15'
           os: 'iOS'
           os_version: '17.2'
+          erase_before_boot: false
       - uses: actions/cache@v4
         with:
           path: build/apps
