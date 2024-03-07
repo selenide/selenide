@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 
 @ParametersAreNonnullByDefault
+@SuppressWarnings("java:S5852")
 public class WebElementWrapper extends WebElementSource {
 
   private static final Pattern RE_DECORATED = Pattern.compile("Decorated \\{(.+)}");

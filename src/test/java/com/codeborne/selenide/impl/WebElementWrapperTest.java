@@ -67,6 +67,12 @@ final class WebElementWrapperTest {
   }
 
   @Test
+  void toString_decorated_xpath() {
+    when(element.toString()).thenReturn("Decorated {[[ChromeDriver: chrome on mac (e271...ff5b)] -> xpath: //*[@name='domain']]}");
+    assertThat(new WebElementWrapper(driver, element, null)).hasToString("{xpath: //*[@name='domain']}");
+  }
+
+  @Test
   void toStringForWrappedSelenideElement() {
     when(element.toString()).thenReturn("Proxy element for: DefaultElementLocator 'By.xpath: //select[@name='wrong-select-name']'");
 
