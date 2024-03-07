@@ -1,5 +1,6 @@
 package com.codeborne.selenide.appium;
 
+import com.codeborne.selenide.BaseElementsCollection;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
@@ -104,7 +105,11 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
 
   @Override
   @Nonnull
-  protected SelenideAppiumCollection createCollection(CollectionSource collection) {
-    return new SelenideAppiumCollection(collection);
+  protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createCollection(
+    CollectionSource collection, Class<?> klass
+  ) {
+    return SelenideAppiumCollection.class.isAssignableFrom(klass) ?
+      new SelenideAppiumCollection(collection) :
+      super.createCollection(collection, klass);
   }
 }

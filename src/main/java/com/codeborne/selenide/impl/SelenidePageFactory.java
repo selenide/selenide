@@ -270,12 +270,12 @@ public class SelenidePageFactory implements PageObjectFactory {
     if (shouldCache(field)) {
       collection = new LazyCollectionSnapshot(collection);
     }
-    return createCollection(collection);
+    return createCollection(collection, field.getType());
   }
 
   @Nonnull
   protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createCollection(
-    CollectionSource collection
+    CollectionSource collection, Class<?> klass
   ) {
     return new ElementsCollection(collection);
   }
