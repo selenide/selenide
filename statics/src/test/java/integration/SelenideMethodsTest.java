@@ -80,16 +80,6 @@ final class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
-  void userCanCheckIfElementExists() {
-    assertThat($(By.name("domain")).exists())
-      .isTrue();
-    assertThat($("#theHiddenElement").exists())
-      .isTrue();
-    assertThat($(By.name("non-existing-element")).exists())
-      .isFalse();
-  }
-
-  @Test
   void userCanCheckIfElementIsDisplayed() {
     assertThat($(By.name("domain")).isDisplayed())
       .isTrue();

@@ -1,7 +1,7 @@
 # Changelog
 
 ## 7.2.2 (under construction)
-* ...
+* #2683 fix method $.exists() for double-wrapped SelenideElement
 
 See https://github.com/selenide/selenide/milestone/203
 
