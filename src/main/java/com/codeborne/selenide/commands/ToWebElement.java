@@ -16,6 +16,10 @@ public class ToWebElement implements Command<WebElement> {
   @CheckReturnValue
   @Nonnull
   public WebElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    return locator.getWebElement();
+    WebElement element = locator.getWebElement();
+    while (element instanceof SelenideElement se) {
+      element = se.toWebElement();
+    }
+    return element;
   }
 }
