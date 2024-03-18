@@ -728,6 +728,10 @@ public final class Condition {
    * Check if element matches ANY of given conditions.
    * The method signature makes you to pass at least 2 conditions, otherwise it would be nonsense.
    *
+   * Using "or" checks in tests is probably a flag of bad test design.
+   * Consider splitting this "or" check into two different methods or tests.
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   *
    * @param name       Name of this condition, like "error" (meaning e.g. "error" OR "failed").
    * @param condition1 first condition to match
    * @param condition2 second condition to match

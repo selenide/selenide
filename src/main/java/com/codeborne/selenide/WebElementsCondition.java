@@ -74,6 +74,11 @@ public abstract class WebElementsCondition {
     return false;
   }
 
+  /**
+   * Using "or" checks in tests is probably a flag of bad test design.
+   * Consider splitting this "or" check into two different methods or tests.
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
   public WebElementsCondition or(WebElementsCondition alternative) {
     return new WebElementsCondition() {
       @Nonnull
