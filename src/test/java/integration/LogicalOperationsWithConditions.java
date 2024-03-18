@@ -2,8 +2,11 @@ package integration;
 
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.and;
 import static com.codeborne.selenide.Condition.be;
@@ -57,6 +60,30 @@ final class LogicalOperationsWithConditions extends ITest {
     $(".lolkek").shouldNotBe(or("visible||exist", visible, exist));
     $(".lolkek").shouldNotBe(or("visible||text", visible, text("Lasnamäe")));
     $(".lolkek").shouldNotBe(or("text||visible", text("Lasnamäe"), visible));
+  }
+
+  @Test
+  void or_newerSyntax() {
+    $("#remove").shouldBe(visible.or(exist));
+    $("#remove").shouldBe(text("Remove me").or(text("Delete me")));
+    $("#remove").shouldBe(text("Delete me").or(text("Remove me")));
+  }
+
+  @Test
+  void or_newerSyntax_negative() {
+    $(".lolkek").shouldNotBe(visible.or(exist));
+    $(".lolkek").shouldNotBe(visible.or(text("Lasnamäe")));
+    $(".lolkek").shouldNotBe(text("Lasnamäe").or(visible));
+  }
+
+  @Test
+  void or_newerSyntax_errorMessage() {
+    assertThatThrownBy(() -> $("#remove").shouldBe(text("Add me").or(text("Update me")), Duration.ofMillis(3)))
+      .isInstanceOf(UIAssertionError.class)
+      .hasMessageStartingWith("Element should be text \"Add me\" OR text \"Update me\" {#remove}")
+      .hasMessageContaining("Actual value: text=\"Remove me\"")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Timeout: 3 ms.");
   }
 
   @Test

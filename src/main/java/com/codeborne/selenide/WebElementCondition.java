@@ -6,6 +6,9 @@ import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import java.util.stream.Stream;
+
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 
 public abstract class WebElementCondition {
   protected final String name;
@@ -65,5 +68,27 @@ public abstract class WebElementCondition {
   @CheckReturnValue
   public boolean missingElementSatisfiesCondition() {
     return missingElementSatisfiesCondition;
+  }
+
+  public WebElementCondition or(WebElementCondition alternative) {
+    return new WebElementCondition("%s OR %s".formatted(WebElementCondition.this.toString(), alternative.toString())) {
+      @Nonnull
+      @Override
+      public CheckResult check(Driver driver, WebElement element) {
+        CheckResult r1 = WebElementCondition.this.check(driver, element);
+        return r1.verdict() == ACCEPT ? r1 : alternative.check(driver, element);
+      }
+
+      @Nonnull
+      @CheckReturnValue
+      @Override
+      public WebElementCondition negate() {
+        return new Not(this,
+          Stream.of(WebElementCondition.this, alternative)
+            .map(WebElementCondition::negate)
+            .anyMatch(WebElementCondition::missingElementSatisfiesCondition)
+        );
+      }
+    };
   }
 }
