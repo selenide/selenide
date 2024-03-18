@@ -4,6 +4,7 @@ import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.ex.UIAssertionError;
+import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementCommunicator;
 import integration.ITest;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,6 +36,12 @@ final class CustomCollectionConditionTest extends ITest {
   }
 
   @Test
+  void customConditionExample_or() {
+    $$(".element").shouldHave(texts("One", "Two", "Three"));
+    $$(".element").first(2).shouldHave(or(texts("One", "None"), texts("One", "Two")));
+  }
+
+  @Test
   void errorMessageOfCustomCondition() {
     assertThatThrownBy(() ->
       $$(".element").shouldHave(allTextsStartingWith("T"))
@@ -47,6 +55,10 @@ final class CustomCollectionConditionTest extends ITest {
 
   private WebElementsCondition allTextsStartingWith(String prefix) {
     return new AllTextsStartingWith(prefix);
+  }
+
+  private Or or(WebElementsCondition c1, WebElementsCondition c2) {
+    return new Or(c1, c2);
   }
 
   private static class AllTextsStartingWith extends WebElementsCondition {
@@ -78,6 +90,28 @@ final class CustomCollectionConditionTest extends ITest {
     @Override
     public String toString() {
       return "All texts starting with " + prefix;
+    }
+  }
+
+  private static class Or extends WebElementsCondition {
+    private final WebElementsCondition c1;
+    private final WebElementsCondition c2;
+
+    private Or(WebElementsCondition c1, WebElementsCondition c2) {
+      this.c1 = c1;
+      this.c2 = c2;
+    }
+
+    @Nonnull
+    @Override
+    public CheckResult check(CollectionSource collection) {
+      CheckResult r1 = c1.check(collection);
+      return r1.verdict() == ACCEPT ? r1 : c2.check(collection);
+    }
+
+    @Override
+    public String toString() {
+      return "%s OR %s".formatted(c1, c2);
     }
   }
 }
