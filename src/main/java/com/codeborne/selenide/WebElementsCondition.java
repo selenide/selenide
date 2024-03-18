@@ -7,10 +7,13 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static java.lang.System.lineSeparator;
 
+@ParametersAreNonnullByDefault
 public abstract class WebElementsCondition {
 
   protected String explanation;
@@ -69,5 +72,21 @@ public abstract class WebElementsCondition {
 
   public boolean missingElementsSatisfyCondition() {
     return false;
+  }
+
+  public WebElementsCondition or(WebElementsCondition alternative) {
+    return new WebElementsCondition() {
+      @Nonnull
+      @Override
+      public CheckResult check(CollectionSource collection) {
+        CheckResult r1 = WebElementsCondition.this.check(collection);
+        return r1.verdict() == ACCEPT ? r1 : alternative.check(collection);
+      }
+
+      @Override
+      public String toString() {
+        return "%s OR %s".formatted(WebElementsCondition.this, alternative);
+      }
+    };
   }
 }
