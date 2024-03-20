@@ -7,6 +7,7 @@ dependencies {
   api("com.github.valfirst.browserup-proxy:browserup-proxy-core:${browserupProxyVersion}") {
     exclude group: 'io.netty'
     exclude group: 'org.seleniumhq.selenium'
+    exclude group: 'xyz.rogfam' // LittleProxy was moved to group "io.github.littleproxy"
   }
   implementation("io.github.littleproxy:littleproxy:${littleProxyVersion}")
   implementation("io.netty:netty-all:$nettyVersion") {because 'used by browserup-proxy'}
