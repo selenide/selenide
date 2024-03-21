@@ -1,7 +1,11 @@
 # Changelog
 
-## 7.2.2 (under construction)
-* #2683 fix method $.exists() for double-wrapped SelenideElement
+## 7.2.2 (released 21.03.2024)
+* Bump io.appium:java-client from 9.1.0 to 9.2.0 (#2686)
+* #2683 fix method $.exists() for double-wrapped SelenideElement (#2685)
+* #2690 fix filename detection when downloading happens as a result of redirect (#2692)
+* #2681 add method OR for collection conditions (#2687)
+* #2681 add method OR for SelenideElement conditions (#2687)
 
 See https://github.com/selenide/selenide/milestone/203
 
