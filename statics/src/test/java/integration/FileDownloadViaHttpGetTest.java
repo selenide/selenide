@@ -252,4 +252,10 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
       .contains("<a id=\"bye\" href=\"/basic-auth/bye\">bye!</a>");
   }
 
+  @Test
+  void downloadWithRedirect() {
+    File downloadedFile = $(byText("Download with redirect")).download();
+    assertThat(downloadedFile).hasName("hello_world.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+  }
 }

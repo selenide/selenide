@@ -54,6 +54,7 @@ public class LocalHttpServer {
 
     context.addServlet(new ServletHolder(new FileDownloadHandler(sessions)), "/files/*");
     context.addServlet(uploadServletHolder(), "/upload");
+    context.addServlet(new ServletHolder(new RedirectHandler()), "/redirect/to/*");
     context.addServlet(new ServletHolder(new BasicAuthHandler()), "/basic-auth/*");
     context.addServlet(new ServletHolder(new BearerTokenHandler()), "/bearer-token-auth/*");
     context.addServlet(new ServletHolder(new HeadersPrinterHandler()), "/headers/*");
