@@ -7,10 +7,12 @@ import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.DefaultRedirectStrategy;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.protocol.RedirectStrategy;
 import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
 import org.apache.hc.client5.http.socket.PlainConnectionSocketFactory;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
@@ -18,6 +20,8 @@ import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.HttpEntityContainer;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.HttpRequest;
 import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
@@ -31,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -47,6 +52,7 @@ import java.util.stream.Stream;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptyMap;
+import static java.util.Objects.requireNonNullElse;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
@@ -98,19 +104,26 @@ public class DownloadFileWithHttpRequest {
   public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout, FileFilter fileFilter) {
     String url = makeAbsoluteUrl(driver.config(), relativeOrAbsoluteUrl);
 
-    try (CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : createDefaultHttpClient()) {
+    MemorizingRedirectStrategy redirectStrategy = new MemorizingRedirectStrategy();
+    try (CloseableHttpClient httpClient = createHttpClient(redirectStrategy)) {
       Resource resource = parseUrl(url);
       HttpGet httpGet = new HttpGet(resource.uri());
       configureHttpGet(httpGet, timeout);
       addHttpHeaders(driver, httpGet, resource.credentials());
       return httpClient.execute(httpGet, createHttpContext(driver), response -> {
-          return handleResponse(driver, timeout, fileFilter, url, response);
+          String responseUrl = requireNonNullElse(redirectStrategy.lastRedirectUrl, url);
+          return handleResponse(driver, timeout, fileFilter, responseUrl, response);
         }
       );
     }
     catch (IOException e) {
       throw new FileNotDownloadedError(driver, "Failed to download " + url + " in " + timeout + " ms.", timeout, e);
     }
+  }
+
+  @Nonnull
+  private CloseableHttpClient createHttpClient(MemorizingRedirectStrategy redirectStrategy) throws IOException {
+    return ignoreSelfSignedCerts ? createTrustingHttpClient(redirectStrategy) : createDefaultHttpClient(redirectStrategy);
   }
 
   @Nonnull
@@ -170,8 +183,25 @@ public class DownloadFileWithHttpRequest {
 
   @CheckReturnValue
   @Nonnull
-  protected CloseableHttpClient createDefaultHttpClient() {
-    return HttpClients.createDefault();
+  protected CloseableHttpClient createDefaultHttpClient(RedirectStrategy redirectStrategy) {
+    return HttpClients.custom()
+      .setRedirectStrategy(redirectStrategy)
+      .build();
+  }
+
+  @ParametersAreNonnullByDefault
+  static class MemorizingRedirectStrategy extends DefaultRedirectStrategy {
+    @Nullable
+    private String lastRedirectUrl;
+
+    @Override
+    public URI getLocationURI(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException {
+      URI redirectUrl = super.getLocationURI(request, response, context);
+      if (redirectUrl != null) {
+        lastRedirectUrl = redirectUrl.toString();
+      }
+      return redirectUrl;
+    }
   }
 
   @ParametersAreNonnullByDefault
@@ -188,9 +218,11 @@ public class DownloadFileWithHttpRequest {
    */
   @CheckReturnValue
   @Nonnull
-  protected CloseableHttpClient createTrustingHttpClient() throws IOException {
+  protected CloseableHttpClient createTrustingHttpClient(RedirectStrategy redirectStrategy) throws IOException {
     try {
       HttpClientBuilder builder = HttpClientBuilder.create();
+      builder.setRedirectStrategy(redirectStrategy);
+
       SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustAllStrategy()).build();
 
       HostnameVerifier hostnameVerifier = NoopHostnameVerifier.INSTANCE;
