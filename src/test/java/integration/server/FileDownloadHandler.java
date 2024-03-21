@@ -5,20 +5,21 @@ import javax.annotation.Nonnull;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.lang.Long.parseLong;
 import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static java.net.URLEncoder.encode;
 
 class FileDownloadHandler extends BaseHandler {
   private final Set<String> sessions;
@@ -34,10 +35,14 @@ class FileDownloadHandler extends BaseHandler {
       return new Result(SC_UNAUTHORIZED, CONTENT_TYPE_HTML_TEXT, "Unknown session: " + sessionId + ", known sessions: " + sessions);
     }
 
+    boolean exposeFileName = !"false".equalsIgnoreCase(request.getParameter("exposeFileName"));
+
     String fileName = getFilenameFromRequest(request);
+    String contentType = getContentType(fileName);
+
     if ("large_file.txt".equals(fileName)) {
       int contentLength = 5 * 1024 * 1024; // 5 MB
-      return new Result(SC_OK, CONTENT_TYPE_PLAIN_TEXT, contentLength, generateLargeFile(contentLength), headers(fileName),
+      return new Result(SC_OK, contentType, contentLength, generateLargeFile(contentLength), headers(fileName, exposeFileName),
         longParam(request, "pause"), longParam(request, "duration"));
     }
     byte[] fileContent = readFileContent(fileName);
@@ -45,23 +50,32 @@ class FileDownloadHandler extends BaseHandler {
       return new Result(SC_NOT_FOUND, CONTENT_TYPE_HTML_TEXT, "NOT_FOUND: " + fileName);
     }
 
-    String contentType = getContentType(fileName);
     if ("файл-с-запрещёнными-символами.txt".equals(fileName)) {
       fileName = "имя с #pound,%percent,&ampersand,{left,}right,\\backslash," +
         "<left,>right,*asterisk,?question,$dollar,!exclamation,'quote,\"quotes," +
         ":colon,@at,+plus,`backtick,|pipe,=equal.txt";
       contentType = CONTENT_TYPE_HTML_TEXT;
     }
-    return new Result(SC_OK, contentType, fileContent, headers(fileName),
+    return new Result(SC_OK, contentType, fileContent, headers(fileName, exposeFileName),
       longParam(request, "pause"), longParam(request, "duration"));
   }
 
   @Nonnull
   @CheckReturnValue
-  private static Map<String, String> headers(String fileName) throws UnsupportedEncodingException {
+  private static Map<String, String> headers(String fileName, boolean exposeFileName) throws UnsupportedEncodingException {
     Map<String, String> map = new HashMap<>();
-    map.put("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+    map.put("content-disposition", exposeFileName ? "attachment; filename=" + encode(fileName, "UTF-8") : "attachment;");
+    map.put("content-type", contentType(fileName));
     return map;
+  }
+
+  private static String contentType(String fileName) {
+    return switch (FilenameUtils.getExtension(fileName)) {
+      case "txt" -> "text/plain";
+      case "html" -> "text/html";
+      case "pdf" -> "application/pdf";
+      default -> "application/octet-stream";
+    };
   }
 
   private InputStream generateLargeFile(final int contentLength) {
@@ -83,7 +97,6 @@ class FileDownloadHandler extends BaseHandler {
       }
     }
 
-    return "No cookie 'session_id' found: " + Arrays.stream(request.getCookies()).map(Cookie::getName).collect(Collectors.toList());
+    return "No cookie 'session_id' found: " + Arrays.stream(request.getCookies()).map(Cookie::getName).toList();
   }
-
 }

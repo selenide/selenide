@@ -173,4 +173,11 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
     assertThat(text.getName()).isEqualTo(fileName);
     assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
   }
+
+  @Test
+  void downloadWithRedirect() {
+    File downloadedFile = $(byText("Download with redirect")).download(withExtension("txt"));
+    assertThat(downloadedFile).hasName("hello_world.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+  }
 }

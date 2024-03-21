@@ -65,17 +65,10 @@ public abstract class BaseHandler extends HttpServlet {
     if (!result.httpHeaders.containsKey("Cache-Control")) {
       response.setHeader("Cache-Control", "no-cache");
     }
-    try (OutputStream os = response.getOutputStream()) {
-      if (result.duration == 0) {
-        writeQuickly(os, result.content);
-      }
-      else {
-        writeSlowly(os, result.contentLength, result.content, result.duration);
-      }
-    }
+    writeContent(response, result);
     logRequest(request, result.httpStatus, start);
     if (result.httpStatus >= SC_BAD_REQUEST) {
-      log.error("Http response {}: '{}'", result.httpStatus, IOUtils.toString(result.content, UTF_8));
+      log.error("Http response {}: '{}'", result.httpStatus, result.content == null ? null : IOUtils.toString(result.content, UTF_8));
     }
   }
 
@@ -106,6 +99,19 @@ public abstract class BaseHandler extends HttpServlet {
       httpStatus,
       (System.nanoTime() - startTime) / 1_000_000
     );
+  }
+
+  private void writeContent(HttpServletResponse response, Result result) throws IOException {
+    if (result.content != null) {
+      try (OutputStream os = response.getOutputStream()) {
+        if (result.duration == 0) {
+          writeQuickly(os, result.content);
+        }
+        else {
+          writeSlowly(os, result.contentLength, result.content, result.duration);
+        }
+      }
+    }
   }
 
   private static void writeQuickly(OutputStream os, InputStream content) throws IOException {

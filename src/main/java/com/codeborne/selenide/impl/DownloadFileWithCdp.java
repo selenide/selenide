@@ -120,7 +120,8 @@ public class DownloadFileWithCdp {
     }
     while (!stopwatch.isTimeoutReached());
 
-    String message = "Failed to download file%s in %d ms.".formatted(fileFilter.description(), timeout);
+    String message = "Failed to download file%s in %d ms., found files: %s".formatted(
+      fileFilter.description(), timeout, downloads.folder().files());
     throw new FileNotDownloadedError(driver, message, timeout);
   }
 

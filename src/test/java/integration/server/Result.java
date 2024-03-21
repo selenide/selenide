@@ -1,5 +1,6 @@
 package integration.server;
 
+import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Map;
@@ -11,7 +12,7 @@ class Result {
   final int httpStatus;
   final String contentType;
   final int contentLength;
-  final InputStream content;
+  @Nullable final InputStream content;
   final Map<String, String> httpHeaders;
   final long pause;
   final long duration;
@@ -28,11 +29,15 @@ class Result {
     this(httpStatus, contentType, content, httpHeaders, 0, 0);
   }
 
+  Result(int httpStatus, Map<String, String> httpHeaders) {
+    this(httpStatus, null, 0, null, httpHeaders, 0, 0);
+  }
+
   Result(int httpStatus, String contentType, byte[] content, Map<String, String> httpHeaders, long pause, long duration) {
     this(httpStatus, contentType, content.length, new ByteArrayInputStream(content), httpHeaders, pause, duration);
   }
 
-  Result(int httpStatus, String contentType, int contentLength, InputStream content,
+  Result(int httpStatus, String contentType, int contentLength, @Nullable InputStream content,
          Map<String, String> httpHeaders, long pause, long duration) {
     this.httpStatus = httpStatus;
     this.contentType = contentType;
@@ -41,5 +46,15 @@ class Result {
     this.httpHeaders = httpHeaders;
     this.pause = pause;
     this.duration = duration;
+  }
+
+  @Override
+  public String toString() {
+    return "Result{" +
+           "status=" + httpStatus +
+           ", type=" + contentType +
+           ", length=" + contentLength +
+           ", headers=" + httpHeaders +
+           '}';
   }
 }
