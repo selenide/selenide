@@ -43,7 +43,7 @@ class FileRenderHandler extends BaseHandler {
       generateSessionId(request, response);
     }
 
-    return new Result(SC_OK, getContentType(fileName), fileContent);
+    return new Result(SC_OK, contentType(fileName), fileContent);
   }
 
   private void sleepIfNeeded(@Nullable String duration) {

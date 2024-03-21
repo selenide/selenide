@@ -5,7 +5,6 @@ import javax.annotation.Nonnull;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +37,7 @@ class FileDownloadHandler extends BaseHandler {
     boolean exposeFileName = !"false".equalsIgnoreCase(request.getParameter("exposeFileName"));
 
     String fileName = getFilenameFromRequest(request);
-    String contentType = getContentType(fileName);
+    String contentType = contentType(fileName);
 
     if ("large_file.txt".equals(fileName)) {
       int contentLength = 5 * 1024 * 1024; // 5 MB
@@ -62,20 +61,11 @@ class FileDownloadHandler extends BaseHandler {
 
   @Nonnull
   @CheckReturnValue
-  private static Map<String, String> headers(String fileName, boolean exposeFileName) throws UnsupportedEncodingException {
+  private Map<String, String> headers(String fileName, boolean exposeFileName) throws UnsupportedEncodingException {
     Map<String, String> map = new HashMap<>();
     map.put("content-disposition", exposeFileName ? "attachment; filename=" + encode(fileName, "UTF-8") : "attachment;");
     map.put("content-type", contentType(fileName));
     return map;
-  }
-
-  private static String contentType(String fileName) {
-    return switch (FilenameUtils.getExtension(fileName)) {
-      case "txt" -> "text/plain";
-      case "html" -> "text/html";
-      case "pdf" -> "application/pdf";
-      default -> "application/octet-stream";
-    };
   }
 
   private InputStream generateLargeFile(final int contentLength) {

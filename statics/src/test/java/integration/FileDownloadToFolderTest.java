@@ -278,7 +278,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadWithRedirect() {
-    File downloadedFile = $(byText("Download with redirect")).download();
+    File downloadedFile = $(byText("Download with redirect")).download(withExtension("txt"));
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }

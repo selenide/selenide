@@ -1,6 +1,5 @@
 package integration.server;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static integration.server.Delayer.writeSlowly;
@@ -28,7 +28,7 @@ import static jakarta.servlet.http.HttpServletResponse.SC_METHOD_NOT_ALLOWED;
 public abstract class BaseHandler extends HttpServlet {
   static final String CONTENT_TYPE_PLAIN_TEXT = "text/plain";
   static final String CONTENT_TYPE_HTML_TEXT = "text/html";
-  private static final String CONTENT_TYPE_IMAGE_PNG = "image/png";
+  private static final Pattern RE_FILE_EXTENSION = Pattern.compile(".*\\.(.+)");
   private static final Logger log = LoggerFactory.getLogger(BaseHandler.class);
 
   Result get(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -72,9 +72,17 @@ public abstract class BaseHandler extends HttpServlet {
     }
   }
 
-  String getContentType(String fileName) {
-    String fileExtension = FilenameUtils.getExtension(fileName);
-    return fileExtension.contains("png") ? CONTENT_TYPE_IMAGE_PNG : CONTENT_TYPE_HTML_TEXT;
+  protected String contentType(String fileName) {
+    String fileExtension = RE_FILE_EXTENSION.matcher(fileName).replaceFirst("$1");
+
+    return switch (fileExtension) {
+      case "txt" -> CONTENT_TYPE_PLAIN_TEXT;
+      case "html" -> CONTENT_TYPE_HTML_TEXT;
+      case "pdf" -> "application/pdf";
+      case "png" -> "image/png";
+      case "ico" -> "image/x-icon";
+      default -> "application/octet-stream";
+    };
   }
 
   String getFilenameFromRequest(HttpServletRequest request) {
