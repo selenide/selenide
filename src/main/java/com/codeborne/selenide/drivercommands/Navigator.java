@@ -1,5 +1,11 @@
 package com.codeborne.selenide.drivercommands;
 
+import static com.codeborne.selenide.AuthenticationType.BASIC;
+import static com.codeborne.selenide.FileDownloadMode.PROXY;
+import static com.codeborne.selenide.drivercommands.BasicAuthUtils.appendBasicAuthToURL;
+import static com.codeborne.selenide.drivercommands.BasicAuthUtils.registerBasicAuth;
+import static java.util.regex.Pattern.DOTALL;
+
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.BasicAuthCredentials;
 import com.codeborne.selenide.Config;
@@ -8,20 +14,13 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.AuthenticationFilter;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
-
+import java.net.URL;
+import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.net.URL;
-import java.util.regex.Pattern;
-
-import static com.codeborne.selenide.AuthenticationType.BASIC;
-import static com.codeborne.selenide.FileDownloadMode.PROXY;
-import static com.codeborne.selenide.drivercommands.BasicAuthUtils.appendBasicAuthToURL;
-import static com.codeborne.selenide.drivercommands.BasicAuthUtils.registerBasicAuth;
-import static java.util.regex.Pattern.DOTALL;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 
 @ParametersAreNonnullByDefault
 public class Navigator {
@@ -43,8 +42,8 @@ public class Navigator {
     navigateTo(driver, url.toExternalForm(), BASIC, new BasicAuthCredentials(domain, login, password));
   }
 
-  public void open(SelenideDriver driver, String relativeOrAbsoluteUrl,
-                   AuthenticationType authenticationType, Credentials credentials) {
+  public void open(SelenideDriver driver, String relativeOrAbsoluteUrl, AuthenticationType authenticationType,
+                   Credentials credentials) {
     navigateTo(driver, relativeOrAbsoluteUrl, authenticationType, credentials);
   }
 
@@ -57,29 +56,26 @@ public class Navigator {
     return isAbsoluteUrl(relativeOrAbsoluteUrl) ? relativeOrAbsoluteUrl : config.baseUrl() + relativeOrAbsoluteUrl;
   }
 
-  private void navigateTo(SelenideDriver driver,
-                          String relativeOrAbsoluteUrl,
-                          @Nullable AuthenticationType authenticationType,
+  private void navigateTo(SelenideDriver driver, String relativeOrAbsoluteUrl, @Nullable AuthenticationType authenticationType,
                           @Nullable Credentials credentials) {
     checkThatProxyIsEnabled(driver.config());
 
     String absoluteUrl = absoluteUrl(driver.config(), relativeOrAbsoluteUrl);
 
-    SelenideLogger.run("open", absoluteUrl, () -> {
-      try {
-        WebDriver webDriver = driver.getAndCheckWebDriver();
+    try {
+      WebDriver webDriver = driver.getAndCheckWebDriver();
+      SelenideLogger.run("open", absoluteUrl, () -> {
         String url = prepareAuthentication(driver, absoluteUrl, authenticationType, credentials);
         webDriver.navigate().to(url);
+      });
+    } catch (WebDriverException e) {
+      e.addInfo("selenide.url", absoluteUrl);
+      e.addInfo("selenide.baseUrl", driver.config().baseUrl());
+      if (driver.config().remote() != null) {
+        e.addInfo("selenide.remote", driver.config().remote());
       }
-      catch (WebDriverException e) {
-        e.addInfo("selenide.url", absoluteUrl);
-        e.addInfo("selenide.baseUrl", driver.config().baseUrl());
-        if (driver.config().remote() != null) {
-          e.addInfo("selenide.remote", driver.config().remote());
-        }
-        throw e;
-      }
-    });
+      throw e;
+    }
   }
 
   public void open(SelenideDriver driver) {
@@ -94,9 +90,7 @@ public class Navigator {
     }
   }
 
-  private String prepareAuthentication(SelenideDriver driver,
-                                       String requestUrl,
-                                       @Nullable AuthenticationType authenticationType,
+  private String prepareAuthentication(SelenideDriver driver, String requestUrl, @Nullable AuthenticationType authenticationType,
                                        @Nullable Credentials credentials) {
 
     if (driver.config().proxyEnabled()) {
@@ -107,21 +101,17 @@ public class Navigator {
     if (credentials == null || authenticationType == null) {
       // no authentication needed
       return requestUrl;
-    }
-    else if (driver.config().proxyEnabled()) {
+    } else if (driver.config().proxyEnabled()) {
       // credentials sent via proxy
       basicAuthRequestFilter(driver).setAuthentication(authenticationType, credentials);
       return requestUrl;
-    }
-    else if (registerBasicAuth(driver.getWebDriver(), credentials)) {
+    } else if (registerBasicAuth(driver.getWebDriver(), credentials)) {
       // credentials sent via CDP
       return requestUrl;
-    }
-    else if (authenticationType == BASIC) {
+    } else if (authenticationType == BASIC) {
       // credentials are prepended to the URL
       return appendBasicAuthToURL(requestUrl, (BasicAuthCredentials) credentials);
-    }
-    else {
+    } else {
       throw new UnsupportedOperationException("Cannot use " + authenticationType + " authentication without proxy server");
     }
   }

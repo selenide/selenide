@@ -38,9 +38,7 @@ final class LogEventListenerTest extends BaseIntegrationTest {
     removeMeButton.shouldNotBe(visible);
 
     SoftAssertions sa = new SoftAssertions();
-    sa.assertThat(beforeEvents).hasSize(1);
-    sa.assertThat(beforeEvents.get(0)).isEqualTo("before: $(#remove) click()");
-
+    sa.assertThat(beforeEvents).hasSize(5);
     sa.assertThat(afterEvents).hasSize(5);
 
     sa.assertThat(afterEvents.get(0)).startsWith("after: $(webdriver)");
@@ -48,6 +46,12 @@ final class LogEventListenerTest extends BaseIntegrationTest {
     sa.assertThat(afterEvents.get(2)).isEqualTo("after: $(#remove) should be(visible)");
     sa.assertThat(afterEvents.get(3)).isEqualTo("after: $(#remove) click()");
     sa.assertThat(afterEvents.get(4)).isEqualTo("after: $(#remove) should not be(visible)");
+
+    sa.assertThat(beforeEvents.get(0)).startsWith("before: $(webdriver)");
+    sa.assertThat(beforeEvents.get(1)).startsWith("before: $(open)");
+    sa.assertThat(beforeEvents.get(2)).isEqualTo("before: $(#remove) should be(visible)");
+    sa.assertThat(beforeEvents.get(3)).isEqualTo("before: $(#remove) click()");
+    sa.assertThat(beforeEvents.get(4)).isEqualTo("before: $(#remove) should not be(visible)");
 
     sa.assertAll();
   }
@@ -61,9 +65,7 @@ final class LogEventListenerTest extends BaseIntegrationTest {
 
     @Override
     public void beforeEvent(LogEvent logEvent) {
-      if (logEvent.getSubject().contains("click()")) {
-        beforeEvents.add(format("before: $(%s) %s", logEvent.getElement(), logEvent.getSubject()));
-      }
+      beforeEvents.add(format("before: $(%s) %s", logEvent.getElement(), logEvent.getSubject()));
     }
   }
 }
