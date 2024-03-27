@@ -133,7 +133,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     WebDriver webDriver = getCurrentThreadDriver().map(WebDriverInstance::webDriver).orElse(null);
     if (webDriver == null) {
       log.info("No webdriver is bound to current thread: {} - let's create a new webdriver", currentThread().getId());
-      return createAndRegisterDriver().webDriver();
+      return newBrowser(config).webDriver();
     }
 
     if (browserHealthChecker.isBrowserStillOpen(webDriver)) {
@@ -148,7 +148,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
     log.info("Webdriver has been closed meanwhile. Let's re-create it.");
     closeWebDriver();
-    return createAndRegisterDriver().webDriver();
+    return newBrowser(config).webDriver();
   }
 
   @Nullable
@@ -170,8 +170,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @CheckReturnValue
   @Nonnull
-  private WebDriverInstance createAndRegisterDriver() {
-    WebDriverInstance driver = createDriver();
+  private WebDriverInstance registerDriver(WebDriverInstance driver) {
     long threadId = setWebDriver(driver);
 
     if (config.holdBrowserOpen()) {
@@ -186,7 +185,20 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @CheckReturnValue
   @Nonnull
   private WebDriverInstance createDriver() {
+    return createDriver(config);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  private WebDriverInstance createDriver(Config config) {
     return createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public WebDriverInstance newBrowser(Config config) {
+    var instance = createDriver(config);
+    return registerDriver(instance);
   }
 
   @Override
