@@ -471,6 +471,12 @@ final class SelenideMethodsTest extends IntegrationTest {
   void checkFailsForInvalidSelector() {
     assertThatThrownBy(() -> $(By.xpath("//input[:attr='al]")).shouldBe(visible))
       .isInstanceOf(InvalidSelectorException.class);
+    assertThatThrownBy(() -> $(By.cssSelector("//input[:attr='al]")).shouldBe(visible))
+      .isInstanceOf(InvalidSelectorException.class);
+    assertThatThrownBy(() -> $(By.id("")).shouldBe(visible))
+      .isInstanceOf(InvalidSelectorException.class);
+    assertThatThrownBy(() -> $(By.tagName("")).shouldBe(visible))
+      .isInstanceOf(InvalidSelectorException.class);
   }
 
   @Test
