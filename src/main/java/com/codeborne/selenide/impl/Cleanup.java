@@ -71,9 +71,11 @@ public class Cleanup {
     return message.contains("invalid or illegal string was specified") ||
       message.contains("Invalid selector") ||
       message.contains("invalid selector") ||
+      message.contains("invalid or illegal selector was specified") ||
       message.contains("is not a valid selector") ||
       message.contains("SYNTAX_ERR") ||
-      message.contains("INVALID_EXPRESSION_ERR");
+      message.contains("INVALID_EXPRESSION_ERR") ||
+      message.contains("is not a valid XPath");
   }
 
   public InvalidSelectorException wrapInvalidSelectorException(Throwable error) {
