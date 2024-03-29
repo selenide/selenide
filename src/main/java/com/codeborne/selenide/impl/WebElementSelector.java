@@ -4,6 +4,8 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByCssSelector;
+import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriverException;
@@ -65,15 +67,31 @@ public class WebElementSelector {
   }
 
   private WebElement findElement(SearchContext context, By selector) {
-    return context instanceof SelenideElement selenideElement ?
-      selenideElement.toWebElement().findElement(selector) :
-      context.findElement(selector);
+    try {
+      return context instanceof SelenideElement selenideElement ?
+        selenideElement.toWebElement().findElement(selector) :
+        context.findElement(selector);
+    }
+    catch (JavascriptException e) {
+      throw unwrapInvalidSelectorException(e);
+    }
   }
 
   private List<WebElement> findElements(SearchContext context, By selector) {
-    return context instanceof SelenideElement selenideElement ?
-      selenideElement.toWebElement().findElements(selector) :
-      context.findElements(selector);
+    try {
+      return context instanceof SelenideElement selenideElement ?
+        selenideElement.toWebElement().findElements(selector) :
+        context.findElements(selector);
+    }
+    catch (JavascriptException e) {
+      throw unwrapInvalidSelectorException(e);
+    }
+  }
+
+  private static WebDriverException unwrapInvalidSelectorException(JavascriptException e) {
+    return e.getMessage().contains("An invalid or illegal selector was specified") ||
+           e.getMessage().contains("not a valid XPath expression") ?
+      new InvalidSelectorException(e.getMessage(), e.getCause()) : e;
   }
 
   protected void checkThatXPathNotStartingFromSlash(SearchContext context, By selector) {
