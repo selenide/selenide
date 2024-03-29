@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.up;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
 import static com.codeborne.selenide.appium.SelenideAppium.$$;
+import static com.codeborne.selenide.appium.SelenideAppium.$x;
 
 public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
   @BeforeEach
@@ -44,15 +45,15 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
 
   @Test
   public void loginTestWithoutPageObject() {
-    SelenideAppiumCollection inputFields = $$(By.xpath("//android.widget.EditText"));
+    SelenideAppiumCollection inputFields = $$(By.xpath("//android.widget.EditText")).as("Input fields");
     inputFields.shouldHave(size(2)).get(0).setValue("bob@example.com");
     inputFields.get(1).scroll(up());
     inputFields.get(1).setValue("wrongpassword");
 
-    SelenideAppiumElement loginButton = $(AppiumBy.accessibilityId("Login button"));
+    SelenideAppiumElement loginButton = $(AppiumBy.accessibilityId("Login button")).as("Login button");
     loginButton.click();
 
-    SelenideAppiumElement errorMessage = $(By.xpath("//*[@content-desc='generic-error-message']/android.widget.TextView"));
+    SelenideAppiumElement errorMessage = $x("//*[@content-desc='generic-error-message']/android.widget.TextView").as("Error message");
     errorMessage.shouldHave(text("Provided credentials do not match any user in this service."));
   }
 }

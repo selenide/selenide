@@ -9,6 +9,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public interface SelenideAppiumElement extends SelenideElement {
   @Nonnull
+  @Override
+  SelenideAppiumElement as(String alias);
+
+  @Nonnull
   @CanIgnoreReturnValue
   SelenideAppiumElement hideKeyboard();
 
