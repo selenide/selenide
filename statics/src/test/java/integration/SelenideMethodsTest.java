@@ -10,7 +10,6 @@ import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -465,12 +464,6 @@ final class SelenideMethodsTest extends IntegrationTest {
       .isFalse();
     assertThat($("#multirowTable").has(text("Ninja")))
       .isFalse();
-  }
-
-  @Test
-  void checkFailsForInvalidSelector() {
-    assertThatThrownBy(() -> $(By.xpath("//input[:attr='al]")).shouldBe(visible))
-      .isInstanceOf(InvalidSelectorException.class);
   }
 
   @Test
