@@ -38,7 +38,7 @@ subprojects {
     }
     implementation("com.google.guava:guava:33.1.0-jre")
     implementation("org.apache.commons:commons-lang3:3.14.0")
-    implementation("commons-io:commons-io:2.15.1")
+    implementation("commons-io:commons-io:2.16.0")
     testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
     testImplementation("io.netty:netty-all:$nettyVersion")
     testImplementation("io.netty:netty-codec:$nettyVersion")
