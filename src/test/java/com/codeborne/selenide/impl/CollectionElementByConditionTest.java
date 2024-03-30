@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Mocks.mockWebElement;
 import static java.util.Arrays.asList;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.when;
 
 final class CollectionElementByConditionTest {
   private final Driver driver = new DriverStub();
+  private final CollectionSource collection = mock();
 
   @Test
   void wrap() {
@@ -34,7 +36,6 @@ final class CollectionElementByConditionTest {
 
   @Test
   void getWebElement() {
-    CollectionSource collection = mock();
     WebElement mockedWebElement1 = mock();
     WebElement mockedWebElement2 = mock();
 
@@ -49,8 +50,7 @@ final class CollectionElementByConditionTest {
 
   @Test
   void getSearchCriteria() {
-    CollectionSource collection = mock();
-    when(collection.description()).thenReturn("ul#employees li.employee");
+    when(collection.shortDescription()).thenReturn("ul#employees li.employee");
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, visible);
     assertThat(collectionElement)
       .hasToString(String.format("%s.findBy(visible)", "ul#employees li.employee"));
@@ -58,8 +58,7 @@ final class CollectionElementByConditionTest {
 
   @Test
   void testToString() {
-    CollectionSource collection = mock();
-    when(collection.description()).thenReturn("ul#employees li.employee");
+    when(collection.shortDescription()).thenReturn("ul#employees li.employee");
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, visible);
     assertThat(collectionElement)
       .hasToString(String.format("%s.findBy(visible)", "ul#employees li.employee"));
@@ -67,9 +66,8 @@ final class CollectionElementByConditionTest {
 
   @Test
   void createElementNotFoundErrorWithEmptyCollection() {
-    CollectionSource collection = mock();
     when(collection.driver()).thenReturn(driver);
-    when(collection.description()).thenReturn("ul#employees li.employee");
+    when(collection.getSearchCriteria()).thenReturn("ul#employees li.employee");
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, visible);
 
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(visible,
@@ -84,20 +82,19 @@ final class CollectionElementByConditionTest {
 
   @Test
   void createElementNotFoundErrorWithNonEmptyCollection() {
-    CollectionSource collection = mock();
     when(collection.driver()).thenReturn(driver);
-    when(collection.description()).thenReturn("ul#employees li.employee");
+    when(collection.getSearchCriteria()).thenReturn("ul#employees li.employee");
     when(collection.getElements()).thenReturn(singletonList(mock()));
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, visible);
 
-    WebElementCondition mockedCollection = mock();
-    when(mockedCollection.toString()).thenReturn("Reason description");
-    ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
+    WebElementCondition condition = text("Hello").because("Successfully logged in");
+    ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(condition, new Error("Error message"));
 
     assertThat(elementNotFoundError)
       .hasMessage(String.format("Element not found {ul#employees li.employee.findBy(visible)}%n" +
-        "Expected: Reason description%n" +
-        "Timeout: 0 ms.%n" +
-        "Caused by: java.lang.Error: Error message"));
+                                "Expected: text \"Hello\" (because Successfully logged in)%n" +
+                                "Timeout: 0 ms.%n" +
+                                "Caused by: java.lang.Error: Error message"
+      ));
   }
 }

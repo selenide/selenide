@@ -50,7 +50,13 @@ public class LastCollectionElement extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public String getSearchCriteria() {
-    return collection.description() + ":last";
+    return collection.getSearchCriteria() + ":last";
+  }
+
+  @Nonnull
+  @Override
+  public String description() {
+    return getAlias().getOrElse(() -> collection.shortDescription() + ":last");
   }
 
   @Override

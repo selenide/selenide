@@ -57,7 +57,13 @@ public class CollectionElement extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public String getSearchCriteria() {
-    return collection.description() + '[' + index + ']';
+    return collection.getSearchCriteria() + '[' + index + ']';
+  }
+
+  @Nonnull
+  @Override
+  public String description() {
+    return getAlias().getOrElse(() -> collection.shortDescription() + '[' + index + ']');
   }
 
   @Override
