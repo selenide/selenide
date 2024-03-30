@@ -53,9 +53,9 @@ final class WaitMethodFailsOnTest extends IntegrationTest {
   void wait_while_visible() {
     SelenideElement element = $(".detective").shouldBe(visible);
 
-    assertThatThrownBy(() -> element.shouldNot(visible, Duration.ofMillis(42)))
+    assertThatThrownBy(() -> element.shouldNotBe(visible, Duration.ofMillis(42)))
       .isInstanceOf(ElementShouldNot.class)
-      .hasMessageStartingWith("Element should not visible {.detective}")
+      .hasMessageStartingWith("Element should not be visible {.detective}")
       .hasMessageContaining("Actual value: visible");
   }
 

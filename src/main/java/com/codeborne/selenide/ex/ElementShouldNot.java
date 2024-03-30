@@ -27,7 +27,7 @@ public class ElementShouldNot extends UIAssertionError {
         String.format("Element: '%s'", describe.fully(driver, element)),
         errorFormatter.actualValue(expectedCondition, driver, element, lastCheckResult)
       ),
-      expectedCondition,
+      "not " + expectedCondition,
       lastCheckResult == null ? null : lastCheckResult.actualValue(),
       cause);
   }
