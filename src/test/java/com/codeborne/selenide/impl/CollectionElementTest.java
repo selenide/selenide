@@ -39,38 +39,32 @@ final class CollectionElementTest {
 
   @Test
   void getSearchCriteria() {
-    String collectionDescription = "Collection description";
-    int index = 1;
     CollectionSource collection = mock();
-    when(collection.description()).thenReturn(collectionDescription);
-    CollectionElement collectionElement = new CollectionElement(collection, 1);
-    assertThat(collectionElement.getSearchCriteria())
-      .isEqualTo(String.format("%s[%s]", collectionDescription, index));
+    when(collection.getSearchCriteria()).thenReturn("#report .line");
+    CollectionElement collectionElement = new CollectionElement(collection, 2);
+    assertThat(collectionElement.getSearchCriteria()).isEqualTo("#report .line[2]");
   }
 
   @Test
   void testToString() {
     CollectionSource collection = mock();
-    String collectionDescription = "Collection description";
-    when(collection.description()).thenReturn(collectionDescription);
-    int index = 1;
+    when(collection.shortDescription()).thenReturn("#report .line");
     CollectionElement collectionElement = new CollectionElement(collection, 1);
-    assertThat(collectionElement)
-      .hasToString(String.format("%s[%s]", collectionDescription, index));
+    assertThat(collectionElement).hasToString("#report .line[1]");
   }
 
   @Test
   void createElementNotFoundErrorWithEmptyCollection() {
     CollectionSource collection = mock();
     when(collection.driver()).thenReturn(driver);
-    when(collection.description()).thenReturn("Collection description");
+    when(collection.getSearchCriteria()).thenReturn("#report .line");
     CollectionElement collectionElement = new CollectionElement(collection, 33);
 
     WebElementCondition mockedCollection = mock();
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
     assertThat(elementNotFoundError)
-      .hasMessage(String.format("Element not found {Collection description[33]}%n" +
+      .hasMessage(String.format("Element not found {#report .line[33]}%n" +
         "Expected: visible%n" +
         "Timeout: 0 ms.%n" +
         "Caused by: java.lang.Error: Error message"));
@@ -80,7 +74,7 @@ final class CollectionElementTest {
   void createElementNotFoundErrorWithNonEmptyCollection() {
     CollectionSource collection = mock();
     when(collection.driver()).thenReturn(driver);
-    when(collection.description()).thenReturn("Collection description");
+    when(collection.getSearchCriteria()).thenReturn("#report .line");
     when(collection.getElements()).thenReturn(singletonList(mock()));
     CollectionElement collectionElement = new CollectionElement(collection, 1);
 
@@ -89,7 +83,7 @@ final class CollectionElementTest {
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
     assertThat(elementNotFoundError)
-      .hasMessage(String.format("Element not found {Collection description[1]}%n" +
+      .hasMessage(String.format("Element not found {#report .line[1]}%n" +
         "Expected: Reason description%n" +
         "Timeout: 0 ms.%n" +
         "Caused by: java.lang.Error: Error message"));
