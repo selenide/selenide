@@ -1,5 +1,14 @@
 # Changelog
 
+## 7.2.3 (released 30.03.2024)
+* bump Selenium from 4.18.1 to 4.19.1 (#2697)
+* bump Appium from 9.2.0 to 9.2.2 (#2697)
+* add method $.as() for SelenideAppiumElement (#2701)
+* fix usages of aliases in reports (#2702)
+* restore throwing InvalidSelectorException after upgrading to Chrome 123 (#2700)
+
+See https://github.com/selenide/selenide/milestone/204?closed=1
+
 ## 7.2.2 (released 21.03.2024)
 * Bump io.appium:java-client from 9.1.0 to 9.2.0 (#2686)
 * #2683 fix method $.exists() for double-wrapped SelenideElement (#2685)
@@ -7,7 +16,7 @@
 * #2681 add method OR for collection conditions (#2687)
 * #2681 add method OR for SelenideElement conditions (#2687)
 
-See https://github.com/selenide/selenide/milestone/203
+See https://github.com/selenide/selenide/milestone/203?closed=1
 
 ## 7.2.1 (released 07.03.2024)
 * Fix Appium browser when browser is Remote (#2664) - thanks to Petr Ovcharenko 
