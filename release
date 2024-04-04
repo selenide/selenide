@@ -14,7 +14,15 @@ then
     exit 1
 fi
 
+branch=$(git branch --show-current)
+if [ "$branch" != "main" ]
+then
+    echo "Current branch is not 'main': '$branch'"
+    exit 1
+fi
+
 echo "Releasing version: ${version}"
+
 git tag -a "v${version}" -m "released selenide ${version}"
 git push origin --tags
 ./gradlew clean check javadocForSite
