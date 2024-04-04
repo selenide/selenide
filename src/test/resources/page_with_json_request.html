@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test::background user</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h1>Page with background request</h1>
+<h2></h2>
+<br/>
+
+<h3>Product</h3>
+<table id="product" style="width: 600px; margin: 0 auto; border: 1px solid grey;">
+  <tr>
+    <td>Name: </td>
+    <td id="name"></td>
+  </tr>
+  <tr>
+    <td>Price: </td>
+    <td id="price"></td>
+  </tr>
+  <tr>
+    <td>Available: </td>
+    <td id="availability"></td>
+  </tr>
+</table>
+
+<h6 style="margin-top: 100px;">Http response info</h6>
+<table id="debug" style="width: 200px; background-color: lightgrey;">
+  <tr>
+    <td>Http status: </td>
+    <td id="status"></td>
+  </tr>
+  <tr>
+    <td>Content length: </td>
+    <td id="content-length"></td>
+  </tr>
+  <tr>
+    <td>Content type: </td>
+    <td id="content-type"></td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+
+  function loadData() {
+    fetch(`product.json`, {method: 'GET'}).then(response => {
+      response.json().then((product) => {
+        document.getElementById('name').textContent = product.name
+        document.getElementById('price').textContent = product.price + ' ' + product.currency
+        document.getElementById('availability').textContent = product.availability ? 'yes' : 'no'
+        document.getElementById('status').textContent = response.status
+        document.getElementById('content-length').textContent = response.headers.get('content-length')
+        document.getElementById('content-type').textContent = response.headers.get('content-type')
+      })
+    })
+      .catch((e) => document.getElementById('name').textContent = e)
+  }
+
+  loadData();
+</script>
+
+</body>
+</html>

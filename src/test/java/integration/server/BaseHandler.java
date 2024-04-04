@@ -76,6 +76,7 @@ public abstract class BaseHandler extends HttpServlet {
     String fileExtension = RE_FILE_EXTENSION.matcher(fileName).replaceFirst("$1");
 
     return switch (fileExtension) {
+      case "json" -> "application/json";
       case "txt" -> CONTENT_TYPE_PLAIN_TEXT;
       case "html" -> CONTENT_TYPE_HTML_TEXT;
       case "pdf" -> "application/pdf";
