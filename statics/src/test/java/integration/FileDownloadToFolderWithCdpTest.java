@@ -5,7 +5,7 @@ import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
@@ -62,7 +62,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     timeout = 5000;
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadsFiles() {
     File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
@@ -70,7 +70,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadsFileWithAlert() {
     File downloadedFile = $(byText("Download me with alert")).download(
       using(CDP).withFilter(withExtension("txt")).withAction(
@@ -84,7 +84,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadsFileWithCyrillicName() {
     File downloadedFile = $(byText("Download file with cyrillic name")).download(withExtension("txt"));
 
@@ -93,7 +93,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadMissingFile() {
     timeout = 111;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
@@ -101,7 +101,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
       .hasMessageStartingWith("Failed to download file with extension \"txt\" in 111 ms");
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadMissingFileWithExtension() {
     timeout = 111;
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
@@ -109,7 +109,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
       .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 111 ms.");
   }
 
-  @RepeatedTest(5)
+  @Test
   public void download_byName() {
     File downloadedFile = $(byText("Download me")).download(withName("hello_world.txt"));
 
@@ -117,7 +117,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
-  @RepeatedTest(5)
+  @Test
   public void download_byNameRegex() {
     File downloadedFile = $(byText("Download me")).download(withNameMatching("hello_.+\\.txt"));
 
@@ -125,7 +125,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
-  @RepeatedTest(5)
+  @Test
   public void download_byExtension() {
     File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
@@ -133,7 +133,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadsFilesToCustomFolder() throws IOException {
     closeWebDriver();
     String customDownloadsFolder = createTempDirectory("selenide-tests-to-custom-folder").toString();
@@ -151,7 +151,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     }
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadsPdfFile() {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
@@ -159,7 +159,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile).content().startsWith("%PDF-1.1");
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadsPotentiallyHarmfulWindowsFiles() throws IOException {
     assumeThat(isEdge())
       .as("Edge shows warning like '*.exe file is not downloaded'")
@@ -173,7 +173,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
       .isEqualToIgnoringNewLines("Here might be potentially harmful exe file");
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadsPotentiallyHarmfulMacFiles() throws IOException {
     File downloadedFile = $(byText("Download DMG file")).download(withExtension("dmg"));
 
@@ -181,7 +181,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadWithOptions() {
     Configuration.fileDownload = PROXY;
     Configuration.timeout = 1;
@@ -196,7 +196,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadEmptyFile() {
     File downloadedFile = $(byText("Download empty file")).download(withExtension("txt"));
 
@@ -205,7 +205,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadsFileWithPartExtension() {
     File downloadedFile = $(byText("Download file *part")).download(withExtension("part"));
 
@@ -214,7 +214,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadsFileWithCrdownloadExtension() {
     File downloadedFile = $(byText("Download file *crdownload"))
       .download(900, withName("hello_world.crdownload"));
@@ -224,7 +224,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
-  @RepeatedTest(5)
+  @Test
   public void canSpecifyTimeoutForFileIncrement_downloadNotEvenStarted() {
     var shortIncrementTimeout = using(CDP)
       .withTimeout(ofSeconds(10))
@@ -242,7 +242,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     closeWebDriver();
   }
 
-  @RepeatedTest(5)
+  @Test
   public void download_slowly() {
     File downloadedFile = $(byText("Download me slowly"))
       .download(4000, withName("hello_world.txt"));
@@ -251,7 +251,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
-  @RepeatedTest(5)
+  @Test
   public void download_super_slowly() {
     File downloadedFile = $(byText("Download me super slowly")).download(6000, withExtension("txt"));
 
@@ -259,7 +259,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadLargeFile() {
     File downloadedFile = $(byText("Download large file")).download(8000, withExtension("txt"));
 
@@ -267,7 +267,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile).hasSize(5 * 1024 * 1024);
   }
 
-  @RepeatedTest(5)
+  @Test
   public void cannotDownloadUsingProxy_ifBrowserIsOpenedWithoutProxy() {
     assertThatThrownBy(() -> $(byText("Download me")).download(using(PROXY)))
       .isInstanceOf(IllegalStateException.class)
@@ -285,7 +285,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
   }
 
-  @RepeatedTest(5)
+  @Test
   void downloadWithRedirect() {
     File downloadedFile = $(byText("Download with redirect")).download();
     assertThat(downloadedFile).hasName("hello_world.txt");
