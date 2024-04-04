@@ -9,12 +9,15 @@ import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.EmptyHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.HttpResponse;
+import org.openqa.selenium.remote.http.Contents;
+import org.openqa.selenium.remote.http.HttpResponse;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -67,10 +70,16 @@ public class MockResponseFilter implements RequestFilter {
    * @param mockedResponse the mocked response body (e.g. html or image)
    */
   public void mockBytes(String name, RequestMatcher requestMatcher, int status, Supplier<byte[]> mockedResponse) {
+    mockResponse(name, requestMatcher, () -> new HttpResponse()
+      .setStatus(status)
+      .setContent(Contents.bytes(mockedResponse.get())));
+  }
+
+  public void mockResponse(String name, RequestMatcher requestMatcher, Supplier<HttpResponse> mockedResponse) {
     if (mocks.containsKey(name)) {
       throw new IllegalArgumentException("Response filter already registered: " + name);
     }
-    mocks.put(name, new ResponseMock(name, requestMatcher, status, mockedResponse));
+    mocks.put(name, new ResponseMock(name, requestMatcher, mockedResponse));
   }
 
   /**
@@ -93,7 +102,9 @@ public class MockResponseFilter implements RequestFilter {
 
   @Override
   @Nullable
-  public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo) {
+  public io.netty.handler.codec.http.HttpResponse filterRequest(
+    HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo
+  ) {
     for (ResponseMock mock : mocks.values()) {
       if (mock.requestMatcher.match(request, contents, messageInfo)) {
         return request.method().equals(OPTIONS) ?
@@ -122,13 +133,26 @@ public class MockResponseFilter implements RequestFilter {
   @Nonnull
   @CheckReturnValue
   private DefaultFullHttpResponse mockRequest(HttpRequest request, ResponseMock mock) {
-    ByteBuf content = wrappedBuffer(mock.mockedResponse.get());
+    HttpResponse httpResponse = mock.mockedResponse.get();
     HttpHeaders headers = new DefaultHttpHeaders()
-      .add("Content-Length", content.readableBytes())
+      .add("Content-Length", httpResponse.getContent().length())
       .set("Access-Control-Allow-Origin", "*")
       .add("X-Mocked-By", mock.name);
+    httpResponse.forEachHeader((name, value) -> {
+      headers.add(name, value);
+    });
 
-    return response(request, mock.status, content, headers);
+    ByteBuf content = readBytes(mock.name, httpResponse.getContent());
+    return response(request, httpResponse.getStatus(), content, headers);
+  }
+
+  private ByteBuf readBytes(String mockName, Supplier<InputStream> source) {
+    try (InputStream in = source.get()) {
+      return wrappedBuffer(in.readAllBytes());
+    }
+    catch (IOException e) {
+      throw new RuntimeException("Failed to read mocked response content for " + mockName, e);
+    }
   }
 
   @Nonnull
@@ -141,13 +165,11 @@ public class MockResponseFilter implements RequestFilter {
   private static final class ResponseMock {
     private final String name;
     private final RequestMatcher requestMatcher;
-    private final int status;
-    private final Supplier<byte[]> mockedResponse;
+    private final Supplier<HttpResponse> mockedResponse;
 
-    private ResponseMock(String name, RequestMatcher requestMatcher, int status, Supplier<byte[]> mockedResponse) {
+    private ResponseMock(String name, RequestMatcher requestMatcher, Supplier<HttpResponse> mockedResponse) {
       this.name = name;
       this.requestMatcher = requestMatcher;
-      this.status = status;
       this.mockedResponse = mockedResponse;
     }
   }
