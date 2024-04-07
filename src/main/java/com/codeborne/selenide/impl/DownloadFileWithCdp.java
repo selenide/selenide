@@ -171,28 +171,37 @@ public class DownloadFileWithCdp {
       return downloads.values().stream().map(download -> download.lastModifiedAt).max(Long::compare);
     }
 
-    private void addFile(String guid, String fileName) {
-      downloads.put(guid, new CdpDownload(folder, fileName));
+    private void setName(String guid, String fileName) {
+      download(guid).fileName = fileName;
     }
 
-    public void inProgress(String guid) {
-      downloads.get(guid).lastModifiedAt = currentTimeMillis();
+    public void inProgress(DownloadProgress e) {
+      download(e.getGuid()).lastModifiedAt = currentTimeMillis();
+      if (e.getReceivedBytes().longValue() >= e.getTotalBytes().longValue()) {
+        finish(e.getGuid());
+      }
     }
 
     public void finish(String guid) {
-      downloads.get(guid).completed = true;
+      download(guid).completed = true;
+    }
+
+    private synchronized CdpDownload download(String guid) {
+      if (!downloads.containsKey(guid)) {
+        downloads.put(guid, new CdpDownload(folder));
+      }
+      return downloads.get(guid);
     }
   }
 
   private static class CdpDownload {
     private final DownloadsFolder folder;
-    private final String fileName;
+    private String fileName;
     private long lastModifiedAt = currentTimeMillis();
     private boolean completed;
 
-    private CdpDownload(DownloadsFolder folder, String fileName) {
+    private CdpDownload(DownloadsFolder folder) {
       this.folder = folder;
-      this.fileName = fileName;
     }
 
     private File file() {
@@ -209,7 +218,7 @@ public class DownloadFileWithCdp {
     public void accept(DownloadWillBegin e) {
       log.debug("[{}] Download will begin with suggested file name \"{}\" (url: \"{}\", frameId: {}, guid: {})",
         id, e.getSuggestedFilename(), e.getUrl(), e.getFrameId(), e.getGuid());
-      downloads.addFile(e.getGuid(), e.getSuggestedFilename());
+      downloads.setName(e.getGuid(), e.getSuggestedFilename());
     }
 
     @Override
@@ -232,7 +241,7 @@ public class DownloadFileWithCdp {
           throw new FileNotDownloadedError(driver, message, timeout);
         }
         case COMPLETED -> downloads.finish(e.getGuid());
-        case INPROGRESS -> downloads.inProgress(e.getGuid());
+        case INPROGRESS -> downloads.inProgress(e);
       }
     }
 
