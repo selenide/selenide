@@ -24,7 +24,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
         with:
           arguments: ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.20.0-SNAPSHOT --no-parallel --no-daemon --console=plain
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-report-linux-${{matrix.gradle-task}}
