@@ -24,6 +24,7 @@ import static com.codeborne.selenide.Condition.clickable;
 import static com.codeborne.selenide.Condition.editable;
 import static com.codeborne.selenide.Condition.interactable;
 import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -146,6 +147,12 @@ public abstract class WebElementSource {
     else {
       throw new ElementShould(driver(), getAlias(), getSearchCriteria(), prefix, condition, checkResult, element, lastError);
     }
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  public WebElement findAndAssertElementIsVisible() {
+    return requireNonNull(checkConditionAndReturnElement("be ", visible, false));
   }
 
   /**

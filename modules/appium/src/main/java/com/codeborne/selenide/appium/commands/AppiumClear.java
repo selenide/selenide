@@ -18,7 +18,7 @@ public class AppiumClear extends Clear {
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     if (isMobile(locator.driver())) {
-      locator.findAndAssertElementIsInteractable().clear();
+      locator.findAndAssertElementIsVisible().clear();
       return proxy;
     }
     else {
