@@ -161,16 +161,24 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     return SelenideElement.class.isAssignableFrom(method.getDeclaringClass());
   }
 
+  private static final Set<Class<? extends Throwable>> TERMINAL_EXCEPTIONS = Set.of(
+    FileNotDownloadedError.class,
+    IllegalArgumentException.class,
+    ReflectiveOperationException.class,
+    JavascriptException.class,
+    UnhandledAlertException.class,
+    NoSuchSessionException.class,
+    UnsupportedCommandException.class
+  );
+
+  private static final Set<String> TERMINAL_MESSAGES = Set.of(
+    "Reached error page: about:neterror"
+  );
+
   @CheckReturnValue
   static boolean shouldRetryAfterError(Throwable e) {
-    if (e instanceof FileNotDownloadedError) return false;
-    if (e instanceof IllegalArgumentException) return false;
-    if (e instanceof ReflectiveOperationException) return false;
-    if (e instanceof JavascriptException) return false;
-    if (e instanceof UnhandledAlertException) return false;
-    if (e instanceof NoSuchSessionException) return false;
-    if (e instanceof UnsupportedCommandException) return false;
-    if (e instanceof WebDriverException && e.getMessage().startsWith("Reached error page: about:neterror")) return false;
+    if (TERMINAL_EXCEPTIONS.stream().anyMatch(te -> te.isAssignableFrom(e.getClass()))) return false;
+    if (TERMINAL_MESSAGES.stream().anyMatch(message -> e.getMessage().startsWith(message))) return false;
 
     return e instanceof Exception || e instanceof AssertionError;
   }
