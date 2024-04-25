@@ -314,6 +314,15 @@ final class SelenideElementProxyTest {
   }
 
   @Test
+  void shouldNotRetry_whenFirefoxShowsNetworkError() {
+    WebDriverException exception = new WebDriverException("""
+      Reached error page: about:neterror?e=dnsNotFound&u=https%3A//example/
+      Build info: version: '4.20.0', revision: '866c76ca80'
+      """);
+    assertThat(shouldRetryAfterError(exception)).isFalse();
+  }
+
+  @Test
   void shouldRetry_onAssertionError() {
     AssertionError error = new AssertionError("bla");
     assertThat(shouldRetryAfterError(error)).isTrue();
