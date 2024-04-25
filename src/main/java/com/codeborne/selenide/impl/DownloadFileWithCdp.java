@@ -178,7 +178,9 @@ public class DownloadFileWithCdp {
     public void inProgress(DownloadProgress e) {
       download(e.getGuid()).lastModifiedAt = currentTimeMillis();
       if (e.getReceivedBytes().longValue() >= e.getTotalBytes().longValue()) {
-        finish(e.getGuid());
+        if (download(e.getGuid()).file().exists()) {
+          finish(e.getGuid());
+        }
       }
     }
 
