@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.3.0 (released 25.04.2024)
+* bump Selenium from 4.19.1 to 4.20.0 (#2726)
+
 ## 7.2.3 (released 30.03.2024)
 * bump Selenium from 4.18.1 to 4.19.1 (#2697)
 * bump Appium from 9.2.0 to 9.2.2 (#2697)
