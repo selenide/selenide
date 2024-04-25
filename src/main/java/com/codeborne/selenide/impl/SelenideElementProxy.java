@@ -170,6 +170,7 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     if (e instanceof UnhandledAlertException) return false;
     if (e instanceof NoSuchSessionException) return false;
     if (e instanceof UnsupportedCommandException) return false;
+    if (e instanceof WebDriverException && e.getMessage().startsWith("Reached error page: about:neterror")) return false;
 
     return e instanceof Exception || e instanceof AssertionError;
   }
