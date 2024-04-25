@@ -1,14 +1,22 @@
 package integration;
 
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
+import com.codeborne.selenide.webdriver.FirefoxDriverFactory;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.codeborne.selenide.webdriver.ChromeDriverFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +28,7 @@ import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.CDP;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
@@ -183,5 +192,26 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     File downloadedFile = $(byText("Download with redirect")).download();
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+  }
+
+  @Test
+  void downloadFileWithCustomBrowser() {
+    closeWebDriver();
+    Configuration.browser = CustomWebDriverProvider.class.getName();
+    openFile("page_with_uploads.html");
+    File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
+
+    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+  }
+
+  private static class CustomWebDriverProvider extends ChromeDriverFactory {
+    @Nonnull
+    @Override
+    public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy,
+                            @Nullable File browserDownloadsFolder) {
+      return super.create(config, browser, proxy, browserDownloadsFolder);
+    }
   }
 }

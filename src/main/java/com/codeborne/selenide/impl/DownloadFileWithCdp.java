@@ -7,6 +7,8 @@ import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
+import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
@@ -126,17 +128,20 @@ public class DownloadFileWithCdp {
   }
 
   private DevTools initDevTools(Driver driver) {
-    if (driver.browser().isChromium()) {
-      Optional<HasDevTools> cdpBrowser = cast(driver.getWebDriver(), HasDevTools.class);
-      if (cdpBrowser.isPresent()) {
-        DevTools devTools = cdpBrowser.get().getDevTools();
-        devTools.createSessionIfThereIsNotOne();
-        devTools.send(Page.enable());
-        return devTools;
-      }
+    WebDriver webDriver = driver.getWebDriver();
+    Optional<HasCapabilities> hasCapabilities = cast(webDriver, HasCapabilities.class);
+    Optional<HasDevTools> cdpBrowser = cast(webDriver, HasDevTools.class);
+    if (cdpBrowser.isPresent()
+      && hasCapabilities.isPresent()
+      && new com.codeborne.selenide.Browser(hasCapabilities.get().getCapabilities().getBrowserName(), false).isChromium()) {
+      DevTools devTools = cdpBrowser.get().getDevTools();
+      devTools.createSessionIfThereIsNotOne();
+      devTools.send(Page.enable());
+      return devTools;
+    } else {
+      throw new IllegalArgumentException(
+        "The browser you selected \"%s\" doesn't have Chrome Devtools protocol functionality.".formatted(driver.browser().name));
     }
-    throw new IllegalArgumentException("The browser you selected \"%s\" doesn't have Chrome Devtools protocol functionality."
-      .formatted(driver.browser().name));
   }
 
   private void prepareDownloadWithCdp(Driver driver, DevTools devTools,
