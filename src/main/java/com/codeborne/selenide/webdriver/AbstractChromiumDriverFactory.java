@@ -53,6 +53,7 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     preferences.put("safebrowsing.enabled", true);
     preferences.put("credentials_enable_service", false);
     preferences.put("profile.password_manager_enabled", false);
+    preferences.put("profile.password_manager_leak_detection", false);
     preferences.put("plugins.always_open_pdf_externally", true);
     preferences.put("profile.default_content_setting_values.automatic_downloads", 1);
 
