@@ -35,9 +35,10 @@ class EdgeDriverFactoryTest {
     assertThat(options.get("extensions")).isEqualTo(emptyList());
 
     Map<String, Object> prefs = prefs(options);
-    assertThat(prefs).hasSize(6);
+    assertThat(prefs).hasSize(7);
     assertThat(prefs.get("credentials_enable_service")).isEqualTo(false);
     assertThat(prefs.get("profile.password_manager_enabled")).isEqualTo(false);
+    assertThat(prefs.get("profile.password_manager_leak_detection")).isEqualTo(false);
     assertThat(prefs.get("plugins.always_open_pdf_externally")).isEqualTo(true);
     assertThat(prefs.get("profile.default_content_setting_values.automatic_downloads")).isEqualTo(1);
     assertThat(prefs.get("safebrowsing.enabled")).isEqualTo(true);
@@ -58,9 +59,10 @@ class EdgeDriverFactoryTest {
     );
 
     Map<String, Object> prefs = prefs(options);
-    assertThat(prefs).hasSize(6);
+    assertThat(prefs).hasSize(7);
     assertThat(prefs.get("credentials_enable_service")).isEqualTo(false);
     assertThat(prefs.get("profile.password_manager_enabled")).isEqualTo(false);
+    assertThat(prefs.get("profile.password_manager_leak_detection")).isEqualTo(false);
     assertThat(prefs.get("plugins.always_open_pdf_externally")).isEqualTo(true);
     assertThat(prefs.get("profile.default_content_setting_values.automatic_downloads")).isEqualTo(1);
     assertThat(prefs.get("safebrowsing.enabled")).isEqualTo(true);
