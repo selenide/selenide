@@ -1,9 +1,14 @@
 # Changelog
 
 ## 7.3.0 (released 28.04.2024)
+* #2705 add method to mock http response with specific content type (#2706)
+* #2722 fix `$.clear()` in Appium for element that exists, but is not visible. (#2723)
+* #2725 show the real error instead of "Element not found" when clicking on a non-working link in Firefox (#2727)
+* #2658 disable Chrome warning about stolen passwords (#2729)
+* Fix CDP download for custom browsers (#2728)
 * bump Selenium from 4.19.1 to 4.20.0 (#2726)
 * bump LittleProxy from 2.2.0 to 2.2.1 (#2726)
-* deprecate setting "holdBrowserOpen" (#2730)
+* deprecate setting `holdBrowserOpen` (#2730)
 
 ## 7.2.3 (released 30.03.2024)
 * bump Selenium from 4.18.1 to 4.19.1 (#2697)
