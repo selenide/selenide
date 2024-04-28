@@ -5,9 +5,7 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
-import com.codeborne.selenide.webdriver.FirefoxDriverFactory;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.codeborne.selenide.webdriver.ChromeDriverFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,8 +14,10 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.codeborne.selenide.webdriver.ChromeDriverFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,6 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
+@ParametersAreNonnullByDefault
 final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileFromGridWithCdpTest.class);
   private final File folder = new File(downloadsFolder).getAbsoluteFile();
@@ -197,13 +198,18 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
   @Test
   void downloadFileWithCustomBrowser() {
     closeWebDriver();
-    Configuration.browser = CustomWebDriverProvider.class.getName();
-    openFile("page_with_uploads.html");
-    File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
+    try {
+      Configuration.browser = CustomWebDriverProvider.class.getName();
+      openFile("page_with_uploads.html");
+      File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
-    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
-    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+      assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
+      assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+      assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+    }
+    finally {
+      closeWebDriver();
+    }
   }
 
   private static class CustomWebDriverProvider extends ChromeDriverFactory {

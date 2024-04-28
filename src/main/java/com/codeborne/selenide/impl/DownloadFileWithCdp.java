@@ -129,11 +129,9 @@ public class DownloadFileWithCdp {
 
   private DevTools initDevTools(Driver driver) {
     WebDriver webDriver = driver.getWebDriver();
-    Optional<HasCapabilities> hasCapabilities = cast(webDriver, HasCapabilities.class);
+
     Optional<HasDevTools> cdpBrowser = cast(webDriver, HasDevTools.class);
-    if (cdpBrowser.isPresent()
-      && hasCapabilities.isPresent()
-      && new com.codeborne.selenide.Browser(hasCapabilities.get().getCapabilities().getBrowserName(), false).isChromium()) {
+    if (cdpBrowser.isPresent() && isChromium(webDriver)) {
       DevTools devTools = cdpBrowser.get().getDevTools();
       devTools.createSessionIfThereIsNotOne();
       devTools.send(Page.enable());
@@ -142,6 +140,12 @@ public class DownloadFileWithCdp {
       throw new IllegalArgumentException(
         "The browser you selected \"%s\" doesn't have Chrome Devtools protocol functionality.".formatted(driver.browser().name));
     }
+  }
+
+  private boolean isChromium(WebDriver webDriver) {
+    Optional<HasCapabilities> hasCapabilities = cast(webDriver, HasCapabilities.class);
+    return hasCapabilities.isPresent() &&
+           new com.codeborne.selenide.Browser(hasCapabilities.get().getCapabilities().getBrowserName(), false).isChromium();
   }
 
   private void prepareDownloadWithCdp(Driver driver, DevTools devTools,
