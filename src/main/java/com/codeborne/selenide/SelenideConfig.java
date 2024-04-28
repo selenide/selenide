@@ -26,6 +26,10 @@ public class SelenideConfig implements Config {
   private String baseUrl = getProperty("selenide.baseUrl", "http://localhost:8080");
   private long timeout = Long.parseLong(getProperty("selenide.timeout", "4000"));
   private long pollingInterval = Long.parseLong(getProperty("selenide.pollingInterval", "200"));
+  /**
+   * @deprecated Don't use this setting. It leaves the browser and webdriver open.
+   * User can later close the browser manually, but the webdriver leaves running forever.
+   */
   private boolean holdBrowserOpen = Boolean.parseBoolean(getProperty("selenide.holdBrowserOpen", "false"));
   private boolean reopenBrowserOnFail = Boolean.parseBoolean(getProperty("selenide.reopenBrowserOnFail", "true"));
   private boolean clickViaJs = Boolean.parseBoolean(getProperty("selenide.clickViaJs", "false"));
@@ -76,6 +80,7 @@ public class SelenideConfig implements Config {
     return this;
   }
 
+  @Deprecated
   @Override
   public boolean holdBrowserOpen() {
     return holdBrowserOpen;

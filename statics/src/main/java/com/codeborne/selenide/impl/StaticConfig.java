@@ -32,6 +32,7 @@ class StaticConfig implements Config {
     return Configuration.pollingInterval;
   }
 
+  @Deprecated
   @Override
   public boolean holdBrowserOpen() {
     return Configuration.holdBrowserOpen;

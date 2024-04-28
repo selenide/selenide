@@ -63,7 +63,12 @@ public class Configuration {
    * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.holdBrowserOpen=true".
    * <br>
    * Default value: false.
+   * <br>
+   * @deprecated Don't use this setting. It leaves the browser and webdriver open.
+   * User can later close the browser manually, but the webdriver leaves running forever.
+   * To achieve the same effect, just add `sleep(600_000)` in your test.
    */
+  @Deprecated
   public static boolean holdBrowserOpen = defaults.holdBrowserOpen();
 
   /**

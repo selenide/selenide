@@ -18,7 +18,14 @@ public interface Config {
   String baseUrl();
   long timeout();
   long pollingInterval();
+
+  /**
+   * @deprecated Don't use this setting. It leaves the browser and webdriver open.
+   * User can later close the browser manually, but the webdriver leaves running forever.
+   */
+  @Deprecated
   boolean holdBrowserOpen();
+
   boolean reopenBrowserOnFail();
   boolean clickViaJs();
   boolean screenshots();
