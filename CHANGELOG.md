@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.3.0 (released 28.04.2024)
+## 7.3.1 (released 28.04.2024)
 * #2705 add method to mock http response with specific content type (#2706)
 * #2722 fix `$.clear()` in Appium for element that exists, but is not visible. (#2723)
 * #2725 show the real error instead of "Element not found" when clicking on a non-working link in Firefox (#2727)

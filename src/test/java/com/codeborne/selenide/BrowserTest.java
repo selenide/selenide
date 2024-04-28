@@ -28,6 +28,11 @@ final class BrowserTest {
   }
 
   @Test
+  void edgeNameFromCapabilitiesTest() {
+    assertThat(new Browser("MicrosoftEdge", false).isChromium()).isTrue();
+  }
+
+  @Test
   void mostBrowsersSupportInsecureCerts() {
     assertThat(new Browser(CHROME, false).supportsInsecureCerts()).isTrue();
     assertThat(new Browser(FIREFOX, false).supportsInsecureCerts()).isTrue();

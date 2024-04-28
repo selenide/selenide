@@ -171,7 +171,7 @@ Project "selenide-appium" was merged into project "selenide".
 * upgrade to selenide:5.8.0
 
 === 1.4.3
-* upgrade to io.appium:java-client:7.3.0
+* upgrade to io.appium:java-client:7.3.1
 
 === 1.4.2
 * upgrade to io.appium:java-client:7.2.0

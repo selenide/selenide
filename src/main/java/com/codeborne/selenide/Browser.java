@@ -46,7 +46,7 @@ public class Browser {
 
   @CheckReturnValue
   public boolean isEdge() {
-    return EDGE.equalsIgnoreCase(name);
+    return EDGE.equalsIgnoreCase(name) || "MicrosoftEdge".equalsIgnoreCase(name);
   }
 
   @CheckReturnValue
