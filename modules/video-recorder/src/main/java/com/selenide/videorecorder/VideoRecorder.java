@@ -1,23 +1,17 @@
 package com.selenide.videorecorder;
 
-import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.io.FileUtils;
 import org.bytedeco.javacpp.Loader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v121.page.Page;
+import org.openqa.selenium.devtools.v124.page.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.webdriver;
 
 public class VideoRecorder extends Thread {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorder.class);
@@ -51,13 +45,7 @@ public class VideoRecorder extends Thread {
 
   public void startRecording(String fileName) throws IOException {
     recordFile = new File(defaultRecordsFolder, fileName + ".webm");
-
     process = Runtime.getRuntime().exec(ffmpeg.formatted(ffmpegExecutable, recordFile.getAbsolutePath()));
-//    ProcessBuilder processBuilder = new ProcessBuilder(
-//      Arrays.asList(ffmpeg.formatted(ffmpegExecutable, recordFile.getAbsolutePath()).split(" "))
-//    );
-//    process = processBuilder.start();
-
     inputStream = process.getOutputStream();
     //   inputStream = (ByteArrayOutputStream) process.getOutputStream();
     prev_timestamp.set(new Date().getTime() / 1000);

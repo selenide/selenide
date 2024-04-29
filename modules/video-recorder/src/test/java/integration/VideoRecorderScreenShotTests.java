@@ -2,22 +2,21 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.DragAndDropOptions;
-import com.selenide.videorecorder.VideoRecorder;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.selenide.videorecorder.VideoRecorderScreenShot;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Timer;
 
 import static com.codeborne.selenide.Selenide.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class VideoRecorderTests {
+public class VideoRecorderScreenShotTests {
 
-  private static final Logger log = LoggerFactory.getLogger(VideoRecorderTests.class);
+  private static final Logger log = LoggerFactory.getLogger(VideoRecorderScreenShotTests.class);
 
   @BeforeAll
   public static void setUp() {
@@ -29,19 +28,20 @@ public class VideoRecorderTests {
     Configuration.timeout = 10000;
   }
 
-  VideoRecorder videoRecorder;
+  VideoRecorderScreenShot videoRecorder;
+  Timer timer  = new Timer();
 
   @BeforeEach
   public void beforeEach() {
     open();
-    videoRecorder = new VideoRecorder(webdriver().object());
-    videoRecorder.start();
+    videoRecorder = new VideoRecorderScreenShot(webdriver().object());
+    timer.schedule(videoRecorder, 0, 1000);
   }
 
   @AfterEach
   public void afterEach() throws IOException {
     videoRecorder.stopRecording();
-    videoRecorder.interrupt();
+    videoRecorder.cancel();
     closeWebDriver();
   }
 
