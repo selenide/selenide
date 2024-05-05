@@ -1,6 +1,5 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.commands.DragAndDrop;
 import com.codeborne.selenide.commands.GetSelectedOptionText;
 import com.codeborne.selenide.commands.GetSelectedOptionValue;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
@@ -380,6 +379,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String data(String dataAttributeName);
 
   /**
+   * @see com.codeborne.selenide.commands.GetAttribute
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
@@ -388,6 +388,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String getAttribute(String name);
 
   /**
+   * @see com.codeborne.selenide.commands.GetCssValue
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
@@ -409,6 +410,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Check if this element exists and visible.
    *
    * @return false if element does not exist, is invisible, browser is closed or any WebDriver exception happened.
+   * @see com.codeborne.selenide.commands.IsDisplayed
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
@@ -461,7 +463,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   boolean has(WebElementCondition condition);
 
   /**
-   * @see #is(WebElementCondition, Duration)
+   * Same as {@link #is(WebElementCondition, Duration)}
+   * @see com.codeborne.selenide.commands.Matches
    */
   @CheckReturnValue
   boolean has(WebElementCondition condition, Duration timeout);
@@ -499,6 +502,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Wait until given element meets given condition (with given timeout)
+   * @see com.codeborne.selenide.commands.Should
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -520,6 +524,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Wait until given element meets given condition (with given timeout)
+   * @see com.codeborne.selenide.commands.ShouldHave
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -541,6 +546,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Wait until given element meets given condition (with given timeout)
+   * @see com.codeborne.selenide.commands.ShouldBe
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -567,6 +573,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Wait until given element meets given condition (with given timeout)
+   * @see com.codeborne.selenide.commands.ShouldNot
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -588,6 +595,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Wait until given element does NOT meet given condition (with given timeout)
+   * @see com.codeborne.selenide.commands.ShouldNotHave
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -609,6 +617,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Wait until given element does NOT meet given condition (with given timeout)
+   * @see com.codeborne.selenide.commands.ShouldNotBe
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -719,6 +728,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * For example, $("tr").lastChild(); could give the last "td".
    *
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
+   * @see com.codeborne.selenide.commands.GetLastChild
    */
   @CheckReturnValue
   @Nonnull
@@ -1278,6 +1288,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @Nonnull
   File download(long timeout, FileFilter fileFilter) throws FileNotDownloadedError;
 
+  /**
+   * @see com.codeborne.selenide.commands.DownloadFile
+   */
   @CheckReturnValue
   @Nonnull
   File download(DownloadOptions options) throws FileNotDownloadedError;
@@ -1453,7 +1466,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param options drag and drop options to define target and which way it will be executed
    *
    * @return this element
-   * @see DragAndDrop
+   * @see com.codeborne.selenide.commands.DragAndDrop
    */
   @Nonnull
   @CanIgnoreReturnValue
