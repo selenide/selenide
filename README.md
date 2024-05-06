@@ -85,9 +85,9 @@ Selenide was originally designed and developed by [Andrei Solntsev](http://asoln
 
 Many thanks to these incredible tools that help us create open-source software:
 
-[![Intellij IDEA](https://cloud.google.com/tools/images/icon_IntelliJIDEA.png)](http://www.jetbrains.com/idea)
-[![YourKit Java profiler](http://selenide.org/images/yourkit.png)](https://www.yourkit.com/features/)
+[![Intellij IDEA](https://selenide.org/images/jetbrains.svg)](http://www.jetbrains.com/idea)
 [![BrowserStack](https://www.browserstack.com/images/mail/browserstack-logo-footer.png)](https://www.browserstack.com)
+[![LambdaTest](https://www.lambdatest.com/support/img/logo.svg)](https://www.lambdatest.com/)
 
 ## License
 
