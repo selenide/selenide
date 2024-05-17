@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.3.2 (released 17.05.2024)
+* bump Selenium from 4.20.0 to 4.21.0 (#2744)
+* refactoring: instead of catching all Errors, catch only AssertionErrors (#2745)
+
 ## 7.3.1 (released 28.04.2024)
 * #2705 add method to mock http response with specific content type (#2706)
 * #2722 fix `$.clear()` in Appium for element that exists, but is not visible. (#2723)
