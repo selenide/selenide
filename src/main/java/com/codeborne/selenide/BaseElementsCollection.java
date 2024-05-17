@@ -150,7 +150,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
       SelenideLogger.commitStep(log, PASS);
       return self();
     }
-    catch (Error error) {
+    catch (AssertionError error) {
       Error wrappedError = UIAssertionError.wrap(driver(), error, timeout.toMillis());
       SelenideLogger.commitStep(log, wrappedError);
       return switch (driver().config().assertionMode()) {
