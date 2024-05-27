@@ -10,10 +10,17 @@ dependencies {
   implementation ('org.bytedeco:ffmpeg-platform:5.1.2-1.5.8')
   testImplementation project(':statics').sourceSets.test.output
   testImplementation project(':modules:core').sourceSets.test.output
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-  testImplementation("org.junit.platform:junit-platform-suite-engine:1.10.1")
+  implementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+  implementation("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+  implementation("org.testng:testng:7.10.2")
+  implementation("org.junit.platform:junit-platform-suite-engine:1.10.1")
+  implementation 'org.jobrunr:jobrunr:7.1.1'
   testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}
+}
+
+tasks.register('testNG', Test) {
+  useTestNG()
+  include("integration/**/*")
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')
