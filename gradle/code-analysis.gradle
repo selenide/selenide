@@ -41,6 +41,10 @@ subprojects {
     }
   }
 
+  checkstyle {
+    toolVersion = "10.17.0"
+  }
+
   tasks.withType(Checkstyle).configureEach {
     maxWarnings = 0
     showViolations = true
