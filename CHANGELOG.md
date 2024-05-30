@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.3.3
+* downgraded TestNG from 7.9.0 to 7.4.0 (#2755)
+
 ## 7.3.2 (released 17.05.2024)
 * bump Selenium from 4.20.0 to 4.21.0 (#2744)
 * refactoring: instead of catching all Errors, catch only AssertionErrors (#2745)

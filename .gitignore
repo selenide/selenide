@@ -1,3 +1,5 @@
+.DS_Store
+
 build
 hs_err_pid*
 !.idea

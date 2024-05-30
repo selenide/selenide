@@ -56,4 +56,12 @@ public class TestNgSoftTest extends BaseTest {
     $("#empty-text-area").val("text for textarea");
     $("#empty-text-area").shouldHave(value("text for textarea"));
   }
+
+  @Test
+  public void textAreaShouldFail() {
+    $("#empty-text-area").val("text for textarea");
+    // Will fail (on purpose) test will continue but should be marked as a FAILED test is in SOFT mode
+    $("#empty-text-area").shouldNotHave(value("text for textarea"));
+    $("#empty-text-area").shouldHave(value("text for textarea"));
+  }
 }
