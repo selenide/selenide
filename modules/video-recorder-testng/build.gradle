@@ -1,0 +1,25 @@
+ext {
+  artifactId = "video-recorder-testng"
+  testngVersion = '7.10.1'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  api project(":modules:video-recorder-core")
+  api("org.testng:testng:$testngVersion") { transitive = false }
+  testRuntimeOnly("org.testng:testng:$testngVersion") {
+    exclude(group: 'junit')
+    exclude(group: 'testng')
+    exclude(group: 'org.apache.ant')
+    exclude(group: 'com.google.inject')
+  }
+}
+
+tasks.withType(Test).configureEach{
+  useTestNG()
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')

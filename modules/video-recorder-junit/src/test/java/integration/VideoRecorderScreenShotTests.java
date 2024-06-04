@@ -4,7 +4,9 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.DragAndDropOptions;
 import com.selenide.videorecorder.DisableVideoRecording;
 import com.selenide.videorecorder.RecordVideoJunit;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 import static com.codeborne.selenide.Selenide.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RecordVideoJunit
 public class VideoRecorderScreenShotTests {
@@ -21,16 +22,15 @@ public class VideoRecorderScreenShotTests {
 
   @BeforeAll
   public static void setUp() {
-    FirefoxOptions chromeOptions = new FirefoxOptions();
+    ChromeOptions chromeOptions = new ChromeOptions();
     chromeOptions.setCapability("webSocketUrl", true);
     Configuration.browserCapabilities = chromeOptions;
-    Configuration.browser = "firefox";
+    //Configuration.browser = "firefox";
     Configuration.headless = false;
     Configuration.timeout = 10000;
   }
 
   @Test
-  @DisableVideoRecording
   public void videoFileShouldExistsAndNotEmpty() throws IOException {
     long now = System.currentTimeMillis();
 

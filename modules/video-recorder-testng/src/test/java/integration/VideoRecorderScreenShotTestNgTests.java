@@ -2,10 +2,8 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.DragAndDropOptions;
-import com.selenide.videorecorder.BrowserRecorder;
+import com.selenide.videorecorder.BrowserRecorderListener;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
@@ -16,7 +14,7 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.Selenide.*;
 
-@Listeners(BrowserRecorder.class)
+@Listeners(BrowserRecorderListener.class)
 public class VideoRecorderScreenShotTestNgTests {
 
   private static final Logger log = LoggerFactory.getLogger(VideoRecorderScreenShotTestNgTests.class);
@@ -27,7 +25,10 @@ public class VideoRecorderScreenShotTestNgTests {
 //    chromeOptions.setCapability("webSocketUrl", true);
 //    chromeOptions.setLogLevel(FirefoxDriverLogLevel.TRACE);
 //    Configuration.browserCapabilities = chromeOptions;
-    Configuration.browser = FirefoxProvider.class.getName();
+    //Configuration.browser = FirefoxProvider.class.getName();
+    ChromeOptions chromeOptions = new ChromeOptions();
+    chromeOptions.setCapability("webSocketUrl", true);
+    Configuration.browserCapabilities = chromeOptions;
     Configuration.headless = false;
     Configuration.timeout = 10000;
   }
