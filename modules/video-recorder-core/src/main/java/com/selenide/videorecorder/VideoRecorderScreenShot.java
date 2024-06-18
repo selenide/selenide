@@ -9,19 +9,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import java.util.Date;
 import java.util.TimerTask;
 
-/**
- * Created by Serhii Bryt
- * 07.05.2024 11:57
- **/
+/*
+  Created by Serhii Bryt
+  07.05.2024 11:57
+ */
 
 /**
  * This is video recording based on taking screenshots. How it works.
@@ -40,7 +44,9 @@ import java.util.TimerTask;
 public class VideoRecorderScreenShot extends TimerTask {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorderScreenShot.class);
 
-  static final String ffmpeg = "%s -loglevel error -f image2pipe -avioflags direct -fpsprobesize 0 -probesize 32 -analyzeduration 0 -c:v mjpeg -i - -y -an -r 24 -c:v vp8 -qmin 0 -qmax 50 -crf 8 -deadline realtime -speed 8 -b:v 1M -threads 1 %s";
+  static final String ffmpeg = "%s -loglevel error -f image2pipe -avioflags direct " +
+    "-fpsprobesize 0 -probesize 32 -analyzeduration 0 -c:v mjpeg -i - -y -an -r 24 -c:v vp8 -qmin 0 -qmax 50 " +
+    "-crf 8 -deadline realtime -speed 8 -b:v 1M -threads 1 %s";
 
   static final String defaultRecordsFolder = "build/records";
 
