@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.3.3-SNAPSHOT
+* Add video recorder (#2145)
+  * Core functionality
+  * JUnit module
+  * TestNG module
+
 ## 7.3.2 (released 17.05.2024)
 * bump Selenium from 4.20.0 to 4.21.0 (#2744)
 * refactoring: instead of catching all Errors, catch only AssertionErrors (#2745)
