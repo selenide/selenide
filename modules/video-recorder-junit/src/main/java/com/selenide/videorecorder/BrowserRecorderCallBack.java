@@ -1,12 +1,16 @@
 package com.selenide.videorecorder;
 
 import com.codeborne.selenide.WebDriverRunner;
-import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.Selenide.webdriver;
 
 /**
  * Created by Serhii Bryt

@@ -21,7 +21,7 @@ public class BrowserRecorderListener implements ITestListener {
   @Override
   public void onTestStart(ITestResult result) {
     if (!result.getMethod().getConstructorOrMethod().getMethod().isAnnotationPresent(DisableVideoRecording.class)) {
-        initRecorder(result.getTestClass().getRealClass().getSimpleName(), result.getMethod().getMethodName());
+      initRecorder(result.getTestClass().getRealClass().getSimpleName(), result.getMethod().getMethodName());
     }
   }
 
