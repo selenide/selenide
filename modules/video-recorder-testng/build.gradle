@@ -10,6 +10,7 @@ repositories {
 dependencies {
   api project(":modules:video-recorder-core")
   api("org.testng:testng:$testngVersion") { transitive = false }
+  testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
   testRuntimeOnly("org.testng:testng:$testngVersion") {
     exclude(group: 'junit')
     exclude(group: 'testng')
@@ -18,7 +19,8 @@ dependencies {
   }
 }
 
-tasks.withType(Test).configureEach{
+tasks.withType(Test) {
+  maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
   useTestNG()
 }
 

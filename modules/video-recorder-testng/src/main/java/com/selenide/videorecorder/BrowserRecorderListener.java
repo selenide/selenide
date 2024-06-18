@@ -21,17 +21,17 @@ public class BrowserRecorderListener implements ITestListener {
   @Override
   public void onTestStart(ITestResult result) {
     if (!result.getMethod().getConstructorOrMethod().getMethod().isAnnotationPresent(DisableVideoRecording.class)) {
-      initRecorder();
+        initRecorder(result.getTestClass().getRealClass().getSimpleName(), result.getMethod().getMethodName());
     }
   }
 
-  private void initRecorder() {
+  private void initRecorder(String testClassName, String testName) {
     if (!WebDriverRunner.hasWebDriverStarted()) {
       open();
     }
-    videoRecorder = new VideoRecorderScreenShot(webdriver().object());
+    videoRecorder = new VideoRecorderScreenShot(webdriver().object(), testClassName, testName);
     timer = new ScheduledThreadPoolExecutor(1);
-    timer.scheduleAtFixedRate(videoRecorder, 0, 1, TimeUnit.SECONDS);
+    timer.scheduleAtFixedRate(videoRecorder, 0, 1000, TimeUnit.MILLISECONDS);
   }
 
   @Override
