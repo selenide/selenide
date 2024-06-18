@@ -17,10 +17,11 @@ dependencies {
   implementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
   implementation("org.junit.jupiter:junit-jupiter-engine:5.10.2")
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
+  implementation('org.bytedeco:ffmpeg-platform:6.0-1.5.9')
+  implementation('org.bytedeco:javacv:1.5.9')
 }
 
 test {
-  maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
   useJUnitPlatform()
 }
 

@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static com.codeborne.selenide.Selenide.*;
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RecordVideoJunit
 public class VideoRecorderScreenShotJunitTests {

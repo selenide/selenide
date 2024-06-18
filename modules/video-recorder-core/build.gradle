@@ -1,3 +1,7 @@
+plugins {
+  id 'java'
+}
+
 ext {
   artifactId = 'video-recorder-core'
 }
