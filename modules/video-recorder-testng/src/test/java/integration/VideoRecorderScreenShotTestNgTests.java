@@ -40,7 +40,7 @@ public class VideoRecorderScreenShotTestNgTests {
 
 
   @Test
-  public void videoFileShouldExistsAndNotEmptyTest() {
+  public void videoFileShouldExistsAndNotEmptyTestTestNg() {
     open("file://" + this.getClass().getClassLoader().getResource("draggable.html").getPath());
     $("#drag1").dragAndDrop(DragAndDropOptions.to("#div2"));
     sleep(3000);

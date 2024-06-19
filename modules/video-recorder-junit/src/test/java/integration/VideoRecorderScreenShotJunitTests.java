@@ -25,6 +25,7 @@ public class VideoRecorderScreenShotJunitTests {
     MutableCapabilities mutableCapabilities = new MutableCapabilities();
     mutableCapabilities.setCapability("webSocketUrl", true);
     Configuration.browserCapabilities = mutableCapabilities;
+    open();
   }
 
   @AfterEach
@@ -38,7 +39,7 @@ public class VideoRecorderScreenShotJunitTests {
   }
 
   @Test
-  public void videoFileShouldExistsAndNotEmpty() {
+  public void videoFileShouldExistsAndNotEmptyJunit() {
     open("file://" + this.getClass().getClassLoader().getResource("draggable.html").getPath());
     $("#drag1").dragAndDrop(DragAndDropOptions.to("#div2"));
     sleep(3000);
