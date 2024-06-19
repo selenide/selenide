@@ -3,12 +3,13 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.DragAndDropOptions;
 import com.selenide.videorecorder.VideoRecorderScreenShot;
-import org.junit.jupiter.api.*;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.openqa.selenium.MutableCapabilities;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -20,16 +21,22 @@ public class VideoRecorderScreenShotTests {
   ScheduledThreadPoolExecutor executor;
 
 
+  @BeforeAll
+  public static void beforeAll() {
+    MutableCapabilities mutableCapabilities = new MutableCapabilities();
+    mutableCapabilities.setCapability("webSocketUrl", true);
+    Configuration.browserCapabilities = mutableCapabilities;
+    open();
+  }
+
   @AfterEach
-  public void afterEach() throws IOException {
+  public void afterEach() {
     stopRecordingAndCloseDriver();
     checkVideoLengthInTime();
   }
 
   @Test
-  public void videoFileShouldExistsAndNotEmptyChromeTest(TestInfo testInfo) {
-    initChrome();
-    open();
+  public void videoFileShouldExistsAndNotEmptyTest(TestInfo testInfo) {
     initRecorder(testInfo);
     open("file://" + this.getClass().getClassLoader().getResource("draggable.html").getPath());
     $("#drag1").dragAndDrop(DragAndDropOptions.to("#div2"));
@@ -44,42 +51,6 @@ public class VideoRecorderScreenShotTests {
     sleep(3000);
     $("#drag1").dragAndDrop(DragAndDropOptions.to("#div1"));
     sleep(3000);
-  }
-
-  @Test
-  public void videoFileShouldExistsAndNotEmptyFFTest(TestInfo testInfo) {
-    initFirefox();
-    open();
-    initRecorder(testInfo);
-    open("file://" + this.getClass().getClassLoader().getResource("draggable.html").getPath());
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div2"));
-    sleep(3000);
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div1"));
-    sleep(3000);
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div2"));
-    sleep(3000);
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div1"));
-    sleep(3000);
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div2"));
-    sleep(3000);
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div1"));
-    sleep(3000);
-  }
-
-  private void initChrome() {
-    ChromeOptions chromeOptions = new ChromeOptions();
-    chromeOptions.setCapability("webSocketUrl", true);
-    Configuration.browserCapabilities = chromeOptions;
-    Configuration.browser = "chrome";
-    Configuration.headless = true;
-  }
-
-  private void initFirefox() {
-    FirefoxOptions firefoxOptions = new FirefoxOptions();
-    firefoxOptions.setCapability("webSocketUrl", true);
-    Configuration.browserCapabilities = firefoxOptions;
-    Configuration.browser = "firefox";
-    Configuration.headless = true;
   }
 
   private void initRecorder(TestInfo testInfo) {

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.MutableCapabilities;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,11 +22,9 @@ public class VideoRecorderScreenShotJunitTests {
 
   @BeforeAll
   public static void setUp() {
-    ChromeOptions chromeOptions = new ChromeOptions();
-    chromeOptions.setCapability("webSocketUrl", true);
-    Configuration.browserCapabilities = chromeOptions;
-    Configuration.headless = true;
-    Configuration.timeout = 10000;
+    MutableCapabilities mutableCapabilities = new MutableCapabilities();
+    mutableCapabilities.setCapability("webSocketUrl", true);
+    Configuration.browserCapabilities = mutableCapabilities;
   }
 
   @AfterEach

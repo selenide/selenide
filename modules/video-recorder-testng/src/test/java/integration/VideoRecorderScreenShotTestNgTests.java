@@ -4,7 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.DragAndDropOptions;
 import com.google.common.collect.Iterables;
 import com.selenide.videorecorder.BrowserRecorderListener;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.MutableCapabilities;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -23,11 +23,9 @@ public class VideoRecorderScreenShotTestNgTests {
 
   @BeforeClass
   public void setUp() {
-    ChromeOptions chromeOptions = new ChromeOptions();
-    chromeOptions.setCapability("webSocketUrl", true);
-    Configuration.browserCapabilities = chromeOptions;
-    Configuration.headless = true;
-    Configuration.timeout = 10000;
+    MutableCapabilities mutableCapabilities = new MutableCapabilities();
+    mutableCapabilities.setCapability("webSocketUrl", true);
+    Configuration.browserCapabilities = mutableCapabilities;
   }
 
   @AfterMethod
