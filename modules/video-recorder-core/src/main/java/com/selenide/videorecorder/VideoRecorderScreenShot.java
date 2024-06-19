@@ -1,26 +1,31 @@
 package com.selenide.videorecorder;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacv.FFmpegFrameRecorder;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.FrameConverter;
+import org.bytedeco.javacv.Java2DFrameConverter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
 import org.openqa.selenium.bidi.browsingcontext.CaptureScreenshotParameters;
+import org.openqa.selenium.bidi.module.Browser;
+import org.openqa.selenium.bidi.module.BrowsingContextInspector;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import java.util.Date;
 import java.util.TimerTask;
+
+import static org.bytedeco.ffmpeg.global.avutil.AV_PIX_FMT_YUV420P;
 
 /*
   Created by Serhii Bryt
@@ -44,22 +49,11 @@ import java.util.TimerTask;
 public class VideoRecorderScreenShot extends TimerTask {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorderScreenShot.class);
 
-  static final String ffmpeg = "%s -loglevel error -f image2pipe -avioflags direct " +
-    "-fpsprobesize 0 -probesize 32 -analyzeduration 0 -c:v mjpeg -i - -y -an -r 24 -c:v vp8 -qmin 0 -qmax 50 " +
-    "-crf 8 -deadline realtime -speed 8 -b:v 1M -threads 1 %s";
-
+  FFmpegFrameRecorder recorder;
   static final String defaultRecordsFolder = "build/records";
-
   BrowsingContext browsingContext;
-
-  final String ffmpegExecutable = Loader.load(org.bytedeco.ffmpeg.ffmpeg.class);
-
   private String defaultVideoName;
-
-  private Process recordProcess;
-  private OutputStream outputStream;
   private Path pathToSaveVideo;
-
   CaptureScreenshotParameters captureScreenshotParameters;
 
   public VideoRecorderScreenShot(WebDriver webDriver) {
@@ -71,7 +65,7 @@ public class VideoRecorderScreenShot extends TimerTask {
       prepareRecordsFolder();
       createDirectoryToSaveVideoForTest(className, testName);
       defaultVideoName = new Date().getTime() + ".webm";
-      initVideoRecordingProcess(webDriver);
+      initVideoRecordingProcessEx(webDriver);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -89,60 +83,45 @@ public class VideoRecorderScreenShot extends TimerTask {
     Files.createDirectories(pathToSaveVideo);
   }
 
-  private void initVideoRecordingProcess(WebDriver driver) throws IOException, InterruptedException {
+  private void initVideoRecordingProcessEx(WebDriver driver) throws IOException, InterruptedException {
     captureScreenshotParameters = new CaptureScreenshotParameters();
     captureScreenshotParameters
-      .origin(CaptureScreenshotParameters.Origin.VIEWPORT)
-      .imageFormat("image/png", 0.5);
-    log.debug("Init BiDi");
+      .origin(CaptureScreenshotParameters.Origin.VIEWPORT);
+    log.info("Init BiDi");
     browsingContext = new BrowsingContext(driver, driver.getWindowHandle());
-    recordProcess = Runtime.getRuntime().exec(ffmpeg.formatted(ffmpegExecutable,
-      Path.of(pathToSaveVideo.toString(), defaultVideoName).toFile().getAbsolutePath()));
-    outputStream = recordProcess.getOutputStream();
-    Thread.sleep(1000);
+    recorder = new FFmpegFrameRecorder(new File(Path.of(pathToSaveVideo.toString(), defaultVideoName).toFile().getAbsolutePath()),
+      driver.manage().window().getSize().getWidth(),
+      driver.manage().window().getSize().getHeight());
+    recorder.setFormat("webm");
+    recorder.setVideoCodecName("libx264");
+    recorder.setVideoOption("crf", "24");
+    recorder.setPixelFormat(AV_PIX_FMT_YUV420P);
+    recorder.setFrameRate(24);
+    recorder.start();
   }
 
 
   @Override
   public void run() {
-    log.debug("Video recording");
-    try {
-      log.debug("Make screenshot");
+    log.info("Video recording");
+    try (Java2DFrameConverter converter = new Java2DFrameConverter()) {
+      log.info("Make screenshot");
       byte[] lastImage = Base64.getDecoder().decode(browsingContext.captureScreenshot(captureScreenshotParameters));
-      byte[] convertedImage = convertPngToJpeg(lastImage);
-      log.debug("Write screenshot to stream");
+      Frame convert = converter.getFrame(ImageIO.read(new ByteArrayInputStream(lastImage)), 1.0, true);
+      log.info("Write screenshot to stream");
       for (int i = 0; i < 24; i++) {
-        outputStream.write(convertedImage);
+        recorder.record(convert);
       }
     } catch (Exception e) {
-      log.debug(e.getMessage());
-    }
-  }
-
-  private byte[] convertPngToJpeg(byte[] pngAsByteArray) {
-    try {
-      BufferedImage read = ImageIO.read(new ByteArrayInputStream(pngAsByteArray));
-      BufferedImage newBufferedImage = new BufferedImage(
-        read.getWidth(), // Returns the width of the BufferedImage.
-        read.getHeight(),  // Returns the height of the BufferedImage.
-        BufferedImage.TYPE_INT_BGR);
-      newBufferedImage.createGraphics()
-        .drawImage(read, 0, 0, Color.white, null);
-      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-      ImageIO.write(newBufferedImage, "jpg", byteArrayOutputStream);
-      return byteArrayOutputStream.toByteArray();
-    } catch (Exception e) {
-      throw new RuntimeException(e.getMessage());
+      log.error(e.getMessage());
     }
   }
 
   public void stopRecording(boolean... save) {
     try {
-      log.debug("Close inputStream");
-      outputStream.flush();
-      outputStream.close();
+      log.info("Close inputStream");
+      recorder.stop();
       Thread.sleep(500);
-      recordProcess.destroy();
       if (save.length > 0 && !save[0]) {
         Files.delete(Path.of(pathToSaveVideo.toString(), defaultVideoName));
       }
@@ -153,7 +132,7 @@ public class VideoRecorderScreenShot extends TimerTask {
   }
 
   private void prepareRecordsFolder() throws IOException {
-    log.debug("Prepare records folder");
+    log.info("Prepare records folder");
     Files.createDirectories(Path.of(defaultRecordsFolder));
   }
 

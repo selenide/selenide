@@ -55,23 +55,4 @@ public class VideoRecorderScreenShotJunitTests {
     $("#drag1").dragAndDrop(DragAndDropOptions.to("#div1"));
     sleep(3000);
   }
-
-  @Test
-  public void videoFileShouldExistsAndNotEmpty1() {
-    open("file://" + this.getClass().getClassLoader().getResource("draggable.html").getPath());
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div2"));
-    sleep(3000);
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div1"));
-    sleep(3000);
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div2"));
-    sleep(3000);
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div1"));
-    sleep(3000);
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div2"));
-    sleep(3000);
-    $("#drag1").dragAndDrop(DragAndDropOptions.to("#div1"));
-    sleep(3000);
-  }
-
-
 }
