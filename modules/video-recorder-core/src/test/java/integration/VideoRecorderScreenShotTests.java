@@ -2,18 +2,13 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.DragAndDropOptions;
-import com.google.common.collect.Iterables;
 import com.selenide.videorecorder.VideoRecorderScreenShot;
-import org.bytedeco.javacv.FFmpegFrameGrabber;
-import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
