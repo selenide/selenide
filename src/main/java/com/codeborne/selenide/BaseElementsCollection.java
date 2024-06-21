@@ -460,6 +460,20 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
   }
 
   /**
+   * Does not reload collection elements while iterating it.
+   *
+   * Not recommended: As a rule, tests should not iterate collection elements.
+   * Instead, try to write a {@link CollectionCondition} which verifies the whole collection.
+   *
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  public Stream<T> stream() {
+    return StreamSupport.stream(spliterator(), false);
+  }
+
+  /**
    * Returns a "static" {@link Iterable} which doesn't reload web elements during iteration.
    *
    * It's faster than {@link #asDynamicIterable()}},
