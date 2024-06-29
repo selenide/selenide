@@ -24,7 +24,7 @@ Currently, the plugin supports the following features:
 We are going to implement more features like reading logs and videos etc.
 
 ## Usage
-1. Import `com.codeborne:selenide-selenoid:7.3.2`
+1. Import `com.codeborne:selenide-selenoid:7.3.3`
 2. Set `Configuration.fileDownload = FOLDER;`
 3. Use method `$.download()` as usually.
 

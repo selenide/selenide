@@ -1,10 +1,10 @@
 # Changelog
 
-## 7.3.3-SNAPSHOT
-* Add video recorder (#2145)
-  * Core functionality
-  * JUnit module
-  * TestNG module
+## 7.3.3 (released 21.06.2024)
+* bump Selenium from 4.21.0 to 4.22.0
+* Bump io.appium:java-client from 9.2.2 to 9.2.3 (#2752)
+* Bump nettyVersion from 4.1.109.Final to 4.1.111.Final (#2749) (#2764)
+* Bump io.github.littleproxy:littleproxy from 2.2.1 to 2.2.3 (#2765)
 
 ## 7.3.2 (released 17.05.2024)
 * bump Selenium from 4.20.0 to 4.21.0 (#2744)
