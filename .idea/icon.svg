@@ -1,0 +1,15 @@
+<svg version="1.1" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(-82.19 -74.77)">
+    <circle cx="99.83" cy="100.6" r="3.777" fill="#f0f8ff" stroke="#000" stroke-width=".3269"/>
+    <circle cx="98.24" cy="95.32" r="6.616" fill="#ba55d3" stroke="#240041" stroke-width=".184"/>
+    <circle cx="92.69" cy="95.47" r="3.777" fill="#f0f8ff" stroke="#000" stroke-width=".3269"/>
+    <circle cx="87.06" cy="81.51" r="3.777" fill="#f0f8ff" stroke="#000" stroke-width=".3269"/>
+    <circle cx="90.96" cy="83.4" r="6.171" fill="#ff8c00" stroke="#240041" stroke-width=".1718"/>
+    <circle cx="93.48" cy="79.44" r="3.777" fill="#f0f8ff" stroke="#000" stroke-width=".3269"/>
+    <g stroke="#000">
+      <circle cx="105.2" cy="78.5" r="3.041" fill="#f0f8ff" stroke-width=".2632"/>
+      <circle cx="104.3" cy="82.34" r="4.77" fill="#1e90ff" stroke-width=".184"/>
+      <circle cx="108.1" cy="84.75" r="3.041" fill="#f0f8ff" stroke-width=".2632"/>
+    </g>
+  </g>
+</svg>
