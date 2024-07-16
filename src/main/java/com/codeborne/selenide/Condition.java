@@ -10,6 +10,10 @@ import com.codeborne.selenide.conditions.CssClass;
 import com.codeborne.selenide.conditions.CssValue;
 import com.codeborne.selenide.conditions.CustomMatch;
 import com.codeborne.selenide.conditions.Disabled;
+import com.codeborne.selenide.conditions.DomAttribute;
+import com.codeborne.selenide.conditions.DomAttributeValue;
+import com.codeborne.selenide.conditions.DomProperty;
+import com.codeborne.selenide.conditions.DomPropertyValue;
 import com.codeborne.selenide.conditions.Editable;
 import com.codeborne.selenide.conditions.Enabled;
 import com.codeborne.selenide.conditions.ExactOwnText;
@@ -112,13 +116,14 @@ public final class Condition {
    * <p>Example:</p>
    * <p>{@code $("input[type=file]").shouldBe(interactable);}</p>
    * <br/>
+   *
    * @since 6.5.0
    */
   public static final WebElementCondition interactable = new Interactable();
 
   /**
    * <p>
-   *   Check if element has "readonly" attribute (with any value)
+   * Check if element has "readonly" attribute (with any value)
    * </p>
    * <br>
    * <p>Sample:</p>
@@ -137,19 +142,21 @@ public final class Condition {
    * <br>
    * <p>Sample: {@code $("input").shouldBe(editable);}</p>
    * <br>
+   *
    * @since 6.5.0
    */
   public static final WebElementCondition editable = new Editable();
 
   /**
    * <p>
-   *  Check that the element is animated. An animated element changes its position or size over time.
-   *  Implemented for web browser context only.
+   * Check that the element is animated. An animated element changes its position or size over time.
+   * Implemented for web browser context only.
    * </p>
    * <br>
    * <p>Sample:</p>
    * <p>{@code $("popup").shouldBe(animated);}</p>
    * <br>
+   *
    * @since v7.0.7
    */
   public static final WebElementCondition animated = new Animated();
@@ -339,6 +346,7 @@ public final class Condition {
    * <p>NB! Ignores multiple whitespaces between words.</p>
    * <p>NB! Nulls and blank strings are not allowed in the specified collection
    * (because any element does contain an empty text).</p>
+   *
    * @throws IllegalArgumentException If specified collection contains {@code null}s or blank strings.
    * @since 7.0.3
    */
@@ -355,6 +363,7 @@ public final class Condition {
    * <p>NB! Ignores multiple whitespaces between words.</p>
    * <p>NB! Nulls and blank strings are not allowed in the specified collection
    * (because any element does contain an empty text).</p>
+   *
    * @throws IllegalArgumentException If specified collection contains {@code null}s or blank strings.
    * @since 7.0.3
    */
@@ -369,6 +378,7 @@ public final class Condition {
    * one of the given {@code texts}. Assertion fails if specified collection is empty.
    *
    * <p>NB! Ignores multiple whitespaces between words.</p>
+   *
    * @throws IllegalArgumentException If specified collection contains {@code null} elements.
    * @since 7.0.3
    */
@@ -383,6 +393,7 @@ public final class Condition {
    * one of the given {@code texts}. Assertion fails if specified collection is empty.
    *
    * <p>NB! Ignores multiple whitespaces between words.</p>
+   *
    * @throws IllegalArgumentException If specified collection contains {@code null} elements.
    * @since 7.0.3
    */
@@ -486,7 +497,7 @@ public final class Condition {
   /**
    * Assert that element contains given inner text.
    * <p>Sample: {@code $("h1").shouldHave(innerText("Hello"))}</p>
-   *
+   * <p>
    * It can be used to check the text of a hidden element.
    *
    * <p>Case insensitive</p>
@@ -577,6 +588,7 @@ public final class Condition {
   /**
    * Asserts that element has the given tag name.
    * <p>Sample: {@code $(".btn-primary").shouldHave(tagName("button"));}</p>
+   *
    * @since 6.7.3
    */
   @CheckReturnValue
@@ -618,6 +630,56 @@ public final class Condition {
   @Nonnull
   public static WebElementCondition cssValue(String propertyName, @Nullable String expectedValue) {
     return new CssValue(propertyName, expectedValue);
+  }
+
+  /**
+   * Check if element has given dom attribute (with any value)
+   *
+   * <p>Sample: {@code $("#mydiv").shouldHave(domAttribute("hidden"));}</p>
+   *
+   * @param domAttributeName name of dom attribute, not null
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static WebElementCondition domAttribute(String domAttributeName) {
+    return new DomAttribute(domAttributeName);
+  }
+
+  /**
+   * <p>Sample: {@code $("#mydiv").shouldHave(domAttributeValue("hidden", "hidden"));}</p>
+   *
+   * @param domAttributeName          name of dom attribute
+   * @param expectedDomAttributeValue expected value of dom attribute
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static WebElementCondition domAttributeValue(String domAttributeName, String expectedDomAttributeValue) {
+    return new DomAttributeValue(domAttributeName, expectedDomAttributeValue);
+  }
+
+  /**
+   * Check if element has given dom property (with any value)
+   *
+   * <p>Sample: {@code $("#mydiv").shouldHave(domProperty("id"));}</p>
+   *
+   * @param domPropertyName name of dom property, not null
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static WebElementCondition domProperty(String domPropertyName) {
+    return new DomProperty(domPropertyName);
+  }
+
+  /**
+   * <p>Sample: {@code $("#mydiv").shouldHave(domPropertyValue("id", "mydiv"));}</p>
+   *
+   * @param domPropertyName          name of dom property
+   * @param expectedDomPropertyValue expected value of dom property
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static WebElementCondition domPropertyValue(String domPropertyName, String expectedDomPropertyValue) {
+    return new DomPropertyValue(domPropertyName, expectedDomPropertyValue);
   }
 
   /**
@@ -727,16 +789,16 @@ public final class Condition {
   /**
    * Check if element matches ANY of given conditions.
    * The method signature makes you to pass at least 2 conditions, otherwise it would be nonsense.
-   *
+   * <p>
    * Using "or" checks in tests is probably a flag of bad test design.
    * Consider splitting this "or" check into two different methods or tests.
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    *
    * @param name       Name of this condition, like "error" (meaning e.g. "error" OR "failed").
    * @param condition1 first condition to match
    * @param condition2 second condition to match
    * @param conditions Other conditions to match
    * @return logical OR for given conditions.
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -769,14 +831,15 @@ public final class Condition {
 
   /**
    * Check if element is clickable: {@link #interactable} AND {@link #enabled}.
-   *
+   * <p>
    * Usually you don't need to use this condition.
    * When you just call {@code $("button").click()}, Selenide automatically checks that the element is clickable.
-   *
+   * <p>
    * <br/>
    * <p>Example:</p>
    * <p>{@code $("input[type=button]").shouldBe(clickable);}</p>
    * <br/>
+   *
    * @since 7.2.0
    */
   public static final WebElementCondition clickable = and("clickable", interactable, enabled);

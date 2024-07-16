@@ -41,6 +41,22 @@ public class Mocks {
 
   @Nonnull
   @CheckReturnValue
+  public static WebElement elementWithDomAttribute(String name, String value) {
+    WebElement element = mock();
+    when(element.getDomAttribute(name)).thenReturn(value);
+    return element;
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  public static WebElement elementWithDomProperty(String name, String value) {
+    WebElement element = mock();
+    when(element.getDomProperty(name)).thenReturn(value);
+    return element;
+  }
+
+  @Nonnull
+  @CheckReturnValue
   public static SelenideElement mockSelect(WebElement... options) {
     SelenideElement select = mockElement("select", "");
     when(select.isSelected()).thenReturn(true);
