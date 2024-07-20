@@ -23,11 +23,11 @@ public abstract class ITTest {
 
   @BeforeAll
   static void startAppium() {
-    AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder()
+    service = new AppiumServiceBuilder()
       .withArgument(RELAXED_SECURITY)
       .withIPAddress("127.0.0.1")
-      .withTimeout(ofMinutes(3));
-    service = AppiumDriverLocalService.buildService(appiumServiceBuilder);
+      .withTimeout(ofMinutes(3))
+      .build();
     service.start();
   }
 
