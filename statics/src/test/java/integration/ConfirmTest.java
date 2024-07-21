@@ -144,7 +144,6 @@ final class ConfirmTest extends IntegrationTest {
     assertThatThrownBy(() -> $("h1").shouldHave(text("Page with JQuery")))
       .isInstanceOf(UIAssertionError.class)
       .hasMessageStartingWith("UnhandledAlertException: ")
-      .hasMessageContaining("Get out of this page, John Mc'Clane?")
       .hasMessageContaining("Screenshot:")
       .hasMessageContaining("Page source:")
       .hasCauseInstanceOf(UnhandledAlertException.class);

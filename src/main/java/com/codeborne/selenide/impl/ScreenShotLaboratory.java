@@ -68,11 +68,11 @@ public class ScreenShotLaboratory {
   protected final ThreadLocal<List<Screenshot>> currentContextScreenshots = new ThreadLocal<>();
   protected final ThreadLocal<List<Screenshot>> threadScreenshots = withInitial(ArrayList::new);
 
-  protected ScreenShotLaboratory() {
+  private ScreenShotLaboratory() {
     this(inject(Photographer.class), inject(PageSourceExtractor.class), new Clock());
   }
 
-  protected ScreenShotLaboratory(Photographer photographer, PageSourceExtractor extractor, Clock clock) {
+  ScreenShotLaboratory(Photographer photographer, PageSourceExtractor extractor, Clock clock) {
     this.photographer = photographer;
     this.extractor = extractor;
     this.clock = clock;

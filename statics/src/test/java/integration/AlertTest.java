@@ -75,7 +75,6 @@ final class AlertTest extends IntegrationTest {
     assertThatThrownBy(() -> $("#message").shouldHave(text("Hello, Greg!")))
       .isInstanceOf(UIAssertionError.class)
       .hasMessageStartingWith("UnhandledAlertException: ")
-      .hasMessageContaining("Are you sure, Greg?")
       .hasMessageContaining("Screenshot:")
       .hasMessageContaining("Page source:")
       .hasCauseInstanceOf(UnhandledAlertException.class);

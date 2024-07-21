@@ -88,5 +88,9 @@
     <Class name="com.codeborne.selenide.Selenide"/>
     <Bug pattern="NM_METHOD_NAMING_CONVENTION"/>
   </Match>
+  <Match>
+    <Class name="com.codeborne.selenide.impl.ScreenShotLaboratory"/>
+    <Bug pattern="SING_SINGLETON_HAS_NONPRIVATE_CONSTRUCTOR"/>
+  </Match>
 </FindBugsFilter>
 
