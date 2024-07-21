@@ -1,7 +1,7 @@
 # Tests video recorder
 
 ### Concept
-Now the last versions of Selenium have [BiDi functionality](https://www.selenium.dev/documentation/webdriver/bidirectional/).
+Now the last versions of Selenium have [BiDi functionality](https://www.selenium.dev/documentation/webdriver/bidi/w3c/).
 This allows us to use unified API for at lest Chrome and Firefox.  
 
 Usually to take screenshot we use the next code:
@@ -29,7 +29,7 @@ FirefoxOptions firefoxOptions = new FirefoxOptions();
 firefoxOptions.setCapability("webSocketUrl", true);
 Webdriver driver = new FirefoxDriver(firefoxOptions);
 ```
-These couple lines of code allows you to use BiDi. In our case it allows to use [`BrowsingContext`](https://www.selenium.dev/documentation/webdriver/bidirectional/webdriver_bidi/browsing_context/).  
+These couple lines of code allows you to use BiDi. In our case it allows to use [`BrowsingContext`](https://www.selenium.dev/documentation/webdriver/bidi/w3c/browsing_context/).  
 
 ## VideoRecorderScreenShot class
 [`VideoRecorderScreenShot`](src/main/java/com/selenide/videorecorder/VideoRecorderScreenShotTests.java) is used to record video. It extends from TimerTask class to run in parallel thread.  
