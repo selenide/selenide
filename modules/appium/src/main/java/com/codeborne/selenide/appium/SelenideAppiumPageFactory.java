@@ -7,6 +7,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.LazyWebElementSnapshot;
+import com.codeborne.selenide.impl.NoOpsList;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.HasBrowserCheck;
@@ -108,8 +109,14 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createCollection(
     CollectionSource collection, Class<?> klass
   ) {
-    return SelenideAppiumCollection.class.isAssignableFrom(klass) ?
-      new SelenideAppiumCollection(collection) :
+    return klass.isAssignableFrom(SelenideAppiumList.class) ?
+      new SelenideAppiumList(collection) :
       super.createCollection(collection, klass);
+  }
+
+  private static class SelenideAppiumList extends SelenideAppiumCollection implements NoOpsList<SelenideAppiumElement> {
+    SelenideAppiumList(CollectionSource collection) {
+      super(collection);
+    }
   }
 }

@@ -486,7 +486,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
   @CheckReturnValue
   @Nonnull
   public SelenideElementIterable<T> asFixedIterable() {
-    return () -> new SelenideElementIterator<>(new CollectionSnapshot(collection));
+    return () -> new SelenideElementIterator<>(new CollectionSnapshot(collection), clazz);
   }
 
   /**
@@ -500,7 +500,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
   @CheckReturnValue
   @Nonnull
   public SelenideElementIterable<T> asDynamicIterable() {
-    return () -> new SelenideElementIterator<>(collection);
+    return () -> new SelenideElementIterator<>(collection, clazz);
   }
 
   /**

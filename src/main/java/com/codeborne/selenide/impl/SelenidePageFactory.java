@@ -217,6 +217,10 @@ public class SelenidePageFactory implements PageObjectFactory {
     if (BaseElementsCollection.class.isAssignableFrom(field.getType())) {
       return createElementsCollection(driver, searchContext, selector, field, alias);
     }
+
+    if (field.getType().isAssignableFrom(ElementsList.class) && isCollectionOfSelenideElements(field, genericTypes)) {
+      return createElementsCollection(driver, searchContext, selector, field, alias);
+    }
     else if (Container.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(driver, searchContext, field, selector);
     }
@@ -228,6 +232,11 @@ public class SelenidePageFactory implements PageObjectFactory {
     }
 
     return defaultFieldDecorator(driver, searchContext).decorate(loader, field);
+  }
+
+  private boolean isCollectionOfSelenideElements(Field field, Type[] genericTypes) {
+    Class<?> listGenericType = getListGenericType(field, genericTypes);
+    return listGenericType != null && SelenideElement.class.isAssignableFrom(listGenericType);
   }
 
   @Nonnull
@@ -275,9 +284,8 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   @Nonnull
   protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createCollection(
-    CollectionSource collection, Class<?> klass
-  ) {
-    return new ElementsCollection(collection);
+    CollectionSource collection, Class<?> klass) {
+    return new ElementsList(collection);
   }
 
   @CheckReturnValue
@@ -346,5 +354,11 @@ public class SelenidePageFactory implements PageObjectFactory {
       if (objects[i].equals(firstArgument)) return i;
     }
     return -1;
+  }
+
+  private static class ElementsList extends ElementsCollection implements NoOpsList<SelenideElement> {
+    ElementsList(CollectionSource collection) {
+      super(collection);
+    }
   }
 }

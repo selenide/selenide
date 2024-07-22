@@ -1,6 +1,7 @@
 package it.mobile.android;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.appium.SelenideAppium;
 import com.codeborne.selenide.appium.SelenideAppiumCollection;
 import com.codeborne.selenide.appium.SelenideAppiumElement;
@@ -9,7 +10,11 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import java.util.Iterator;
+import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
@@ -18,6 +23,7 @@ import static com.codeborne.selenide.appium.AppiumScrollOptions.up;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
 import static com.codeborne.selenide.appium.SelenideAppium.$$;
 import static com.codeborne.selenide.appium.SelenideAppium.$x;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
   @BeforeEach
@@ -41,6 +47,33 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
     loginPage.selenideElements.shouldHave(size(2));
     loginPage.selenideElements.first().setValue("bob@example.com");
     loginPage.selenideElements.last().setValue("secret");
+  }
+
+  @Test
+  public void pageObjectWithSelenideElementList() {
+    LoginPageWithSelenideElementList loginPage = page();
+    assertThat(loginPage.elements).hasSize(2);
+    loginPage.elements.get(0).setValue("bob@example.com");
+    loginPage.elements.get(1).setValue("secret");
+  }
+
+  @Test
+  public void pageObjectWithSelenideAppiumElementList() {
+    LoginPageWithSelenideAppiumElementList loginPage = page();
+    assertThat(loginPage.elements).hasSize(2);
+    loginPage.elements.get(0).scroll(up()).setValue("bob@example.com");
+    loginPage.elements.get(1).scroll(up()).setValue("secret");
+
+    assertThat(loginPage.nonWebElements).isNull();
+  }
+
+  @Test
+  public void pageObjectWithSelenideAppiumElementIterable() {
+    LoginPageWithSelenideAppiumElementIterable loginPage = page();
+    assertThat(loginPage.elements).hasSize(2);
+    Iterator<SelenideAppiumElement> iterator = loginPage.elements.iterator();
+    iterator.next().scroll(up()).setValue("bob@example.com");
+    iterator.next().scroll(up()).setValue("secret");
   }
 
   @Test
@@ -72,4 +105,22 @@ class LoginPageWithCollections {
 class LoginPageWithSelenideCollection {
   @AndroidFindBy(xpath = "//android.widget.EditText")
   ElementsCollection selenideElements;
+}
+
+class LoginPageWithSelenideElementList {
+  @AndroidFindBy(xpath = "//android.widget.EditText")
+  List<SelenideElement> elements;
+}
+
+class LoginPageWithSelenideAppiumElementList {
+  @AndroidFindBy(xpath = "//android.widget.EditText")
+  List<SelenideAppiumElement> elements;
+
+  @AndroidFindBy(xpath = "//android.widget.EditText")
+  List<WebDriver> nonWebElements;
+}
+
+class LoginPageWithSelenideAppiumElementIterable {
+  @AndroidFindBy(xpath = "//android.widget.EditText")
+  Iterable<SelenideAppiumElement> elements;
 }
