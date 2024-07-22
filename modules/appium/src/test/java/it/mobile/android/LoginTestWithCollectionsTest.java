@@ -18,11 +18,14 @@ import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.up;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
 import static com.codeborne.selenide.appium.SelenideAppium.$$;
 import static com.codeborne.selenide.appium.SelenideAppium.$x;
+import static java.lang.System.currentTimeMillis;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
@@ -52,6 +55,10 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
   @Test
   public void pageObjectWithSelenideElementList() {
     LoginPageWithSelenideElementList loginPage = page();
+    for (long start = currentTimeMillis();
+         currentTimeMillis() - start < timeout && loginPage.elements.size() != 2; ) {
+      sleep(100);
+    }
     assertThat(loginPage.elements).hasSize(2);
     loginPage.elements.get(0).setValue("bob@example.com");
     loginPage.elements.get(1).setValue("secret");

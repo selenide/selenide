@@ -21,7 +21,8 @@ public class AppiumCollectionsTest extends BaseSwagLabsAndroidTest {
 
   @Test
   void appiumCollectionMethods() {
-    SelenideAppiumCollection inputFields = $$(By.xpath("//android.widget.EditText"));
+    SelenideAppiumCollection inputFields = $$(By.xpath("//android.widget.EditText")).shouldHave(size(2));
+
     assertThat(inputFields.first(1))
       .isInstanceOf(SelenideAppiumCollection.class)
       .hasSize(1);
