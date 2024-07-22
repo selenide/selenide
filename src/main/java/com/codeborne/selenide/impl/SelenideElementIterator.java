@@ -8,7 +8,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static com.codeborne.selenide.commands.Util.classOf;
 
 @ParametersAreNonnullByDefault
 public class SelenideElementIterator<T extends SelenideElement> implements Iterator<T> {
@@ -16,10 +15,9 @@ public class SelenideElementIterator<T extends SelenideElement> implements Itera
   private final Class<T> clazz;
   protected int index;
 
-  @SafeVarargs
-  public SelenideElementIterator(CollectionSource collection, T... clazz) {
+  public SelenideElementIterator(CollectionSource collection, Class<T> clazz) {
     this.collection = collection;
-    this.clazz = classOf(clazz);
+    this.clazz = clazz;
   }
 
   @Override

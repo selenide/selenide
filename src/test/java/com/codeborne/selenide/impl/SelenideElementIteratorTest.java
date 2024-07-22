@@ -15,7 +15,7 @@ final class SelenideElementIteratorTest {
   @Test
   void hasNext() {
     CollectionSource collection = mockCollection("collection with 1 element", webElement);
-    SelenideElementIterator<SelenideElement> selenideElementIterator = new SelenideElementIterator<>(collection);
+    SelenideElementIterator<SelenideElement> selenideElementIterator = new SelenideElementIterator<>(collection, SelenideElement.class);
 
     assertThat(selenideElementIterator.hasNext()).isTrue();
   }
@@ -23,7 +23,7 @@ final class SelenideElementIteratorTest {
   @Test
   void doesNotHasNext() {
     CollectionSource collection = mockCollection("empty collection");
-    SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
+    SelenideElementIterator<SelenideElement> selenideElementIterator = new SelenideElementIterator<>(collection, SelenideElement.class);
 
     assertThat(selenideElementIterator.hasNext()).isFalse();
   }
@@ -31,7 +31,7 @@ final class SelenideElementIteratorTest {
   @Test
   void next() {
     CollectionSource collection = mockCollection("collection with 1 element", webElement);
-    SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
+    SelenideElementIterator<SelenideElement> selenideElementIterator = new SelenideElementIterator<>(collection, SelenideElement.class);
     SelenideElement nextElement = selenideElementIterator.next();
 
     assertThat(nextElement).isNotNull();
@@ -42,7 +42,7 @@ final class SelenideElementIteratorTest {
   @Test
   void remove() {
     CollectionSource collection = mockCollection("collection with 1 element", webElement);
-    SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
+    SelenideElementIterator<SelenideElement> selenideElementIterator = new SelenideElementIterator<>(collection, SelenideElement.class);
 
     assertThatThrownBy(selenideElementIterator::remove)
       .isInstanceOf(UnsupportedOperationException.class)
