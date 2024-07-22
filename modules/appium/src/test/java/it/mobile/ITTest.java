@@ -1,6 +1,7 @@
 package it.mobile;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.junit5.TextReportExtension;
 import com.codeborne.selenide.webdriver.HttpClientTimeouts;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -17,7 +18,7 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXED_SECURITY;
 import static java.time.Duration.ofMinutes;
 
-@ExtendWith(TextReportExtension.class)
+@ExtendWith({TextReportExtension.class, ScreenShooterExtension.class})
 public abstract class ITTest {
   private static AppiumDriverLocalService service;
 
