@@ -43,7 +43,7 @@ public class SelenideAppium {
     if (!WebDriverRunner.hasWebDriverStarted()) {
       launchApp();
     }
-    deepLinkLauncher.openDeepLinkOnIos(AppiumDriverRunner.getMobileDriver(), deepLinkUrl);
+    deepLinkLauncher.openDeepLinkOnIos(AppiumDriverRunner.getIosDriver(), deepLinkUrl);
   }
   /**
    * Open a deep link for an Android application
