@@ -526,6 +526,23 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
     return collection.getAlias().getOrElse(collection::toString);
   }
 
+  /**
+   * Displays the collection in human-readable format.
+   * Useful for logging and debugging.
+   * Not recommended to use for test verifications.
+   * May work relatively slowly because it fetches actual element information from browser.
+   *
+   * @since 7.4.0
+   * @return e.g. [<strong id=orderConfirmedStatus class=>Order has been confirmed</strong>]
+   * @see com.codeborne.selenide.commands.DescribeElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  public String describe() {
+    return stream().map(el -> el.describe()).toList().toString();
+  }
+
   @CheckReturnValue
   @Nonnull
   private Driver driver() {
