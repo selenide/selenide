@@ -58,6 +58,16 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
+  void describeCollection() {
+    assertThat($$("#radioButtons input").describe()).isEqualTo(
+      "[<input name=\"me\" type=\"radio\" value=\"master\"></input>," +
+      " <input name=\"me\" type=\"radio\" value=\"margarita\"></input>," +
+      " <input name=\"me\" type=\"radio\" value=\"cat\"></input>," +
+      " <input name=\"me\" type=\"radio\" value=\"woland\"></input>]"
+    );
+  }
+
+  @Test
   void invalidSelector() {
     assertThatThrownBy(() -> $$(By.xpath("//xxx[@'")).shouldHave(size(0)))
       .isInstanceOf(InvalidSelectorException.class);
