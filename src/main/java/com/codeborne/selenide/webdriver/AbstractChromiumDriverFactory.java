@@ -39,6 +39,7 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     arguments.add("--proxy-bypass-list=<-loopback>");
     arguments.add("--disable-dev-shm-usage");
     arguments.add("--disable-search-engine-choice-screen");
+    arguments.add("--unsafely-disable-devtools-self-xss-warnings");
     arguments.addAll(parseArguments(externalArguments));
     arguments.addAll(createHeadlessArguments(config));
     if (config.browserSize() != null && BrowserResizer.isValidDimension(config.browserSize())) {

@@ -56,6 +56,7 @@ class EdgeDriverFactoryTest {
       "--proxy-bypass-list=<-loopback>",
       "--disable-dev-shm-usage",
       "--disable-search-engine-choice-screen",
+      "--unsafely-disable-devtools-self-xss-warnings",
       "--window-size=1366,768"
     );
 
