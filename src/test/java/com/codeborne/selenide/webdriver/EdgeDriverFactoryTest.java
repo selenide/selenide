@@ -55,6 +55,7 @@ class EdgeDriverFactoryTest {
     assertThat(args(options)).containsExactly(
       "--proxy-bypass-list=<-loopback>",
       "--disable-dev-shm-usage",
+      "--disable-search-engine-choice-screen",
       "--window-size=1366,768"
     );
 
