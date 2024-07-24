@@ -27,6 +27,7 @@ import static com.codeborne.selenide.appium.SelenideAppium.$$;
 import static com.codeborne.selenide.appium.SelenideAppium.$x;
 import static java.lang.System.currentTimeMillis;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.util.IterableUtil.sizeOf;
 
 public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
   @BeforeEach
@@ -55,10 +56,7 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
   @Test
   public void pageObjectWithSelenideElementList() {
     LoginPageWithSelenideElementList loginPage = page();
-    for (long start = currentTimeMillis();
-         currentTimeMillis() - start < timeout && loginPage.elements.size() != 2; ) {
-      sleep(100);
-    }
+    waitUntilCollectionFullyLoaded(loginPage.elements, 2);
     assertThat(loginPage.elements).hasSize(2);
     loginPage.elements.get(0).setValue("bob@example.com");
     loginPage.elements.get(1).setValue("secret");
@@ -67,6 +65,7 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
   @Test
   public void pageObjectWithSelenideAppiumElementList() {
     LoginPageWithSelenideAppiumElementList loginPage = page();
+    waitUntilCollectionFullyLoaded(loginPage.elements, 2);
     assertThat(loginPage.elements).hasSize(2);
     loginPage.elements.get(0).scroll(up()).setValue("bob@example.com");
     loginPage.elements.get(1).scroll(up()).setValue("secret");
@@ -77,6 +76,7 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
   @Test
   public void pageObjectWithSelenideAppiumElementIterable() {
     LoginPageWithSelenideAppiumElementIterable loginPage = page();
+    waitUntilCollectionFullyLoaded(loginPage.elements, 2);
     assertThat(loginPage.elements).hasSize(2);
     Iterator<SelenideAppiumElement> iterator = loginPage.elements.iterator();
     iterator.next().scroll(up()).setValue("bob@example.com");
@@ -95,6 +95,13 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
 
     SelenideAppiumElement errorMessage = $x("//*[@content-desc='generic-error-message']/android.widget.TextView").as("Error message");
     errorMessage.shouldHave(text("Provided credentials do not match any user in this service."));
+  }
+
+  private static void waitUntilCollectionFullyLoaded(Iterable<?> collection, int expectedSize) {
+    for (long start = currentTimeMillis();
+         currentTimeMillis() - start < timeout && sizeOf(collection) != expectedSize; ) {
+      sleep(100);
+    }
   }
 }
 
