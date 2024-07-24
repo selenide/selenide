@@ -30,6 +30,7 @@ public class SelenideConfig implements Config {
    * @deprecated Don't use this setting. It leaves the browser and webdriver open.
    * User can later close the browser manually, but the webdriver leaves running forever.
    */
+  @Deprecated
   private boolean holdBrowserOpen = Boolean.parseBoolean(getProperty("selenide.holdBrowserOpen", "false"));
   private boolean reopenBrowserOnFail = Boolean.parseBoolean(getProperty("selenide.reopenBrowserOnFail", "true"));
   private boolean clickViaJs = Boolean.parseBoolean(getProperty("selenide.clickViaJs", "false"));
@@ -86,6 +87,7 @@ public class SelenideConfig implements Config {
     return holdBrowserOpen;
   }
 
+  @Deprecated
   public SelenideConfig holdBrowserOpen(boolean holdBrowserOpen) {
     this.holdBrowserOpen = holdBrowserOpen;
     return this;
