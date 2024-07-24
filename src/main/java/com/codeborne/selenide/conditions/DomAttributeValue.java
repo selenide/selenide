@@ -6,14 +6,18 @@ import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 public class DomAttributeValue extends WebElementCondition {
   private final String domAttributeName;
-  protected final String expectedDomAttributeValue;
 
-  public DomAttributeValue(String domAttributeName, String expectedDomAttributeValue) {
+  @Nullable
+  private final String expectedDomAttributeValue;
+
+  public DomAttributeValue(String domAttributeName, @Nullable String expectedDomAttributeValue) {
     super(String.format("dom attribute %s=\"%s\"", domAttributeName, expectedDomAttributeValue));
     this.domAttributeName = domAttributeName;
     this.expectedDomAttributeValue = expectedDomAttributeValue;
@@ -24,7 +28,7 @@ public class DomAttributeValue extends WebElementCondition {
   public CheckResult check(Driver driver, WebElement element) {
     String attributeValue = element.getDomAttribute(domAttributeName);
     return new CheckResult(
-      expectedDomAttributeValue.equals(attributeValue),
+      Objects.equals(expectedDomAttributeValue, attributeValue),
       String.format("%s=\"%s\"", domAttributeName, attributeValue)
     );
   }

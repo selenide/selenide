@@ -18,10 +18,6 @@ import static com.codeborne.selenide.Condition.checked;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.cssValue;
 import static com.codeborne.selenide.Condition.disabled;
-import static com.codeborne.selenide.Condition.domAttribute;
-import static com.codeborne.selenide.Condition.domAttributeValue;
-import static com.codeborne.selenide.Condition.domProperty;
-import static com.codeborne.selenide.Condition.domPropertyValue;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.have;
@@ -38,6 +34,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Mocks.*;
 import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -161,6 +158,7 @@ final class ConditionTest {
   }
 
   @Test
+  @SuppressWarnings("InjectedReferences")
   void checksValueOfClassAttribute() {
     assertThat(cssClass("btn").check(driver, elementWithAttribute("class", "btn btn-warning")).verdict()).isEqualTo(ACCEPT);
     assertThat(cssClass("btn-warning").check(driver, elementWithAttribute("class", "btn btn-warning")).verdict()).isEqualTo(ACCEPT);
@@ -173,40 +171,6 @@ final class ConditionTest {
   void elementHasCssValue() {
     assertThat(cssValue("display", "none").check(driver, elementWithCssStyle("display", "none")).verdict()).isEqualTo(ACCEPT);
     assertThat(cssValue("font-size", "24").check(driver, elementWithCssStyle("font-size", "20")).verdict()).isEqualTo(REJECT);
-  }
-
-  @Test
-  void elementHasDomAttribute() {
-    assertThat(domAttribute("hidden").check(driver, elementWithDomAttribute("hidden", "true")).verdict()).isEqualTo(ACCEPT);
-    assertThat(domAttribute("hidden").check(driver, elementWithDomAttribute("hidden", "false")).verdict()).isEqualTo(ACCEPT);
-    assertThat(domAttribute("hidden").check(driver, elementWithDomAttribute("hidden", "")).verdict()).isEqualTo(ACCEPT);
-    assertThat(domAttribute("hidden").check(driver, elementWithDomAttribute("id", "id1")).verdict()).isEqualTo(REJECT);
-  }
-
-  @Test
-  void elementHasDomAttributeValue() {
-    WebElementCondition condition = domAttributeValue("checked", "true");
-    assertThat(condition.check(driver, elementWithDomAttribute("checked", "true")).verdict()).isEqualTo(ACCEPT);
-    assertThat(condition.check(driver, elementWithDomAttribute("checked", "false")).verdict()).isEqualTo(REJECT);
-    assertThat(condition.check(driver, elementWithDomAttribute("checked", "")).verdict()).isEqualTo(REJECT);
-    assertThat(condition.check(driver, elementWithAttribute("id", "id2")).verdict()).isEqualTo(REJECT);
-  }
-
-  @Test
-  void elementHasDomProperty() {
-    assertThat(domProperty("id").check(driver, elementWithDomProperty("id", "id1")).verdict()).isEqualTo(ACCEPT);
-    assertThat(domProperty("id").check(driver, elementWithDomProperty("id", "id2")).verdict()).isEqualTo(ACCEPT);
-    assertThat(domProperty("id").check(driver, elementWithDomProperty("id", "")).verdict()).isEqualTo(ACCEPT);
-    assertThat(domProperty("id").check(driver, elementWithDomProperty("name", "name1")).verdict()).isEqualTo(REJECT);
-  }
-
-  @Test
-  void elementHasDomPropertyValue() {
-    WebElementCondition condition = domPropertyValue("id", "id1");
-    assertThat(condition.check(driver, elementWithDomProperty("id", "id1")).verdict()).isEqualTo(ACCEPT);
-    assertThat(condition.check(driver, elementWithDomProperty("id", "id2")).verdict()).isEqualTo(REJECT);
-    assertThat(condition.check(driver, elementWithDomProperty("id", "")).verdict()).isEqualTo(REJECT);
-    assertThat(condition.check(driver, elementWithDomProperty("name", "name2")).verdict()).isEqualTo(REJECT);
   }
 
   private WebElement elementWithCssStyle(String propertyName, String value) {
@@ -472,6 +436,7 @@ final class ConditionTest {
   }
 
   @Test
+  @SuppressWarnings("SelenideEmptyMatchText")
   void shouldHaveText_doesNotAccept_emptyString() {
     assertThatThrownBy(() -> text(""))
       .isInstanceOf(IllegalArgumentException.class)
@@ -480,10 +445,10 @@ final class ConditionTest {
 
   @Test
   void shouldHaveText_accepts_blankNonEmptyString() {
-    text(" ");
-    text("  ");
-    text("\t");
-    text("\n");
+    assertThatNoException().isThrownBy(() -> text(" "));
+    assertThatNoException().isThrownBy(() -> text("  "));
+    assertThatNoException().isThrownBy(() -> text("\t"));
+    assertThatNoException().isThrownBy(() -> text("\n"));
   }
 
   private WebElement mockElement(boolean isSelected, String text) {

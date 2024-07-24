@@ -638,6 +638,7 @@ public final class Condition {
    * <p>Sample: {@code $("#mydiv").shouldHave(domAttribute("hidden"));}</p>
    *
    * @param domAttributeName name of dom attribute, not null
+   * @since 7.4.0
    */
   @CheckReturnValue
   @Nonnull
@@ -650,10 +651,11 @@ public final class Condition {
    *
    * @param domAttributeName          name of dom attribute
    * @param expectedDomAttributeValue expected value of dom attribute
+   * @since 7.4.0
    */
   @CheckReturnValue
   @Nonnull
-  public static WebElementCondition domAttributeValue(String domAttributeName, String expectedDomAttributeValue) {
+  public static WebElementCondition domAttribute(String domAttributeName, @Nullable String expectedDomAttributeValue) {
     return new DomAttributeValue(domAttributeName, expectedDomAttributeValue);
   }
 
@@ -663,6 +665,7 @@ public final class Condition {
    * <p>Sample: {@code $("#mydiv").shouldHave(domProperty("id"));}</p>
    *
    * @param domPropertyName name of dom property, not null
+   * @since 7.4.0
    */
   @CheckReturnValue
   @Nonnull
@@ -675,10 +678,11 @@ public final class Condition {
    *
    * @param domPropertyName          name of dom property
    * @param expectedDomPropertyValue expected value of dom property
+   * @since 7.4.0
    */
   @CheckReturnValue
   @Nonnull
-  public static WebElementCondition domPropertyValue(String domPropertyName, String expectedDomPropertyValue) {
+  public static WebElementCondition domProperty(String domPropertyName, @Nullable String expectedDomPropertyValue) {
     return new DomPropertyValue(domPropertyName, expectedDomPropertyValue);
   }
 
