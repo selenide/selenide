@@ -60,7 +60,7 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
     options.setExperimentalOption("prefs", prefs(browserDownloadsFolder, System.getProperty("chromeoptions.prefs", "")));
     setMobileEmulation(options);
 
-    return options.merge(commonCapabilities);
+    return merge(options, commonCapabilities);
   }
 
   protected void addHeadless(ChromeOptions options) {

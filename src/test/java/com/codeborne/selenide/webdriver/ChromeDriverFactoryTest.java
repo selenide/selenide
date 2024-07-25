@@ -23,6 +23,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.openqa.selenium.chrome.ChromeOptions.CAPABILITY;
 
 final class ChromeDriverFactoryTest {
   private static final String CHROME_OPTIONS_PREFS = "chromeoptions.prefs";
@@ -45,7 +46,7 @@ final class ChromeDriverFactoryTest {
   @Test
   void defaultChromeOptions() {
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-    Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
+    Map<String, Object> prefsMap = getBrowserLaunchPrefs(CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).hasSizeGreaterThanOrEqualTo(5);
     assertThat(prefsMap).containsEntry("credentials_enable_service", false);
@@ -68,7 +69,7 @@ final class ChromeDriverFactoryTest {
   void disablesAnnoyingPopupAboutExtensions() {
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
 
-    List<String> excludeSwitches = getBrowserLaunchExcludeSwitches(ChromeOptions.CAPABILITY, chromeOptions);
+    List<String> excludeSwitches = getBrowserLaunchExcludeSwitches(CAPABILITY, chromeOptions);
     assertThat(excludeSwitches).isEqualTo(asList("enable-automation", "load-extension"));
   }
 
@@ -80,8 +81,21 @@ final class ChromeDriverFactoryTest {
 
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
 
-    List<String> excludeSwitches = getBrowserLaunchExcludeSwitches(ChromeOptions.CAPABILITY, chromeOptions);
+    List<String> excludeSwitches = getBrowserLaunchExcludeSwitches(CAPABILITY, chromeOptions);
     assertThat(excludeSwitches).isEqualTo(singletonList("enable-automation"));
+  }
+
+  @Test
+  void mergesExperimentalOptions_prefs() {
+    config.browserCapabilities(new ChromeOptions()
+      .setExperimentalOption("prefs", Map.of("profile.content_settings.exceptions.clipboard", "{'setting':1}"))
+    );
+
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    Map<String, Object> prefsMap = getBrowserLaunchPrefs(CAPABILITY, chromeOptions);
+
+    assertThat(prefsMap).containsEntry("profile.content_settings.exceptions.clipboard", "{'setting':1}");
+    assertThat(prefsMap).containsEntry("download.default_directory", new File(DOWNLOADS_FOLDER).getAbsolutePath());
   }
 
   @Test
@@ -90,7 +104,7 @@ final class ChromeDriverFactoryTest {
 
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, null);
 
-    Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
+    Map<String, Object> prefsMap = getBrowserLaunchPrefs(CAPABILITY, chromeOptions);
     assertThat(prefsMap).containsEntry("credentials_enable_service", false);
     assertThat(prefsMap).containsEntry("profile.password_manager_enabled", false);
     assertThat(prefsMap).doesNotContainKey("download.default_directory");
@@ -101,7 +115,7 @@ final class ChromeDriverFactoryTest {
     System.setProperty(CHROME_OPTIONS_ARGS, "abdd,--abcd,\"snc,snc\",xcvcd=123,\"abc emd\"");
 
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+    List<String> optionArguments = getBrowserLaunchArgs(CAPABILITY, chromeOptions);
 
     assertThat(optionArguments)
       .contains("abdd", "--abcd", "xcvcd=123", "snc,snc", "abc emd");
@@ -113,7 +127,7 @@ final class ChromeDriverFactoryTest {
       "\"key5=abc,555\",key6=\"555 abc\"");
 
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-    Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
+    Map<String, Object> prefsMap = getBrowserLaunchPrefs(CAPABILITY, chromeOptions);
 
     assertThat(prefsMap)
       .containsEntry("key1", "stringval")
@@ -129,7 +143,7 @@ final class ChromeDriverFactoryTest {
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=1,key2");
 
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-    Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
+    Map<String, Object> prefsMap = getBrowserLaunchPrefs(CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).containsEntry("key1", 1);
     assertThat(prefsMap).doesNotContainKey("key2");
@@ -140,7 +154,7 @@ final class ChromeDriverFactoryTest {
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=1,key2=1=false");
 
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-    Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
+    Map<String, Object> prefsMap = getBrowserLaunchPrefs(CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).containsEntry("key1", 1);
     assertThat(prefsMap).doesNotContainKeys("key2", "key2=", "key2=1", "key2=1=", "key2=1=false");
@@ -161,7 +175,7 @@ final class ChromeDriverFactoryTest {
     config.headless(true);
 
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+    List<String> optionArguments = getBrowserLaunchArgs(CAPABILITY, chromeOptions);
 
     assertThat(optionArguments).contains("--headless=new");
   }
@@ -169,7 +183,7 @@ final class ChromeDriverFactoryTest {
   @Test
   void disablesUsingDevSharedMemory() {
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+    List<String> optionArguments = getBrowserLaunchArgs(CAPABILITY, chromeOptions);
 
     assertThat(optionArguments).contains("--disable-dev-shm-usage");
   }
@@ -177,7 +191,7 @@ final class ChromeDriverFactoryTest {
   @Test
   void doesNotDisableSandboxByDefault() {
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+    List<String> optionArguments = getBrowserLaunchArgs(CAPABILITY, chromeOptions);
 
     assertThat(optionArguments).doesNotContain("--no-sandbox");
   }
@@ -186,7 +200,7 @@ final class ChromeDriverFactoryTest {
   void canDisableSandbox_withArgument() {
     config.browserCapabilities(new ChromeOptions().addArguments("--no-sandbox"));
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+    List<String> optionArguments = getBrowserLaunchArgs(CAPABILITY, chromeOptions);
 
     assertThat(optionArguments).contains("--no-sandbox");
   }
@@ -195,7 +209,7 @@ final class ChromeDriverFactoryTest {
   void canDisableSandbox_withSystemProperty() {
     System.setProperty("chromeoptions.args", "foo,--no-sandbox,bar");
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+    List<String> optionArguments = getBrowserLaunchArgs(CAPABILITY, chromeOptions);
 
     assertThat(optionArguments).contains("--no-sandbox");
   }
@@ -220,6 +234,6 @@ final class ChromeDriverFactoryTest {
 
   @SuppressWarnings("unchecked")
   private Map<String, Object> getChromeOptions(Capabilities caps) {
-    return (Map<String, Object>) caps.asMap().get(ChromeOptions.CAPABILITY);
+    return (Map<String, Object>) caps.asMap().get(CAPABILITY);
   }
 }
