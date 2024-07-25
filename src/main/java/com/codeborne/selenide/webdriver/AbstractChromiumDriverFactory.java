@@ -1,6 +1,8 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Config;
+import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.chromium.ChromiumOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,10 +11,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
@@ -66,6 +70,43 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
 
     log.debug("Using chromium preferences: {}", preferences);
     return preferences;
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  @Override
+  protected <T extends MutableCapabilities> T merge(T capabilities, MutableCapabilities additionalCapabilities) {
+    if (capabilities instanceof ChromiumOptions<?> options1 && additionalCapabilities instanceof ChromiumOptions<?> options2) {
+      mergePrefs(options1, options2);
+    }
+    return super.merge(capabilities, additionalCapabilities);
+  }
+
+  @SuppressWarnings("unchecked")
+  private void mergePrefs(ChromiumOptions<?> options1, ChromiumOptions<?> options2) {
+    Map<String, Object> experimentalOptions1 = experimentalOptions(options1);
+    Map<String, Object> experimentalOptions2 = experimentalOptions(options2);
+    if (experimentalOptions1 != null && experimentalOptions2 != null) {
+      if (experimentalOptions1.get("prefs") instanceof Map<?, ?> prefs1 &&
+          experimentalOptions2.get("prefs") instanceof Map<?, ?> prefs2) {
+        Map<Object, Objects> mergedPrefs = new HashMap<>(prefs1.size() + prefs2.size());
+        mergedPrefs.putAll((Map<Object, Objects>) prefs1);
+        mergedPrefs.putAll((Map<Object, Objects>) prefs2);
+        options2.setExperimentalOption("prefs", mergedPrefs);
+      }
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> experimentalOptions(ChromiumOptions<?> options) {
+    try {
+      Field field = ChromiumOptions.class.getDeclaredField("experimentalOptions");
+      field.setAccessible(true);
+      return (Map<String, Object>) field.get(options);
+    }
+    catch (NoSuchFieldException | IllegalAccessException e) {
+      throw new RuntimeException("Failed to extract experimentalOptions from " + options, e);
+    }
   }
 
   @Nonnull

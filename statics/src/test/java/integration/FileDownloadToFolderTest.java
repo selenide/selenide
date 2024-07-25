@@ -1,19 +1,22 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
 import org.apache.commons.lang3.SystemUtils;
-import com.codeborne.selenide.ex.FileNotDownloadedError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
@@ -24,6 +27,7 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
@@ -44,6 +48,13 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
+    if (isChrome()) {
+      Configuration.browserCapabilities = new ChromeOptions().setExperimentalOption("prefs", Map.of("foo", "bar"));
+    }
+    if (isEdge()) {
+      Configuration.browserCapabilities = new EdgeOptions().setExperimentalOption("prefs", Map.of("foo", "bar"));
+    }
+
     if (SystemUtils.IS_OS_WINDOWS) {
       closeWebDriver();
     }
