@@ -36,6 +36,8 @@ import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.TextCheck.FULL_TEXT;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
@@ -173,6 +175,11 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   protected void assumeClipboardSupported() {
+    if (isChrome() || isEdge()) {
+      // in Chromium browsers, we grant permissions via DevTools and access clipboard via JS
+      return;
+    }
+
     assumeThat(headless).isFalse();
     assumeThat(GraphicsEnvironment.isHeadless()).isFalse();
     try {
