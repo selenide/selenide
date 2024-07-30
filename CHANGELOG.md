@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.4.1 (released 30.07.2024)
+* Bump Appium from 9.2.3 to 9.3.0 (#2796)
+* Bump BrowserupProxy from 2.2.17 to 2.2.18 (#2795)
+* #2797 Fix augmenter error in mobile (#2798)
+
 ## 7.4.0 (released 26.07.2024)
 * bump Selenium from 4.22.0 to 4.23.0 (#2785)
 * disable Chrome popup "Choose your search engine" (#2792)
