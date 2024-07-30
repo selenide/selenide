@@ -26,10 +26,12 @@ public class WebdriverUnwrapper {
     return cast(driver.getWebDriver(), klass);
   }
 
+  @SuppressWarnings("unchecked")
   public static <T> Optional<T> cast(SearchContext driverOrElement, Class<T> klass) {
+    if (klass.isAssignableFrom(driverOrElement.getClass())) {
+      return Optional.of((T) driverOrElement);
+    }
     WebDriver webdriver = unwrap(driverOrElement);
-
-    //noinspection unchecked
     return webdriver != null && klass.isAssignableFrom(webdriver.getClass()) ? Optional.of((T) webdriver) : Optional.empty();
   }
 
