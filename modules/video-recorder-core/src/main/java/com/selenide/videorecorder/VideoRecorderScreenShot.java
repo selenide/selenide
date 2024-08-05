@@ -6,7 +6,6 @@ import org.bytedeco.javacv.Java2DFrameConverter;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
