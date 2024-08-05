@@ -45,10 +45,10 @@ public class VideoRecorderScreenShot extends TimerTask {
   private WebDriver driver;
 
   public VideoRecorderScreenShot(WebDriver driver, File videoFile) {
-    try {
       this.driver = driver;
-      initVideoRecordingProcessEx(videoFile);
-    } catch (Exception e) {
+    try {
+      initVideoRecordingProcess(videoFile);
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
@@ -57,7 +57,7 @@ public class VideoRecorderScreenShot extends TimerTask {
     this(driver, videoFile.toFile());
   }
 
-  private void initVideoRecordingProcessEx(File videoFile) throws IOException, InterruptedException {
+  private void initVideoRecordingProcess(File videoFile) throws IOException {
     recorder = new FFmpegFrameRecorder(videoFile,
       driver.manage().window().getSize().getWidth(),
       driver.manage().window().getSize().getHeight());
