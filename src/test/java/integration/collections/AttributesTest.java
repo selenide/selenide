@@ -21,6 +21,11 @@ public class AttributesTest extends ITest {
   }
 
   @Test
+  void canCheckProperties() {
+    $$(".element").shouldHave(attributes("value", "11111", "22222", "33333"));
+  }
+
+  @Test
   void errorMessage() {
     assertThatThrownBy(() -> $$(".element").shouldHave(attributes("data-value", "1  uno", "2  duo", "3  trio")))
       .isInstanceOf(AttributesMismatch.class)

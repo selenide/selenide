@@ -38,7 +38,7 @@ public class WebElementCommunicator implements ElementCommunicator {
   public List<String> attributes(Driver driver, List<WebElement> elements, String attributeName) {
     try {
       return driver.executeJavaScript(
-        "return Array.from(arguments[0]).map(el => el.getAttribute(arguments[1]))",
+        "return Array.from(arguments[0]).map(el => el[arguments[1]] || el.getAttribute(arguments[1]))",
         elements, attributeName
       );
     }

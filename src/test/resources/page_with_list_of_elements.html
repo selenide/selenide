@@ -6,9 +6,9 @@
 </head>
 <body>
 <h1>List of elements</h1>
-<div class="element" data-value="1 uno">One</div>
-<div class="element" data-value="2 duo">Two</div>
-<div class="element" data-value="3 trio">Three</div>
+<div id="one" class="element" data-value="1 uno">One</div>
+<div id="two" class="element" data-value="2 duo">Two</div>
+<div id="three" class="element" data-value="3 trio">Three</div>
 
 <h1>List of elements with spaces</h1>
 <ol class="spaces">
@@ -16,5 +16,10 @@
   <li>The second</li>
   <li>The third</li>
 </ol>
+<script>
+  document.getElementById('one').setAttribute('value', '11111')
+  document.getElementById('two')['value'] = '22222'
+  document.getElementById('three').value = '33333'
+</script>
 </body>
 </html>
