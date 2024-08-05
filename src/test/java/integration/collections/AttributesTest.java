@@ -21,6 +21,11 @@ public class AttributesTest extends ITest {
   }
 
   @Test
+  void canCheckBooleanValues() {
+    $$(".field").shouldHave(attributes("required", "true", "true", "true"));
+  }
+
+  @Test
   void canCheckProperties() {
     $$(".element").shouldHave(attributes("value", "11111", "22222", "33333"));
   }
