@@ -24,20 +24,6 @@ import static org.bytedeco.ffmpeg.global.avutil.AV_PIX_FMT_YUV420P;
   07.05.2024 11:57
  */
 
-/**
- * This is video recording based on taking screenshots. How it works.
- * Webdriver instance should exist. Then we initialize {@link BrowsingContext} from Selenium BiDi.
- * From one hand Selenium BiDi allows us to use common api for all (ar almost all) browsers.
- * From other hand BiDi uses WebSocket connection so this functionality can work in parallel with the main Selenium.
- * After that we initialize ffmpeg process.
- * During the recording process we call run() method every second, take screenshot and write it 24 times
- * to the ffmpeg process output stream. At the emd we save file with [timestamp].webm format.
- * Files are stored in build/records folder of the project by default.
- *
- * @see TimerTask
- * @see BrowsingContext
- * @see <a href="https://www.selenium.dev/documentation/webdriver/bidirectional/webdriver_bidi/">Selenium BiDi</a>
- */
 public class VideoRecorderScreenShot extends TimerTask {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorderScreenShot.class);
 
@@ -45,7 +31,7 @@ public class VideoRecorderScreenShot extends TimerTask {
   private WebDriver driver;
 
   public VideoRecorderScreenShot(WebDriver driver, File videoFile) {
-      this.driver = driver;
+    this.driver = driver;
     try {
       initVideoRecordingProcess(videoFile);
     } catch (IOException e) {
