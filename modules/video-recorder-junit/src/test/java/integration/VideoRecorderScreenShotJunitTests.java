@@ -20,7 +20,7 @@ public class VideoRecorderScreenShotJunitTests {
 
 
   @AfterEach
-  public void afterEach(TestInfo testInfo) throws IOException {
+  public void afterEach(TestInfo testInfo) {
     Path path = RecorderFileUtils.generateOrGetVideoFolderName(
       testInfo.getTestClass().get().getSimpleName(),
       testInfo.getTestMethod().get().getName()
@@ -48,7 +48,7 @@ public class VideoRecorderScreenShotJunitTests {
   }
 
   @Test
-  public void waitingTest(){
+  public void waitingTest() {
     open("https://the-internet.herokuapp.com/dynamic_controls");
     $("#input-example button").click();
     $("#input-example input").shouldBe(enabled, Duration.ofSeconds(10));

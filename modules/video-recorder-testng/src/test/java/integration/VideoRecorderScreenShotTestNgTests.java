@@ -19,8 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class VideoRecorderScreenShotTestNgTests {
 
   @AfterMethod
-  public void afterMethod(ITestResult result){
-    Path path = RecorderFileUtils.generateOrGetVideoFolderName(result.getTestClass().getRealClass().getSimpleName(), result.getMethod().getMethodName());
+  public void afterMethod(ITestResult result) {
+    Path path = RecorderFileUtils
+      .generateOrGetVideoFolderName(result.getTestClass().getRealClass().getSimpleName(),
+        result.getMethod().getMethodName());
     path = RecorderFileUtils.getLastModifiedFile(path);
     assertThat(path.toFile().length()).isGreaterThan(0);
     assertThat(path.toFile()).hasExtension("webm");
@@ -45,7 +47,7 @@ public class VideoRecorderScreenShotTestNgTests {
   }
 
   @Test
-  public void waitingTest(){
+  public void waitingTest() {
     open("https://the-internet.herokuapp.com/dynamic_controls");
     $("#input-example button").click();
     $("#input-example input").shouldBe(enabled, Duration.ofSeconds(10));

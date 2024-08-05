@@ -34,7 +34,7 @@ public class VideoRecorderScreenShotTests {
   }
 
   @Test
-  public void videoFileShouldExistsAndNotEmptyTestCore(TestInfo testInfo) {
+  public void videoFileShouldExistsAndNotEmptyTestCore() {
     open("file://" + this.getClass().getClassLoader().getResource("draggable.html").getPath());
     $("#drag1").dragAndDrop(DragAndDropOptions.to("#div2"));
     sleep(3000);
