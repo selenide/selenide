@@ -17,18 +17,31 @@
   <input type="submit">
 </form>
 
-<h1>List of elements with spaces</h1>
+<h1 readonly="true">List of elements with spaces</h1>
 <ol class="spaces">
   <li>The first</li>
   <li>The second</li>
   <li>The third</li>
 </ol>
 <script>
+  // set "value" property
   document.getElementById('one').setAttribute('value', '11111')
   document.getElementById('two')['value'] = '22222'
   document.getElementById('three').value = '33333'
+
+  // set "class" property
+  document.getElementById('one').classList.add("first");
+  document.getElementById('two').classList.add("middle");
+  document.getElementById('three').classList.add("last");
+
+  // set boolean property "required"
   document.getElementById('i1').required = true
   document.getElementById('i2')['required'] = true
+
+  // set boolean property "readOnly"
+  document.getElementById('i1').readOnly = true
+  document.getElementById('i2').setAttribute("readonly", "readonly")
+  document.getElementById('i3')['readOnly'] = true
 </script>
 </body>
 </html>

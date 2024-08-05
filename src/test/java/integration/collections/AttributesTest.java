@@ -21,8 +21,25 @@ public class AttributesTest extends ITest {
   }
 
   @Test
-  void canCheckBooleanValues() {
+  void canCheckBooleanValues_required() {
     $$(".field").shouldHave(attributes("required", "true", "true", "true"));
+    $$(".element").shouldHave(attributes("required", null, null, null));
+  }
+
+  @Test
+  void canCheckBooleanValues_readOnly() {
+    $$(".field").shouldHave(attributes("readOnly", "true", "true", "true"));
+    $$(".element").shouldHave(attributes("readOnly", null, null, null));
+    $$("h1").shouldHave(attributes("readOnly", null, "true"));
+  }
+
+  @Test
+  void canCheckCssClasses() {
+    $$(".element").shouldHave(attributes("class",
+      "element first",
+      "element middle",
+      "element last"
+    ));
   }
 
   @Test
