@@ -1,41 +1,29 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.DragAndDropOptions;
-import com.google.common.collect.Iterables;
 import com.selenide.videorecorder.BrowserRecorderListener;
-import org.openqa.selenium.MutableCapabilities;
+import com.selenide.videorecorder.RecorderFileUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Selenide.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Listeners(BrowserRecorderListener.class)
 public class VideoRecorderScreenShotTestNgTests {
 
-  @BeforeClass
-  public void setUp() {
-    MutableCapabilities mutableCapabilities = new MutableCapabilities();
-    mutableCapabilities.setCapability("webSocketUrl", true);
-    Configuration.browserCapabilities = mutableCapabilities;
-  }
-
   @AfterMethod
-  public void afterMethod(ITestResult result) throws IOException {
-    Path path = Path.of("build/records",
-      result.getTestClass().getRealClass().getSimpleName(),
-      result.getMethod().getMethodName());
-    Path last = Iterables.getLast(Files.list(path).toList());
-    assertThat(last.toFile().length()).isGreaterThan(0);
-    assertThat(last.toFile()).hasExtension("webm");
+  public void afterMethod(ITestResult result){
+    Path path = RecorderFileUtils.generateOrGetVideoFolderName(result.getTestClass().getRealClass().getSimpleName(), result.getMethod().getMethodName());
+    path = RecorderFileUtils.getLastModifiedFile(path);
+    assertThat(path.toFile().length()).isGreaterThan(0);
+    assertThat(path.toFile()).hasExtension("webm");
   }
 
 
@@ -55,4 +43,12 @@ public class VideoRecorderScreenShotTestNgTests {
     $("#drag1").dragAndDrop(DragAndDropOptions.to("#div1"));
     sleep(3000);
   }
+
+  @Test
+  public void waitingTest(){
+    open("https://the-internet.herokuapp.com/dynamic_controls");
+    $("#input-example button").click();
+    $("#input-example input").shouldBe(enabled, Duration.ofSeconds(10));
+  }
+
 }

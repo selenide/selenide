@@ -7,8 +7,7 @@ import org.testng.ITestResult;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.webdriver;
+import static com.codeborne.selenide.Selenide.*;
 
 /**
  * Created by Serhii Bryt
@@ -17,10 +16,12 @@ import static com.codeborne.selenide.Selenide.webdriver;
 public class BrowserRecorderListener implements ITestListener {
   private VideoRecorderScreenShot videoRecorder = null;
   private ScheduledThreadPoolExecutor timer;
+  private Boolean shouldRecordVideo = false;
 
   @Override
   public void onTestStart(ITestResult result) {
-    if (!result.getMethod().getConstructorOrMethod().getMethod().isAnnotationPresent(DisableVideoRecording.class)) {
+    shouldRecordVideo = !result.getMethod().getConstructorOrMethod().getMethod().isAnnotationPresent(DisableVideoRecording.class);
+    if (shouldRecordVideo) {
       initRecorder(result.getTestClass().getRealClass().getSimpleName(), result.getMethod().getMethodName());
     }
   }
@@ -29,30 +30,28 @@ public class BrowserRecorderListener implements ITestListener {
     if (!WebDriverRunner.hasWebDriverStarted()) {
       open();
     }
-    videoRecorder = new VideoRecorderScreenShot(webdriver().object(), testClassName, testName);
+    videoRecorder = new VideoRecorderScreenShot(webdriver().object(),
+      RecorderFileUtils.generateVideoFileName(testClassName, testName));
     timer = new ScheduledThreadPoolExecutor(1);
     timer.scheduleAtFixedRate(videoRecorder, 0, 1000, TimeUnit.MILLISECONDS);
   }
 
   @Override
   public void onTestFailure(ITestResult result) {
-    if (videoRecorder != null) {
+    if (shouldRecordVideo) {
       stop();
     }
   }
 
   private void stop() {
     videoRecorder.stopRecording();
-    videoRecorder.cancel();
     timer.shutdownNow();
   }
 
   @Override
   public void onTestSuccess(ITestResult result) {
-    if (videoRecorder != null) {
-      if (!result.getMethod().getConstructorOrMethod().getMethod().isAnnotationPresent(DisableVideoRecording.class)) {
-        stop();
-      }
+    if (shouldRecordVideo) {
+      stop();
     }
   }
 }

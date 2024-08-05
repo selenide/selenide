@@ -1,15 +1,11 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.DragAndDropOptions;
+import com.selenide.videorecorder.RecorderFileUtils;
 import com.selenide.videorecorder.VideoRecorderScreenShot;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
-import org.openqa.selenium.MutableCapabilities;
+import org.junit.jupiter.api.*;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -23,21 +19,22 @@ public class VideoRecorderScreenShotTests {
 
   @BeforeAll
   public static void beforeAll() {
-    MutableCapabilities mutableCapabilities = new MutableCapabilities();
-    mutableCapabilities.setCapability("webSocketUrl", true);
-    Configuration.browserCapabilities = mutableCapabilities;
     open();
   }
 
+  @BeforeEach
+  public void beforeEach(TestInfo testInfo) {
+    initRecorder(testInfo);
+  }
+
   @AfterEach
-  public void afterEach() {
+  public void afterEach(TestInfo testInfo) {
     stopRecordingAndCloseDriver();
-    checkVideoLengthInTime();
+    checkVideoLengthInTime(testInfo);
   }
 
   @Test
   public void videoFileShouldExistsAndNotEmptyTestCore(TestInfo testInfo) {
-    initRecorder(testInfo);
     open("file://" + this.getClass().getClassLoader().getResource("draggable.html").getPath());
     $("#drag1").dragAndDrop(DragAndDropOptions.to("#div2"));
     sleep(3000);
@@ -55,22 +52,22 @@ public class VideoRecorderScreenShotTests {
 
   private void initRecorder(TestInfo testInfo) {
     videoRecorder = new VideoRecorderScreenShot(webdriver().object(),
-      testInfo.getTestClass().get().getSimpleName(),
-      testInfo.getTestMethod().get().getName());
+      RecorderFileUtils.generateVideoFileName(testInfo.getTestClass().get().getSimpleName(),
+        testInfo.getTestMethod().get().getName()));
     executor = new ScheduledThreadPoolExecutor(1);
     executor.scheduleAtFixedRate(videoRecorder, 0, 1000, TimeUnit.MILLISECONDS);
   }
 
   private void stopRecordingAndCloseDriver() {
     videoRecorder.stopRecording();
-    videoRecorder.cancel();
     executor.shutdown();
     closeWebDriver();
   }
 
-  private void checkVideoLengthInTime() {
-    File videoFile = videoRecorder.getVideoFile();
-    assertThat(videoFile.length()).isGreaterThan(0);
+  private void checkVideoLengthInTime(TestInfo testInfo) {
+    Path videoFile = RecorderFileUtils.getLastModifiedFile(RecorderFileUtils
+      .generateOrGetVideoFolderName(testInfo.getTestClass().get().getSimpleName(), testInfo.getTestMethod().get().getName()));
+    assertThat(videoFile.toFile().length()).isGreaterThan(0);
     assertThat(videoFile).hasExtension("webm");
   }
 
