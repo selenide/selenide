@@ -10,6 +10,13 @@
 <div id="two" class="element" data-value="2 duo">Two</div>
 <div id="three" class="element" data-value="3 trio">Three</div>
 
+<form action="/page_with_big_divs.html">
+  <input id="i1" class="field">
+  <input id="i2" class="field">
+  <input id="i3" class="field" required>
+  <input type="submit">
+</form>
+
 <h1>List of elements with spaces</h1>
 <ol class="spaces">
   <li>The first</li>
@@ -20,6 +27,8 @@
   document.getElementById('one').setAttribute('value', '11111')
   document.getElementById('two')['value'] = '22222'
   document.getElementById('three').value = '33333'
+  document.getElementById('i1').required = true
+  document.getElementById('i2')['required'] = true
 </script>
 </body>
 </html>
