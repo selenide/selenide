@@ -40,6 +40,7 @@ class EdgeDriverFactoryTest {
     assertThat(prefs.get("profile.password_manager_enabled")).isEqualTo(false);
     assertThat(prefs.get("profile.password_manager_leak_detection")).isEqualTo(false);
     assertThat(prefs.get("autofill.profile_enabled")).isEqualTo(false);
+    assertThat(prefs.get("autofill.credit_card_enabled")).isEqualTo(false);
     assertThat(prefs.get("plugins.always_open_pdf_externally")).isEqualTo(true);
     assertThat(prefs.get("profile.default_content_setting_values.automatic_downloads")).isEqualTo(1);
     assertThat(prefs.get("safebrowsing.enabled")).isEqualTo(true);
