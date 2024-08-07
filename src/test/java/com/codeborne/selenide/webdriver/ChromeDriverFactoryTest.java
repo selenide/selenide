@@ -52,6 +52,8 @@ final class ChromeDriverFactoryTest {
     assertThat(prefsMap).containsEntry("credentials_enable_service", false);
     assertThat(prefsMap).containsEntry("profile.password_manager_enabled", false);
     assertThat(prefsMap).containsEntry("plugins.always_open_pdf_externally", true);
+    assertThat(prefsMap).containsEntry("autofill.profile_enabled", false);
+    assertThat(prefsMap).containsEntry("autofill.credit_card_enabled", false);
     assertThat(prefsMap).containsEntry("profile.default_content_setting_values.automatic_downloads", 1);
     assertThat(prefsMap).containsEntry("download.default_directory",
       new File(DOWNLOADS_FOLDER).getAbsolutePath());
