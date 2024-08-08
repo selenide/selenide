@@ -20,12 +20,6 @@ jobs:
           model: 'iPhone 15'
           os: 'iOS'
           os_version: '17.5'
-      - uses: actions/cache@v4
-        with:
-          path: build/apps
-          key: ${{ runner.os }}-ios-tests-${{ hashFiles('**/*.zip*') }}
-          restore-keys: |
-            ${{ runner.os }}-ios-tests-
       - name: Setup NodeJS
         uses: actions/setup-node@v4
         with:
