@@ -19,7 +19,7 @@ jobs:
         with:
           model: 'iPhone 15'
           os: 'iOS'
-          os_version: '17.5'
+          os_version: '18.0'
       - name: Setup NodeJS
         uses: actions/setup-node@v4
         with:
