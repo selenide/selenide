@@ -94,6 +94,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
       - name: Install Appium
         run: |
           npm install -g appium
@@ -140,7 +141,7 @@ jobs:
         with:
           model: 'iPhone 15'
           os: 'iOS'
-          os_version: '17.2'
+          os_version: '17.5'
       - uses: actions/cache@v4
         with:
           path: build/apps
@@ -151,6 +152,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
       - name: Install Appium
         run: |
           npm install -g appium
@@ -167,6 +169,7 @@ jobs:
           pushd "$cwd"
           cd ~
           appium driver install xcuitest
+          appium driver run xcuitest build-wda
           appium driver install safari
           appium-doctor
       - name: Set up JDK
