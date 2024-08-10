@@ -3,6 +3,7 @@ package it.mobile.android;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.appium.SelenideAppium;
+import it.mobile.ClickListener;
 import it.mobile.ITTest;
 import it.mobile.android.driverproviders.AndroidDriverWithDemos;
 import org.junit.jupiter.api.AfterAll;
