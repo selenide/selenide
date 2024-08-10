@@ -17,8 +17,10 @@ import io.appium.java_client.pagefactory.bys.builder.AppiumByBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ByIdOrName;
+import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +67,14 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     }
 
     return new DefaultElementByBuilder(null, null);
+  }
+
+  @Nonnull
+  @Override
+  @CheckReturnValue
+  protected FieldDecorator defaultFieldDecorator(Driver driver, @Nullable WebElementSource searchContext) {
+    SearchContext context = getSearchContext(driver, searchContext);
+    return new AppiumFieldDecorator(context);
   }
 
   @CheckReturnValue
