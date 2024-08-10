@@ -9,22 +9,24 @@ import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.Set;
 
 import static com.codeborne.selenide.WebDriverRunner.driver;
+import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 
 /**
  * The main starting point of Selenide-Appium.
  * <p>
  * You start with methods {@link #launchApp()} for launching the tested application
  */
+@ParametersAreNonnullByDefault
 public class SelenideAppium {
   private static final AppiumNavigator appiumNavigator = new AppiumNavigator();
   private static final DeepLinkLauncher deepLinkLauncher = new DeepLinkLauncher();
 
   private SelenideAppium() {
-
   }
 
   /**
@@ -40,7 +42,7 @@ public class SelenideAppium {
    * @param deepLinkUrl - deep link url
    */
   public static void openIOSDeepLink(@Nonnull String deepLinkUrl) {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
+    if (!hasWebDriverStarted()) {
       launchApp();
     }
     deepLinkLauncher.openDeepLinkOnIos(AppiumDriverRunner.getIosDriver(), deepLinkUrl);
@@ -51,7 +53,7 @@ public class SelenideAppium {
    * @param appPackage - Android application package
    */
   public static void openAndroidDeepLink(@Nonnull String deepLinkUrl, @Nonnull String appPackage) {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
+    if (!hasWebDriverStarted()) {
       launchApp();
     }
     deepLinkLauncher.openDeepLinkOnAndroid(AppiumDriverRunner.getMobileDriver(), deepLinkUrl, appPackage);
@@ -72,14 +74,20 @@ public class SelenideAppium {
     Selenide.back();
   }
 
+  @Nonnull
+  @CheckReturnValue
   public static SelenideAppiumTargetLocator switchTo() {
     return new SelenideAppiumTargetLocator(WebDriverRunner.driver());
   }
 
+  @Nonnull
+  @CheckReturnValue
   public static Set<String> getContextHandles() {
     return switchTo().getContextHandles();
   }
 
+  @Nonnull
+  @CheckReturnValue
   public static String getCurrentContext() {
     return switchTo().getCurrentContext();
   }
