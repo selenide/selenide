@@ -7,11 +7,13 @@ import io.appium.java_client.ios.IOSDriver;
 import org.slf4j.helpers.CheckReturnValue;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isAndroid;
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isIos;
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 
+@ParametersAreNonnullByDefault
 public class AppiumDriverRunner {
 
   /**

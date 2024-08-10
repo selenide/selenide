@@ -40,6 +40,7 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
 
   @Override
   @Nonnull
+  @CheckReturnValue
   protected By findSelector(Driver driver, Field field) {
     AppiumByBuilder builder = byBuilder(driver);
     builder.setAnnotated(field);
@@ -47,6 +48,8 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     return selector != null ? selector : super.findSelector(driver, field);
   }
 
+  @Nonnull
+  @CheckReturnValue
   private DefaultElementByBuilder byBuilder(Driver driver) {
     Optional<HasBrowserCheck> hasBrowserCheck = cast(driver, HasBrowserCheck.class);
     if (hasBrowserCheck.isPresent() && hasBrowserCheck.get().isBrowser()) {
@@ -81,6 +84,8 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     return super.decorate(loader, driver, searchContext, field, selector, genericTypes);
   }
 
+  @Nullable
+  @CheckReturnValue
   private Object decorateWithAppium(ClassLoader loader, @Nullable WebElementSource searchContext, Field field) {
     if (searchContext == null) {
       logger.warn("Cannot initialize field {}", field);
@@ -96,6 +101,7 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
   protected SelenideElement decorateWebElement(Driver driver, @Nullable WebElementSource searchContext, By selector,
                                                Field field, @Nullable String alias) {
@@ -106,6 +112,7 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
 
   @Override
   @Nonnull
+  @CheckReturnValue
   protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createCollection(
     CollectionSource collection, Class<?> klass
   ) {

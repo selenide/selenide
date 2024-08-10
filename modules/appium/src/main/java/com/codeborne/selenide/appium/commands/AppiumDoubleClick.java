@@ -43,6 +43,8 @@ public class AppiumDoubleClick implements Command<SelenideElement> {
     return proxy;
   }
 
+  @Nonnull
+  @CheckReturnValue
   private ClickOptions options(@Nullable Object[] args) {
     return (args == null || args.length == 0) ?
       ClickOptions.usingDefaultMethod() :

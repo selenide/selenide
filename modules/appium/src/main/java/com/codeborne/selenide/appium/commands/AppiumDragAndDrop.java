@@ -13,6 +13,7 @@ import org.openqa.selenium.interactions.Sequence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -50,6 +51,8 @@ public class AppiumDragAndDrop extends DragAndDrop {
     return proxy;
   }
 
+  @Nonnull
+  @CheckReturnValue
   private Sequence getSequenceToPerformDragAndDrop(Point source, Point target) {
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
     return new Sequence(finger, 1)
@@ -62,6 +65,8 @@ public class AppiumDragAndDrop extends DragAndDrop {
       .addAction(finger.createPointerUp(PointerInput.MouseButton.MIDDLE.asArg()));
   }
 
+  @Nonnull
+  @CheckReturnValue
   private Point getCenter(WebElement element) {
     int x = element.getLocation().getX() + element.getSize().getWidth() / 2;
     int y = element.getLocation().getY() + element.getSize().getHeight() / 2;

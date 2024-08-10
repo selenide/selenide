@@ -4,6 +4,8 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.ContextAware;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Set;
 
@@ -25,6 +27,8 @@ public class SelenideAppiumTargetLocator {
     });
   }
 
+  @Nonnull
+  @CheckReturnValue
   public Set<String> getContextHandles() {
     return cast(driver, ContextAware.class)
       .map(ContextAware::getContextHandles)

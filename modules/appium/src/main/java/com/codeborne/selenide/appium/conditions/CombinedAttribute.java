@@ -5,6 +5,7 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -25,11 +26,13 @@ public class CombinedAttribute {
     this.iosAttribute = iosAttribute;
   }
 
+  @Nonnull
   @CheckReturnValue
   public static CombinedAttribute android(String android) {
     return new CombinedAttribute(android, null);
   }
 
+  @Nonnull
   @CheckReturnValue
   public CombinedAttribute ios(String ios) {
     return new CombinedAttribute(androidAttribute, ios);
@@ -41,6 +44,8 @@ public class CombinedAttribute {
     return element.getAttribute(getAttributeName(driver));
   }
 
+  @Nonnull
+  @CheckReturnValue
   private String getAttributeName(Driver driver) {
     if (isAndroid(driver)) {
       return requireNonNull(androidAttribute, "Android selector not given");

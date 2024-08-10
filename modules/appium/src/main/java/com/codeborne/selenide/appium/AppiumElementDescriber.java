@@ -52,6 +52,7 @@ public class AppiumElementDescriber implements ElementDescriber {
   private static final SelenideElementDescriber webVersion = new SelenideElementDescriber();
 
   @Nonnull
+  @CheckReturnValue
   @Override
   public String fully(Driver driver, @Nullable WebElement element) {
     if (element == null) {
@@ -67,6 +68,8 @@ public class AppiumElementDescriber implements ElementDescriber {
     ).orElseGet(() -> webVersion.fully(driver, element));
   }
 
+  @Nonnull
+  @CheckReturnValue
   protected List<String> supportedAttributes(Driver driver) {
     if (isAndroid(driver)) {
       return androidAttributes();
@@ -79,6 +82,8 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
   }
 
+  @Nonnull
+  @CheckReturnValue
   protected List<String> androidAttributes() {
     return asList(
       "resource-id", "checked", "content-desc",
@@ -87,17 +92,22 @@ public class AppiumElementDescriber implements ElementDescriber {
     );
   }
 
+  @Nonnull
+  @CheckReturnValue
   protected List<String> iosAttributes() {
     return asList("enabled", "selected", "name", "value", "visible");
   }
 
+  @Nonnull
+  @CheckReturnValue
   protected List<String> genericAttributes() {
     return asList("checked", "content-desc", "enabled", "name", "displayed");
   }
 
   @Nonnull
+  @CheckReturnValue
   @Override
-  public String briefly(Driver driver, @Nonnull WebElement element) {
+  public String briefly(Driver driver, WebElement element) {
     return cast(driver, AppiumDriver.class).map(appiumDriver ->
       new Builder(element, appiumDriver, supportedAttributes(driver))
         .appendTagName()
@@ -134,6 +144,8 @@ public class AppiumElementDescriber implements ElementDescriber {
       this.supportedAttributes = supportedAttributes;
     }
 
+    @Nonnull
+    @CheckReturnValue
     private Builder appendTagName() {
       if (isAndroid(webDriver)) {
         getAttribute("class", className -> {
@@ -141,22 +153,23 @@ public class AppiumElementDescriber implements ElementDescriber {
         });
       }
       if ("?".equals(tagName)) {
-        safeCall(element::getTagName, () -> "Failed to get tag name", tagName -> this.tagName = tagName);
+        safeCall(element::getTagName, () -> "Failed to get tag name", tag -> this.tagName = tag);
       }
       sb.append("<").append(tagName);
       return this;
     }
 
+    @Nonnull
+    @CheckReturnValue
     private Builder appendAttributes() {
       supportedAttributes.forEach(this::appendAttribute);
       return this;
     }
 
-    private Builder appendAttribute(String name) {
+    private void appendAttribute(String name) {
       getAttribute(name, value -> {
         sb.append(" ").append(name).append("=\"").append(value).append("\"");
       });
-      return this;
     }
 
     private void getAttribute(String name, Consumer<String> attributeHandler) {
@@ -191,6 +204,8 @@ public class AppiumElementDescriber implements ElementDescriber {
       }
     }
 
+    @Nonnull
+    @CheckReturnValue
     public Builder finish() {
       sb.append(">");
 
@@ -206,19 +221,21 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
 
     private void appendText() {
-      safeCall(element::getText, () -> "Failed to get text", text -> this.text = text);
+      safeCall(element::getText, () -> "Failed to get text", value -> this.text = value);
       if ("?".equals(text)) {
-        getAttribute("text", text -> this.text = text);
+        getAttribute("text", value -> this.text = value);
       }
       if ("?".equals(text)) {
-        getAttribute("label", text -> this.text = text);
+        getAttribute("label", value -> this.text = value);
       }
       if ("?".equals(text)) {
-        getAttribute("value", text -> this.text = text);
+        getAttribute("value", value -> this.text = value);
       }
       sb.append(text);
     }
 
+    @Nonnull
+    @CheckReturnValue
     private String build() {
       return sb.toString();
     }
