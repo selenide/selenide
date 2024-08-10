@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.4.2
+* bump Selenium from 4.23.0 to 4.23.1
+* disable Chrome popups "Save address?" and "Save card?" (#2802)
+* #2800 Check dynamic properties in addition to attributes (#2801)
+
 ## 7.4.1 (released 30.07.2024)
 * Bump Appium from 9.2.3 to 9.3.0 (#2796)
 * Bump BrowserupProxy from 2.2.17 to 2.2.18 (#2795)
