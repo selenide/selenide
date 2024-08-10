@@ -290,14 +290,21 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   @CheckReturnValue
   @Nonnull
-  protected DefaultFieldDecorator defaultFieldDecorator(Driver driver, @Nullable WebElementSource searchContext) {
+  protected FieldDecorator defaultFieldDecorator(Driver driver, @Nullable WebElementSource searchContext) {
     return new DefaultFieldDecorator(fieldLocatorFactory(driver, searchContext));
   }
 
   @Nonnull
+  @CheckReturnValue
   private DefaultElementLocatorFactory fieldLocatorFactory(Driver driver, @Nullable WebElementSource searchContext) {
-    SearchContext context = searchContext == null ? driver.getWebDriver() : searchContext.getWebElement();
+    SearchContext context = getSearchContext(driver, searchContext);
     return new DefaultElementLocatorFactory(context);
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  protected SearchContext getSearchContext(Driver driver, @Nullable WebElementSource searchContext) {
+    return searchContext == null ? driver.getWebDriver() : searchContext.getWebElement();
   }
 
   @CheckReturnValue
