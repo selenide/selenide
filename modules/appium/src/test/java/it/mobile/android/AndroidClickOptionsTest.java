@@ -1,5 +1,6 @@
 package it.mobile.android;
 
+import com.codeborne.selenide.Configuration;
 import io.appium.java_client.AppiumBy;
 import org.junit.jupiter.api.Test;
 
@@ -65,6 +66,7 @@ class AndroidClickOptionsTest extends BaseApiDemosTest {
 
   @Test
   void clickUsingJavascript_notSupported() {
+    Configuration.timeout = 10;
     assertThatThrownBy(() -> $(AppiumBy.xpath(".//*[@text='Preference']")).click(withTimeout(ofSeconds(2))))
       .isInstanceOf(UnsupportedOperationException.class)
       .hasMessage("Click timeout is not supported in mobile");
@@ -72,6 +74,7 @@ class AndroidClickOptionsTest extends BaseApiDemosTest {
 
   @Test
   void clickWithTimeout_notSupported() {
+    Configuration.timeout = 10;
     assertThatThrownBy(() -> $(AppiumBy.xpath(".//*[@text='Preference']")).click(usingJavaScript()))
       .isInstanceOf(UnsupportedOperationException.class)
       .hasMessage("Click using JavaScript is not supported in mobile");

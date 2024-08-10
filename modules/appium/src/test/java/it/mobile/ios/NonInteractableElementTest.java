@@ -1,5 +1,6 @@
 package it.mobile.ios;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.appium.SelenideAppiumElement;
 import com.codeborne.selenide.ex.ElementShould;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ public class NonInteractableElementTest extends BaseIosCalculatorTest {
   @BeforeEach
   void makeElementNonInteractable() {
     $(By.name("show alert")).click();
+    Configuration.timeout = 10;
   }
 
   @Test
