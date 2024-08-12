@@ -10,8 +10,6 @@ import com.codeborne.selenide.ex.PageObjectException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
@@ -224,10 +222,10 @@ public class SelenidePageFactory implements PageObjectFactory {
     else if (Container.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(driver, searchContext, field, selector);
     }
-    else if (isDecoratableList(field, genericTypes, Container.class)) {
+    else if (isDecoratableList(field, selector, genericTypes, Container.class)) {
       return createElementsContainerList(driver, searchContext, field, genericTypes, selector);
     }
-    else if (isDecoratableList(field, genericTypes, WebElement.class)) {
+    else if (isDecoratableList(field, selector, genericTypes, WebElement.class)) {
       return createWebElementsList(loader, driver, searchContext, field);
     }
 
@@ -323,18 +321,14 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @CheckReturnValue
-  protected boolean isDecoratableList(Field field, Type[] genericTypes, Class<?> type) {
+  protected boolean isDecoratableList(Field field, @Nullable By selector, Type[] genericTypes, Class<?> type) {
     if (!List.class.isAssignableFrom(field.getType())) {
       return false;
     }
 
     Class<?> listType = getListGenericType(field, genericTypes);
 
-    return listType != null && type.isAssignableFrom(listType) && annotatedWithFindBy(field);
-  }
-
-  private boolean annotatedWithFindBy(Field field) {
-    return field.getAnnotation(FindBy.class) != null || field.getAnnotation(FindBys.class) != null;
+    return listType != null && type.isAssignableFrom(listType) && selector != null;
   }
 
   @CheckReturnValue
