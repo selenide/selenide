@@ -49,11 +49,13 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
   @Test
   public void pageObjectWithContainer() {
     LoginPageWithContainer loginPage = page();
-    loginPage.inputFields.shouldHave(size(2)).get(0).setValue("bob@example.com");
+    assertThat(loginPage.inputFields).hasSize(2);
+    loginPage.inputFields.get(0).sendKeys("bob@example.com");
     loginPage.inputFields.get(1).scroll(up());
     loginPage.inputFields.get(1).setValue("wrongpassword");
     loginPage.loginButton.click();
-    loginPage.errors.message.shouldHave(text("Provided credentials do not match any user in this service."));
+    assertThat(loginPage.errors).hasSize(1);
+    loginPage.errors.get(0).message.shouldHave(text("Provided credentials do not match any user in this service."));
   }
 
   @Test
@@ -129,13 +131,13 @@ class LoginPageWithCollections {
 
 class LoginPageWithContainer {
   @AndroidFindBy(xpath = "//android.widget.EditText")
-  SelenideAppiumCollection inputFields;
+  List<SelenideAppiumElement> inputFields;
 
   @AndroidFindBy(accessibility = "Login button")
   WebElement loginButton;
 
   @AndroidFindBy(xpath = "//*[@content-desc='generic-error-message']")
-  ErrorsWidget errors;
+  List<ErrorsWidget> errors;
 
   static class ErrorsWidget implements Container {
     @AndroidFindBy(xpath = ".//android.widget.TextView")
