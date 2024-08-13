@@ -30,12 +30,12 @@
     optionByValue(requestedValue).selected = 'selected';
   }
 
-  const event = document.createEvent('HTMLEvents');
-  event.initEvent('click', true, true);
-  select.dispatchEvent(event);
+
+  select.dispatchEvent(new Event('click'));
+
   if (getSelectedOptionsString(select) !== previousSelectedOptions) {
-    event.initEvent('change', true, true);
-    select.dispatchEvent(event);
+    select.dispatchEvent(new Event('input'));
+    select.dispatchEvent(new Event('change'));
   }
 
   return {};
