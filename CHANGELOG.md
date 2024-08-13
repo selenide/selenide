@@ -1,9 +1,11 @@
 # Changelog
 
-## 7.4.2
+## 7.4.2 (released 13.08.2024)
 * bump Selenium from 4.23.0 to 4.23.1
 * disable Chrome popups "Save address?" and "Save card?" (#2802)
 * #2800 Check dynamic properties in addition to attributes (#2801)
+* #2808 support List<? extends Container> in page objects for mobile apps (#2812)
+* Make `$.selectOption*()` trigger 'input' event in addition to 'change' event (#2813)
 
 ## 7.4.1 (released 30.07.2024)
 * Bump Appium from 9.2.3 to 9.3.0 (#2796)
