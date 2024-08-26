@@ -130,7 +130,7 @@ public class AppiumClick extends Click {
   @CheckReturnValue
   protected WebElement findElement(WebElementSource locator, boolean force) {
     if (isMobile(locator.driver())) {
-      return locator.findAndAssertElementIsVisible();
+      return force ? locator.getWebElement() : locator.findAndAssertElementIsVisible();
     } else {
       return super.findElement(locator, force);
     }

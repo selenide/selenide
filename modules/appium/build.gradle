@@ -36,4 +36,14 @@ tasks.register('ios', Test) {
   maxParallelForks = 1
 }
 
+tasks.withType(Test).configureEach {
+  useJUnitPlatform()
+  System.properties.stringPropertyNames()
+    .findAll { it.startsWith("selenide.") }
+    .forEach {
+      println " set ${it} to ${System.getProperty(it)}"
+      systemProperties[it] = System.getProperty(it)
+    }
+}
+
 apply from: rootProject.file('gradle/publish-module.gradle')

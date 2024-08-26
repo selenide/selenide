@@ -1,4 +1,4 @@
-package it.mobile.android.driverproviders;
+package it.mobile.android.driverproviders.local;
 
 import com.codeborne.selenide.WebDriverProvider;
 import io.appium.java_client.android.AndroidDriver;
@@ -13,7 +13,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public abstract class AndroidDriverProvider implements WebDriverProvider {
+public abstract class LocalAndroidDriverProvider implements WebDriverProvider {
   @Nonnull
   @Override
   public WebDriver createDriver(@Nonnull Capabilities capabilities) {

@@ -18,7 +18,6 @@ class AndroidCombinedByTest extends BaseSwagLabsAndroidTest {
 
   @Test
   void combinedByAndroid() {
-
     int index = 1;
     CombinedBy username = CombinedBy
       .android(AppiumBy.xpath("(//android.widget.EditText)[" + index + "]"))

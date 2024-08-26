@@ -19,11 +19,6 @@ public class Apps {
     return downloadSampleApp(APPIUM_APPS_URL, "ApiDemos-debug.apk");
   }
 
-  public static File downloadIosApp() {
-    return downloadSampleApp(APPIUM_APPS_URL, "TestApp.app.zip");
-  }
-
-  //can be used later if needed
   public static File downloadSwagLabsAndroidApp() {
     return downloadSampleApp(SAUCE_LAB_APPS_URL, "Android-MyDemoAppRN.1.3.0.build-244.apk");
   }
