@@ -8,7 +8,7 @@ public class BrowserstackUtils {
   private static final HashMap<String, Object> bstackOptions = new HashMap<>();
 
   static {
-    bstackOptions.put("userName", "borisosipov2");
+    bstackOptions.put("userName", "githubactions_qxmgVeB");
     bstackOptions.put("accessKey", System.getProperty("selenide.bs_key"));
     bstackOptions.put("appiumVersion", "2.6.0");
     bstackOptions.put("projectName", "Selenide-Appium");
