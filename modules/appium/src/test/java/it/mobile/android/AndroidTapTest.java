@@ -19,7 +19,13 @@ class AndroidTapTest extends BaseApiDemosTest {
 
   @Test
   void androidTapWithOffset() {
-    $(AppiumBy.xpath(".//*[@text='Views']")).tap(tapWithOffset(0, -200)); //Find view but click Text
+    // Find "Views" list item
+    // But tap on "Text" list item by calculating offset of list item height
+    int heightOffset = $(AppiumBy.xpath(".//*[@text='Views']"))
+      .shouldBe(visible)
+      .getSize()
+      .getHeight();
+    $(AppiumBy.xpath(".//*[@text='Views']")).tap(tapWithOffset(0, -heightOffset)); //Find view but click Text
     $(AppiumBy.xpath(".//*[@text='KeyEventText']")).shouldBe(visible);
   }
 

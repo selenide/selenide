@@ -74,50 +74,21 @@ jobs:
   run-android-tests:
     runs-on: ubuntu-latest
     env:
-      APPIUM_TEST_SERVER_PORT: 4723
-      APPIUM_TEST_SERVER_HOST: 127.0.0.1
-      APPIUM_STARTUP_TIMEOUT_SEC: 30
+      BS_KEY: ${{ secrets.BS_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: AVD cache
-        uses: actions/cache@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
-          path: |
-            build/apps
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: ${{ runner.os }}-android-tests-${{ hashFiles('**/*.zip*') }}
-          restore-keys: |
-            ${{ runner.os }}-android-tests-
-      - name: Setup NodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install Appium
-        run: |
-          npm install -g appium
-          npm install -g appium-doctor
-      - name: Start Appium server
-        run: |
-          cwd=$(pwd)
-          pushd "$cwd"
-          cd ~
-          appium driver install uiautomator2
-          appium-doctor
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-      - name: Run tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          profile: pixel_3_xl
-          disable-animations: true
-          emulator-options: -no-snapshot -no-window -no-boot-anim -camera-back emulated -camera-front emulated -gpu swiftshader_indirect
-          script: ./gradlew clean android --info
+          distribution: 'temurin'
+          cache: 'gradle'
+          java-version: '17'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Run the tests
+        if: ${{ env.BS_KEY }}
+        run: ./gradlew android --info -Dselenide.bs_key=${{ secrets.BS_KEY }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -125,59 +96,24 @@ jobs:
           path: |
             **/build/reports
             **/build/test-results
-            **/appium.log
 
   run-ios-tests:
-    runs-on: macOS-14
+    runs-on: ubuntu-latest
     env:
-      APPIUM_TEST_SERVER_PORT: 4723
-      APPIUM_TEST_SERVER_HOST: 127.0.0.1
-      APPIUM_STARTUP_TIMEOUT_SEC: 30
+      BS_KEY: ${{ secrets.BS_KEY }}
     steps:
       - uses: actions/checkout@v4
-      - name: Setup iOS simulator
-        uses: futureware-tech/simulator-action@v3
-        with:
-          model: 'iPhone 15'
-          os: 'iOS'
-          os_version: '18.0'
-      - uses: actions/cache@v4
-        with:
-          path: build/apps
-          key: ${{ runner.os }}-ios-tests-${{ hashFiles('**/*.zip*') }}
-          restore-keys: |
-            ${{ runner.os }}-ios-tests-
-      - name: Setup NodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install Appium
-        run: |
-          npm install -g appium
-          npm install -g appium-doctor
-      - name: Log Xcode Version
-        run: xcodebuild -version
-      - name: Log Installed Simulators
-        run: xcrun simctl list
-      - name: Log Runtimes
-        run: xcrun simctl list runtimes
-      - name: Start Appium server
-        run: |
-          cwd=$(pwd)
-          pushd "$cwd"
-          cd ~
-          appium driver install xcuitest
-          appium driver run xcuitest build-wda
-          appium driver install safari
-          appium-doctor
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           cache: 'gradle'
           java-version: '17'
-      - name: Run iOS tests
-        run: ./gradlew ios --no-daemon --console=plain -i
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Run the tests
+        if: ${{ env.BS_KEY }}
+        run: ./gradlew ios --info -Dselenide.bs_key=${{ secrets.BS_KEY }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -185,7 +121,6 @@ jobs:
           path: |
             **/build/reports
             **/build/test-results
-            **/appium.log
 
   run-selenoid-tests:
     runs-on: ubuntu-latest

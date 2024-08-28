@@ -10,46 +10,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.Duration;
 
-public abstract class IosDriverProvider implements WebDriverProvider {
+import static it.mobile.BrowserstackUtils.browserstackUrl;
+import static it.mobile.BrowserstackUtils.getBrowserstackOptions;
+
+public class IosDriverProvider implements WebDriverProvider {
   private static final Logger log = LoggerFactory.getLogger(IosDriverProvider.class);
 
   @Nonnull
   @Override
   public WebDriver createDriver(@Nonnull Capabilities capabilities) {
     XCUITestOptions options = getXcuiTestOptions();
-    options.setApp(getApplicationUnderTest().getAbsolutePath());
     try {
-      return new IOSDriver(url(), options);
+      return new IOSDriver(browserstackUrl(), options);
     } catch (SessionNotCreatedException e) {
-      log.error("Failed to start Simulator", e);
-      // Sometimes WDA session creation freezes unexpectedly on CI
-      options.useNewWDA();
-      return new IOSDriver(url(), options);
+      log.error("Failed to start Session", e);
+      return new IOSDriver(browserstackUrl(), options);
     }
   }
-
-  protected abstract File getApplicationUnderTest();
 
   protected XCUITestOptions getXcuiTestOptions() {
     XCUITestOptions options = new XCUITestOptions();
-    // on GitHub actions, first test run maybe extremely slow
-    options.setWdaLaunchTimeout(Duration.ofMinutes(10));
-    options.setDeviceName("iPhone 15");
+    options.setApp("bs://7233e5202a8d1fbf5c5df35a13dc08760b3e840b");
+    options.setPlatformVersion("17");
+    options.setDeviceName("iPhone 15 Pro");
     options.setFullReset(false);
     options.setShouldTerminateApp(true);
+    options.setCapability("bstack:options", getBrowserstackOptions());
     return options;
   }
 
-  private static URL url() {
-    try {
-      return new URL("http://127.0.0.1:4723/");
-    } catch (MalformedURLException e) {
-      throw new RuntimeException(e);
-    }
-  }
 }
