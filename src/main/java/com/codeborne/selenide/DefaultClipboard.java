@@ -3,7 +3,7 @@ package com.codeborne.selenide;
 import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v127.browser.Browser;
+import org.openqa.selenium.devtools.v128.browser.Browser;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -19,8 +19,8 @@ import java.util.Optional;
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.instanceOf;
 import static java.util.Optional.empty;
-import static org.openqa.selenium.devtools.v127.browser.model.PermissionType.CLIPBOARDREADWRITE;
-import static org.openqa.selenium.devtools.v127.browser.model.PermissionType.CLIPBOARDSANITIZEDWRITE;
+import static org.openqa.selenium.devtools.v128.browser.model.PermissionType.CLIPBOARDREADWRITE;
+import static org.openqa.selenium.devtools.v128.browser.model.PermissionType.CLIPBOARDSANITIZEDWRITE;
 
 @ParametersAreNonnullByDefault
 public class DefaultClipboard implements Clipboard {
