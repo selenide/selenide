@@ -150,7 +150,7 @@ jobs:
     name: 🤖 Auto merge dependabot PR
     timeout-minutes: 10
     needs: [run-tests-on-linux, run-tests-on-windows, run-android-tests, run-ios-tests, run-selenoid-tests]
-    if: ${{ github.actor == 'dependabot[bot]' }}
+    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
