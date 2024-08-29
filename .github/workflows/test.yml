@@ -27,10 +27,10 @@ jobs:
       - name: Set-DisplayResolution
         shell: pwsh
         run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
-      - name: Build with Gradle
-        uses: gradle/gradle-build-action@v3
-        with:
-          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Run the tests
+        run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -58,10 +58,10 @@ jobs:
       - name: Setup Firefox
         if: ${{ matrix.gradle-task != 'check' }}
         uses: browser-actions/setup-firefox@latest
-      - name: Build with Gradle
-        uses: gradle/gradle-build-action@v3
-        with:
-          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Run the tests
+        run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -93,6 +93,7 @@ jobs:
         if: always()
         with:
           name: test-report-android
+          retention-days: 14
           path: |
             **/build/reports
             **/build/test-results
@@ -118,6 +119,7 @@ jobs:
         if: always()
         with:
           name: test-report-ios
+          retention-days: 14
           path: |
             **/build/reports
             **/build/test-results
@@ -133,15 +135,16 @@ jobs:
           cache: 'gradle'
           java-version: '17'
       - name: Start selenoid
-        uses: Xotabu4/selenoid-github-action@v2
-      - name: Run integration tests
-        uses: gradle/gradle-build-action@v3
-        with:
-          arguments: selenoidTests
+        uses: BorisOsipov/selenoid-github-action@1
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Run the tests
+        run: ./gradlew selenoidTests
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-report-selenoid
+          retention-days: 14
           path: |
             **/build/reports
             **/build/test-results
