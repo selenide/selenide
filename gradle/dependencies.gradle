@@ -37,7 +37,7 @@ subprojects {
       exclude group: 'org.slf4j'
     }
     implementation("com.google.guava:guava:33.3.0-jre")
-    implementation("org.apache.commons:commons-lang3:3.16.0")
+    implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("commons-io:commons-io:2.16.1")
     testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
     testImplementation("io.netty:netty-all:$nettyVersion")
