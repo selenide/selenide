@@ -4,7 +4,7 @@ ext {
   httpClientVersion = '5.3.1'
   junitVersion = '5.11.0'
   jettyVersion = '11.0.19'
-  nettyVersion = '4.1.112.Final'
+  nettyVersion = '4.1.113.Final'
   assertjVersion = '3.26.3'
   mockitoVersion = '5.13.0'
   slf4jVersion = '2.0.16'
