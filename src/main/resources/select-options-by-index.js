@@ -1,38 +1,20 @@
 (function(select, indexes) {
-  if (select.tagName.toLowerCase() !== 'select') {
-    return {nonSelect: 'Cannot select option from a non-select element'};
-  }
-  if (select.disabled) {
-    return {disabledSelect: 'Cannot select option in a disabled select'};
-  }
-  select.focus();
+  import 'selects.js'
 
-  const missingOptionsIndexes = indexes.filter(index => !select.options[index]);
-  if (missingOptionsIndexes.length > 0) {
-    return {optionsNotFound: missingOptionsIndexes};
+  function checkMissingOptionsIndexes() {
+    const missingOptionsIndexes = indexes.filter(index => !select.options[index]);
+    return missingOptionsIndexes.length > 0 ? {optionsNotFound: missingOptionsIndexes} : null
   }
 
-  const disabledOptionsIndexes = indexes.filter(index => select.options[index].disabled);
-  if (disabledOptionsIndexes.length > 0) {
-    return {disabledOptions: disabledOptionsIndexes};
+  function checkDisabledOptionsIndexes() {
+    const disabledOptionsIndexes = indexes.filter(index => select.options[index].disabled);
+    return disabledOptionsIndexes.length > 0 ? {disabledOptions: disabledOptionsIndexes} : null
   }
 
-  function getSelectedOptionsString(select) {
-    return Array.from(select.options).map(option => option.selected).join(",");
-  }
-
-  let previousSelectedOptions = getSelectedOptionsString(select);
-  for (let index of indexes) {
-    select.options[index].selected = 'selected';
-  }
-
-  select.dispatchEvent(new Event('click'));
-
-  if (getSelectedOptionsString(select) !== previousSelectedOptions) {
-    select.dispatchEvent(new Event('input'));
-    select.dispatchEvent(new Event('change'));
-  }
-
-  return {};
+  return checkState(select) || checkMissingOptionsIndexes() || checkDisabledOptionsIndexes() || applyChanges(select, () => {
+    for (let index of indexes) {
+      select.options[index].selected = 'selected'
+    }
+  })
 })(arguments[0], arguments[1])
 
