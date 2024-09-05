@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.4.3 (released 05.09.2024)
+* bump Selenium from 4.23.1 to 4.24.0 (#2825)
+* Bump LittleProxy from 2.2.3 to 2.2.4 (#2831)
+* Bump Netty from 4.1.112.Final to 4.1.113.Final (#2834)
+
+See https://github.com/selenide/selenide/milestone/209?closed=1
+
 ## 7.4.2 (released 13.08.2024)
 * bump Selenium from 4.23.0 to 4.23.1
 * disable Chrome popups "Save address?" and "Save card?" (#2802)

@@ -24,7 +24,7 @@ Currently, the plugin supports the following features:
 * Saving videos
 
 ## Usage
-1. Import `com.codeborne:selenide-grid:7.4.2`
+1. Import `com.codeborne:selenide-grid:7.4.3`
 2. Set `Configuration.fileDownload = FOLDER;`
 3. Use method `$.download()` as usually.
 
