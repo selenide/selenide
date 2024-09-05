@@ -12,20 +12,42 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
+import static java.util.regex.Pattern.DOTALL;
 
 @ParametersAreNonnullByDefault
 public class JavaScript {
+  private static final Pattern RE = Pattern.compile("import '(.+?\\.js)'", DOTALL);
   private final FileContent jsSource;
+  private final Lazy<String> content = lazyEvaluated(() -> readContent());
 
   public JavaScript(String jsFileName) {
     jsSource = new FileContent(jsFileName);
   }
 
+  String content() {
+    return content.get();
+  }
+
+  private String readContent() {
+    String js = jsSource.content();
+    Matcher matcher = RE.matcher(js);
+    while (matcher.find()) {
+      String fileName = matcher.group(1);
+      String includedScript = new FileContent(fileName).content();
+      js = matcher.replaceFirst(includedScript);
+      matcher = RE.matcher(js);
+    }
+    return js;
+  }
+
   @Nonnull
   @SuppressWarnings("unchecked")
   public <T> T execute(SearchContext context, Object... arguments) {
-    String js = "return " + jsSource.content();
-    return (T) jsExecutor(context).executeScript(js, arguments);
+    return (T) jsExecutor(context).executeScript("return " + content(), arguments);
   }
 
   @Nonnull
