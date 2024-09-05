@@ -78,6 +78,7 @@
     <option value="mickey rourke">Mickey "Rock'n'Roll" Rourke</option>
     <option id="denzel-washington" value='denzel \\"equalizer\\" washington'>Denzel Washington</option>
   </select>
+  <blockquote id="hero-greeting"></blockquote>
 </div>
 
 <div id="radioButtons">
@@ -214,6 +215,7 @@
     <option value="zhiguli" disabled>Zhiguli</option>
     <option value="lada" disabled>Lada</option>
   </select>
+  <blockquote id="cars-greeting"></blockquote>
 </div>
 
 <div test-attribute="test-value" class="top-container-class">
@@ -243,6 +245,16 @@
     setTimeout(() => {
       document.getElementById('disabled-select').removeAttribute('disabled')
     }, 200)
+  })
+
+  document.getElementById('hero').addEventListener('change', (e) => {
+    document.getElementById('hero-greeting').textContent = e.target.value && `Yes, ${e.target.value} is my hero!`
+  })
+
+  const cars = document.getElementById('cars');
+  cars.addEventListener('input', (e) => {
+    const greeting = Array.from(cars.selectedOptions).map(option => option.value).join(' & ')
+    document.getElementById('cars-greeting').textContent = greeting && `Yes, ${greeting} are my favorite cars!`
   })
 </script>
 
