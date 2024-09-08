@@ -119,4 +119,10 @@ public class AppiumScrollOptions {
   public float getBottomPointHeightPercent() {
     return bottomPointHeightPercent;
   }
+
+  @Override
+  public String toString() {
+    return String.format("%s, max swipes: %s, top height: %s, bottom height: %s",
+      scrollDirection, maxSwipeCount, topPointHeightPercent, bottomPointHeightPercent);
+  }
 }
