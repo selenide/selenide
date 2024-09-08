@@ -18,10 +18,10 @@ function applyChanges(select, changes) {
   select.focus()
   changes(select)
 
-  select.dispatchEvent(new Event('click'));
+  select.dispatchEvent(new Event('click', {bubbles: true, cancelable: true}));
   if (getSelectedOptionsString(select) !== previousSelectedOptions) {
-    select.dispatchEvent(new Event('input'))
-    select.dispatchEvent(new Event('change'))
+    select.dispatchEvent(new Event('input', {bubbles: true, cancelable: true}))
+    select.dispatchEvent(new Event('change', {bubbles: true, cancelable: true}))
   }
   return {};
 }

@@ -76,7 +76,7 @@
     <option value="john mc'lain">John Mc'Lain</option>
     <option value='arnold "schwarzenegger"'>Arnold "Schwarzenegger"</option>
     <option value="mickey rourke">Mickey "Rock'n'Roll" Rourke</option>
-    <option id="denzel-washington" value='denzel \\"equalizer\\" washington'>Denzel Washington</option>
+    <option id="denzel-washington" value='denzel "equalizer" washington'>Denzel Washington</option>
   </select>
   <blockquote id="hero-greeting"></blockquote>
 </div>
@@ -204,7 +204,7 @@
   </select>
 </div>
 
-<div class="container">
+<div class="container" id="cars-container">
   <label for="cars">Choose your cars:</label>
   <br/>
   <select name="cars" id="cars" multiple>
@@ -247,12 +247,12 @@
     }, 200)
   })
 
-  document.getElementById('hero').addEventListener('change', (e) => {
+  document.getElementById('apostrophes-and-quotes').addEventListener('change', (e) => {
     document.getElementById('hero-greeting').textContent = e.target.value && `Yes, ${e.target.value} is my hero!`
   })
 
   const cars = document.getElementById('cars');
-  cars.addEventListener('input', (e) => {
+  document.getElementById('cars-container').addEventListener('input', () => {
     const greeting = Array.from(cars.selectedOptions).map(option => option.value).join(' & ')
     document.getElementById('cars-greeting').textContent = greeting && `Yes, ${greeting} are my favorite cars!`
   })
