@@ -6,8 +6,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 
 @ParametersAreNonnullByDefault
 public class SelenideElementIterator<T extends SelenideElement> implements Iterator<T> {
@@ -29,10 +27,8 @@ public class SelenideElementIterator<T extends SelenideElement> implements Itera
   @Override
   @CheckReturnValue
   @Nonnull
+  @SuppressWarnings("IteratorNextCanNotThrowNoSuchElementException")
   public T next() {
-    if (!hasNext()) {
-      throw new NoSuchElementException("No next element present in collection %s at index %d".formatted(collection, index));
-    }
     return CollectionElement.wrap(clazz, collection, index++);
   }
 
