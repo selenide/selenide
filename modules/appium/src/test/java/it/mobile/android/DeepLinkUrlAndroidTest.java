@@ -1,6 +1,7 @@
 package it.mobile.android;
 
 import com.codeborne.selenide.appium.SelenideAppium;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -12,6 +13,10 @@ class DeepLinkUrlAndroidTest extends BaseSwagLabsAndroidTest {
   void deepLinkInAndroid() {
     SelenideAppium.openAndroidDeepLink("mydemoapprn://product-details/1", "com.saucelabs.mydemoapp.rn");
     $(withText("Sauce Labs Backpack")).shouldBe(visible);
+  }
+
+  @AfterEach
+  void tearDown() {
     SelenideAppium.terminateApp("com.saucelabs.mydemoapp.rn");
   }
 }

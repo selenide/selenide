@@ -68,8 +68,7 @@ public abstract class ITTest {
         closeWebDriver();
         launchApp();
       }
-      case NOT_RUNNING -> mobileDriver.activateApp(bundleId);
-      case RUNNING_IN_BACKGROUND, RUNNING_IN_BACKGROUND_SUSPENDED, RUNNING_IN_FOREGROUND -> {
+      case NOT_RUNNING, RUNNING_IN_BACKGROUND, RUNNING_IN_BACKGROUND_SUSPENDED, RUNNING_IN_FOREGROUND -> {
         mobileDriver.terminateApp(bundleId);
         Selenide.executeJavaScript("mobile: clearApp", Map.of("appId", bundleId));
         mobileDriver.activateApp(bundleId);
