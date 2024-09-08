@@ -8,7 +8,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class AppiumScrollOptions {
 
   private final ScrollDirection scrollDirection;
-  private final int maxSwipeCounts;
+  private final int maxSwipeCount;
   private final float topPointHeightPercent;
   private final float bottomPointHeightPercent;
 
@@ -16,15 +16,15 @@ public class AppiumScrollOptions {
   private static final float DEFAULT_TOP_POINT_HEIGHT_PERCENT = 0.25f;
   private static final float DEFAULT_BOTTOM_POINT_HEIGHT_PERCENT = 0.5f;
 
-  private AppiumScrollOptions(ScrollDirection scrollDirection, int maxSwipeCounts) {
-    this(scrollDirection, maxSwipeCounts, DEFAULT_TOP_POINT_HEIGHT_PERCENT, DEFAULT_BOTTOM_POINT_HEIGHT_PERCENT);
+  private AppiumScrollOptions(ScrollDirection scrollDirection, int maxSwipeCount) {
+    this(scrollDirection, maxSwipeCount, DEFAULT_TOP_POINT_HEIGHT_PERCENT, DEFAULT_BOTTOM_POINT_HEIGHT_PERCENT);
   }
 
-  private AppiumScrollOptions(ScrollDirection scrollDirection, int maxSwipeCounts,
+  private AppiumScrollOptions(ScrollDirection scrollDirection, int maxSwipeCount,
                               float topPointHeightPercent, float bottomPointHeightPercent) {
     checkCoordinateValues(topPointHeightPercent, bottomPointHeightPercent);
     this.scrollDirection = scrollDirection;
-    this.maxSwipeCounts = maxSwipeCounts;
+    this.maxSwipeCount = maxSwipeCount;
     this.topPointHeightPercent = validatePercentage("Top point height percentage", topPointHeightPercent);
     this.bottomPointHeightPercent = validatePercentage("Bottom point height percentage", bottomPointHeightPercent);
   }
@@ -44,8 +44,8 @@ public class AppiumScrollOptions {
 
   @Nonnull
   @CheckReturnValue
-  public static AppiumScrollOptions with(ScrollDirection scrollDirection, int maxSwipeCounts) {
-    return new AppiumScrollOptions(scrollDirection, maxSwipeCounts);
+  public static AppiumScrollOptions with(ScrollDirection scrollDirection, int maxSwipeCount) {
+    return new AppiumScrollOptions(scrollDirection, maxSwipeCount);
   }
 
   @Nonnull
@@ -62,8 +62,8 @@ public class AppiumScrollOptions {
 
   @Nonnull
   @CheckReturnValue
-  public static AppiumScrollOptions down(int maxSwipeCounts) {
-    return new AppiumScrollOptions(ScrollDirection.DOWN, maxSwipeCounts);
+  public static AppiumScrollOptions down(int maxSwipeCount) {
+    return new AppiumScrollOptions(ScrollDirection.DOWN, maxSwipeCount);
   }
 
   @Nonnull
@@ -74,8 +74,8 @@ public class AppiumScrollOptions {
 
   @Nonnull
   @CheckReturnValue
-  public static AppiumScrollOptions up(int maxSwipeCounts) {
-    return new AppiumScrollOptions(ScrollDirection.UP, maxSwipeCounts);
+  public static AppiumScrollOptions up(int maxSwipeCount) {
+    return new AppiumScrollOptions(ScrollDirection.UP, maxSwipeCount);
   }
 
   @Nonnull
@@ -90,9 +90,18 @@ public class AppiumScrollOptions {
     return new AppiumScrollOptions(ScrollDirection.DOWN, DEFAULT_MAX_SWIPE_COUNTS, topPointHeightPercent, bottomPointHeightPercent);
   }
 
+  /**
+   * @deprecated Use {@link #getMaxSwipeCount()} instead
+   */
   @CheckReturnValue
+  @Deprecated
   public int getMaxSwipeCounts() {
-    return maxSwipeCounts;
+    return maxSwipeCount;
+  }
+
+  @CheckReturnValue
+  public int getMaxSwipeCount() {
+    return maxSwipeCount;
   }
 
   @Nonnull
