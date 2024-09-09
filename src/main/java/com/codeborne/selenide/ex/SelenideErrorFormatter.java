@@ -47,7 +47,8 @@ public class SelenideErrorFormatter implements ErrorFormatter {
 
   @CheckReturnValue
   @Nonnull
-  protected String causedBy(@Nullable Throwable cause) {
+  @Override
+  public String causedBy(@Nullable Throwable cause) {
     if (cause == null) {
       return "";
     }

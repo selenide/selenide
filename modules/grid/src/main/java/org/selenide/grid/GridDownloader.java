@@ -27,7 +27,7 @@ class GridDownloader {
       return localFile;
     }
     catch (IOException e) {
-      throw new FileNotDownloadedError(driver, "Failed to copy downloaded file from grid", driver.config().timeout(), e);
+      throw new FileNotDownloadedError("Failed to copy downloaded file from grid", driver.config().timeout(), e);
     }
   }
 

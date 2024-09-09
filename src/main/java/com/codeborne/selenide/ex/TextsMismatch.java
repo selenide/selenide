@@ -15,7 +15,6 @@ public class TextsMismatch extends UIAssertionError {
                        @Nullable String explanation, long timeoutMs,
                        @Nullable Throwable cause) {
     super(
-      collection.driver(),
       message +
         lineSeparator() + "Actual (" + actualTexts.size() + "): " + actualTexts +
         lineSeparator() + "Expected (" + expectedTexts.size() + "): " + expectedTexts +

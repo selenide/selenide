@@ -84,7 +84,7 @@ public class DownloadFileWithCdp {
       if (!fileFilter.match(new DownloadedFile(file, emptyMap()))) {
         String message = String.format("Failed to download file%s in %d ms.%s;%n actually downloaded: %s",
           fileFilter.description(), timeout, fileFilter.description(), file.getAbsolutePath());
-        throw new FileNotDownloadedError(driver, message, timeout);
+        throw new FileNotDownloadedError(message, timeout);
       }
 
       // Move file to unique folder
@@ -116,7 +116,7 @@ public class DownloadFileWithCdp {
         return downloadedFile.get().file();
       }
       else {
-        failFastIfNoChanges(driver, downloads, fileFilter, downloadStartedAt, timeout, incrementTimeout);
+        failFastIfNoChanges(downloads, fileFilter, downloadStartedAt, timeout, incrementTimeout);
       }
       stopwatch.sleep(pollingInterval);
     }
@@ -124,7 +124,7 @@ public class DownloadFileWithCdp {
 
     String message = "Failed to download file%s in %d ms., found files: %s".formatted(
       fileFilter.description(), timeout, downloads.folder().files());
-    throw new FileNotDownloadedError(driver, message, timeout);
+    throw new FileNotDownloadedError(message, timeout);
   }
 
   private DevTools initDevTools(Driver driver) {
@@ -249,7 +249,7 @@ public class DownloadFileWithCdp {
         case CANCELED -> {
           String message = "File download is %s (received bytes: %s, total bytes: %s, guid: %s)".formatted(
             e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
-          throw new FileNotDownloadedError(driver, message, timeout);
+          throw new FileNotDownloadedError(message, timeout);
         }
         case COMPLETED -> downloads.finish(e.getGuid());
         case INPROGRESS -> downloads.inProgress(e);
@@ -262,7 +262,7 @@ public class DownloadFileWithCdp {
     }
   }
 
-  private void failFastIfNoChanges(Driver driver, CdpDownloads downloads, FileFilter filter,
+  private void failFastIfNoChanges(CdpDownloads downloads, FileFilter filter,
                                    long downloadStartedAt, long timeout, long incrementTimeout) {
     long now = currentTimeMillis();
     long lastModifiedAt = downloads.lastModificationTime().orElse(downloadStartedAt);
@@ -273,7 +273,7 @@ public class DownloadFileWithCdp {
         "(lastUpdate: %s, now: %s, incrementTimeout: %s)",
         filter.description(), timeout, downloads.folder, filesHasNotBeenUpdatedForMs,
         lastModifiedAt, now, incrementTimeout);
-      throw new FileNotDownloadedError(driver, message, timeout);
+      throw new FileNotDownloadedError(message, timeout);
     }
   }
 }

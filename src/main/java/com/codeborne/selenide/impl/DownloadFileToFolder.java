@@ -84,7 +84,7 @@ public class DownloadFileToFolder {
       log.debug("All downloaded files: {}", folder.filesAsString());
     }
 
-    File downloadedFile = newDownloads.firstDownloadedFile(driver, timeout, fileFilter);
+    File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
     return archiveFile(driver, downloadedFile);
   }
 
@@ -119,7 +119,7 @@ public class DownloadFileToFolder {
     if (folder.hasFiles(extension, filter)) {
       String message = String.format("Folder %s still contains files %s after %s ms. " +
                                      "Apparently, the downloading hasn't completed in time.", folder, extension, timeout);
-      throw new FileNotDownloadedError(driver, message, timeout);
+      throw new FileNotDownloadedError(message, timeout);
     }
   }
 
@@ -181,7 +181,7 @@ public class DownloadFileToFolder {
         filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs,
         start, lastFileUpdate, now, incrementTimeout,
         folder.modificationTimes());
-      throw new FileNotDownloadedError(driver, message, timeout);
+      throw new FileNotDownloadedError(message, timeout);
     }
   }
 

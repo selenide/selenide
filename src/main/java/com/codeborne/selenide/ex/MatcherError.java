@@ -16,7 +16,6 @@ public class MatcherError extends UIAssertionError {
                       @Nullable Exception cause,
                       long timeoutMs) {
     super(
-      collection.driver(),
       "Collection matcher error" +
         lineSeparator() + "Expected: " + expected +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +

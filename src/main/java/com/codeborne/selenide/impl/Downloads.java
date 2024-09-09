@@ -1,6 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
@@ -78,11 +77,11 @@ public class Downloads {
 
   @CheckReturnValue
   @Nonnull
-  public File firstDownloadedFile(Driver driver, long timeout, FileFilter fileFilter) {
+  public File firstDownloadedFile(long timeout, FileFilter fileFilter) {
     return firstMatchingFile(fileFilter)
       .orElseThrow(() -> {
         String message = String.format("Failed to download file%s in %d ms.", fileFilter.description(), timeout);
-          return new FileNotDownloadedError(driver, message.trim(), timeout);
+          return new FileNotDownloadedError(message.trim(), timeout);
         }
       ).getFile();
   }

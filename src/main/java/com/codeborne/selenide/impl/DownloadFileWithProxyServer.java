@@ -71,7 +71,7 @@ public class DownloadFileWithProxyServer {
         log.info("Downloaded {}", filter.downloads().filesAsString());
         log.info("Just in case, intercepted {}", filter.responsesAsString());
       }
-      return filter.downloads().firstDownloadedFile(driver, timeout, fileFilter);
+      return filter.downloads().firstDownloadedFile(timeout, fileFilter);
     }
     finally {
       filter.deactivate();

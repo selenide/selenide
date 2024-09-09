@@ -36,17 +36,17 @@ public class SelectOptionByValue implements Command<Void> {
       throw new IllegalArgumentException("Cannot select option from a non-select element");
     }
     if (error.containsKey("disabledSelect")) {
-      throw new InvalidStateError(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
+      throw new InvalidStateError(selectField.description(), "Cannot select option in a disabled select");
     }
     if (error.containsKey("disabledOptions")) {
       List<String> value = cast(error.get("disabledOptions"));
       String elementDescription = String.format("%s/option[value:%s]", selectField.description(), arrayToString(value));
-      throw new InvalidStateError(selectField.driver(), elementDescription, "Cannot select a disabled option");
+      throw new InvalidStateError(elementDescription, "Cannot select a disabled option");
     }
     if (error.containsKey("optionsNotFound")) {
       List<String> value = cast(error.get("optionsNotFound"));
       String elementDescription = String.format("%s/option[value:%s]", selectField.getSearchCriteria(), arrayToString(value));
-      throw new ElementNotFound(selectField.driver(), selectField.getAlias(), elementDescription, exist);
+      throw new ElementNotFound(selectField.getAlias(), elementDescription, exist);
     }
   }
 }
