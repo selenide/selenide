@@ -20,11 +20,8 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.files.DownloadActions.click;
 import static com.codeborne.selenide.files.FileFilters.none;
 import static java.util.Collections.emptyMap;
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -33,8 +30,7 @@ import static org.mockito.Mockito.when;
 
 final class DownloadFileWithProxyServerTest {
   private final Waiter waiter = new DummyWaiter();
-  private final WindowsCloser windowsCloser = spy(new DummyWindowsCloser());
-  private final DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter, windowsCloser);
+  private final DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter);
   private final SelenideConfig config = new SelenideConfig();
   private final WebDriver webdriver = new DummyWebDriver();
   private final SelenideProxyServer proxy = mock();
@@ -71,7 +67,6 @@ final class DownloadFileWithProxyServerTest {
     File file = command.download(linkWithHref, link, 3000, none(), click());
 
     assertThat(file.getName()).isEqualTo("report.pdf");
-    verify(windowsCloser).runAndCloseArisedWindows(same(webdriver), any());
   }
 
   @Test
@@ -105,7 +100,7 @@ final class DownloadFileWithProxyServerTest {
 
   private void emulateServerResponseWithFiles(final File... files) {
     doAnswer(invocation -> {
-      filter.downloads().files().addAll(Stream.of(files).map(file -> new DownloadedFile(file, emptyMap())).collect(toList()));
+      filter.downloads().files().addAll(Stream.of(files).map(file -> new DownloadedFile(file, emptyMap())).toList());
       return null;
     }).when(link).click();
   }
