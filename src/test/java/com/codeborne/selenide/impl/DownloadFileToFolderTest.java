@@ -24,13 +24,11 @@ import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 final class DownloadFileToFolderTest {
   private final Downloader downloader = new Downloader();
-  private final WindowsCloser windowsCloser = spy(new DummyWindowsCloser());
-  private final DownloadFileToFolder command = new DownloadFileToFolder(downloader, windowsCloser);
+  private final DownloadFileToFolder command = new DownloadFileToFolder(downloader);
   private final SelenideConfig config = new SelenideConfig();
   private final WebDriver webdriver = new DummyWebDriver();
   private final WebElementSource linkWithHref = mock();

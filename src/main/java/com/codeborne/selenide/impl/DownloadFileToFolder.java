@@ -9,7 +9,6 @@ import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import com.google.common.collect.ImmutableSet;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,38 +33,33 @@ public class DownloadFileToFolder {
   private static final Set<String> FIREFOX_TEMPORARY_FILES = ImmutableSet.of("part");
 
   private final Downloader downloader;
-  private final WindowsCloser windowsCloser;
 
-  DownloadFileToFolder(Downloader downloader, WindowsCloser windowsCloser) {
+  DownloadFileToFolder(Downloader downloader) {
     this.downloader = downloader;
-    this.windowsCloser = windowsCloser;
   }
 
   public DownloadFileToFolder() {
-    this(new Downloader(), new WindowsCloser());
+    this(new Downloader());
   }
 
   @CheckReturnValue
   @Nonnull
-  public File download(WebElementSource anyClickableElement,
+  public File download(WebElementSource link,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
 
-    WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     long minimalIncrementTimeout = Math.max(incrementTimeout, 1000);
-    return windowsCloser.runAndCloseArisedWindows(webDriver, () ->
-      clickAndWaitForNewFilesInDownloadsFolder(anyClickableElement, clickable, timeout, minimalIncrementTimeout, fileFilter, action)
-    );
+    return clickAndWaitForNewFilesInDownloadsFolder(link, clickable, timeout, minimalIncrementTimeout, fileFilter, action);
   }
 
   @CheckReturnValue
   @Nonnull
-  File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource anyClickableElement, WebElement clickable,
+  File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource link, WebElement clickable,
                                                 long timeout, long incrementTimeout,
                                                 FileFilter fileFilter,
                                                 DownloadAction action) {
-    Driver driver = anyClickableElement.driver();
+    Driver driver = link.driver();
     Config config = driver.config();
     long pollingInterval = Math.max(config.pollingInterval(), 50);
     DownloadsFolder folder = getDownloadsFolder(driver);
