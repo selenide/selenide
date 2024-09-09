@@ -9,10 +9,11 @@ import io.appium.java_client.InteractsWithApps;
 import io.appium.java_client.appmanagement.ApplicationState;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Map;
@@ -25,29 +26,32 @@ import static java.time.Duration.ofMinutes;
 
 @ExtendWith({TextReportExtension.class, ScreenShooterExtension.class, BrowserstackExtension.class})
 public abstract class ITTest {
-  private static AppiumDriverLocalService service;
+  private static final Logger log = LoggerFactory.getLogger(ITTest.class);
+  private static volatile AppiumDriverLocalService service;
 
   @BeforeAll
-  static void startAppium() {
+  static void initAppium() {
     if (isCi()) {
       return;
     }
-    service = new AppiumServiceBuilder()
-      .withArgument(RELAXED_SECURITY)
-      .withIPAddress("127.0.0.1")
-      .withTimeout(ofMinutes(3))
-      .build();
-    service.start();
+    if (service == null) {
+      startAppium();
+    }
   }
 
-  @AfterAll
-  static void stopAppium() {
-    if (isCi()) {
-      return;
-    }
-    if (service != null) {
-      service.stop();
-      service = null;
+  private static synchronized void startAppium() {
+    if (service == null) {
+      service = new AppiumServiceBuilder()
+        .withArgument(RELAXED_SECURITY)
+        .withIPAddress("127.0.0.1")
+        .withTimeout(ofMinutes(3))
+        .build();
+      service.start();
+      Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        log.info("Stopping Appium..");
+        service.stop();
+        log.info("Appium stopped.");
+      }));
     }
   }
 
