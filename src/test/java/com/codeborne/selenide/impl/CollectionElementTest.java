@@ -66,7 +66,6 @@ final class CollectionElementTest {
     assertThat(elementNotFoundError)
       .hasMessage(String.format("Element not found {#report .line[33]}%n" +
         "Expected: visible%n" +
-        "Timeout: 0 ms.%n" +
         "Caused by: java.lang.Error: Error message"));
   }
 
@@ -85,7 +84,6 @@ final class CollectionElementTest {
     assertThat(elementNotFoundError)
       .hasMessage(String.format("Element not found {#report .line[1]}%n" +
         "Expected: Reason description%n" +
-        "Timeout: 0 ms.%n" +
         "Caused by: java.lang.Error: Error message"));
   }
 }

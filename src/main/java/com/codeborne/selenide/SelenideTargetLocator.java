@@ -297,17 +297,17 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   private Error frameNotFoundError(String message, Throwable cause) {
-    FrameNotFoundError error = new FrameNotFoundError(driver, message, cause);
+    FrameNotFoundError error = new FrameNotFoundError(message, cause);
     return UIAssertionError.wrap(driver, error, config.timeout());
   }
 
   private Error windowNotFoundError(String message, Throwable cause) {
-    WindowNotFoundError error = new WindowNotFoundError(driver, message, cause);
+    WindowNotFoundError error = new WindowNotFoundError(message, cause);
     return UIAssertionError.wrap(driver, error, config.timeout());
   }
 
   private Error alertNotFoundError(Throwable cause, long timeoutMs) {
-    var error = new AlertNotFoundError(driver, cause);
+    var error = new AlertNotFoundError(cause);
     return UIAssertionError.wrap(driver, error, timeoutMs);
   }
 }

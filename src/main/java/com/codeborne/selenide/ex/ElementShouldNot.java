@@ -21,7 +21,6 @@ public class ElementShouldNot extends UIAssertionError {
                           WebElementCondition expectedCondition, @Nullable CheckResult lastCheckResult,
                           WebElement element, @Nullable Throwable cause) {
     super(
-      driver,
       join(
         String.format("Element%s should not %s%s {%s}", alias.appendable(), prefix, expectedCondition, searchCriteria),
         String.format("Element: '%s'", describe.fully(driver, element)),

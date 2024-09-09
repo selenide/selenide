@@ -52,17 +52,17 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
       throw new IllegalArgumentException("Cannot select option from a non-select element");
     }
     if (error.containsKey("disabledSelect")) {
-      throw new InvalidStateError(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
+      throw new InvalidStateError(selectField.description(), "Cannot select option in a disabled select");
     }
     if (error.containsKey("disabledOptions")) {
       List<String> optionsTexts = cast(error.get("disabledOptions"));
       String elementDescription = String.format("%s/option[text:%s]", selectField.description(), arrayToString(optionsTexts));
-      throw new InvalidStateError(selectField.driver(), elementDescription, "Cannot select a disabled option");
+      throw new InvalidStateError(elementDescription, "Cannot select a disabled option");
     }
     if (error.containsKey("optionsNotFound")) {
       List<String> optionsTexts = cast(error.get("optionsNotFound"));
       String elementDescription = String.format("%s/option[text:%s]", selectField.getSearchCriteria(), arrayToString(optionsTexts));
-      throw new ElementNotFound(selectField.driver(), selectField.getAlias(), elementDescription, exist);
+      throw new ElementNotFound(selectField.getAlias(), elementDescription, exist);
     }
   }
 
@@ -72,17 +72,17 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
       throw new IllegalArgumentException("Cannot select option from a non-select element");
     }
     if (error.containsKey("disabledSelect")) {
-      throw new InvalidStateError(selectField.driver(), selectField.description(), "Cannot select option in a disabled select");
+      throw new InvalidStateError(selectField.description(), "Cannot select option in a disabled select");
     }
     if (error.containsKey("disabledOptions")) {
       List<Integer> index = cast(error.get("disabledOptions"));
       String elementDescription = String.format("%s/option[index:%s]", selectField.description(), arrayToString(index));
-      throw new InvalidStateError(selectField.driver(), elementDescription, "Cannot select a disabled option");
+      throw new InvalidStateError(elementDescription, "Cannot select a disabled option");
     }
     if (error.containsKey("optionsNotFound")) {
       List<Integer> index = cast(error.get("optionsNotFound"));
       String elementDescription = String.format("%s/option[index:%s]", selectField.getSearchCriteria(), arrayToString(index));
-      throw new ElementNotFound(selectField.driver(), selectField.getAlias(), elementDescription, exist);
+      throw new ElementNotFound(selectField.getAlias(), elementDescription, exist);
     }
   }
 }

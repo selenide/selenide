@@ -40,7 +40,7 @@ public abstract class WebElementsCondition {
    * Override this method if you want to customize error class or description
    */
   public void fail(CollectionSource collection, CheckResult lastCheckResult, @Nullable Exception cause, long timeoutMs) {
-    throw new UIAssertionError(collection.driver(),
+    throw new UIAssertionError(
       errorMessage() +
       lineSeparator() + "Actual: " + lastCheckResult.getActualValue() +
       lineSeparator() + "Expected: " + expectedValue() +

@@ -4,6 +4,7 @@ import com.codeborne.selenide.Container;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.PageObjectException;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.openqa.selenium.NoSuchElementException;
 
 import javax.annotation.CheckReturnValue;
@@ -58,7 +59,7 @@ public class ElementsContainerCollection extends AbstractList<Container> {
     try {
       return collection.getElements().size();
     } catch (NoSuchElementException e) {
-      throw new ElementNotFound(driver, NONE, collection.getSearchCriteria(), exist, e);
+      throw UIAssertionError.wrap(driver, new ElementNotFound(NONE, collection.getSearchCriteria(), exist, e), 0L);
     }
   }
 

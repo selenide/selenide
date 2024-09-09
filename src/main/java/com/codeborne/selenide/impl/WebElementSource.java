@@ -87,7 +87,7 @@ public abstract class WebElementSource {
     if (cause instanceof UIAssertionError) {
       throw new IllegalArgumentException("Unexpected UIAssertionError as a cause of ElementNotFound: " + cause, cause);
     }
-    return new ElementNotFound(driver(), alias, getSearchCriteria(), condition, cause);
+    return new ElementNotFound(alias, getSearchCriteria(), condition, cause);
   }
 
   @CheckReturnValue

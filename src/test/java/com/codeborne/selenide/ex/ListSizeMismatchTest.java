@@ -30,7 +30,6 @@ final class ListSizeMismatchTest {
 
     assertThat(listSizeMismatch)
       .hasMessage(String.format("List size mismatch: expected: <= 10, actual: 3, collection: Collection description%n" +
-        "Timeout: 1 s.%n" +
         "Caused by: java.lang.Exception: Something happened"));
   }
 
@@ -47,7 +46,6 @@ final class ListSizeMismatchTest {
     assertThat(listSizeMismatch)
       .hasMessage(String.format("List size mismatch: expected: > 10" +
         " (because it's said in customer requirement #12345), actual: 3, collection: Collection description%n" +
-        "Timeout: 1 s.%n" +
         "Caused by: java.lang.Exception: Something happened"));
   }
 }

@@ -1,6 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SelenideElement;
@@ -285,7 +284,7 @@ final class SelenideElementProxyTest {
 
   @Test
   void shouldNotRetry_onFileNotDownloadedError() {
-    FileNotDownloadedError exception = new FileNotDownloadedError(new DriverStub(webdriver), "bla", 2000);
+    FileNotDownloadedError exception = new FileNotDownloadedError("bla", 2000);
     assertThat(shouldRetryAfterError(exception)).isFalse();
   }
 

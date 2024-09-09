@@ -17,6 +17,10 @@ public interface ErrorFormatter {
 
   @CheckReturnValue
   @Nonnull
+  String causedBy(@Nullable Throwable cause);
+
+  @CheckReturnValue
+  @Nonnull
   default String formatActualValue(@Nullable String actualValue) {
     return actualValue == null ? "" : String.format("Actual value: %s", actualValue);
   }

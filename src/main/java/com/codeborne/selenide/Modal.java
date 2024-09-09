@@ -84,7 +84,7 @@ public class Modal {
 
   private static void checkDialogText(Driver driver, @Nullable String expectedDialogText, String actualDialogText) {
     if (expectedDialogText != null && !expectedDialogText.equals(actualDialogText)) {
-      DialogTextMismatch assertionError = new DialogTextMismatch(driver, expectedDialogText, actualDialogText);
+      DialogTextMismatch assertionError = new DialogTextMismatch(expectedDialogText, actualDialogText);
       throw UIAssertionError.wrap(driver, assertionError, driver.config().timeout());
     }
   }

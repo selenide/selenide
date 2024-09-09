@@ -30,7 +30,6 @@ final class ElementShouldTest {
       .hasMessage("Element should be visible {By.name: selenide}" + lineSeparator() +
         "Element: '<h1>Hello boy</h1>'" + lineSeparator() +
         "Actual value: visible:false" + lineSeparator() +
-        "Timeout: 0 ms." + lineSeparator() +
         "Caused by: NoSuchElementException: By.name: q");
   }
 }

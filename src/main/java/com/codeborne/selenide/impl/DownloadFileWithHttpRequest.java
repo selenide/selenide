@@ -117,7 +117,7 @@ public class DownloadFileWithHttpRequest {
       );
     }
     catch (IOException e) {
-      throw new FileNotDownloadedError(driver, "Failed to download " + url + " in " + timeout + " ms.", timeout, e);
+      throw new FileNotDownloadedError("Failed to download " + url + " in " + timeout + " ms.", timeout, e);
     }
   }
 
@@ -133,7 +133,7 @@ public class DownloadFileWithHttpRequest {
       throw new RuntimeException("Failed to download file " + url + ": " + response);
     }
     if (response.getCode() >= 400) {
-      throw new FileNotDownloadedError(driver, "Failed to download file " + url + ": " + response, timeout);
+      throw new FileNotDownloadedError("Failed to download file " + url + ": " + response, timeout);
     }
 
     String fileName = getFileName(url, response);
@@ -143,7 +143,7 @@ public class DownloadFileWithHttpRequest {
     if (!fileFilter.match(new DownloadedFile(downloadedFile, emptyMap()))) {
       String message = String.format("Failed to download file from %s in %d ms.%s;%n actually downloaded: %s",
         url, timeout, fileFilter.description(), downloadedFile.getAbsolutePath());
-      throw new FileNotDownloadedError(driver, message, timeout);
+      throw new FileNotDownloadedError(message, timeout);
     }
     return downloadedFile;
   }

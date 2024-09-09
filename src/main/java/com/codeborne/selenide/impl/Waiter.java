@@ -61,7 +61,7 @@ public class Waiter {
       sleep(pollingInterval);
     }
 
-    Error failure = UIAssertionError.wrap(driver, new ConditionNotMetError(driver, condition, subject, result, error), timeout);
+    Error failure = UIAssertionError.wrap(driver, new ConditionNotMetError(condition, subject, result, error), timeout);
     SelenideLogger.commitStep(log, failure);
     throw failure;
   }
@@ -93,7 +93,7 @@ public class Waiter {
       sleep(pollingInterval);
     }
 
-    Error failure = UIAssertionError.wrap(driver, new ConditionMetError(driver, condition, subject, result, error), timeout);
+    Error failure = UIAssertionError.wrap(driver, new ConditionMetError(condition, subject, result, error), timeout);
     SelenideLogger.commitStep(log, failure);
     throw failure;
   }

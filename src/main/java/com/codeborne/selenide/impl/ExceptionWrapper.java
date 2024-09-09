@@ -23,10 +23,10 @@ class ExceptionWrapper {
       return error;
     }
     else if (error instanceof InvalidElementStateException) {
-      return new InvalidStateError(webElementSource.driver(), webElementSource.description(), error);
+      return new InvalidStateError(webElementSource.description(), error);
     }
     else if (isElementNotClickableException(error)) {
-      return new ElementIsNotClickableError(webElementSource.driver(), webElementSource.description(), error);
+      return new ElementIsNotClickableError(webElementSource.description(), error);
     }
     else if (error instanceof StaleElementReferenceException || error instanceof NotFoundException) {
       return webElementSource.createElementNotFoundError(exist, error);

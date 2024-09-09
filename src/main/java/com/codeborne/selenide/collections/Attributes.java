@@ -70,7 +70,7 @@ public class Attributes extends WebElementsCondition {
     }
 
     String message = lastCheckResult.getMessageOrElse(() -> String.format("Attribute '%s' values mismatch", attribute));
-    throw new AttributesMismatch(collection.driver(), message, collection, expectedValues,
+    throw new AttributesMismatch(message, collection, expectedValues,
       actualAttributeValues, explanation, timeoutMs, cause);
   }
 

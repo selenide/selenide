@@ -71,7 +71,7 @@ public class CollectionElement extends WebElementSource {
   @Nonnull
   public ElementNotFound createElementNotFoundError(WebElementCondition condition, Throwable cause) {
     if (collection.getElements().isEmpty()) {
-      return new ElementNotFound(driver(), getAlias(), getSearchCriteria(), visible, cause);
+      return new ElementNotFound(getAlias(), getSearchCriteria(), visible, cause);
     }
     return super.createElementNotFoundError(condition, cause);
   }
