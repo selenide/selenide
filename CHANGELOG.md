@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.5.0 (under construction)
+* #2836 don't try to close any windows when downloading a file (#2840)
+* #2830 generate error details only once during error construction (#2839)
+* #2832 Raise "bubbleable" events when selection options in <select>s. (#2835)
+* bump dnsjava from 3.6.0 to 3.6.1
+* bump LittleProxy from 2.2.4 to 2.3.0 (#2837)
+
 ## 7.4.3 (released 05.09.2024)
 * bump Selenium from 4.23.1 to 4.24.0 (#2825)
 * Bump LittleProxy from 2.2.3 to 2.2.4 (#2831)
