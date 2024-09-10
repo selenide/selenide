@@ -19,8 +19,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.inNewBrowser;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.files.FileFilters.withExtension;
-import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class CustomOneTimeWebdriverTest extends IntegrationTest {
@@ -54,7 +52,7 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
       checkDownload(FOLDER);
     });
 
-    File downloadedFile = $(byText("Download me")).download(using(FOLDER).withFilter(withExtension("txt")));
+    File downloadedFile = $(byText("Download me")).download(using(FOLDER).withExtension("txt"));
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
@@ -69,7 +67,7 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
       checkDownload(PROXY, "hello_world.*\\.txt", "hello_world.txt");
     });
 
-    File downloadedFile = $(byText("Download me")).download(using(PROXY).withFilter(withExtension("txt")));
+    File downloadedFile = $(byText("Download me")).download(using(PROXY).withExtension("txt"));
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
@@ -81,9 +79,7 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
   }
 
   private void checkDownload(FileDownloadMode mode, String fileName, String referenceFile) {
-    File text = $("#multiple-downloads").download(
-      using(mode).withFilter(withNameMatching(fileName))
-    );
+    File text = $("#multiple-downloads").download(using(mode).withNameMatching(fileName));
     assertThat(text.getName()).matches(fileName);
     assertThat(text.length()).isEqualTo(new FileContent(referenceFile).content().length());
   }

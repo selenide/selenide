@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.FileFilter;
+import com.codeborne.selenide.files.FileFilters;
 import com.codeborne.selenide.impl.HasTimeout;
 
 import javax.annotation.CheckReturnValue;
@@ -9,12 +10,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
+import java.util.stream.Stream;
 
 import static com.codeborne.selenide.files.DownloadActions.click;
 import static com.codeborne.selenide.files.FileFilters.none;
+import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
 public class DownloadOptions implements HasTimeout {
+  @Nullable
   private final FileDownloadMode method;
   @Nullable
   private final Duration timeout;
@@ -23,7 +27,7 @@ public class DownloadOptions implements HasTimeout {
   private final FileFilter filter;
   private final DownloadAction action;
 
-  private DownloadOptions(FileDownloadMode method, @Nullable Duration timeout, @Nullable Duration incrementTimeout,
+  private DownloadOptions(@Nullable FileDownloadMode method, @Nullable Duration timeout, @Nullable Duration incrementTimeout,
                           FileFilter filter, DownloadAction action) {
     this.method = method;
     this.timeout = timeout;
@@ -33,7 +37,7 @@ public class DownloadOptions implements HasTimeout {
   }
 
   @CheckReturnValue
-  @Nonnull
+  @Nullable
   public FileDownloadMode getMethod() {
     return method;
   }
@@ -59,6 +63,12 @@ public class DownloadOptions implements HasTimeout {
   @Nonnull
   public DownloadAction getAction() {
     return action;
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public DownloadOptions withMethod(FileDownloadMode method) {
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action);
   }
 
   @CheckReturnValue
@@ -99,6 +109,24 @@ public class DownloadOptions implements HasTimeout {
     return new DownloadOptions(method, timeout, incrementTimeout, filter, action);
   }
 
+  @CheckReturnValue
+  @Nonnull
+  public DownloadOptions withExtension(String extension) {
+    return new DownloadOptions(method, timeout, incrementTimeout, FileFilters.withExtension(extension), action);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public DownloadOptions withName(String fileName) {
+    return new DownloadOptions(method, timeout, incrementTimeout, FileFilters.withName(fileName), action);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public DownloadOptions withNameMatching(String fileNameRegex) {
+    return new DownloadOptions(method, timeout, incrementTimeout, FileFilters.withNameMatching(fileNameRegex), action);
+  }
+
   /**
    * User action to start the downloading process.
    * By default, it's a click.
@@ -115,19 +143,24 @@ public class DownloadOptions implements HasTimeout {
 
   @Override
   public String toString() {
-    if (timeout != null && !filter.isEmpty())
-      return String.format("method: %s, timeout: %s ms, filter:%s", method, timeout.toMillis(), filter.description());
-    else if (timeout != null)
-      return String.format("method: %s, timeout: %s ms", method, timeout.toMillis());
-    else if (!filter.isEmpty())
-      return String.format("method: %s, filter:%s", method, filter.description());
-    else
-      return String.format("method: %s", method);
+    return Stream.of(
+        method == null ? null : "method: %s".formatted(method.name()),
+        timeout == null ? null : "timeout: %s ms".formatted(timeout.toMillis()),
+        incrementTimeout == null ? null : "incrementTimeout: %s ms".formatted(incrementTimeout.toMillis()),
+        filter.isEmpty() ? null : filter.toString()
+      ).filter(p -> p != null)
+      .collect(joining(", "));
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static DownloadOptions file() {
+    return new DownloadOptions(null, null, null, none(), click());
   }
 
   @CheckReturnValue
   @Nonnull
   public static DownloadOptions using(FileDownloadMode method) {
-    return new DownloadOptions(method, null, null, none(), click());
+    return file().withMethod(method);
   }
 }

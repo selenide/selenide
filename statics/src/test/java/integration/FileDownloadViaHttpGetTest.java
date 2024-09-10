@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
+import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
@@ -147,7 +148,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @Test
   void downloadWithCustomTimeout() {
-    File downloadedFile = $(byText("Download me slowly")).download(3000);
+    File downloadedFile = $(byText("Download me slowly")).download(file().withTimeout(3000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -156,7 +157,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   @Test
   void downloadsGetsTimeoutException() {
     assertThatThrownBy(() -> {
-      File downloadedFile = $(byText("Start download after delay (2000 ms)")).download(100);
+      File downloadedFile = $(byText("Start download after delay (2000 ms)")).download(file().withTimeout(100));
       assertThat(downloadedFile).hasContent("File downloading should fail with timeout");
     })
       .isInstanceOf(FileNotDownloadedError.class)
@@ -199,7 +200,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     Configuration.timeout = 1;
 
     File downloadedFile = $(byText("Download me")).download(using(HTTPGET)
-      .withFilter(withExtension("txt"))
+      .withExtension("txt")
       .withTimeout(4000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
@@ -211,7 +212,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     Configuration.fileDownload = PROXY;
     Configuration.timeout = 4000;
 
-    File downloadedFile = $(byText("Download me")).download(using(HTTPGET).withFilter(withExtension("txt")));
+    File downloadedFile = $(byText("Download me")).download(using(HTTPGET).withExtension("txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -220,7 +221,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   @Test
   public void download_super_slowly() {
     File downloadedFile = $(byText("Download me super slowly"))
-      .download(4000, withName("hello_world.txt"));
+      .download(file().withTimeout(4000).withName("hello_world.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -228,7 +229,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @Test
   public void download_super_slowly_without_filter() {
-    File downloadedFile = $(byText("Download me super slowly")).download(4000);
+    File downloadedFile = $(byText("Download me super slowly")).download(file().withTimeout(4000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");

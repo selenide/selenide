@@ -37,6 +37,12 @@ class ArgumentsTest {
   }
 
   @Test
+  void extractsTimeout_fromArgumentOfTypeLong() {
+    Arguments arguments = new Arguments(8000L, usingJavaScript());
+    assertThat(arguments.getTimeoutMs(4000)).isEqualTo(8000);
+  }
+
+  @Test
   void returnsDefaultTimeout() {
     assertThat(new Arguments(visible).getTimeoutMs(4000)).isEqualTo(4000);
   }
