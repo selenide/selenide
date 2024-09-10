@@ -3,6 +3,7 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadOptions;
+import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.files.FileFilters;
@@ -24,6 +25,7 @@ import java.time.Duration;
 
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.impl.Plugins.inject;
+import static java.util.Objects.requireNonNullElse;
 import static java.util.Optional.ofNullable;
 
 @ParametersAreNonnullByDefault
@@ -60,24 +62,15 @@ public class DownloadFile implements Command<File> {
 
     log.debug("Download file: {}", options);
 
-    switch (options.getMethod()) {
-      case HTTPGET: {
-        return downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, options.getFilter());
-      }
-      case PROXY: {
-        return downloadFileWithProxyServer.download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
-      }
-      case FOLDER: {
-        return downloadFileToFolder.download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
-      }
-      case CDP: {
-        return downloadFileWithCdp
-          .download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
-      }
-      default: {
-        throw new IllegalArgumentException("Unknown file download mode: " + options.getMethod());
-      }
-    }
+    FileDownloadMode method = requireNonNullElse(options.getMethod(), config.fileDownload());
+    return switch (method) {
+      case HTTPGET -> downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, options.getFilter());
+      case PROXY -> downloadFileWithProxyServer.download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
+      case FOLDER ->
+        downloadFileToFolder.download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
+      case CDP -> downloadFileWithCdp
+        .download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
+    };
   }
 
   @CheckReturnValue

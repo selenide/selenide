@@ -43,7 +43,8 @@ public class Arguments {
     return ofType(Duration.class).map(Duration::toMillis)
       .orElseGet(() ->
         ofType(HasTimeout.class).map(HasTimeout::timeout).map(Duration::toMillis)
-          .orElse(defaultTimeout)
+          .orElseGet(() ->
+            ofType(Long.class).orElse(defaultTimeout))
       );
   }
 }

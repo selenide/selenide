@@ -1248,9 +1248,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @throws RuntimeException      if 50x status code was returned from server
    * @throws FileNotDownloadedError     if 40x status code was returned from server
    * @see com.codeborne.selenide.commands.DownloadFile
+   * @deprecated Use method {{@link #download(DownloadOptions)}} instead
    */
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   File download(long timeout) throws FileNotDownloadedError;
 
   /**
@@ -1283,9 +1285,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @throws FileNotDownloadedError     if 40x status code was returned from server, or the downloaded file didn't match given filter.
    * @see com.codeborne.selenide.files.FileFilters
    * @see com.codeborne.selenide.commands.DownloadFile
+   * @deprecated Use method {{@link #download(DownloadOptions)}} instead
    */
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   File download(long timeout, FileFilter fileFilter) throws FileNotDownloadedError;
 
   /**

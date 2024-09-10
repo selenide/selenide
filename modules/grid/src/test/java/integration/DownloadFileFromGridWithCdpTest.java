@@ -24,7 +24,7 @@ import java.nio.file.Files;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
-import static com.codeborne.selenide.DownloadOptions.using;
+import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.FileDownloadMode.CDP;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -66,8 +66,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
   @Test
   void downloadsFileWithAlert() {
-    File downloadedFile = $(byText("Download me with alert")).download(
-      using(CDP).withFilter(withExtension("txt")).withAction(
+    File downloadedFile = $(byText("Download me with alert")).download(file().withExtension("txt").withAction(
         clickAndConfirm("Are you sure to download it?")
       )
     );
@@ -97,7 +96,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
   @Test
   void downloadsPdfFile() {
-    File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
+    File downloadedFile = $(byText("Download a PDF")).download(file().withExtension("pdf").withTimeout(timeout));
 
     assertThat(downloadedFile.getName()).matches("minimal.*.pdf");
     assertThat(downloadedFile).content().startsWith("%PDF-1.1");
@@ -136,7 +135,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
   @Test
   void downloadsFileWithPartExtension() {
-    File downloadedFile = $(byText("Download file *part")).download(withExtension("part"));
+    File downloadedFile = $(byText("Download file *part")).download(file().withExtension("part"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.part");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, part WinRar!");
@@ -145,7 +144,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
   @Test
   void downloadsFileWithCrdownloadExtension() {
-    File downloadedFile = $(byText("Download file *crdownload")).download(900, withName("hello_world.crdownload"));
+    File downloadedFile = $(byText("Download file *crdownload")).download(file().withName("hello_world.crdownload").withTimeout(900));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.crdownload");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
@@ -155,7 +154,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
   @Test
   public void download_slowly() {
     File downloadedFile = $(byText("Download me slowly"))
-      .download(4000, withName("hello_world.txt"));
+      .download(file().withName("hello_world.txt").withTimeout(4000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -163,7 +162,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
   @Test
   public void download_super_slowly() {
-    File downloadedFile = $(byText("Download me super slowly")).download(6000, withExtension("txt"));
+    File downloadedFile = $(byText("Download me super slowly")).download(file().withExtension("txt").withTimeout(6000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -171,7 +170,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
   @Test
   void downloadLargeFile() {
-    File downloadedFile = $(byText("Download large file")).download(8000, withExtension("txt"));
+    File downloadedFile = $(byText("Download large file")).download(file().withExtension("txt").withTimeout(8000));
 
     assertThat(downloadedFile).hasName("large_file.txt");
     assertThat(downloadedFile).hasSize(5 * 1024 * 1024);

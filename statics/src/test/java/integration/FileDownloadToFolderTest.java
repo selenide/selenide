@@ -75,7 +75,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   @Test
   void downloadsFileWithAlert() {
     File downloadedFile = $(byText("Download me with alert")).download(
-      using(FOLDER).withFilter(withExtension("txt")).withAction(
+      using(FOLDER).withExtension("txt").withAction(
         clickAndConfirm("Are you sure to download it?")
       )
     );
@@ -174,7 +174,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     Configuration.timeout = 1;
 
     File downloadedFile = $(byText("Download me")).download(using(FOLDER)
-      .withFilter(withExtension("txt"))
+      .withExtension("txt")
       .withTimeout(4000)
     );
 
@@ -215,7 +215,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     var shortIncrementTimeout = using(FOLDER)
       .withTimeout(ofSeconds(10))
       .withIncrementTimeout(ofMillis(1001))
-      .withFilter(withName("hello_world.txt"));
+      .withName("hello_world.txt");
     assertThatThrownBy(() -> $("h1")
       .download(shortIncrementTimeout))
       .isInstanceOf(FileNotDownloadedError.class)
@@ -232,7 +232,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     var shortIncrementTimeout = using(FOLDER)
       .withTimeout(ofSeconds(10))
       .withIncrementTimeout(ofMillis(100))
-      .withFilter(withName("hello_world.txt"));
+      .withName("hello_world.txt");
     assertThatThrownBy(() -> {
       File file = $(byText("Download me super slowly")).download(shortIncrementTimeout);
       assertThat(file).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
