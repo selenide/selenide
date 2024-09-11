@@ -10,7 +10,6 @@ dependencies {
     exclude group: 'xyz.rogfam' // LittleProxy was moved to group "io.github.littleproxy"
   }
   implementation("io.github.littleproxy:littleproxy:${littleProxyVersion}")
-  implementation("dnsjava:dnsjava:3.6.1") {because 'used by browserup-proxy and LittleProxy'}
   implementation("io.netty:netty-all:$nettyVersion") {because 'used by browserup-proxy'}
   api("io.netty:netty-codec-http:$nettyVersion") {because 'allows Selenide users to add request/response interceptors'}
 
