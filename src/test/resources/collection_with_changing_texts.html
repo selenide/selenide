@@ -15,28 +15,25 @@
 <h2 id="status"></h2>
 
 <script type="text/javascript">
-  const totalTime = new Date();
-  let size = 1;
-
-  function updateNextText() {
-    document.getElementById('item' + size).textContent = 'Updated Item #' + size;
-    size++;
+  function updateText(id, text) {
+    document.getElementById(id).textContent = text;
   }
 
-  function growCollection() {
+  function growCollection(text) {
     const node = document.createElement('li');
-    const textNode = document.createTextNode('Additional text #' + size);
+    const textNode = document.createTextNode(text);
     node.appendChild(textNode);
     document.getElementById("collection").appendChild(node);
-    size++;
   }
 
-  setTimeout(updateNextText, 810);
-  setTimeout(updateNextText, 820);
-  setTimeout(updateNextText, 830);
+  (() => {
+    setTimeout(() => updateText('item1', 'Updated Item #1'), 200);
+    setTimeout(() => updateText('item2', 'Updated Item #2'), 220);
+    setTimeout(() => updateText('item3', 'Updated Item #3'), 240);
 
-  setTimeout(growCollection, 835);
-  setTimeout(growCollection, 840);
+    setTimeout(() => growCollection('Additional text #4'), 260);
+    setTimeout(() => growCollection('Additional text #5'), 280);
+  })()
 </script>
 
 </body>
