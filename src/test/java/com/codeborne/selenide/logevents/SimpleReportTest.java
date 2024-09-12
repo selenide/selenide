@@ -1,7 +1,6 @@
 package com.codeborne.selenide.logevents;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,14 +15,6 @@ import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.apache.commons.io.IOUtils.resourceToString;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.anyList;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 final class SimpleReportTest {
   private static final Pattern REGEX_LINE_SEPARATOR = Pattern.compile("\\n");
@@ -101,39 +92,31 @@ final class SimpleReportTest {
   @Test
   void sortEventsBeforeGenerateReport() {
     Log event1 = new Log("event 1", "click", PASS, millisToNanos(200), millisToNanos(300));
-    Log event2 = new Log("event 2", "click", PASS, millisToNanos(300), millisToNanos(400));
-    Log event3 = new Log("event 3", "click", PASS, millisToNanos(400), millisToNanos(500));
+    Log event2 = new Log("event 2", "click", PASS, millisToNanos(300), millisToNanos(500));
+    Log event3 = new Log("event 3", "click", PASS, millisToNanos(500), millisToNanos(800));
     Log innerWrapper = new Log("inner wrapper", "click", PASS, millisToNanos(100), millisToNanos(800));
     Log mainWrapper = new Log("main wrapper", "", PASS, 0, millisToNanos(1000));
 
-    SimpleReport spiedReport = spy(new SimpleReport());
-    EventsCollector collector = mock(EventsCollector.class);
-
-    SelenideLogger.addListener("simpleReport", collector);
-    when(collector.events()).thenReturn(asList(
+    List<String> reportLines = new SimpleReport().generateReport("SORTING EVENTS", asList(
       event1,
       event2,
       event3,
       innerWrapper,
       mainWrapper
-    ));
+    )).lines().toList();
 
-    ArgumentCaptor<List<LogEvent>> captor = ArgumentCaptor.forClass(List.class);
-    doReturn("report").when(spiedReport).generateReport(anyString(), anyList());
-
-    spiedReport.finish("Test");
-
-    verify(spiedReport).generateReport(eq("Test"), captor.capture());
-
-    List<LogEvent> events = captor.getValue();
-
-    assertThat(events).isEqualTo(asList(
-      mainWrapper,
-      innerWrapper,
-      event1,
-      event2,
-      event3
-    ));
+    assertThat(reportLines).containsExactly(
+      "Report for SORTING EVENTS",
+      "+----------------------+---------+------------+------------+",
+      "| Element              | Subject | Status     | ms.        |",
+      "+----------------------+---------+------------+------------+",
+      "| main wrapper         |         | PASS       | 1000       |",
+      "|   inner wrapper      | click   | PASS       | 700        |",
+      "|     event 1          | click   | PASS       | 100        |",
+      "|     event 2          | click   | PASS       | 200        |",
+      "|     event 3          | click   | PASS       | 300        |",
+      "+----------------------+---------+------------+------------+"
+    );
   }
 
   @Test

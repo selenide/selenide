@@ -35,7 +35,7 @@ public class SelenideLog implements LogEvent {
     return this.status;
   }
 
-  protected void setStatus(EventStatus status) {
+  protected final void setStatus(EventStatus status) {
     this.status = status;
     endNs = System.nanoTime();
   }
@@ -67,7 +67,7 @@ public class SelenideLog implements LogEvent {
     return error;
   }
 
-  public void setError(Throwable error) {
+  public final void setError(Throwable error) {
     this.error = error;
   }
 
