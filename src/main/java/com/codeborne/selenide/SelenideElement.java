@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.commands.GetSelectedOptionText;
 import com.codeborne.selenide.commands.GetSelectedOptionValue;
+import com.codeborne.selenide.commands.ScrollIntoCenter;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -1228,6 +1229,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @Nonnull
   @CanIgnoreReturnValue
   SelenideElement scrollIntoView(String scrollIntoViewOptions);
+
+  /**
+   * Scroll element vertically to the center of viewport.
+   * Same as {@code $.scrollIntoView("{block: 'center'}")}
+   * @see ScrollIntoCenter
+   * @since 7.6.0
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement scrollIntoCenter();
 
   /**
    * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
