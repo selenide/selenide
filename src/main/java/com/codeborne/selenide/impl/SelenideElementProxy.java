@@ -87,7 +87,7 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
       SelenideLogger.commitStep(log, PASS);
       return result;
     }
-    catch (Error error) {
+    catch (AssertionError error) {
       Throwable wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs);
       SelenideLogger.commitStep(log, wrappedError);
       return continueOrBreak(proxy, method, wrappedError);
