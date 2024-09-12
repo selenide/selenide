@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.partialText;
@@ -59,7 +58,7 @@ final class CollectionWithChangingTextsTest extends ITest {
   void stream() {
     List<String> texts = $$("#collection li").asDynamicIterable()
       .stream()
-      .map(se -> se.getText()).collect(Collectors.toList());
+      .map(se -> se.getText()).toList();
 
     assertThat(texts).containsExactly("Item #1", "Item #2", "Item #3");
   }
@@ -69,7 +68,7 @@ final class CollectionWithChangingTextsTest extends ITest {
     waitForNewElementsRendered();
 
     List<String> texts = $$("#collection li").asDynamicIterable()
-      .stream().map(se -> se.getText()).collect(Collectors.toList());
+      .stream().map(se -> se.getText()).toList();
 
     assertThat(texts).containsExactly(
       "Updated Item #1", "Updated Item #2", "Updated Item #3",

@@ -10,7 +10,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @ParametersAreNonnullByDefault
 public class WebElementCommunicator implements ElementCommunicator {
@@ -47,7 +46,7 @@ public class WebElementCommunicator implements ElementCommunicator {
   protected List<String> textsOneByOne(List<WebElement> elements) {
     return elements.stream()
       .map(element -> element.getText())
-      .collect(Collectors.toList());
+      .toList();
   }
 
   @Override
@@ -66,6 +65,6 @@ public class WebElementCommunicator implements ElementCommunicator {
   protected List<String> attributesOneByOne(List<WebElement> elements, String attributeName) {
     return elements.stream()
       .map(element -> element.getAttribute(attributeName))
-      .collect(Collectors.toList());
+      .toList();
   }
 }
