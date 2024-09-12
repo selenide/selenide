@@ -7,10 +7,16 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.SelenideTargetLocator;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
+import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.devtools.v128.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.lang.ThreadLocal.withInitial;
 
 public abstract class ITest extends BaseIntegrationTest {
+  private static final Logger browserLogs = LoggerFactory.getLogger("browser");
   private final long longTimeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
 
   private static final ThreadLocal<SelenideConfig> config = withInitial(() ->
@@ -92,6 +98,17 @@ public abstract class ITest extends BaseIntegrationTest {
     retry(() -> {
       if (driver().hasWebDriverStarted()) {
         driver().open("about:blank");
+      }
+      else {
+        driver().open();
+        cast(driver().getWebDriver(), HasDevTools.class).ifPresent(webdriver -> {
+          var devTools = webdriver.getDevTools();
+          devTools.createSessionIfThereIsNotOne();
+          devTools.send(Log.enable());
+          devTools.addListener(Log.entryAdded(), log ->
+            browserLogs.info("[{}] {} source:{} url:{}", log.getLevel(), log.getText(), log.getSource(), log.getUrl().orElse("-"))
+          );
+        });
       }
       driver().open("/" + fileName + "?browser=" + browser +
                     "&timeout=" + driver().config().timeout());
