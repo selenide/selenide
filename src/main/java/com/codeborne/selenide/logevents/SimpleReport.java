@@ -49,11 +49,7 @@ public class SimpleReport {
       return;
     }
 
-    List<LogEvent> events = new ArrayList<>(logEventListener.events());
-
-    events.sort(comparingLong(LogEvent::getStartTime));
-
-    String report = generateReport(title, events);
+    String report = generateReport(title, logEventListener.events());
     log.info(report);
 
     logEventListener.clear();
@@ -61,7 +57,10 @@ public class SimpleReport {
 
   @Nonnull
   @CheckReturnValue
-  String generateReport(String title, List<LogEvent> events) {
+  protected String generateReport(String title, List<LogEvent> rawEvents) {
+    List<LogEvent> events = new ArrayList<>(rawEvents);
+
+    events.sort(comparingLong(LogEvent::getStartTime));
     var eventsWithNestingLevel = escapeSubjectAndComputeNestingLevel(events);
 
     int firstColumnWidth = Math.max(maxLocatorLength(eventsWithNestingLevel), MIN_FIRST_COLUMN_WIDTH);
