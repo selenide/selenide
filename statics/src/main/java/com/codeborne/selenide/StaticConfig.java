@@ -1,11 +1,5 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide;
 
-import com.codeborne.selenide.AssertionMode;
-import com.codeborne.selenide.Config;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.FileDownloadMode;
-import com.codeborne.selenide.SelectorMode;
-import com.codeborne.selenide.TextCheck;
 import org.openqa.selenium.MutableCapabilities;
 
 /**
@@ -16,7 +10,7 @@ import org.openqa.selenium.MutableCapabilities;
  *
  * This class should not be normally used in end user's code.
  */
-class StaticConfig implements Config {
+final class StaticConfig implements Config {
   @Override
   public String baseUrl() {
     return Configuration.baseUrl;

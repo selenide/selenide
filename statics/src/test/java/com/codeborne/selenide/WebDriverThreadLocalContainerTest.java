@@ -1,8 +1,5 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverProvider;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

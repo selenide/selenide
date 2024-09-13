@@ -1,11 +1,11 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide;
 
-import com.codeborne.selenide.Config;
-import com.codeborne.selenide.DownloadsFolder;
-import com.codeborne.selenide.SharedDownloadsFolder;
 import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
 import com.codeborne.selenide.drivercommands.CreateDriverCommand;
 import com.codeborne.selenide.drivercommands.WebdriversRegistry;
+import com.codeborne.selenide.impl.DeadThreadsWatchdog;
+import com.codeborne.selenide.impl.WebDriverContainer;
+import com.codeborne.selenide.impl.WebDriverInstance;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
@@ -41,7 +41,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Nullable
   private Proxy userProvidedProxy;
 
-  private final Config config = new StaticConfig();
+  private final Config config = new ThreadLocalSelenideConfig();
   private final BrowserHealthChecker browserHealthChecker;
   private final WebDriverFactory factory = new WebDriverFactory();
   private final CreateDriverCommand createDriverCommand = new CreateDriverCommand();

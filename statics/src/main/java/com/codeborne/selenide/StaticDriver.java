@@ -1,10 +1,5 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide;
 
-import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Config;
-import com.codeborne.selenide.DownloadsFolder;
-import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
 
@@ -16,13 +11,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 /**
  * A `Driver` implementation which uses thread-local
  * webdriver and proxy from `WebDriverRunner`.
- *
- * @see WebDriverRunner
- * @see StaticConfig
  */
 @ParametersAreNonnullByDefault
 class StaticDriver implements Driver {
-  private final Config config = new StaticConfig();
+  private final Config config = new ThreadLocalSelenideConfig();
 
   @Override
   @CheckReturnValue

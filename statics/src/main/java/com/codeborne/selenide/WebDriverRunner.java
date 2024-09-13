@@ -1,8 +1,6 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.ThreadLocalSelenideDriver;
 import com.codeborne.selenide.impl.WebDriverContainer;
-import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -22,7 +20,7 @@ import static com.codeborne.selenide.Configuration.headless;
 @ParametersAreNonnullByDefault
 public class WebDriverRunner {
   public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
-  private static final SelenideDriver staticSelenideDriver = new ThreadLocalSelenideDriver();
+  private static final ThreadLocalSelenideDriver staticSelenideDriver = new ThreadLocalSelenideDriver();
 
   /**
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
@@ -124,7 +122,7 @@ public class WebDriverRunner {
 
   @CheckReturnValue
   @Nonnull
-  static SelenideDriver getSelenideDriver() {
+  static ThreadLocalSelenideDriver getSelenideDriver() {
     return staticSelenideDriver;
   }
 
