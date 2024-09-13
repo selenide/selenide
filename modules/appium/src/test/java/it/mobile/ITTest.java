@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.util.Map;
 
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.appium.SelenideAppium.launchApp;
 import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXED_SECURITY;
 import static it.mobile.BrowserstackUtils.isCi;

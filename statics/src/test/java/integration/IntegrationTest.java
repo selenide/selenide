@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.junit.jupiter.api.AfterAll;
@@ -30,11 +29,11 @@ import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.TextCheck.FULL_TEXT;
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
@@ -109,7 +108,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
    */
   protected static void turnProxy(boolean proxyEnabled) {
     if (Configuration.proxyEnabled != proxyEnabled) {
-      Selenide.closeWebDriver();
+      closeWebDriver();
     }
     Configuration.proxyEnabled = proxyEnabled;
     Configuration.fileDownload = proxyEnabled ? PROXY : HTTPGET;

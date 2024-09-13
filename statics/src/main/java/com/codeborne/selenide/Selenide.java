@@ -235,7 +235,7 @@ public class Selenide {
    * @see WebDriver#quit()
    */
   public static void closeWebDriver() {
-    SelenideLogger.run("webdriver", getReadableSubject("close"), WebDriverRunner::closeWebDriver);
+    SelenideLogger.run("webdriver", getReadableSubject("close"), getSelenideDriver()::close);
   }
 
   /**
