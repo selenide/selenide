@@ -153,7 +153,9 @@ public class WebDriverRunner {
    * <p>NB! Method quits this driver, closing every associated window.</p>
    *
    * @see WebDriver#quit()
+   * @deprecated Use method {@link Selenide#closeWebDriver()} instead
    */
+  @Deprecated
   public static void closeWebDriver() {
     webdriverContainer.closeWebDriver();
   }

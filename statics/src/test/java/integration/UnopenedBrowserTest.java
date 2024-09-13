@@ -78,7 +78,7 @@ final class UnopenedBrowserTest extends IntegrationTest {
       header.shouldBe(visible).shouldHave(text("Page with selects"));
     }
     finally {
-      WebDriverRunner.closeWebDriver();
+      closeWebDriver();
       driver.quit();
     }
   }
