@@ -1,6 +1,5 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

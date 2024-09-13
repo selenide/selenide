@@ -54,6 +54,14 @@ public class Selenide {
   }
 
   /**
+   * Opens browser with given config.
+   * If there was already an opened browser with different config, it will be closed.
+   */
+  public static void open(String relativeOrAbsoluteUrl, Config config) {
+    getSelenideDriver().open(relativeOrAbsoluteUrl, config);
+  }
+
+  /**
    * @see Selenide#open(String)
    */
   public static void open(URL absoluteUrl) {
@@ -112,6 +120,14 @@ public class Selenide {
    */
   public static void open() {
     getSelenideDriver().open();
+  }
+
+  /**
+   * Open an empty browser with given config.
+   * If there was already an opened browser with different config, it will be closed.
+   */
+  public static void open(Config config) {
+    getSelenideDriver().open(config);
   }
 
   /**
