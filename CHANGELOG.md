@@ -1,9 +1,12 @@
 # Changelog
 
-## 7.5.0 (under construction)
+## 7.5.0 (15.09.2024)
+* #1372 allow to open every new browser with its own Configuration (#2846)
+* #2832 Raise "bubbleable" events when selection options in <select>s. (#2835)
+* Add few builder methods for DownloadOptions (#2841)
 * #2836 don't try to close any windows when downloading a file (#2840)
 * #2830 generate error details only once during error construction (#2839)
-* #2832 Raise "bubbleable" events when selection options in <select>s. (#2835)
+* don't catch all errors (#2845)
 * bump BrowserUpProxy from 2.2.18 to 2.2.19
 * bump dnsjava from 3.6.0 to 3.6.1
 * bump LittleProxy from 2.2.4 to 2.3.0 (#2837)
