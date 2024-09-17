@@ -2,7 +2,7 @@
 
 ## 7.5.0 (15.09.2024)
 * #1372 allow to open every new browser with its own Configuration (#2846)
-* #2832 Raise "bubbleable" events when selection options in <select>s. (#2835)
+* #2832 Raise "bubbleable" events when selection options in `<select>`s. (#2835)
 * Add few builder methods for DownloadOptions (#2841)
 * #2836 don't try to close any windows when downloading a file (#2840)
 * #2830 generate error details only once during error construction (#2839)
