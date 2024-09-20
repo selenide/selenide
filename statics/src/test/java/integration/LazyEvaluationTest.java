@@ -2,7 +2,6 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,6 +13,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Configuration.config;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
@@ -68,7 +68,7 @@ final class LazyEvaluationTest extends IntegrationTest {
     assumeThat(WebDriverRunner.isChrome()).isTrue();
     assertThat(WebDriverRunner.getWebDriver()).isInstanceOf(ChromeDriver.class);
     try {
-      open("/page_with_jquery.html", new SelenideConfig().browser("firefox").baseUrl(getBaseUrl()));
+      open("/page_with_jquery.html", config().browser("firefox"));
       assertThat(WebDriverRunner.getWebDriver()).isInstanceOf(FirefoxDriver.class);
       h1.shouldBe(visible).shouldHave(text("Page with JQuery"));
     }
