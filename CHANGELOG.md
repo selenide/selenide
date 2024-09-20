@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.5.1 (20.09.2024)
+* bump Selenium from 4.24.0 to 4.25.0 (#2851)
+
 ## 7.5.0 (15.09.2024)
 * #1372 allow to open every new browser with its own Configuration (#2846)
 * #2832 Raise "bubbleable" events when selection options in `<select>`s. (#2835)

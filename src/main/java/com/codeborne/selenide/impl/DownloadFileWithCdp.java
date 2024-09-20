@@ -12,10 +12,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v128.browser.Browser;
-import org.openqa.selenium.devtools.v128.browser.model.DownloadProgress;
-import org.openqa.selenium.devtools.v128.browser.model.DownloadWillBegin;
-import org.openqa.selenium.devtools.v128.page.Page;
+import org.openqa.selenium.devtools.v129.browser.Browser;
+import org.openqa.selenium.devtools.v129.browser.model.DownloadProgress;
+import org.openqa.selenium.devtools.v129.browser.model.DownloadWillBegin;
+import org.openqa.selenium.devtools.v129.page.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +35,8 @@ import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
-import static org.openqa.selenium.devtools.v128.browser.Browser.downloadProgress;
-import static org.openqa.selenium.devtools.v128.browser.Browser.downloadWillBegin;
+import static org.openqa.selenium.devtools.v129.browser.Browser.downloadProgress;
+import static org.openqa.selenium.devtools.v129.browser.Browser.downloadWillBegin;
 
 @ParametersAreNonnullByDefault
 public class DownloadFileWithCdp {

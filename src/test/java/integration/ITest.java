@@ -8,7 +8,7 @@ import com.codeborne.selenide.SelenideTargetLocator;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v128.log.Log;
+import org.openqa.selenium.devtools.v129.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
