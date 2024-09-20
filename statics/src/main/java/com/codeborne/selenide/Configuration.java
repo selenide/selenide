@@ -64,6 +64,7 @@ public class Configuration {
    * <br>
    * Default value: false.
    * <br>
+   *
    * @deprecated Don't use this setting. It leaves the browser and webdriver open.
    * User can later close the browser manually, but the webdriver leaves running forever.
    * To achieve the same effect, just add `sleep(600_000)` in your test.
@@ -147,8 +148,8 @@ public class Configuration {
    * In some cases `eager` can bring performance boosts for the slow tests.
    * Though, we left default value `normal` because we are afraid to break users' existing tests.
    * <br>
-   * @see <a href="https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy">documentation</a>
    *
+   * @see <a href="https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy">documentation</a>
    * @since 3.5
    */
   public static String pageLoadStrategy = defaults.pageLoadStrategy();
@@ -197,10 +198,10 @@ public class Configuration {
    */
   public static String reportsFolder = defaults.reportsFolder();
 
-    /**
+  /**
    * Folder to store downloaded files to.
    * Can be configured either programmatically, via selenide.properties file
-     * or by system property "-Dselenide.downloadsFolder=test-result/downloads".
+   * or by system property "-Dselenide.downloadsFolder=test-result/downloads".
    * <br>
    * Default value: "build/downloads" (this is default for Gradle projects)
    */
@@ -248,9 +249,9 @@ public class Configuration {
    * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.selectorMode=Sizzle".
    * </p>
    * <br>
-   *   Possible values: "CSS" or "Sizzle"
+   * Possible values: "CSS" or "Sizzle"
    * <br>
-   *   Default value: CSS
+   * Default value: CSS
    *
    * @see SelectorMode
    */
@@ -263,9 +264,9 @@ public class Configuration {
    * or by system property "-Dselenide.assertionMode=SOFT".</p>
    *
    * <br>
-   *   Possible values: "STRICT" or "SOFT"
+   * Possible values: "STRICT" or "SOFT"
    * <br>
-   *   Default value: STRICT
+   * Default value: STRICT
    *
    * @see AssertionMode
    */
@@ -313,16 +314,17 @@ public class Configuration {
 
   /**
    * <p>
-   *  Whether webdriver logs should be enabled.
+   * Whether webdriver logs should be enabled.
    * </p>
    *
    * <p>
-   *   These logs may be useful for debugging some webdriver issues.
-   *   But in most cases they are not needed (and can take quite a lot of disk space),
-   *   that's why don't enable them by default.
+   * These logs may be useful for debugging some webdriver issues.
+   * But in most cases they are not needed (and can take quite a lot of disk space),
+   * that's why don't enable them by default.
    * </p>
-   *
+   * <p>
    * Default: false
+   *
    * @since 5.18.0
    */
   public static boolean webdriverLogsEnabled = defaults.webdriverLogsEnabled();
@@ -351,6 +353,7 @@ public class Configuration {
    * or by system property "-Dselenide.remoteReadTimeout=180000"
    * <br>
    * Default: 90000
+   *
    * @since 6.7.4
    */
   public static long remoteReadTimeout = defaults.remoteReadTimeout();
@@ -362,7 +365,49 @@ public class Configuration {
    * or by system property "-Dselenide.remoteConnectionTimeout=180000"
    * <br>
    * Default: 10000
+   *
    * @since 6.9.0
    */
   public static long remoteConnectionTimeout = defaults.remoteConnectionTimeout();
+
+  /**
+   * @since 7.5.1
+   * @return a new instance of {@link SelenideConfig} containing all settings from {@link Configuration}.
+   * This instance can be safely modified (without affecting the origin {@link Configuration}).
+   */
+  public static SelenideConfig config() {
+    return new SelenideConfig()
+      .baseUrl(baseUrl)
+      .timeout(timeout)
+      .pollingInterval(pollingInterval)
+      .holdBrowserOpen(holdBrowserOpen)
+      .reopenBrowserOnFail(reopenBrowserOnFail)
+      .browser(browser)
+      .browserVersion(browserVersion)
+      .remote(remote)
+      .browserSize(browserSize)
+      .browserPosition(browserPosition)
+      .browserCapabilities(browserCapabilities)
+      .pageLoadStrategy(pageLoadStrategy)
+      .pageLoadTimeout(pageLoadTimeout)
+      .clickViaJs(clickViaJs)
+      .screenshots(screenshots)
+      .savePageSource(savePageSource)
+      .reportsFolder(reportsFolder)
+      .downloadsFolder(downloadsFolder)
+      .reportsUrl(reportsUrl)
+      .fastSetValue(fastSetValue)
+      .textCheck(textCheck)
+      .selectorMode(selectorMode)
+      .assertionMode(assertionMode)
+      .fileDownload(fileDownload)
+      .proxyEnabled(proxyEnabled)
+      .proxyHost(proxyHost)
+      .proxyPort(proxyPort)
+      .webdriverLogsEnabled(webdriverLogsEnabled)
+      .headless(headless)
+      .browserBinary(browserBinary)
+      .remoteReadTimeout(remoteReadTimeout)
+      .remoteConnectionTimeout(remoteConnectionTimeout);
+  }
 }
