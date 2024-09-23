@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.conditions.ExplainedObjectCondition;
+
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,4 +38,9 @@ public interface ObjectCondition<T> {
   default CheckResult result(T object, boolean met, @Nullable Object actualValue) {
     return met ? accepted(actualValue) : rejected(message(object), actualValue);
   }
+
+  default ObjectCondition<T> because(String message) {
+    return new ExplainedObjectCondition<>(this, message);
+  }
+
 }

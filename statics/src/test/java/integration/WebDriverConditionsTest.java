@@ -127,6 +127,11 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
+  void waitForUrlCurrentFrameContainingWithBecause() {
+    webdriver().shouldHave(currentFrameUrlContaining("https://google.ee/").because("неужели сработает"), ofMillis(2000));
+  }
+
+  @Test
   void errorMessageForWrongCurrentFrameUrlStartingWith() {
     assertThatThrownBy(() ->
       webdriver().shouldHave(currentFrameUrlStartingWith("https://google.ee/"), ofMillis(5))
