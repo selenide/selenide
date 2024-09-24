@@ -13,6 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.clipboard;
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(SelenoidSetup.class)
 public class SelenoidClipboardTest {
@@ -45,6 +46,16 @@ public class SelenoidClipboardTest {
     String multilineText = "John\nWick\r\nThe\nGreat\r";
     clipboard().setText(multilineText);
     clipboard().shouldHave(content(multilineText));
+    assertThat(clipboard().getText()).isEqualTo(multilineText);
+  }
+
+  @Test
+  public void setAndGetClipboardMultilineContentWithBecause() {
+    String multilineText = "John\nWick\r\nThe\nGreat\r";
+    clipboard().setText(multilineText);
+    assertThatThrownBy(() ->
+                         clipboard().shouldHave(content(multilineText + "test").because("Content don`t right")))
+      .hasMessageContaining("");
     assertThat(clipboard().getText()).isEqualTo(multilineText);
   }
 }
