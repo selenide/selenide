@@ -37,7 +37,7 @@ subprojects {
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
       exclude group: 'org.slf4j'
     }
-    implementation("com.google.guava:guava:33.3.0-jre")
+    implementation("com.google.guava:guava:33.3.1-jre")
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("commons-io:commons-io:2.17.0")
     testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core") {
