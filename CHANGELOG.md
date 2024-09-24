@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.5.2 (under construction)
+* 
+
 ## 7.5.1 (21.09.2024)
 * bump Selenium from 4.24.0 to 4.25.0 (#2851)
 * add method `Configuration.config()` (#2852)
