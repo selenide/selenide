@@ -65,7 +65,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
                          webdriver().shouldHave(url("page_with_frames.html").because("wrong url"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetError.class)
-      .hasMessageStartingWith("webdriver should have url page_with_frames.html (because: wrong url)")
+      .hasMessageStartingWith("webdriver should have url page_with_frames.html (because wrong url)")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 10 ms.");
@@ -77,7 +77,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
                          webdriver().shouldNotHave(url(baseUrl + "/page_with_frames_with_delays.html").because("wrong url"),
                                                    ofMillis(10))
     )
-      .hasMessageStartingWith("webdriver should not have url " + baseUrl + "/page_with_frames_with_delays.html (because: wrong url)")
+      .hasMessageStartingWith("webdriver should not have url " + baseUrl + "/page_with_frames_with_delays.html (because wrong url)")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 10 ms.");

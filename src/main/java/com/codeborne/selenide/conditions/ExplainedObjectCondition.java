@@ -20,13 +20,13 @@ public class ExplainedObjectCondition<T> implements ObjectCondition<T> {
   @Nonnull
   @Override
   public String description() {
-    return delegate.description() + " (because: " + message + ")";
+    return delegate.description() + " (because " + message + ")";
   }
 
   @Nonnull
   @Override
   public String negativeDescription() {
-    return delegate.negativeDescription() + " (because: " + message + ")";
+    return delegate.negativeDescription() + " (because " + message + ")";
   }
 
   @Override
