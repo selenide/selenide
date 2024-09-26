@@ -5,8 +5,11 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.SpaceSeparator;
 import com.codeborne.selenide.commands.GetSelectedOptionText;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -83,14 +86,15 @@ final class TextTest {
       .check(driver, element).verdict()).isEqualTo(ACCEPT);
   }
 
-  @Test
-  void apply_for_textInput_ignoresWhitespaces() {
+  @ParameterizedTest
+  @EnumSource(SpaceSeparator.class)
+  void apply_for_textInput_ignoresWhitespaces(SpaceSeparator spaceSeparator) {
     assertThat(new Text("john the malkovich")
       .check(driver, mockElement("John  the\n Malkovich")).verdict())
       .isEqualTo(ACCEPT);
 
     assertThat(new Text("This is nonbreakable space")
-      .check(driver, mockElement("This is nonbreakable\u00a0space")).verdict())
+      .check(driver, mockElement("This is nonbreakable\\" + spaceSeparator.toString().toLowerCase() + "space")).verdict())
       .isEqualTo(ACCEPT);
   }
 
