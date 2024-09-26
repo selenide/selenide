@@ -1,0 +1,28 @@
+ext {
+  artifactId = "video-recorder-testng"
+  testngVersion = '7.10.1'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  api project(":modules:video-recorder-core")
+  api("org.testng:testng:$testngVersion") { transitive = false }
+  testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
+  testRuntimeOnly("org.testng:testng:$testngVersion") {
+    exclude(group: 'junit')
+    exclude(group: 'testng')
+    exclude(group: 'org.apache.ant')
+    exclude(group: 'com.google.inject')
+  }
+  implementation("org.bytedeco:javacv:$javacvVersion")
+  implementation("org.bytedeco:javacv-platform:$javacvVersion")
+}
+
+tasks.withType(Test) {
+  useTestNG()
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')
