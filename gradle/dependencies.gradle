@@ -13,7 +13,7 @@ ext {
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.9'
   archunitVersion = '1.3.0'
-  jacksonVersion = '2.17.2'
+  jacksonVersion = '2.18.0'
 }
 
 subprojects {
