@@ -31,7 +31,7 @@ public class IosDriverProvider implements WebDriverProvider {
 
   protected XCUITestOptions getXcuiTestOptions() {
     XCUITestOptions options = new XCUITestOptions();
-    options.setApp("bs://7233e5202a8d1fbf5c5df35a13dc08760b3e840b");
+    options.setApp("githubactions_qxmgVeB/IOS_SwagLabs");
     options.setPlatformVersion("17");
     options.setDeviceName("iPhone 15 Pro");
     options.setFullReset(false);

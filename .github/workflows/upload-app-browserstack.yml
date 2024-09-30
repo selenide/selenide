@@ -1,0 +1,16 @@
+name: 'Upload apps to Browserstack. They delete an uploaded app after 30 days from the day of upload'
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '40 7 27 * *'
+
+jobs:
+  upload-apps-to-browserstack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run script
+        run: |
+          ./.github/upload-apps-to-browserstack.sh
+        shell: bash
