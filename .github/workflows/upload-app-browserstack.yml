@@ -12,5 +12,5 @@ jobs:
         uses: actions/checkout@v4
       - name: Run script
         run: |
-          ./.github/upload-apps-to-browserstack.sh
+          ./.github/upload_test_apps.sh
         shell: bash
