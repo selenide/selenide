@@ -6,6 +6,8 @@ on:
 
 jobs:
   upload-apps-to-browserstack:
+    env:
+      BS_KEY: ${{ secrets.BS_KEY }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
