@@ -93,8 +93,13 @@ final class TextTest {
       .check(driver, mockElement("John  the\n Malkovich")).verdict())
       .isEqualTo(ACCEPT);
 
+    String sepLowercase = spaceSeparator.toString().toLowerCase();
+    String unicodeSpace = org.apache.commons.text.StringEscapeUtils.unescapeJava("\\%s".formatted(sepLowercase));
+    SelenideElement mockElement = mockElement("This is nonbreakable" + unicodeSpace + "space");
+
     assertThat(new Text("This is nonbreakable space")
-      .check(driver, mockElement("This is nonbreakable\\" + spaceSeparator.toString().toLowerCase() + "space")).verdict())
+      .check(driver, mockElement).verdict())
+      .as(mockElement.getText() + " - case for separator: " + sepLowercase)
       .isEqualTo(ACCEPT);
   }
 
