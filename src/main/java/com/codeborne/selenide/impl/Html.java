@@ -8,7 +8,7 @@ import static java.util.regex.Pattern.DOTALL;
 
 @ParametersAreNonnullByDefault
 public class Html {
-  private static final Pattern REGEX_SPACES = Pattern.compile("[\\s\\n\\rua-z0-9]+");
+  private static final Pattern REGEX_SPACES = Pattern.compile("[\\s\\n\\r]+|\\\\u[0-3][0|6][2a850][0-9af]+");
   public static Html text = new Html();
 
   public boolean matches(String text, String regex) {
