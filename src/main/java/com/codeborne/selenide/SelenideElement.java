@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.commands.GetSelectedOptionText;
 import com.codeborne.selenide.commands.GetSelectedOptionValue;
+import com.codeborne.selenide.commands.ScrollBy;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -1230,53 +1231,27 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement scrollIntoView(String scrollIntoViewOptions);
 
   /**
-   * Scrolls on element by a given amount.
-   * The number represent vertical distances, in pixels, that you want to scroll by.
-   * If you want to scroll in the opposite direction, use a negative number.<p>
+   * Scrolls the element by a specified distance in a specified direction.<p>
+   * It takes {@link ScrollByOptions} to specify the direction, distance and other options.
    *
    * For example, if you want to scroll the element down by 100 pixels, you can do:
    *
    * <pre>
-   * {@code element.scrollOnElement(100)}
-   * </pre>
-   *
-   * If you want to scroll the element up by 250 pixels, you can do:
-   *
-   * <pre>
-   * {@code element.scrollOnElement(-250)}
-   * </pre>
-   *
-   * @param top string property specify the number of pixels along the Y axis to scroll the element by
-   * @see com.codeborne.selenide.commands.ScrollOnElement
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  SelenideElement scrollOnElement(Integer top);
-
-  /**
-   * Scrolls on element by a given amount. To use this method, you need to pass either two numbers.
-   * The two numbers represent the horizontal and vertical distances, in pixels, that you want to scroll by.
-   * If you want to scroll in the opposite direction, use a negative number.<p>
-   *
-   * For example, if you want to scroll the element down by 100 pixels, you can do:
-   *
-   * <pre>
-   * {@code element.scrollOnElement(100, 0)}
+   * {@code element.scrollBy(ScrollByOptions.direction(ScrollByDirection.DOWN).distance(100))}
    * </pre>
    *
    * If you want to scroll the element right by 250 pixels, you can do:
    *
    * <pre>
-   * {@code element.scrollOnElement(0, -250)}
+   * {@code element.scrollBy(ScrollByOptions.direction(ScrollByDirection.RIGHT).distance(250))}
    * </pre>
    *
-   * @param top string property specify the number of pixels along the Y axis to scroll the element by
-   * @param left string property specify the number of pixels along the X axis to scroll the element by
-   * @see com.codeborne.selenide.commands.ScrollOnElement
+   * @param scrollByOptions
+   * @see com.codeborne.selenide.commands.ScrollBy
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement scrollOnElement(Integer top, Integer left);
+  SelenideElement scrollBy(ScrollByOptions scrollByOptions);
 
   /**
    * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
