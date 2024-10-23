@@ -1,5 +1,8 @@
 package com.codeborne.selenide.appium;
 
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
+import static io.appium.java_client.remote.options.SupportsAutomationNameOption.AUTOMATION_NAME_OPTION;
+
 import com.codeborne.selenide.BaseElementsCollection;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Selenide;
@@ -11,9 +14,17 @@ import com.codeborne.selenide.impl.NoOpsList;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.HasBrowserCheck;
+import io.appium.java_client.pagefactory.AndroidFindAll;
+import io.appium.java_client.pagefactory.AndroidFindBy;
+import io.appium.java_client.pagefactory.AndroidFindBys;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.DefaultElementByBuilder;
 import io.appium.java_client.pagefactory.bys.builder.AppiumByBuilder;
+import io.appium.java_client.pagefactory.iOSXCUITFindAll;
+import io.appium.java_client.pagefactory.iOSXCUITFindBy;
+import io.appium.java_client.pagefactory.iOSXCUITFindBys;
+import java.lang.annotation.Annotation;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
@@ -33,9 +44,6 @@ import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.Optional;
 
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
-import static io.appium.java_client.remote.options.SupportsAutomationNameOption.AUTOMATION_NAME_OPTION;
-
 @ParametersAreNonnullByDefault
 public class SelenideAppiumPageFactory extends SelenidePageFactory {
   private static final Logger logger = LoggerFactory.getLogger(SelenideAppiumPageFactory.class);
@@ -44,17 +52,22 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   @Nonnull
   @CheckReturnValue
   protected By findSelector(Driver driver, Field field) {
-    AppiumByBuilder builder = byBuilder(driver);
+    AppiumByBuilder builder = byBuilder(driver, field);
     builder.setAnnotated(field);
     By selector = builder.buildBy();
     return selector != null ? selector : super.findSelector(driver, field);
   }
 
-  @Nonnull
+
+@Nonnull
   @CheckReturnValue
-  private DefaultElementByBuilder byBuilder(Driver driver) {
-    if (!driver.hasWebDriverStarted()) {
+  private DefaultElementByBuilder byBuilder(Driver driver, Field field) {
+    if (!isPlatformAnnotationAdded(field)) {
       return new DefaultElementByBuilder(null, null);
+    }
+    if (!driver.hasWebDriverStarted()) {
+      throw new RuntimeException("The Appium Page factory requires a browser instance to be created before calling" +
+        " initialization via page; please ensure the browser or WebDriver session is initialized first.");
     }
 
     Optional<HasBrowserCheck> hasBrowserCheck = cast(driver, HasBrowserCheck.class);
@@ -139,5 +152,12 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     SelenideAppiumList(CollectionSource collection) {
       super(collection);
     }
+  }
+
+  private boolean isPlatformAnnotationAdded(Field field) {
+    List<Class<? extends Annotation>> classes =
+      List.of(AndroidFindBy.class, AndroidFindBys.class, AndroidFindAll.class, iOSXCUITFindBy.class, iOSXCUITFindBys.class,
+        iOSXCUITFindAll.class);
+    return classes.stream().anyMatch(field::isAnnotationPresent);
   }
 }
