@@ -59,12 +59,13 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   }
 
 
-@Nonnull
+  @Nonnull
   @CheckReturnValue
   private DefaultElementByBuilder byBuilder(Driver driver, Field field) {
     if (!isPlatformAnnotationAdded(field)) {
       return new DefaultElementByBuilder(null, null);
     }
+
     if (!driver.hasWebDriverStarted()) {
       throw new RuntimeException("The Appium Page factory requires a browser instance to be created before calling" +
         " initialization via page(); please ensure the browser or WebDriver session created");
