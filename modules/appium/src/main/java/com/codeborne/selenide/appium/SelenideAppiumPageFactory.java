@@ -67,7 +67,7 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     }
     if (!driver.hasWebDriverStarted()) {
       throw new RuntimeException("The Appium Page factory requires a browser instance to be created before calling" +
-        " initialization via page; please ensure the browser or WebDriver session is initialized first.");
+        " initialization via page(); please ensure the browser or WebDriver session created");
     }
 
     Optional<HasBrowserCheck> hasBrowserCheck = cast(driver, HasBrowserCheck.class);
