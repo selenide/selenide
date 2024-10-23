@@ -4,7 +4,6 @@ import com.codeborne.selenide.BaseElementsCollection;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.LazyWebElementSnapshot;
@@ -54,7 +53,7 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   @Nonnull
   @CheckReturnValue
   private DefaultElementByBuilder byBuilder(Driver driver) {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
+    if (!driver.hasWebDriverStarted()) {
       return new DefaultElementByBuilder(null, null);
     }
 
