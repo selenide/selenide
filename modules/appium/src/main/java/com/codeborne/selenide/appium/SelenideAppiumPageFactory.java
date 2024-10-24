@@ -16,12 +16,18 @@ import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.HasBrowserCheck;
 import io.appium.java_client.pagefactory.AndroidFindAll;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import io.appium.java_client.pagefactory.AndroidFindByAllSet;
+import io.appium.java_client.pagefactory.AndroidFindByChainSet;
+import io.appium.java_client.pagefactory.AndroidFindBySet;
 import io.appium.java_client.pagefactory.AndroidFindBys;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.DefaultElementByBuilder;
 import io.appium.java_client.pagefactory.bys.builder.AppiumByBuilder;
 import io.appium.java_client.pagefactory.iOSXCUITFindAll;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
+import io.appium.java_client.pagefactory.iOSXCUITFindByAllSet;
+import io.appium.java_client.pagefactory.iOSXCUITFindByChainSet;
+import io.appium.java_client.pagefactory.iOSXCUITFindBySet;
 import io.appium.java_client.pagefactory.iOSXCUITFindBys;
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -29,6 +35,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ByIdOrName;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
@@ -47,6 +54,10 @@ import java.util.Optional;
 @ParametersAreNonnullByDefault
 public class SelenideAppiumPageFactory extends SelenidePageFactory {
   private static final Logger logger = LoggerFactory.getLogger(SelenideAppiumPageFactory.class);
+  private final List<Class<? extends Annotation>> platformAnnotations =
+    List.of(AndroidFindBy.class, AndroidFindBys.class, AndroidFindAll.class, AndroidFindByAllSet.class, AndroidFindByChainSet.class,
+      AndroidFindBySet.class, iOSXCUITFindBy.class, iOSXCUITFindBys.class, iOSXCUITFindAll.class, iOSXCUITFindByAllSet.class,
+      iOSXCUITFindByChainSet.class, iOSXCUITFindBySet.class);
 
   @Override
   @Nonnull
@@ -58,7 +69,6 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     return selector != null ? selector : super.findSelector(driver, field);
   }
 
-
   @Nonnull
   @CheckReturnValue
   private DefaultElementByBuilder byBuilder(Driver driver, Field field) {
@@ -67,8 +77,8 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     }
 
     if (!driver.hasWebDriverStarted()) {
-      throw new RuntimeException("The Appium Page factory requires a browser instance to be created before calling" +
-        " initialization via page(); please ensure the browser or WebDriver session created");
+      throw new WebDriverException("The SelenideAppiumPageFactory requires a webdriver instance to be created before page" +
+        " initialization; No webdriver is bound to current thread. You need to call open() first");
     }
 
     Optional<HasBrowserCheck> hasBrowserCheck = cast(driver, HasBrowserCheck.class);
@@ -156,9 +166,6 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   }
 
   private boolean isPlatformAnnotationAdded(Field field) {
-    List<Class<? extends Annotation>> classes =
-      List.of(AndroidFindBy.class, AndroidFindBys.class, AndroidFindAll.class, iOSXCUITFindBy.class, iOSXCUITFindBys.class,
-        iOSXCUITFindAll.class);
-    return classes.stream().anyMatch(field::isAnnotationPresent);
+    return platformAnnotations.stream().anyMatch(field::isAnnotationPresent);
   }
 }
