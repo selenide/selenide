@@ -1,7 +1,7 @@
 # Changelog
 
 ## 7.5.2 (under construction)
-* 
+* bump Selenium from 4.25.0 to 4.26.0 
 
 ## 7.5.1 (21.09.2024)
 * bump Selenium from 4.24.0 to 4.25.0 (#2851)
