@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
+import static java.util.regex.Matcher.quoteReplacement;
 import static java.util.regex.Pattern.DOTALL;
 
 @ParametersAreNonnullByDefault
@@ -38,7 +39,7 @@ public class JavaScript {
     while (matcher.find()) {
       String fileName = matcher.group(1);
       String includedScript = new FileContent(fileName).content();
-      js = matcher.replaceFirst(includedScript);
+      js = matcher.replaceFirst(quoteReplacement(includedScript));
       matcher = RE.matcher(js);
     }
     return js;
