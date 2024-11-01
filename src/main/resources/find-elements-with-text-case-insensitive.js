@@ -1,18 +1,9 @@
 (function () {
+  import 'texts.js'
+
   const root = arguments[0] || document.body;
-  const text = arguments[1].toLowerCase().replace(/\s+/gi, ' ');
+  const text = normalizeText(arguments[1]);
   const limit = arguments[2];
 
-  const treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  const nodeList = [];
-
-  while (nodeList.length < limit && treeWalker.nextNode()) {
-    const node = treeWalker.currentNode;
-
-    if (node.nodeType === Node.TEXT_NODE && node.textContent.toLowerCase().replace(/\s+/gi, ' ').includes(text)) {
-      nodeList.push(node.parentNode);
-    }
-  }
-
-  return nodeList;
+  return findNodes(root, limit, (node, nodeText) => nodeText.includes(text));
 })(...arguments)

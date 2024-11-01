@@ -1,7 +1,9 @@
 # Changelog
 
 ## 7.5.2 (under construction)
-* bump Selenium from 4.25.0 to 4.26.0 
+* add because function for webDriverConditions (#2853) --  thanks to Daniil Moiseev
+* fix regExp for spaces separators (#2858) --  thanks to Daniil Moiseev
+* bump Selenium from 4.25.0 to 4.26.0
 
 ## 7.5.1 (21.09.2024)
 * bump Selenium from 4.24.0 to 4.25.0 (#2851)
