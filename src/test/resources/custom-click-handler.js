@@ -1,6 +1,6 @@
 (function (element) {
-  import 'customer-click-helper.js'
-  import 'customer-click-logger.js'
+  import 'custom-click-helper.js'
+  import 'custom-click-logger.js'
   logClick(element)
   customClick(element)
 })(arguments[0])
