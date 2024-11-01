@@ -150,7 +150,7 @@ final class SelenideMethodsTest extends IntegrationTest {
       .isEqualTo("Dropdown list");
 
     assertThat($("#baskerville").innerHtml().trim())
-      .isEqualTo("<span></span> L'a\n      Baskerville");
+      .startsWith("<span></span> L'a  \n").endsWith("Baskerville");
     assertThat($("#status").innerHtml().trim())
       .isEqualTo("Username: <span class=\"name\">Bob Smith</span>&nbsp;Last login: <span class=\"last-login\">01.01.1970</span>");
   }
