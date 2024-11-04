@@ -1,4 +1,4 @@
-package it.mobile;
+package com.codeborne.selenide.appium;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,16 +16,16 @@ class SelenideAppiumPageFactoryTest {
   @Test
   void exception_on_init_mobile_element_without_webdriver() {
     Selenide.closeWebDriver();
-    assertThatThrownBy(PageWithPlatformSelectors::new)
+    assertThatThrownBy(() -> Selenide.page(PageWithPlatformSelectors.class))
       .isInstanceOf(WebDriverException.class)
-        .hasMessageStartingWith("The Appium Page factory requires a webdriver instance to be created before page initialization;" +
-        " No webdriver is bound to current thread. You need to call open() first");
+        .hasMessageStartingWith("The SelenideAppiumPageFactory requires a webdriver instance to be created before page " +
+          "initialization; No webdriver is bound to current thread. You need to call open() first");
   }
 
   @Test
   void web_element_page_factory_doesnt_require_webdriver_instance() {
     Selenide.closeWebDriver();
-    var page = new PageWithWebSelectors();
+    var page = Selenide.page(PageWithWebSelectors.class);
     assertThat(page.element).isNotNull()
       .hasToString("{By.id: someId}");
   }
@@ -33,7 +33,7 @@ class SelenideAppiumPageFactoryTest {
   @Test
   void mobile_platform_element_successfully_init_with_created_webdriver() {
     open();
-    var page = new PageWithPlatformSelectors();
+    var page = Selenide.page(PageWithPlatformSelectors.class);
     assertThat(page.element).isNotNull()
       .hasToString("{By.id: element}");
   }
