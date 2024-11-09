@@ -2,11 +2,11 @@ package com.codeborne.selenide.appium.commands;
 
 import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.appium.AppiumClickOptions;
 import com.codeborne.selenide.commands.Click;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.AppiumDriver;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,27 +14,20 @@ import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
-@ParametersAreNonnullByDefault
 public class AppiumClick extends Click {
 
   private static final String FINGER_1 = "finger1";
 
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public void execute(WebElementSource locator, Object @Nullable [] args) {
     if (!isMobile(locator.driver())) {
-      return super.execute(proxy, locator, args);
+      super.execute(locator, args);
     }
 
     ClickOptions options = options(args);
@@ -46,7 +39,6 @@ public class AppiumClick extends Click {
     else {
       click(locator.driver(), webElement, options);
     }
-    return proxy;
   }
 
   @Override
@@ -126,8 +118,6 @@ public class AppiumClick extends Click {
   }
 
   @Override
-  @Nonnull
-  @CheckReturnValue
   protected WebElement findElement(WebElementSource locator, boolean force) {
     if (isMobile(locator.driver())) {
       return force ? locator.getWebElement() : locator.findAndAssertElementIsVisible();

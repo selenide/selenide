@@ -7,6 +7,7 @@ import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,10 +20,6 @@ import org.openqa.selenium.devtools.v130.page.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,7 +35,6 @@ import static java.util.Objects.requireNonNull;
 import static org.openqa.selenium.devtools.v130.browser.Browser.downloadProgress;
 import static org.openqa.selenium.devtools.v130.browser.Browser.downloadWillBegin;
 
-@ParametersAreNonnullByDefault
 public class DownloadFileWithCdp {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithCdp.class);
   private static final AtomicLong SEQUENCE = new AtomicLong();
@@ -58,8 +54,6 @@ public class DownloadFileWithCdp {
     return driver.browserDownloadsFolder();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
@@ -95,7 +89,6 @@ public class DownloadFileWithCdp {
     }
   }
 
-  @Nonnull
   protected File archiveFile(Driver driver, File downloadedFile) {
     File uniqueFolder = downloader.prepareTargetFolder(driver.config());
     File archivedFile = new File(uniqueFolder, downloadedFile.getName());

@@ -1,8 +1,5 @@
 package com.codeborne.selenide.appium;
 
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
-import static io.appium.java_client.remote.options.SupportsAutomationNameOption.AUTOMATION_NAME_OPTION;
-
 import com.codeborne.selenide.BaseElementsCollection;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Selenide;
@@ -29,8 +26,7 @@ import io.appium.java_client.pagefactory.iOSXCUITFindByAllSet;
 import io.appium.java_client.pagefactory.iOSXCUITFindByChainSet;
 import io.appium.java_client.pagefactory.iOSXCUITFindBySet;
 import io.appium.java_client.pagefactory.iOSXCUITFindBys;
-import java.lang.annotation.Annotation;
-import java.util.List;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
@@ -42,16 +38,16 @@ import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 
-@ParametersAreNonnullByDefault
+import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
+import static io.appium.java_client.remote.options.SupportsAutomationNameOption.AUTOMATION_NAME_OPTION;
+
 public class SelenideAppiumPageFactory extends SelenidePageFactory {
   private static final Logger logger = LoggerFactory.getLogger(SelenideAppiumPageFactory.class);
   private final List<Class<? extends Annotation>> platformAnnotations =
@@ -60,8 +56,6 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
       iOSXCUITFindByChainSet.class, iOSXCUITFindBySet.class);
 
   @Override
-  @Nonnull
-  @CheckReturnValue
   protected By findSelector(Driver driver, Field field) {
     AppiumByBuilder builder = byBuilder(driver, field);
     builder.setAnnotated(field);
@@ -69,8 +63,6 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     return selector != null ? selector : super.findSelector(driver, field);
   }
 
-  @Nonnull
-  @CheckReturnValue
   private DefaultElementByBuilder byBuilder(Driver driver, Field field) {
     if (!isPlatformAnnotationAdded(field)) {
       return new DefaultElementByBuilder(null, null);
@@ -80,7 +72,6 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
       throw new WebDriverException("The SelenideAppiumPageFactory requires a webdriver instance to be created before page" +
         " initialization; No webdriver is bound to current thread. You need to call open() first");
     }
-
     Optional<HasBrowserCheck> hasBrowserCheck = cast(driver, HasBrowserCheck.class);
     if (hasBrowserCheck.isPresent() && hasBrowserCheck.get().isBrowser()) {
       return new DefaultElementByBuilder(null, null);
@@ -97,15 +88,12 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     return new DefaultElementByBuilder(null, null);
   }
 
-  @Nonnull
   @Override
-  @CheckReturnValue
   protected FieldDecorator defaultFieldDecorator(Driver driver, @Nullable WebElementSource searchContext) {
     SearchContext context = getSearchContext(driver, searchContext);
     return new AppiumFieldDecorator(context);
   }
 
-  @CheckReturnValue
   @Nullable
   @Override
   public Object decorate(
@@ -123,7 +111,6 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   }
 
   @Nullable
-  @CheckReturnValue
   private Object decorateWithAppium(ClassLoader loader, @Nullable WebElementSource searchContext, Field field) {
     if (searchContext == null) {
       logger.warn("Cannot initialize field {}", field);
@@ -138,8 +125,6 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     return appiumElement;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   protected SelenideElement decorateWebElement(Driver driver, @Nullable WebElementSource searchContext, By selector,
                                                Field field, @Nullable String alias) {
@@ -149,8 +134,6 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   }
 
   @Override
-  @Nonnull
-  @CheckReturnValue
   protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createCollection(
     CollectionSource collection, Class<?> klass
   ) {

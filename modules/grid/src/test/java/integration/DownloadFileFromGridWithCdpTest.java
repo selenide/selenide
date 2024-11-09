@@ -6,6 +6,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
 import com.codeborne.selenide.webdriver.ChromeDriverFactory;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,9 +16,6 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,7 +37,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-@ParametersAreNonnullByDefault
 final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileFromGridWithCdpTest.class);
   private final File folder = new File(downloadsFolder).getAbsoluteFile();
@@ -49,7 +46,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     assumeThat(isFirefox())
       .as("Firefox doesn't support CDP download method")
       .isFalse();
-    Configuration.remote = gridUrl.toString();
+    Configuration.remote = gridUrl().toString();
     Configuration.browserCapabilities.setCapability("se:downloadsEnabled", true);
     Configuration.fileDownload = CDP;
     openFile("page_with_uploads.html");
@@ -212,7 +209,6 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
   }
 
   private static class CustomWebDriverProvider extends ChromeDriverFactory {
-    @Nonnull
     @Override
     public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy,
                             @Nullable File browserDownloadsFolder) {

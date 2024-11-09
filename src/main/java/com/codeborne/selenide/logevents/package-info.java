@@ -1,5 +1,9 @@
 /**
- * @since Selenide 2.16
  * @author https://github.com/kumarunster
  */
+@NullMarked
+@CheckReturnValue
 package com.codeborne.selenide.logevents;
+
+import com.google.errorprone.annotations.CheckReturnValue;
+import org.jspecify.annotations.NullMarked;

@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.MutableCapabilities;
 
 import static java.lang.ThreadLocal.withInitial;
@@ -30,21 +31,25 @@ final class ThreadLocalSelenideConfig implements Config {
     return config.get().headless();
   }
 
+  @Nullable
   @Override
   public String remote() {
     return config.get().remote();
   }
 
+  @Nullable
   @Override
   public String browserSize() {
     return config.get().browserSize();
   }
 
+  @Nullable
   @Override
   public String browserVersion() {
     return config.get().browserVersion();
   }
 
+  @Nullable
   @Override
   public String browserPosition() {
     return config.get().browserPosition();
@@ -91,6 +96,7 @@ final class ThreadLocalSelenideConfig implements Config {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean holdBrowserOpen() {
     return config.get().holdBrowserOpen();
   }
@@ -125,6 +131,7 @@ final class ThreadLocalSelenideConfig implements Config {
     return config.get().downloadsFolder();
   }
 
+  @Nullable
   @Override
   public String reportsUrl() {
     return config.get().reportsUrl();
@@ -160,6 +167,7 @@ final class ThreadLocalSelenideConfig implements Config {
     return config.get().proxyEnabled();
   }
 
+  @Nullable
   @Override
   public String proxyHost() {
     return config.get().proxyHost();

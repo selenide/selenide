@@ -9,6 +9,7 @@ import io.appium.java_client.InteractsWithApps;
 import io.appium.java_client.appmanagement.ApplicationState;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,7 @@ import static java.time.Duration.ofMinutes;
 @ExtendWith({TextReportExtension.class, ScreenShooterExtension.class, BrowserstackExtension.class})
 public abstract class ITTest {
   private static final Logger log = LoggerFactory.getLogger(ITTest.class);
+  @Nullable
   private static volatile AppiumDriverLocalService service;
 
   @BeforeAll
@@ -41,17 +43,18 @@ public abstract class ITTest {
 
   private static synchronized void startAppium() {
     if (service == null) {
-      service = new AppiumServiceBuilder()
+      var appium = new AppiumServiceBuilder()
         .withArgument(RELAXED_SECURITY)
         .withIPAddress("127.0.0.1")
         .withTimeout(ofMinutes(3))
         .build();
-      service.start();
+      appium.start();
       Runtime.getRuntime().addShutdownHook(new Thread(() -> {
         log.info("Stopping Appium..");
-        service.stop();
+        appium.stop();
         log.info("Appium stopped.");
       }));
+      service = appium;
     }
   }
 

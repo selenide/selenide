@@ -16,6 +16,7 @@ import static com.codeborne.selenide.WebDriverConditions.title;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static integration.ScreenshotTestHelper.verifyScreenshotSize;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class FullScreenshotsGridTest extends AbstractGridTest {
@@ -30,7 +31,7 @@ public class FullScreenshotsGridTest extends AbstractGridTest {
 
   @BeforeEach
   void setUp() {
-    Configuration.remote = gridUrl.toString();
+    Configuration.remote = gridUrl().toString();
   }
 
   @AfterEach
@@ -50,6 +51,7 @@ public class FullScreenshotsGridTest extends AbstractGridTest {
     Selenide.switchTo().window(0);
 
     File screenshot = Selenide.screenshot(OutputType.FILE);
+    assertThat(screenshot).isNotNull();
     verifyScreenshotSize(screenshot, width, height);
   }
 }

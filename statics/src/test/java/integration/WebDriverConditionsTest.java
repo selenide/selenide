@@ -9,10 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.CheckResult.accepted;
 import static com.codeborne.selenide.CheckResult.rejected;
 import static com.codeborne.selenide.Configuration.baseUrl;
@@ -225,23 +221,19 @@ final class WebDriverConditionsTest extends IntegrationTest {
     webdriver().shouldNotHave(customCookie("nonexistent_cookie"));
   }
 
-  @ParametersAreNonnullByDefault
   @SuppressWarnings("AnonymousInnerClassMayBeStatic")
   private ObjectCondition<WebDriver> customCookie(String expectedCookieName) {
     return new ObjectCondition<>() {
-      @Nonnull
       @Override
       public String description() {
         return "should have a cookie with name '" + expectedCookieName + "'";
       }
 
-      @Nonnull
       @Override
       public String negativeDescription() {
         return "should not have a cookie with name '" + expectedCookieName + "'";
       }
 
-      @CheckReturnValue
       @Override
       public CheckResult check(WebDriver webdriver) {
         return webdriver.manage().getCookieNamed(expectedCookieName) != null ?
@@ -249,19 +241,15 @@ final class WebDriverConditionsTest extends IntegrationTest {
           rejected(message(webdriver), actualValue(webdriver));
       }
 
-      @Nonnull
-      @CheckReturnValue
       private String actualValue(WebDriver webdriver) {
         return "Available cookies: " + webdriver.manage().getCookies();
       }
 
       @Override
-      @CheckReturnValue
       public String expectedValue() {
         return expectedCookieName;
       }
 
-      @Nonnull
       @Override
       public String describe(WebDriver object) {
         return "webdriver";

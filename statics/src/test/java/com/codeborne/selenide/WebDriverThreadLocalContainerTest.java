@@ -7,9 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -22,6 +19,7 @@ final class WebDriverThreadLocalContainerTest {
   private final WebDriverThreadLocalContainer container = new WebDriverThreadLocalContainer(browserHealthChecker);
 
   @BeforeEach
+  @SuppressWarnings("deprecation")
   void mockWebDriver() {
     WebDriverRunner.setProxy(null);
     Configuration.holdBrowserOpen = false;
@@ -31,6 +29,7 @@ final class WebDriverThreadLocalContainerTest {
   }
 
   @AfterEach
+  @SuppressWarnings("deprecation")
   void resetSetting() {
     Configuration.holdBrowserOpen = false;
     Configuration.reopenBrowserOnFail = true;
@@ -82,6 +81,7 @@ final class WebDriverThreadLocalContainerTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   void doesNotCloseBrowsers_ifHoldBrowserOpenSettingIsTrue() {
     Configuration.holdBrowserOpen = true;
 
@@ -136,9 +136,7 @@ final class WebDriverThreadLocalContainerTest {
 
   private static class DummyProvider implements WebDriverProvider {
     @Override
-    @CheckReturnValue
-    @Nonnull
-    public WebDriver createDriver(@Nonnull Capabilities capabilities) {
+    public WebDriver createDriver(Capabilities capabilities) {
       WebDriver webdriver = mock();
       WebDriver.Options options = mock();
       when(webdriver.manage()).thenReturn(options);

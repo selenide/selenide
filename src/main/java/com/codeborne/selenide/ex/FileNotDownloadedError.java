@@ -1,6 +1,6 @@
 package com.codeborne.selenide.ex;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class FileNotDownloadedError extends UIAssertionError {
   public FileNotDownloadedError(String message, long timeout) {

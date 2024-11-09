@@ -1,26 +1,19 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Command;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
 
 import static com.codeborne.selenide.commands.Util.firstOf;
 
-@ParametersAreNonnullByDefault
-public class Press implements Command<SelenideElement> {
+public class Press extends FluentCommand {
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
 
     if (args == null || args.length == 0) {
       throw new IllegalArgumentException("Please pass one Keys type to press");
     }
     CharSequence[] key = firstOf(args);
     locator.findAndAssertElementIsInteractable().sendKeys(key);
-    return proxy;
   }
 }

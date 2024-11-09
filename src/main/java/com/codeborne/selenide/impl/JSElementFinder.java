@@ -4,21 +4,16 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
 
 import static com.codeborne.selenide.Condition.exist;
 import static java.lang.Thread.currentThread;
 
-@ParametersAreNonnullByDefault
 public class JSElementFinder extends WebElementSource {
-  @CheckReturnValue
-  @Nonnull
   @SuppressWarnings("unchecked")
   public static <T extends SelenideElement> T wrap(Class<T> clazz, Driver driver,
                                                    String description, WebElementSource parent, String js) {
@@ -41,15 +36,11 @@ public class JSElementFinder extends WebElementSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Driver driver() {
     return driver;
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebElement getWebElement() throws NoSuchElementException, IndexOutOfBoundsException {
     WebElement webElement = driver.executeJavaScript(js, parent.getWebElement());
     if (webElement == null) {
@@ -59,23 +50,17 @@ public class JSElementFinder extends WebElementSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
-  public ElementNotFound createElementNotFoundError(WebElementCondition condition, Throwable cause) {
+  public ElementNotFound createElementNotFoundError(WebElementCondition condition, @Nullable Throwable cause) {
     parent.checkCondition("", exist, false);
     return super.createElementNotFoundError(condition, cause);
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String getSearchCriteria() {
     return description;
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String toString() {
     return "{" + description() + '}';
   }

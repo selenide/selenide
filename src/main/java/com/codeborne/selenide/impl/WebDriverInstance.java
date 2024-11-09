@@ -4,20 +4,14 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.drivercommands.CloseDriverCommand;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebDriver;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.util.Objects.requireNonNull;
 
 /**
  * An instance of webdriver with its resources: config, proxy and downloads folder.
- * @since 6.7.2
  */
-@ParametersAreNonnullByDefault
 public record WebDriverInstance(
   Config config,
   WebDriver webDriver,
@@ -31,8 +25,6 @@ public record WebDriverInstance(
     requireNonNull(webDriver, "webDriver must not be null");
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public SelenideProxyServer proxy() {
     if (!config.proxyEnabled()) {

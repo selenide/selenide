@@ -5,8 +5,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,7 +12,6 @@ import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static java.lang.Integer.parseInt;
 
-@ParametersAreNonnullByDefault
 class Coordinates extends WebElementCondition {
   private static final Pattern regex = Pattern.compile("\\((\\d+), (\\d+)\\)");
   private final int expectedX;
@@ -26,7 +23,6 @@ class Coordinates extends WebElementCondition {
     this.expectedY = expectedY;
   }
 
-  @Nonnull
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String text = element.getText();

@@ -7,9 +7,6 @@ import io.netty.handler.codec.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class ResponseSizeWatchdog implements ResponseFilter {
   private static final Logger log = LoggerFactory.getLogger(ResponseSizeWatchdog.class);
 

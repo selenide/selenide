@@ -8,13 +8,11 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.Serializable;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
+import static java.util.Objects.requireNonNull;
+
 public class ByDeepShadow {
   private static final JavaScript jsSource = new JavaScript("query-selector-shadow-dom.js");
 
@@ -25,13 +23,10 @@ public class ByDeepShadow {
    * @param target CSS expression of target element
    * @return A By which locates elements by CSS inside DOM with shadow-roots.
    */
-  @CheckReturnValue
-  @Nonnull
   public static By cssSelector(String target) {
     return new ByDeepShadowCss(target);
   }
 
-  @ParametersAreNonnullByDefault
   public static class ByDeepShadowCss extends By implements Serializable {
     private final String target;
 
@@ -40,8 +35,6 @@ public class ByDeepShadow {
     }
 
     @Override
-    @CheckReturnValue
-    @Nonnull
     public WebElement findElement(SearchContext context) {
       List<WebElement> found = findElements(context);
       if (found.isEmpty()) {
@@ -51,11 +44,9 @@ public class ByDeepShadow {
     }
 
     @Override
-    @CheckReturnValue
-    @Nonnull
     public List<WebElement> findElements(SearchContext context) {
       try {
-        return jsSource.execute(context, target);
+        return requireNonNull(jsSource.execute(context, target));
       }
       catch (JavascriptException e) {
         throw new NoSuchElementException(Cleanup.of.webdriverExceptionMessage(e));
@@ -63,8 +54,6 @@ public class ByDeepShadow {
     }
 
     @Override
-    @CheckReturnValue
-    @Nonnull
     public String toString() {
       return "By.shadowDeepCss: " +  target;
     }

@@ -2,26 +2,21 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.impl.Lazy;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
-@ParametersAreNonnullByDefault
 public class Commands {
-  private static Commands instance;
+  private static final Lazy<Commands> instance = lazyEvaluated(() -> inject(Commands.class));
 
   public static synchronized Commands getInstance() {
-    if (instance == null) {
-      instance = inject(Commands.class);
-    }
-    return instance;
+    return instance.get();
   }
 
   private final Map<String, Command<?>> commands = new ConcurrentHashMap<>(128);
@@ -125,6 +120,7 @@ public class Commands {
 
   private void addSelectCommands() {
     add("getOptions", new GetOptions());
+    add("options", new GetOptions());
     add("getSelectedOption", new GetSelectedOption());
     add("getSelectedOptions", new GetSelectedOptions());
     add("getSelectedOptionText", new GetSelectedOptionText());
@@ -158,14 +154,12 @@ public class Commands {
 
   @Nullable
   public <T> T execute(Object proxy, WebElementSource webElementSource, String methodName,
-                       @Nullable Object[] args) {
+                       Object @Nullable [] args) {
     Command<T> command = getCommand(methodName);
     return command.execute((SelenideElement) proxy, webElementSource, args);
   }
 
   @SuppressWarnings("unchecked")
-  @CheckReturnValue
-  @Nonnull
   private <T> Command<T> getCommand(String methodName) {
     Command<T> command = (Command<T>) commands.get(methodName);
     if (command == null) {

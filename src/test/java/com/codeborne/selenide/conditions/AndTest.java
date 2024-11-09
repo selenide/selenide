@@ -6,10 +6,6 @@ import com.codeborne.selenide.WebElementCondition;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static java.util.Arrays.asList;
@@ -172,7 +168,6 @@ final class AndTest {
     ).isFalse();
   }
 
-  @ParametersAreNonnullByDefault
   private static class SimpleCondition extends WebElementCondition {
     private final boolean applyResult;
 
@@ -185,22 +180,16 @@ final class AndTest {
       this.applyResult = applyResult;
     }
 
-    @Nonnull
-    @CheckReturnValue
     @Override
     public CheckResult check(Driver driver, WebElement element) {
       return new CheckResult(this.applyResult, null);
     }
 
-    @Nonnull
-    @CheckReturnValue
     @Override
     public WebElementCondition negate() {
       return new Not(this, !this.missingElementSatisfiesCondition());
     }
 
-    @Nonnull
-    @CheckReturnValue
     @Override
     public String toString() {
       return "SimpleCondition(" + this.applyResult + ", " + this.missingElementSatisfiesCondition() + ")";

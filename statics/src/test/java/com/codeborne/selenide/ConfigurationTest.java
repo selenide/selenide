@@ -1,15 +1,15 @@
 package com.codeborne.selenide;
 
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class ConfigurationTest {
-  private final Random random = new Random();
+  private final Random random = new SecureRandom();
   private final Map<String, Value> previous = collectSettings();
 
   @AfterEach
@@ -105,7 +105,6 @@ final class ConfigurationTest {
     }
   }
 
-  @Nonnull
   private static Stream<Field> fields() {
     return Arrays.stream(Configuration.class.getFields())
       .filter(f -> Modifier.isStatic(f.getModifiers()));

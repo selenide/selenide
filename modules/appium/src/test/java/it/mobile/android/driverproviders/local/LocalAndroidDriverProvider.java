@@ -8,15 +8,13 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 public abstract class LocalAndroidDriverProvider implements WebDriverProvider {
-  @Nonnull
   @Override
-  public WebDriver createDriver(@Nonnull Capabilities capabilities) {
+  public WebDriver createDriver(Capabilities capabilities) {
     UiAutomator2Options options = getUiAutomator2Options();
     options.setApp(getApplicationUnderTest().getAbsolutePath());
     try {

@@ -5,15 +5,11 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
 abstract class CollectionSizeCondition extends WebElementsCondition {
   private final String operator;
   protected final int expectedSize;
@@ -24,8 +20,6 @@ abstract class CollectionSizeCondition extends WebElementsCondition {
   }
 
   @Override
-  @Nonnull
-  @CheckReturnValue
   public CheckResult check(Driver driver, List<WebElement> elements) {
     int size = elements.size();
     return new CheckResult(apply(size), size);

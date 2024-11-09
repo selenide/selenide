@@ -2,14 +2,10 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverListener;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.headless;
@@ -17,7 +13,6 @@ import static com.codeborne.selenide.Configuration.headless;
 /**
  * A static facade for accessing WebDriver instance for current threads
  */
-@ParametersAreNonnullByDefault
 public class WebDriverRunner {
   public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
   private static final ThreadLocalSelenideDriver staticSelenideDriver = new ThreadLocalSelenideDriver();
@@ -26,15 +21,11 @@ public class WebDriverRunner {
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
    *
    * @param listener your listener of webdriver events
-   * @since 6.0.0
    */
   public static void addListener(WebDriverListener listener) {
     webdriverContainer.addListener(listener);
   }
 
-  /**
-   * @since 6.0.0
-   */
   public static void removeListener(WebDriverListener listener) {
     webdriverContainer.removeListener(listener);
   }
@@ -87,8 +78,6 @@ public class WebDriverRunner {
    * Get the underlying instance of Selenium WebDriver.
    * This can be used for any operations directly with WebDriver.
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebDriver getWebDriver() {
     return webdriverContainer.getWebDriver();
   }
@@ -105,8 +94,6 @@ public class WebDriverRunner {
    *
    * @return new instance of WebDriver if the previous one has been closed meanwhile.
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebDriver getAndCheckWebDriver() {
     return webdriverContainer.getAndCheckWebDriver();
   }
@@ -114,25 +101,18 @@ public class WebDriverRunner {
   /**
    * Get selenide proxy. It's activated only if Configuration.proxyEnabled == true
    */
-  @CheckReturnValue
-  @Nonnull
   public static SelenideProxyServer getSelenideProxy() {
     return webdriverContainer.getProxyServer();
   }
 
-  @CheckReturnValue
-  @Nonnull
   static ThreadLocalSelenideDriver getSelenideDriver() {
     return staticSelenideDriver;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static Driver driver() {
     return getSelenideDriver().driver();
   }
 
-  @CheckReturnValue
   @Nullable
   public static DownloadsFolder getBrowserDownloadsFolder() {
     return webdriverContainer.getBrowserDownloadsFolder();
@@ -163,7 +143,6 @@ public class WebDriverRunner {
   /**
    * @return true if instance of Selenium WebDriver is started in current thread
    */
-  @CheckReturnValue
   public static boolean hasWebDriverStarted() {
     return webdriverContainer.hasWebDriverStarted();
   }
@@ -180,8 +159,6 @@ public class WebDriverRunner {
     webdriverContainer.inNewBrowser(lambda);
   }
 
-  @CheckReturnValue
-  @Nonnull
   private static Browser browser() {
     return new Browser(browser, headless);
   }
@@ -189,7 +166,6 @@ public class WebDriverRunner {
   /**
    * Is Selenide configured to use Firefox browser
    */
-  @CheckReturnValue
   public static boolean isFirefox() {
     return browser().isFirefox();
   }
@@ -197,7 +173,6 @@ public class WebDriverRunner {
   /**
    * Is Selenide configured to use Chrome browser
    */
-  @CheckReturnValue
   public static boolean isChrome() {
     return browser().isChrome();
   }
@@ -205,7 +180,6 @@ public class WebDriverRunner {
   /**
    * Is Selenide configured to use Internet Explorer browser
    */
-  @CheckReturnValue
   public static boolean isIE() {
     return browser().isIE();
   }
@@ -213,7 +187,6 @@ public class WebDriverRunner {
   /**
    * Is Selenide configured to use Microsoft EDGE browser
    */
-  @CheckReturnValue
   public static boolean isEdge() {
     return browser().isEdge();
   }
@@ -221,7 +194,6 @@ public class WebDriverRunner {
   /**
    * Is Selenide configured to use headless browser
    */
-  @CheckReturnValue
   public static boolean isHeadless() {
     return browser().isHeadless();
   }
@@ -229,7 +201,6 @@ public class WebDriverRunner {
   /**
    * Does this browser support javascript
    */
-  @CheckReturnValue
   public static boolean supportsJavascript() {
     return driver().supportsJavascript();
   }
@@ -244,8 +215,7 @@ public class WebDriverRunner {
   /**
    * @return the source (HTML) of current page
    */
-  @CheckReturnValue
-  @Nonnull
+  @Nullable
   public static String source() {
     return webdriverContainer.getPageSource();
   }
@@ -253,8 +223,7 @@ public class WebDriverRunner {
   /**
    * @return the URL of current page
    */
-  @CheckReturnValue
-  @Nonnull
+  @Nullable
   public static String url() {
     return webdriverContainer.getCurrentUrl();
   }
@@ -262,8 +231,6 @@ public class WebDriverRunner {
   /**
    * @return the URL of current frame
    */
-  @CheckReturnValue
-  @Nonnull
   public static String currentFrameUrl() {
     return webdriverContainer.getCurrentFrameUrl();
   }

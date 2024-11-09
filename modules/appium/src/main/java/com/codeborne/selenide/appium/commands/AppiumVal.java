@@ -4,11 +4,8 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.GetValue;
 import com.codeborne.selenide.commands.Val;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class AppiumVal extends Val {
   private final GetValue getValue = new GetValue();
   private final AppiumSetValue setValue = new AppiumSetValue();
@@ -19,7 +16,7 @@ public class AppiumVal extends Val {
 
   @Override
   @Nullable
-  public Object execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public Object execute(SelenideElement proxy, WebElementSource locator, Object @Nullable [] args) {
     if (args == null || args.length == 0) {
       return getValue.execute(proxy, locator, NO_ARGS);
     }

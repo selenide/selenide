@@ -11,13 +11,9 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Locatable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.Stopwatch.sleepAtLeast;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ParametersAreNonnullByDefault
 final class MoveAroundTest extends ITest {
   @BeforeEach
   void openPage() {
@@ -41,7 +37,6 @@ final class MoveAroundTest extends ITest {
 
   public static WebElementCondition moveAround(int movePeriodMs) {
     return new WebElementCondition("moveAround") {
-      @Nonnull
       @Override
       public CheckResult check(Driver driver, WebElement element) {
         if (!(element instanceof Locatable locatable)) {

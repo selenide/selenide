@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByCssSelector;
 import org.openqa.selenium.InvalidSelectorException;
@@ -11,33 +12,25 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.SelectorMode.CSS;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Thanks to http://selenium.polteq.com/en/injecting-the-sizzle-css-selector-library/
  */
-@ParametersAreNonnullByDefault
 public class WebElementSelector {
   public static WebElementSelector instance = new WebElementSelector();
 
   protected final FileContent sizzleSource = new FileContent("sizzle.js");
 
-  @CheckReturnValue
-  @Nonnull
   public WebElement findElement(Driver driver, @Nullable WebElementSource parent, By selector, int index) {
     return index == 0 ?
       findElement(driver, parent, selector) :
       findElements(driver, parent, selector).get(index);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public WebElement findElement(Driver driver, @Nullable WebElementSource parent, By selector) {
     SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
     checkThatXPathNotStartingFromSlash(context, selector);
@@ -53,8 +46,6 @@ public class WebElementSelector {
     return webElements.get(0);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public List<WebElement> findElements(Driver driver, @Nullable WebElementSource parent, By selector) {
     SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
     checkThatXPathNotStartingFromSlash(context, selector);
@@ -104,8 +95,6 @@ public class WebElementSelector {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected List<WebElement> evaluateSizzleSelector(Driver driver, SearchContext context, ByCssSelector sizzleCssSelector) {
     injectSizzleIfNeeded(driver);
 
@@ -114,9 +103,9 @@ public class WebElementSelector {
       .replace("By.cssSelector: ", "");
 
     if (context instanceof WebElement)
-      return driver.executeJavaScript("return Sizzle(arguments[0], arguments[1])", sizzleSelector, context);
+      return requireNonNull(driver.executeJavaScript("return Sizzle(arguments[0], arguments[1])", sizzleSelector, context));
     else
-      return driver.executeJavaScript("return Sizzle(arguments[0])", sizzleSelector);
+      return requireNonNull(driver.executeJavaScript("return Sizzle(arguments[0])", sizzleSelector));
   }
 
   protected void injectSizzleIfNeeded(Driver driver) {
@@ -127,7 +116,7 @@ public class WebElementSelector {
 
   protected Boolean sizzleLoaded(Driver driver) {
     try {
-      return driver.executeJavaScript("return typeof Sizzle != 'undefined'");
+      return requireNonNull(driver.executeJavaScript("return typeof Sizzle != 'undefined'"));
     }
     catch (WebDriverException e) {
       return false;

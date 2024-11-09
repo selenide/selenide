@@ -4,7 +4,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.URL;
@@ -18,8 +17,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 /**
  * We assume this API will change in next releases.
  * Be aware if you are going to use it.
- *
- * @since Selenide 5.15.0
  */
 public class Plugins {
   private static final Logger logger = LoggerFactory.getLogger(Plugins.class);
@@ -63,7 +60,6 @@ public class Plugins {
     }
   }
 
-  @Nonnull
   private static <T> T instantiate(String className, Class<T> klass) throws Exception {
     Constructor<? extends T> constructor = Class.forName(className).asSubclass(klass).getDeclaredConstructor();
     constructor.setAccessible(true);

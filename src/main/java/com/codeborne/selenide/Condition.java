@@ -1,9 +1,9 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.conditions.And;
+import com.codeborne.selenide.conditions.Animated;
 import com.codeborne.selenide.conditions.Attribute;
 import com.codeborne.selenide.conditions.AttributeWithValue;
-import com.codeborne.selenide.conditions.Animated;
 import com.codeborne.selenide.conditions.CaseSensitiveText;
 import com.codeborne.selenide.conditions.Checked;
 import com.codeborne.selenide.conditions.CssClass;
@@ -48,12 +48,9 @@ import com.codeborne.selenide.conditions.TagName;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.conditions.ConditionHelpers.merge;
@@ -62,7 +59,6 @@ import static java.util.Arrays.asList;
 /**
  * Conditions to match web elements: checks for visibility, text etc.
  */
-@ParametersAreNonnullByDefault
 public final class Condition {
   /**
    * Checks if element is visible
@@ -116,8 +112,6 @@ public final class Condition {
    * <p>Example:</p>
    * <p>{@code $("input[type=file]").shouldBe(interactable);}</p>
    * <br/>
-   *
-   * @since 6.5.0
    */
   public static final WebElementCondition interactable = new Interactable();
 
@@ -142,8 +136,6 @@ public final class Condition {
    * <br>
    * <p>Sample: {@code $("input").shouldBe(editable);}</p>
    * <br>
-   *
-   * @since 6.5.0
    */
   public static final WebElementCondition editable = new Editable();
 
@@ -168,8 +160,6 @@ public final class Condition {
    *
    * @param attributeName name of attribute, not null
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition attribute(String attributeName) {
     return new Attribute(attributeName);
   }
@@ -180,8 +170,6 @@ public final class Condition {
    * @param attributeName          name of attribute
    * @param expectedAttributeValue expected value of attribute
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition attribute(String attributeName, String expectedAttributeValue) {
     return new AttributeWithValue(attributeName, expectedAttributeValue);
   }
@@ -194,8 +182,6 @@ public final class Condition {
    * @param attributeName  name of attribute
    * @param attributeRegex regex to match attribute value
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition attributeMatching(String attributeName, String attributeRegex) {
     return new MatchAttributeWithValue(attributeName, attributeRegex);
   }
@@ -208,8 +194,6 @@ public final class Condition {
    *
    * @param href expected value of "href" attribute
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition href(String href) {
     return new Href(href);
   }
@@ -222,8 +206,6 @@ public final class Condition {
    *
    * @param expectedValue expected value of "value" attribute
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition value(String expectedValue) {
     return new Value(expectedValue);
   }
@@ -235,10 +217,7 @@ public final class Condition {
    * <p>Sample: {@code $("input").shouldHave(partialValue("12345 666 77"));}</p>
    *
    * @param expectedValue expected value of "value" attribute
-   * @since 6.7.3
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition partialValue(String expectedValue) {
     return new PartialValue(expectedValue);
   }
@@ -252,8 +231,6 @@ public final class Condition {
    * @param propertyName      property name of the pseudo-element
    * @param expectedValue     expected value of the property
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition pseudo(String pseudoElementName, String propertyName, String expectedValue) {
     return new PseudoElementPropertyWithValue(pseudoElementName, propertyName, expectedValue);
   }
@@ -265,8 +242,6 @@ public final class Condition {
    * @param pseudoElementName pseudo-element name of the element, ":before", ":after"
    * @param expectedValue     expected content of the pseudo-element
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition pseudo(String pseudoElementName, String expectedValue) {
     return new PseudoElementPropertyWithValue(pseudoElementName, "content", expectedValue);
   }
@@ -276,8 +251,6 @@ public final class Condition {
    *
    * @param value expected value of input field
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition exactValue(String value) {
     return attribute("value", value);
   }
@@ -288,8 +261,6 @@ public final class Condition {
    *
    * @param name expected name of input field
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition name(String name) {
     return attribute("name", name);
   }
@@ -300,8 +271,6 @@ public final class Condition {
    *
    * @param type expected type of input field
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition type(String type) {
     return attribute("type", type);
   }
@@ -311,8 +280,6 @@ public final class Condition {
    *
    * @param id expected id of input field
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition id(String id) {
     return attribute("id", id);
   }
@@ -333,8 +300,6 @@ public final class Condition {
    *
    * @param regex e.g. Kicked.*Chuck Norris - in this case ".*" can contain any characters including spaces, tabs, CR etc.
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition matchText(String regex) {
     return new MatchText(regex);
   }
@@ -350,8 +315,6 @@ public final class Condition {
    * @throws IllegalArgumentException If specified collection contains {@code null}s or blank strings.
    * @since 7.0.3
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition oneOfTexts(String... texts) {
     return new OneOfTexts(asList(texts));
   }
@@ -367,8 +330,6 @@ public final class Condition {
    * @throws IllegalArgumentException If specified collection contains {@code null}s or blank strings.
    * @since 7.0.3
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition oneOfTextsCaseSensitive(String... texts) {
     return new OneOfTextsCaseSensitive(asList(texts));
   }
@@ -382,8 +343,6 @@ public final class Condition {
    * @throws IllegalArgumentException If specified collection contains {@code null} elements.
    * @since 7.0.3
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition oneOfExactTexts(String... texts) {
     return new OneOfExactTexts(asList(texts));
   }
@@ -397,8 +356,6 @@ public final class Condition {
    * @throws IllegalArgumentException If specified collection contains {@code null} elements.
    * @since 7.0.3
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition oneOfExactTextsCaseSensitive(String... texts) {
     return new OneOfExactTextsCaseSensitive(asList(texts));
   }
@@ -407,11 +364,7 @@ public final class Condition {
    * Assert that given element's text CONTAINS given text
    *
    * <p>Sample: {@code $("h1").shouldHave(partialText("ello Joh"))}</p>
-   *
-   * @since 6.7.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition partialText(String expectedText) {
     return new PartialText(expectedText);
   }
@@ -420,11 +373,7 @@ public final class Condition {
    * Assert that given element's text CONTAINS given text (case-sensitive)
    *
    * <p>Sample: {@code $("h1").should(partialTextCaseSensitive("ELLO jOH"))}</p>
-   *
-   * @since 6.7.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition partialTextCaseSensitive(String expectedText) {
     return new PartialTextCaseSensitive(expectedText);
   }
@@ -443,8 +392,6 @@ public final class Condition {
    *             NB! Empty string is not allowed (because any element does contain an empty text).
    * @throws IllegalArgumentException if given text is null or empty
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition text(String text) {
     return new Text(text);
   }
@@ -458,8 +405,6 @@ public final class Condition {
    *
    * @param expectedText expected selected text of the element
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition selectedText(String expectedText) {
     return new SelectedText(expectedText);
   }
@@ -473,8 +418,6 @@ public final class Condition {
    *
    * @param text expected text of HTML element
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition textCaseSensitive(String text) {
     return new CaseSensitiveText(text);
   }
@@ -488,8 +431,6 @@ public final class Condition {
    *
    * @param text expected text of HTML element
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition exactText(String text) {
     return new ExactText(text);
   }
@@ -503,8 +444,6 @@ public final class Condition {
    * <p>Case insensitive</p>
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition innerText(String text) {
     return new InnerText(text);
   }
@@ -518,8 +457,6 @@ public final class Condition {
    *
    * @param text expected text of HTML element without its children
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition ownText(String text) {
     return new OwnText(text);
   }
@@ -532,10 +469,7 @@ public final class Condition {
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
    * @param text expected text of HTML element without its children
-   * @since 6.6.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition ownTextCaseSensitive(String text) {
     return new OwnTextCaseSensitive(text);
   }
@@ -549,8 +483,6 @@ public final class Condition {
    *
    * @param text expected text of HTML element without its children
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition exactOwnText(String text) {
     return new ExactOwnText(text);
   }
@@ -563,10 +495,7 @@ public final class Condition {
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
    * @param text expected text of HTML element without its children
-   * @since 6.6.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition exactOwnTextCaseSensitive(String text) {
     return new ExactOwnTextCaseSensitive(text);
   }
@@ -579,8 +508,6 @@ public final class Condition {
    *
    * @param text expected text of HTML element
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition exactTextCaseSensitive(String text) {
     return new ExactTextCaseSensitive(text);
   }
@@ -588,11 +515,7 @@ public final class Condition {
   /**
    * Asserts that element has the given tag name.
    * <p>Sample: {@code $(".btn-primary").shouldHave(tagName("button"));}</p>
-   *
-   * @since 6.7.3
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition tagName(String cssClass) {
     return new TagName(cssClass);
   }
@@ -601,8 +524,6 @@ public final class Condition {
    * Asserts that element has the given class. Element may have other classes as well.
    * <p>Sample: {@code $("input").shouldHave(cssClass("active"));}</p>
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition cssClass(String cssClass) {
     return new CssClass(cssClass);
   }
@@ -626,8 +547,6 @@ public final class Condition {
    * @param expectedValue expected value of css property
    * @see WebElement#getCssValue
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition cssValue(String propertyName, @Nullable String expectedValue) {
     return new CssValue(propertyName, expectedValue);
   }
@@ -640,8 +559,6 @@ public final class Condition {
    * @param domAttributeName name of dom attribute, not null
    * @since 7.4.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition domAttribute(String domAttributeName) {
     return new DomAttribute(domAttributeName);
   }
@@ -653,8 +570,6 @@ public final class Condition {
    * @param expectedDomAttributeValue expected value of dom attribute
    * @since 7.4.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition domAttribute(String domAttributeName, @Nullable String expectedDomAttributeValue) {
     return new DomAttributeValue(domAttributeName, expectedDomAttributeValue);
   }
@@ -667,21 +582,17 @@ public final class Condition {
    * @param domPropertyName name of dom property, not null
    * @since 7.4.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition domProperty(String domPropertyName) {
     return new DomProperty(domPropertyName);
   }
 
   /**
-   * <p>Sample: {@code $("#mydiv").shouldHave(domPropertyValue("id", "mydiv"));}</p>
+   * <p>Sample: {@code $("#my-div").shouldHave(domPropertyValue("id", "my-div"));}</p>
    *
    * @param domPropertyName          name of dom property
    * @param expectedDomPropertyValue expected value of dom property
    * @since 7.4.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition domProperty(String domPropertyName, @Nullable String expectedDomPropertyValue) {
     return new DomPropertyValue(domPropertyName, expectedDomPropertyValue);
   }
@@ -694,8 +605,6 @@ public final class Condition {
    * @param description the description of the predicate
    * @param predicate   the {@link Predicate} to match
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition match(String description, Predicate<WebElement> predicate) {
     return new CustomMatch(description, predicate);
   }
@@ -745,8 +654,6 @@ public final class Condition {
    * <p>
    * Typically, you don't need to use it.
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition not(WebElementCondition condition) {
     return condition.negate();
   }
@@ -761,8 +668,6 @@ public final class Condition {
    * @param conditions Other conditions to match
    * @return logical AND for given conditions.
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition and(String name, WebElementCondition condition1, WebElementCondition condition2,
                                         WebElementCondition... conditions) {
     return new And(name, merge(condition1, condition2, conditions));
@@ -772,8 +677,6 @@ public final class Condition {
    * Synonym for {@link #and(String, WebElementCondition, WebElementCondition, WebElementCondition...)}.
    * Useful for better readability.
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition allOf(String name, WebElementCondition condition1, WebElementCondition condition2,
                                           WebElementCondition... conditions) {
     return and(name, condition1, condition2, conditions);
@@ -783,8 +686,6 @@ public final class Condition {
    * Synonym for {@link #and(String, WebElementCondition, WebElementCondition, WebElementCondition...)}
    * with "all of" name. Useful for better readability.
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition allOf(WebElementCondition condition1, WebElementCondition condition2,
                                           WebElementCondition... conditions) {
     return and("all of", condition1, condition2, conditions);
@@ -804,8 +705,6 @@ public final class Condition {
    * @return logical OR for given conditions.
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition or(String name, WebElementCondition condition1, WebElementCondition condition2,
                                        WebElementCondition... conditions) {
     return new Or(name, merge(condition1, condition2, conditions));
@@ -815,8 +714,6 @@ public final class Condition {
    * Synonym for {@link #or(String, WebElementCondition, WebElementCondition, WebElementCondition...)}.
    * Useful for better readability.
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition anyOf(String name, WebElementCondition condition1, WebElementCondition condition2,
                                           WebElementCondition... conditions) {
     return or(name, condition1, condition2, conditions);
@@ -826,8 +723,6 @@ public final class Condition {
    * Synonym for {@link #or(String, WebElementCondition, WebElementCondition, WebElementCondition...)}
    * with "any of" name. Useful for better readability.
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition anyOf(WebElementCondition condition1, WebElementCondition condition2,
                                           WebElementCondition... conditions) {
     return or("any of", condition1, condition2, conditions);
@@ -855,8 +750,6 @@ public final class Condition {
    * @param delegate next condition to wrap
    * @return WebElementCondition
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition be(WebElementCondition delegate) {
     return wrap("be", delegate);
   }
@@ -868,8 +761,6 @@ public final class Condition {
    * @param delegate next condition to wrap
    * @return WebElementCondition
    */
-  @CheckReturnValue
-  @Nonnull
   public static WebElementCondition have(WebElementCondition delegate) {
     return wrap("have", delegate);
   }

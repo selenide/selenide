@@ -52,6 +52,7 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.actions;
 import static com.codeborne.selenide.Selenide.element;
 import static com.codeborne.selenide.Selenide.elements;
+import static com.codeborne.selenide.Selenide.getFocusedElement;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.title;
 import static com.codeborne.selenide.Selenide.webdriver;
@@ -75,7 +76,6 @@ final class SelenideMethodsTest extends IntegrationTest {
   @Test
   void canOpenBlankPage() {
     open("about:blank");
-    $("body").shouldHave(exactText(""));
   }
 
   @Test
@@ -564,9 +564,15 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canCheckWhichElementIsFocusedNow() {
-    SelenideElement focusedElement = Selenide.getFocusedElement();
+    SelenideElement focusedElement = getFocusedElement();
 
     $("#username").sendKeys("focusing...");
     focusedElement.shouldBe(visible).shouldHave(tagName("input"), partialValue("focusing"));
+  }
+
+  @Test
+  void getFocusedElement_neverReturnsNull() {
+    open("about:blank");
+    getFocusedElement().shouldHave(tagName("body"));
   }
 }

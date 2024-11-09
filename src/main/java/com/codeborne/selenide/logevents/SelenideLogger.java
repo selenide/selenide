@@ -2,13 +2,10 @@ package com.codeborne.selenide.logevents;
 
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,14 +16,14 @@ import static com.codeborne.selenide.logevents.ArgumentsPrinter.readableArgument
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Locale.ROOT;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Logs Selenide test steps and notifies all registered LogEventListener about it
  */
-@ParametersAreNonnullByDefault
 public class SelenideLogger {
   private static final Logger LOG = LoggerFactory.getLogger(SelenideLogger.class);
-  private static final ThreadLocal<Map<String, LogEventListener>> listeners = new ThreadLocal<>();
+  private static final ThreadLocal<@Nullable Map<String, LogEventListener>> listeners = new ThreadLocal<>();
   private static final Pattern REGEX_UPPER_CASE = Pattern.compile("([A-Z])");
 
   /**
@@ -46,31 +43,23 @@ public class SelenideLogger {
     listeners.set(threadListeners);
   }
 
-  @CheckReturnValue
-  @Nonnull
-  public static SelenideLog beginStep(String source, String methodName, @Nullable Object... args) {
+  public static SelenideLog beginStep(String source, String methodName, Object @Nullable... args) {
     return beginStep(source, getReadableSubject(methodName, args));
   }
 
-  @CheckReturnValue
-  @Nonnull
-  public static String getReadableSubject(String methodName, @Nullable Object... args) {
+  public static String getReadableSubject(String methodName, Object @Nullable... args) {
     return readableMethodName(methodName) + "(" + readableArguments(args) + ")";
   }
 
-  @CheckReturnValue
-  @Nonnull
   static String readableMethodName(String methodName) {
     return REGEX_UPPER_CASE.matcher(methodName).replaceAll(" $1").toLowerCase(ROOT);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideLog beginStep(String source, String subject) {
-    Collection<LogEventListener> listeners = getEventLoggerListeners();
+    Collection<LogEventListener> threadListeners = getEventLoggerListeners();
 
     SelenideLog log = new SelenideLog(source, subject);
-    for (LogEventListener listener : listeners) {
+    for (LogEventListener listener : threadListeners) {
       try {
         listener.beforeEvent(log);
       }
@@ -89,8 +78,8 @@ public class SelenideLogger {
   public static void commitStep(SelenideLog log, EventStatus status) {
     log.setStatus(status);
 
-    Collection<LogEventListener> listeners = getEventLoggerListeners();
-    for (LogEventListener listener : listeners) {
+    Collection<LogEventListener> threadListeners = getEventLoggerListeners();
+    for (LogEventListener listener : threadListeners) {
       try {
         listener.afterEvent(log);
       }
@@ -108,11 +97,11 @@ public class SelenideLogger {
     });
   }
 
-  @CheckReturnValue
   public static <T> T get(String source, String subject, Supplier<T> supplier) {
-    return wrap(source, subject, supplier);
+    return requireNonNull(wrap(source, subject, supplier));
   }
 
+  @Nullable
   @CanIgnoreReturnValue
   public static <T> T step(String source, Supplier<T> supplier) {
     return wrap(source, "", supplier);
@@ -126,8 +115,9 @@ public class SelenideLogger {
     });
   }
 
+  @Nullable
   @CanIgnoreReturnValue
-  private static <T> T wrap(String source, String subject, Supplier<T> supplier) {
+  private static <T> T wrap(String source, String subject, Supplier<@Nullable T> supplier) {
     SelenideLog log = SelenideLogger.beginStep(source, subject);
     try {
       T result = supplier.get();
@@ -140,13 +130,11 @@ public class SelenideLogger {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   private static Collection<LogEventListener> getEventLoggerListeners() {
     if (listeners.get() == null) {
       listeners.set(new HashMap<>());
     }
-    return listeners.get().values();
+    return requireNonNull(listeners.get()).values();
   }
 
   /**
@@ -158,14 +146,17 @@ public class SelenideLogger {
    */
   @SuppressWarnings("unchecked")
   @Nullable
+  @CanIgnoreReturnValue
   public static <T extends LogEventListener> T removeListener(String name) {
-    Map<String, LogEventListener> listeners = SelenideLogger.listeners.get();
-    return listeners == null ? null : (T) listeners.remove(name);
+    Map<String, LogEventListener> threadListeners = SelenideLogger.listeners.get();
+    return threadListeners == null ? null : (T) threadListeners.remove(name);
   }
 
+  @Nullable
+  @SuppressWarnings("unchecked")
   static <T extends LogEventListener> T getListener(String name) {
-    Map<String, LogEventListener> listeners = SelenideLogger.listeners.get();
-    return listeners == null ? null : (T) listeners.get(name);
+    Map<String, LogEventListener> threadListeners = SelenideLogger.listeners.get();
+    return threadListeners == null ? null : (T) threadListeners.get(name);
   }
 
   public static void removeAllListeners() {
@@ -180,7 +171,7 @@ public class SelenideLogger {
    * corresponding name has been called in current thread.
    */
   public static boolean hasListener(String name) {
-    Map<String, LogEventListener> listeners = SelenideLogger.listeners.get();
-    return listeners != null && listeners.containsKey(name);
+    Map<String, LogEventListener> threadListeners = SelenideLogger.listeners.get();
+    return threadListeners != null && threadListeners.containsKey(name);
   }
 }

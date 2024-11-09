@@ -5,13 +5,8 @@ import com.codeborne.selenide.ObjectCondition;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
-@ParametersAreNonnullByDefault
 public class CookieWithNameAndValue implements ObjectCondition<WebDriver> {
 
   private final String name;
@@ -22,21 +17,16 @@ public class CookieWithNameAndValue implements ObjectCondition<WebDriver> {
     this.value = value;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String description() {
     return String.format("should have a cookie with name \"%s\" and value \"%s\"", name, value);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String negativeDescription() {
     return String.format("should not have cookie with name \"%s\" and value \"%s\"", name, value);
   }
 
-  @CheckReturnValue
   @Override
   public CheckResult check(WebDriver webDriver) {
     Cookie cookie = webDriver.manage().getCookieNamed(name);
@@ -44,23 +34,17 @@ public class CookieWithNameAndValue implements ObjectCondition<WebDriver> {
     return result(webDriver, met, actualValue(webDriver));
   }
 
-  @Nonnull
-  @CheckReturnValue
   private String actualValue(WebDriver webDriver) {
     return String.format("Available cookies: %s", webDriver.manage().getCookies());
   }
 
-  @Nullable
-  @CheckReturnValue
   @Override
   public String expectedValue() {
     return String.format("cookie with name \"%s\" and value \"%s\"", name, value);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
-  public String describe(@Nonnull WebDriver webDriver) {
+  public String describe(WebDriver webDriver) {
     return "webdriver";
   }
 }

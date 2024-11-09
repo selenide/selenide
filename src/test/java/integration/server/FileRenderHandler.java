@@ -3,8 +3,8 @@ package integration.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 
-@ParametersAreNonnullByDefault
+@NullMarked
 class FileRenderHandler extends BaseHandler {
   private static final Logger log = LoggerFactory.getLogger(FileRenderHandler.class);
   private final AtomicLong sessionIdCounter = new AtomicLong();

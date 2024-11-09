@@ -8,15 +8,12 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 
-import javax.annotation.Nonnull;
-
 import static it.mobile.BrowserstackUtils.browserstackUrl;
 import static it.mobile.BrowserstackUtils.getBrowserstackOptions;
 
 public abstract class AndroidDriverProvider implements WebDriverProvider {
-  @Nonnull
   @Override
-  public WebDriver createDriver(@Nonnull Capabilities capabilities) {
+  public WebDriver createDriver(Capabilities capabilities) {
     UiAutomator2Options options = new UiAutomator2Options();
     options.setAutomationName(AutomationName.ANDROID_UIAUTOMATOR2);
     options.setPlatformName("Android");

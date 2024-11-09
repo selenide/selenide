@@ -9,17 +9,14 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-
 import static it.mobile.BrowserstackUtils.browserstackUrl;
 import static it.mobile.BrowserstackUtils.getBrowserstackOptions;
 
 public class IosDriverProvider implements WebDriverProvider {
   private static final Logger log = LoggerFactory.getLogger(IosDriverProvider.class);
 
-  @Nonnull
   @Override
-  public WebDriver createDriver(@Nonnull Capabilities capabilities) {
+  public WebDriver createDriver(Capabilities capabilities) {
     XCUITestOptions options = getXcuiTestOptions();
     try {
       return new IOSDriver(browserstackUrl(), options);

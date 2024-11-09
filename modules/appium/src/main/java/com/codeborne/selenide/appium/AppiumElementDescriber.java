@@ -4,6 +4,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.SelenideElementDescriber;
 import io.appium.java_client.AppiumDriver;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -13,10 +14,6 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -33,7 +30,7 @@ import static java.util.regex.Pattern.compile;
  * Appium-specific element describer.
  * <p>
  * Sample output:
- * <p>
+ *
  * <pre>{@code
  * Element should have text '666' {By.id: result}
  * Element:
@@ -45,14 +42,11 @@ import static java.util.regex.Pattern.compile;
  * }
  * </pre>
  */
-@ParametersAreNonnullByDefault
 public class AppiumElementDescriber implements ElementDescriber {
   private static final Logger logger = LoggerFactory.getLogger(AppiumElementDescriber.class);
   private static final Pattern RE_IOS_UNSUPPORTED_ATTRIBUTE = compile(".*The attribute '\\w+' is unknown.*", DOTALL);
   private static final SelenideElementDescriber webVersion = new SelenideElementDescriber();
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String fully(Driver driver, @Nullable WebElement element) {
     if (element == null) {
@@ -68,8 +62,6 @@ public class AppiumElementDescriber implements ElementDescriber {
     ).orElseGet(() -> webVersion.fully(driver, element));
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected List<String> supportedAttributes(Driver driver) {
     if (isAndroid(driver)) {
       return androidAttributes();
@@ -82,8 +74,6 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected List<String> androidAttributes() {
     return asList(
       "resource-id", "checked", "content-desc",
@@ -92,20 +82,14 @@ public class AppiumElementDescriber implements ElementDescriber {
     );
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected List<String> iosAttributes() {
     return asList("enabled", "selected", "name", "value", "visible");
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected List<String> genericAttributes() {
     return asList("checked", "content-desc", "enabled", "name", "displayed");
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String briefly(Driver driver, WebElement element) {
     return cast(driver, AppiumDriver.class).map(appiumDriver ->
@@ -117,8 +101,6 @@ public class AppiumElementDescriber implements ElementDescriber {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String selector(By selector) {
     if (selector instanceof By.ByCssSelector) {
       return selector.toString()
@@ -128,7 +110,6 @@ public class AppiumElementDescriber implements ElementDescriber {
     return selector.toString();
   }
 
-  @ParametersAreNonnullByDefault
   private static class Builder {
     private final WebElement element;
     private final AppiumDriver webDriver;
@@ -136,6 +117,7 @@ public class AppiumElementDescriber implements ElementDescriber {
     private String tagName = "?";
     private String text = "?";
     private final StringBuilder sb = new StringBuilder();
+    @Nullable
     private WebDriverException unforgivableException;
 
     private Builder(WebElement element, AppiumDriver webDriver, List<String> supportedAttributes) {
@@ -144,8 +126,6 @@ public class AppiumElementDescriber implements ElementDescriber {
       this.supportedAttributes = supportedAttributes;
     }
 
-    @Nonnull
-    @CheckReturnValue
     private Builder appendTagName() {
       if (isAndroid(webDriver)) {
         getAttribute("class", className -> {
@@ -159,8 +139,6 @@ public class AppiumElementDescriber implements ElementDescriber {
       return this;
     }
 
-    @Nonnull
-    @CheckReturnValue
     private Builder appendAttributes() {
       supportedAttributes.forEach(this::appendAttribute);
       return this;
@@ -178,7 +156,7 @@ public class AppiumElementDescriber implements ElementDescriber {
         attributeHandler);
     }
 
-    private void safeCall(Supplier<String> method, Supplier<String> errorMessage, Consumer<String> resultHandler) {
+    private void safeCall(Supplier<@Nullable String> method, Supplier<String> errorMessage, Consumer<String> resultHandler) {
       if (unforgivableException != null) return;
 
       try {
@@ -204,8 +182,6 @@ public class AppiumElementDescriber implements ElementDescriber {
       }
     }
 
-    @Nonnull
-    @CheckReturnValue
     public Builder finish() {
       sb.append(">");
 
@@ -222,7 +198,7 @@ public class AppiumElementDescriber implements ElementDescriber {
 
     private void appendText() {
       safeCall(element::getText, () -> "Failed to get text", value -> this.text = value);
-      if ("?".equals(text)) {
+      if ("?".equals(text) || text.isEmpty()) {
         getAttribute("text", value -> this.text = value);
       }
       if ("?".equals(text)) {
@@ -234,15 +210,11 @@ public class AppiumElementDescriber implements ElementDescriber {
       sb.append(text);
     }
 
-    @Nonnull
-    @CheckReturnValue
     private String build() {
       return sb.toString();
     }
   }
 
-  @Nonnull
-  @CheckReturnValue
   static String removePackage(String className) {
     int i = className.lastIndexOf('.');
     return i < 0 ? className : className.substring(i + 1);

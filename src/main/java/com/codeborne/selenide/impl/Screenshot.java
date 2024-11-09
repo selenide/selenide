@@ -1,13 +1,15 @@
 package com.codeborne.selenide.impl;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
+
 import java.io.File;
 
 public class Screenshot {
+  @Nullable
   private final File imageFile;
+  @Nullable
   private final String image;
+  @Nullable
   private final String source;
 
   public Screenshot(@Nullable File imageFile, @Nullable String imageUrl, @Nullable String source) {
@@ -16,26 +18,21 @@ public class Screenshot {
     this.source = source;
   }
 
-  @CheckReturnValue
   @Nullable
   File getImageFile() {
     return imageFile;
   }
 
-  @CheckReturnValue
   @Nullable
   public String getImage() {
     return image;
   }
 
-  @CheckReturnValue
   @Nullable
   public String getSource() {
     return source;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static Screenshot none() {
     return new Screenshot(null, null, null);
   }

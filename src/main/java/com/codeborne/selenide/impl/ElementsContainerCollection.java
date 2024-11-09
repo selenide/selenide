@@ -7,9 +7,6 @@ import com.codeborne.selenide.ex.PageObjectException;
 import com.codeborne.selenide.ex.UIAssertionError;
 import org.openqa.selenium.NoSuchElementException;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.AbstractList;
@@ -17,7 +14,6 @@ import java.util.AbstractList;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.impl.Alias.NONE;
 
-@ParametersAreNonnullByDefault
 public class ElementsContainerCollection extends AbstractList<Container> {
   private final PageObjectFactory pageFactory;
   private final Driver driver;
@@ -40,8 +36,6 @@ public class ElementsContainerCollection extends AbstractList<Container> {
     this.collection = collection;
   }
 
-  @CheckReturnValue
-  @Nonnull
   @Override
   public Container get(int index) {
     String searchCriteria = String.format("%s[%s]", collection.getSearchCriteria(), index);
@@ -53,7 +47,6 @@ public class ElementsContainerCollection extends AbstractList<Container> {
     }
   }
 
-  @CheckReturnValue
   @Override
   public int size() {
     try {

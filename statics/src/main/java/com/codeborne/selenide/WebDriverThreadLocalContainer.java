@@ -8,16 +8,14 @@ import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverInstance;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,8 +27,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static java.lang.Thread.currentThread;
+import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
 public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private static final Logger log = LoggerFactory.getLogger(WebDriverThreadLocalContainer.class);
 
@@ -92,6 +90,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     setWebDriver(new WebDriverInstance(config, webDriver, selenideProxy, browserDownloadsFolder));
   }
 
+  @CanIgnoreReturnValue
   private long setWebDriver(WebDriverInstance webDriverInstance) {
     long threadId = currentThread().getId();
     threadWebDriver.put(threadId, webDriverInstance);
@@ -114,21 +113,16 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
    * @return true iff webdriver is started in current thread
    */
   @Override
-  @CheckReturnValue
   public boolean hasWebDriverStarted() {
     return getCurrentThreadDriver().map(driver -> driver.webDriver() != null).orElse(false);
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebDriver getWebDriver() {
     return currentThreadDriver().webDriver();
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebDriver getAndCheckWebDriver() {
     WebDriver webDriver = getCurrentThreadDriver().map(WebDriverInstance::webDriver).orElse(null);
     if (webDriver == null) {
@@ -157,8 +151,6 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     return currentThreadDriver().downloadsFolder();
   }
 
-  @Nonnull
-  @CheckReturnValue
   private WebDriverInstance currentThreadDriver() {
     return getCurrentThreadDriver().orElseThrow(() -> new IllegalStateException(
       "No webdriver is bound to current thread: " + currentThread().getId() + ". You need to call open(url) first."));
@@ -168,8 +160,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     return Optional.ofNullable(threadWebDriver.get(currentThread().getId()));
   }
 
-  @CheckReturnValue
-  @Nonnull
+  @SuppressWarnings("deprecation")
   private WebDriverInstance createAndRegisterDriver() {
     WebDriverInstance driver = createDriver();
     long threadId = setWebDriver(driver);
@@ -183,15 +174,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     return driver;
   }
 
-  @CheckReturnValue
-  @Nonnull
   private WebDriverInstance createDriver() {
     return createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public SelenideProxyServer getProxyServer() {
     return currentThreadDriver().proxy();
   }
@@ -252,26 +239,21 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     }
   }
 
+  @Nullable
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String getPageSource() {
     return getWebDriver().getPageSource();
   }
 
+  @Nullable
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String getCurrentUrl() {
     return getWebDriver().getCurrentUrl();
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String getCurrentFrameUrl() {
-    //noinspection ConstantConditions
-    return executeJavaScript("return window.location.href").toString();
+    return requireNonNull(executeJavaScript("return window.location.href")).toString();
   }
 
   boolean isDeadThreadsWatchdogStarted() {

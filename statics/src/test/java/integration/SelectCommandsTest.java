@@ -1,5 +1,7 @@
 package integration;
 
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.focused;
@@ -62,6 +64,10 @@ public class SelectCommandsTest extends IntegrationTest {
       .unfocus()
       .shouldNotBe(focused);
 
+    SelenideElement focusedElement = Selenide.getFocusedElement();
+    System.out.println(focusedElement.describe());
+    $("body")
+      .shouldBe(focused);
     $("#onblur").shouldHave(text("after blur"));
   }
 

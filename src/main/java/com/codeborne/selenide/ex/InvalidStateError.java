@@ -2,9 +2,6 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.impl.Cleanup;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class InvalidStateError extends UIAssertionError {
   public InvalidStateError(String elementDescription, Throwable cause) {
     super("Invalid element state [" + elementDescription + "]: " +

@@ -9,14 +9,11 @@ import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import com.google.common.collect.ImmutableSet;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +23,6 @@ import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
 
-@ParametersAreNonnullByDefault
 public class DownloadFileToFolder {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolder.class);
   private static final Set<String> CHROMIUM_TEMPORARY_FILES = ImmutableSet.of("crdownload", "tmp");
@@ -42,8 +38,6 @@ public class DownloadFileToFolder {
     this(new Downloader());
   }
 
-  @CheckReturnValue
-  @Nonnull
   public File download(WebElementSource link,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
@@ -53,8 +47,6 @@ public class DownloadFileToFolder {
     return clickAndWaitForNewFilesInDownloadsFolder(link, clickable, timeout, minimalIncrementTimeout, fileFilter, action);
   }
 
-  @CheckReturnValue
-  @Nonnull
   File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource link, WebElement clickable,
                                                 long timeout, long incrementTimeout,
                                                 FileFilter fileFilter,
@@ -198,7 +190,6 @@ public class DownloadFileToFolder {
     }
   }
 
-  @Nonnull
   protected File archiveFile(Driver driver, File downloadedFile) {
     File uniqueFolder = downloader.prepareTargetFolder(driver.config());
     File archivedFile = new File(uniqueFolder, downloadedFile.getName());

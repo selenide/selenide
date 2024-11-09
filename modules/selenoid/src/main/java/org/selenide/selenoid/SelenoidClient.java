@@ -8,9 +8,6 @@ import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,8 +23,8 @@ import java.util.Base64;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
 public class SelenoidClient {
   private static final Logger log = LoggerFactory.getLogger(SelenoidClient.class);
   private static final ObjectMapper json = new ObjectMapper();
@@ -35,7 +32,8 @@ public class SelenoidClient {
   private final String sessionId;
 
   public static SelenoidClient clientFor(Driver driver) {
-    return new SelenoidClient(driver.config().remote(), driver.getSessionId().toString());
+    String hubUrl = requireNonNull(driver.config().remote(), "Remote browser URL is not configured");
+    return new SelenoidClient(hubUrl, driver.getSessionId().toString());
   }
 
   public SelenoidClient(String hubUrl, String sessionId) {
@@ -43,8 +41,6 @@ public class SelenoidClient {
     this.sessionId = sessionId;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public List<String> downloads() {
     URL url = url(baseUrl + "/download/" + sessionId + "/?json");
     String fileNamesJson = readToString(url);
@@ -62,8 +58,6 @@ public class SelenoidClient {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   public File download(String fileName, File targetFolder) {
     URL url = urlOfDownloadedFile(fileName);
     try (InputStream in = connectionFromUrl(url).getInputStream()) {
@@ -104,8 +98,6 @@ public class SelenoidClient {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   public String getClipboardText() {
     try {
       HttpURLConnection connection = connectionFromUrl(url(baseUrl, "clipboard", sessionId));
@@ -142,14 +134,10 @@ public class SelenoidClient {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   URL urlOfDownloadedFile(String fileName) {
     return url(baseUrl, "download", sessionId, fileName);
   }
 
-  @CheckReturnValue
-  @Nonnull
   private URL url(String url) {
     try {
       return new URL(url);
@@ -159,8 +147,6 @@ public class SelenoidClient {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   private URL url(String base, String... pathSegments) {
     try {
       return new URIBuilder(base)
@@ -172,8 +158,6 @@ public class SelenoidClient {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   private String readToString(URL url) {
     try (InputStream in = connectionFromUrl(url).getInputStream()) {
       return IOUtils.toString(in, UTF_8);
@@ -183,8 +167,6 @@ public class SelenoidClient {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   private HttpURLConnection connectionFromUrl(URL url) throws IOException {
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     if (url.getUserInfo() != null) {

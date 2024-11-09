@@ -35,7 +35,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
 
   @BeforeEach
   void openFileUploadForm() {
-    Configuration.remote = gridUrl.toString();
+    Configuration.remote = gridUrl().toString();
     Configuration.browserCapabilities.setCapability("se:downloadsEnabled", true);
     Configuration.fileDownload = FOLDER;
     openFile("page_with_uploads.html");

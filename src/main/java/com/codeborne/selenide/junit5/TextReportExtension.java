@@ -1,19 +1,15 @@
 package com.codeborne.selenide.junit5;
 
 import com.codeborne.selenide.logevents.SimpleReport;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 /**
  * @author Aliaksandr Rasolka
- * @since 1.0.0
  */
-@ParametersAreNonnullByDefault
 public class TextReportExtension implements BeforeEachCallback, AfterEachCallback, AfterAllCallback {
   private final SimpleReport report;
   private boolean onFailedTest;
@@ -31,10 +27,10 @@ public class TextReportExtension implements BeforeEachCallback, AfterEachCallbac
   /**
    * Initialize text report extension with specified failed tests log strategy.
    *
-   * @param onFailedTest parameter that indicate if need to log failed tests
+   * @param onFailedTest whether to log failed tests
    * @return current extension instance
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public TextReportExtension onFailedTest(final boolean onFailedTest) {
     this.onFailedTest = onFailedTest;
     return this;
@@ -43,10 +39,10 @@ public class TextReportExtension implements BeforeEachCallback, AfterEachCallbac
   /**
    * Initialize text report extension with specified successful tests log strategy.
    *
-   * @param onSucceededTest parameter that indicate if need to log successful tests
+   * @param onSucceededTest whether to log succeeded tests
    * @return current extension instance
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public TextReportExtension onSucceededTest(final boolean onSucceededTest) {
     this.onSucceededTest = onSucceededTest;
     return this;

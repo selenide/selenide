@@ -41,7 +41,7 @@ final class LastCollectionElementTest {
 
   @Test
   void getElementMethodWhenIndexOutBoundExceptionThrown() {
-    checkGetElementsMethodWithException(new IndexOutOfBoundsException());
+    checkGetElementsMethodWithException(new IndexOutOfBoundsException("Oops"));
   }
 
   @Test

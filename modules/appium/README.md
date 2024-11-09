@@ -20,12 +20,12 @@ Just add to pom.xml:
 1. Create a class and implement WebDriverProvider interface
 
 ```java
-@ParametersAreNonnullByDefault
+@NullMarked
 public class AndroidDriverForApiDemos implements WebDriverProvider {
 
     @Override
     @CheckReturnValue
-    @Nonnull
+    @NonNull
     public WebDriver createDriver(Capabilities capabilities) {
         UiAutomator2Options options = new UiAutomator2Options();
         options.merge(capabilities);

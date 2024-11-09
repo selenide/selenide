@@ -1,22 +1,20 @@
 package com.codeborne.selenide.impl;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
+
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Optional;
 
 public class Arguments {
-  private final Object[] args;
+  @Nullable
+  private final Object @Nullable [] args;
 
-  public Arguments(@Nullable Object... args) {
+  public Arguments(@Nullable Object @Nullable... args) {
     this.args = args;
   }
 
-  @CheckReturnValue
-  @Nonnull
-  public <T> Optional<T> ofType(@Nonnull Class<T> klass) {
+  public <T> Optional<T> ofType(Class<T> klass) {
     if (args == null) return Optional.empty();
 
     for (Object arg : args) {
@@ -27,6 +25,7 @@ public class Arguments {
     return Optional.empty();
   }
 
+  @Nullable
   public <T> T nth(int index) {
     if (args == null) {
       throw new IllegalArgumentException("Missing arguments");
@@ -38,7 +37,6 @@ public class Arguments {
     return (T) args[index];
   }
 
-  @CheckReturnValue
   public long getTimeoutMs(long defaultTimeout) {
     return ofType(Duration.class).map(Duration::toMillis)
       .orElseGet(() ->

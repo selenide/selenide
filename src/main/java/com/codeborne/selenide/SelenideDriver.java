@@ -6,11 +6,14 @@ import com.codeborne.selenide.drivercommands.WebDriverWrapper;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.JavaScript;
+import com.codeborne.selenide.impl.Lazy;
 import com.codeborne.selenide.impl.PageObjectFactory;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.selector.FocusedElementLocator;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
@@ -18,10 +21,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.support.events.WebDriverListener;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,16 +30,17 @@ import java.util.List;
 
 import static com.codeborne.selenide.commands.Util.classOf;
 import static com.codeborne.selenide.files.FileFilters.none;
+import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Collections.emptyList;
+import static java.util.Objects.requireNonNull;
 
 /**
  * "Selenide driver" is a container for WebDriver + proxy server + settings
  */
-@ParametersAreNonnullByDefault
 public class SelenideDriver {
-  private final JavaScript zoomJs = new JavaScript("zoom.js");
+  private static final JavaScript zoomJs = new JavaScript("zoom.js");
   private static final Navigator navigator = new Navigator();
   private static final ScreenShotLaboratory screenshots = ScreenShotLaboratory.getInstance();
 
@@ -51,9 +51,6 @@ public class SelenideDriver {
     this(config, emptyList());
   }
 
-  /**
-   * @since 6.0.0
-   */
   public SelenideDriver(Config config, List<WebDriverListener> listeners) {
     this(config, new LazyDriver(config, null, listeners));
   }
@@ -73,14 +70,10 @@ public class SelenideDriver {
     this.driver = new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Config config() {
     return config;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Driver driver() {
     return driver;
   }
@@ -109,24 +102,18 @@ public class SelenideDriver {
     navigator.open(this, absoluteUrl, domain, login, password);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                 Class<PageObjectClass> pageObjectClassClass) {
     open(relativeOrAbsoluteUrl);
     return page(pageObjectClassClass);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public <PageObjectClass> PageObjectClass open(URL absoluteUrl,
                                                 Class<PageObjectClass> pageObjectClassClass) {
     open(absoluteUrl);
     return page(pageObjectClassClass);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                 String domain, String login, String password,
                                                 Class<PageObjectClass> pageObjectClassClass) {
@@ -134,33 +121,24 @@ public class SelenideDriver {
     return page(pageObjectClassClass);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public <PageObjectClass> PageObjectClass open(URL absoluteUrl, String domain, String login, String password,
                                                 Class<PageObjectClass> pageObjectClassClass) {
     open(absoluteUrl, domain, login, password);
     return page(pageObjectClassClass);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
     return pageFactory.page(driver(), pageObjectClass);
   }
 
   /**
-   * @since 6.8.0
    * @param reified Don't pass any values here. It's Java Magic :)
    */
-  @CheckReturnValue
-  @Nonnull
-  @SuppressWarnings("unchecked")
-  public <PageObjectClass> PageObjectClass page(PageObjectClass... reified) {
+  @SafeVarargs
+  public final <PageObjectClass> PageObjectClass page(PageObjectClass... reified) {
     return pageFactory.page(driver(), classOf(reified));
   }
 
-  @CheckReturnValue
-  @Nonnull
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
     return pageFactory.page(driver(), pageObject);
   }
@@ -184,14 +162,10 @@ public class SelenideDriver {
     });
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Browser browser() {
     return driver().browser();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideProxyServer getProxy() {
     return driver().getProxy();
   }
@@ -200,13 +174,11 @@ public class SelenideDriver {
     return driver().hasWebDriverStarted();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public WebDriver getWebDriver() {
     return driver.getWebDriver();
   }
 
-  @Nonnull
+  @CanIgnoreReturnValue
   public WebDriver getAndCheckWebDriver() {
     return driver.getAndCheckWebDriver();
   }
@@ -221,15 +193,18 @@ public class SelenideDriver {
     driver.close();
   }
 
+  @Nullable
+  @CanIgnoreReturnValue
   public <T> T executeJavaScript(String jsCode, Object... arguments) {
     return driver().executeJavaScript(jsCode, arguments);
   }
 
+  @Nullable
+  @CanIgnoreReturnValue
   public <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
     return driver().executeAsyncJavaScript(jsCode, arguments);
   }
 
-  @CheckReturnValue
   public SelenideElement getFocusedElement() {
     return $(new FocusedElementLocator());
   }
@@ -238,12 +213,9 @@ public class SelenideDriver {
    * Returns selected text or empty string if no text is selected.
    *
    * @return selected text
-   * @since 6.11.0
    */
-  @CheckReturnValue
-  @Nonnull
   public String getSelectedText() {
-    return this.executeJavaScript("return window.getSelection().toString()");
+    return requireNonNull(executeJavaScript("return window.getSelection().toString()"));
   }
 
   /**
@@ -253,16 +225,14 @@ public class SelenideDriver {
    *
    * @see #getClipboard()
    * @see Clipboard
-   * @since 6.11.0
    */
+  @CanIgnoreReturnValue
   public String copy() {
     String selectedText = this.getSelectedText();
     this.getClipboard().setText(selectedText);
     return selectedText;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideWait Wait() {
     return new SelenideWait(getWebDriver(), config().timeout(), config().pollingInterval());
   }
@@ -276,97 +246,66 @@ public class SelenideDriver {
     return getWebDriver().getTitle();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement $(WebElement webElement) {
     return wrap(driver(), webElement);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement $(String cssSelector) {
     return find(cssSelector);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement find(String cssSelector) {
     return find(By.cssSelector(cssSelector));
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement $x(String xpathExpression) {
     return find(By.xpath(xpathExpression));
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement $(By seleniumSelector) {
     return find(seleniumSelector);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement $(By seleniumSelector, int index) {
     return find(seleniumSelector, index);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement $(String cssSelector, int index) {
     return ElementFinder.wrap(driver(), cssSelector, index);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement find(By criteria) {
     return ElementFinder.wrap(driver(), null, criteria, 0);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement find(By criteria, int index) {
     return ElementFinder.wrap(driver(), null, criteria, index);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public ElementsCollection $$(Collection<? extends WebElement> elements) {
     return new ElementsCollection(driver(), elements);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public ElementsCollection $$(String cssSelector) {
     return new ElementsCollection(driver(), cssSelector);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public ElementsCollection $$x(String xpathExpression) {
     return $$(By.xpath(xpathExpression));
   }
 
-  @CheckReturnValue
-  @Nonnull
   public ElementsCollection findAll(By seleniumSelector) {
     return new ElementsCollection(driver(), seleniumSelector);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public ElementsCollection findAll(String cssSelector) {
     return new ElementsCollection(driver(), By.cssSelector(cssSelector));
   }
 
-  @CheckReturnValue
-  @Nonnull
   public ElementsCollection $$(By criteria) {
     return findAll(criteria);
   }
 
-  @CheckReturnValue
   @Nullable
   public SelenideElement getSelectedRadio(By radioField) {
     for (WebElement radio : $$(radioField).asFixedIterable()) {
@@ -377,14 +316,10 @@ public class SelenideDriver {
     return null;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Modal modal() {
     return new Modal(driver());
   }
 
-  @CheckReturnValue
-  @Nonnull
   public WebDriverLogs getWebDriverLogs() {
     return new WebDriverLogs(driver());
   }
@@ -394,40 +329,30 @@ public class SelenideDriver {
   }
 
   public boolean atBottom() {
-    return executeJavaScript("return window.pageYOffset + window.innerHeight >= document.body.scrollHeight");
+    return Boolean.TRUE.equals(executeJavaScript("return window.scrollY + window.innerHeight >= document.body.scrollHeight"));
   }
 
-  @Nonnull
   public SelenideTargetLocator switchTo() {
     return driver().switchTo();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public String url() {
-    return getWebDriver().getCurrentUrl();
+    return requireNonNull(getWebDriver().getCurrentUrl());
   }
 
-  @CheckReturnValue
   @Nullable
   public String source() {
     return getWebDriver().getPageSource();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public String getCurrentFrameUrl() {
-    return executeJavaScript("return window.location.href").toString();
+    return requireNonNull(executeJavaScript("return window.location.href"));
   }
 
-  @CheckReturnValue
-  @Nonnull
   public String getUserAgent() {
     return driver().getUserAgent();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SessionId getSessionId() {
     return driver().getSessionId();
   }
@@ -436,9 +361,7 @@ public class SelenideDriver {
    * Take a screenshot of the current page
    *
    * @return absolute path of the screenshot taken or null if failed to create screenshot
-   * @since 5.14.0
    */
-  @CheckReturnValue
   @Nullable
   public String screenshot(String fileName) {
     return screenshots.takeScreenshot(driver(), fileName, true, false).getImage();
@@ -448,58 +371,45 @@ public class SelenideDriver {
    * Take a screenshot of the current page
    *
    * @return The screenshot (as bytes, base64 or temporary file)
-   * @since 5.14.0
    */
-  @CheckReturnValue
   @Nullable
   public <T> T screenshot(OutputType<T> outputType) {
     return screenshots.takeScreenShot(driver(), outputType);
   }
 
-  @Nonnull
   public File download(String url) throws URISyntaxException {
     return download(new URI(url), config.timeout());
   }
 
-  @Nonnull
   public File download(String url, long timeoutMs) throws URISyntaxException {
     return download(new URI(url), timeoutMs);
   }
 
-  @Nonnull
   public File download(URI url) {
     return download(url, config.timeout());
   }
 
-  @Nonnull
   public File download(URI url, long timeoutMs) {
     return downloadFileWithHttpRequest().download(driver(), url, timeoutMs, none());
   }
 
-  @CheckReturnValue
-  @Nonnull
   public LocalStorage getLocalStorage() {
     return new LocalStorage(driver());
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SessionStorage getSessionStorage() {
     return new SessionStorage(driver());
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Clipboard getClipboard() {
     return inject(ClipboardService.class).getClipboard(driver());
   }
 
   private static final PageObjectFactory pageFactory = inject(PageObjectFactory.class);
-  private static DownloadFileWithHttpRequest downloadFileWithHttpRequest;
+  private static final Lazy<DownloadFileWithHttpRequest> downloadFileWithHttpRequest = lazyEvaluated(DownloadFileWithHttpRequest::new);
 
   private static synchronized DownloadFileWithHttpRequest downloadFileWithHttpRequest() {
-    if (downloadFileWithHttpRequest == null) downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
-    return downloadFileWithHttpRequest;
+    return downloadFileWithHttpRequest.get();
   }
 
   public Conditional<WebDriver> webdriver() {

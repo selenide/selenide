@@ -1,29 +1,23 @@
 package com.codeborne.selenide.junit;
 
 import com.codeborne.selenide.logevents.SimpleReport;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-/**
- * @since Selenide 2.25
- */
-@ParametersAreNonnullByDefault
 public class TextReport extends TestWatcher {
   protected SimpleReport report = new SimpleReport();
 
   private boolean onFailedTest = true;
   private boolean onSucceededTest = true;
 
-  @Nonnull
+  @CanIgnoreReturnValue
   public TextReport onFailedTest(boolean onFailedTest) {
     this.onFailedTest = onFailedTest;
     return this;
   }
 
-  @Nonnull
+  @CanIgnoreReturnValue
   public TextReport onSucceededTest(boolean onSucceededTest) {
     this.onSucceededTest = onSucceededTest;
     return this;

@@ -3,45 +3,57 @@ package com.codeborne.selenide.appium;
 import com.codeborne.selenide.SelenideElement;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public interface SelenideAppiumElement extends SelenideElement {
-  @Nonnull
+  @CanIgnoreReturnValue
   @Override
   SelenideAppiumElement as(String alias);
 
-  @Nonnull
+  /**
+   * @see com.codeborne.selenide.appium.commands.HideKeyboard
+   */
   @CanIgnoreReturnValue
   SelenideAppiumElement hideKeyboard();
 
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumScrollTo
+   */
   @Override
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideAppiumElement scrollTo();
 
-  @Nonnull
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumScrollTo
+   */
   @CanIgnoreReturnValue
   SelenideAppiumElement scroll(AppiumScrollOptions appiumScrollOptions);
 
-  @Nonnull
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumSwipeTo
+   */
   @CanIgnoreReturnValue
   SelenideAppiumElement swipeTo();
 
-  @Nonnull
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumSwipeTo
+   */
   @CanIgnoreReturnValue
   SelenideAppiumElement swipe(AppiumSwipeOptions appiumSwipeOptions);
 
-  @Nonnull
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumTap
+   */
   @CanIgnoreReturnValue
   SelenideAppiumElement tap();
 
-  @Nonnull
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumTap
+   */
   @CanIgnoreReturnValue
   SelenideAppiumElement tap(AppiumClickOptions appiumClickOptions);
 
-  @Nonnull
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumDoubleTap
+   */
   @CanIgnoreReturnValue
   SelenideAppiumElement doubleTap();
 }

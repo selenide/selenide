@@ -1,13 +1,10 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.impl.CollectionSource;
-
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
 
 import static java.lang.System.lineSeparator;
 
-@ParametersAreNonnullByDefault
 public class MatcherError extends UIAssertionError {
 
   public MatcherError(@Nullable String explanation,

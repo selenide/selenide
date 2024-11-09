@@ -6,12 +6,6 @@ import com.codeborne.selenide.TextCheck;
 import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public abstract class TextCondition extends WebElementCondition {
   private final String expectedText;
 
@@ -20,20 +14,16 @@ public abstract class TextCondition extends WebElementCondition {
     this.expectedText = expectedText;
   }
 
-  @CheckReturnValue
   protected abstract boolean match(String actualText, String expectedText);
+
   protected boolean match(TextCheck textCheck, String actualText, String expectedText) {
     return match(actualText, expectedText);
   }
 
-  @Nullable
-  @CheckReturnValue
   protected String getText(Driver driver, WebElement element) {
     return element.getText();
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String elementText = getText(driver, element);
@@ -41,8 +31,6 @@ public abstract class TextCondition extends WebElementCondition {
     return new CheckResult(match, String.format("text=\"%s\"", elementText));
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public final String toString() {
     return String.format("%s \"%s\"", getName(), expectedText);
