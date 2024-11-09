@@ -8,21 +8,23 @@ import com.codeborne.selenide.Credentials;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
-
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
 
 import static com.codeborne.selenide.drivercommands.BasicAuthUtils.uriMatchesDomain;
+import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
 public class AuthenticationFilter implements RequestFilter {
+  @Nullable
   private AuthenticationType authenticationType;
+
+  @Nullable
   private Credentials credentials;
 
-  @Override
   @Nullable
+  @Override
   public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo) {
-    if (authenticationType != null && uriMatchesDomain(messageInfo.getUrl(), credentials.domain())) {
+    validate();
+    if (authenticationType != null && uriMatchesDomain(messageInfo.getUrl(), requireNonNull(credentials).domain())) {
       String authorization = String.format("%s %s", authenticationType.getValue(), credentials.encode());
       HttpHeaders headers = request.headers();
       headers.add("Authorization", authorization);
@@ -34,9 +36,19 @@ public class AuthenticationFilter implements RequestFilter {
   public void setAuthentication(@Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
     this.authenticationType = authenticationType;
     this.credentials = credentials;
+    validate();
   }
 
   public void removeAuthentication() {
     setAuthentication(null, null);
+  }
+
+  private void validate() {
+    if (authenticationType != null && credentials == null) {
+      throw new IllegalArgumentException("Authentication type is provided, but credentials not provided");
+    }
+    if (authenticationType == null && credentials != null) {
+      throw new IllegalArgumentException("Credentials are provided, but authentication type not provided");
+    }
   }
 }

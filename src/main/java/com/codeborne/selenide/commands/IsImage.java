@@ -4,17 +4,12 @@ import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.conditions.IsImageLoaded;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class IsImage implements Command<Boolean> {
   @Override
-  @CheckReturnValue
-  public Boolean execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public Boolean execute(SelenideElement proxy, WebElementSource locator, Object @Nullable [] args) {
     WebElement img = locator.getWebElement();
     if (!"img".equalsIgnoreCase(img.getTagName())) {
       throw new IllegalArgumentException("Method isImage() is only applicable for img elements");

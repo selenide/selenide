@@ -11,8 +11,6 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.function.Supplier;
 
@@ -21,11 +19,9 @@ import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.lang.System.currentTimeMillis;
 
-@ParametersAreNonnullByDefault
 public class Waiter {
   private static final Logger logger = LoggerFactory.getLogger(Waiter.class);
 
-  @CheckReturnValue
   public void wait(long timeout, long pollingInterval, Supplier<Boolean> condition) {
     sleep(pollingInterval);
     for (long start = currentTimeMillis();

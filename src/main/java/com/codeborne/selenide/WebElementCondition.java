@@ -4,8 +4,6 @@ import com.codeborne.selenide.conditions.ExplainedCondition;
 import com.codeborne.selenide.conditions.Not;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
@@ -30,15 +28,9 @@ public abstract class WebElementCondition {
    * @param element given WebElement
    * @return {@link CheckResult.Verdict#ACCEPT} if element matches condition, or
    *         {@link CheckResult.Verdict#REJECT} if element doesn't match (and we should keep trying until timeout).
-   *
-   * @since 6.0.0
    */
-  @Nonnull
-  @CheckReturnValue
   public abstract CheckResult check(Driver driver, WebElement element);
 
-  @Nonnull
-  @CheckReturnValue
   public WebElementCondition negate() {
     return new Not(this, missingElementSatisfiesCondition);
   }
@@ -46,26 +38,19 @@ public abstract class WebElementCondition {
   /**
    * Should be used for explaining the reason of condition
    */
-  @Nonnull
-  @CheckReturnValue
   public WebElementCondition because(String message) {
     return new ExplainedCondition<>(this, message);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String toString() {
     return name;
   }
 
-  @Nonnull
-  @CheckReturnValue
   public String getName() {
     return name;
   }
 
-  @CheckReturnValue
   public boolean missingElementSatisfiesCondition() {
     return missingElementSatisfiesCondition;
   }
@@ -77,15 +62,12 @@ public abstract class WebElementCondition {
    */
   public WebElementCondition or(WebElementCondition alternative) {
     return new WebElementCondition("%s OR %s".formatted(WebElementCondition.this.toString(), alternative.toString())) {
-      @Nonnull
       @Override
       public CheckResult check(Driver driver, WebElement element) {
         CheckResult r1 = WebElementCondition.this.check(driver, element);
         return r1.verdict() == ACCEPT ? r1 : alternative.check(driver, element);
       }
 
-      @Nonnull
-      @CheckReturnValue
       @Override
       public WebElementCondition negate() {
         return new Not(this,

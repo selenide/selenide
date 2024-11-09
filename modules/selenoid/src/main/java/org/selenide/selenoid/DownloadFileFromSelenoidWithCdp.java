@@ -3,13 +3,10 @@ package org.selenide.selenoid;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.DownloadFileWithCdp;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 
-@ParametersAreNonnullByDefault
 public class DownloadFileFromSelenoidWithCdp extends DownloadFileWithCdp {
   @Nullable
   @Override
@@ -19,7 +16,6 @@ public class DownloadFileFromSelenoidWithCdp extends DownloadFileWithCdp {
       new SelenoidDownloadsFolder(driver);
   }
 
-  @Nonnull
   @Override
   protected File archiveFile(Driver driver, File downloadedFile) {
     if (driver.isLocalBrowser()) {

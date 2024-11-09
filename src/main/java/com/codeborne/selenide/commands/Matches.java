@@ -8,28 +8,25 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.Arguments;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static java.time.Duration.ZERO;
+import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
 public class Matches implements Command<Boolean> {
   private static final Logger log = LoggerFactory.getLogger(Matches.class);
 
   @Override
-  @CheckReturnValue
-  public Boolean execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public Boolean execute(SelenideElement proxy, WebElementSource locator, Object @Nullable [] args) {
     Arguments arguments = new Arguments(args);
-    WebElementCondition condition = arguments.nth(0);
+    WebElementCondition condition = requireNonNull(arguments.nth(0));
     Duration timeout = arguments.ofType(Duration.class).orElse(ZERO);
 
     if (timeout.toMillis() == 0) {
@@ -40,7 +37,6 @@ public class Matches implements Command<Boolean> {
     }
   }
 
-  @CheckReturnValue
   private boolean evaluate(WebElementSource locator, WebElementCondition condition) {
     WebElement element = getElementOrNull(locator);
     if (element != null) {
@@ -50,7 +46,6 @@ public class Matches implements Command<Boolean> {
     return condition.missingElementSatisfiesCondition();
   }
 
-  @CheckReturnValue
   private boolean evaluateWithTimeout(WebElementSource locator, WebElementCondition condition, long timeout, long pollingInterval) {
     Stopwatch stopwatch = new Stopwatch(timeout);
     while (!stopwatch.isTimeoutReached()) {
@@ -61,8 +56,8 @@ public class Matches implements Command<Boolean> {
     return false;
   }
 
-  @CheckReturnValue
   @Nullable
+  @SuppressWarnings("ErrorNotRethrown")
   protected WebElement getElementOrNull(WebElementSource locator) {
     try {
       return locator.getWebElement();

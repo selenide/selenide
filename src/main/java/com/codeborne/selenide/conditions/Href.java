@@ -4,20 +4,16 @@ import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-@ParametersAreNonnullByDefault
 public class Href extends AttributeWithValue {
   public Href(String expectedAttributeValue) {
     super("href", expectedAttributeValue);
   }
 
-  @Nonnull
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String href = getAttributeValue(element);

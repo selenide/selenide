@@ -6,17 +6,10 @@ import com.codeborne.selenide.commands.ancestor.AncestorRuleEngine;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.By;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.commands.Util.firstOf;
 
-@ParametersAreNonnullByDefault
 public class Ancestor implements Command<SelenideElement> {
   @Override
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     String selector = firstOf(args);
     int indexPredicate = args.length > 1 ?

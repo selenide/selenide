@@ -7,17 +7,16 @@ import com.codeborne.selenide.ex.InvalidStateError;
 import com.codeborne.selenide.impl.Arguments;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Map;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.commands.Util.arrayToString;
 import static com.codeborne.selenide.commands.Util.cast;
+import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
 public class SelectOptionByValue implements Command<Void> {
   private static final JavaScript selectOptionByValue = new JavaScript("select-options-by-value.js");
 
@@ -25,13 +24,13 @@ public class SelectOptionByValue implements Command<Void> {
   @Nullable
   public Void execute(SelenideElement proxy, WebElementSource selectField, @Nullable Object[] args) {
     Arguments arguments = new Arguments(args);
-    List<String> values = Util.merge(arguments.nth(0), arguments.nth(1));
+    List<String> values = Util.merge(requireNonNull(arguments.nth(0)), requireNonNull(arguments.nth(1)));
     selectOptionByValue(selectField, values);
     return null;
   }
 
   private void selectOptionByValue(WebElementSource selectField, List<String> values) {
-    Map<String, String> error = selectOptionByValue.execute(selectField.driver(), selectField.getWebElement(), values);
+    Map<String, String> error = requireNonNull(selectOptionByValue.execute(selectField.driver(), selectField.getWebElement(), values));
     if (error.containsKey("nonSelect")) {
       throw new IllegalArgumentException("Cannot select option from a non-select element");
     }

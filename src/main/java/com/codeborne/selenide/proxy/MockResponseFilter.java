@@ -9,13 +9,10 @@ import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.EmptyHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.remote.http.Contents;
 import org.openqa.selenium.remote.http.HttpResponse;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
@@ -29,10 +26,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Selenide proxy filter allowing to mock any response
- *
- * @since 6.9.0
  */
-@ParametersAreNonnullByDefault
 public class MockResponseFilter implements RequestFilter {
   private static final int HTTP_STATUS_OK = 200;
   private static final byte[] EMPTY_RESPONSE = new byte[0];
@@ -101,8 +95,7 @@ public class MockResponseFilter implements RequestFilter {
   }
 
   @Override
-  @Nullable
-  public io.netty.handler.codec.http.HttpResponse filterRequest(
+  public io.netty.handler.codec.http.@Nullable HttpResponse filterRequest(
     HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo
   ) {
     for (ResponseMock mock : mocks.values()) {
@@ -116,8 +109,6 @@ public class MockResponseFilter implements RequestFilter {
     return null;
   }
 
-  @Nonnull
-  @CheckReturnValue
   private DefaultFullHttpResponse mockOptionsRequest(HttpRequest request, ResponseMock mock) {
     HttpHeaders headers = new DefaultHttpHeaders()
       .add("Content-Length", "0")
@@ -130,8 +121,6 @@ public class MockResponseFilter implements RequestFilter {
     return response(request, HTTP_STATUS_OK, wrappedBuffer(EMPTY_RESPONSE), headers);
   }
 
-  @Nonnull
-  @CheckReturnValue
   private DefaultFullHttpResponse mockRequest(HttpRequest request, ResponseMock mock) {
     HttpResponse httpResponse = mock.mockedResponse.get();
     HttpHeaders headers = new DefaultHttpHeaders()
@@ -155,13 +144,10 @@ public class MockResponseFilter implements RequestFilter {
     }
   }
 
-  @Nonnull
-  @CheckReturnValue
   private static DefaultFullHttpResponse response(HttpRequest request, int status, ByteBuf content, HttpHeaders headers) {
     return new DefaultFullHttpResponse(request.protocolVersion(), valueOf(status), content, headers, EmptyHttpHeaders.INSTANCE);
   }
 
-  @ParametersAreNonnullByDefault
   private static final class ResponseMock {
     private final String name;
     private final RequestMatcher requestMatcher;

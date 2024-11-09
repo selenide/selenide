@@ -1,13 +1,15 @@
 package com.codeborne.selenide.appium;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import io.appium.java_client.android.AndroidDriver;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentCaptor.captor;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class DeepLinkLauncherTest {
   DeepLinkLauncher deepLinkLauncher = new DeepLinkLauncher();
@@ -15,7 +17,7 @@ class DeepLinkLauncherTest {
   @Test
   void shouldSendAppIdForAndroid() {
     AndroidDriver androidDriver = mock(AndroidDriver.class);
-    ArgumentCaptor<Map<String, String>> params = ArgumentCaptor.forClass(Map.class);
+    ArgumentCaptor<Map<String, String>> params = captor();
     ArgumentCaptor<String> script = ArgumentCaptor.forClass(String.class);
     when(androidDriver.executeScript(script.capture(), params.capture())).thenReturn("ok");
 

@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.SelenideDriver;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.BuildInfo;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
@@ -13,10 +14,6 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
@@ -31,7 +28,6 @@ import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static com.codeborne.selenide.Browsers.SAFARI;
 
-@ParametersAreNonnullByDefault
 public class WebDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(WebDriverFactory.class);
 
@@ -39,8 +35,6 @@ public class WebDriverFactory {
   private final RemoteDriverFactory remoteDriverFactory = new RemoteDriverFactory();
   private final BrowserResizer browserResizer = new BrowserResizer();
 
-  @CheckReturnValue
-  @Nonnull
   private Map<String, Class<? extends AbstractDriverFactory>> factories() {
     Map<String, Class<? extends AbstractDriverFactory>> result = new HashMap<>();
     result.put(CHROME, ChromeDriverFactory.class);
@@ -52,8 +46,6 @@ public class WebDriverFactory {
     return result;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public WebDriver createWebDriver(Config config, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     log.debug("browser={}", config.browser());
     log.debug("browser.version={}", config.browserVersion());
@@ -102,8 +94,6 @@ public class WebDriverFactory {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   private WebDriver createWebDriverInstance(Config config, Browser browser,
                                             @Nullable Proxy proxy,
                                             @Nullable File browserDownloadsFolder) {
@@ -118,8 +108,6 @@ public class WebDriverFactory {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   private DriverFactory findFactory(Browser browser) {
     Class<? extends AbstractDriverFactory> factoryClass = factories.getOrDefault(
       browser.name.toLowerCase(Locale.ROOT), DefaultDriverFactory.class);

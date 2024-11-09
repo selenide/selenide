@@ -1,17 +1,17 @@
 package integration;
 
 import com.codeborne.selenide.Command;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.Click;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -74,9 +74,10 @@ final class ExecuteMethodTest extends ITest {
       new Command<Void>() {
         @Override
         @Nullable
-        public Void execute(@Nonnull SelenideElement proxy,
-                            @Nonnull WebElementSource locator,
-                            @Nullable Object[] args) {
+        @CanIgnoreReturnValue
+        public Void execute(SelenideElement proxy,
+                            WebElementSource locator,
+                            Object @Nullable [] args) {
           passedArgsRef.set(args);
           return null;
         }
@@ -92,9 +93,10 @@ final class ExecuteMethodTest extends ITest {
       new Command<Void>() {
         @Override
         @Nullable
-        public Void execute(@Nonnull SelenideElement proxy,
-                            @Nonnull WebElementSource locator,
-                            @Nullable Object[] args) {
+        @CanIgnoreReturnValue
+        public Void execute(SelenideElement proxy,
+                            WebElementSource locator,
+                            Object @Nullable [] args) {
           passedArgsRef.set(args);
           return null;
         }
@@ -104,21 +106,17 @@ final class ExecuteMethodTest extends ITest {
     assertThat(passedArgsRef.get()).isEmpty();
   }
 
-  @ParametersAreNonnullByDefault
-  private static final class TripleClick implements Command<SelenideElement> {
+  private static final class TripleClick extends FluentCommand {
     @Override
-    @Nonnull
-    public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+    protected void execute(WebElementSource locator, Object @Nullable [] args) {
       WebElement element = locator.findAndAssertElementIsInteractable();
       element.click();
       element.click();
       element.click();
-      return proxy;
     }
   }
 
-  @ParametersAreNonnullByDefault
-  private static final class CustomSetValueCommand implements Command<SelenideElement> {
+  private static final class CustomSetValueCommand extends FluentCommand {
     private final String value;
 
     CustomSetValueCommand(String value) {
@@ -126,11 +124,10 @@ final class ExecuteMethodTest extends ITest {
     }
 
     @Override
-    @Nonnull
-    public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-      proxy.clear();
-      proxy.sendKeys(value);
-      return proxy;
+    protected void execute(WebElementSource locator, Object @Nullable [] args) {
+      WebElement webElement = locator.getWebElement();
+      webElement.clear();
+      webElement.sendKeys(value);
     }
   }
 }

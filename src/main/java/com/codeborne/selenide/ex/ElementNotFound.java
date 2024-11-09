@@ -3,13 +3,11 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.Alias;
 import com.codeborne.selenide.impl.CollectionSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
 public class ElementNotFound extends UIAssertionError {
   public ElementNotFound(Alias alias, By searchCriteria, WebElementCondition expectedCondition) {
     this(alias, searchCriteria.toString(), expectedCondition, null);

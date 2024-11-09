@@ -6,14 +6,11 @@ import com.codeborne.selenide.impl.ElementCommunicator;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.rejected;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
-@ParametersAreNonnullByDefault
 public class ExactTextsCaseSensitiveInAnyOrder extends ExactTexts {
   private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
 
@@ -25,7 +22,6 @@ public class ExactTextsCaseSensitiveInAnyOrder extends ExactTexts {
     super(exactTexts);
   }
 
-  @Nonnull
   @Override
   public CheckResult check(Driver driver, List<WebElement> elements) {
     List<String> actualTexts = communicator.texts(driver, elements);

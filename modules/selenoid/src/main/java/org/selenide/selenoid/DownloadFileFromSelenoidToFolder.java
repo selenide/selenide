@@ -4,13 +4,10 @@ import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.Downloader;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 
-@ParametersAreNonnullByDefault
 public class DownloadFileFromSelenoidToFolder extends com.codeborne.selenide.impl.DownloadFileToFolder {
   private final Downloader downloader;
 
@@ -35,9 +32,7 @@ public class DownloadFileFromSelenoidToFolder extends com.codeborne.selenide.imp
     if (driver.isLocalBrowser()) {
       super.waitWhileFilesAreBeingModified(driver, folder, timeout, pollingInterval);
     }
-    else {
-      // In Selenoid, we don't know files' modification time :(
-    }
+    // In Selenoid, we don't know files' modification time :(
   }
 
   @Override
@@ -46,12 +41,9 @@ public class DownloadFileFromSelenoidToFolder extends com.codeborne.selenide.imp
     if (driver.isLocalBrowser()) {
       super.failFastIfNoChanges(driver, folder, filter, start, timeout, incrementTimeout);
     }
-    else {
-      // In Selenoid, we don't know files' modification time :(
-    }
+    // In Selenoid, we don't know files' modification time :(
   }
 
-  @Nonnull
   @Override
   protected File archiveFile(Driver driver, File downloadedFile) {
     if (driver.isLocalBrowser()) {

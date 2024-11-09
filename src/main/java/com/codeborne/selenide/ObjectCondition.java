@@ -1,34 +1,21 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.conditions.ExplainedObjectCondition;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
 
 import static com.codeborne.selenide.CheckResult.accepted;
 import static com.codeborne.selenide.CheckResult.rejected;
 
-@ParametersAreNonnullByDefault
 public interface ObjectCondition<T> {
-  @Nonnull
-  @CheckReturnValue
   String description();
 
-  @Nonnull
-  @CheckReturnValue
   String negativeDescription();
 
-  @CheckReturnValue
   CheckResult check(T object);
 
   @Nullable
-  @CheckReturnValue
   String expectedValue();
 
-  @Nonnull
-  @CheckReturnValue
   String describe(T object);
 
   default String message(T object) {

@@ -1,21 +1,17 @@
 package com.codeborne.selenide.appium.commands;
 
-import com.codeborne.selenide.Command;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.appium.AppiumScrollCoordinates;
 import com.codeborne.selenide.appium.AppiumSwipeDirection;
 import com.codeborne.selenide.appium.AppiumSwipeOptions;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.AppiumDriver;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -26,13 +22,11 @@ import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
-@ParametersAreNonnullByDefault
-public class AppiumSwipeTo implements Command<SelenideElement> {
+public class AppiumSwipeTo extends FluentCommand {
   private static final AppiumSwipeOptions DEFAULT_OPTIONS = right();
 
-  @Nullable
   @Override
-  public SelenideElement execute(SelenideElement element, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     AppiumSwipeOptions appiumSwipeOptions = extractOptions(args);
     Optional<AppiumDriver> driver = cast(locator.driver(), AppiumDriver.class);
 
@@ -40,7 +34,6 @@ public class AppiumSwipeTo implements Command<SelenideElement> {
       throw new IllegalArgumentException("Swipe is supported only in Appium");
     }
     swipeInMobile(driver.get(), locator, appiumSwipeOptions);
-    return null;
   }
 
   private void swipeInMobile(AppiumDriver appiumDriver, WebElementSource locator, AppiumSwipeOptions appiumSwipeOptions) {
@@ -97,9 +90,7 @@ public class AppiumSwipeTo implements Command<SelenideElement> {
       .addAction(finger.createPointerUp(PointerInput.MouseButton.MIDDLE.asArg()));
   }
 
-  @Nonnull
-  @CheckReturnValue
-  private AppiumSwipeOptions extractOptions(@Nullable Object[] args) {
+  private AppiumSwipeOptions extractOptions(Object @Nullable [] args) {
     if (args == null || args.length == 0) {
       return DEFAULT_OPTIONS;
     } else if (args.length == 1) {

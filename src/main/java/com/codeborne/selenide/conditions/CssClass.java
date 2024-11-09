@@ -5,11 +5,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class CssClass extends WebElementCondition {
   private final String expectedCssClass;
 
@@ -18,8 +13,6 @@ public class CssClass extends WebElementCondition {
     this.expectedCssClass = expectedCssClass;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String actualCssClasses = element.getAttribute("class");
@@ -27,8 +20,6 @@ public class CssClass extends WebElementCondition {
     return new CheckResult(hasClass, String.format("class=\"%s\"", actualCssClasses));
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("%s \"%s\"", getName(), expectedCssClass);

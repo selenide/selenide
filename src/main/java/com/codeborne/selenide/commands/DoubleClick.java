@@ -4,9 +4,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.JavaScript;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class DoubleClick extends Click {
 
   private final JavaScript jsSource = new JavaScript("dblclick.js");

@@ -1,14 +1,13 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.WebElementCondition;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
@@ -17,26 +16,20 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
 
-@ParametersAreNonnullByDefault
 public class Util {
-  @CheckReturnValue
-  public static int size(@Nullable Object[] args) {
+  public static int size(@Nullable Object @Nullable [] args) {
     return args == null ? 0 : args.length;
   }
 
   @SuppressWarnings("unchecked")
-  @CheckReturnValue
-  @Nonnull
-  public static <T> T firstOf(@Nullable Object[] args) {
+  public static <T> T firstOf(Object @Nullable [] args) {
     if (args == null || args.length == 0) {
       throw new IllegalArgumentException("Missing arguments");
     }
     return (T) args[0];
   }
 
-  @CheckReturnValue
-  @Nonnull
-  public static List<WebElementCondition> argsToConditions(@Nullable Object[] args) {
+  public static List<WebElementCondition> argsToConditions(Object @Nullable [] args) {
     if (args == null) return emptyList();
 
     List<WebElementCondition> conditions = new ArrayList<>(args.length);
@@ -51,8 +44,6 @@ public class Util {
     return conditions;
   }
 
-  @CheckReturnValue
-  @Nonnull
   @SafeVarargs
   public static <T> List<T> merge(T first, T... others) {
     List<T> result = new ArrayList<>(1 + others.length);
@@ -61,13 +52,18 @@ public class Util {
     return unmodifiableList(result);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static List<Integer> merge(int first, int[] others) {
     List<Integer> result = new ArrayList<>(1 + others.length);
     result.add(first);
     IntStream.of(others).forEach(i -> result.add(i));
     return unmodifiableList(result);
+  }
+
+  public static Map<Object, Object> mergeMaps(Map<?, ?> first, Map<?, ?> second) {
+    Map<Object, Object> result = new HashMap<>(first.size() + second.size());
+    result.putAll(first);
+    result.putAll(second);
+    return result;
   }
 
   @SuppressWarnings("unchecked")

@@ -2,24 +2,19 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.CollectionSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static java.lang.System.lineSeparator;
 
-@ParametersAreNonnullByDefault
 public abstract class WebElementsCondition {
 
+  @Nullable
   protected String explanation;
 
-  @Nonnull
-  @CheckReturnValue
   public CheckResult check(Driver driver, List<WebElement> elements) {
     throw new UnsupportedOperationException("Implement one of 'check' methods in your condition");
   }
@@ -29,8 +24,6 @@ public abstract class WebElementsCondition {
    * Can check the collection using JavaScript or any other effective means.
    * Also, can return "actual values" in the returned {@link CheckResult} object.
    */
-  @Nonnull
-  @CheckReturnValue
   public CheckResult check(CollectionSource collection) {
     List<WebElement> elements = collection.getElements();
     return check(collection.driver(), elements);
@@ -81,7 +74,6 @@ public abstract class WebElementsCondition {
    */
   public WebElementsCondition or(WebElementsCondition alternative) {
     return new WebElementsCondition() {
-      @Nonnull
       @Override
       public CheckResult check(CollectionSource collection) {
         CheckResult r1 = WebElementsCondition.this.check(collection);

@@ -3,14 +3,11 @@ package com.codeborne.selenide.junit;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.UIAssertionError;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Usage:
@@ -31,7 +28,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
  *   It doesn't take screenshots for webdrivers created by your code, e.g. using {@code new SelenideDriver()}.
  * </p>
  */
-@ParametersAreNonnullByDefault
 public class ScreenShooter extends TestWatcher {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooter.class);
 
@@ -40,13 +36,11 @@ public class ScreenShooter extends TestWatcher {
   private ScreenShooter() {
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static ScreenShooter failedTests() {
     return new ScreenShooter();
   }
 
-  @Nonnull
+  @CanIgnoreReturnValue
   public ScreenShooter succeededTests() {
     captureSuccessfulTests = true;
     return this;
@@ -81,7 +75,6 @@ public class ScreenShooter extends TestWatcher {
    *
    * @param folderWithScreenshots Folder to put screenshots to
    */
-  @Nonnull
   public ScreenShooter to(String folderWithScreenshots) {
     Configuration.reportsFolder = folderWithScreenshots;
     return this;

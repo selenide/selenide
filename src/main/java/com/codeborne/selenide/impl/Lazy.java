@@ -1,8 +1,13 @@
 package com.codeborne.selenide.impl;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.function.Supplier;
 
+import static java.util.Objects.requireNonNull;
+
 public class Lazy<T> {
+  @Nullable
   private volatile T value;
   private final Supplier<T> supplier;
 
@@ -18,7 +23,7 @@ public class Lazy<T> {
         }
       }
     }
-    return value;
+    return requireNonNull(value);
   }
 
   public static <T> Lazy<T> lazyEvaluated(Supplier<T> supplier) {

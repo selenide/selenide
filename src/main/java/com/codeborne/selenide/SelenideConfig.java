@@ -1,6 +1,8 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.CiReportUrl;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.MutableCapabilities;
 
 import static com.codeborne.selenide.AssertionMode.STRICT;
@@ -13,12 +15,17 @@ public class SelenideConfig implements Config {
 
   private String browser = getProperty("selenide.browser", CHROME);
   private boolean headless = Boolean.parseBoolean(getProperty("selenide.headless", "false"));
-  private String remote = getProperty("selenide.remote", null);
+  @Nullable
+  private String remote = getPropertyOrNull("selenide.remote");
+  @Nullable
   private String browserSize = getProperty("selenide.browserSize", "1366x768");
-  private String browserVersion = getProperty("selenide.browserVersion", null);
-  private String browserPosition = getProperty("selenide.browserPosition", null);
+  @Nullable
+  private String browserVersion = getPropertyOrNull("selenide.browserVersion");
+  @Nullable
+  private String browserPosition = getPropertyOrNull("selenide.browserPosition");
   private boolean webdriverLogsEnabled = Boolean.parseBoolean(getProperty("selenide.webdriverLogsEnabled", "false"));
-  private String browserBinary = getProperty("selenide.browserBinary", null);
+  @Nullable
+  private String browserBinary = getPropertyOrNull("selenide.browserBinary");
   private String pageLoadStrategy = getProperty("selenide.pageLoadStrategy", "normal");
   private long pageLoadTimeout = Long.parseLong(getProperty("selenide.pageLoadTimeout", "30000"));
   private MutableCapabilities browserCapabilities = new MutableCapabilities();
@@ -39,14 +46,16 @@ public class SelenideConfig implements Config {
   private boolean savePageSource = Boolean.parseBoolean(getProperty("selenide.savePageSource", "true"));
   private String reportsFolder = getProperty("selenide.reportsFolder", "build/reports/tests");
   private String downloadsFolder = getProperty("selenide.downloadsFolder", "build/downloads");
-  private String reportsUrl = new CiReportUrl().getReportsUrl(getProperty("selenide.reportsUrl", null));
+  @Nullable
+  private String reportsUrl = new CiReportUrl().getReportsUrl(getPropertyOrNull("selenide.reportsUrl"));
   private boolean fastSetValue = Boolean.parseBoolean(getProperty("selenide.fastSetValue", "false"));
   private TextCheck textCheck = TextCheck.valueOf(getProperty("selenide.textCheck", TextCheck.PARTIAL_TEXT.name()));
   private SelectorMode selectorMode = SelectorMode.valueOf(getProperty("selenide.selectorMode", CSS.name()));
   private AssertionMode assertionMode = AssertionMode.valueOf(getProperty("selenide.assertionMode", STRICT.name()));
   private FileDownloadMode fileDownload = FileDownloadMode.valueOf(getProperty("selenide.fileDownload", HTTPGET.name()));
   private boolean proxyEnabled = Boolean.parseBoolean(getProperty("selenide.proxyEnabled", "false"));
-  private String proxyHost = getProperty("selenide.proxyHost", null);
+  @Nullable
+  private String proxyHost = getPropertyOrNull("selenide.proxyHost");
   private int proxyPort = Integer.parseInt(getProperty("selenide.proxyPort", "0"));
   private long remoteReadTimeout = Long.parseLong(getProperty("selenide.remoteReadTimeout", "90000"));
   private long remoteConnectionTimeout = Long.parseLong(getProperty("selenide.remoteConnectionTimeout", "10000"));
@@ -56,6 +65,7 @@ public class SelenideConfig implements Config {
     return baseUrl;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
@@ -66,6 +76,7 @@ public class SelenideConfig implements Config {
     return timeout;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig timeout(long timeout) {
     this.timeout = timeout;
     return this;
@@ -76,6 +87,7 @@ public class SelenideConfig implements Config {
     return pollingInterval;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig pollingInterval(long pollingInterval) {
     this.pollingInterval = pollingInterval;
     return this;
@@ -88,6 +100,7 @@ public class SelenideConfig implements Config {
   }
 
   @Deprecated
+  @CanIgnoreReturnValue
   public SelenideConfig holdBrowserOpen(boolean holdBrowserOpen) {
     this.holdBrowserOpen = holdBrowserOpen;
     return this;
@@ -98,6 +111,7 @@ public class SelenideConfig implements Config {
     return reopenBrowserOnFail;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig reopenBrowserOnFail(boolean reopenBrowserOnFail) {
     this.reopenBrowserOnFail = reopenBrowserOnFail;
     return this;
@@ -108,6 +122,7 @@ public class SelenideConfig implements Config {
     return clickViaJs;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig clickViaJs(boolean clickViaJs) {
     this.clickViaJs = clickViaJs;
     return this;
@@ -118,6 +133,7 @@ public class SelenideConfig implements Config {
     return screenshots;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig screenshots(boolean screenshots) {
     this.screenshots = screenshots;
     return this;
@@ -128,6 +144,7 @@ public class SelenideConfig implements Config {
     return savePageSource;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig savePageSource(boolean savePageSource) {
     this.savePageSource = savePageSource;
     return this;
@@ -138,6 +155,7 @@ public class SelenideConfig implements Config {
     return reportsFolder;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig reportsFolder(String reportsFolder) {
     this.reportsFolder = reportsFolder;
     return this;
@@ -148,17 +166,20 @@ public class SelenideConfig implements Config {
     return downloadsFolder;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig downloadsFolder(String downloadsFolder) {
     this.downloadsFolder = downloadsFolder;
     return this;
   }
 
+  @Nullable
   @Override
   public String reportsUrl() {
     return reportsUrl;
   }
 
-  public SelenideConfig reportsUrl(String reportsUrl) {
+  @CanIgnoreReturnValue
+  public SelenideConfig reportsUrl(@Nullable String reportsUrl) {
     this.reportsUrl = reportsUrl;
     return this;
   }
@@ -173,11 +194,13 @@ public class SelenideConfig implements Config {
     return textCheck;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig fastSetValue(boolean fastSetValue) {
     this.fastSetValue = fastSetValue;
     return this;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig textCheck(TextCheck textCheck) {
     this.textCheck = textCheck;
     return this;
@@ -188,6 +211,7 @@ public class SelenideConfig implements Config {
     return selectorMode;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig selectorMode(SelectorMode selectorMode) {
     this.selectorMode = selectorMode;
     return this;
@@ -198,6 +222,7 @@ public class SelenideConfig implements Config {
     return assertionMode;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig assertionMode(AssertionMode assertionMode) {
     this.assertionMode = assertionMode;
     return this;
@@ -208,6 +233,7 @@ public class SelenideConfig implements Config {
     return fileDownload;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig fileDownload(FileDownloadMode fileDownload) {
     this.fileDownload = fileDownload;
     return this;
@@ -218,17 +244,20 @@ public class SelenideConfig implements Config {
     return proxyEnabled;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig proxyEnabled(boolean proxyEnabled) {
     this.proxyEnabled = proxyEnabled;
     return this;
   }
 
+  @Nullable
   @Override
   public String proxyHost() {
     return proxyHost;
   }
 
-  public SelenideConfig proxyHost(String proxyHost) {
+  @CanIgnoreReturnValue
+  public SelenideConfig proxyHost(@Nullable String proxyHost) {
     this.proxyHost = proxyHost;
     return this;
   }
@@ -238,6 +267,7 @@ public class SelenideConfig implements Config {
     return proxyPort;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig proxyPort(int proxyPort) {
     this.proxyPort = proxyPort;
     return this;
@@ -248,6 +278,7 @@ public class SelenideConfig implements Config {
     return browser;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig browser(String browser) {
     this.browser = browser;
     return this;
@@ -258,47 +289,56 @@ public class SelenideConfig implements Config {
     return headless;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig headless(boolean headless) {
     this.headless = headless;
     return this;
   }
 
+  @Nullable
   @Override
   public String remote() {
     return remote;
   }
 
-  public SelenideConfig remote(String remote) {
+  @CanIgnoreReturnValue
+  public SelenideConfig remote(@Nullable String remote) {
     this.remote = remote;
     return this;
   }
 
+  @Nullable
   @Override
   public String browserSize() {
     return browserSize;
   }
 
-  public SelenideConfig browserSize(String browserSize) {
+  @CanIgnoreReturnValue
+  public SelenideConfig browserSize(@Nullable String browserSize) {
     this.browserSize = browserSize;
     return this;
   }
 
+  @Nullable
   @Override
   public String browserVersion() {
     return browserVersion;
   }
 
-  public SelenideConfig browserVersion(String browserVersion) {
+  @CanIgnoreReturnValue
+  public SelenideConfig browserVersion(@Nullable String browserVersion) {
     this.browserVersion = browserVersion;
     return this;
   }
 
+  @Nullable
   @Override
   public String browserPosition() {
     return browserPosition;
   }
 
-  public SelenideConfig browserPosition(String browserPosition) {
+  @CanIgnoreReturnValue
+  public SelenideConfig browserPosition(@Nullable String browserPosition) {
     this.browserPosition = browserPosition;
     return this;
   }
@@ -308,17 +348,20 @@ public class SelenideConfig implements Config {
     return webdriverLogsEnabled;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig webdriverLogsEnabled(boolean webdriverLogsEnabled) {
     this.webdriverLogsEnabled = webdriverLogsEnabled;
     return this;
   }
 
+  @Nullable
   @Override
   public String browserBinary() {
     return browserBinary;
   }
 
-  public SelenideConfig browserBinary(String browserBinary) {
+  @CanIgnoreReturnValue
+  public SelenideConfig browserBinary(@Nullable String browserBinary) {
     this.browserBinary = browserBinary;
     return this;
   }
@@ -333,11 +376,13 @@ public class SelenideConfig implements Config {
     return pageLoadTimeout;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig pageLoadStrategy(String pageLoadStrategy) {
     this.pageLoadStrategy = pageLoadStrategy;
     return this;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig pageLoadTimeout(long pageLoadTimeout) {
     this.pageLoadTimeout = pageLoadTimeout;
     return this;
@@ -348,17 +393,23 @@ public class SelenideConfig implements Config {
     return browserCapabilities;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig browserCapabilities(MutableCapabilities browserCapabilities) {
     this.browserCapabilities = browserCapabilities;
     return this;
   }
 
-  private String getProperty(String key, String defaultValue) {
-    String value = properties.getProperty(key, defaultValue);
-    if (value != null && value.trim().isEmpty() && defaultValue == null) {
+  @Nullable
+  private String getPropertyOrNull(String key) {
+    String value = properties.getPropertyOrNull(key);
+    if (value != null && value.trim().isEmpty()) {
       return null;
     }
     return value;
+  }
+
+  private String getProperty(String key, String defaultValue) {
+    return properties.getProperty(key, defaultValue);
   }
 
   @Override
@@ -366,6 +417,7 @@ public class SelenideConfig implements Config {
     return remoteReadTimeout;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig remoteReadTimeout(long remoteReadTimeout) {
     this.remoteReadTimeout = remoteReadTimeout;
     return this;
@@ -376,6 +428,7 @@ public class SelenideConfig implements Config {
     return remoteConnectionTimeout;
   }
 
+  @CanIgnoreReturnValue
   public SelenideConfig remoteConnectionTimeout(long remoteConnectionTimeout) {
     this.remoteConnectionTimeout = remoteConnectionTimeout;
     return this;

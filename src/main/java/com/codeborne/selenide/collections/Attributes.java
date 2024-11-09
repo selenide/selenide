@@ -7,12 +7,9 @@ import com.codeborne.selenide.ex.AttributesMismatch;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementCommunicator;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,7 +17,6 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
-@ParametersAreNonnullByDefault
 public class Attributes extends WebElementsCondition {
   private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
 
@@ -36,10 +32,8 @@ public class Attributes extends WebElementsCondition {
   }
 
   @Override
-  @Nonnull
-  @CheckReturnValue
   public CheckResult check(Driver driver, List<WebElement> elements) {
-    List<String> actualValues = communicator.attributes(driver, elements, attribute);
+    List<@Nullable String> actualValues = communicator.attributes(driver, elements, attribute);
     if (actualValues.size() != expectedValues.size()) {
       String message = String.format("List size mismatch (expected: %s, actual: %s)", expectedValues.size(), actualValues.size());
       return CheckResult.rejected(message, actualValues);

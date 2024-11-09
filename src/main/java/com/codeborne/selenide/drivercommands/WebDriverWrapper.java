@@ -6,21 +6,16 @@ import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.WebDriverInstance;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * A `Driver` implementation which uses given webdriver [and proxy].
  * It doesn't open a new browser.
  * It doesn't start a new proxy.
  */
-@ParametersAreNonnullByDefault
 public class WebDriverWrapper implements Driver {
   private static final Logger log = LoggerFactory.getLogger(WebDriverWrapper.class);
 
@@ -37,42 +32,31 @@ public class WebDriverWrapper implements Driver {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Config config() {
     return wd.config();
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Browser browser() {
     return new Browser(wd.config().browser(), wd.config().headless());
   }
 
   @Override
-  @CheckReturnValue
   public boolean hasWebDriverStarted() {
     return wd.webDriver() != null;
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebDriver getWebDriver() {
     return wd.webDriver();
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public SelenideProxyServer getProxy() {
     return wd.proxy();
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebDriver getAndCheckWebDriver() {
     if (wd.webDriver() == null || !browserHealthChecker.isBrowserStillOpen(wd.webDriver())) {
       log.info("Webdriver has been closed meanwhile");
@@ -83,7 +67,6 @@ public class WebDriverWrapper implements Driver {
   }
 
   @Override
-  @CheckReturnValue
   @Nullable
   public DownloadsFolder browserDownloadsFolder() {
     return wd.downloadsFolder();

@@ -4,14 +4,14 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
+import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
+
 public class LazyWebElementSnapshot extends WebElementSource {
   public static SelenideElement wrap(WebElementSource delegate) {
     return wrap(SelenideElement.class, delegate);
@@ -27,72 +27,60 @@ public class LazyWebElementSnapshot extends WebElementSource {
   }
 
   private final WebElementSource delegate;
-
-  private WebElement snapshot;
+  private final Lazy<WebElement> snapshot;
 
   LazyWebElementSnapshot(WebElementSource delegate) {
     this.delegate = delegate;
+    this.snapshot = lazyEvaluated(() -> delegate.getWebElement());
   }
 
-  @Nonnull
   @Override
   public Driver driver() {
     return delegate.driver();
   }
 
-  @Nonnull
   @Override
   public WebElement getWebElement() {
-    if (snapshot == null) {
-      snapshot = delegate.getWebElement();
-    }
-    return snapshot;
+    return snapshot.get();
   }
 
-  @Nonnull
   @Override
   public String getSearchCriteria() {
     return delegate.getSearchCriteria();
   }
 
   @Override
-  public void setAlias(String alias) {
+  public final void setAlias(String alias) {
     delegate.setAlias(alias);
   }
 
-  @Nonnull
   @Override
   public Alias getAlias() {
     return delegate.getAlias();
   }
 
-  @Nonnull
   @Override
   public String description() {
     return delegate.description();
   }
 
-  @Nonnull
   @Override
   public String toString() {
     return delegate.toString();
   }
 
-  @Nonnull
   @Override
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
     return delegate.find(proxy, arg, index);
   }
 
-  @Nonnull
   @Override
   public List<WebElement> findAll() throws IndexOutOfBoundsException {
     return delegate.findAll();
   }
 
-  @Nonnull
   @Override
-  public ElementNotFound createElementNotFoundError(WebElementCondition condition, Throwable cause) {
+  public ElementNotFound createElementNotFoundError(WebElementCondition condition, @Nullable Throwable cause) {
     return delegate.createElementNotFoundError(condition, cause);
   }
 }

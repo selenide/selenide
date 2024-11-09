@@ -9,16 +9,13 @@ import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -31,7 +28,6 @@ import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertion
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Arrays.asList;
 
-@ParametersAreNonnullByDefault
 class SelenideElementProxy<T extends SelenideElement> implements InvocationHandler {
   private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
     "as",
@@ -70,8 +66,9 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     this.webElementSource = webElementSource;
   }
 
+  @Nullable
   @Override
-  public Object invoke(Object proxy, Method method, @Nullable Object... args) throws Throwable {
+  public Object invoke(Object proxy, Method method, Object @Nullable [] args) throws Throwable {
     Arguments arguments = new Arguments(args);
     if (methodsToSkipLogging.contains(method.getName()))
       return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
@@ -103,7 +100,6 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     }
   }
 
-  @Nonnull
   private Object continueOrBreak(Object proxy, Method method, Throwable wrappedError) throws Throwable {
     if (config().assertionMode() == SOFT && isMethodForSoftAssertion(method))
       return proxy;
@@ -123,8 +119,9 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     return driver().config();
   }
 
+  @Nullable
   protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs,
-                                    Object proxy, Method method, @Nullable Object[] args) throws Throwable {
+                                    Object proxy, Method method, Object @Nullable [] args) throws Throwable {
     Stopwatch stopwatch = new Stopwatch(timeoutMs);
 
     Throwable lastError;
@@ -156,7 +153,6 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     throw exceptionWrapper.wrap(lastError, webElementSource);
   }
 
-  @CheckReturnValue
   static boolean isSelenideElementMethod(Method method) {
     return SelenideElement.class.isAssignableFrom(method.getDeclaringClass());
   }
@@ -175,7 +171,6 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     "Reached error page: about:neterror"
   );
 
-  @CheckReturnValue
   static boolean shouldRetryAfterError(Throwable e) {
     if (TERMINAL_EXCEPTIONS.stream().anyMatch(te -> te.isAssignableFrom(e.getClass()))) return false;
     if (TERMINAL_MESSAGES.stream().anyMatch(message -> e.getMessage().startsWith(message))) return false;

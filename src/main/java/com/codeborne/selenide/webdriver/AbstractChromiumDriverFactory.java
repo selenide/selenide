@@ -1,34 +1,27 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Config;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chromium.ChromiumOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
+import static com.codeborne.selenide.commands.Util.mergeMaps;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.regex.Matcher.quoteReplacement;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-/**
- * @since 6.0.0
- */
-@ParametersAreNonnullByDefault
 public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(AbstractChromiumDriverFactory.class);
 
@@ -36,8 +29,6 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
   private static final Pattern REGEX_COMMAS_IN_VALUES = Pattern.compile(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
   private static final Pattern REGEX_REMOVE_QUOTES = Pattern.compile("\"", Pattern.LITERAL);
 
-  @Nonnull
-  @CheckReturnValue
   protected List<String> createChromiumArguments(Config config, String externalArguments) {
     List<String> arguments = new ArrayList<>();
     arguments.add("--proxy-bypass-list=<-loopback>");
@@ -46,14 +37,14 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     arguments.add("--unsafely-disable-devtools-self-xss-warnings");
     arguments.addAll(parseArguments(externalArguments));
     arguments.addAll(createHeadlessArguments(config));
-    if (config.browserSize() != null && BrowserResizer.isValidDimension(config.browserSize())) {
-      arguments.add(convertBrowserSizeToChromeFormat(config.browserSize()));
+
+    String browserSize = config.browserSize();
+    if (browserSize != null && BrowserResizer.isValidDimension(browserSize)) {
+      arguments.add(convertBrowserSizeToChromeFormat(browserSize));
     }
     return arguments;
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected Map<String, Object> prefs(@Nullable File browserDownloadsFolder, String externalPreferences) {
     Map<String, Object> preferences = new HashMap<>();
     preferences.put("safebrowsing.enabled", true);
@@ -74,8 +65,6 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     return preferences;
   }
 
-  @CheckReturnValue
-  @Nonnull
   @Override
   protected <T extends MutableCapabilities> T merge(T capabilities, MutableCapabilities additionalCapabilities) {
     if (capabilities instanceof ChromiumOptions<?> options1 && additionalCapabilities instanceof ChromiumOptions<?> options2) {
@@ -84,18 +73,13 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     return super.merge(capabilities, additionalCapabilities);
   }
 
-  @SuppressWarnings("unchecked")
   private void mergePrefs(ChromiumOptions<?> options1, ChromiumOptions<?> options2) {
     Map<String, Object> experimentalOptions1 = experimentalOptions(options1);
     Map<String, Object> experimentalOptions2 = experimentalOptions(options2);
-    if (experimentalOptions1 != null && experimentalOptions2 != null) {
-      if (experimentalOptions1.get("prefs") instanceof Map<?, ?> prefs1 &&
-          experimentalOptions2.get("prefs") instanceof Map<?, ?> prefs2) {
-        Map<Object, Objects> mergedPrefs = new HashMap<>(prefs1.size() + prefs2.size());
-        mergedPrefs.putAll((Map<Object, Objects>) prefs1);
-        mergedPrefs.putAll((Map<Object, Objects>) prefs2);
-        options2.setExperimentalOption("prefs", mergedPrefs);
-      }
+
+    if (experimentalOptions1.get("prefs") instanceof Map<?, ?> prefs1 &&
+        experimentalOptions2.get("prefs") instanceof Map<?, ?> prefs2) {
+      options2.setExperimentalOption("prefs", mergeMaps(prefs1, prefs2));
     }
   }
 
@@ -111,8 +95,6 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     }
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected List<String> createHeadlessArguments(Config config) {
     List<String> arguments = new ArrayList<>();
     if (config.headless()) {
@@ -142,14 +124,10 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     return arguments;
   }
 
-  @Nonnull
-  @CheckReturnValue
   private String convertBrowserSizeToChromeFormat(String browserSize) {
     return "--window-size=" + browserSize.replace("x", ",");
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected Map<String, Object> parsePreferencesFromString(String preferencesString) {
     Map<String, Object> prefs = new HashMap<>();
     List<String> allPrefs = parseCSV(preferencesString);
@@ -172,8 +150,6 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     return prefs;
   }
 
-  @CheckReturnValue
-  @Nonnull
   private List<String> parseArguments(String arguments) {
     return parseCSV(arguments).stream()
       .map(this::removeQuotes)
@@ -186,14 +162,10 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
    *                  Example: 123,"foo bar","bar,foo"
    * @return values as array, quotes are preserved
    */
-  @CheckReturnValue
-  @Nonnull
   final List<String> parseCSV(String csvString) {
     return isBlank(csvString) ? emptyList() : asList(REGEX_COMMAS_IN_VALUES.split(csvString));
   }
 
-  @CheckReturnValue
-  @Nonnull
   private String removeQuotes(String value) {
     return REGEX_REMOVE_QUOTES.matcher(value).replaceAll(quoteReplacement(""));
   }

@@ -3,10 +3,6 @@ package com.codeborne.selenide;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 /**
  * <p>
  *  Interface for using custom WebDriver in your tests.
@@ -31,7 +27,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  *  the latter cannot use Selenide proxy and downloads folder. If you don't need them - it's fine to use {@link WebDriverProvider} too.
  * </p>
  */
-@ParametersAreNonnullByDefault
+@FunctionalInterface
 public interface WebDriverProvider {
 
   /**
@@ -44,7 +40,5 @@ public interface WebDriverProvider {
    * recommended to pass this variable to {@link WebDriver}, probably modifying it according to specific needs
    * @return new {@link WebDriver} instance
    */
-  @CheckReturnValue
-  @Nonnull
-  WebDriver createDriver(@Nonnull Capabilities capabilities);
+  WebDriver createDriver(Capabilities capabilities);
 }

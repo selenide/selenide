@@ -3,23 +3,21 @@ package com.codeborne.selenide.testng;
 import com.codeborne.selenide.logevents.ErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.logevents.SoftAssertsErrorsCollector;
+import org.jspecify.annotations.Nullable;
 import org.testng.ITestResult;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.reporters.ExitCodeListener;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Method;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
+import static com.codeborne.selenide.testng.Annotations.annotation;
 import static java.util.Arrays.asList;
 
 /**
  * Annotate your test class with {@code @Listeners({ SoftAsserts.class})}
  */
-@ParametersAreNonnullByDefault
 public class SoftAsserts extends ExitCodeListener {
   public static boolean fullStacktraces = true;
 
@@ -77,12 +75,13 @@ public class SoftAsserts extends ExitCodeListener {
   boolean isTestMethodApplicableForSoftAsserts(@Nullable Method testMethod) {
     if (testMethod == null) return false;
 
-    Test annotation = testMethod.getAnnotation(Test.class);
+    Test annotation = annotation(testMethod, Test.class);
     return annotation == null || asList(annotation.expectedExceptions()).isEmpty();
   }
 
+  @Nullable
   Listeners getListenersAnnotation(Class<?> testClass) {
-    Listeners annotation = testClass.getAnnotation(Listeners.class);
+    Listeners annotation = annotation(testClass, Listeners.class);
     return annotation != null ? annotation :
       testClass.getSuperclass() != null ? getListenersAnnotation(testClass.getSuperclass()) : null;
   }
@@ -100,7 +99,6 @@ public class SoftAsserts extends ExitCodeListener {
     }
   }
 
-  @Nonnull
   private String testName(ITestResult result) {
     return result.getTestClass().getName() + '.' + result.getName();
   }

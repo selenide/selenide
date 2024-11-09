@@ -1,18 +1,11 @@
 package com.codeborne.selenide.clearwithshortcut;
 
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.Clear;
-import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static org.openqa.selenium.Keys.DELETE;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -33,24 +26,14 @@ import static org.slf4j.LoggerFactory.getLogger;
  *   <li>press "Delete"</li>
  * </ol>
  */
-@ParametersAreNonnullByDefault
 public class ClearWithShortcut extends Clear {
   private static final Logger log = LoggerFactory.getLogger(ClearWithShortcut.class);
-
-  @Nonnull
-  @CheckReturnValue
-  @Override
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    WebElement input = locator.findAndAssertElementIsEditable();
-    clearAndTrigger(locator.driver(), input);
-    return proxy;
-  }
 
   /**
    * Clear the input content without triggering "change" and "blur" events
    */
   @Override
-  public void clear(Driver driver, WebElement input) {
+  protected void clear(Driver driver, WebElement input) {
     input.clear();
     clearWithShortcut(driver, input);
   }
@@ -71,8 +54,6 @@ public class ClearWithShortcut extends Clear {
     }
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected Platform getPlatform(Driver driver) {
     if (!driver.supportsJavascript()) {
       return Platform.UNKNOWN;

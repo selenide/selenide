@@ -1,7 +1,5 @@
 package integration.server;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,10 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static java.lang.Long.parseLong;
 import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static java.lang.Long.parseLong;
 import static java.net.URLEncoder.encode;
 
 class FileDownloadHandler extends BaseHandler {
@@ -59,8 +57,6 @@ class FileDownloadHandler extends BaseHandler {
       longParam(request, "pause"), longParam(request, "duration"));
   }
 
-  @Nonnull
-  @CheckReturnValue
   private Map<String, String> headers(String fileName, boolean exposeFileName) throws UnsupportedEncodingException {
     Map<String, String> map = new HashMap<>();
     map.put("content-disposition", exposeFileName ? "attachment; filename=" + encode(fileName, "UTF-8") : "attachment;");

@@ -5,12 +5,8 @@ import com.codeborne.selenide.commands.GetSelectedOptionText;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-@ParametersAreNonnullByDefault
 public class PartialText extends TextCondition {
 
   public PartialText(String text) {
@@ -27,7 +23,6 @@ public class PartialText extends TextCondition {
     return Html.text.contains(actualText, expectedText);
   }
 
-  @Nullable
   @Override
   protected String getText(Driver driver, WebElement element) {
     return "select".equalsIgnoreCase(element.getTagName()) ?

@@ -90,7 +90,6 @@ final class DownloadFileWithProxyServerTest {
 
   @Test
   void proxyServerShouldBeStarted() {
-    SelenideConfig config = new SelenideConfig().proxyEnabled(true).fileDownload(PROXY);
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, mock(), new DummyWebDriver(), null));
 
     assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), click()))

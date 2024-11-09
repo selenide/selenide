@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.MutableCapabilities;
 
 /**
@@ -62,6 +63,7 @@ final class StaticConfig implements Config {
     return Configuration.downloadsFolder;
   }
 
+  @Nullable
   @Override
   public String reportsUrl() {
     return Configuration.reportsUrl;
@@ -97,6 +99,7 @@ final class StaticConfig implements Config {
     return Configuration.proxyEnabled;
   }
 
+  @Nullable
   @Override
   public String proxyHost() {
     return Configuration.proxyHost;
@@ -127,21 +130,25 @@ final class StaticConfig implements Config {
     return Configuration.headless;
   }
 
+  @Nullable
   @Override
   public String remote() {
     return Configuration.remote;
   }
 
+  @Nullable
   @Override
   public String browserSize() {
     return Configuration.browserSize;
   }
 
+  @Nullable
   @Override
   public String browserVersion() {
     return Configuration.browserVersion;
   }
 
+  @Nullable
   @Override
   public String browserPosition() {
     return Configuration.browserPosition;
@@ -152,6 +159,7 @@ final class StaticConfig implements Config {
     return Configuration.webdriverLogsEnabled;
   }
 
+  @Nullable
   @Override
   public String browserBinary() {
     return Configuration.browserBinary;

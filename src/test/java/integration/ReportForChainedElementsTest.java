@@ -6,7 +6,6 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +83,6 @@ final class ReportForChainedElementsTest extends BaseIntegrationTest {
     return files == null ? emptyList() : asList(files);
   }
 
-  @Nonnull
   private File screenshotsFolder() {
     return new File(driver.config().reportsFolder()).getAbsoluteFile();
   }

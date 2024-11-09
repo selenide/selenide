@@ -29,14 +29,11 @@ import org.apache.hc.core5.http.protocol.BasicHttpContext;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.apache.hc.core5.ssl.TrustStrategy;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import java.io.File;
@@ -59,7 +56,6 @@ import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.hc.client5.http.protocol.HttpClientContext.COOKIE_STORE;
 
-@ParametersAreNonnullByDefault
 public class DownloadFileWithHttpRequest {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithHttpRequest.class);
   private final ElementDescriber describe = inject(ElementDescriber.class);
@@ -77,8 +73,6 @@ public class DownloadFileWithHttpRequest {
     this.downloader = downloader;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter) {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
@@ -93,14 +87,10 @@ public class DownloadFileWithHttpRequest {
     return download(driver, fileToDownloadLocation, timeout, fileFilter);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public File download(Driver driver, URI url, long timeout, FileFilter fileFilter) {
     return download(driver, url.toASCIIString(), timeout, fileFilter);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout, FileFilter fileFilter) {
     String url = makeAbsoluteUrl(driver.config(), relativeOrAbsoluteUrl);
 
@@ -121,12 +111,10 @@ public class DownloadFileWithHttpRequest {
     }
   }
 
-  @Nonnull
   private CloseableHttpClient createHttpClient(MemorizingRedirectStrategy redirectStrategy) throws IOException {
     return ignoreSelfSignedCerts ? createTrustingHttpClient(redirectStrategy) : createDefaultHttpClient(redirectStrategy);
   }
 
-  @Nonnull
   private File handleResponse(Driver driver, long timeout, FileFilter fileFilter, String url,
                               ClassicHttpResponse response) throws IOException {
     if (response.getCode() >= 500) {
@@ -148,8 +136,6 @@ public class DownloadFileWithHttpRequest {
     return downloadedFile;
   }
 
-  @CheckReturnValue
-  @Nonnull
   String makeAbsoluteUrl(Config config, String relativeOrAbsoluteUrl) {
     return relativeOrAbsoluteUrl.startsWith("/") ? config.baseUrl() + relativeOrAbsoluteUrl : relativeOrAbsoluteUrl;
   }
@@ -165,7 +151,6 @@ public class DownloadFileWithHttpRequest {
     }
   }
 
-  @ParametersAreNonnullByDefault
   record Resource(URI uri, String credentials) {
   }
 
@@ -181,19 +166,17 @@ public class DownloadFileWithHttpRequest {
     );
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected CloseableHttpClient createDefaultHttpClient(RedirectStrategy redirectStrategy) {
     return HttpClients.custom()
       .setRedirectStrategy(redirectStrategy)
       .build();
   }
 
-  @ParametersAreNonnullByDefault
   static class MemorizingRedirectStrategy extends DefaultRedirectStrategy {
     @Nullable
     private String lastRedirectUrl;
 
+    @Nullable
     @Override
     public URI getLocationURI(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException {
       URI redirectUrl = super.getLocationURI(request, response, context);
@@ -204,7 +187,6 @@ public class DownloadFileWithHttpRequest {
     }
   }
 
-  @ParametersAreNonnullByDefault
   private static class TrustAllStrategy implements TrustStrategy {
     @Override
     public boolean isTrusted(X509Certificate[] arg0, String arg1) {
@@ -216,8 +198,6 @@ public class DownloadFileWithHttpRequest {
    * configure HttpClient to ignore self-signed certs
    * as described here: <a href="https://literatejava.com/networks/ignore-ssl-certificate-errors-apache-httpclient-4-4/">...</a>
    */
-  @CheckReturnValue
-  @Nonnull
   protected CloseableHttpClient createTrustingHttpClient(RedirectStrategy redirectStrategy) throws IOException {
     try {
       HttpClientBuilder builder = HttpClientBuilder.create();
@@ -242,8 +222,6 @@ public class DownloadFileWithHttpRequest {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected HttpContext createHttpContext(Driver driver) {
     HttpContext localContext = new BasicHttpContext();
     if (driver.hasWebDriverStarted()) {
@@ -261,8 +239,6 @@ public class DownloadFileWithHttpRequest {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected String getFileName(String fileToDownloadLocation, HttpResponse response) {
     for (Header header : response.getHeaders()) {
       Optional<String> fileName = httpHelper.getFileNameFromContentDisposition(header.getName(), header.getValue());
@@ -279,7 +255,6 @@ public class DownloadFileWithHttpRequest {
     return result;
   }
 
-  @Nonnull
   private String headersToString(HttpResponse response) {
     return Stream.of(response.getHeaders()).map(h -> h.getName() + "=" + h.getValue()).collect(joining(", "));
   }

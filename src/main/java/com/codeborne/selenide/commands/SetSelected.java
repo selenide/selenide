@@ -1,19 +1,14 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Command;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.ex.InvalidStateError;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.commands.Util.firstOf;
 
-@ParametersAreNonnullByDefault
-public class SetSelected implements Command<SelenideElement> {
+public class SetSelected extends FluentCommand {
   private final Click click;
 
   public SetSelected() {
@@ -25,18 +20,17 @@ public class SetSelected implements Command<SelenideElement> {
   }
 
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     boolean selected = firstOf(args);
     WebElement element = locator.getWebElement();
     if (!element.isDisplayed()) {
       throw new InvalidStateError(locator.description(), "Cannot change invisible element");
     }
     String tag = element.getTagName();
-    if (!tag.equals("option")) {
-      if (tag.equals("input")) {
+    if (!"option".equals(tag)) {
+      if ("input".equals(tag)) {
         String type = element.getAttribute("type");
-        if (!type.equals("checkbox") && !type.equals("radio")) {
+        if (!"checkbox".equals(type) && !"radio".equals(type)) {
           throw new InvalidStateError(locator.description(), "Only use setSelected on checkbox/option/radio");
         }
       }
@@ -48,8 +42,7 @@ public class SetSelected implements Command<SelenideElement> {
       throw new InvalidStateError(locator.description(), "Cannot change value of readonly/disabled element");
     }
     if (element.isSelected() != selected) {
-      click.execute(proxy, locator, NO_ARGS);
+      click.execute(locator, NO_ARGS);
     }
-    return proxy;
   }
 }

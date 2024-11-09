@@ -4,11 +4,9 @@ import com.codeborne.selenide.Container;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.By;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
-@ParametersAreNonnullByDefault
 public interface PageObjectFactory {
   <PageObjectClass> PageObjectClass page(Driver driver, Class<PageObjectClass> pageObjectClass);
 

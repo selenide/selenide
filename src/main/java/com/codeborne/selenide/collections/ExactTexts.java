@@ -8,12 +8,9 @@ import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementCommunicator;
 import com.codeborne.selenide.impl.Html;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.rejected;
@@ -21,7 +18,6 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
-@ParametersAreNonnullByDefault
 public class ExactTexts extends WebElementsCondition {
   private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
 
@@ -38,7 +34,6 @@ public class ExactTexts extends WebElementsCondition {
     this.expectedTexts = unmodifiableList(expectedTexts);
   }
 
-  @Nonnull
   @Override
   public CheckResult check(Driver driver, List<WebElement> elements) {
     List<String> actualTexts = communicator.texts(driver, elements);
@@ -57,7 +52,6 @@ public class ExactTexts extends WebElementsCondition {
     return CheckResult.accepted();
   }
 
-  @CheckReturnValue
   protected boolean check(String actualText, String expectedText) {
     return Html.text.equals(actualText, expectedText);
   }

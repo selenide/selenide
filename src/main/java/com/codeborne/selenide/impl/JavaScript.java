@@ -1,25 +1,23 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WrapsDriver;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
+import static java.util.Objects.requireNonNull;
 import static java.util.regex.Matcher.quoteReplacement;
 import static java.util.regex.Pattern.DOTALL;
 
-@ParametersAreNonnullByDefault
 public class JavaScript {
   private static final Pattern RE = Pattern.compile("import '(.+?\\.js)'", DOTALL);
   private final FileContent jsSource;
@@ -45,26 +43,27 @@ public class JavaScript {
     return js;
   }
 
-  @Nonnull
+  @Nullable
+  @CanIgnoreReturnValue
   @SuppressWarnings("unchecked")
-  public <T> T execute(SearchContext context, Object... arguments) {
+  public <T> T execute(SearchContext context, @Nullable Object... arguments) {
     return (T) jsExecutor(context).executeScript("return " + content(), arguments);
   }
 
-  @Nonnull
+  @Nullable
+  @CanIgnoreReturnValue
   public <T> T execute(Driver driver, Object... arguments) {
     return execute(driver.getWebDriver(), arguments);
   }
 
-  @Nonnull
-  @CheckReturnValue
+  @CanIgnoreReturnValue
   @SuppressWarnings("unchecked")
   public <T> T executeOrFail(Driver driver, Object... arguments) {
-    List<Object> result = execute(driver, arguments);
+    List<@Nullable Object> result = requireNonNull(execute(driver, arguments));
     if (result.get(1) != null) {
       throw new IllegalArgumentException((String) result.get(1));
     }
-    return (T) result.get(0);
+    return (T) requireNonNull(result.get(0));
   }
 
   public static JavascriptExecutor jsExecutor(SearchContext context) {

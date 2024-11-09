@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.reporters.ExitCodeListener;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 /**
  * <p>
  * Annotate your test class with {@code @Listeners({ ScreenShooter.class})}
@@ -22,7 +20,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
  *   It doesn't take screenshots for webdrivers created by your code, e.g. using {@code new SelenideDriver()}.
  * </p>
  */
-@ParametersAreNonnullByDefault
 public class ScreenShooter extends ExitCodeListener {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooter.class);
 

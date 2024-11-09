@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.SelenideElementIterator;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.anyLong;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -36,6 +37,7 @@ final class ElementsCollectionTest {
   private final WebElement element1 = mockWebElement("h1", "First");
   private final WebElement element2 = mockWebElement("h2", "Second");
   private final WebElement element3 = mockWebElement("h3", "Third");
+  private final ElementsCollection collection = spy(new ElementsCollection(source));
 
   @BeforeEach
   void mockWebDriver() {
@@ -44,44 +46,49 @@ final class ElementsCollectionTest {
 
   @Test
   void shouldHaveSize() {
-    ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(emptyList());
 
     collection.shouldHave(size(0));
 
+    verify(collection, never()).sleep(any());
+  }
+
+  @Test
+  void shouldHaveSize_doesNotWait_ifSizeIsAlreadyExpected() {
     when(source.getElements()).thenReturn(asList(element1, element2));
+
     collection.shouldHave(size(2));
 
-    verify(collection, never()).sleep(anyLong());
+    verify(collection, never()).sleep(any());
   }
 
   @Test
   void shouldBe() {
-    ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(emptyList());
-
     collection.shouldBe(CollectionCondition.size(0));
+  }
 
+  @Test
+  void shouldBe_size() {
     when(source.getElements()).thenReturn(asList(element1, element2));
     collection.shouldBe(CollectionCondition.size(2));
   }
 
   @Test
   void shouldWithErrorThrown() {
-    ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(emptyList());
 
     assertThatThrownBy(() -> collection.should("Size", Duration.ofMillis(1), CollectionCondition.size(1)))
-      .isInstanceOf(Error.class);
+      .isInstanceOf(ListSizeMismatch.class);
   }
 
   @Test
   void shouldWithRuntimeException() {
-    ElementsCollection collection = new ElementsCollection(source);
-    doThrow(RuntimeException.class).when(source).getElements();
+    doThrow(new IllegalArgumentException("Oops")).when(source).getElements();
 
     assertThatThrownBy(() -> collection.should("Be size 1", Duration.ofMillis(1), CollectionCondition.size(1)))
-      .isInstanceOf(RuntimeException.class);
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Oops");
   }
 
   @Test
@@ -134,7 +141,7 @@ final class ElementsCollectionTest {
       elementWithAttribute("data-test-id", "10001"),
       elementWithAttribute("data-test-id", "20002")
     );
-    List<String> elementsTexts = collection.attributes("data-test-id");
+    var elementsTexts = collection.attributes("data-test-id");
     assertThat(elementsTexts).containsExactly("10001", "20002");
   }
 
@@ -186,30 +193,23 @@ final class ElementsCollectionTest {
 
   @Test
   void doesNotWait_ifConditionAlreadyMatches() {
-    CollectionSource source = mock();
-    when(source.driver()).thenReturn(driver);
-    ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(asList(element1, element2));
 
     collection.shouldHave(size(2));
-    verify(collection, never()).sleep(anyLong());
+    verify(collection, never()).sleep(any());
   }
 
   @Test
   void doesNotWait_ifJavascriptExceptionHappened() {
-    CollectionSource source = mock();
-    when(source.driver()).thenReturn(driver);
-    ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenThrow(new JavascriptException("ReferenceError: Sizzle is not defined"));
 
     assertThatThrownBy(() -> collection.shouldHave(size(0))).isInstanceOf(JavascriptException.class);
 
-    verify(collection, never()).sleep(anyLong());
+    verify(collection, never()).sleep(any());
   }
 
   @Test
   void sleepsAsLessAsPossible_untilConditionGetsMatched() {
-    ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(
       singletonList(element1),
       asList(element1, element2),
@@ -217,7 +217,7 @@ final class ElementsCollectionTest {
     );
 
     collection.shouldHave(size(3));
-    verify(collection, times(2)).sleep(anyLong());
+    verify(collection, times(2)).sleep(any());
   }
 
   private static ElementsCollection collection(String firstText, String secondText) {
@@ -227,7 +227,6 @@ final class ElementsCollectionTest {
   }
 
   private ElementsCollection collection(String first, String second, String third) {
-    ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(source.getElement(0)).thenReturn(element1);
     when(source.getElement(1)).thenReturn(element2);

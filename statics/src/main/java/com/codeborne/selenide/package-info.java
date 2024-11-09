@@ -13,4 +13,9 @@
  * Other classes will come automatically with a help of your IDE.
  * </p>
  */
+@CheckReturnValue
+@NullMarked
 package com.codeborne.selenide;
+
+import com.google.errorprone.annotations.CheckReturnValue;
+import org.jspecify.annotations.NullMarked;

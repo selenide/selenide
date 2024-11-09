@@ -17,6 +17,7 @@ public class AliasTest {
   }
 
   @Test
+  @SuppressWarnings("ResultOfObjectAllocationIgnored")
   void emptyAliasNotAllowed() {
     assertThatThrownBy(() -> new Alias(""))
       .isInstanceOf(IllegalArgumentException.class)

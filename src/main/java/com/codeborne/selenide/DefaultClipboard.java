@@ -5,9 +5,6 @@ import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v130.browser.Browser;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -18,11 +15,11 @@ import java.util.Optional;
 
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.instanceOf;
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
 import static org.openqa.selenium.devtools.v130.browser.model.PermissionType.CLIPBOARDREADWRITE;
 import static org.openqa.selenium.devtools.v130.browser.model.PermissionType.CLIPBOARDSANITIZEDWRITE;
 
-@ParametersAreNonnullByDefault
 public class DefaultClipboard implements Clipboard {
   private final Driver driver;
 
@@ -30,15 +27,11 @@ public class DefaultClipboard implements Clipboard {
     this.driver = driver;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public Driver driver() {
     return driver;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public Clipboard object() {
     return this;
@@ -54,12 +47,10 @@ public class DefaultClipboard implements Clipboard {
     return false;
   }
 
-  @CheckReturnValue
-  @Nonnull
   @Override
   public String getText() {
     if (grantPermission()) {
-      return driver.executeJavaScript("return await navigator.clipboard.readText()");
+      return requireNonNull(driver.executeJavaScript("return await navigator.clipboard.readText()"));
     }
     try {
       assertLocalBrowser();

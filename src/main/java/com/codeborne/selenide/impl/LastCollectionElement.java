@@ -4,17 +4,14 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.visible;
 
-@ParametersAreNonnullByDefault
 public class LastCollectionElement extends WebElementSource {
   public static SelenideElement wrap(CollectionSource collection) {
     return (SelenideElement) Proxy.newProxyInstance(
@@ -29,15 +26,11 @@ public class LastCollectionElement extends WebElementSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Driver driver() {
     return collection.driver();
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebElement getWebElement() {
     return lastElementOf(collection.getElements());
   }
@@ -47,22 +40,17 @@ public class LastCollectionElement extends WebElementSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String getSearchCriteria() {
     return collection.getSearchCriteria() + ":last";
   }
 
-  @Nonnull
   @Override
   public String description() {
     return getAlias().getOrElse(() -> collection.shortDescription() + ":last");
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
-  public ElementNotFound createElementNotFoundError(WebElementCondition condition, Throwable cause) {
+  public ElementNotFound createElementNotFoundError(WebElementCondition condition, @Nullable Throwable cause) {
     if (collection.getElements().isEmpty()) {
       return new ElementNotFound(getAlias(), getSearchCriteria(), visible, cause);
     }

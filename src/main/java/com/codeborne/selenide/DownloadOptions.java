@@ -4,11 +4,8 @@ import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.files.FileFilters;
 import com.codeborne.selenide.impl.HasTimeout;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.stream.Stream;
 
@@ -16,7 +13,6 @@ import static com.codeborne.selenide.files.DownloadActions.click;
 import static com.codeborne.selenide.files.FileFilters.none;
 import static java.util.stream.Collectors.joining;
 
-@ParametersAreNonnullByDefault
 public class DownloadOptions implements HasTimeout {
   @Nullable
   private final FileDownloadMode method;
@@ -36,49 +32,38 @@ public class DownloadOptions implements HasTimeout {
     this.action = action;
   }
 
-  @CheckReturnValue
   @Nullable
   public FileDownloadMode getMethod() {
     return method;
   }
 
-  @CheckReturnValue
+  @Nullable
   @Override
   public Duration timeout() {
     return timeout;
   }
 
-  @CheckReturnValue
+  @Nullable
   public Duration incrementTimeout() {
     return incrementTimeout;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public FileFilter getFilter() {
     return filter;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public DownloadAction getAction() {
     return action;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public DownloadOptions withMethod(FileDownloadMode method) {
     return new DownloadOptions(method, timeout, incrementTimeout, filter, action);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public DownloadOptions withTimeout(long timeoutMs) {
     return new DownloadOptions(method, Duration.ofMillis(timeoutMs), incrementTimeout, filter, action);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public DownloadOptions withTimeout(Duration timeout) {
     return new DownloadOptions(method, timeout, incrementTimeout, filter, action);
   }
@@ -97,32 +82,22 @@ public class DownloadOptions implements HasTimeout {
    *
    * @param incrementTimeout should be lesser than download timeout
    */
-  @CheckReturnValue
-  @Nonnull
   public DownloadOptions withIncrementTimeout(Duration incrementTimeout) {
     return new DownloadOptions(method, timeout, incrementTimeout, filter, action);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public DownloadOptions withFilter(FileFilter filter) {
     return new DownloadOptions(method, timeout, incrementTimeout, filter, action);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public DownloadOptions withExtension(String extension) {
     return new DownloadOptions(method, timeout, incrementTimeout, FileFilters.withExtension(extension), action);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public DownloadOptions withName(String fileName) {
     return new DownloadOptions(method, timeout, incrementTimeout, FileFilters.withName(fileName), action);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public DownloadOptions withNameMatching(String fileNameRegex) {
     return new DownloadOptions(method, timeout, incrementTimeout, FileFilters.withNameMatching(fileNameRegex), action);
   }
@@ -135,7 +110,6 @@ public class DownloadOptions implements HasTimeout {
    *
    * @param action any lambda accepting a Driver and WebElement (the element being clicked).
    * @return DownloadOptions
-   * @since 5.22.0
    */
   public DownloadOptions withAction(DownloadAction action) {
     return new DownloadOptions(method, timeout, incrementTimeout, filter, action);
@@ -152,14 +126,10 @@ public class DownloadOptions implements HasTimeout {
       .collect(joining(", "));
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static DownloadOptions file() {
     return new DownloadOptions(null, null, null, none(), click());
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static DownloadOptions using(FileDownloadMode method) {
     return file().withMethod(method);
   }

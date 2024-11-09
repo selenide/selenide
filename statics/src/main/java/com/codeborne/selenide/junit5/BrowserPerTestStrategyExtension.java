@@ -3,9 +3,7 @@ package com.codeborne.selenide.junit5;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 
 /**
  * By using this extension browser will be automatically closed after each test.
@@ -20,9 +18,7 @@ import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
  * <br>
  *
  * @author simple-elf
- * @since 5.21.0
  */
-@ParametersAreNonnullByDefault
 public class BrowserPerTestStrategyExtension implements AfterEachCallback {
   @Override
   public void afterEach(final ExtensionContext context) {

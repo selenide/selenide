@@ -1,6 +1,7 @@
 package integration.server;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import jakarta.servlet.MultipartConfigElement;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
@@ -10,9 +11,6 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.net.BindException;
 import java.util.List;
@@ -23,7 +21,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
-@ParametersAreNonnullByDefault
 public class LocalHttpServer {
   private static final Logger log = LoggerFactory.getLogger(LocalHttpServer.class);
   private final List<UploadedFile> uploadedFiles = new CopyOnWriteArrayList<>();
@@ -31,6 +28,7 @@ public class LocalHttpServer {
   private final Server server;
   private final int port;
 
+  @SuppressWarnings({"resource", "IOResourceOpenedButNotSafelyClosed"})
   LocalHttpServer(int port, boolean ssl, String friendlyOrigin, Map<String, String> basicAuthUsers) {
     this.port = port;
     server = new Server();
@@ -62,16 +60,12 @@ public class LocalHttpServer {
     context.addServlet(new ServletHolder(new FileRenderHandler(sessions)), "/*");
   }
 
-  @Nonnull
-  @CheckReturnValue
   private ServletHolder uploadServletHolder() {
     ServletHolder uploadServlet = new ServletHolder(new FileUploadHandler(uploadedFiles));
     uploadServlet.getRegistration().setMultipartConfig(multipartConfig());
     return uploadServlet;
   }
 
-  @Nonnull
-  @CheckReturnValue
   private MultipartConfigElement multipartConfig() {
     String location = System.getProperty("java.io.tmpdir");
     long maxFileSize = 3 * 1024 * 1024; // 3mb - limit for a single file
@@ -94,6 +88,7 @@ public class LocalHttpServer {
     log.info("Reset sessions & uploaded files");
   }
 
+  @CanIgnoreReturnValue
   public LocalHttpServer start() throws Exception {
     server.start();
     return this;

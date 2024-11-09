@@ -4,18 +4,12 @@ import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
 public class Find implements Command<SelenideElement> {
   @Override
-  @CheckReturnValue
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object... args) {
-    assert args != null;
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object... args) {
+    requireNonNull(args);
 
     return args.length == 1 ?
         locator.find(proxy, args[0], 0) :

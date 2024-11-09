@@ -4,16 +4,12 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.stream.Collectors.toList;
 
-@ParametersAreNonnullByDefault
 public class FilteringCollection implements CollectionSource {
   private final CollectionSource originalCollection;
   private final WebElementCondition filter;
@@ -25,8 +21,6 @@ public class FilteringCollection implements CollectionSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public List<WebElement> getElements() {
     return originalCollection.getElements().stream()
       .filter(webElement -> filter.check(originalCollection.driver(), webElement).verdict() == ACCEPT)
@@ -34,8 +28,6 @@ public class FilteringCollection implements CollectionSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebElement getElement(int index) {
     return originalCollection.getElements().stream()
       .filter(webElement -> filter.check(originalCollection.driver(), webElement).verdict() == ACCEPT)
@@ -45,8 +37,6 @@ public class FilteringCollection implements CollectionSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String getSearchCriteria() {
     return originalCollection.description() + ".filter(" + filter + ')';
   }
@@ -57,13 +47,10 @@ public class FilteringCollection implements CollectionSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Driver driver() {
     return originalCollection.driver();
   }
 
-  @Nonnull
   @Override
   public Alias getAlias() {
     return alias;

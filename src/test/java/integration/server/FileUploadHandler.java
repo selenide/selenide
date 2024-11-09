@@ -9,7 +9,6 @@ import org.eclipse.jetty.server.MultiPartFormInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -44,7 +43,6 @@ class FileUploadHandler extends BaseHandler {
     }
   }
 
-  @Nonnull
   private static UploadedFile multipartToFile(Part item) throws IOException {
     MultiPartFormInputStream.MultiPart i = (MultiPartFormInputStream.MultiPart) item;
     byte[] content = IOUtils.toByteArray(i.getInputStream());

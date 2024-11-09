@@ -8,9 +8,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -60,8 +57,6 @@ public class StepsTest extends IntegrationTest {
     );
   }
 
-  @Nonnull
-  @CheckReturnValue
   private List<String> stepsFromReport() {
     String report = SimpleReportTester.report(events.events());
 
@@ -71,10 +66,7 @@ public class StepsTest extends IntegrationTest {
       .toList();
   }
 
-  @ParametersAreNonnullByDefault
   private static class SimpleReportTester extends SimpleReport {
-    @Nonnull
-    @CheckReturnValue
     static String report(List<LogEvent> events) {
       return new SimpleReportTester().generateReport("", events);
     }

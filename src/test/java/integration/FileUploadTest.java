@@ -3,8 +3,6 @@ package integration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -154,8 +152,6 @@ final class FileUploadTest extends ITest {
       .hasMessageMatching("File not found in classpath:.*goodbye_world.txt");
   }
 
-  @Nonnull
-  @CheckReturnValue
   private File toLocalFile(String fileName) throws URISyntaxException {
     URL url = requireNonNull(getClass().getResource(fileName), () -> "Not found in classpath: " + fileName);
     return new File(url.toURI());

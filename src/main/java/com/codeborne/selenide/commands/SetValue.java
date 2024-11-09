@@ -1,17 +1,14 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.SetValueOptions;
 import com.codeborne.selenide.ex.InvalidStateError;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
-
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.SetValueMethod.JS;
 import static com.codeborne.selenide.SetValueMethod.SEND_KEYS;
@@ -22,8 +19,7 @@ import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-@ParametersAreNonnullByDefault
-public class SetValue implements Command<SelenideElement> {
+public class SetValue extends FluentCommand {
   private final JavaScript js = new JavaScript("set-value.js");
   private final Clear clear;
 
@@ -36,12 +32,10 @@ public class SetValue implements Command<SelenideElement> {
   }
 
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     Driver driver = locator.driver();
     SetValueOptions options = extractOptions(driver.config(), requireNonNull(args));
     setValueForTextInput(driver, locator, options);
-    return proxy;
   }
 
   private SetValueOptions extractOptions(Config config, Object[] args) {
@@ -66,7 +60,7 @@ public class SetValue implements Command<SelenideElement> {
       }
     }
     else {
-      if (value.length() > 0) {
+      if (!value.isEmpty()) {
         clear.clear(driver, element);
         element.sendKeys(value);
       }
@@ -77,6 +71,6 @@ public class SetValue implements Command<SelenideElement> {
   }
 
   private String setValueByJs(Driver driver, WebElement element, CharSequence text) {
-    return js.execute(driver, element, text);
+    return requireNonNull(js.execute(driver, element, text));
   }
 }

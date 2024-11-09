@@ -6,23 +6,17 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebDriverException;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
 
-@ParametersAreNonnullByDefault
 public class DescribeElement implements Command<String> {
   private final ElementDescriber describe = inject(ElementDescriber.class);
 
   @Override
-  @CheckReturnValue
-  @Nonnull
-  public String execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  @SuppressWarnings("ErrorNotRethrown")
+  public String execute(SelenideElement proxy, WebElementSource locator, Object @Nullable [] args) {
     try {
       return describe.fully(locator.driver(), locator.getWebElement());
     } catch (WebDriverException elementDoesNotExist) {

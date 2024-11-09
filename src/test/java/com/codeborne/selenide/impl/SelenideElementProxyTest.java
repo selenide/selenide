@@ -26,8 +26,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.exist;
@@ -211,7 +209,6 @@ final class SelenideElementProxyTest {
     verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
-  @ParametersAreNonnullByDefault
   private static class TestEventListener implements LogEventListener {
 
     private final String expectSelector;
@@ -349,7 +346,6 @@ final class SelenideElementProxyTest {
     assertThat(isSelenideElementMethod(SelenideChildElement.class.getMethod("hook"))).isTrue();
   }
 
-  @ParametersAreNonnullByDefault
   private interface SelenideChildElement extends SelenideElement {
     SelenideChildElement hook();
   }

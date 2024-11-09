@@ -2,11 +2,8 @@ package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.impl.Html;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
 public class ExactTextsCaseSensitive extends ExactTexts {
   public ExactTextsCaseSensitive(String... expectedTexts) {
     super(expectedTexts);
@@ -16,7 +13,6 @@ public class ExactTextsCaseSensitive extends ExactTexts {
     super(expectedTexts);
   }
 
-  @CheckReturnValue
   @Override
   protected boolean check(String actualText, String expectedText) {
     return Html.text.equalsCaseSensitive(actualText, expectedText);

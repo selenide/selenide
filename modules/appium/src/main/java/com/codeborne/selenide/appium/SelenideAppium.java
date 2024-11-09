@@ -7,9 +7,6 @@ import com.codeborne.selenide.impl.WebElementWrapper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.Set;
 
@@ -21,7 +18,6 @@ import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
  * <p>
  * You start with methods {@link #launchApp()} for launching the tested application
  */
-@ParametersAreNonnullByDefault
 public class SelenideAppium {
   private static final AppiumNavigator appiumNavigator = new AppiumNavigator();
   private static final DeepLinkLauncher deepLinkLauncher = new DeepLinkLauncher();
@@ -41,7 +37,7 @@ public class SelenideAppium {
    * Open a deep link for an IOS application
    * @param deepLinkUrl - deep link url
    */
-  public static void openIOSDeepLink(@Nonnull String deepLinkUrl) {
+  public static void openIOSDeepLink(String deepLinkUrl) {
     if (!hasWebDriverStarted()) {
       launchApp();
     }
@@ -52,7 +48,7 @@ public class SelenideAppium {
    * @param deepLinkUrl - deep link url
    * @param appPackage - Android application package
    */
-  public static void openAndroidDeepLink(@Nonnull String deepLinkUrl, @Nonnull String appPackage) {
+  public static void openAndroidDeepLink(String deepLinkUrl, String appPackage) {
     if (!hasWebDriverStarted()) {
       launchApp();
     }
@@ -74,56 +70,38 @@ public class SelenideAppium {
     Selenide.back();
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static SelenideAppiumTargetLocator switchTo() {
     return new SelenideAppiumTargetLocator(WebDriverRunner.driver());
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static Set<String> getContextHandles() {
     return switchTo().getContextHandles();
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static String getCurrentContext() {
     return switchTo().getCurrentContext();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumElement $x(String xpathExpression) {
     return $(By.xpath(xpathExpression), 0);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumElement $(By seleniumSelector) {
     return $(seleniumSelector, 0);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumElement $(By seleniumSelector, int index) {
     return ElementFinder.wrap(driver(), SelenideAppiumElement.class, null, seleniumSelector, index);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumElement $(WebElement webElement) {
     return WebElementWrapper.wrap(SelenideAppiumElement.class, driver(), webElement);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumCollection $$(By selector) {
     return new SelenideAppiumCollection(driver(), selector);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumCollection $$(Collection<? extends WebElement> elements) {
     return new SelenideAppiumCollection(driver(), elements);
   }

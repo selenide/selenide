@@ -12,14 +12,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ParametersAreNonnullByDefault
 final class ChildElementTest extends ITest {
   @BeforeEach
   void openPage() {
@@ -67,7 +63,6 @@ final class ChildElementTest extends ITest {
 
   public static WebElementCondition child(String childCssSelector, WebElementCondition condition) {
     return new WebElementCondition("child " + childCssSelector + " with " + condition.getName()) {
-      @Nonnull
       @Override
       public CheckResult check(Driver driver, WebElement element) {
         WebElement child = element.findElement(By.cssSelector(childCssSelector));

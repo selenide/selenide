@@ -1,17 +1,14 @@
 package com.codeborne.selenide.conditions.webdriver;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
 
-@ParametersAreNonnullByDefault
 public class UrlContaining extends UrlCondition {
   public UrlContaining(String expectedUrl) {
     super("containing ", expectedUrl);
   }
 
-  @CheckReturnValue
   @Override
-  public boolean test(String url) {
-    return url.contains(expectedUrl);
+  public boolean test(@Nullable String url) {
+    return url != null && url.contains(expectedUrl);
   }
 }

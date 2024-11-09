@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -11,38 +12,27 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-@ParametersAreNonnullByDefault
 public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(ChromeDriverFactory.class);
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     ChromeOptions chromeOptions = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     log.debug("Chrome options: {}", chromeOptions);
     return new ChromeDriver(buildService(config), chromeOptions);
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected ChromeDriverService buildService(Config config) {
     return withLog(config, new ChromeDriverService.Builder());
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public ChromeOptions createCapabilities(Config config, Browser browser,
                                           @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     ChromeOptions commonCapabilities = createCommonCapabilities(new ChromeOptions(), config, browser, proxy);
@@ -67,14 +57,10 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
     options.addArguments("--headless=new");
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected List<String> createChromeArguments(Config config, Browser browser) {
     return createChromiumArguments(config, System.getProperty("chromeoptions.args"));
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected String[] excludeSwitches(Capabilities capabilities) {
     return hasExtensions(capabilities) ?
       new String[]{"enable-automation"} :
@@ -96,8 +82,6 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected Map<String, Object> mobileEmulation() {
     String mobileEmulation = System.getProperty("chromeoptions.mobileEmulation", "");
     return parsePreferencesFromString(mobileEmulation);

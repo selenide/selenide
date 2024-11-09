@@ -17,20 +17,15 @@ import org.openqa.selenium.firefox.HasFullPageScreenshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.unwrap;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Implementation of {@link Photographer} which can take full-size screenshots.
- *
- * @since 6.7.0
  */
-@ParametersAreNonnullByDefault
 public class FullSizePhotographer implements Photographer {
   private static final Logger log = LoggerFactory.getLogger(FullSizePhotographer.class);
   private static final JavaScript js = new JavaScript("get-screen-size.js");
@@ -45,9 +40,7 @@ public class FullSizePhotographer implements Photographer {
     this.defaultImplementation = defaultImplementation;
   }
 
-  @Nonnull
   @Override
-  @CheckReturnValue
   public <T> Optional<T> takeScreenshot(Driver driver, OutputType<T> outputType) {
     try {
       Optional<T> result = takeFullSizeScreenshot(driver, outputType);
@@ -60,7 +53,6 @@ public class FullSizePhotographer implements Photographer {
     }
   }
 
-  @Nonnull
   private <T> Optional<T> takeFullSizeScreenshot(Driver driver, OutputType<T> outputType) {
     WebDriver webDriver = unwrap(driver.getWebDriver());
 
@@ -76,8 +68,6 @@ public class FullSizePhotographer implements Photographer {
     return Optional.empty();
   }
 
-  @Nonnull
-  @CheckReturnValue
   private <WD extends WebDriver & HasDevTools, ResultType> Optional<ResultType> takeScreenshot(
     WD devtoolsDriver, OutputType<ResultType> outputType
   ) {
@@ -101,8 +91,6 @@ public class FullSizePhotographer implements Photographer {
     return Optional.of(screenshot);
   }
 
-  @Nonnull
-  @CheckReturnValue
   private <WD extends WebDriver & HasCdp, ResultType> Optional<ResultType> takeScreenshotWithCDP(
     WD cdpDriver, OutputType<ResultType> outputType
   ) {
@@ -125,7 +113,7 @@ public class FullSizePhotographer implements Photographer {
   }
 
   private Options getOptions(WebDriver webDriver) {
-    Map<String, Object> size = js.execute(webDriver);
+    Map<String, Object> size = requireNonNull(js.execute(webDriver));
     return new Options((long) size.get("fullWidth"), (long) size.get("fullHeight"), (boolean) size.get("exceedViewport"));
   }
 

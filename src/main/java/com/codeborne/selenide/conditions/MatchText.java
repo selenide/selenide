@@ -3,12 +3,8 @@ package com.codeborne.selenide.conditions;
 import com.codeborne.selenide.TextCheck;
 import com.codeborne.selenide.impl.Html;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-@ParametersAreNonnullByDefault
 public class MatchText extends TextCondition {
 
   public MatchText(String regex) {
@@ -18,7 +14,6 @@ public class MatchText extends TextCondition {
     }
   }
 
-  @CheckReturnValue
   @Override
   protected boolean match(String actualText, String expectedText) {
     throw new UnsupportedOperationException();

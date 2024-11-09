@@ -41,7 +41,7 @@ public class AppiumElementDescriberTest {
   public void printsTagName_ifPresent() {
     givenIosDriver();
     when(element.getTagName()).thenReturn("XCUIElementTypeImage");
-    when(element.getAttribute("class")).thenThrow(new UnsupportedCommandException());
+    when(element.getAttribute("class")).thenThrow(new UnsupportedCommandException("Oops"));
 
     assertThat(describer.briefly(driver, element))
       .isEqualTo("<XCUIElementTypeImage>?</XCUIElementTypeImage>");
@@ -62,7 +62,7 @@ public class AppiumElementDescriberTest {
   public void canExtractTextFromAttributeText() {
     givenIosDriver();
     when(element.getTagName()).thenReturn("XCUIElementTypeImage");
-    when(element.getText()).thenReturn(null);
+    when(element.getText()).thenReturn("");
     when(element.getAttribute("text")).thenReturn("element text");
 
     assertThat(describer.briefly(driver, element))
@@ -92,7 +92,7 @@ public class AppiumElementDescriberTest {
   @Test
   public void extractsTagNameFromClassName_inAndroid() {
     givenAndroidDriver();
-    when(element.getTagName()).thenReturn(null);
+    when(element.getTagName()).thenReturn("");
     when(element.getAttribute("class")).thenReturn("android.widget.TextView");
     when(element.getAttribute("className")).thenReturn("android.widget.TextView");
     when(element.getAttribute("text")).thenReturn("Hello, world");
@@ -174,7 +174,7 @@ public class AppiumElementDescriberTest {
 
   @Test
   void isUnsupportedAttributeError_android() {
-    assertThat(isUnsupportedAttributeError(new UnsupportedCommandException())).isTrue();
+    assertThat(isUnsupportedAttributeError(new UnsupportedCommandException("Oops"))).isTrue();
   }
 
   @Test

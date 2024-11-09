@@ -21,7 +21,7 @@ final class FindByXpathCommandTest {
 
   @Test
   void noArgs() {
-    assertThatThrownBy(() -> command.execute(proxy, locator))
+    assertThatThrownBy(() -> command.execute(proxy, locator, new Object[0]))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Missing arguments");
   }

@@ -17,47 +17,39 @@ import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 
-@ParametersAreNonnullByDefault
 public final class CollectionCondition {
   public static WebElementsCondition empty = size(0);
 
   /**
    * Checks that collection has the given size
    */
-  @CheckReturnValue
   public static WebElementsCondition size(int expectedSize) {
     return new ListSize(expectedSize);
   }
 
-  @CheckReturnValue
   public static WebElementsCondition sizeGreaterThan(int expectedSize) {
     return new SizeGreaterThan(expectedSize);
   }
 
-  @CheckReturnValue
   public static WebElementsCondition sizeGreaterThanOrEqual(int expectedSize) {
     return new SizeGreaterThanOrEqual(expectedSize);
   }
 
-  @CheckReturnValue
   public static WebElementsCondition sizeLessThan(int expectedSize) {
     return new SizeLessThan(expectedSize);
   }
 
-  @CheckReturnValue
   public static WebElementsCondition sizeLessThanOrEqual(int size) {
     return new SizeLessThanOrEqual(size);
   }
 
-  @CheckReturnValue
   public static WebElementsCondition sizeNotEqual(int expectedSize) {
     return new SizeNotEqual(expectedSize);
   }
@@ -67,7 +59,6 @@ public final class CollectionCondition {
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  @CheckReturnValue
   public static WebElementsCondition texts(String... expectedTexts) {
     return new Texts(expectedTexts);
   }
@@ -77,7 +68,6 @@ public final class CollectionCondition {
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  @CheckReturnValue
   public static WebElementsCondition texts(List<String> expectedTexts) {
     return new Texts(expectedTexts);
   }
@@ -87,7 +77,6 @@ public final class CollectionCondition {
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  @CheckReturnValue
   public static WebElementsCondition textsInAnyOrder(String... expectedTexts) {
     return new TextsInAnyOrder(expectedTexts);
   }
@@ -97,7 +86,6 @@ public final class CollectionCondition {
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  @CheckReturnValue
   public static WebElementsCondition textsInAnyOrder(List<String> expectedTexts) {
     return new TextsInAnyOrder(expectedTexts);
   }
@@ -107,7 +95,6 @@ public final class CollectionCondition {
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  @CheckReturnValue
   public static WebElementsCondition exactTexts(String... expectedTexts) {
     return new ExactTexts(expectedTexts);
   }
@@ -117,7 +104,6 @@ public final class CollectionCondition {
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  @CheckReturnValue
   public static WebElementsCondition exactTexts(List<String> expectedTexts) {
     return new ExactTexts(expectedTexts);
   }
@@ -125,8 +111,7 @@ public final class CollectionCondition {
   /**
    * @see #attributes(String, List)
    */
-  @CheckReturnValue
-  public static WebElementsCondition attributes(String attribute, String... expectedValues) {
+  public static WebElementsCondition attributes(String attribute, @Nullable String... expectedValues) {
     return attributes(attribute, asList(expectedValues));
   }
 
@@ -135,7 +120,6 @@ public final class CollectionCondition {
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  @CheckReturnValue
   public static WebElementsCondition attributes(String attribute, List<String> expectedValues) {
     return new Attributes(attribute, expectedValues);
   }
@@ -145,7 +129,6 @@ public final class CollectionCondition {
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  @CheckReturnValue
   public static WebElementsCondition exactTextsCaseSensitive(String... expectedTexts) {
     return new ExactTextsCaseSensitive(expectedTexts);
   }
@@ -155,7 +138,6 @@ public final class CollectionCondition {
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  @CheckReturnValue
   public static WebElementsCondition exactTextsCaseSensitive(List<String> expectedTexts) {
     return new ExactTextsCaseSensitive(expectedTexts);
   }
@@ -166,7 +148,6 @@ public final class CollectionCondition {
    * @param description The description of the given predicate
    * @param predicate   the {@link java.util.function.Predicate} to match
    */
-  @CheckReturnValue
   public static WebElementsCondition anyMatch(String description, java.util.function.Predicate<WebElement> predicate) {
     return new AnyMatch(description, predicate);
   }
@@ -177,7 +158,6 @@ public final class CollectionCondition {
    * @param description The description of the given predicate
    * @param predicate   the {@link java.util.function.Predicate} to match
    */
-  @CheckReturnValue
   public static WebElementsCondition allMatch(String description, java.util.function.Predicate<WebElement> predicate) {
     return new AllMatch(description, predicate);
   }
@@ -188,7 +168,6 @@ public final class CollectionCondition {
    * @param description The description of the given predicate
    * @param predicate   the {@link java.util.function.Predicate} to match
    */
-  @CheckReturnValue
   public static WebElementsCondition noneMatch(String description, java.util.function.Predicate<WebElement> predicate) {
     return new NoneMatch(description, predicate);
   }
@@ -199,7 +178,6 @@ public final class CollectionCondition {
    *
    * @param expectedText The expected text in the collection
    */
-  @CheckReturnValue
   public static WebElementsCondition itemWithText(String expectedText) {
     return new ItemWithText(expectedText);
   }
@@ -226,7 +204,6 @@ public final class CollectionCondition {
    *
    * @param expectedTexts the expected texts that the collection should contain
    */
-  @CheckReturnValue
   public static WebElementsCondition containExactTextsCaseSensitive(String... expectedTexts) {
     return new ContainExactTextsCaseSensitive(expectedTexts);
   }
@@ -256,7 +233,6 @@ public final class CollectionCondition {
    *
    * @param expectedTexts the expected texts that the collection should contain
    */
-  @CheckReturnValue
   public static WebElementsCondition containExactTextsCaseSensitive(List<String> expectedTexts) {
     return new ContainExactTextsCaseSensitive(expectedTexts);
   }
@@ -268,7 +244,6 @@ public final class CollectionCondition {
    *
    * @param expectedTexts Expected texts in any order in the collection
    */
-  @CheckReturnValue
   public static WebElementsCondition exactTextsCaseSensitiveInAnyOrder(List<String> expectedTexts) {
     return new ExactTextsCaseSensitiveInAnyOrder(expectedTexts);
   }
@@ -280,7 +255,6 @@ public final class CollectionCondition {
    *
    * @param expectedTexts Expected texts in any order in the collection
    */
-  @CheckReturnValue
   public static WebElementsCondition exactTextsCaseSensitiveInAnyOrder(String... expectedTexts) {
     return new ExactTextsCaseSensitiveInAnyOrder(expectedTexts);
   }

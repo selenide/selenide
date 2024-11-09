@@ -1,10 +1,5 @@
 package com.codeborne.selenide.appium;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class AppiumScrollOptions {
 
   private final ScrollDirection scrollDirection;
@@ -42,50 +37,34 @@ public class AppiumScrollOptions {
     }
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static AppiumScrollOptions with(ScrollDirection scrollDirection, int maxSwipeCount) {
     return new AppiumScrollOptions(scrollDirection, maxSwipeCount);
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static AppiumScrollOptions with(ScrollDirection scrollDirection, float topPointHeightPercent, float bottomPointHeightPercent) {
     return new AppiumScrollOptions(scrollDirection, DEFAULT_MAX_SWIPE_COUNTS, topPointHeightPercent, bottomPointHeightPercent);
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static AppiumScrollOptions down() {
     return new AppiumScrollOptions(ScrollDirection.DOWN, DEFAULT_MAX_SWIPE_COUNTS);
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static AppiumScrollOptions down(int maxSwipeCount) {
     return new AppiumScrollOptions(ScrollDirection.DOWN, maxSwipeCount);
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static AppiumScrollOptions up() {
     return new AppiumScrollOptions(ScrollDirection.UP, DEFAULT_MAX_SWIPE_COUNTS);
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static AppiumScrollOptions up(int maxSwipeCount) {
     return new AppiumScrollOptions(ScrollDirection.UP, maxSwipeCount);
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static AppiumScrollOptions up(float topPointHeightPercent, float bottomPointHeightPercent) {
     return new AppiumScrollOptions(ScrollDirection.UP, DEFAULT_MAX_SWIPE_COUNTS, topPointHeightPercent, bottomPointHeightPercent);
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static AppiumScrollOptions down(float topPointHeightPercent, float bottomPointHeightPercent) {
     return new AppiumScrollOptions(ScrollDirection.DOWN, DEFAULT_MAX_SWIPE_COUNTS, topPointHeightPercent, bottomPointHeightPercent);
   }
@@ -93,29 +72,23 @@ public class AppiumScrollOptions {
   /**
    * @deprecated Use {@link #getMaxSwipeCount()} instead
    */
-  @CheckReturnValue
   @Deprecated
   public int getMaxSwipeCounts() {
     return maxSwipeCount;
   }
 
-  @CheckReturnValue
   public int getMaxSwipeCount() {
     return maxSwipeCount;
   }
 
-  @Nonnull
-  @CheckReturnValue
   public ScrollDirection getScrollDirection() {
     return scrollDirection;
   }
 
-  @CheckReturnValue
   public float getTopPointHeightPercent() {
     return topPointHeightPercent;
   }
 
-  @CheckReturnValue
   public float getBottomPointHeightPercent() {
     return bottomPointHeightPercent;
   }

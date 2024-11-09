@@ -3,7 +3,9 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.apache.commons.io.FileUtils;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -13,10 +15,6 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -39,15 +37,17 @@ import java.util.stream.Stream;
 
 import static com.codeborne.selenide.impl.FileHelper.ensureParentFolderExists;
 import static com.codeborne.selenide.impl.Plugins.inject;
+import static com.codeborne.selenide.impl.Screenshot.none;
 import static java.io.File.separatorChar;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNullElse;
+import static java.util.Objects.requireNonNullElseGet;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 import static org.openqa.selenium.OutputType.BYTES;
 import static org.openqa.selenium.OutputType.FILE;
 
-@ParametersAreNonnullByDefault
 public class ScreenShotLaboratory {
   private static final Logger log = LoggerFactory.getLogger(ScreenShotLaboratory.class);
 
@@ -65,7 +65,7 @@ public class ScreenShotLaboratory {
   protected AtomicLong screenshotCounter = new AtomicLong();
 
   protected final ThreadLocal<String> currentContext = withInitial(() -> "");
-  protected final ThreadLocal<List<Screenshot>> currentContextScreenshots = new ThreadLocal<>();
+  protected final ThreadLocal<@Nullable List<Screenshot>> currentContextScreenshots = new ThreadLocal<>();
   protected final ThreadLocal<List<Screenshot>> threadScreenshots = withInitial(ArrayList::new);
 
   private ScreenShotLaboratory() {
@@ -78,14 +78,10 @@ public class ScreenShotLaboratory {
     this.clock = clock;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Screenshot takeScreenShot(Driver driver, String className, String methodName) {
     return takeScreenshot(driver, getScreenshotFileName(className, methodName), true, true);
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected String getScreenshotFileName(String className, String methodName) {
     return className.replace('.', separatorChar) + separatorChar +
       methodName + '.' + clock.timestamp();
@@ -102,16 +98,13 @@ public class ScreenShotLaboratory {
    * @param fileName name of file (without extension) to store screenshot to.
    * @return instance of {@link Screenshot} containing both files
    */
-  @CheckReturnValue
-  @Nonnull
   public Screenshot takeScreenshot(Driver driver, String fileName, boolean saveScreenshot, boolean savePageSource) {
     Screenshot screenshot = ifWebDriverStarted(driver, webDriver ->
       ifReportsFolderNotNull(driver.config(), config ->
         takeScreenShot(config, driver, fileName, saveScreenshot, savePageSource)));
-    return screenshot != null ? screenshot : Screenshot.none();
+    return screenshot != null ? screenshot : none();
   }
 
-  @CheckReturnValue
   @Nullable
   public <T> T takeScreenShot(Driver driver, OutputType<T> outputType) {
     return ifWebDriverStarted(driver, webDriver ->
@@ -127,8 +120,6 @@ public class ScreenShotLaboratory {
     return screenshot;
   }
 
-  @CheckReturnValue
-  @Nonnull
   private Screenshot takeScreenShot(Config config, Driver driver, String fileName, boolean saveScreenshot, boolean savePageSource) {
     File source = savePageSource ? savePageSourceToFile(config, fileName, driver) : null;
     File image = saveScreenshot ? savePageImageToFile(config, fileName, driver) : null;
@@ -137,31 +128,20 @@ public class ScreenShotLaboratory {
     return screenshot;
   }
 
-  @CheckReturnValue
-  @Nullable
   public File takeScreenshot(Driver driver, WebElement element) {
     try {
       BufferedImage destination = takeScreenshotAsImage(driver, element);
-      if (destination != null) {
-        return writeToFile(driver, destination);
-      }
+      return writeToFile(driver, destination);
     }
     catch (IOException e) {
-      log.error("Failed to take screenshot of {}", element, e);
+      throw new RuntimeException("Failed to take screenshot of " + element, e);
     }
-    return null;
   }
 
-  @CheckReturnValue
-  @Nullable
   public BufferedImage takeScreenshotAsImage(Driver driver, WebElement element) {
-    return ifWebDriverStarted(driver, webdriver ->
-      ifReportsFolderNotNull(driver.config(), config ->
-        takeElementScreenshotAsImage(driver, element).orElse(null)));
+    return takeElementScreenshotAsImage(driver, element).orElseThrow(() -> new RuntimeException("Cannot take screenshot"));
   }
 
-  @CheckReturnValue
-  @Nonnull
   private Optional<BufferedImage> takeElementScreenshotAsImage(Driver driver, WebElement element) {
     if (!(driver.getWebDriver() instanceof TakesScreenshot)) {
       log.warn("Cannot take screenshot because browser does not support screenshots");
@@ -187,13 +167,10 @@ public class ScreenShotLaboratory {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected String generateScreenshotFileName() {
     return currentContext.get() + clock.timestamp() + "." + screenshotCounter.getAndIncrement();
   }
 
-  @CheckReturnValue
   @Nullable
   public File takeScreenshot(Driver driver, WebElement iframe, SelenideElement element) {
     try {
@@ -208,8 +185,6 @@ public class ScreenShotLaboratory {
     return null;
   }
 
-  @CheckReturnValue
-  @Nonnull
   private File writeToFile(Driver driver, BufferedImage destination) throws IOException {
     File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png").getAbsoluteFile();
     ensureParentFolderExists(screenshotOfElement);
@@ -217,7 +192,6 @@ public class ScreenShotLaboratory {
     return screenshotOfElement;
   }
 
-  @CheckReturnValue
   @Nullable
   public BufferedImage takeScreenshotAsImage(Driver driver, WebElement iframe, SelenideElement element) {
     return ifWebDriverStarted(driver, webdriver ->
@@ -227,7 +201,6 @@ public class ScreenShotLaboratory {
   }
 
   @Nullable
-  @CheckReturnValue
   private BufferedImage takeElementScreenshotAsImage(Driver driver, WebElement iframe, SelenideElement element) {
     driver.switchTo().frame(iframe);
     try {
@@ -239,7 +212,6 @@ public class ScreenShotLaboratory {
     }
   }
 
-  @CheckReturnValue
   @Nullable
   public File takeScreenShotAsFile(Driver driver) {
     return ifWebDriverStarted(driver, webDriver -> {
@@ -256,8 +228,9 @@ public class ScreenShotLaboratory {
   }
 
   protected void addToHistory(Screenshot screenshot) {
-    if (currentContextScreenshots.get() != null) {
-      currentContextScreenshots.get().add(screenshot);
+    List<Screenshot> contextScreenshots = currentContextScreenshots.get();
+    if (contextScreenshots != null) {
+      contextScreenshots.add(screenshot);
     }
     synchronized (allScreenshots) {
       allScreenshots.add(screenshot);
@@ -265,11 +238,12 @@ public class ScreenShotLaboratory {
     threadScreenshots.get().add(screenshot);
   }
 
-  @Nonnull
+  @CanIgnoreReturnValue
   private File addToImageHistory(Config config, File imageFile) {
     Screenshot screenshot = new Screenshot(imageFile, toUrl(config, imageFile), null);
-    if (currentContextScreenshots.get() != null) {
-      currentContextScreenshots.get().add(screenshot);
+    List<Screenshot> contextScreenshots = currentContextScreenshots.get();
+    if (contextScreenshots != null) {
+      contextScreenshots.add(screenshot);
     }
     synchronized (allScreenshots) {
       allScreenshots.add(screenshot);
@@ -278,7 +252,6 @@ public class ScreenShotLaboratory {
     return imageFile;
   }
 
-  @CheckReturnValue
   @Nullable
   protected File savePageImageToFile(Config config, String fileName, Driver driver) {
     try {
@@ -306,8 +279,6 @@ public class ScreenShotLaboratory {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected File savePageSourceToFile(Config config, String fileName, Driver driver) {
     return extractor.extract(config, driver.getWebDriver(), fileName);
   }
@@ -322,65 +293,52 @@ public class ScreenShotLaboratory {
     currentContextScreenshots.set(new ArrayList<>());
   }
 
-  @Nonnull
+  @CanIgnoreReturnValue
   public List<Screenshot> finishContext() {
     List<Screenshot> result = currentContextScreenshots.get();
     currentContext.set("");
     currentContextScreenshots.remove();
-    return result;
+    return requireNonNull(result, "Current context is not started");
   }
 
-  @CheckReturnValue
-  @Nonnull
   public List<File> getScreenshots() {
     synchronized (allScreenshots) {
       return allScreenshots.stream()
         .map(screenshot -> screenshot.getImageFile())
         .filter(image -> image != null)
-        .collect(toList());
+        .toList();
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
-  public List<File> getThreadScreenshots() {
+  public List<@Nullable File> getThreadScreenshots() {
     List<Screenshot> screenshots = threadScreenshots.get();
     return streamOf(screenshots)
       .map(screenshot -> screenshot.getImageFile())
-      .collect(toList());
+      .toList();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public List<Screenshot> threadScreenshots() {
-    List<Screenshot> screenshots = threadScreenshots.get();
-    return screenshots == null ? emptyList() : screenshots;
+    return threadScreenshots.get();
   }
 
-  @CheckReturnValue
-  @Nonnull
-  public List<File> getContextScreenshots() {
+  public List<@Nullable File> getContextScreenshots() {
     List<Screenshot> screenshots = currentContextScreenshots.get();
     return streamOf(screenshots)
       .map(screenshot -> screenshot.getImageFile())
-      .collect(toList());
+      .toList();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public List<Screenshot> contextScreenshots() {
     List<Screenshot> screenshots = currentContextScreenshots.get();
-    return screenshots == null ? emptyList() : screenshots;
+    return requireNonNullElse(screenshots, emptyList());
   }
 
-  @CheckReturnValue
   @Nullable
   public File getLastScreenshot() {
     Screenshot screenshot = lastScreenshot();
     return screenshot == null ? null : screenshot.getImageFile();
   }
 
-  @CheckReturnValue
   @Nullable
   public Screenshot lastScreenshot() {
     synchronized (allScreenshots) {
@@ -388,67 +346,44 @@ public class ScreenShotLaboratory {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Optional<File> getLastThreadScreenshot() {
-    List<File> screenshots = getThreadScreenshots();
-    return getLastScreenshot(screenshots);
+    return lastOf(getThreadScreenshots());
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Optional<Screenshot> lastThreadScreenshot() {
-    List<Screenshot> screenshots = threadScreenshots();
-    return lastScreenshot(screenshots);
+    return lastOf(threadScreenshots());
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Optional<File> getLastContextScreenshot() {
-    List<File> screenshots = getContextScreenshots();
-    return getLastScreenshot(screenshots);
+    return lastOf(getContextScreenshots());
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Optional<Screenshot> lastContextScreenshot() {
-    List<Screenshot> screenshots = contextScreenshots();
-    return lastScreenshot(screenshots);
+    return lastOf(contextScreenshots());
   }
 
-  @CheckReturnValue
-  @Nonnull
-  private Optional<File> getLastScreenshot(@Nullable List<File> screenshots) {
+  private static <T> Optional<T> lastOf(@Nullable List<T> screenshots) {
     return screenshots == null || screenshots.isEmpty()
       ? Optional.empty()
       : Optional.of(screenshots.get(screenshots.size() - 1));
   }
 
-  @CheckReturnValue
-  @Nonnull
-  private Optional<Screenshot> lastScreenshot(@Nullable List<Screenshot> screenshots) {
-    return screenshots == null || screenshots.isEmpty()
-      ? Optional.empty()
-      : Optional.of(screenshots.get(screenshots.size() - 1));
-  }
-
-  @CheckReturnValue
-  @Nonnull
+  @CanIgnoreReturnValue
   public Screenshot takeScreenshot(Driver driver, boolean saveScreenshot, boolean savePageSource) {
     Screenshot screenshot = ifWebDriverStarted(driver, webDriver ->
       ifReportsFolderNotNull(driver.config(), config ->
         takeScreenShot(config, driver, generateScreenshotFileName(), saveScreenshot, savePageSource)));
-    return screenshot != null ? screenshot : Screenshot.none();
+    return requireNonNullElseGet(screenshot, () -> none());
   }
 
-  @CheckReturnValue
   @Nullable
   private String toUrl(Config config, @Nullable File file) {
     if (file == null) {
       return null;
     }
-    else if (config.reportsUrl() != null) {
-      return formatScreenShotURL(config.reportsUrl(), file.getAbsolutePath());
+    String reportsUrl = config.reportsUrl();
+    if (reportsUrl != null) {
+      return formatScreenShotURL(reportsUrl, file.getAbsolutePath());
     }
     try {
       return file.getCanonicalFile().toURI().toURL().toExternalForm();
@@ -458,8 +393,6 @@ public class ScreenShotLaboratory {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   private String formatScreenShotURL(String reportsURL, String screenshot) {
     Path current = Paths.get(System.getProperty("user.dir"));
     Path target = Paths.get(screenshot).normalize();
@@ -473,28 +406,20 @@ public class ScreenShotLaboratory {
     return normalizeURL(reportsURL, screenShotPath);
   }
 
-  @CheckReturnValue
-  @Nonnull
   private String normalizeURL(String reportsURL, String path) {
     return appendSlash(reportsURL) + encodePath(path);
   }
 
-  @CheckReturnValue
-  @Nonnull
   private String appendSlash(String url) {
     return url.endsWith("/") ? url : url + "/";
   }
 
-  @CheckReturnValue
-  @Nonnull
   String encodePath(String path) {
     return REGEX_PLUS.matcher(Arrays.stream(path.split("/"))
       .map(this::encode)
       .collect(joining("/"))).replaceAll("%20");
   }
 
-  @CheckReturnValue
-  @Nonnull
   private String encode(String str) {
     try {
       return URLEncoder.encode(str, StandardCharsets.UTF_8.name());
@@ -505,14 +430,12 @@ public class ScreenShotLaboratory {
     }
   }
 
-  @CheckReturnValue
   private static boolean isInsideFolder(Path root, Path other) {
     return other.startsWith(root.toAbsolutePath());
   }
 
-  @CheckReturnValue
   @Nullable
-  private <T> T ifWebDriverStarted(Driver driver, Function<WebDriver, T> lambda) {
+  private <T> T ifWebDriverStarted(Driver driver, Function<WebDriver, @Nullable T> lambda) {
     if (!driver.hasWebDriverStarted()) {
       log.warn("Cannot take screenshot because browser is not started");
       return null;
@@ -520,9 +443,9 @@ public class ScreenShotLaboratory {
     return lambda.apply(driver.getWebDriver());
   }
 
-  @CheckReturnValue
   @Nullable
-  private <T> T ifReportsFolderNotNull(Config config, Function<Config, T> lambda) {
+  private <T> T ifReportsFolderNotNull(Config config, Function<Config, @Nullable T> lambda) {
+    //noinspection ConstantValue
     if (config.reportsFolder() == null) {
       log.error("Cannot take screenshot because reportsFolder is null");
       return null;

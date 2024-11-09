@@ -2,10 +2,8 @@ package integration;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
-import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.OutputType;
 
 import javax.imageio.ImageIO;
@@ -18,7 +16,6 @@ import java.util.Base64;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class ScreenshotsTest extends IntegrationTest {
-  @RegisterExtension static ScreenShooterExtension screenshotPerTest = new ScreenShooterExtension();
   private final ScreenShotLaboratory screenshots = ScreenShotLaboratory.getInstance();
 
   @BeforeEach

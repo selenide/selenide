@@ -6,34 +6,23 @@ import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.DurationFormat;
 import com.codeborne.selenide.impl.Screenshot;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.ex.Strings.join;
 
-@ParametersAreNonnullByDefault
 public class SelenideErrorFormatter implements ErrorFormatter {
   private static final DurationFormat df = new DurationFormat();
 
-  @CheckReturnValue
-  @Nonnull
   @Override
   public String generateErrorDetails(AssertionError error, Driver driver, Screenshot screenshot, long timeoutMs) {
     return join(screenshot.summary(), timeout(timeoutMs), causedBy(error.getCause()));
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected String timeout(long timeoutMs) {
     return String.format("Timeout: %s", df.format(timeoutMs));
   }
 
-  @CheckReturnValue
-  @Nonnull
   @Override
   public String actualValue(WebElementCondition condition, Driver driver,
                             @Nullable WebElement element,
@@ -45,8 +34,6 @@ public class SelenideErrorFormatter implements ErrorFormatter {
     return "";
   }
 
-  @CheckReturnValue
-  @Nonnull
   @Override
   public String causedBy(@Nullable Throwable cause) {
     if (cause == null) {

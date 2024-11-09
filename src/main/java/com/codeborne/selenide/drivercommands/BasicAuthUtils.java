@@ -2,14 +2,11 @@ package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.BasicAuthCredentials;
 import com.codeborne.selenide.Credentials;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.HasAuthentication;
 import org.openqa.selenium.UsernameAndPassword;
 import org.openqa.selenium.WebDriver;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -19,9 +16,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static java.util.Locale.ROOT;
 
-@ParametersAreNonnullByDefault
 public class BasicAuthUtils {
-  @Nonnull
   static String appendBasicAuthToURL(String url, @Nullable BasicAuthCredentials credentials) {
     if (credentials == null) {
       return url;
@@ -37,13 +32,10 @@ public class BasicAuthUtils {
 
   }
 
-  @Nonnull
-  @CheckReturnValue
   private static String encode(String value) {
     return URLEncoder.encode(value, UTF_8);
   }
 
-  @CheckReturnValue
   public static boolean registerBasicAuth(WebDriver webDriver, @Nullable Credentials credentials) {
     if (webDriver instanceof HasAuthentication hasAuthentication && credentials instanceof BasicAuthCredentials basicAuth) {
       hasAuthentication.register(
@@ -55,12 +47,10 @@ public class BasicAuthUtils {
     return false;
   }
 
-  @CheckReturnValue
   public static boolean uriMatchesDomain(String url, String domain) {
     return hostMatchesDomain(getHostname(url), domain);
   }
 
-  @CheckReturnValue
   static boolean uriMatchesDomain(URI uri, String domain) {
     return hostMatchesDomain(uri.getHost(), domain);
   }
@@ -78,7 +68,6 @@ public class BasicAuthUtils {
   }
 
   @Nullable
-  @CheckReturnValue
   static String getHostname(String url) {
     try {
       return new URI(url).getHost();
