@@ -76,7 +76,6 @@ final class CollectionElementByConditionTest {
     assertThat(elementNotFoundError)
       .hasMessage(String.format("Element not found {ul#employees li.employee.findBy(visible)}%n" +
         "Expected: visible%n" +
-        "Timeout: 0 ms.%n" +
         "Caused by: NoSuchElementException: with class: employee"));
   }
 
@@ -93,7 +92,6 @@ final class CollectionElementByConditionTest {
     assertThat(elementNotFoundError)
       .hasMessage(String.format("Element not found {ul#employees li.employee.findBy(visible)}%n" +
                                 "Expected: text \"Hello\" (because Successfully logged in)%n" +
-                                "Timeout: 0 ms.%n" +
                                 "Caused by: java.lang.Error: Error message"
       ));
   }

@@ -1,21 +1,14 @@
 package integration.customcommands;
 
-import com.codeborne.selenide.Command;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
 
 import static integration.customcommands.MyFramework.tripleClickCounter;
 
-@ParametersAreNonnullByDefault
-class TripleClick implements Command<MySelenideElement> {
+class TripleClick extends FluentCommand {
   @Override
-  @Nonnull
-  public MySelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     tripleClickCounter.incrementAndGet();
-    return (MySelenideElement) proxy;
   }
 }

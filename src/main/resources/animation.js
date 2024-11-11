@@ -10,7 +10,10 @@
   // when running in background tabs or hidden <iframe>s,
   // in order to improve performance and battery life.
   if (document.visibilityState === 'hidden') {
-    return null;
+    return {
+      animating: false,
+      error: 'You are checking for animations on an inactive(background) tab. It is impossible to check for animations on inactive tab.'
+    };
   }
 
   // wait for two consecutive frames to make sure there are no animations
@@ -19,7 +22,7 @@
       const rect1 = element.getBoundingClientRect();
       window.requestAnimationFrame(() => {
         const rect2 = element.getBoundingClientRect();
-        resolve(!isEqual(rect1, rect2))
+        resolve({animating: !isEqual(rect1, rect2), error: null})
       });
     });
   });

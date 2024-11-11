@@ -5,36 +5,29 @@ import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
+import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
+
 public class LazyCollectionSnapshot implements CollectionSource {
 
   private final CollectionSource delegate;
-
-  private List<WebElement> elementsSnapshot;
+  private final Lazy<List<WebElement>> elementsSnapshot;
 
   LazyCollectionSnapshot(CollectionSource delegate) {
     this.delegate = delegate;
+    this.elementsSnapshot = lazyEvaluated(() -> new ArrayList<>(delegate.getElements()));
   }
 
-  @Nonnull
   @Override
   public List<WebElement> getElements() {
-    if (elementsSnapshot == null) {
-      elementsSnapshot = new ArrayList<>(delegate.getElements());
-    }
-    return elementsSnapshot;
+    return elementsSnapshot.get();
   }
 
-  @Nonnull
   @Override
   public WebElement getElement(int index) {
     return this.getElements().get(index);
   }
 
-  @Nonnull
   @Override
   public String getSearchCriteria() {
     return delegate.getSearchCriteria();
@@ -45,13 +38,11 @@ public class LazyCollectionSnapshot implements CollectionSource {
     return delegate.toString();
   }
 
-  @Nonnull
   @Override
   public Driver driver() {
     return delegate.driver();
   }
 
-  @Nonnull
   @Override
   public Alias getAlias() {
     return delegate.getAlias();

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test::tabs::title</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+
+<h1>Page with DOM attributes and properties</h1>
+<label for="name">
+  Disabled input:
+  <input id="name" disabled>
+</label>
+
+<button id="counter" data-counter="100">Increment counter</button>
+
+<script>
+  const button = document.getElementById('counter')
+  button.addEventListener('click', () => {
+    setTimeout(() => {
+      document.getElementById('name').removeAttribute('disabled')
+      button.setAttribute('data-counter', 1 + parseInt(button.getAttribute('data-counter')))
+      button['data-absent'] = 'none'
+    }, 70)
+  })
+</script>
+</body>
+</html>

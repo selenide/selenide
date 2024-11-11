@@ -6,16 +6,14 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementDescriber;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
 
-@ParametersAreNonnullByDefault
 public abstract class PredicateCollectionCondition extends WebElementsCondition {
   private static final ElementDescriber describe = inject(ElementDescriber.class);
 

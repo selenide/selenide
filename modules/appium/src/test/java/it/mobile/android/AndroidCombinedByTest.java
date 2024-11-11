@@ -1,9 +1,9 @@
 package it.mobile.android;
 
 import com.codeborne.selenide.appium.selector.CombinedBy;
-import io.appium.java_client.AppiumBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
@@ -18,11 +18,10 @@ class AndroidCombinedByTest extends BaseSwagLabsAndroidTest {
 
   @Test
   void combinedByAndroid() {
-
     int index = 1;
     CombinedBy username = CombinedBy
-      .android(AppiumBy.xpath("(//android.widget.EditText)[" + index + "]"))
-      .ios(AppiumBy.xpath("(//XCUIElementTypeTextField)[" + index + "]"));
+      .android(By.xpath("(//android.widget.EditText)[" + index + "]"))
+      .ios(By.xpath("(//XCUIElementTypeTextField)[" + index + "]"));
     //selenide will choose appropriate locator at the runtime
     $(username).shouldBe(visible, ofSeconds(10));
   }

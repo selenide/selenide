@@ -5,12 +5,8 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
-@ParametersAreNonnullByDefault
 public class TagName extends WebElementCondition {
   private final String expectedTagName;
 
@@ -19,8 +15,6 @@ public class TagName extends WebElementCondition {
     this.expectedTagName = expectedTagName;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String actualTagName = element.getTagName();
@@ -28,8 +22,6 @@ public class TagName extends WebElementCondition {
     return new CheckResult(matches, String.format("tag \"%s\"", actualTagName));
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("tag \"%s\"", expectedTagName);

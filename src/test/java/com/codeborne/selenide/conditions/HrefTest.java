@@ -5,15 +5,11 @@ import com.codeborne.selenide.DriverStub;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@ParametersAreNonnullByDefault
 final class HrefTest {
   private final Driver driver = new DriverStub();
 
@@ -55,7 +51,6 @@ final class HrefTest {
       .isEqualTo("https://127.0.0.1:42042/files/файл-с-русским-названием.txt");
   }
 
-  @Nonnull
   private WebElement link(String href) {
     WebElement link = mockElement("click me");
     when(link.getAttribute("href")).thenReturn(href);

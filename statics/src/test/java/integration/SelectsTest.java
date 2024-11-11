@@ -7,12 +7,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
 import static com.codeborne.selenide.Condition.exactValue;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.partialText;
@@ -140,24 +143,20 @@ final class SelectsTest extends IntegrationTest {
   }
 
   @Test
-  void userCanSelectOptionByIndex() {
+  void selectOptionByIndex() {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
 
     select.selectOption(0);
-    assertThat(select.getSelectedOptionText())
-      .isEqualTo("@one.io");
+    assertThat(select.getSelectedOptionText()).isEqualTo("@one.io");
 
     select.selectOption(1);
-    assertThat(select.getSelectedOptionText())
-      .isEqualTo("@two.eu");
+    assertThat(select.getSelectedOptionText()).isEqualTo("@two.eu");
 
     select.selectOption(2);
-    assertThat(select.getSelectedOptionText())
-      .isEqualTo("@three.com");
+    assertThat(select.getSelectedOptionText()).isEqualTo("@three.com");
 
     select.selectOption(3);
-    assertThat(select.getSelectedOptionText())
-      .isEqualTo("@four.ee");
+    assertThat(select.getSelectedOptionText()).isEqualTo("@four.ee");
   }
 
   @Test
@@ -206,8 +205,7 @@ final class SelectsTest extends IntegrationTest {
       .isEqualTo("-- Select your hero --");
 
     $("#hero").selectOptionByValue("john mc'lain");
-    assertThat($("#hero").getText())
-      .isEqualTo("John Mc'Lain");
+    assertThat($("#hero").getText()).isEqualTo("John Mc'Lain");
   }
 
   @Test
@@ -253,6 +251,7 @@ final class SelectsTest extends IntegrationTest {
     $("#cars").shouldHave(partialText("saab").because("Option with text `Saab` is selected"));
     $("#cars").shouldHave(partialTextCaseSensitive("Audi").because("Option with text `Audi` is selected"));
     $("#cars").shouldHave(partialTextCaseSensitive("Saab").because("Option with text `Saab` is selected"));
+    $("#cars-greeting").shouldHave(exactTextCaseSensitive("Yes, saab & audi are my favorite cars!"));
   }
 
   @Test
@@ -286,6 +285,7 @@ final class SelectsTest extends IntegrationTest {
   void optionTextWithApostrophe() {
     $("#hero").selectOption("John Mc'Lain");
     $("#hero").getSelectedOption().shouldHave(value("john mc'lain"));
+    $("#hero-greeting").shouldHave(exactTextCaseSensitive("Yes, john mc'lain is my hero!"), Duration.ofMillis(100));
   }
 
   @Test
@@ -471,6 +471,7 @@ final class SelectsTest extends IntegrationTest {
 
     $("#cars").selectOption("Volvo");
     $("#cars").getSelectedOptions().shouldHave(texts("Volvo"));
+    $("#cars-greeting").shouldHave(exactTextCaseSensitive("Yes, volvo are my favorite cars!"));
   }
 
   @Test
@@ -495,5 +496,56 @@ final class SelectsTest extends IntegrationTest {
     $("#disabled-select").selectOption("Anna");
     $("#disabled-select").getSelectedOption().shouldHave(text("Anna"));
     $("#disabled-select").shouldBe(enabled);
+  }
+
+  @Test
+  void selectOptionByValue_triggersChangeEvent() {
+    $("#hero").selectOptionByValue("john mc'lain");
+    $("#hero-greeting").shouldHave(exactTextCaseSensitive("Yes, john mc'lain is my hero!"), Duration.ofMillis(100));
+  }
+
+  @Test
+  void selectOptionByValue_triggersInputEvent() {
+    $("#cars").selectOptionByValue("saab", "audi");
+    $("#cars-greeting").shouldHave(exactTextCaseSensitive("Yes, saab & audi are my favorite cars!"));
+  }
+
+  @Test
+  void selectOptionByIndex_triggersChangeEvent() {
+    $("#hero").selectOption(2);
+    assertThat($("#hero").getText()).isEqualTo("Arnold \"Schwarzenegger\"");
+    $("#hero-greeting").shouldHave(exactTextCaseSensitive("Yes, arnold \"schwarzenegger\" is my hero!"), Duration.ofMillis(100));
+  }
+
+  @Test
+  void selectOptionByIndex_triggersInputEvent() {
+    $("#cars").selectOption(1, 3);
+    $("#cars-greeting").shouldHave(exactTextCaseSensitive("Yes, saab & audi are my favorite cars!"));
+  }
+
+  @Test
+  void selectOptionByText_triggersChangeEvent() {
+    $("#hero").selectOption("Mickey \"Rock'n'Roll\" Rourke");
+    assertThat($("#hero").getText()).isEqualTo("Mickey \"Rock'n'Roll\" Rourke");
+    $("#hero-greeting").shouldHave(exactTextCaseSensitive("Yes, mickey rourke is my hero!"), Duration.ofMillis(100));
+  }
+
+  @Test
+  void selectOptionByText_triggersInputEvent() {
+    $("#cars").selectOption("Audi", "Volvo", "Opel");
+    $("#cars-greeting").shouldHave(exactTextCaseSensitive("Yes, volvo & opel & audi are my favorite cars!"));
+  }
+
+  @Test
+  void selectOptionByPartialText_triggersChangeEvent() {
+    $("#hero").selectOptionContainingText("ckey");
+    assertThat($("#hero").getText()).isEqualTo("Mickey \"Rock'n'Roll\" Rourke");
+    $("#hero-greeting").shouldHave(exactTextCaseSensitive("Yes, mickey rourke is my hero!"), Duration.ofMillis(100));
+  }
+
+  @Test
+  void selectOptionByPartialText_triggersInputEvent() {
+    $("#cars").selectOptionContainingText("udi", "olvo", "pe");
+    $("#cars-greeting").shouldHave(exactTextCaseSensitive("Yes, volvo & opel & audi are my favorite cars!"));
   }
 }

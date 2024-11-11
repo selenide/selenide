@@ -1,23 +1,19 @@
 package com.codeborne.selenide.appium.commands;
 
-import com.codeborne.selenide.Command;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
+import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 
-@ParametersAreNonnullByDefault
-public class HideKeyboard implements Command<Object> {
-
+public class HideKeyboard extends FluentCommand {
   @Override
-  @Nullable
-  public Object execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     Optional<AndroidDriver> androidDriver = cast(locator.driver().getWebDriver(), AndroidDriver.class);
     Optional<IOSDriver> iosDriver = cast(locator.driver().getWebDriver(), IOSDriver.class);
 
@@ -25,12 +21,11 @@ public class HideKeyboard implements Command<Object> {
       hideKeyBoardForAndroid(androidDriver.get());
     }
     else if (iosDriver.isPresent()) {
-      hideKeyBoardForIos(iosDriver.get(), proxy);
+      hideKeyBoardForIos(iosDriver.get(), locator.getWebElement());
     }
     else {
       throw new UnsupportedOperationException("Cannot hide keyboard for webdriver " + locator.driver().getWebDriver());
     }
-    return proxy;
   }
 
   private void hideKeyBoardForAndroid(AndroidDriver driver) {
@@ -39,7 +34,7 @@ public class HideKeyboard implements Command<Object> {
     }
   }
 
-  private void hideKeyBoardForIos(IOSDriver driver, SelenideElement element) {
+  private void hideKeyBoardForIos(IOSDriver driver, WebElement element) {
     if (driver.isKeyboardShown()) {
       element.sendKeys("\n");
     }

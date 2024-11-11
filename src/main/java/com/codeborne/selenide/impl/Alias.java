@@ -1,12 +1,9 @@
 package com.codeborne.selenide.impl;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+
 import java.util.function.Supplier;
 
-@ParametersAreNonnullByDefault
 public class Alias {
   private final String text;
 
@@ -15,18 +12,14 @@ public class Alias {
     this.text = text;
   }
 
-  @CheckReturnValue
   public String getOrElse(Supplier<String> defaultValue) {
     return text;
   }
 
-  @CheckReturnValue
   public String get(Supplier<String> defaultValue) {
     return text + " {" + defaultValue.get() + '}';
   }
 
-  @Nonnull
-  @CheckReturnValue
   public String appendable() {
     return getText() == null ? "" : " \"" + getText() + "\"";
   }
@@ -34,10 +27,8 @@ public class Alias {
   /**
    * As a rule, you don't need to use this method directly.
    * @return text value of this alias (or empty text if alias is not defined)
-   * @since 5.20.0
    */
   @Nullable
-  @CheckReturnValue
   public String getText() {
     return text;
   }
@@ -50,20 +41,17 @@ public class Alias {
     }
 
     @Override
-    @CheckReturnValue
     public String getOrElse(Supplier<String> defaultValue) {
       return defaultValue.get();
     }
 
     @Override
-    @CheckReturnValue
     public String get(Supplier<String> defaultValue) {
       return defaultValue.get();
     }
 
     @Override
     @Nullable
-    @CheckReturnValue
     public String getText() {
       return null;
     }

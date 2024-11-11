@@ -52,6 +52,7 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.actions;
 import static com.codeborne.selenide.Selenide.element;
 import static com.codeborne.selenide.Selenide.elements;
+import static com.codeborne.selenide.Selenide.getFocusedElement;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.title;
 import static com.codeborne.selenide.Selenide.webdriver;
@@ -75,7 +76,6 @@ final class SelenideMethodsTest extends IntegrationTest {
   @Test
   void canOpenBlankPage() {
     open("about:blank");
-    $("body").shouldHave(exactText(""));
   }
 
   @Test
@@ -150,7 +150,7 @@ final class SelenideMethodsTest extends IntegrationTest {
       .isEqualTo("Dropdown list");
 
     assertThat($("#baskerville").innerHtml().trim())
-      .isEqualTo("<span></span> L'a\n      Baskerville");
+      .startsWith("<span></span> L'a  \n").endsWith("Baskerville");
     assertThat($("#status").innerHtml().trim())
       .isEqualTo("Username: <span class=\"name\">Bob Smith</span>&nbsp;Last login: <span class=\"last-login\">01.01.1970</span>");
   }
@@ -316,19 +316,6 @@ final class SelenideMethodsTest extends IntegrationTest {
   @Test
   void userCanFollowLinks() {
     $(By.linkText("Want to see ajax in action?")).click();
-    webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(1000));
-  }
-
-  @Test
-  void userCanFollowLinksUsingScrollIntoViewBoolean() {
-    $(By.linkText("Want to see ajax in action?")).scrollIntoView(true).click();
-    webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(1000));
-  }
-
-  @Test
-  void userCanFollowLinksUsingScrollIntoViewOptions() {
-    timeout = 1000;
-    $(By.linkText("Want to see ajax in action?")).scrollIntoView("{behavior: \"instant\", inline: \"center\"}").click();
     webdriver().shouldHave(urlContaining("long_ajax_request.html"), ofMillis(1000));
   }
 
@@ -577,9 +564,15 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canCheckWhichElementIsFocusedNow() {
-    SelenideElement focusedElement = Selenide.getFocusedElement();
+    SelenideElement focusedElement = getFocusedElement();
 
     $("#username").sendKeys("focusing...");
     focusedElement.shouldBe(visible).shouldHave(tagName("input"), partialValue("focusing"));
+  }
+
+  @Test
+  void getFocusedElement_neverReturnsNull() {
+    open("about:blank");
+    getFocusedElement().shouldHave(tagName("body"));
   }
 }

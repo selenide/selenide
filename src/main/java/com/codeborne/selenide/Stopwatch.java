@@ -1,17 +1,17 @@
 package com.codeborne.selenide;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import java.time.Duration;
 
 import static java.lang.System.nanoTime;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-@ParametersAreNonnullByDefault
 public class Stopwatch {
   private final long startTimeNano;
   private final long timeoutNano;
+
+  public Stopwatch(Duration timeout) {
+    this(timeout.toMillis());
+  }
 
   public Stopwatch(long timeoutMs) {
     this(timeoutMs, nanoTime());
@@ -22,7 +22,6 @@ public class Stopwatch {
     timeoutNano = MILLISECONDS.toNanos(timeoutMs);
   }
 
-  @CheckReturnValue
   public boolean isTimeoutReached() {
     return isTimeoutReached(nanoTime());
   }

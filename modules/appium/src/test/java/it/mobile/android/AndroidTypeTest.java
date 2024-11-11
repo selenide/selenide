@@ -2,6 +2,7 @@ package it.mobile.android;
 
 import io.appium.java_client.AppiumBy;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -11,8 +12,8 @@ class AndroidTypeTest extends BaseApiDemosTest {
 
   @Test
   void androidType() {
-    $(AppiumBy.xpath(".//*[@text='Views']")).tap();
-    $(AppiumBy.xpath(".//*[@text='TextFields']"))
+    $(By.xpath(".//*[@text='Views']")).tap();
+    $(By.xpath(".//*[@text='TextFields']"))
       .scrollTo()
       .shouldBe(visible)
       .click();

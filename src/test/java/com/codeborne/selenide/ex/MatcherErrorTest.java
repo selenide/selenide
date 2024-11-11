@@ -28,7 +28,6 @@ final class MatcherErrorTest {
         "Expected: all of elements to match [class=active] predicate" + lineSeparator() +
         "Collection: .rows" + lineSeparator() +
         "Elements: <actual-elements>" + lineSeparator() +
-        "Timeout: 4 s." + lineSeparator() +
         "Caused by: NoSuchElementException: .third");
   }
 
@@ -42,7 +41,6 @@ final class MatcherErrorTest {
         "Because: I think so" + lineSeparator() +
         "Collection: .rows" + lineSeparator() +
         "Elements: <actual-elements>" + lineSeparator() +
-        "Timeout: 4 s." + lineSeparator() +
         "Caused by: NoSuchElementException: .third");
   }
 }

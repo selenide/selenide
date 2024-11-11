@@ -1,18 +1,13 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Clean the input field value.
@@ -30,17 +25,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
  *   <li>press "Backspace"</li>
  * </ol>
  */
-@ParametersAreNonnullByDefault
-public class Clear implements Command<SelenideElement> {
+public class Clear extends FluentCommand {
   private static final Logger log = LoggerFactory.getLogger(Clear.class);
 
-  @Nonnull
-  @CheckReturnValue
   @Override
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     WebElement input = locator.findAndAssertElementIsEditable();
     clearAndTrigger(locator.driver(), input);
-    return proxy;
   }
 
   /**
@@ -68,7 +59,7 @@ public class Clear implements Command<SelenideElement> {
   /**
    * Clear the input content without triggering "change" and "blur" events
    */
-  public void clear(Driver driver, WebElement input) {
+  protected void clear(Driver driver, WebElement input) {
     input.clear();
   }
 }

@@ -8,33 +8,23 @@ import org.openqa.selenium.TakesScreenshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.MalformedURLException;
 import java.nio.file.Paths;
 
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 
-@ParametersAreNonnullByDefault
 public class Helper {
   private static final Logger log = LoggerFactory.getLogger(Helper.class);
 
-  @Nonnull
-  @CheckReturnValue
   static String getReportsFolder() {
     String folder = Configuration.headless ? Configuration.browser + "_headless" : Configuration.browser;
     return "statics/build/reports/tests/" + folder;
   }
 
-  @Nonnull
-  @CheckReturnValue
   static String path(String className, String methodName) {
     return "http://ci.org/" + Configuration.reportsFolder + "/integration/errormessages/" + className + "/" + methodName;
   }
 
-  @Nonnull
-  @CheckReturnValue
   static Condition<Throwable> screenshot() {
     return new Condition<>("Screenshot in folder " + Configuration.reportsFolder) {
       @Override
@@ -59,8 +49,6 @@ public class Helper {
     };
   }
 
-  @Nonnull
-  @CheckReturnValue
   static Condition<Throwable> screenshot(String path) {
     return new Condition<>("Screenshot in sub-folder " + path) {
       @Override
@@ -76,8 +64,6 @@ public class Helper {
     };
   }
 
-  @Nonnull
-  @CheckReturnValue
   static Condition<Throwable> webElementNotFound(String selector) {
     return new Condition<>("Selenium error message for missing element " + selector) {
       @Override

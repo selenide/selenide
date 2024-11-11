@@ -26,6 +26,9 @@ public class DateConditionsTest extends ITest {
     $("#birthdate").shouldHave(date(birthday));
     $("#birthdate").shouldHave(dateBetween(birthday.minusDays(1), birthday, "yyyy-MM-dd"));
     $("#birthdate").shouldHave(dateFormat("yyyy-MM-dd"));
+
+    dateBetween(birthday.minusDays(1), birthday, "yyyy-MM-dd");
+    dateFormat("yyyy-MM-dd");
   }
 
   @Test

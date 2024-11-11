@@ -4,13 +4,8 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.commands.GetSelectedOptionText;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-@ParametersAreNonnullByDefault
 public class Text extends CaseInsensitiveTextCondition {
 
   private final GetSelectedOptionText getSelectedOptionsTexts;
@@ -29,8 +24,6 @@ public class Text extends CaseInsensitiveTextCondition {
     this.getSelectedOptionsTexts = getSelectedOptionsTexts;
   }
 
-  @Nullable
-  @CheckReturnValue
   @Override
   protected String getText(Driver driver, WebElement element) {
     return "select".equalsIgnoreCase(element.getTagName()) ?

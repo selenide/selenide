@@ -3,6 +3,7 @@ package com.codeborne.selenide.selector;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.selector.Xpath.NORMALIZE_SPACE_XPATH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ByTextTest {
@@ -13,8 +14,8 @@ class ByTextTest {
       .hasToString("by text: john");
     assertThat(selector)
       .isInstanceOf(By.ByXPath.class);
-    assertThat(selector.getXPath())
-      .isEqualTo(".//*/text()[normalize-space(translate(string(.), '\t\n\r\u00a0', '    ')) = \"john\"]/parent::*");
+    assertThat(selector.getXPath()).isEqualTo(
+      ".//*/text()[%s = \"john\"]/parent::*".formatted(NORMALIZE_SPACE_XPATH));
   }
 
   @Test
@@ -24,8 +25,7 @@ class ByTextTest {
       .hasToString("by text: Ludvig'van\"Beethoven");
     assertThat(selector)
       .isInstanceOf(By.ByXPath.class);
-    assertThat(selector.getXPath())
-      .isEqualTo(".//*/text()[normalize-space(translate(string(.), '\t\n\r ', '    ')) = " +
-        "concat(\"Ludvig'van\", '\"', \"Beethoven\")]/parent::*");
+    assertThat(selector.getXPath()).isEqualTo(
+      ".//*/text()[%s = concat(\"Ludvig'van\", '\"', \"Beethoven\")]/parent::*".formatted(NORMALIZE_SPACE_XPATH));
   }
 }

@@ -1,14 +1,13 @@
 package com.codeborne.selenide.impl;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.regex.Pattern;
 
 import static java.util.Locale.ROOT;
 import static java.util.regex.Pattern.DOTALL;
 
-@ParametersAreNonnullByDefault
 public class Html {
-  private static final Pattern REGEX_SPACES = Pattern.compile("[\\s\\n\\r\u00a0]+");
+  private static final Pattern REGEX_SPACES = Pattern.compile("[\\s\\p{Zs}\u200B\u200C\u200D\u2060]+");
+
   public static Html text = new Html();
 
   public boolean matches(String text, String regex) {

@@ -15,6 +15,7 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
   testImplementation("org.seleniumhq.selenium:selenium-grid:$seleniumVersion") {
     exclude group: 'org.slf4j'
+    exclude group: 'com.google.code.findbugs'
   }
   testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}
 }

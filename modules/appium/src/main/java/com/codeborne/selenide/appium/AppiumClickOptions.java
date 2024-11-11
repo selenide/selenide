@@ -49,5 +49,4 @@ public class AppiumClickOptions extends ClickOptions {
   public Duration longPressHoldDuration() {
     return this.longPressHoldDuration;
   }
-
 }

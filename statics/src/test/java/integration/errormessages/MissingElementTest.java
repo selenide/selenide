@@ -60,7 +60,8 @@ final class MissingElementTest extends IntegrationTest {
   @Test
   void elementNotFound() {
     String path = path("elementNotFound");
-    UIAssertionError e = catchThrowableOfType(() -> $("#h9").shouldHave(text("expected text")), UIAssertionError.class);
+    UIAssertionError e = catchThrowableOfType(UIAssertionError.class, () ->
+      $("#h9").shouldHave(text("expected text")));
     assertThat(e)
       .isInstanceOf(ElementNotFound.class)
       .hasMessageMatching(String.format("Element not found \\{#h9}%n" +
@@ -80,8 +81,8 @@ final class MissingElementTest extends IntegrationTest {
   @Test
   void elementTextDoesNotMatch() {
     String path = path("elementTextDoesNotMatch");
-    UIAssertionError e = catchThrowableOfType(() ->
-      $("h2").shouldHave(text("expected text")), UIAssertionError.class
+    UIAssertionError e = catchThrowableOfType(UIAssertionError.class, () ->
+      $("h2").shouldHave(text("expected text"))
     );
     assertThat(e)
       .isInstanceOf(ElementShould.class)
@@ -98,8 +99,8 @@ final class MissingElementTest extends IntegrationTest {
   @Test
   void elementAttributeDoesNotMatch() {
     String path = path("elementAttributeDoesNotMatch");
-    UIAssertionError e = catchThrowableOfType(() ->
-      $("h2").shouldHave(attribute("name", "header")), UIAssertionError.class
+    UIAssertionError e = catchThrowableOfType(UIAssertionError.class, () ->
+      $("h2").shouldHave(attribute("name", "header"))
     );
     assertThat(e)
       .isInstanceOf(ElementShould.class)
@@ -116,8 +117,8 @@ final class MissingElementTest extends IntegrationTest {
   @Test
   void wrapperTextDoesNotMatch() {
     String path = path("wrapperTextDoesNotMatch");
-    UIAssertionError e = catchThrowableOfType(() ->
-      $(element(By.tagName("h2"))).shouldHave(text("expected text")), UIAssertionError.class
+    UIAssertionError e = catchThrowableOfType(UIAssertionError.class, () ->
+      $(element(By.tagName("h2"))).shouldHave(text("expected text"))
     );
     assertThat(e)
       .isInstanceOf(ElementShould.class)
@@ -134,8 +135,8 @@ final class MissingElementTest extends IntegrationTest {
   @Test
   void clickHiddenElement() {
     String path = path("clickHiddenElement");
-    UIAssertionError e = catchThrowableOfType(() ->
-      $("#theHiddenElement").click(), UIAssertionError.class
+    UIAssertionError e = catchThrowableOfType(UIAssertionError.class, () ->
+      $("#theHiddenElement").click()
     );
     assertThat(e)
       .isInstanceOf(ElementShould.class)
@@ -153,8 +154,8 @@ final class MissingElementTest extends IntegrationTest {
   @Test
   void pageObjectElementTextDoesNotMatch() {
     String path = path("pageObjectElementTextDoesNotMatch");
-    UIAssertionError e = catchThrowableOfType(() ->
-      $(pageObject.header1).shouldHave(text("expected text")), UIAssertionError.class
+    UIAssertionError e = catchThrowableOfType(UIAssertionError.class, () ->
+      $(pageObject.header1).shouldHave(text("expected text"))
     );
     assertThat(e)
       .isInstanceOf(ElementShould.class)
@@ -171,8 +172,8 @@ final class MissingElementTest extends IntegrationTest {
   @Test
   void pageObjectWrapperTextDoesNotMatch() {
     String path = path("pageObjectWrapperTextDoesNotMatch");
-    UIAssertionError e = catchThrowableOfType(() ->
-      $(pageObject.header2).shouldHave(text("expected text")), UIAssertionError.class
+    UIAssertionError e = catchThrowableOfType(UIAssertionError.class, () ->
+      $(pageObject.header2).shouldHave(text("expected text"))
     );
     assertThat(e)
       .isInstanceOf(ElementShould.class)
@@ -188,8 +189,8 @@ final class MissingElementTest extends IntegrationTest {
 
   @Test
   void selectOptionFromMissingList() {
-    UIAssertionError e = catchThrowableOfType(() ->
-      $(pageObject.categoryDropdown).selectOption("SomeOption"), UIAssertionError.class
+    UIAssertionError e = catchThrowableOfType(UIAssertionError.class, () ->
+      $(pageObject.categoryDropdown).selectOption("SomeOption")
     );
     assertThat(e)
       .isInstanceOf(ElementNotFound.class)
@@ -202,8 +203,8 @@ final class MissingElementTest extends IntegrationTest {
   @Test
   void clickMissingWrappedElement() {
     String path = path("clickMissingWrappedElement");
-    UIAssertionError e = catchThrowableOfType(() ->
-      $(pageObject.categoryDropdown).click(), UIAssertionError.class
+    UIAssertionError e = catchThrowableOfType(UIAssertionError.class, () ->
+      $(pageObject.categoryDropdown).click()
     );
     assertThat(e).isInstanceOf(ElementNotFound.class)
       .hasMessageMatching(String.format("Element not found \\{#invalid_id}%n" +
@@ -219,8 +220,8 @@ final class MissingElementTest extends IntegrationTest {
   @Test
   void existingElementShouldNotExist() {
     String path = path("existingElementShouldNotExist");
-    UIAssertionError e = catchThrowableOfType(() ->
-      $("h2").shouldNot(exist), UIAssertionError.class);
+    UIAssertionError e = catchThrowableOfType(UIAssertionError.class, () ->
+      $("h2").shouldNot(exist));
 
     assertThat(e)
       .isInstanceOf(ElementShouldNot.class)
@@ -237,8 +238,8 @@ final class MissingElementTest extends IntegrationTest {
   @Test
   void nonExistingElementShouldNotBeHidden() {
     String path = path("nonExistingElementShouldNotBeHidden");
-    UIAssertionError e = catchThrowableOfType(() ->
-      $("h14").shouldNotBe(hidden), UIAssertionError.class);
+    UIAssertionError e = catchThrowableOfType(UIAssertionError.class, () ->
+      $("h14").shouldNotBe(hidden));
 
     assertThat(e)
       .isInstanceOf(ElementNotFound.class)

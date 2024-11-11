@@ -11,9 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
@@ -21,7 +18,6 @@ import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ParametersAreNonnullByDefault
 final class CustomCollectionConditionTest extends ITest {
 
   @BeforeEach
@@ -70,8 +66,6 @@ final class CustomCollectionConditionTest extends ITest {
       this.prefix = prefix;
     }
 
-    @Nonnull
-    @CheckReturnValue
     @Override
     public CheckResult check(Driver driver, List<WebElement> elements) {
       List<String> actualTexts = communicator.texts(driver, elements);
@@ -102,7 +96,6 @@ final class CustomCollectionConditionTest extends ITest {
       this.c2 = c2;
     }
 
-    @Nonnull
     @Override
     public CheckResult check(CollectionSource collection) {
       CheckResult r1 = c1.check(collection);

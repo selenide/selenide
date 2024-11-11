@@ -11,9 +11,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,9 +44,7 @@ final class CustomWebDriverProviderTest extends IntegrationTest {
 
   private static class CustomWebDriverProvider implements WebDriverProvider {
     @Override
-    @CheckReturnValue
-    @Nonnull
-    public WebDriver createDriver(@Nonnull Capabilities capabilities) {
+    public WebDriver createDriver(Capabilities capabilities) {
       return new CustomChromeDriver(chromeOptions(null));
     }
   }

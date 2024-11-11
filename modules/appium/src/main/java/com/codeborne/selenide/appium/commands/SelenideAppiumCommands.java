@@ -2,9 +2,6 @@ package com.codeborne.selenide.appium.commands;
 
 import com.codeborne.selenide.commands.Commands;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class SelenideAppiumCommands extends Commands {
   public SelenideAppiumCommands() {
     add("dragAndDrop", new AppiumDragAndDrop());

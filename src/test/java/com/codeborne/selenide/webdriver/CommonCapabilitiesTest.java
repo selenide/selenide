@@ -4,6 +4,7 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.SelenideConfig;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
@@ -12,10 +13,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 
 import static com.codeborne.selenide.Browsers.EDGE;
@@ -71,7 +68,7 @@ final class CommonCapabilitiesTest {
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isTrue();
   }
 
-  private boolean asBool(Object raw) {
+  private boolean asBool(@Nullable Object raw) {
     if (raw != null) {
       if (raw instanceof String stringValue) {
         return Boolean.parseBoolean(stringValue);
@@ -87,20 +84,15 @@ final class CommonCapabilitiesTest {
     return new Browser(config.browser(), config.headless());
   }
 
-  @ParametersAreNonnullByDefault
   private static class DummyDriverFactory extends AbstractDriverFactory {
 
     @Override
-    @CheckReturnValue
-    @Nonnull
     public MutableCapabilities createCapabilities(Config config, Browser browser,
                                                   @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
       return new MutableCapabilities();
     }
 
     @Override
-    @CheckReturnValue
-    @Nonnull
     public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
       return new DummyWebDriver();
     }

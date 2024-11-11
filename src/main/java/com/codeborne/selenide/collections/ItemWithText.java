@@ -5,18 +5,14 @@ import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementCommunicator;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Collections.singletonList;
 
-@ParametersAreNonnullByDefault
 public class ItemWithText extends WebElementsCondition {
   private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
   private final String expectedText;
@@ -25,8 +21,6 @@ public class ItemWithText extends WebElementsCondition {
     this.expectedText = expectedText;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public CheckResult check(CollectionSource collection) {
     List<WebElement> elements = collection.getElements();
@@ -44,7 +38,6 @@ public class ItemWithText extends WebElementsCondition {
       collection, singletonList(expectedText), lastCheckResult.getActualValue(), explanation, timeoutMs, cause);
   }
 
-  @CheckReturnValue
   @Override
   public String toString() {
     return "Text " + expectedText;

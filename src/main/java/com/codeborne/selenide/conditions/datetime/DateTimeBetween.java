@@ -1,11 +1,7 @@
 package com.codeborne.selenide.conditions.datetime;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.LocalDateTime;
 
-@ParametersAreNonnullByDefault
 class DateTimeBetween extends TemporalCondition<LocalDateTime> {
   private final LocalDateTime from;
   private final LocalDateTime until;
@@ -28,8 +24,6 @@ class DateTimeBetween extends TemporalCondition<LocalDateTime> {
     return !actualDate.isAfter(until) && !actualDate.isBefore(from);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("%s \"%s\" and \"%s\"", getName(), format(from), format(until));

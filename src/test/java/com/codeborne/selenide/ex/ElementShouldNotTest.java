@@ -23,7 +23,6 @@ final class ElementShouldNotTest {
     assertThat(elementShould).hasMessage("Element should not be visible {by.name: selenide}" + lineSeparator() +
       "Element: '<null displayed:false></null>'" + lineSeparator() +
       "Actual value: visible:false" + lineSeparator() +
-      "Timeout: 0 ms." + lineSeparator() +
       "Caused by: java.lang.Throwable: Error message");
   }
 }

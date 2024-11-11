@@ -9,12 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ParametersAreNonnullByDefault
 final class ValueInAttributeTest extends ITest {
   @BeforeEach
   void openPage() {
@@ -38,7 +34,6 @@ final class ValueInAttributeTest extends ITest {
   private static WebElementCondition valueInAttribute(String attributeName, String value) {
     return new WebElementCondition(String.format("value '%s' in attribute '%s'", value, attributeName)) {
       @Override
-      @Nonnull
       public CheckResult check(Driver driver, WebElement element) {
         String attr = element.getAttribute(attributeName);
         String attributeValue = attr == null ? "" : attr;

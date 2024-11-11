@@ -1,6 +1,6 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,6 @@ import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.WebDriverListener;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
 import java.net.URL;
 
 import static com.codeborne.selenide.Browsers.FIREFOX;
@@ -20,6 +18,7 @@ import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.TestResources.toURL;
 import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
+import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;
@@ -30,6 +29,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 final class WebDriverRunnerTest {
+  @Nullable
   private static WebDriver driver;
 
   private final URL url = toURL("start_page.html");
@@ -46,6 +46,7 @@ final class WebDriverRunnerTest {
   }
 
   @AfterEach
+  @SuppressWarnings("deprecation")
   void resetSettings() {
     WebDriverRunner.closeWebDriver();
     driver = null;
@@ -54,6 +55,7 @@ final class WebDriverRunnerTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   void allowsToSpecifyCustomWebDriverConfiguration() {
     WebDriverRunner.closeWebDriver();
     Configuration.browser = CustomWebDriverProvider.class.getName();
@@ -84,10 +86,8 @@ final class WebDriverRunnerTest {
 
   private static class CustomWebDriverProvider implements WebDriverProvider {
     @Override
-    @CheckReturnValue
-    @Nonnull
-    public WebDriver createDriver(@Nonnull Capabilities capabilities) {
-      return driver;
+    public WebDriver createDriver(Capabilities capabilities) {
+      return requireNonNull(driver);
     }
   }
 }

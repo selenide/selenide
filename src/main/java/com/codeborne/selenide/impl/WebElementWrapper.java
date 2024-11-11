@@ -2,18 +2,13 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-@ParametersAreNonnullByDefault
 @SuppressWarnings("java:S5852")
 public class WebElementWrapper extends WebElementSource {
 
@@ -54,15 +49,11 @@ public class WebElementWrapper extends WebElementSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebElement getWebElement() {
     return delegate;
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String getSearchCriteria() {
     if (searchCriteria != null) return searchCriteria;
     String elementToString = delegate.toString();
@@ -79,15 +70,11 @@ public class WebElementWrapper extends WebElementSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String toString() {
     return getAlias().getOrElse(() -> getSearchCriteria());
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Driver driver() {
     return driver;
   }

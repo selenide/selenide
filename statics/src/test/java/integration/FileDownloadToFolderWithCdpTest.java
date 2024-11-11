@@ -73,7 +73,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   @Test
   void downloadsFileWithAlert() {
     File downloadedFile = $(byText("Download me with alert")).download(
-      using(CDP).withFilter(withExtension("txt")).withAction(
+      using(CDP).withExtension("txt").withAction(
         clickAndConfirm("Are you sure to download it?")
       )
     );
@@ -187,7 +187,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     Configuration.timeout = 1;
 
     File downloadedFile = $(byText("Download me")).download(using(CDP)
-      .withFilter(withExtension("txt"))
+      .withExtension("txt")
       .withTimeout(4000)
     );
 
@@ -229,7 +229,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     var shortIncrementTimeout = using(CDP)
       .withTimeout(ofSeconds(10))
       .withIncrementTimeout(ofMillis(201))
-      .withFilter(withName("hello_world.txt"));
+      .withName("hello_world.txt");
     assertThatThrownBy(() -> $("h1")
       .download(shortIncrementTimeout))
       .isInstanceOf(FileNotDownloadedError.class)

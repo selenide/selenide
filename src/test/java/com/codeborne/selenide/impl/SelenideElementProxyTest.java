@@ -1,6 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SelenideElement;
@@ -26,8 +25,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.enabled;
@@ -212,7 +209,6 @@ final class SelenideElementProxyTest {
     verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
-  @ParametersAreNonnullByDefault
   private static class TestEventListener implements LogEventListener {
 
     private final String expectSelector;
@@ -285,7 +281,7 @@ final class SelenideElementProxyTest {
 
   @Test
   void shouldNotRetry_onFileNotDownloadedError() {
-    FileNotDownloadedError exception = new FileNotDownloadedError(new DriverStub(webdriver), "bla", 2000);
+    FileNotDownloadedError exception = new FileNotDownloadedError("bla", 2000);
     assertThat(shouldRetryAfterError(exception)).isFalse();
   }
 
@@ -350,7 +346,6 @@ final class SelenideElementProxyTest {
     assertThat(isSelenideElementMethod(SelenideChildElement.class.getMethod("hook"))).isTrue();
   }
 
-  @ParametersAreNonnullByDefault
   private interface SelenideChildElement extends SelenideElement {
     SelenideChildElement hook();
   }

@@ -1,14 +1,15 @@
 package com.codeborne.selenide;
 
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.MutableCapabilities;
 
 public interface Config {
   String browser();
   boolean headless();
-  String remote();
-  String browserSize();
-  String browserVersion();
-  String browserPosition();
+  @Nullable String remote();
+  @Nullable String browserSize();
+  @Nullable String browserVersion();
+  @Nullable String browserPosition();
   boolean webdriverLogsEnabled();
   String browserBinary();
   String pageLoadStrategy();
@@ -30,17 +31,21 @@ public interface Config {
   boolean clickViaJs();
   boolean screenshots();
   boolean savePageSource();
+
   String reportsFolder();
   String downloadsFolder();
-  String reportsUrl();
+  @Nullable String reportsUrl();
+
   boolean fastSetValue();
   TextCheck textCheck();
   SelectorMode selectorMode();
   AssertionMode assertionMode();
   FileDownloadMode fileDownload();
+
   boolean proxyEnabled();
-  String proxyHost();
+  @Nullable String proxyHost();
   int proxyPort();
+
   long remoteReadTimeout();
   long remoteConnectionTimeout();
 }

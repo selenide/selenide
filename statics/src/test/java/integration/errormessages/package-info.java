@@ -59,5 +59,9 @@
  *                     or(name, conditions)
  *
  */
-
+@NullMarked
+@CheckReturnValue
 package integration.errormessages;
+
+import com.google.errorprone.annotations.CheckReturnValue;
+import org.jspecify.annotations.NullMarked;

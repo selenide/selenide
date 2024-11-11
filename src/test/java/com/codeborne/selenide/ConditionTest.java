@@ -31,9 +31,10 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.type;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Mocks.elementWithAttribute;
+import static com.codeborne.selenide.Mocks.*;
 import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -157,6 +158,7 @@ final class ConditionTest {
   }
 
   @Test
+  @SuppressWarnings("InjectedReferences")
   void checksValueOfClassAttribute() {
     assertThat(cssClass("btn").check(driver, elementWithAttribute("class", "btn btn-warning")).verdict()).isEqualTo(ACCEPT);
     assertThat(cssClass("btn-warning").check(driver, elementWithAttribute("class", "btn btn-warning")).verdict()).isEqualTo(ACCEPT);
@@ -434,6 +436,7 @@ final class ConditionTest {
   }
 
   @Test
+  @SuppressWarnings("SelenideEmptyMatchText")
   void shouldHaveText_doesNotAccept_emptyString() {
     assertThatThrownBy(() -> text(""))
       .isInstanceOf(IllegalArgumentException.class)
@@ -442,10 +445,10 @@ final class ConditionTest {
 
   @Test
   void shouldHaveText_accepts_blankNonEmptyString() {
-    text(" ");
-    text("  ");
-    text("\t");
-    text("\n");
+    assertThatNoException().isThrownBy(() -> text(" "));
+    assertThatNoException().isThrownBy(() -> text("  "));
+    assertThatNoException().isThrownBy(() -> text("\t"));
+    assertThatNoException().isThrownBy(() -> text("\n"));
   }
 
   private WebElement mockElement(boolean isSelected, String text) {

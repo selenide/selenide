@@ -6,13 +6,8 @@ import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-@ParametersAreNonnullByDefault
 public class PartialValue extends WebElementCondition {
   private final String expectedValue;
 
@@ -26,8 +21,6 @@ public class PartialValue extends WebElementCondition {
     }
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String value = getValueAttribute(element);
@@ -36,8 +29,6 @@ public class PartialValue extends WebElementCondition {
     return new CheckResult(valueMatches, actualValue);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("%s \"%s\"", getName(), expectedValue);

@@ -3,6 +3,7 @@ package it.selenoid;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.FileDownloadMode;
 import com.google.common.collect.ImmutableMap;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -59,6 +60,7 @@ public class SelenoidSetup implements BeforeEachCallback, AfterEachCallback  {
     return capabilities;
   }
 
+  @CanIgnoreReturnValue
   static void checkDownload() throws IOException {
     open("/download.html");
     File file = $(byText("hello-world.txt")).download(withExtension("txt"));

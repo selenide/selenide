@@ -4,6 +4,7 @@ import com.browserup.bup.util.HttpMessageContents;
 import com.browserup.bup.util.HttpMessageInfo;
 import io.netty.handler.codec.http.HttpRequest;
 
+@FunctionalInterface
 public interface RequestMatcher {
   enum HttpMethod {
     DELETE,
@@ -11,7 +12,7 @@ public interface RequestMatcher {
     POST,
     PUT,
     OPTIONS,
-    PATCH;
+    PATCH
   }
 
   boolean match(HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo);

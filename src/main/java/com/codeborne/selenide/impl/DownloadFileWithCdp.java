@@ -7,22 +7,19 @@ import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v127.browser.Browser;
-import org.openqa.selenium.devtools.v127.browser.model.DownloadProgress;
-import org.openqa.selenium.devtools.v127.browser.model.DownloadWillBegin;
-import org.openqa.selenium.devtools.v127.page.Page;
+import org.openqa.selenium.devtools.v130.browser.Browser;
+import org.openqa.selenium.devtools.v130.browser.model.DownloadProgress;
+import org.openqa.selenium.devtools.v130.browser.model.DownloadWillBegin;
+import org.openqa.selenium.devtools.v130.page.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,10 +32,9 @@ import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
-import static org.openqa.selenium.devtools.v127.browser.Browser.downloadProgress;
-import static org.openqa.selenium.devtools.v127.browser.Browser.downloadWillBegin;
+import static org.openqa.selenium.devtools.v130.browser.Browser.downloadProgress;
+import static org.openqa.selenium.devtools.v130.browser.Browser.downloadWillBegin;
 
-@ParametersAreNonnullByDefault
 public class DownloadFileWithCdp {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithCdp.class);
   private static final AtomicLong SEQUENCE = new AtomicLong();
@@ -58,8 +54,6 @@ public class DownloadFileWithCdp {
     return driver.browserDownloadsFolder();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
@@ -84,7 +78,7 @@ public class DownloadFileWithCdp {
       if (!fileFilter.match(new DownloadedFile(file, emptyMap()))) {
         String message = String.format("Failed to download file%s in %d ms.%s;%n actually downloaded: %s",
           fileFilter.description(), timeout, fileFilter.description(), file.getAbsolutePath());
-        throw new FileNotDownloadedError(driver, message, timeout);
+        throw new FileNotDownloadedError(message, timeout);
       }
 
       // Move file to unique folder
@@ -95,7 +89,6 @@ public class DownloadFileWithCdp {
     }
   }
 
-  @Nonnull
   protected File archiveFile(Driver driver, File downloadedFile) {
     File uniqueFolder = downloader.prepareTargetFolder(driver.config());
     File archivedFile = new File(uniqueFolder, downloadedFile.getName());
@@ -116,7 +109,7 @@ public class DownloadFileWithCdp {
         return downloadedFile.get().file();
       }
       else {
-        failFastIfNoChanges(driver, downloads, fileFilter, downloadStartedAt, timeout, incrementTimeout);
+        failFastIfNoChanges(downloads, fileFilter, downloadStartedAt, timeout, incrementTimeout);
       }
       stopwatch.sleep(pollingInterval);
     }
@@ -124,7 +117,7 @@ public class DownloadFileWithCdp {
 
     String message = "Failed to download file%s in %d ms., found files: %s".formatted(
       fileFilter.description(), timeout, downloads.folder().files());
-    throw new FileNotDownloadedError(driver, message, timeout);
+    throw new FileNotDownloadedError(message, timeout);
   }
 
   private DevTools initDevTools(Driver driver) {
@@ -249,7 +242,7 @@ public class DownloadFileWithCdp {
         case CANCELED -> {
           String message = "File download is %s (received bytes: %s, total bytes: %s, guid: %s)".formatted(
             e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
-          throw new FileNotDownloadedError(driver, message, timeout);
+          throw new FileNotDownloadedError(message, timeout);
         }
         case COMPLETED -> downloads.finish(e.getGuid());
         case INPROGRESS -> downloads.inProgress(e);
@@ -262,7 +255,7 @@ public class DownloadFileWithCdp {
     }
   }
 
-  private void failFastIfNoChanges(Driver driver, CdpDownloads downloads, FileFilter filter,
+  private void failFastIfNoChanges(CdpDownloads downloads, FileFilter filter,
                                    long downloadStartedAt, long timeout, long incrementTimeout) {
     long now = currentTimeMillis();
     long lastModifiedAt = downloads.lastModificationTime().orElse(downloadStartedAt);
@@ -273,7 +266,7 @@ public class DownloadFileWithCdp {
         "(lastUpdate: %s, now: %s, incrementTimeout: %s)",
         filter.description(), timeout, downloads.folder, filesHasNotBeenUpdatedForMs,
         lastModifiedAt, now, incrementTimeout);
-      throw new FileNotDownloadedError(driver, message, timeout);
+      throw new FileNotDownloadedError(message, timeout);
     }
   }
 }

@@ -7,15 +7,12 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Stopwatch;
 import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -24,15 +21,12 @@ import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.stream.Collectors.joining;
 
-@ParametersAreNonnullByDefault
 public class UploadFile implements Command<File> {
   private static final Logger log = LoggerFactory.getLogger(UploadFile.class);
   private final ElementDescriber describe = inject(ElementDescriber.class);
 
   @Override
-  @CheckReturnValue
-  @Nonnull
-  public File execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public File execute(SelenideElement proxy, WebElementSource locator, Object @Nullable [] args) {
     File[] file = getFiles(args);
     checkFilesGiven(file);
     checkFilesExist(file);
@@ -46,8 +40,6 @@ public class UploadFile implements Command<File> {
     return getCanonicalFile(file[0]);
   }
 
-  @Nonnull
-  @CheckReturnValue
   private File getCanonicalFile(File f) {
     try {
       return f.getCanonicalFile();
@@ -72,9 +64,7 @@ public class UploadFile implements Command<File> {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
-  private File[] getFiles(@Nullable Object[] args) {
+  private File[] getFiles(Object @Nullable [] args) {
     return args instanceof File[] multipleFiles ? multipleFiles : firstOf(args);
   }
 

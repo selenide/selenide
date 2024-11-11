@@ -1,23 +1,16 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Command;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.TypeOptions;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.Stopwatch.sleepAtLeast;
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
-public class Type implements Command<SelenideElement> {
+public class Type extends FluentCommand {
   private final Clear clear;
 
   public Type() {
@@ -28,19 +21,15 @@ public class Type implements Command<SelenideElement> {
     this.clear = clear;
   }
 
-  @Nullable
   @Override
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+  protected void execute(WebElementSource locator, Object[] args) {
     TypeOptions typeOptions = extractOptions(requireNonNull(args));
-    clearField(proxy, locator, typeOptions);
+    clearField(locator, typeOptions);
 
     WebElement element = findElement(locator);
     typeIntoField(element, typeOptions);
-    return proxy;
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected WebElement findElement(WebElementSource locator) {
     return locator.findAndAssertElementIsEditable();
   }
@@ -53,12 +42,12 @@ public class Type implements Command<SelenideElement> {
     }
   }
 
-  protected void clearField(SelenideElement proxy, WebElementSource locator, TypeOptions typeOptions) {
+  protected void clearField(WebElementSource locator, TypeOptions typeOptions) {
     if (typeOptions.shouldClearFieldBeforeTyping()) {
-      if (typeOptions.textToType().length() > 0) {
-        clear.clear(locator.driver(), proxy);
+      if (!typeOptions.textToType().isEmpty()) {
+        clear.clear(locator.driver(), locator.getWebElement());
       } else {
-        clear.clearAndTrigger(locator.driver(), proxy);
+        clear.clearAndTrigger(locator.driver(), locator.getWebElement());
       }
     }
   }

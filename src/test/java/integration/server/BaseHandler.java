@@ -1,6 +1,7 @@
 package integration.server;
 
 import org.apache.commons.io.IOUtils;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +59,9 @@ public abstract class BaseHandler extends HttpServlet {
     }
     response.setStatus(result.httpStatus);
     response.setContentLength(result.contentLength);
-    response.setContentType(result.contentType);
+    if (result.contentType != null) {
+      response.setContentType(result.contentType);
+    }
     for (Map.Entry<String, String> httpHeader : result.httpHeaders.entrySet()) {
       response.setHeader(httpHeader.getKey(), httpHeader.getValue());
     }
@@ -90,7 +93,7 @@ public abstract class BaseHandler extends HttpServlet {
     return request.getPathInfo().replaceFirst("/(.*)", "$1");
   }
 
-  byte[] readFileContent(String fileName) throws IOException {
+  byte @Nullable [] readFileContent(String fileName) throws IOException {
     try (InputStream in = currentThread().getContextClassLoader().getResourceAsStream(fileName)) {
       return in == null ? null : IOUtils.toByteArray(in);
     }

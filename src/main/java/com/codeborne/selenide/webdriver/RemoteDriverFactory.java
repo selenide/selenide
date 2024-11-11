@@ -9,14 +9,12 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.http.ClientConfig;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 
-@ParametersAreNonnullByDefault
+import static java.util.Objects.requireNonNull;
+
 public class RemoteDriverFactory {
   public WebDriver create(Config config, MutableCapabilities capabilities) {
     try {
@@ -30,11 +28,10 @@ public class RemoteDriverFactory {
     }
   }
 
-  @Nonnull
-  @CheckReturnValue
   private CommandExecutor createExecutor(Config config) throws MalformedURLException {
+    String remoteUrl = requireNonNull(config.remote(), "Remote browser URL is not configured");
     ClientConfig clientConfig = ClientConfig.defaultConfig()
-      .baseUrl(new URL(config.remote()))
+      .baseUrl(new URL(remoteUrl))
       .readTimeout(Duration.ofMillis(config.remoteReadTimeout()))
       .connectionTimeout(Duration.ofMillis(config.remoteConnectionTimeout()));
 

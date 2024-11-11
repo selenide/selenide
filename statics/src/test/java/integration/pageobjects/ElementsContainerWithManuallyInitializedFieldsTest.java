@@ -8,6 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.Iterator;
+import java.util.List;
+
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -36,6 +39,21 @@ final class ElementsContainerWithManuallyInitializedFieldsTest extends Integrati
   }
 
   @Test
+  void listWithFindByAnnotation() {
+    MyContainerWithList page = page();
+    page.options.get(0).shouldHave(text("-- Select your hero --"));
+    page.options.get(1).shouldHave(text("John Mc'Lain"));
+  }
+
+  @Test
+  void iterableWithFindByAnnotation() {
+    MyContainerWithIterable page = page();
+    Iterator<SelenideElement> iterator = page.options.iterator();
+    iterator.next().shouldHave(text("-- Select your hero --"));
+    iterator.next().shouldHave(text("John Mc'Lain"));
+  }
+
+  @Test
   void cannotInitializeElementsContainerOutsidePageObject() {
     assertThatThrownBy(() -> page(InvalidContainer.class))
       .isInstanceOf(IllegalArgumentException.class)
@@ -50,6 +68,16 @@ final class ElementsContainerWithManuallyInitializedFieldsTest extends Integrati
   private static class MyContainer implements Container {
     SelenideElement headerLink = $("h2>a");
     ElementsCollection options = $$("#hero>option");
+  }
+
+  private static class MyContainerWithList implements Container {
+    @FindBy(css = "#hero>option")
+    List<SelenideElement> options;
+  }
+
+  private static class MyContainerWithIterable implements Container {
+    @FindBy(css = "#hero>option")
+    Iterable<SelenideElement> options;
   }
 
   private static class InvalidContainer implements Container {

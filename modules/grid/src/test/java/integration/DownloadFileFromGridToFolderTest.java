@@ -16,7 +16,7 @@ import java.nio.file.Files;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
-import static com.codeborne.selenide.DownloadOptions.using;
+import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -35,7 +35,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
 
   @BeforeEach
   void openFileUploadForm() {
-    Configuration.remote = gridUrl.toString();
+    Configuration.remote = gridUrl().toString();
     Configuration.browserCapabilities.setCapability("se:downloadsEnabled", true);
     Configuration.fileDownload = FOLDER;
     openFile("page_with_uploads.html");
@@ -52,8 +52,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
 
   @Test
   void downloadsFileWithAlert() {
-    File downloadedFile = $(byText("Download me with alert")).download(
-      using(FOLDER).withFilter(withExtension("txt")).withAction(
+    File downloadedFile = $(byText("Download me with alert")).download(file().withExtension("txt").withAction(
         clickAndConfirm("Are you sure to download it?")
       )
     );

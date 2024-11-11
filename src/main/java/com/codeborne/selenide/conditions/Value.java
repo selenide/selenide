@@ -7,11 +7,6 @@ import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class Value extends WebElementCondition {
   private final String expectedValue;
 
@@ -20,8 +15,6 @@ public class Value extends WebElementCondition {
     this.expectedValue = expectedValue;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String value = getValueAttribute(element);
@@ -36,8 +29,6 @@ public class Value extends WebElementCondition {
     };
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("%s=\"%s\"", getName(), expectedValue);

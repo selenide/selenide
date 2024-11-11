@@ -50,9 +50,9 @@ final class SelectorsTest extends ITest {
   void byAttributeEscapesQuotes() {
     $(byAttribute("value", "john mc'lain")).shouldHave(attribute("value", "john mc'lain"));
     $(byAttribute("value", "arnold \"schwarzenegger\"")).shouldHave(attribute("value", "arnold \"schwarzenegger\""));
-    $("#denzel-washington").shouldHave(attribute("value", "denzel \\\\\"equalizer\\\\\" washington"));
-    $(byAttribute("value", "denzel \\\\\"equalizer\\\\\" washington"))
-      .shouldHave(attribute("value", "denzel \\\\\"equalizer\\\\\" washington"))
+    $("#denzel-washington").shouldHave(attribute("value", "denzel \"equalizer\" washington"));
+    $(byAttribute("value", "denzel \"equalizer\" washington"))
+      .shouldHave(attribute("value", "denzel \"equalizer\" washington"))
       .shouldHave(text("Denzel Washington"));
   }
 

@@ -11,14 +11,10 @@ import org.openqa.selenium.remote.service.DriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-@ParametersAreNonnullByDefault
 public class CdpClient {
   private static final Logger log = LoggerFactory.getLogger(CdpClient.class);
 
@@ -38,8 +34,6 @@ public class CdpClient {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   private String command(File downloadsFolder) {
     return "{" +
         "  \"cmd\": \"Page.setDownloadBehavior\",\n" +
@@ -55,8 +49,6 @@ public class CdpClient {
     return text.replace("\\", "\\\\").replace("\"", "\\\"");
   }
 
-  @CheckReturnValue
-  @Nonnull
   private HttpPost request(String url, String command) {
     HttpPost request = new HttpPost(url);
     request.addHeader("Content-Type", "application/json");

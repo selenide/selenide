@@ -24,6 +24,14 @@ final class FramesCustomWaitTest extends ITest {
   }
 
   @Test
+  void waitsUntilInnerFrameAppears_withCustomTimeout() {
+    setTimeout(6000);
+    $("#btn").click();
+    switchTo().innerFrame("ifrm");
+    $("body").shouldBe(text("This is last frame!"));
+  }
+
+  @Test
   void waitsUntilFrameAppears_withoutCustomTimeout() {
     $("#btn").click();
     assertThatThrownBy(() -> switchTo().frame(1))

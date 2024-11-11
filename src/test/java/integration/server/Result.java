@@ -1,6 +1,6 @@
 package integration.server;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Map;
@@ -10,7 +10,7 @@ import static java.util.Collections.emptyMap;
 
 class Result {
   final int httpStatus;
-  final String contentType;
+  @Nullable final String contentType;
   final int contentLength;
   @Nullable final InputStream content;
   final Map<String, String> httpHeaders;
@@ -37,7 +37,7 @@ class Result {
     this(httpStatus, contentType, content.length, new ByteArrayInputStream(content), httpHeaders, pause, duration);
   }
 
-  Result(int httpStatus, String contentType, int contentLength, @Nullable InputStream content,
+  Result(int httpStatus, @Nullable String contentType, int contentLength, @Nullable InputStream content,
          Map<String, String> httpHeaders, long pause, long duration) {
     this.httpStatus = httpStatus;
     this.contentType = contentType;

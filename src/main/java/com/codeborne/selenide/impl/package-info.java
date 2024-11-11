@@ -16,4 +16,9 @@
  * NB! But "com.codeborne.selenide.impl" package is subject to change.
  * It's up to you to maintain your overridden logic.
  */
+@CheckReturnValue
+@NullMarked
 package com.codeborne.selenide.impl;
+
+import com.google.errorprone.annotations.CheckReturnValue;
+import org.jspecify.annotations.NullMarked;

@@ -3,13 +3,8 @@ package com.codeborne.selenide.selector;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Quotes;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.selector.Xpath.NORMALIZE_SPACE_XPATH;
 
-@ParametersAreNonnullByDefault
 public class ByTagAndText extends By.ByXPath {
   protected final String tag;
   protected final String elementText;
@@ -21,14 +16,10 @@ public class ByTagAndText extends By.ByXPath {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String toString() {
     return "by tag: " + tag + "; by text: " + elementText;
   }
 
-  @CheckReturnValue
-  @Nonnull
   String getXPath() {
     return super.toString().replace("By.xpath: ", "");
   }

@@ -15,7 +15,6 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
-import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static it.selenoid.SelenoidSetup.checkDownload;
 import static it.selenoid.SelenoidSetup.resetSelenoidSettings;
 import static org.apache.commons.lang3.StringUtils.rightPad;
@@ -63,7 +62,7 @@ public class FileDownloadTest {
     $("[name=delay]").setValue("3000");
     $("#lore-ipsum").setValue(fileContent);
 
-    File file = $("#slow-download").download(using(FOLDER).withFilter(withExtension("txt")));
+    File file = $("#slow-download").download(using(FOLDER).withExtension("txt"));
 
     assertThat(file).hasName("hello.txt");
     assertThat(file).content().isEqualToIgnoringWhitespace(fileContent);
