@@ -106,7 +106,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     timeout = 111;
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 111 ms.");
+      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 111 ms");
   }
 
   @Test
