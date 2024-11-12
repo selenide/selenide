@@ -1,0 +1,28 @@
+plugins {
+  id 'java'
+}
+
+ext {
+  artifactId = "video-recorder-junit"
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  api project(":modules:video-recorder-core")
+  testImplementation platform("org.junit:junit-bom:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+  implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+  implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+  testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
+  implementation("org.bytedeco:javacv:$javacvVersion")
+  implementation("org.bytedeco:javacv-platform:$javacvVersion")
+}
+
+test {
+  useJUnitPlatform()
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')
