@@ -1,6 +1,5 @@
 ext {
-  artifactId = "video-recorder-testng"
-  testngVersion = '7.10.1'
+  artifactId = "selenide-video-recorder-testng"
 }
 
 repositories {
@@ -8,10 +7,11 @@ repositories {
 }
 
 dependencies {
-  api project(":modules:video-recorder-core")
-  api("org.testng:testng:$testngVersion") { transitive = false }
+  testImplementation project(":modules:video-recorder")
+  testImplementation project(':modules:core').sourceSets.test.output
+
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
-  testRuntimeOnly("org.testng:testng:$testngVersion") {
+  testImplementation("org.testng:testng:$testngVersion") {
     exclude(group: 'junit')
     exclude(group: 'testng')
     exclude(group: 'org.apache.ant')
@@ -21,8 +21,6 @@ dependencies {
   implementation("org.bytedeco:javacv-platform:$javacvVersion")
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
   useTestNG()
 }
-
-apply from: rootProject.file('gradle/publish-module.gradle')

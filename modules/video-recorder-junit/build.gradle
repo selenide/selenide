@@ -3,7 +3,7 @@ plugins {
 }
 
 ext {
-  artifactId = "video-recorder-junit"
+  artifactId = "selenide-video-recorder-junit"
 }
 
 repositories {
@@ -11,18 +11,16 @@ repositories {
 }
 
 dependencies {
-  api project(":modules:video-recorder-core")
+  testImplementation project(":modules:video-recorder")
+  testImplementation project(':modules:core').sourceSets.test.output
+
   testImplementation platform("org.junit:junit-bom:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
   implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
-  implementation("org.bytedeco:javacv:$javacvVersion")
-  implementation("org.bytedeco:javacv-platform:$javacvVersion")
 }
 
 test {
   useJUnitPlatform()
 }
-
-apply from: rootProject.file('gradle/publish-module.gradle')
