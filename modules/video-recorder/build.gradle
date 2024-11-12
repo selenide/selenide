@@ -1,0 +1,26 @@
+plugins {
+  id 'java'
+}
+
+ext {
+  artifactId = 'selenide-video-recorder'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  api project(":statics")
+  compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion") { transitive = false }
+  compileOnly("org.testng:testng:$testngVersion") { transitive = false }
+
+  testImplementation project(':modules:core').sourceSets.test.output
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+  testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
+  implementation("org.bytedeco:javacv:$javacvVersion")
+  implementation("org.bytedeco:javacv-platform:$javacvVersion")
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')
