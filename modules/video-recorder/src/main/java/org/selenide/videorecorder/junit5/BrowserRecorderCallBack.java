@@ -1,6 +1,7 @@
 package org.selenide.videorecorder.junit5;
 
 import com.codeborne.selenide.WebDriverRunner;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -19,7 +20,7 @@ import static com.codeborne.selenide.Selenide.webdriver;
  * 07.05.2024 11:57
  **/
 public class BrowserRecorderCallBack implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
-  private VideoRecorderScreenShot videoRecorder = null;
+  private VideoRecorderScreenShot videoRecorder;
   private ScheduledThreadPoolExecutor timer;
   private Boolean shouldRecordVideo = false;
 
@@ -27,7 +28,7 @@ public class BrowserRecorderCallBack implements BeforeTestExecutionCallback, Aft
    * Init video recorder and if there is no webdriver is running
    * call Selnide.open() method.
    */
-  private void initRecorder(String className, String testName) {
+  private void initRecorder(@Nullable String className, @Nullable String testName) {
     if (!WebDriverRunner.hasWebDriverStarted()) {
       open();
     }
@@ -52,9 +53,11 @@ public class BrowserRecorderCallBack implements BeforeTestExecutionCallback, Aft
 
   @Override
   public void beforeTestExecution(ExtensionContext context) {
-    shouldRecordVideo = !context.getTestMethod().get().isAnnotationPresent(DisableVideoRecording.class);
+    shouldRecordVideo = !context.getTestMethod().map(m -> m.isAnnotationPresent(DisableVideoRecording.class)).orElse(false);
     if (shouldRecordVideo) {
-      initRecorder(context.getTestClass().get().getSimpleName(), context.getTestMethod().get().getName());
+      String testClass = context.getTestClass().map(tc -> tc.getSimpleName()).orElse(null);
+      String testMethod = context.getTestMethod().map(tm -> tm.getName()).orElse(null);
+      initRecorder(testClass, testMethod);
     }
   }
 }

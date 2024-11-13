@@ -16,9 +16,9 @@ import static com.codeborne.selenide.Selenide.webdriver;
 /**
  * Created by Serhii Bryt
  * 07.05.2024 11:57
- **/
+ */
 public class BrowserRecorderListener implements ITestListener {
-  private VideoRecorderScreenShot videoRecorder = null;
+  private VideoRecorderScreenShot videoRecorder;
   private ScheduledThreadPoolExecutor timer;
   private Boolean shouldRecordVideo = false;
 
