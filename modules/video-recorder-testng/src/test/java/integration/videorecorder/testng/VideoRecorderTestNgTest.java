@@ -2,7 +2,7 @@ package integration.videorecorder.testng;
 
 import com.codeborne.selenide.DragAndDropOptions;
 import org.selenide.videorecorder.core.RecorderFileUtils;
-import org.selenide.videorecorder.testng.BrowserRecorderListener;
+import org.selenide.videorecorder.testng.VideoRecorderListener;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Listeners;
@@ -18,7 +18,7 @@ import static com.codeborne.selenide.Selenide.sleep;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Listeners(BrowserRecorderListener.class)
+@Listeners(VideoRecorderListener.class)
 public class VideoRecorderTestNgTest {
 
   @AfterMethod

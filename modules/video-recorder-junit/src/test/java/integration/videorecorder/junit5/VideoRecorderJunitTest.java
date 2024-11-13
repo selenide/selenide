@@ -5,7 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.selenide.videorecorder.core.RecorderFileUtils;
-import org.selenide.videorecorder.junit5.RecordVideoJunit;
+import org.selenide.videorecorder.junit5.Video;
 
 import java.nio.file.Path;
 import java.time.Duration;
@@ -17,17 +17,15 @@ import static com.codeborne.selenide.Selenide.sleep;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RecordVideoJunit
+@Video
 public class VideoRecorderJunitTest {
-
-
   @AfterEach
   public void afterEach(TestInfo testInfo) {
-    Path path = RecorderFileUtils.generateOrGetVideoFolderName(
+    Path videoFolder = RecorderFileUtils.generateOrGetVideoFolderName(
       testInfo.getTestClass().orElseThrow().getSimpleName(),
       testInfo.getTestMethod().orElseThrow().getName()
     );
-    path = RecorderFileUtils.getLastModifiedFile(path);
+    Path path = RecorderFileUtils.getLastModifiedFile(videoFolder);
     assertThat(path.toFile().length()).isGreaterThan(0);
     assertThat(path.toFile()).hasExtension("webm");
   }

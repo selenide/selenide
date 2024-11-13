@@ -22,13 +22,13 @@ import static org.bytedeco.ffmpeg.global.avutil.AV_PIX_FMT_YUV420P;
  * Created by Serhii Bryt
  * 07.05.2024 11:57
  */
-public class VideoRecorderScreenShot extends TimerTask {
-  private static final Logger log = LoggerFactory.getLogger(VideoRecorderScreenShot.class);
+public class VideoRecorder extends TimerTask {
+  private static final Logger log = LoggerFactory.getLogger(VideoRecorder.class);
 
   private FFmpegFrameRecorder recorder;
   private final WebDriver driver;
 
-  public VideoRecorderScreenShot(WebDriver driver, File videoFile) {
+  public VideoRecorder(WebDriver driver, File videoFile) {
     this.driver = driver;
     try {
       initVideoRecordingProcess(videoFile);
@@ -37,7 +37,7 @@ public class VideoRecorderScreenShot extends TimerTask {
     }
   }
 
-  public VideoRecorderScreenShot(WebDriver driver, Path videoFile) {
+  public VideoRecorder(WebDriver driver, Path videoFile) {
     this(driver, videoFile.toFile());
   }
 

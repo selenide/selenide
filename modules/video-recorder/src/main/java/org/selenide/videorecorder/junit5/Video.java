@@ -11,8 +11,8 @@ import java.lang.annotation.Target;
  * Created by Serhii Bryt
  * 30.04.2024 12:56
  **/
-@ExtendWith({BrowserRecorderCallBack.class})
+@ExtendWith(VideoRecorderExtension.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface RecordVideoJunit {
+public @interface Video {
 }
