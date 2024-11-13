@@ -28,20 +28,21 @@ implementation("com.codeborne:selenide-video-recorder:LAST_VERSION_OF_SELENIDE")
 
 ### JUnit 5
 
-Annotate test class with `@RecordVideoJunit`. Videos will be recorded automatically.
+1. Annotate test class with `@Video`. Videos will be recorded automatically.
+To skip recording for a specific test, annotate this test with `@NoVideo`.
 
-To skip recording for a specific test, annotate this test with `@DisableVideoRecording`.
+2. Alternatively, you can enable JUnit extension `@ExtendWith(VideoRecorderExtension.class)`.
 
-Example of test is [here](../video-recorder-junit/src/test/java/integration/video_recorder/junit5/VideoRecorderScreenShotJunitTests.java)
+Example of test is [here](../video-recorder-junit/src/test/java/integration/videorecorder/junit5/VideoRecorderJunitTest.java)
 
 
 ### TestNG
 
-Add `@Listeners(BrowserRecorderListener.class)` to a test class. Videos will be recorded automatically.
+Add `@Listeners(VideoRecorderListener.class)` to a test class. Videos will be recorded automatically.
 
-To skip video recording for a specific test, annotate this test with `@DisableVideoRecording`.
+To skip video recording for a specific test, annotate this test with `@NoVideo`.
 
-Example of test is [here](../video-recorder-testng/src/test/java/integration/video_recorder/testng/VideoRecorderScreenShotTestNgTests.java)
+Example of test is [here](../video-recorder-testng/src/test/java/integration/videorecorder/testng/VideoRecorderTestNgTest.java)
 
 ### Other testing frameworks
 
@@ -50,14 +51,14 @@ Selenide has built-in support for two testing frameworks: JUnit5 and TestNG.
 If you use some other framework, you can run video recorder directly like this (pseudocode):
 
 ```java
-videoRecorder = new VideoRecorderScreenShot(
+videoRecorder = new VideoRecorder(
   webdriver().object(),
   RecorderFileUtils.generateVideoFileName(<testClassName>, <testName>));
 executor = new ScheduledThreadPoolExecutor(1);
 executor.scheduleAtFixedRate(videoRecorder, 0, 1000, TimeUnit.MILLISECONDS);
 ```
 
-in the first line the parameter for `VideoRecorderScreenShot` constructor should pass `Webdriver` instance.
+in the first line the parameter for `VideoRecorder` constructor should pass `Webdriver` instance.
 `<testClassName>` and `<testName>` can be `null`. These parameters are needed to point recorder to the video file.
 
 | testsClassName | testName   | result file name location                                                                       |
