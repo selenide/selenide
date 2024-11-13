@@ -20,11 +20,12 @@ import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.Selenide.webdriver;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.selenide.videorecorder.core.RecorderFileUtils.generateOrGetVideoFolderName;
+import static org.selenide.videorecorder.core.RecorderFileUtils.getLastModifiedFile;
 
 public class VideoRecorderTest {
-  VideoRecorderScreenShot videoRecorder;
-  ScheduledThreadPoolExecutor executor;
-
+  private VideoRecorderScreenShot videoRecorder;
+  private ScheduledThreadPoolExecutor executor;
 
   @BeforeAll
   public static void beforeAll() {
@@ -61,8 +62,8 @@ public class VideoRecorderTest {
 
   private void initRecorder(TestInfo testInfo) {
     videoRecorder = new VideoRecorderScreenShot(webdriver().object(),
-      RecorderFileUtils.generateVideoFileName(testInfo.getTestClass().get().getSimpleName(),
-        testInfo.getTestMethod().get().getName()));
+      RecorderFileUtils.generateVideoFileName(testInfo.getTestClass().orElseThrow().getSimpleName(),
+        testInfo.getTestMethod().orElseThrow().getName()));
     executor = new ScheduledThreadPoolExecutor(1);
     executor.scheduleAtFixedRate(videoRecorder, 0, 1000, TimeUnit.MILLISECONDS);
   }
@@ -74,8 +75,10 @@ public class VideoRecorderTest {
   }
 
   private void checkVideoLengthInTime(TestInfo testInfo) {
-    Path videoFile = RecorderFileUtils.getLastModifiedFile(RecorderFileUtils
-      .generateOrGetVideoFolderName(testInfo.getTestClass().get().getSimpleName(), testInfo.getTestMethod().get().getName()));
+    String testClass = testInfo.getTestClass().orElseThrow().getSimpleName();
+    String testMethod = testInfo.getTestMethod().orElseThrow().getName();
+    Path videoFolder = generateOrGetVideoFolderName(testClass, testMethod);
+    Path videoFile = getLastModifiedFile(videoFolder);
     assertThat(videoFile.toFile().length()).isGreaterThan(0);
     assertThat(videoFile).hasExtension("webm");
   }

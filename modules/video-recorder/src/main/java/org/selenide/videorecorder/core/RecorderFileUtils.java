@@ -1,24 +1,27 @@
 package org.selenide.videorecorder.core;
 
 import com.codeborne.selenide.WebDriverRunner;
-import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 public class RecorderFileUtils {
 
+  // TODO don't require driver
   private static final String recordsDefaultFolder = WebDriverRunner.driver().config().reportsFolder() + "/records";
 
-  public static Path generateOrGetVideoFolderName(String className, String testName) {
+  public static Path generateOrGetVideoFolderName(@Nullable String className, @Nullable String testName) {
     Path pathToSaveVideo = Path.of(recordsDefaultFolder);
 
-    if (!StringUtils.isEmpty(testName)) {
+    if (!isEmpty(className)) {
       pathToSaveVideo = pathToSaveVideo.resolve(className);
     }
-    if (!StringUtils.isEmpty(className)) {
+    if (!isEmpty(testName)) {
       pathToSaveVideo = pathToSaveVideo.resolve(testName);
     }
     try {
@@ -29,8 +32,8 @@ public class RecorderFileUtils {
     return pathToSaveVideo;
   }
 
-  public static Path generateVideoFileName(String className, String testName) {
-    return generateOrGetVideoFolderName(className, testName).resolve(UUID.randomUUID().toString() + ".webm");
+  public static Path generateVideoFileName(@Nullable String className, @Nullable String testName) {
+    return generateOrGetVideoFolderName(className, testName).resolve(UUID.randomUUID() + ".webm");
   }
 
   public static Path generateVideoFileName() {
@@ -38,9 +41,8 @@ public class RecorderFileUtils {
   }
 
   public static Path getLastModifiedFile(Path videoFolder) {
-    try {
-      return Files
-        .list(videoFolder)
+    try (var files = Files.list(videoFolder)) {
+      return files
         .sorted((o1, o2) -> Long.compare(o2.toFile().lastModified(), o1.toFile().lastModified()))
         .toList()
         .get(0);

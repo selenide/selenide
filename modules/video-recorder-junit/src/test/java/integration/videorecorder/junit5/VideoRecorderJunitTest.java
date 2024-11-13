@@ -24,8 +24,8 @@ public class VideoRecorderJunitTest {
   @AfterEach
   public void afterEach(TestInfo testInfo) {
     Path path = RecorderFileUtils.generateOrGetVideoFolderName(
-      testInfo.getTestClass().get().getSimpleName(),
-      testInfo.getTestMethod().get().getName()
+      testInfo.getTestClass().orElseThrow().getSimpleName(),
+      testInfo.getTestMethod().orElseThrow().getName()
     );
     path = RecorderFileUtils.getLastModifiedFile(path);
     assertThat(path.toFile().length()).isGreaterThan(0);

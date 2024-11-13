@@ -18,16 +18,15 @@ import java.util.TimerTask;
 
 import static org.bytedeco.ffmpeg.global.avutil.AV_PIX_FMT_YUV420P;
 
-/*
-  Created by Serhii Bryt
-  07.05.2024 11:57
+/**
+ * Created by Serhii Bryt
+ * 07.05.2024 11:57
  */
-
 public class VideoRecorderScreenShot extends TimerTask {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorderScreenShot.class);
 
   private FFmpegFrameRecorder recorder;
-  private WebDriver driver;
+  private final WebDriver driver;
 
   public VideoRecorderScreenShot(WebDriver driver, File videoFile) {
     this.driver = driver;
