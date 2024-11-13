@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Predicate;
 
 import static java.lang.Thread.currentThread;
 
@@ -54,6 +56,10 @@ class DisposablesRegistry<T extends Disposable> {
 
   void disposeAllItems() {
     disposables.forEach(Disposable::dispose);
+  }
+
+  public Optional<T> find(Predicate<T> filter) {
+    return disposables.stream().filter(filter).findFirst();
   }
 
   private class SelenideCleanupShutdownHook extends Thread {

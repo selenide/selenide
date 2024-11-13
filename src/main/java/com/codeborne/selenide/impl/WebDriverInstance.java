@@ -13,12 +13,21 @@ import static java.util.Objects.requireNonNull;
  * An instance of webdriver with its resources: config, proxy and downloads folder.
  */
 public record WebDriverInstance(
+  long threadId,
   Config config,
   WebDriver webDriver,
   @Nullable SelenideProxyServer proxy,
   @Nullable DownloadsFolder downloadsFolder) implements Disposable {
 
   private static final CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
+
+  public WebDriverInstance(
+    Config config,
+    WebDriver webDriver,
+    @Nullable SelenideProxyServer proxy,
+    @Nullable DownloadsFolder downloadsFolder) {
+    this(Thread.currentThread().getId(), config, webDriver, proxy, downloadsFolder);
+  }
 
   public WebDriverInstance {
     requireNonNull(config, "config must not be null");
