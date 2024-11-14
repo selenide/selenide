@@ -35,6 +35,12 @@ To skip recording for a specific test, annotate this test with `@NoVideo`.
 
 Example of test is [here](../video-recorder-junit/src/test/java/integration/videorecorder/junit5/VideoRecorderJunitTest.java)
 
+P.S. If needed, you can get reference to the recorded video file:
+
+```java
+Optional<Path> videoFile = VideoRecorderExtension.getRecordedVideo();
+```
+
 
 ### TestNG
 
@@ -44,29 +50,33 @@ To skip video recording for a specific test, annotate this test with `@NoVideo`.
 
 Example of test is [here](../video-recorder-testng/src/test/java/integration/videorecorder/testng/VideoRecorderTestNgTest.java)
 
+P.S. If needed, you can get reference to the recorded video file:
+
+```java
+Optional<Path> videoFile = VideoRecorderListener.getRecordedVideo();
+```
+
 ### Other testing frameworks
 
 Selenide has built-in support for two testing frameworks: JUnit5 and TestNG.
 
-If you use some other framework, you can run video recorder directly like this (pseudocode):
+If you use some other framework, you can run video recorder directly like this:
 
 ```java
-videoRecorder = new VideoRecorder(
-  webdriver().object(),
+VideoRecorder videoRecorder = new VideoRecorder(
   RecorderFileUtils.generateVideoFileName(<testClassName>, <testName>));
-executor = new ScheduledThreadPoolExecutor(1);
-executor.scheduleAtFixedRate(videoRecorder, 0, 1000, TimeUnit.MILLISECONDS);
+videoRecorder.start();
 ```
 
 in the first line the parameter for `VideoRecorder` constructor should pass `Webdriver` instance.
 `<testClassName>` and `<testName>` can be `null`. These parameters are needed to point recorder to the video file.
 
-| testsClassName | testName   | result file name location                                                                       |
-|----------------|------------|-------------------------------------------------------------------------------------------------|
-| null or ""     | null or "" | `Configuration.reportsFolder + "/records/" + <randomFileName>.webm`                             |
-| not empty      | null or "" | `Configuration.reportsFolder + "/records" + "/testClassName/" + <randomFileName>.webm`          |
-| null or ""     | not empty  | `Configuration.reportsFolder + "/records" + "/testName/" + <randomFileName>.webm`               |
-| not empty      | not empty  | `Configuration.reportsFolder + "/records" + "/testClassName/testName/" + <randomFileName>.webm` |
+| testsClassName | testName   | result file name location                                                                     |
+|----------------|------------|-----------------------------------------------------------------------------------------------|
+| null or ""     | null or "" | `Configuration.reportsFolder + "/video/" + <randomFileName>.webm`                             |
+| not empty      | null or "" | `Configuration.reportsFolder + "/video" + "/testClassName/" + <randomFileName>.webm`          |
+| null or ""     | not empty  | `Configuration.reportsFolder + "/video" + "/testName/" + <randomFileName>.webm`               |
+| not empty      | not empty  | `Configuration.reportsFolder + "/video" + "/testClassName/testName/" + <randomFileName>.webm` |
 
 The last line schedules task every second.
 After recording, you should stop recorder:
@@ -74,14 +84,4 @@ After recording, you should stop recorder:
 ```java
 videoRecorder.stopRecording();
 executor.shutdown();
-```
-
-After that you can get reference to already recorded file.
-
-```java
-Path videoFile = RecorderFileUtils.getLastModifiedFile(
-  RecorderFileUtils.generateOrGetVideoFolderName(
-    testInfo.getTestClass().get().getSimpleName(), 
-    testInfo.getTestMethod().get().getName())
-);
 ```

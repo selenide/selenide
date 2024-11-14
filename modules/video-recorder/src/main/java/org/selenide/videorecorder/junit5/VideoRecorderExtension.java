@@ -1,18 +1,18 @@
 package org.selenide.videorecorder.junit5;
 
-import com.codeborne.selenide.WebDriverRunner;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.selenide.videorecorder.core.NoVideo;
+import org.selenide.videorecorder.core.RecordedVideos;
 import org.selenide.videorecorder.core.VideoRecorder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.nio.file.Path;
+import java.util.Optional;
 
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.webdriver;
 import static org.selenide.videorecorder.core.RecorderFileUtils.generateVideoFileName;
 
 /**
@@ -20,41 +20,36 @@ import static org.selenide.videorecorder.core.RecorderFileUtils.generateVideoFil
  * 07.05.2024 11:57
  **/
 public class VideoRecorderExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
+  private static final Logger log = LoggerFactory.getLogger(VideoRecorderExtension.class);
+
+  private static final RecordedVideos recordedVideos = new RecordedVideos();
+
+  // TODO store in context
+  @Nullable
   private VideoRecorder videoRecorder;
-  private ScheduledThreadPoolExecutor timer;
-
-  /**
-   * Init video recorder and if there is no webdriver is running
-   * call Selnide.open() method.
-   */
-  private void initRecorder(@Nullable String className, @Nullable String testName) {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
-      open();
-    }
-    videoRecorder = new VideoRecorder(webdriver().object(), generateVideoFileName(className, testName));
-    timer = new ScheduledThreadPoolExecutor(1);
-    timer.scheduleAtFixedRate(videoRecorder, 0, 1, TimeUnit.SECONDS);
-  }
-
-  private void stop() {
-    videoRecorder.stopRecording();
-    timer.shutdown();
-  }
-
-  @Override
-  public void afterTestExecution(ExtensionContext context) {
-    if (shouldRecordVideo(context)) {
-      stop();
-    }
-  }
 
   @Override
   public void beforeTestExecution(ExtensionContext context) {
     if (shouldRecordVideo(context)) {
       String testClass = context.getTestClass().map(tc -> tc.getSimpleName()).orElse(null);
       String testMethod = context.getTestMethod().map(tm -> tm.getName()).orElse(null);
-      initRecorder(testClass, testMethod);
+      videoRecorder = new VideoRecorder(generateVideoFileName(testClass, testMethod));
+      videoRecorder.start();
     }
+  }
+
+  @Override
+  public void afterTestExecution(ExtensionContext context) {
+    if (videoRecorder != null) {
+      videoRecorder.stop();
+      recordedVideos.add(videoRecorder.videoFile());
+      log.info("Video recorded: {}", videoRecorder.videoUrl().orElseThrow());
+      videoRecorder = null;
+    }
+  }
+
+  public static Optional<Path> getRecordedVideo() {
+    return recordedVideos.getRecordedVideo();
   }
 
   private boolean shouldRecordVideo(ExtensionContext context) {

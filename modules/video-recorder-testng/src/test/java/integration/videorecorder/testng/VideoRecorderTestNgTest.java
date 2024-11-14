@@ -1,7 +1,6 @@
 package integration.videorecorder.testng;
 
 import com.codeborne.selenide.DragAndDropOptions;
-import org.selenide.videorecorder.core.RecorderFileUtils;
 import org.selenide.videorecorder.testng.VideoRecorderListener;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -23,10 +22,9 @@ public class VideoRecorderTestNgTest {
 
   @AfterMethod
   public void afterMethod(ITestResult result) {
-    Path path = RecorderFileUtils
-      .generateOrGetVideoFolderName(result.getTestClass().getRealClass().getSimpleName(),
-        result.getMethod().getMethodName());
-    path = RecorderFileUtils.getLastModifiedFile(path);
+    Path path = VideoRecorderListener.getRecordedVideo().orElseThrow();
+    String expectedFileName = result.getTestClass().getRealClass().getSimpleName() + "/" + result.getMethod().getMethodName();
+    assertThat(path.toString()).contains(expectedFileName);
     assertThat(path.toFile().length()).isGreaterThan(0);
     assertThat(path.toFile()).hasExtension("webm");
   }

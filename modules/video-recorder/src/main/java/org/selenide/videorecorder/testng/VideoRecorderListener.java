@@ -1,63 +1,64 @@
 package org.selenide.videorecorder.testng;
 
-import com.codeborne.selenide.WebDriverRunner;
+import org.jspecify.annotations.Nullable;
 import org.selenide.videorecorder.core.NoVideo;
-import org.selenide.videorecorder.core.RecorderFileUtils;
+import org.selenide.videorecorder.core.RecordedVideos;
 import org.selenide.videorecorder.core.VideoRecorder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.nio.file.Path;
+import java.util.Optional;
 
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.webdriver;
+import static org.selenide.videorecorder.core.RecorderFileUtils.generateVideoFileName;
 
 /**
  * Created by Serhii Bryt
  * 07.05.2024 11:57
  */
 public class VideoRecorderListener implements ITestListener {
+  private static final Logger log = LoggerFactory.getLogger(VideoRecorderListener.class);
+  private static final RecordedVideos recordedVideos = new RecordedVideos();
+
+  @Nullable
   private VideoRecorder videoRecorder;
-  private ScheduledThreadPoolExecutor timer;
 
   @Override
   public void onTestStart(ITestResult result) {
     if (shouldRecordVideo(result)) {
-      initRecorder(result.getTestClass().getRealClass().getSimpleName(), result.getMethod().getMethodName());
+      String testClass = result.getTestClass().getRealClass().getSimpleName();
+      String testMethod = result.getMethod().getMethodName();
+      videoRecorder = new VideoRecorder(generateVideoFileName(testClass, testMethod));
+      videoRecorder.start();
     }
-  }
-
-  private void initRecorder(String testClassName, String testName) {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
-      open();
-    }
-    videoRecorder = new VideoRecorder(webdriver().object(),
-      RecorderFileUtils.generateVideoFileName(testClassName, testName));
-    timer = new ScheduledThreadPoolExecutor(1);
-    timer.scheduleAtFixedRate(videoRecorder, 0, 1000, TimeUnit.MILLISECONDS);
   }
 
   @Override
   public void onTestFailure(ITestResult result) {
-    if (shouldRecordVideo(result)) {
-      stop();
-    }
-  }
-
-  private void stop() {
-    videoRecorder.stopRecording();
-    timer.shutdownNow();
+    finish();
   }
 
   @Override
   public void onTestSuccess(ITestResult result) {
-    if (shouldRecordVideo(result)) {
-      stop();
+    finish();
+  }
+
+  private void finish() {
+    if (videoRecorder != null) {
+      videoRecorder.stop();
+      recordedVideos.add(videoRecorder.videoFile());
+      log.info("Video recorded: {}", videoRecorder.videoUrl().orElseThrow());
+      videoRecorder = null;
     }
   }
 
   private static boolean shouldRecordVideo(ITestResult result) {
     return !result.getMethod().getConstructorOrMethod().getMethod().isAnnotationPresent(NoVideo.class);
+  }
+
+  public static Optional<Path> getRecordedVideo() {
+    return recordedVideos.getRecordedVideo();
   }
 }
