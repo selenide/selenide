@@ -17,8 +17,6 @@ dependencies {
     exclude(group: 'org.apache.ant')
     exclude(group: 'com.google.inject')
   }
-  implementation("org.bytedeco:javacv:$javacvVersion")
-  implementation("org.bytedeco:javacv-platform:$javacvVersion")
 }
 
 tasks.withType(Test).configureEach {
