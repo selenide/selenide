@@ -1,30 +1,36 @@
 package org.selenide.videorecorder.core;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
-import java.util.Optional;
 
+import static java.lang.System.nanoTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class RecordedVideosTest {
-  private final RecordedVideos recordedVideos = new RecordedVideos();
+  private final long threadId = nanoTime();
+
+  @BeforeEach
+  void setUp() {
+    RecordedVideos.clear();
+  }
 
   @Test
   void returnsLastVideo() {
-    recordedVideos.add(Optional.of(Path.of("tere.avi")));
-    assertThat(recordedVideos.getRecordedVideo()).contains(Path.of("tere.avi"));
+    RecordedVideos.add(threadId, Path.of("tere.avi"));
+    assertThat(RecordedVideos.getRecordedVideo(threadId)).contains(Path.of("tere.avi"));
   }
 
   @Test
   void returnsEmptyOption_ifNoVideo() {
-    assertThat(recordedVideos.getRecordedVideo()).isEmpty();
+    assertThat(RecordedVideos.getRecordedVideo(threadId)).isEmpty();
   }
 
   @Test
   void returnsEmptyOption_ifLastVideoWasNotRecorded() {
-    recordedVideos.add(Optional.of(Path.of(".")));
-    recordedVideos.add(Optional.empty());
-    assertThat(recordedVideos.getRecordedVideo()).isEmpty();
+    RecordedVideos.add(threadId, Path.of("."));
+    RecordedVideos.remove(threadId);
+    assertThat(RecordedVideos.getRecordedVideo(threadId)).isEmpty();
   }
 }

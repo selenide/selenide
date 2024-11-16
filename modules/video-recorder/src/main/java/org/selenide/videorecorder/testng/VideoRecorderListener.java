@@ -12,13 +12,14 @@ import org.testng.ITestResult;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import static java.lang.Thread.currentThread;
+
 /**
  * Created by Serhii Bryt
  * 07.05.2024 11:57
  */
 public class VideoRecorderListener implements ITestListener {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorderListener.class);
-  private static final RecordedVideos recordedVideos = new RecordedVideos();
 
   @Nullable
   private VideoRecorder videoRecorder;
@@ -44,8 +45,6 @@ public class VideoRecorderListener implements ITestListener {
   private void finish() {
     if (videoRecorder != null) {
       videoRecorder.stop();
-      recordedVideos.add(videoRecorder.videoFile());
-      log.info("Video recorded: {}", videoRecorder.videoUrl().orElseThrow());
       videoRecorder = null;
     }
   }
@@ -55,6 +54,6 @@ public class VideoRecorderListener implements ITestListener {
   }
 
   public static Optional<Path> getRecordedVideo() {
-    return recordedVideos.getRecordedVideo();
+    return RecordedVideos.getRecordedVideo(currentThread().getId());
   }
 }

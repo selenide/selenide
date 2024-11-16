@@ -7,21 +7,17 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.selenide.videorecorder.core.NoVideo;
 import org.selenide.videorecorder.core.RecordedVideos;
 import org.selenide.videorecorder.core.VideoRecorder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.util.Optional;
+
+import static java.lang.Thread.currentThread;
 
 /**
  * Created by Serhii Bryt
  * 07.05.2024 11:57
  **/
 public class VideoRecorderExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
-  private static final Logger log = LoggerFactory.getLogger(VideoRecorderExtension.class);
-
-  private static final RecordedVideos recordedVideos = new RecordedVideos();
-
   // TODO store in context
   @Nullable
   private VideoRecorder videoRecorder;
@@ -38,14 +34,12 @@ public class VideoRecorderExtension implements BeforeTestExecutionCallback, Afte
   public void afterTestExecution(ExtensionContext context) {
     if (videoRecorder != null) {
       videoRecorder.stop();
-      recordedVideos.add(videoRecorder.videoFile());
-      log.info("Video recorded: {}", videoRecorder.videoUrl().orElseThrow());
       videoRecorder = null;
     }
   }
 
   public static Optional<Path> getRecordedVideo() {
-    return recordedVideos.getRecordedVideo();
+    return RecordedVideos.getRecordedVideo(currentThread().getId());
   }
 
   private boolean shouldRecordVideo(ExtensionContext context) {
