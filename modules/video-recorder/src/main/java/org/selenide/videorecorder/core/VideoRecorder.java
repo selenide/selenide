@@ -3,7 +3,6 @@ package org.selenide.videorecorder.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Path;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -49,11 +48,7 @@ public class VideoRecorder {
   public VideoRecorder(int framesPerSecond) {
     fps = framesPerSecond;
     screenShooterTask = new ScreenShooter(currentThread().getId(), screenshots);
-    videoMergerTask = new VideoMerger(fps, DEFAULT_CRF, screenshots);
-  }
-
-  public Optional<Path> videoFile() {
-    return videoMergerTask.videoFile();
+    videoMergerTask = new VideoMerger(currentThread().getId(), fps, DEFAULT_CRF, screenshots);
   }
 
   public Optional<String> videoUrl() {
@@ -61,9 +56,16 @@ public class VideoRecorder {
   }
 
   public void start() {
-    int delayBetweenFrames = (int) (SECONDS.toMicros(1) / fps); // FPS times per second
-    screenshooter.scheduleAtFixedRate(screenShooterTask, 0, delayBetweenFrames, MICROSECONDS);
+    RecordedVideos.remove(currentThread().getId());
+    screenshooter.scheduleAtFixedRate(screenShooterTask, 0, delayBetweenFramesMicros(), MICROSECONDS);
     videoMerger.scheduleWithFixedDelay(videoMergerTask, 0, 1, MILLISECONDS);
+  }
+
+  /**
+   * FPS times per second
+   */
+  private long delayBetweenFramesMicros() {
+    return SECONDS.toMicros(1) / fps;
   }
 
   public void stop() {
@@ -77,7 +79,7 @@ public class VideoRecorder {
       videoMerger.shutdown();
       stop(videoMerger, 20, "Video merger");
 
-      log.info("Video recorder stopped");
+      log.info("Video recorded: {}", videoUrl().orElseThrow());
     }
     catch (InterruptedException e) {
       throw new RuntimeException(e);
@@ -89,7 +91,7 @@ public class VideoRecorder {
       log.warn("{} thread hasn't completed in {} seconds", name, timeoutSeconds);
     }
     else {
-      log.info("{} thread stopped within {} seconds", name, timeoutSeconds);
+      log.debug("{} thread stopped within {} seconds", name, timeoutSeconds);
     }
   }
 }
