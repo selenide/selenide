@@ -42,22 +42,22 @@ public class VideoRecorder {
   private final ScreenShooter screenShooterTask;
   private final VideoMerger videoMergerTask;
 
-  public VideoRecorder(Path videoFile) {
-    this(DEFAULT_FPS, videoFile);
+  public VideoRecorder() {
+    this(DEFAULT_FPS);
   }
 
-  public VideoRecorder(int framesPerSecond, Path videoFile) {
+  public VideoRecorder(int framesPerSecond) {
     fps = framesPerSecond;
-    screenShooterTask = new ScreenShooter(currentThread().getId(), videoFile, screenshots);
+    screenShooterTask = new ScreenShooter(currentThread().getId(), screenshots);
     videoMergerTask = new VideoMerger(fps, DEFAULT_CRF, screenshots);
   }
 
   public Optional<Path> videoFile() {
-    return screenShooterTask.videoFile();
+    return videoMergerTask.videoFile();
   }
 
   public Optional<String> videoUrl() {
-    return screenShooterTask.videoUrl();
+    return videoMergerTask.videoUrl();
   }
 
   public void start() {
