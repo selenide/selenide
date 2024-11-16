@@ -52,7 +52,7 @@ class ScreenShooter extends TimerTask {
     screenshots.add(endMarker(t1));
     log.debug("Taken a screenshot for webdriver END at {}", t1);
 
-    long t2 = currentTimeMillis() + 2000;
+    long t2 = currentTimeMillis() + 3000;
     screenshots.add(endMarker(t2));
     log.debug("Taken a screenshot for webdriver END at {}", t2);
   }

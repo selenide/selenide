@@ -75,7 +75,7 @@ public class VideoRecorder {
       screenShooterTask.finish();
 
       videoMerger.shutdown();
-      stop(videoMerger, 10, "Video merger");
+      stop(videoMerger, 20, "Video merger");
 
       log.info("Video recorder stopped");
     }

@@ -49,13 +49,6 @@ class VideoMerger extends TimerTask {
 
         log.info("Processing screenshot {} (end: {}), queue size: {}", screenshot.timestamp, screenshot.isEnd(), screenshots.size());
 
-        if (screenshot.isEnd()) {
-          log.info("Detected end of screenshots queue: {}", screenshot);
-          finish();
-          cancel();
-          break;
-        }
-
         try {
           long start = currentTimeMillis();
           FFmpegFrameRecorder videoRecorder = getVideoRecorder(screenshot, screenshot.videoFile);
@@ -75,6 +68,13 @@ class VideoMerger extends TimerTask {
           long end = currentTimeMillis();
           log.debug("Added screenshot {} x {} times in {} ms. (frames queue size: {})",
             screenshot.timestamp, framesCount, end - start, screenshots.size());
+
+          if (screenshot.isEnd()) {
+            log.info("Detected end of screenshots queue: {}", screenshot);
+            finish();
+            cancel();
+            break;
+          }
         }
         catch (FFmpegFrameRecorder.Exception e) {
           log.error("Failed to add screenshot to video", e);
