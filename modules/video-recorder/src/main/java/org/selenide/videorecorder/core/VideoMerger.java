@@ -13,8 +13,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.nanoTime;
@@ -24,6 +26,7 @@ import static org.bytedeco.ffmpeg.global.avutil.AV_PIX_FMT_YUV420P;
 
 class VideoMerger extends TimerTask {
   private static final Logger log = LoggerFactory.getLogger(VideoMerger.class);
+  private static final AtomicLong videoFileCounter = new AtomicLong(0);
   private final int fps;
   private final int crf;
   private final Queue<Screenshot> screenshots;
@@ -31,10 +34,21 @@ class VideoMerger extends TimerTask {
   @Nullable
   private FFmpegFrameRecorder recorder;
 
+  @Nullable
+  private Path videoFile;
+
   VideoMerger(int fps, int crf, Queue<Screenshot> screenshots) {
     this.fps = fps;
     this.crf = crf;
     this.screenshots = screenshots;
+  }
+
+  public Optional<Path> videoFile() {
+    return Optional.ofNullable(videoFile);
+  }
+
+  public Optional<String> videoUrl() {
+    return videoFile().map(f -> f.toAbsolutePath().toUri().toString());
   }
 
   @Override
@@ -51,7 +65,7 @@ class VideoMerger extends TimerTask {
 
         try {
           long start = currentTimeMillis();
-          FFmpegFrameRecorder videoRecorder = getVideoRecorder(screenshot, screenshot.videoFile);
+          FFmpegFrameRecorder videoRecorder = getVideoRecorder(screenshot);
           int framesCount = framesCount(fps, screenshot.timestamp, next.timestamp);
           if (framesCount < 1 || framesCount > fps) {
             log.warn("Strange: framesCount={}: fps={}, screenshot.ts={}, next.ts={}", framesCount, fps, screenshot.timestamp, next.timestamp);
@@ -92,18 +106,19 @@ class VideoMerger extends TimerTask {
     return (int) ((endMoment - startMoment) * fps / 1000);
   }
 
-  private FFmpegFrameRecorder getVideoRecorder(Screenshot screenshot, Path videoFile) {
+  private FFmpegFrameRecorder getVideoRecorder(Screenshot screenshot) {
     if (recorder == null) {
-      recorder = initVideoRecording(screenshot, videoFile);
+      recorder = initVideoRecording(screenshot);
     }
     return requireNonNull(recorder);
   }
 
-  private FFmpegFrameRecorder initVideoRecording(Screenshot screenshot, Path videoFile) {
+  private FFmpegFrameRecorder initVideoRecording(Screenshot screenshot) {
     Dimension window = screenshot.window;
+    videoFile = Path.of(screenshot.config.reportsFolder(), currentTimeMillis() + "." + videoFileCounter.getAndIncrement() + ".webm");
     log.info("Start FFMpeg video recorder of size {}x{} in file {}", window.width, window.height, videoFile.toAbsolutePath());
 
-    Path videoFolder = prepareVideoFolder(requireNonNull(videoFile));
+    Path videoFolder = prepareVideoFolder(videoFile);
     log.info("Created folder for video: {}", videoFolder.toAbsolutePath());
 
     FFmpegFrameRecorder rec = new FFmpegFrameRecorder(videoFile.toFile(), window.width, window.height);

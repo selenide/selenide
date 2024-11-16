@@ -12,8 +12,6 @@ import org.testng.ITestResult;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static org.selenide.videorecorder.core.RecorderFileUtils.generateVideoFileName;
-
 /**
  * Created by Serhii Bryt
  * 07.05.2024 11:57
@@ -28,9 +26,7 @@ public class VideoRecorderListener implements ITestListener {
   @Override
   public void onTestStart(ITestResult result) {
     if (shouldRecordVideo(result)) {
-      String testClass = result.getTestClass().getRealClass().getSimpleName();
-      String testMethod = result.getMethod().getMethodName();
-      videoRecorder = new VideoRecorder(generateVideoFileName(testClass, testMethod));
+      videoRecorder = new VideoRecorder();
       videoRecorder.start();
     }
   }

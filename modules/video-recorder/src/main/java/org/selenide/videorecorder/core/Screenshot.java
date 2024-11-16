@@ -1,10 +1,11 @@
 package org.selenide.videorecorder.core;
 
+import com.codeborne.selenide.Config;
+import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.impl.Lazy;
 import org.openqa.selenium.Dimension;
 
 import java.io.IOException;
-import java.nio.file.Path;
 
 import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
 import static org.apache.commons.io.IOUtils.resourceToByteArray;
@@ -14,13 +15,13 @@ class Screenshot {
 
   final long timestamp;
   final Dimension window;
-  final Path videoFile;
+  final Config config;
   final byte[] screenshot;
 
-  Screenshot(long timestamp, Dimension window, Path videoFile, byte[] screenshot) {
+  Screenshot(long timestamp, Dimension window, Config config, byte[] screenshot) {
     this.timestamp = timestamp;
     this.window = window;
-    this.videoFile = videoFile;
+    this.config = config;
     this.screenshot = screenshot;
   }
 
@@ -48,7 +49,7 @@ class Screenshot {
 
   private static class EndMarker extends Screenshot {
     EndMarker(long timestamp) {
-      super(timestamp, new Dimension(0, 0), Path.of("."), LAST_SCREEN.get());
+      super(timestamp, new Dimension(0, 0), new SelenideConfig(), LAST_SCREEN.get());
     }
 
     @Override

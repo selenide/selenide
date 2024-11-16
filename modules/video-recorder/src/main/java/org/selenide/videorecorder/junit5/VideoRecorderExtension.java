@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static org.selenide.videorecorder.core.RecorderFileUtils.generateVideoFileName;
-
 /**
  * Created by Serhii Bryt
  * 07.05.2024 11:57
@@ -31,9 +29,7 @@ public class VideoRecorderExtension implements BeforeTestExecutionCallback, Afte
   @Override
   public void beforeTestExecution(ExtensionContext context) {
     if (shouldRecordVideo(context)) {
-      String testClass = context.getTestClass().map(tc -> tc.getSimpleName()).orElse(null);
-      String testMethod = context.getTestMethod().map(tm -> tm.getName()).orElse(null);
-      videoRecorder = new VideoRecorder(generateVideoFileName(testClass, testMethod));
+      videoRecorder = new VideoRecorder();
       videoRecorder.start();
     }
   }
