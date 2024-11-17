@@ -7,10 +7,12 @@ import com.browserup.bup.filters.ResponseFilter;
 import com.codeborne.selenide.Config;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
-import org.openqa.selenium.net.NetworkUtils;
+import org.openqa.selenium.net.DefaultNetworkInterfaceProvider;
+import org.openqa.selenium.net.NetworkInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -157,14 +159,29 @@ public class SelenideProxyServer {
 
   private String guessHostName() {
     String browserupHostName = getConnectableAddress().getHostAddress();
-    String seleniumHostName = new NetworkUtils().getNonLoopbackAddressOfThisMachine();
-    if (Objects.equals(browserupHostName, seleniumHostName)) {
+    String seleniumHostName = getNonLoopbackAddressOfThisMachine();
+    if (Objects.equals(browserupHostName, seleniumHostName) || seleniumHostName.isEmpty()) {
       log.info("Using proxy host: '{}'", seleniumHostName);
     }
     else {
       log.info("Using proxy host resolved by Selenium: '{}' (fyi BrowserUpProxy resolved : '{}')", seleniumHostName, browserupHostName);
     }
     return seleniumHostName;
+  }
+
+  /**
+   * Copied from org.openqa.selenium.net.NetworkUtils, but works without internet
+   * @return empty string if could not find a non-loopback ip4 address for this machine
+   */
+  private String getNonLoopbackAddressOfThisMachine() {
+    for (NetworkInterface iface : new DefaultNetworkInterfaceProvider().getNetworkInterfaces()) {
+      final InetAddress ip4NonLoopback = iface.getIp4NonLoopBackOnly();
+      if (ip4NonLoopback != null) {
+        return ip4NonLoopback.getHostAddress();
+      }
+    }
+    // Could not find a non-loopback ip4 address for this machine
+    return "";
   }
 
   /**
