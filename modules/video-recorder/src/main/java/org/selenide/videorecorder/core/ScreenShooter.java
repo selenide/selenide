@@ -26,11 +26,13 @@ class ScreenShooter extends TimerTask {
   @Override
   public void run() {
     WebdriversRegistry.webdriver(threadId).ifPresentOrElse(driver -> {
+      long start = currentTimeMillis();
+      log.debug("Taking a screenshot for webdriver in thread {} at {} ...", threadId, start);
       WebDriver webDriver = driver.webDriver();
       byte[] screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(BYTES);
       long timestamp = currentTimeMillis();
-      screenshots.add(new Screenshot(timestamp, webDriver.manage().window().getSize(), driver.config(), screenshot));
-      log.debug("Taken a screenshot for webdriver in thread {} at {}", threadId, timestamp);
+      screenshots.add(new Screenshot(start, webDriver.manage().window().getSize(), driver.config(), screenshot));
+      log.debug("Taken a screenshot for webdriver in thread {} at {} in {} ms.", threadId, timestamp, timestamp - start);
     }, () -> {
       log.debug("Skip taking a screenshot because webdriver is not started in thread {}", threadId);
     });
@@ -39,10 +41,10 @@ class ScreenShooter extends TimerTask {
   void finish() {
     long t1 = currentTimeMillis() + 1000;
     screenshots.add(endMarker(t1));
-    log.debug("Taken a screenshot for webdriver END at {}", t1);
+    log.debug("Added an end marker at {}", t1);
 
     long t2 = currentTimeMillis() + 3000;
     screenshots.add(endMarker(t2));
-    log.debug("Taken a screenshot for webdriver END at {}", t2);
+    log.debug("Added an end marker at {}", t2);
   }
 }
