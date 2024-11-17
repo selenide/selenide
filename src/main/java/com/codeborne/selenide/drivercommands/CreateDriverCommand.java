@@ -67,7 +67,7 @@ public class CreateDriverCommand {
 
       WebDriver webdriver = factory.createWebDriver(config, browserProxy, browserDownloadsFolder);
 
-      log.info("Created webdriver in thread {}: {} -> {}, downloadsFolder: {}",
+      log.debug("Created webdriver in thread {}: {} -> {}, downloadsFolder: {}",
         currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver, downloadsFolder);
 
       WebDriver webDriver = addListeners(webdriver, listeners);
@@ -82,7 +82,7 @@ public class CreateDriverCommand {
       return webdriver;
     }
 
-    log.info("Add listeners to webdriver: {}", listeners);
+    log.debug("Add listeners to webdriver: {}", listeners);
     EventFiringDecorator<WebDriver> wrapper = new EventFiringDecorator<>(listeners.toArray(new WebDriverListener[0]));
     return wrapper.decorate(webdriver);
   }

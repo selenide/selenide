@@ -41,7 +41,7 @@ public final class FileHelper {
   @CanIgnoreReturnValue
   public static File ensureFolderExists(File folder) {
     if (!folder.exists() || !folder.getAbsoluteFile().exists()) {
-      log.info("Creating folder: {}", folder.getAbsolutePath());
+      log.debug("Creating folder: {}", folder.getAbsolutePath());
       try {
         createDirectories(folder.toPath());
       } catch (IOException e) {
@@ -77,7 +77,7 @@ public final class FileHelper {
       File[] files = folder.listFiles();
       if (files == null || files.length == 0) {
         if (folder.delete()) {
-          log.info("Deleted empty folder: {}", folder.getAbsolutePath());
+          log.debug("Deleted empty folder: {}", folder.getAbsolutePath());
         } else {
           log.error("Failed to delete empty folder: {}", folder.getAbsolutePath());
         }

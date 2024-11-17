@@ -40,7 +40,7 @@ public class Plugins {
       return defaultPlugin;
     }
     T implementation = loader.next();
-    logger.info("Using implementation of {}: {}", klass.getName(), implementation.getClass().getName());
+    logger.debug("Using implementation of {}: {}", klass.getName(), implementation.getClass().getName());
     return implementation;
   }
 
