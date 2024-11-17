@@ -9,10 +9,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledExecutorService;
 
 import static com.codeborne.selenide.impl.ThreadNamer.named;
+import static java.lang.Integer.toHexString;
 import static java.lang.Thread.currentThread;
 import static java.util.concurrent.Executors.newScheduledThreadPool;
-import static java.util.concurrent.TimeUnit.MICROSECONDS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -57,15 +58,16 @@ public class VideoRecorder {
 
   public void start() {
     RecordedVideos.remove(currentThread().getId());
-    screenshooter.scheduleAtFixedRate(screenShooterTask, 0, delayBetweenFramesMicros(), MICROSECONDS);
+    log.info("Starting screenshooter every {} nanoseconds to achieve fps {}", delayBetweenFramesNanos(), fps);
+    screenshooter.scheduleAtFixedRate(screenShooterTask, 0, delayBetweenFramesNanos(), NANOSECONDS);
     videoMerger.scheduleWithFixedDelay(videoMergerTask, 0, 1, MILLISECONDS);
   }
 
   /**
    * FPS times per second
    */
-  private long delayBetweenFramesMicros() {
-    return SECONDS.toMicros(1) / fps;
+  private long delayBetweenFramesNanos() {
+    return SECONDS.toNanos(1) / fps;
   }
 
   public void stop() {
@@ -82,6 +84,7 @@ public class VideoRecorder {
       log.info("Video recorded: {}", videoUrl().orElseThrow());
     }
     catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
       throw new RuntimeException(e);
     }
   }
@@ -93,5 +96,10 @@ public class VideoRecorder {
     else {
       log.debug("{} thread stopped within {} seconds", name, timeoutSeconds);
     }
+  }
+
+  @Override
+  public String toString() {
+    return "%s{fps:%s, queueSize:%s}@%s".formatted(getClass().getSimpleName(), fps, screenshots.size(), toHexString(hashCode()));
   }
 }

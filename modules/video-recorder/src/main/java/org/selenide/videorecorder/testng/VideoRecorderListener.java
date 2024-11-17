@@ -1,11 +1,8 @@
 package org.selenide.videorecorder.testng;
 
-import org.jspecify.annotations.Nullable;
 import org.selenide.videorecorder.core.NoVideo;
 import org.selenide.videorecorder.core.RecordedVideos;
 import org.selenide.videorecorder.core.VideoRecorder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
@@ -19,33 +16,33 @@ import static java.lang.Thread.currentThread;
  * 07.05.2024 11:57
  */
 public class VideoRecorderListener implements ITestListener {
-  private static final Logger log = LoggerFactory.getLogger(VideoRecorderListener.class);
-
-  @Nullable
-  private VideoRecorder videoRecorder;
+  private static final String NAME = "VIDEO_RECORDER";
 
   @Override
   public void onTestStart(ITestResult result) {
+    result.removeAttribute(NAME);
     if (shouldRecordVideo(result)) {
-      videoRecorder = new VideoRecorder();
+      VideoRecorder videoRecorder = new VideoRecorder();
+      result.setAttribute(NAME, videoRecorder);
       videoRecorder.start();
     }
   }
 
   @Override
   public void onTestFailure(ITestResult result) {
-    finish();
+    finish(result);
   }
 
   @Override
   public void onTestSuccess(ITestResult result) {
-    finish();
+    finish(result);
   }
 
-  private void finish() {
+  private void finish(ITestResult result) {
+    VideoRecorder videoRecorder = (VideoRecorder) result.getAttribute(NAME);
     if (videoRecorder != null) {
       videoRecorder.stop();
-      videoRecorder = null;
+      result.removeAttribute(NAME);
     }
   }
 
