@@ -63,9 +63,7 @@ public class WebDriverFactory {
     browserResizer.adjustBrowserPosition(config, webdriver);
     setLoadTimeout(config, webdriver);
 
-    logBrowserVersion(webdriver);
-    log.info("Selenide v. {}", SelenideDriver.class.getPackage().getImplementationVersion());
-    logSeleniumInfo();
+    logVersions(webdriver);
     return webdriver;
   }
 
@@ -119,18 +117,21 @@ public class WebDriverFactory {
     }
   }
 
-  private void logSeleniumInfo() {
+  private void logVersions(WebDriver webdriver) {
     BuildInfo seleniumInfo = new BuildInfo();
-    log.info("Selenium WebDriver v. {} build revision: {}", seleniumInfo.getReleaseLabel(), seleniumInfo.getBuildRevision());
+    log.info("Selenide {} / Selenium {} / {}",
+      SelenideDriver.class.getPackage().getImplementationVersion(),
+      seleniumInfo.getReleaseLabel(),
+      getBrowserVersion(webdriver)
+    );
   }
 
-  private void logBrowserVersion(WebDriver webdriver) {
+  private String getBrowserVersion(WebDriver webdriver) {
     if (webdriver instanceof HasCapabilities hasCapabilities) {
-      Capabilities capabilities = hasCapabilities.getCapabilities();
-      log.info("BrowserName={} Version={} Platform={}",
-        capabilities.getBrowserName(), capabilities.getBrowserVersion(), capabilities.getPlatformName());
+      Capabilities c = hasCapabilities.getCapabilities();
+      return "%s %s %s".formatted(c.getBrowserName(), c.getBrowserVersion(), c.getPlatformName());
     } else {
-      log.info("BrowserName={}", webdriver.getClass().getName());
+      return webdriver.getClass().getName();
     }
   }
 }

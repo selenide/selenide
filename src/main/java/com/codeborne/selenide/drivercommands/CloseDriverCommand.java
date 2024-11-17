@@ -31,17 +31,17 @@ public class CloseDriverCommand {
 
     if (webDriver != null) {
       long start = currentTimeMillis();
-      log.info("Close webdriver: {} -> {}...", threadId, webDriver);
+      log.debug("Close webdriver: {} -> {}...", threadId, webDriver);
       quitSafely(webDriver);
-      log.info("Closed webdriver {} in {} ms", threadId, currentTimeMillis() - start);
+      log.debug("Closed webdriver {} in {} ms", threadId, currentTimeMillis() - start);
     }
 
     if (wd.config().proxyEnabled()) {
       long start = currentTimeMillis();
       SelenideProxyServer proxy = wd.proxy();
-      log.info("Close proxy server: {} -> {}...", threadId, proxy);
+      log.debug("Close proxy server: {} -> {}...", threadId, proxy);
       proxy.shutdown();
-      log.info("Closed proxy server {} in {} ms", threadId, currentTimeMillis() - start);
+      log.debug("Closed proxy server {} in {} ms", threadId, currentTimeMillis() - start);
     }
   }
 

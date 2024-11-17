@@ -23,9 +23,9 @@ class DisposablesRegistry<T extends Disposable> {
 
   public synchronized void register(T disposable) {
     disposables.add(disposable);
-    log.info("Register {} in {} [size={}]", disposable, currentThread().getId(), disposables.size());
+    log.debug("Register {} in {} [size={}]", disposable, currentThread().getId(), disposables.size());
     if (shutdownHook == null) {
-      log.info("Add shutdown hook in {} [size={}]", currentThread().getId(), disposables.size());
+      log.debug("Add shutdown hook in {} [size={}]", currentThread().getId(), disposables.size());
       shutdownHook = new SelenideCleanupShutdownHook();
       Runtime.getRuntime().addShutdownHook(shutdownHook);
     }
@@ -33,12 +33,12 @@ class DisposablesRegistry<T extends Disposable> {
 
   public synchronized void unregister(T webdriver) {
     disposables.remove(webdriver);
-    log.info("Unregister {} in {} [size={}]", webdriver, currentThread().getId(), disposables.size());
+    log.debug("Unregister {} in {} [size={}]", webdriver, currentThread().getId(), disposables.size());
   }
 
   synchronized void cancel() {
     if (isShutdownHookRegistered()) {
-      log.info("Remove shutdown hook in {}", currentThread().getId());
+      log.debug("Remove shutdown hook in {}", currentThread().getId());
       Runtime.getRuntime().removeShutdownHook(shutdownHook);
       shutdownHook = null;
     }
@@ -59,9 +59,9 @@ class DisposablesRegistry<T extends Disposable> {
   private class SelenideCleanupShutdownHook extends Thread {
     @Override
     public void run() {
-      log.info("Run cleanup: size={}", disposables.size());
+      log.debug("Run cleanup: size={}", disposables.size());
       disposeAllItems();
-      log.info("Finished cleanup");
+      log.debug("Finished cleanup");
     }
   }
 }
