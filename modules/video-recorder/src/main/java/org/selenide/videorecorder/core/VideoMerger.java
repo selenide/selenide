@@ -69,7 +69,7 @@ class VideoMerger extends TimerTask {
           FFmpegFrameRecorder videoRecorder = getVideoRecorder(current);
           int framesCount = framesCount(fps, current.timestamp, next.timestamp);
           validateFramesCount(framesCount, current, next);
-          framesCount = Math.max(1, framesCount);
+          framesCount = Math.max(2, framesCount);
 
           Frame frame = screenshotToFrame(converter, current.screenshot);
           log.debug("Adding {} to video x {} times (queue size: {}) ...", current, framesCount, screenshots.size());
