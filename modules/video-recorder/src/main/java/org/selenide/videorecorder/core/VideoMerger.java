@@ -20,7 +20,10 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.System.currentTimeMillis;
+import static java.lang.System.nanoTime;
 import static java.util.Objects.requireNonNull;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.bytedeco.ffmpeg.global.avutil.AV_PIX_FMT_YUV420P;
 
 class VideoMerger extends TimerTask {
@@ -54,49 +57,55 @@ class VideoMerger extends TimerTask {
 
   @Override
   public void run() {
-    if (screenshots.size() < 2) return;
+    if (screenshots.size() < 2) {
+      log.debug("Skip processing because of empty queue (queue size: {})", screenshots.size());
+      return;
+    }
 
-    try (Java2DFrameConverter converter = new Java2DFrameConverter()) {
-      while (true) {
-        if (screenshots.size() < 2) break;
-        Screenshot current = screenshots.poll();
-        Screenshot next = screenshots.element();
+    while (true) {
+      if (screenshots.size() < 2) {
+        log.debug("Emptied queue (queue size: {})", screenshots.size());
+        break;
+      }
+      Screenshot current = screenshots.poll();
+      Screenshot next = screenshots.element();
 
-        log.debug("Processing {} (queue size: {})", current, screenshots.size());
+      log.debug("Processing {} (queue size: {})", current, screenshots.size());
 
-        try {
-          long start = currentTimeMillis();
-          FFmpegFrameRecorder videoRecorder = getVideoRecorder(current);
-          int framesCount = framesCount(fps, current.timestamp, next.timestamp);
-          validateFramesCount(framesCount, current, next);
-          framesCount = Math.max(2, framesCount);
+      try {
+        long start = nanoTime();
+        FFmpegFrameRecorder videoRecorder = getVideoRecorder(current);
+        int framesCount = framesCount(fps, current.timestamp, next.timestamp);
+        validateFramesCount(framesCount, current, next);
+        framesCount = Math.max(1, framesCount);
 
-          Frame frame = screenshotToFrame(converter, current.screenshot);
+        try (Java2DFrameConverter converter = new Java2DFrameConverter();
+             Frame frame = screenshotToFrame(converter, current.screenshot)) {
           log.debug("Adding {} to video x {} times (queue size: {}) ...", current, framesCount, screenshots.size());
           for (int i = 0; i < framesCount; i++) {
             videoRecorder.record(frame);
           }
-
-          long end = currentTimeMillis();
-          log.debug("Added {} x {} times in {} ms. (queue size: {})", current, framesCount, end - start, screenshots.size());
-
-          if (current.isEnd()) {
-            log.debug("Detected end of screenshots queue: {}", current);
-            finish();
-            cancel();
-            break;
-          }
         }
-        catch (FFmpegFrameRecorder.Exception e) {
-          log.error("Failed to add screenshot to video", e);
-          throw new RuntimeException(e);
-        }
-        catch (Error | RuntimeException e) {
-          log.error("Failed to add screenshot to video", e);
-          throw e;
+
+        long durationMs = NANOSECONDS.toMillis(nanoTime() - start);
+        log.debug("Added {} x {} times in {} ms. (queue size: {})", current, framesCount, durationMs, screenshots.size());
+
+        if (current.isEnd()) {
+          log.debug("Detected end of screenshots queue: {}", current);
+          cancel();
+          break;
         }
       }
+      catch (FFmpegFrameRecorder.Exception e) {
+        log.error("Failed to add screenshot to video", e);
+        throw new RuntimeException(e);
+      }
+      catch (Error | RuntimeException e) {
+        log.error("Failed to add screenshot to video", e);
+        throw e;
+      }
     }
+    log.debug("Let's make a pause (queue size: {})", screenshots.size());
   }
 
   private void validateFramesCount(int framesCount, Screenshot current, Screenshot next) {
@@ -106,8 +115,8 @@ class VideoMerger extends TimerTask {
     }
   }
 
-  static int framesCount(int fps, long startMoment, long endMoment) {
-    return (int) ((endMoment - startMoment) * fps / 1000);
+  static int framesCount(int fps, long startMomentNanos, long endMomentNanos) {
+    return (int) ((endMomentNanos - startMomentNanos) * fps / SECONDS.toNanos(1));
   }
 
   private FFmpegFrameRecorder getVideoRecorder(Screenshot screenshot) {
@@ -178,7 +187,8 @@ class VideoMerger extends TimerTask {
     }
   }
 
-  private void finish() {
+  void finish() {
+    run();
     if (recorder != null) {
       try {
         log.debug("Stopping frame recorder ...");
