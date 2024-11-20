@@ -80,6 +80,7 @@ public class VideoRecorder {
 
       videoMerger.shutdown();
       stop(videoMerger, 20, "Video merger");
+      videoMergerTask.finish();
 
       log.info("Video recorded: {}", videoUrl().orElseThrow());
     }
