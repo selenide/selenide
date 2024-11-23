@@ -1,5 +1,6 @@
 package org.selenide.videorecorder.core;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
@@ -33,6 +34,7 @@ class VideoMerger extends TimerTask {
   private final int fps;
   private final int crf;
   private final Queue<Screenshot> screenshots;
+  private boolean cancelled;
 
   @Nullable
   private FFmpegFrameRecorder recorder;
@@ -58,60 +60,43 @@ class VideoMerger extends TimerTask {
   @Override
   public void run() {
     if (screenshots.size() < 2) {
-      log.debug("Skip processing because of empty queue (queue size: {})", screenshots.size());
+      log.trace("Skip processing because of empty queue (queue size: {})", screenshots.size());
       return;
     }
 
-    while (true) {
-      if (screenshots.size() < 2) {
-        log.debug("Emptied queue (queue size: {})", screenshots.size());
-        break;
-      }
-      Screenshot current = screenshots.poll();
-      Screenshot next = screenshots.element();
+    Screenshot current = screenshots.poll();
+    Screenshot next = screenshots.element();
 
-      log.debug("Processing {} (queue size: {})", current, screenshots.size());
+    log.debug("Processing {} (queue size: {})", current, screenshots.size());
 
-      try {
-        long start = nanoTime();
-        FFmpegFrameRecorder videoRecorder = getVideoRecorder(current);
-        int framesCount = framesCount(fps, current.timestamp, next.timestamp);
-        validateFramesCount(framesCount, current, next);
-        framesCount = Math.max(1, framesCount);
+    try {
+      long start = nanoTime();
+      FFmpegFrameRecorder videoRecorder = getVideoRecorder(current);
+      int framesCount = Math.max(1, framesCount(fps, current.timestamp, next.timestamp));
 
-        try (Java2DFrameConverter converter = new Java2DFrameConverter();
-             Frame frame = screenshotToFrame(converter, current.screenshot)) {
-          log.debug("Adding {} to video x {} times (queue size: {}) ...", current, framesCount, screenshots.size());
-          for (int i = 0; i < framesCount; i++) {
-            videoRecorder.record(frame);
-          }
-        }
-
-        long durationMs = NANOSECONDS.toMillis(nanoTime() - start);
-        log.debug("Added {} x {} times in {} ms. (queue size: {})", current, framesCount, durationMs, screenshots.size());
-
-        if (current.isEnd()) {
-          log.debug("Detected end of screenshots queue: {}", current);
-          cancel();
-          break;
+      try (Java2DFrameConverter converter = new Java2DFrameConverter();
+           Frame frame = screenshotToFrame(converter, current.screenshot)) {
+        log.trace("Adding {} to video x {} times (queue size: {}) ...", current, framesCount, screenshots.size());
+        for (int i = 0; !cancelled && i < framesCount; i++) {
+          videoRecorder.record(frame);
         }
       }
-      catch (FFmpegFrameRecorder.Exception e) {
-        log.error("Failed to add screenshot to video", e);
-        throw new RuntimeException(e);
-      }
-      catch (Error | RuntimeException e) {
-        log.error("Failed to add screenshot to video", e);
-        throw e;
+
+      long durationMs = NANOSECONDS.toMillis(nanoTime() - start);
+      log.debug("Added {} to video x {} times in {} ms. (queue size: {})", current, framesCount, durationMs, screenshots.size());
+
+      if (current.isEnd()) {
+        log.debug("Detected end of screenshots queue: {}", current);
+        cancel();
       }
     }
-    log.debug("Let's make a pause (queue size: {})", screenshots.size());
-  }
-
-  private void validateFramesCount(int framesCount, Screenshot current, Screenshot next) {
-    if (framesCount < 1 || framesCount > fps) {
-      log.warn("Strange: framesCount={}: fps={}, screenshot.ts={}, next.ts={}",
-        framesCount, fps, current.timestamp, next.timestamp);
+    catch (FFmpegFrameRecorder.Exception e) {
+      log.error("Failed to add screenshot to video", e);
+      throw new RuntimeException(e);
+    }
+    catch (Error | RuntimeException e) {
+      log.error("Failed to add screenshot to video", e);
+      throw e;
     }
   }
 
@@ -187,19 +172,54 @@ class VideoMerger extends TimerTask {
     }
   }
 
+  /**
+   * Complete video processing and save the video file
+   */
   void finish() {
-    run();
     if (recorder != null) {
+      while (!cancelled && screenshots.size() > 1) {
+        run();
+      }
       try {
-        log.debug("Stopping frame recorder ...");
+        log.debug("Stopping video merger ...");
         recorder.stop();
         recorder = null;
-        log.debug("Stopped frame recorder.");
+        log.debug("Stopped video merger.");
       }
       catch (FFmpegFrameRecorder.Exception e) {
         log.error("Failed to stop video recorder", e);
         throw new RuntimeException(e);
       }
+    }
+  }
+
+  @Override
+  @CanIgnoreReturnValue
+  public boolean cancel() {
+    cancelled = true;
+    return super.cancel();
+  }
+
+  /**
+   * Stop video processing and delete the video file
+   */
+  public void rollback() {
+    log.debug("Cancelling video recorder ...");
+    cancel();
+    finish();
+    deleteVideoFile();
+    RecordedVideos.remove(threadId);
+  }
+
+  private void deleteVideoFile() {
+    if (videoFile != null) {
+      try {
+        Files.deleteIfExists(videoFile);
+      }
+      catch (IOException e) {
+        log.error("Failed to delete video file {}", videoFile, e);
+      }
+      videoFile = null;
     }
   }
 }

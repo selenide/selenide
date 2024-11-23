@@ -6,14 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation is used for indicating that the test will not be recorded.
+ * Annotation to mark test methods that needs a video recording.
  *
- * Used only if {@code RecordingMode == ALL}.
- *
- * Created by Serhii Bryt
- * 09.05.2024 15:00
+ * Used only if {@code RecordingMode == ANNOTATED}.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface NoVideo {
+public @interface Video {
 }

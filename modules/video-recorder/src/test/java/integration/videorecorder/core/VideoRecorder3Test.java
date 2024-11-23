@@ -41,7 +41,7 @@ public class VideoRecorder3Test {
 
   @AfterEach
   public void checkVideo() {
-    requireNonNull(videoRecorder).stop();
+    requireNonNull(videoRecorder).finish();
     Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow();
     assertThat(videoFile.toFile().length()).isGreaterThan(0);
     assertThat(videoFile).hasExtension("webm");

@@ -36,7 +36,7 @@ class ScreenShooter extends TimerTask {
       screenshots.add(new Screenshot(start, webDriver.manage().window().getSize(), driver.config(), screenshot));
       log.debug("Taken a screenshot in thread {} at {} in {} ms.", threadId, timestamp, NANOSECONDS.toMillis(timestamp - start));
     }, () -> {
-      log.debug("Skip taking a screenshot because webdriver is not started in thread {}", threadId);
+      log.trace("Skip taking a screenshot because webdriver is not started in thread {}", threadId);
     });
   }
 

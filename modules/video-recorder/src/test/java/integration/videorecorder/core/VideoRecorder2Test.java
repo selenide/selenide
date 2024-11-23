@@ -4,6 +4,7 @@ import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.selenide.videorecorder.core.Video;
 import org.selenide.videorecorder.core.VideoRecorder;
 
 import java.nio.file.Path;
@@ -30,6 +31,7 @@ public class VideoRecorder2Test {
   }
 
   @Test
+  @Video
   public void secondTest() {
     open(config().browserPosition("200x300").browserSize("800x500"));
     for (int i = 0; i < 3; i++) {
@@ -41,7 +43,7 @@ public class VideoRecorder2Test {
 
   @AfterEach
   public void checkVideo() {
-    requireNonNull(videoRecorder).stop();
+    requireNonNull(videoRecorder).finish();
     Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow();
     assertThat(videoFile.toFile().length()).isGreaterThan(0);
     assertThat(videoFile).hasExtension("webm");
