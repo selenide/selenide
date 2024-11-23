@@ -14,7 +14,7 @@ public class SelenideConfig implements Config {
   private final PropertiesReader properties = new PropertiesReader("selenide.properties");
 
   private String browser = getProperty("selenide.browser", CHROME);
-  private boolean headless = Boolean.parseBoolean(getProperty("selenide.headless", "false"));
+  private boolean headless = properties.getBoolean("selenide.headless", false);
   @Nullable
   private String remote = getPropertyOrNull("selenide.remote");
   @Nullable
@@ -23,7 +23,7 @@ public class SelenideConfig implements Config {
   private String browserVersion = getPropertyOrNull("selenide.browserVersion");
   @Nullable
   private String browserPosition = getPropertyOrNull("selenide.browserPosition");
-  private boolean webdriverLogsEnabled = Boolean.parseBoolean(getProperty("selenide.webdriverLogsEnabled", "false"));
+  private boolean webdriverLogsEnabled = properties.getBoolean("selenide.webdriverLogsEnabled", false);
   @Nullable
   private String browserBinary = getPropertyOrNull("selenide.browserBinary");
   private String pageLoadStrategy = getProperty("selenide.pageLoadStrategy", "normal");
@@ -38,22 +38,22 @@ public class SelenideConfig implements Config {
    * User can later close the browser manually, but the webdriver leaves running forever.
    */
   @Deprecated
-  private boolean holdBrowserOpen = Boolean.parseBoolean(getProperty("selenide.holdBrowserOpen", "false"));
-  private boolean reopenBrowserOnFail = Boolean.parseBoolean(getProperty("selenide.reopenBrowserOnFail", "true"));
-  private boolean clickViaJs = Boolean.parseBoolean(getProperty("selenide.clickViaJs", "false"));
-  private boolean screenshots = Boolean.parseBoolean(getProperty("selenide.screenshots", "true"));
+  private boolean holdBrowserOpen = properties.getBoolean("selenide.holdBrowserOpen", false);
+  private boolean reopenBrowserOnFail = properties.getBoolean("selenide.reopenBrowserOnFail", true);
+  private boolean clickViaJs = properties.getBoolean("selenide.clickViaJs", false);
+  private boolean screenshots = properties.getBoolean("selenide.screenshots", true);
 
-  private boolean savePageSource = Boolean.parseBoolean(getProperty("selenide.savePageSource", "true"));
+  private boolean savePageSource = properties.getBoolean("selenide.savePageSource", true);
   private String reportsFolder = getProperty("selenide.reportsFolder", "build/reports/tests");
   private String downloadsFolder = getProperty("selenide.downloadsFolder", "build/downloads");
   @Nullable
   private String reportsUrl = new CiReportUrl().getReportsUrl(getPropertyOrNull("selenide.reportsUrl"));
-  private boolean fastSetValue = Boolean.parseBoolean(getProperty("selenide.fastSetValue", "false"));
+  private boolean fastSetValue = properties.getBoolean("selenide.fastSetValue", false);
   private TextCheck textCheck = TextCheck.valueOf(getProperty("selenide.textCheck", TextCheck.PARTIAL_TEXT.name()));
   private SelectorMode selectorMode = SelectorMode.valueOf(getProperty("selenide.selectorMode", CSS.name()));
   private AssertionMode assertionMode = AssertionMode.valueOf(getProperty("selenide.assertionMode", STRICT.name()));
   private FileDownloadMode fileDownload = FileDownloadMode.valueOf(getProperty("selenide.fileDownload", HTTPGET.name()));
-  private boolean proxyEnabled = Boolean.parseBoolean(getProperty("selenide.proxyEnabled", "false"));
+  private boolean proxyEnabled = properties.getBoolean("selenide.proxyEnabled", false);
   @Nullable
   private String proxyHost = getPropertyOrNull("selenide.proxyHost");
   private int proxyPort = Integer.parseInt(getProperty("selenide.proxyPort", "0"));
@@ -401,11 +401,7 @@ public class SelenideConfig implements Config {
 
   @Nullable
   private String getPropertyOrNull(String key) {
-    String value = properties.getPropertyOrNull(key);
-    if (value != null && value.trim().isEmpty()) {
-      return null;
-    }
-    return value;
+    return properties.getPropertyOrNull(key);
   }
 
   private String getProperty(String key, String defaultValue) {

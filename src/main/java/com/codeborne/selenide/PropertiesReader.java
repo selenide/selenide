@@ -8,27 +8,47 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.util.Optional;
 import java.util.Properties;
 
 import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
 
-final class PropertiesReader {
+public final class PropertiesReader {
   private static final Logger log = LoggerFactory.getLogger(PropertiesReader.class);
 
   private final String fileName;
   private final Lazy<Properties> properties = lazyEvaluated(() -> loadSelenideProperties());
 
-  PropertiesReader(String fileName) {
+  public PropertiesReader(String fileName) {
     this.fileName = fileName;
   }
 
+  /**
+   * @return null if property is null OR empty string.
+   */
   @Nullable
   public synchronized String getPropertyOrNull(String key) {
-    return properties.get().getProperty(key, null);
+    String value = properties.get().getProperty(key, null);
+    if (value != null && value.trim().isEmpty()) {
+      return null;
+    }
+    return value;
   }
 
   public synchronized String getProperty(String key, String defaultValue) {
     return properties.get().getProperty(key, defaultValue);
+  }
+
+  public boolean getBoolean(String key, boolean defaultValue) {
+    return Optional.ofNullable(getPropertyOrNull(key)).map(Boolean::parseBoolean).orElse(defaultValue);
+  }
+
+  public int getInt(String key, int defaultValue) {
+    return Optional.ofNullable(getPropertyOrNull(key)).map(Integer::parseInt).orElse(defaultValue);
+  }
+
+  public long getLong(String key, long defaultValue) {
+    return Optional.ofNullable(getPropertyOrNull(key)).map(Long::parseLong).orElse(defaultValue);
   }
 
   private Properties loadSelenideProperties() {

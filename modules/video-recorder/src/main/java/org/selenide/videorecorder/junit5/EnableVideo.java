@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 @ExtendWith(VideoRecorderExtension.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Video {
+public @interface EnableVideo {
 }

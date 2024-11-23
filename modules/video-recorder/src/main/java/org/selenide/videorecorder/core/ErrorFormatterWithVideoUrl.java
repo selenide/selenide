@@ -19,7 +19,7 @@ public class ErrorFormatterWithVideoUrl extends SelenideErrorFormatter {
   protected String videoUrl() {
     Optional<Path> recordedVideo = RecordedVideos.getRecordedVideo(currentThread().getId());
     return recordedVideo
-      .map(videoFile -> String.format("Video url: %s", videoFile.toUri()))
+      .map(videoFile -> String.format("Video: %s", videoFile.toUri()))
       .orElse("");
   }
 }

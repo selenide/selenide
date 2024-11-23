@@ -10,6 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import static com.codeborne.selenide.impl.ThreadNamer.named;
 import static java.lang.Integer.toHexString;
+import static java.lang.System.nanoTime;
 import static java.lang.Thread.currentThread;
 import static java.util.concurrent.Executors.newScheduledThreadPool;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -22,18 +23,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  */
 public class VideoRecorder {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorder.class);
-  /**
-   * Frames per seconds
-   * 24fps is a standard for movies and TV shows,
-   * but processing this amount of frames causes too high CPU usage.
-   */
-  private static final int DEFAULT_FPS = 12;
-
-  /**
-   * CRF operates on a scale from 0 (lossless) to 51 (lowest quality),
-   * with lower values indicating higher quality and larger file sizes.
-   */
-  private static final int DEFAULT_CRF = 0;
+  private static final VideoConfiguration config = new VideoConfiguration();
 
   private final ScheduledExecutorService screenshooter = newScheduledThreadPool(1, named("video-recorder:screenshots:"));
   private final ScheduledExecutorService videoMerger = newScheduledThreadPool(1, named("video-recorder:stream:"));
@@ -43,13 +33,9 @@ public class VideoRecorder {
   private final VideoMerger videoMergerTask;
 
   public VideoRecorder() {
-    this(DEFAULT_FPS);
-  }
-
-  public VideoRecorder(int framesPerSecond) {
-    fps = framesPerSecond;
+    fps = config.fps();
     screenShooterTask = new ScreenShooter(currentThread().getId(), screenshots);
-    videoMergerTask = new VideoMerger(currentThread().getId(), fps, DEFAULT_CRF, screenshots);
+    videoMergerTask = new VideoMerger(currentThread().getId(), fps, config.crf(), screenshots);
   }
 
   public Optional<String> videoUrl() {
@@ -57,8 +43,8 @@ public class VideoRecorder {
   }
 
   public void start() {
-    RecordedVideos.remove(currentThread().getId());
     log.info("Starting screenshooter every {} nanoseconds to achieve fps {}", delayBetweenFramesNanos(), fps);
+    RecordedVideos.remove(currentThread().getId());
     screenshooter.scheduleAtFixedRate(screenShooterTask, 0, delayBetweenFramesNanos(), NANOSECONDS);
     videoMerger.scheduleWithFixedDelay(videoMergerTask, 0, 1, MILLISECONDS);
   }
@@ -70,19 +56,24 @@ public class VideoRecorder {
     return SECONDS.toNanos(1) / fps;
   }
 
-  public void stop() {
+  /**
+   * Complete video processing and save the video file
+   */
+  public void finish() {
     log.debug("Stopping video recorder...");
 
     try {
       screenshooter.shutdown();
-      stop(screenshooter, 2, "Screenshooter");
+      stop("Screenshooter", screenshooter, config.videoProcessingTimeout());
       screenShooterTask.finish();
 
       videoMerger.shutdown();
-      stop(videoMerger, 20, "Video merger");
+      stop("Video merger", videoMerger, config.videoProcessingTimeout());
       videoMergerTask.finish();
 
-      log.info("Video recorded: {}", videoUrl().orElseThrow());
+      videoUrl().ifPresentOrElse(
+        url -> log.info("Video recorded: {}", videoUrl().orElseThrow()),
+        () -> log.info("Video not recorded."));
     }
     catch (InterruptedException e) {
       Thread.currentThread().interrupt();
@@ -90,12 +81,23 @@ public class VideoRecorder {
     }
   }
 
-  private void stop(ScheduledExecutorService threadPool, int timeoutSeconds, String name) throws InterruptedException {
-    if (!threadPool.awaitTermination(timeoutSeconds, SECONDS)) {
-      log.warn("{} thread hasn't completed in {} seconds", name, timeoutSeconds);
+  /**
+   * Stop video processing and delete the video file
+   */
+  public void cancel() {
+    screenShooterTask.cancel();
+    screenshooter.shutdownNow();
+    videoMergerTask.rollback();
+    videoMerger.shutdownNow();
+  }
+
+  private void stop(String name, ScheduledExecutorService threadPool, long timeoutMs) throws InterruptedException {
+    long start = nanoTime();
+    if (!threadPool.awaitTermination(timeoutMs, MILLISECONDS)) {
+      log.warn("{} thread hasn't completed in {} ms.", name, timeoutMs);
     }
     else {
-      log.debug("{} thread stopped within {} seconds", name, timeoutSeconds);
+      log.debug("{} thread stopped in {} ms.", name, NANOSECONDS.toMillis(nanoTime() - start));
     }
   }
 
