@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.jspecify.annotations.Nullable;
@@ -31,6 +32,7 @@ public interface WebDriverContainer {
 
   void using(WebDriver driver, @Nullable SelenideProxyServer proxy, @Nullable DownloadsFolder downloadsFolder, Runnable lambda);
   void inNewBrowser(Runnable lambda);
+  void inNewBrowser(Config config, Runnable lambda);
 
   void clearBrowserCache();
 
