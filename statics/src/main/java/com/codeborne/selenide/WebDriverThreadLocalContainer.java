@@ -43,7 +43,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private final BrowserHealthChecker browserHealthChecker;
   private final WebDriverFactory factory = new WebDriverFactory();
   private final CreateDriverCommand createDriverCommand = new CreateDriverCommand();
-
+  private final Object lock = new Object();
   private final AtomicBoolean deadThreadsWatchdogStarted = new AtomicBoolean(false);
 
   public WebDriverThreadLocalContainer() {
@@ -160,7 +160,6 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     return Optional.ofNullable(threadWebDriver.get(currentThread().getId()));
   }
 
-  @SuppressWarnings("deprecation")
   private WebDriverInstance createAndRegisterDriver() {
     WebDriverInstance driver = createDriver();
     long threadId = setWebDriver(driver);
@@ -175,7 +174,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   private WebDriverInstance createDriver() {
-    return createDriverCommand.createDriver(config.unwrap(), factory, userProvidedProxy, listeners);
+    return createDriver(config.unwrap());
+  }
+
+  private WebDriverInstance createDriver(Config config) {
+    return createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
   }
 
   @Override
@@ -236,6 +239,17 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   @Override
+  public void inNewBrowser(Config config, Runnable lambda) {
+    var newBrowser = createDriver(config);
+    try {
+      using(newBrowser, lambda);
+    }
+    finally {
+      newBrowser.dispose();
+    }
+  }
+
+  @Override
   public void clearBrowserCache() {
     if (hasWebDriverStarted()) {
       getWebDriver().manage().deleteAllCookies();
@@ -267,7 +281,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     allWebDriverThreads.add(thread);
 
     if (!isDeadThreadsWatchdogStarted()) {
-      synchronized (this) {
+      synchronized (lock) {
         if (!isDeadThreadsWatchdogStarted()) {
           new DeadThreadsWatchdog(allWebDriverThreads, threadWebDriver).start();
           deadThreadsWatchdogStarted.set(true);

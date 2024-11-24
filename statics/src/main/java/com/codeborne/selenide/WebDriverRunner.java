@@ -159,6 +159,10 @@ public class WebDriverRunner {
     webdriverContainer.inNewBrowser(lambda);
   }
 
+  static void inNewBrowser(Config config, Runnable lambda) {
+    webdriverContainer.inNewBrowser(config, lambda);
+  }
+
   private static Browser browser() {
     return new Browser(browser, headless);
   }
