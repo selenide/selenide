@@ -2,7 +2,7 @@ package com.codeborne.selenide.junit;
 
 import org.junit.rules.ExternalResource;
 
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 
 /**
  * Usage:
