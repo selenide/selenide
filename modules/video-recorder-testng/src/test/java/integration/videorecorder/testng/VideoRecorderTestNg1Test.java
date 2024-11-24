@@ -10,12 +10,13 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.TypeOptions.text;
+import static integration.videorecorder.testng.VideoRecorderTester.assertionErrors;
 import static java.time.Duration.ofMillis;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.selenide.videorecorder.testng.VideoRecorderListener.getRecordedVideo;
 
-@Listeners(MarkFailedTestsAsPassed.class)
+@Listeners(VideoRecorderTester.class)
 public class VideoRecorderTestNg1Test {
 
   @Test
@@ -29,14 +30,15 @@ public class VideoRecorderTestNg1Test {
     }
   }
 
-  @AfterMethod
+  @AfterMethod(alwaysRun = true)
   final void checkVideo() {
     assertThat(getRecordedVideo())
       .as("Test is annotated with @Video, but did not fail -> no video")
       .isEmpty();
+    assertThat(assertionErrors()).hasSize(0);
   }
 
-  @AfterMethod
+  @AfterMethod(alwaysRun = true)
   final void closeBrowser() {
     closeWebDriver();
   }

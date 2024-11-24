@@ -53,7 +53,7 @@ public class VideoRecorderListener implements ITestListener {
     finish(result, false);
   }
 
-  private void finish(ITestResult result, boolean testFailed) {
+  protected void finish(ITestResult result, boolean testFailed) {
     VideoRecorder recorder = (VideoRecorder) result.removeAttribute(NAME);
     if (recorder != null) {
       long threadId = currentThread().getId();
