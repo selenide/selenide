@@ -1,13 +1,26 @@
 # Changelog
 
-## 7.5.2 (under construction)
-* add because function for webDriverConditions (#2853) --  thanks to Daniil Moiseev
-* fix regExp for spaces separators (#2858) --  thanks to Daniil Moiseev
-* bump Selenium from 4.25.0 to 4.26.0
+## 7.6.0 (24.11.2024)
+* #2145 Add tests video recorder (#2768) (#2890)  --  thanks to Sergey Brit
+* add "because" function for webDriverConditions (#2853) --  thanks to Daniil Moiseev
+* add method `$.scrollIntoCenter()` (#2842)
+* support special space characters when asserting texts (#2858) --  thanks to Daniil Moiseev
+* support special space characters when finding element by text (#2884)
+* #2859 add method `inNewBrowser(Config config, Runnable lambda)` (#2902)
+* #2859 fix bug with using custom config inside method `inNewBrowser(Runnable lambda)` (#2902)
+* Fix browser not created exception with AppiumPageFactory (#2879) --  thanks to Petro Ovcharenko
+* #2896 fix method `Selenide.screeshot(filename)` to match the description in javadoc (#2901)
+* bump Selenium from 4.25.0 to 4.26.0 (incl. CDP 129 -> 130)
+* JSR305 -> JSpecify (#2889)
+* convert some Selenide "info" logs to "debug" (#2892)
+
+See https://github.com/selenide/selenide/milestone/214?closed=1
 
 ## 7.5.1 (21.09.2024)
 * bump Selenium from 4.24.0 to 4.25.0 (#2851)
 * add method `Configuration.config()` (#2852)
+
+See https://github.com/selenide/selenide/milestone/213?closed=1
 
 ## 7.5.0 (15.09.2024)
 * #1372 allow to open every new browser with its own Configuration (#2846)
@@ -19,6 +32,8 @@
 * bump BrowserUpProxy from 2.2.18 to 2.2.19
 * bump dnsjava from 3.6.0 to 3.6.1
 * bump LittleProxy from 2.2.4 to 2.3.0 (#2837)
+
+See https://github.com/selenide/selenide/milestone/212?closed=1
 
 ## 7.4.3 (released 05.09.2024)
 * bump Selenium from 4.23.1 to 4.24.0 (#2825)
