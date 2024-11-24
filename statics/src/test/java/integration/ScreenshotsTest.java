@@ -11,8 +11,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Base64;
 
+import static java.util.Objects.requireNonNull;
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class ScreenshotsTest extends IntegrationTest {
@@ -40,13 +44,27 @@ final class ScreenshotsTest extends IntegrationTest {
   @Test
   void canTakeScreenshotAsTemporaryFile() throws IOException {
     File screenshot = Selenide.screenshot(OutputType.FILE);
-    BufferedImage img = ImageIO.read(screenshot);
+    BufferedImage img = ImageIO.read(requireNonNull(screenshot));
     assertThat(img.getWidth()).isBetween(50, 3000);
     assertThat(img.getHeight()).isBetween(50, 3000);
+    assertThat(screenshot).exists();
 
     assertThat(screenshots.getContextScreenshots())
       .as("Temporary files screenshots are added to history")
       .hasSize(1);
     assertThat(screenshots.getContextScreenshots().get(0)).isEqualTo(screenshot);
+  }
+
+  @Test
+  void canTakeScreenshotAtEveryMoment() throws URISyntaxException {
+    String fileName = "screenshot-" + randomUUID();
+    String screenshot = Selenide.screenshot(fileName);
+
+    assertThat(screenshot).startsWith("file:/");
+    assertThat(screenshot).endsWith(".png");
+    assertThat(new File(new URI(requireNonNull(screenshot)))).exists();
+
+    String pageSource = screenshot.replace(".png", ".html");
+    assertThat(new File(new URI(pageSource))).exists();
   }
 }
