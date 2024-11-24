@@ -358,13 +358,14 @@ public class SelenideDriver {
   }
 
   /**
-   * Take a screenshot of the current page
+   * Take a screenshot of the current page and save to file "fileName.png" (and optionally, "fileName.html")
    *
-   * @return absolute path of the screenshot taken or null if failed to create screenshot
+   * @param fileName Name of file (without extension) to save PNG (and HTML) to
+   * @return URL of the screenshot taken, or null if failed to create screenshot
    */
   @Nullable
   public String screenshot(String fileName) {
-    return screenshots.takeScreenshot(driver(), fileName, true, false).getImage();
+    return screenshots.takeScreenshot(driver(), fileName, true, driver().config().savePageSource()).getImage();
   }
 
   /**
