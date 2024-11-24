@@ -13,7 +13,7 @@ final class ThreadLocalSelenideConfig implements Config {
     ThreadLocalSelenideConfig.config.set(perThreadConfig);
   }
 
-  Config get() {
+  Config unwrap() {
     return ThreadLocalSelenideConfig.config.get();
   }
 

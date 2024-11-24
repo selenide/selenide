@@ -39,7 +39,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Nullable
   private Proxy userProvidedProxy;
 
-  private final Config config = new ThreadLocalSelenideConfig();
+  private final ThreadLocalSelenideConfig config = new ThreadLocalSelenideConfig();
   private final BrowserHealthChecker browserHealthChecker;
   private final WebDriverFactory factory = new WebDriverFactory();
   private final CreateDriverCommand createDriverCommand = new CreateDriverCommand();
@@ -175,7 +175,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   private WebDriverInstance createDriver() {
-    return createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
+    return createDriverCommand.createDriver(config.unwrap(), factory, userProvidedProxy, listeners);
   }
 
   @Override
@@ -217,7 +217,10 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     }
     finally {
       resetWebDriver();
-      previous.ifPresent(this::setWebDriver);
+      previous.ifPresent(prev -> {
+        setWebDriver(prev);
+        config.set(prev.config());
+      });
     }
   }
 
