@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Parallel Test Suite" parallel="classes" thread-count="3">
-  <test name="Parallel Test">
+<suite name="Video recorder TestNG" parallel="classes" thread-count="3">
+  <test name="in 3 parallel threads">
     <packages>
       <package name="integration.videorecorder.testng"/>
     </packages>

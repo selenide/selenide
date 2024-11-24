@@ -21,6 +21,6 @@ dependencies {
 
 tasks.withType(Test).configureEach {
   useTestNG() {
-    suites "src/test/resources/testng.xml"
+    suites "src/test/resources/suite.xml"
   }
 }
