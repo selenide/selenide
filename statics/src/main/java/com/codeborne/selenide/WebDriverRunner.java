@@ -9,12 +9,13 @@ import org.openqa.selenium.support.events.WebDriverListener;
 
 import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.headless;
+import static com.codeborne.selenide.impl.Plugins.inject;
 
 /**
  * A static facade for accessing WebDriver instance for current threads
  */
 public class WebDriverRunner {
-  public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
+  private static final WebDriverContainer webdriverContainer = inject(WebDriverContainer.class);
   private static final ThreadLocalSelenideDriver staticSelenideDriver = new ThreadLocalSelenideDriver();
 
   /**
