@@ -11,4 +11,5 @@ tasks.register('javadocForSite', Javadoc) {
   classpath += project(":modules:proxy").sourceSets.main.compileClasspath
   classpath += project(":modules:selenoid").sourceSets.main.compileClasspath
   classpath += project(":modules:testng").sourceSets.main.compileClasspath
+  classpath += project(":modules:video-recorder").sourceSets.main.compileClasspath
 }
