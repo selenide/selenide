@@ -45,7 +45,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'check', 'firefox_headless', 'chrome_headless' ]
+        gradle-task: [ 'check', 'firefox_headless', 'chrome_headless', 'javadocForSite' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -56,7 +56,7 @@ jobs:
           cache: 'gradle'
           java-version: '17'
       - name: Setup Firefox
-        if: ${{ matrix.gradle-task != 'check' }}
+        if: ${{ matrix.gradle-task != 'check' && matrix.gradle-task != 'javadocForSite' }}
         uses: browser-actions/setup-firefox@latest
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
