@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.6.1 (26.11.2024)
+* bump Selenium from 4.26.0 to 4.27.0 (incl. CDP 130 -> 131)  (#2904)
+
 ## 7.6.0 (24.11.2024)
 * #2145 Add tests video recorder (#2768) (#2890)  --  thanks to Sergey Brit
 * add "because" function for webDriverConditions (#2853) --  thanks to Daniil Moiseev
