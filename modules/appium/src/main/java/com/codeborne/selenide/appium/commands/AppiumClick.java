@@ -28,6 +28,7 @@ public class AppiumClick extends Click {
   public void execute(WebElementSource locator, Object @Nullable [] args) {
     if (!isMobile(locator.driver())) {
       super.execute(locator, args);
+      return;
     }
 
     ClickOptions options = options(args);
