@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import org.apache.commons.io.IOUtils;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
@@ -13,10 +14,6 @@ import org.openqa.selenium.firefox.GeckoDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.UncheckedIOException;
 import java.util.HashMap;
@@ -26,15 +23,13 @@ import java.util.Optional;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-@ParametersAreNonnullByDefault
 public class FirefoxDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(FirefoxDriverFactory.class);
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     SessionNotCreatedException failure = null;
     for (int retries = 0; retries < 5; retries++) {
@@ -49,15 +44,11 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     throw failure;
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected GeckoDriverService createDriverService(Config config) {
     return withLog(config, new GeckoDriverService.Builder());
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public FirefoxOptions createCapabilities(Config config, Browser browser,
                                            @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     FirefoxOptions initialOptions = new FirefoxOptions();
@@ -89,6 +80,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     }
   }
 
+  @SuppressWarnings({"HttpUrlsUsage", "SpellCheckingInspection"})
   protected void setupPreferences(FirefoxOptions firefoxOptions) {
     firefoxOptions.addPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
     firefoxOptions.addPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
@@ -109,11 +101,9 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("browser.download.folderList", 2); // 0=Desktop, 1=Downloads, 2="reuse last location"
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected String popularContentTypes() {
     try {
-      return String.join(";", IOUtils.readLines(getClass().getResourceAsStream("/content-types.properties"), UTF_8));
+      return String.join(";", IOUtils.readLines(requireNonNull(getClass().getResourceAsStream("/content-types.properties")), UTF_8));
     }
     catch (UncheckedIOException e) {
       return "text/plain;text/csv;application/zip;application/pdf;application/octet-stream;" +
@@ -121,8 +111,6 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected Map<String, String> collectFirefoxProfileFromSystemProperties() {
     String prefix = "firefoxprofile.";
 
@@ -138,8 +126,6 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     return result;
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected Optional<FirefoxProfile> transferFirefoxProfileFromSystemProperties(FirefoxOptions firefoxOptions) {
     Map<String, String> ffProfile = collectFirefoxProfileFromSystemProperties();
     if (ffProfile.isEmpty()) {

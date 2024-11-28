@@ -5,10 +5,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class DomProperty extends WebElementCondition {
   private final String domPropertyName;
 
@@ -17,7 +13,6 @@ public class DomProperty extends WebElementCondition {
     this.domPropertyName = domPropertyName;
   }
 
-  @Nonnull
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String domPropertyValue = element.getDomProperty(domPropertyName);

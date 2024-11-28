@@ -8,12 +8,9 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementCommunicator;
 import com.codeborne.selenide.impl.Html;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +18,6 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
-@ParametersAreNonnullByDefault
 public class ContainExactTextsCaseSensitive extends WebElementsCondition {
   private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
   private final List<String> expectedTexts;
@@ -37,9 +33,7 @@ public class ContainExactTextsCaseSensitive extends WebElementsCondition {
     this.expectedTexts = unmodifiableList(expectedTexts);
   }
 
-  @CheckReturnValue
   @Override
-  @Nonnull
   public CheckResult check(Driver driver, List<WebElement> elements) {
     List<String> actualTexts = communicator.texts(driver, elements);
     List<String> difference = diff(expectedTexts, actualTexts);
@@ -64,7 +58,6 @@ public class ContainExactTextsCaseSensitive extends WebElementsCondition {
     }
   }
 
-  @Nonnull
   private static List<String> diff(List<String> expectedTexts, List<String> actualTexts) {
     List<String> difference = new ArrayList<>(expectedTexts.size());
     expectedTexts.forEach(text -> difference.add(Html.text.reduceSpaces(text)));

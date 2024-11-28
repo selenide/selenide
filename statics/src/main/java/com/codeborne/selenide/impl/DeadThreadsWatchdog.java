@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 import java.util.Map;
 
-class DeadThreadsWatchdog extends Thread {
+public class DeadThreadsWatchdog extends Thread {
   private static final Logger log = LoggerFactory.getLogger(DeadThreadsWatchdog.class);
 
   private final Collection<Thread> allWebDriverThreads;
   private final Map<Long, WebDriverInstance> driverPerThread;
 
-  DeadThreadsWatchdog(Collection<Thread> allWebDriverThreads,
+  public DeadThreadsWatchdog(Collection<Thread> allWebDriverThreads,
                       Map<Long, WebDriverInstance> driverPerThread) {
     this.allWebDriverThreads = allWebDriverThreads;
     this.driverPerThread = driverPerThread;

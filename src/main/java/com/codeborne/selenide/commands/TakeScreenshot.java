@@ -4,18 +4,13 @@ import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 
-@ParametersAreNonnullByDefault
 public class TakeScreenshot implements Command<File> {
   @Override
-  @CheckReturnValue
-  @Nullable
-  public File execute(SelenideElement proxy, WebElementSource element, @Nullable Object[] args) {
+  public File execute(SelenideElement proxy, WebElementSource element, Object @Nullable [] args) {
     return ScreenShotLaboratory.getInstance().takeScreenshot(element.driver(), element.getWebElement());
   }
 }

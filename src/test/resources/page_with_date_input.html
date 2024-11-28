@@ -12,7 +12,7 @@
   <form>
     <fieldset title="User registration form">
       <label> Birthday:
-        <input id="birthday" name="birthday" type="date" />
+        <input id="birthday" name="birthday" type="date" value="1997-08-29" />
       </label>
       <br/>
     </fieldset>
@@ -23,7 +23,6 @@
 
 <script>
   document.getElementById('birthday').onchange = function (e) {
-    //console.log('e', e);
     document.getElementById('user-summary').textContent = 'User birthday: ' + e.target.value;
   }
 </script>

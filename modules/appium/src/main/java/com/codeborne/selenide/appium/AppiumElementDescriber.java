@@ -4,6 +4,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.SelenideElementDescriber;
 import io.appium.java_client.AppiumDriver;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -13,10 +14,6 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -33,7 +30,7 @@ import static java.util.regex.Pattern.compile;
  * Appium-specific element describer.
  * <p>
  * Sample output:
- * <p>
+ *
  * <pre>{@code
  * Element should have text '666' {By.id: result}
  * Element:
@@ -45,13 +42,11 @@ import static java.util.regex.Pattern.compile;
  * }
  * </pre>
  */
-@ParametersAreNonnullByDefault
 public class AppiumElementDescriber implements ElementDescriber {
   private static final Logger logger = LoggerFactory.getLogger(AppiumElementDescriber.class);
   private static final Pattern RE_IOS_UNSUPPORTED_ATTRIBUTE = compile(".*The attribute '\\w+' is unknown.*", DOTALL);
   private static final SelenideElementDescriber webVersion = new SelenideElementDescriber();
 
-  @Nonnull
   @Override
   public String fully(Driver driver, @Nullable WebElement element) {
     if (element == null) {
@@ -95,9 +90,8 @@ public class AppiumElementDescriber implements ElementDescriber {
     return asList("checked", "content-desc", "enabled", "name", "displayed");
   }
 
-  @Nonnull
   @Override
-  public String briefly(Driver driver, @Nonnull WebElement element) {
+  public String briefly(Driver driver, WebElement element) {
     return cast(driver, AppiumDriver.class).map(appiumDriver ->
       new Builder(element, appiumDriver, supportedAttributes(driver))
         .appendTagName()
@@ -107,8 +101,6 @@ public class AppiumElementDescriber implements ElementDescriber {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String selector(By selector) {
     if (selector instanceof By.ByCssSelector) {
       return selector.toString()
@@ -118,7 +110,6 @@ public class AppiumElementDescriber implements ElementDescriber {
     return selector.toString();
   }
 
-  @ParametersAreNonnullByDefault
   private static class Builder {
     private final WebElement element;
     private final AppiumDriver webDriver;
@@ -126,6 +117,7 @@ public class AppiumElementDescriber implements ElementDescriber {
     private String tagName = "?";
     private String text = "?";
     private final StringBuilder sb = new StringBuilder();
+    @Nullable
     private WebDriverException unforgivableException;
 
     private Builder(WebElement element, AppiumDriver webDriver, List<String> supportedAttributes) {
@@ -141,7 +133,7 @@ public class AppiumElementDescriber implements ElementDescriber {
         });
       }
       if ("?".equals(tagName)) {
-        safeCall(element::getTagName, () -> "Failed to get tag name", tagName -> this.tagName = tagName);
+        safeCall(element::getTagName, () -> "Failed to get tag name", tag -> this.tagName = tag);
       }
       sb.append("<").append(tagName);
       return this;
@@ -152,11 +144,10 @@ public class AppiumElementDescriber implements ElementDescriber {
       return this;
     }
 
-    private Builder appendAttribute(String name) {
+    private void appendAttribute(String name) {
       getAttribute(name, value -> {
         sb.append(" ").append(name).append("=\"").append(value).append("\"");
       });
-      return this;
     }
 
     private void getAttribute(String name, Consumer<String> attributeHandler) {
@@ -165,7 +156,7 @@ public class AppiumElementDescriber implements ElementDescriber {
         attributeHandler);
     }
 
-    private void safeCall(Supplier<String> method, Supplier<String> errorMessage, Consumer<String> resultHandler) {
+    private void safeCall(Supplier<@Nullable String> method, Supplier<String> errorMessage, Consumer<String> resultHandler) {
       if (unforgivableException != null) return;
 
       try {
@@ -206,15 +197,15 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
 
     private void appendText() {
-      safeCall(element::getText, () -> "Failed to get text", text -> this.text = text);
-      if ("?".equals(text)) {
-        getAttribute("text", text -> this.text = text);
+      safeCall(element::getText, () -> "Failed to get text", value -> this.text = value);
+      if ("?".equals(text) || text.isEmpty()) {
+        getAttribute("text", value -> this.text = value);
       }
       if ("?".equals(text)) {
-        getAttribute("label", text -> this.text = text);
+        getAttribute("label", value -> this.text = value);
       }
       if ("?".equals(text)) {
-        getAttribute("value", text -> this.text = text);
+        getAttribute("value", value -> this.text = value);
       }
       sb.append(text);
     }
@@ -224,8 +215,6 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
   }
 
-  @Nonnull
-  @CheckReturnValue
   static String removePackage(String className) {
     int i = className.lastIndexOf('.');
     return i < 0 ? className : className.substring(i + 1);

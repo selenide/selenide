@@ -1,6 +1,8 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnsupportedCommandException;
@@ -9,17 +11,14 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Supplier;
 
-@ParametersAreNonnullByDefault
+import static java.util.Objects.requireNonNull;
+
 public class Describe {
   private static final Logger log = LoggerFactory.getLogger(Describe.class);
 
@@ -53,7 +52,7 @@ public class Describe {
   }
 
   private Describe appendAllAttributes() {
-    Map<String, String> map = js.execute(driver, element);
+    Map<String, String> map = requireNonNull(js.execute(driver, element));
     SortedMap<String, String> sortedByName = new TreeMap<>(map);
 
     for (Map.Entry<String, String> entry : sortedByName.entrySet()) {
@@ -89,9 +88,10 @@ public class Describe {
     }
   }
 
+  @CanIgnoreReturnValue
   private Describe attr(String attributeName, @Nullable String attributeValue) {
     if (attributeValue != null) {
-      if (attributeValue.length() > 0) {
+      if (!attributeValue.isEmpty()) {
         sb.append(' ').append(attributeName).append("=\"").append(attributeValue).append('"');
       }
       else {
@@ -101,6 +101,7 @@ public class Describe {
     return this;
   }
 
+  @SuppressWarnings("ConstantValue")
   public String serialize() {
     String text = safeCall("text", element::getText);
     sb.append('>').append(text == null ? "" : text).append("</").append(safeCall("tagName", element::getTagName)).append('>');
@@ -108,8 +109,6 @@ public class Describe {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String toString() {
     return sb.toString();
   }

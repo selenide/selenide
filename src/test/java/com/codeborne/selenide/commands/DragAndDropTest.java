@@ -1,10 +1,10 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.DragAndDropOptions;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.FileContent;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import javax.annotation.Nonnull;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.ACTIONS;
@@ -87,7 +85,7 @@ class DragAndDropTest {
     }
 
     @Override
-    public SelenideElement toSelenideElement(@Nonnull Driver driver) {
+    public SelenideElement toSelenideElement(Driver driver) {
       return mock;
     }
   }

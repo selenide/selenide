@@ -6,10 +6,8 @@ import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 
-@ParametersAreNonnullByDefault
 public class SelenideAppiumCollection extends BaseElementsCollection<SelenideAppiumElement, SelenideAppiumCollection> {
   SelenideAppiumCollection(CollectionSource collection) {
     super(collection);

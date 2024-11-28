@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.net.NetworkUtils;
 
@@ -31,6 +32,7 @@ import org.openqa.selenium.net.NetworkUtils;
  * Example: homepage=http://google.com,"intl.allowed_languages=en,ru,es"
  * </p>
  */
+@SuppressWarnings({"DeprecatedIsStillUsed", "deprecation"})
 public class Configuration {
   private static final SelenideConfig defaults = new SelenideConfig();
 
@@ -64,6 +66,7 @@ public class Configuration {
    * <br>
    * Default value: false.
    * <br>
+   *
    * @deprecated Don't use this setting. It leaves the browser and webdriver open.
    * User can later close the browser manually, but the webdriver leaves running forever.
    * To achieve the same effect, just add `sleep(600_000)` in your test.
@@ -98,6 +101,7 @@ public class Configuration {
    * <br>
    * Default value: none
    */
+  @Nullable
   public static String browserVersion = defaults.browserVersion();
 
   /**
@@ -107,6 +111,7 @@ public class Configuration {
    * <br>
    * Default value: null (Grid is not used).
    */
+  @Nullable
   public static String remote = defaults.remote();
 
   /**
@@ -115,6 +120,7 @@ public class Configuration {
    * <br>
    * Default value: 1366x768
    */
+  @Nullable
   public static String browserSize = defaults.browserSize();
 
   /**
@@ -123,6 +129,7 @@ public class Configuration {
    * <br>
    * Default value: none
    */
+  @Nullable
   public static String browserPosition = defaults.browserPosition();
 
   /**
@@ -147,9 +154,8 @@ public class Configuration {
    * In some cases `eager` can bring performance boosts for the slow tests.
    * Though, we left default value `normal` because we are afraid to break users' existing tests.
    * <br>
-   * @see <a href="https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy">documentation</a>
    *
-   * @since 3.5
+   * @see <a href="https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy">documentation</a>
    */
   public static String pageLoadStrategy = defaults.pageLoadStrategy();
 
@@ -157,8 +163,6 @@ public class Configuration {
    * Timeout for loading a web page (in milliseconds).
    * Default timeout in Selenium WebDriver is 300 seconds (which is incredibly long).
    * Selenide default is 30 seconds.
-   *
-   * @since 5.15.0
    */
   public static long pageLoadTimeout = defaults.pageLoadTimeout();
 
@@ -197,10 +201,10 @@ public class Configuration {
    */
   public static String reportsFolder = defaults.reportsFolder();
 
-    /**
+  /**
    * Folder to store downloaded files to.
    * Can be configured either programmatically, via selenide.properties file
-     * or by system property "-Dselenide.downloadsFolder=test-result/downloads".
+   * or by system property "-Dselenide.downloadsFolder=test-result/downloads".
    * <br>
    * Default value: "build/downloads" (this is default for Gradle projects)
    */
@@ -217,6 +221,7 @@ public class Configuration {
    * "http://ci.mycompany.com/job/my-job/446/artifact/build/reports/tests/my_test.png" - it's useful to analyze test
    * failures in CI server.
    */
+  @Nullable
   public static String reportsUrl = defaults.reportsUrl();
 
   /**
@@ -248,11 +253,9 @@ public class Configuration {
    * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.selectorMode=Sizzle".
    * </p>
    * <br>
-   *   Possible values: "CSS" or "Sizzle"
+   * Possible values: "CSS" or "Sizzle"
    * <br>
-   *   Default value: CSS
-   *
-   * @see SelectorMode
+   * Default value: CSS
    */
   public static SelectorMode selectorMode = defaults.selectorMode();
 
@@ -263,11 +266,9 @@ public class Configuration {
    * or by system property "-Dselenide.assertionMode=SOFT".</p>
    *
    * <br>
-   *   Possible values: "STRICT" or "SOFT"
+   * Possible values: "STRICT" or "SOFT"
    * <br>
-   *   Default value: STRICT
-   *
-   * @see AssertionMode
+   * Default value: STRICT
    */
   public static AssertionMode assertionMode = defaults.assertionMode();
 
@@ -300,6 +301,7 @@ public class Configuration {
    *
    * @see NetworkUtils#getNonLoopbackAddressOfThisMachine()
    */
+  @Nullable
   public static String proxyHost = defaults.proxyHost();
 
   /**
@@ -313,17 +315,16 @@ public class Configuration {
 
   /**
    * <p>
-   *  Whether webdriver logs should be enabled.
+   * Whether webdriver logs should be enabled.
    * </p>
    *
    * <p>
-   *   These logs may be useful for debugging some webdriver issues.
-   *   But in most cases they are not needed (and can take quite a lot of disk space),
-   *   that's why don't enable them by default.
+   * These logs may be useful for debugging some webdriver issues.
+   * But in most cases they are not needed (and can take quite a lot of disk space),
+   * that's why don't enable them by default.
    * </p>
-   *
+   * <p>
    * Default: false
-   * @since 5.18.0
    */
   public static boolean webdriverLogsEnabled = defaults.webdriverLogsEnabled();
 
@@ -342,6 +343,7 @@ public class Configuration {
    * Can be configured either programmatically, via selenide.properties file
    * or by system property "-Dselenide.browserBinary=/path/to/binary"
    */
+  @Nullable
   public static String browserBinary = defaults.browserBinary();
 
   /**
@@ -351,7 +353,6 @@ public class Configuration {
    * or by system property "-Dselenide.remoteReadTimeout=180000"
    * <br>
    * Default: 90000
-   * @since 6.7.4
    */
   public static long remoteReadTimeout = defaults.remoteReadTimeout();
 
@@ -362,7 +363,47 @@ public class Configuration {
    * or by system property "-Dselenide.remoteConnectionTimeout=180000"
    * <br>
    * Default: 10000
-   * @since 6.9.0
    */
   public static long remoteConnectionTimeout = defaults.remoteConnectionTimeout();
+
+  /**
+   * @since 7.5.1
+   * @return a new instance of {@link SelenideConfig} containing all settings from {@link Configuration}.
+   * This instance can be safely modified (without affecting the origin {@link Configuration}).
+   */
+  public static SelenideConfig config() {
+    return new SelenideConfig()
+      .baseUrl(baseUrl)
+      .timeout(timeout)
+      .pollingInterval(pollingInterval)
+      .holdBrowserOpen(holdBrowserOpen)
+      .reopenBrowserOnFail(reopenBrowserOnFail)
+      .browser(browser)
+      .browserVersion(browserVersion)
+      .remote(remote)
+      .browserSize(browserSize)
+      .browserPosition(browserPosition)
+      .browserCapabilities(browserCapabilities)
+      .pageLoadStrategy(pageLoadStrategy)
+      .pageLoadTimeout(pageLoadTimeout)
+      .clickViaJs(clickViaJs)
+      .screenshots(screenshots)
+      .savePageSource(savePageSource)
+      .reportsFolder(reportsFolder)
+      .downloadsFolder(downloadsFolder)
+      .reportsUrl(reportsUrl)
+      .fastSetValue(fastSetValue)
+      .textCheck(textCheck)
+      .selectorMode(selectorMode)
+      .assertionMode(assertionMode)
+      .fileDownload(fileDownload)
+      .proxyEnabled(proxyEnabled)
+      .proxyHost(proxyHost)
+      .proxyPort(proxyPort)
+      .webdriverLogsEnabled(webdriverLogsEnabled)
+      .headless(headless)
+      .browserBinary(browserBinary)
+      .remoteReadTimeout(remoteReadTimeout)
+      .remoteConnectionTimeout(remoteConnectionTimeout);
+  }
 }

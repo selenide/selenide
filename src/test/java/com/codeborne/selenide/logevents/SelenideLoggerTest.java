@@ -14,7 +14,11 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 final class SelenideLoggerTest {
   @RegisterExtension
@@ -137,7 +141,7 @@ final class SelenideLoggerTest {
   @Test
   void getCommitsFailureAndRethrowsInCaseOfException() {
     LogEventListener listener = mock();
-    var exception = new RuntimeException();
+    var exception = new RuntimeException("Oops");
 
     SelenideLogger.addListener("simpleReport", listener);
 

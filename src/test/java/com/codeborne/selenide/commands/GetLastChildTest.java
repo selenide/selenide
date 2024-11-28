@@ -17,13 +17,12 @@ final class GetLastChildTest {
   private final SelenideElement proxy = mock();
   private final WebElementSource locator = mock();
   private final SelenideElement webElement = mock();
-  private final Find find = mock();
-  private final GetLastChild command = new GetLastChild(find);
+  private final GetLastChild command = new GetLastChild();
 
   @Test
   void findsLastChildUsingXpath() {
-    when(find.execute(any(), any(), any(), anyInt())).thenReturn(webElement);
+    when(locator.find(any(), any(), anyInt())).thenReturn(webElement);
     assertThat(command.execute(proxy, locator, null)).isEqualTo(webElement);
-    verify(find).execute(proxy, locator, By.xpath("*[last()]"), 0);
+    verify(locator).find(proxy, By.xpath("*[last()]"), 0);
   }
 }

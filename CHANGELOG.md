@@ -1,5 +1,57 @@
 # Changelog
 
+## 7.6.1 (26.11.2024)
+* bump Selenium from 4.26.0 to 4.27.0 (incl. CDP 130 -> 131)  (#2904)
+
+## 7.6.0 (24.11.2024)
+* #2145 Add tests video recorder (#2768) (#2890)  --  thanks to Sergey Brit
+* add "because" function for webDriverConditions (#2853) --  thanks to Daniil Moiseev
+* add method `$.scrollIntoCenter()` (#2842)
+* support special space characters when asserting texts (#2858) --  thanks to Daniil Moiseev
+* support special space characters when finding element by text (#2884)
+* #2859 add method `inNewBrowser(Config config, Runnable lambda)` (#2902)
+* #2859 fix bug with using custom config inside method `inNewBrowser(Runnable lambda)` (#2902)
+* Fix browser not created exception with AppiumPageFactory (#2879) --  thanks to Petro Ovcharenko
+* #2896 fix method `Selenide.screeshot(filename)` to match the description in javadoc (#2901)
+* bump Selenium from 4.25.0 to 4.26.0 (incl. CDP 129 -> 130)
+* JSR305 -> JSpecify (#2889)
+* convert some Selenide "info" logs to "debug" (#2892)
+
+See https://github.com/selenide/selenide/milestone/214?closed=1
+
+## 7.5.1 (21.09.2024)
+* bump Selenium from 4.24.0 to 4.25.0 (#2851)
+* add method `Configuration.config()` (#2852)
+
+See https://github.com/selenide/selenide/milestone/213?closed=1
+
+## 7.5.0 (15.09.2024)
+* #1372 allow to open every new browser with its own Configuration (#2846)
+* #2832 Raise "bubbleable" events when selection options in `<select>`s. (#2835)
+* Add few builder methods for DownloadOptions (#2841)
+* #2836 don't try to close any windows when downloading a file (#2840)
+* #2830 generate error details only once during error construction (#2839)
+* don't catch all errors (#2845)
+* bump BrowserUpProxy from 2.2.18 to 2.2.19
+* bump dnsjava from 3.6.0 to 3.6.1
+* bump LittleProxy from 2.2.4 to 2.3.0 (#2837)
+
+See https://github.com/selenide/selenide/milestone/212?closed=1
+
+## 7.4.3 (released 05.09.2024)
+* bump Selenium from 4.23.1 to 4.24.0 (#2825)
+* Bump LittleProxy from 2.2.3 to 2.2.4 (#2831)
+* Bump Netty from 4.1.112.Final to 4.1.113.Final (#2834)
+
+See https://github.com/selenide/selenide/milestone/209?closed=1
+
+## 7.4.2 (released 13.08.2024)
+* bump Selenium from 4.23.0 to 4.23.1
+* disable Chrome popups "Save address?" and "Save card?" (#2802)
+* #2800 Check dynamic properties in addition to attributes (#2801)
+* #2808 support List<? extends Container> in page objects for mobile apps (#2812)
+* Make `$.selectOption*()` trigger 'input' event in addition to 'change' event (#2813)
+
 ## 7.4.1 (released 30.07.2024)
 * Bump Appium from 9.2.3 to 9.3.0 (#2796)
 * Bump BrowserupProxy from 2.2.17 to 2.2.18 (#2795)

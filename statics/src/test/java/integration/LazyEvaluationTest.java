@@ -8,21 +8,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 
 final class LazyEvaluationTest extends IntegrationTest {
 
-  private SelenideElement h1 = $("h1");
-  private SelenideElement button = $("#some-button");
-  private SelenideElement input1 = $$("input").first();
-  private SelenideElement input2 = $$("input").last();
-  private SelenideElement input3 = $$("input").get(2);
-  private ElementsCollection inputs1 = $$("input").filterBy(visible);
-  private ElementsCollection inputs2 = $$("input").first(2);
-  private ElementsCollection inputs3 = $$("input").last(2);
+  private final SelenideElement h1 = $("h1");
+  private final SelenideElement button = $("#some-button");
+  private final SelenideElement input1 = $$("input").first();
+  private final SelenideElement input2 = $$("input").last();
+  private final SelenideElement input3 = $$("input").get(2);
+  private final ElementsCollection inputs1 = $$("input").filterBy(visible);
+  private final ElementsCollection inputs2 = $$("input").first(2);
+  private final ElementsCollection inputs3 = $$("input").last(2);
 
   @BeforeAll
   static void guaranteeThatBrowserIsNotOpenedTooEarly() {
@@ -37,7 +38,7 @@ final class LazyEvaluationTest extends IntegrationTest {
 
   @Test
   void singleElementLazyFound() {
-    h1.shouldBe(visible);
+    h1.shouldBe(visible).shouldHave(text("Page with JQuery"));
     button.click();
   }
 

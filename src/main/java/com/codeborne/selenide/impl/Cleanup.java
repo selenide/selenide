@@ -1,33 +1,26 @@
 package com.codeborne.selenide.impl;
 
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.regex.Pattern;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.regex.Pattern.DOTALL;
 
-@ParametersAreNonnullByDefault
 public class Cleanup {
   private static final Pattern REGEX_FIRST_LINE = Pattern.compile("([^\\n]*)\\n.*", DOTALL);
   private static final Pattern REGEX_SELENIUM_WARNING = Pattern.compile("(.*)\\(WARNING: The server did not provide any stacktrace.*");
   private static final Pattern REGEX_SELENIUM_PACKAGE = Pattern.compile("org\\.openqa\\.selenium\\.(.*)");
   public static Cleanup of = new Cleanup();
 
-  @CheckReturnValue
-  @Nonnull
   public String webdriverExceptionMessage(Throwable e) {
     return e instanceof WebDriverException ?
       requireNonNull(webdriverExceptionMessage(e.getClass().getSimpleName() + ": " + e.getMessage())) :
       e.toString();
   }
 
-  @CheckReturnValue
   @Nullable
   public String webdriverExceptionMessage(@Nullable String webDriverExceptionInfo) {
     if (webDriverExceptionInfo == null) return null;

@@ -1,15 +1,12 @@
 package com.codeborne.selenide.files;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+
 import java.io.File;
 import java.util.Map;
 
 import static java.lang.System.currentTimeMillis;
 
-@ParametersAreNonnullByDefault
 public class DownloadedFile {
   private final File file;
   private final Map<String, String> headers;
@@ -23,13 +20,10 @@ public class DownloadedFile {
     this.headers = headers;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public File getFile() {
     return file;
   }
 
-  @CheckReturnValue
   public boolean hasContentDispositionHeader() {
     return headers.containsKey("content-disposition");
   }

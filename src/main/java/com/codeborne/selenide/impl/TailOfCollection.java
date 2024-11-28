@@ -3,14 +3,10 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.impl.Alias.NONE;
 
-@ParametersAreNonnullByDefault
 public class TailOfCollection implements CollectionSource {
   private final CollectionSource originalCollection;
   private final int size;
@@ -22,8 +18,6 @@ public class TailOfCollection implements CollectionSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public List<WebElement> getElements() {
     List<WebElement> source = originalCollection.getElements();
     int sourceCollectionSize = source.size();
@@ -31,8 +25,6 @@ public class TailOfCollection implements CollectionSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebElement getElement(int index) {
     List<WebElement> source = originalCollection.getElements();
     int sourceCollectionSize = source.size();
@@ -45,8 +37,6 @@ public class TailOfCollection implements CollectionSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String getSearchCriteria() {
     return originalCollection.description() + ":last(" + size + ')';
   }
@@ -57,13 +47,10 @@ public class TailOfCollection implements CollectionSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Driver driver() {
     return originalCollection.driver();
   }
 
-  @Nonnull
   @Override
   public Alias getAlias() {
     return alias;

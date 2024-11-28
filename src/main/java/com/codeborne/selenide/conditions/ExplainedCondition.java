@@ -5,11 +5,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class ExplainedCondition<T extends WebElementCondition> extends WebElementCondition {
   private final T delegate;
   private final String message;
@@ -20,24 +15,18 @@ public class ExplainedCondition<T extends WebElementCondition> extends WebElemen
     this.message = message;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     return delegate.check(driver, element);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public WebElementCondition negate() {
     return delegate.negate().because(message);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String toString() {
-    return delegate.toString() + " (because " + message + ")";
+    return delegate + " (because " + message + ")";
   }
 }

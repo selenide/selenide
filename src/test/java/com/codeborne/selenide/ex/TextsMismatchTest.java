@@ -21,8 +21,7 @@ final class TextsMismatchTest {
     assertThat(error).hasMessage(String.format("Texts mismatch%n" +
       "Actual (3): [Niff, Naff, Nuff]%n" +
       "Expected (3): [Piff, Paff, Puff]%n" +
-      "Collection: .characters%n" +
-      "Timeout: 9 s."));
+      "Collection: .characters"));
   }
 
   @Test
@@ -34,8 +33,7 @@ final class TextsMismatchTest {
       "Actual (3): [Niff, Naff, Nuff]%n" +
       "Expected (3): [Piff, Paff, Puff]%n" +
       "Because: we expect favorite characters%n" +
-      "Collection: .characters%n" +
-      "Timeout: 9 s."));
+      "Collection: .characters"));
   }
 
   @Test
@@ -45,8 +43,7 @@ final class TextsMismatchTest {
     assertThat(error).hasMessage(String.format("Texts mismatch%n" +
                                                "Actual (3): [Niff, Naff, Nuff]%n" +
                                                "Expected (2): [Chip, Dale]%n" +
-                                               "Collection: .characters%n" +
-                                               "Timeout: 9 s."));
+                                               "Collection: .characters"));
   }
 
 }

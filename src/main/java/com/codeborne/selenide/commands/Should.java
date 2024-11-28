@@ -1,18 +1,13 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Command;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
 
 import static com.codeborne.selenide.commands.Util.argsToConditions;
 
-@ParametersAreNonnullByDefault
-public class Should implements Command<SelenideElement> {
+public class Should extends FluentCommand {
   private final String prefix;
 
   public Should() {
@@ -24,11 +19,9 @@ public class Should implements Command<SelenideElement> {
   }
 
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     for (WebElementCondition condition : argsToConditions(args)) {
       locator.checkCondition(prefix, condition, false);
     }
-    return proxy;
   }
 }

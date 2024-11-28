@@ -1,11 +1,7 @@
 package com.codeborne.selenide.conditions.datetime;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.LocalDateTime;
 
-@ParametersAreNonnullByDefault
 class DateTimeEquals extends TemporalCondition<LocalDateTime> {
 
   private final LocalDateTime expectedDateTime;
@@ -24,8 +20,6 @@ class DateTimeEquals extends TemporalCondition<LocalDateTime> {
     return expectedDateTime.isEqual(actualDateTime);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("%s \"%s\"", getName(), format(expectedDateTime));

@@ -6,11 +6,8 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.DownloadedFile;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.unwrapRemoteWebDriver;
 import static java.util.Collections.emptyMap;
@@ -34,15 +31,13 @@ public class GridDownloadsFolder implements DownloadsFolder {
   public void deleteIfEmpty() {
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public List<File> files() {
-    return webDriver.getDownloadableFiles().stream().map(name -> new File(name)).collect(Collectors.toList());
+    return webDriver.getDownloadableFiles().stream()
+      .map(name -> new File(name))
+      .toList();
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public List<DownloadedFile> filesNewerThan(long modifiedAfterTs) {
     return files().stream()
@@ -50,7 +45,6 @@ public class GridDownloadsFolder implements DownloadsFolder {
       .collect(toList());
   }
 
-  @Nonnull
   @Override
   public String getPath() {
     return config.downloadsFolder();

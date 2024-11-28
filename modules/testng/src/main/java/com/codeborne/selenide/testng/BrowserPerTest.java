@@ -3,14 +3,11 @@ package com.codeborne.selenide.testng;
 import org.testng.ITestResult;
 import org.testng.reporters.ExitCodeListener;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 
 /**
  * Annotate your test class with {@code @Listeners({ BrowserPerTest.class})}
  */
-@ParametersAreNonnullByDefault
 public class BrowserPerTest extends ExitCodeListener {
 
   @Override

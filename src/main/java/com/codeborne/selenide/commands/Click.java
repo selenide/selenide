@@ -2,18 +2,14 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.ClickMethod;
 import com.codeborne.selenide.ClickOptions;
-import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.Arrays;
 
@@ -23,21 +19,16 @@ import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.commands.Util.size;
 
-@ParametersAreNonnullByDefault
-public class Click implements Command<SelenideElement> {
+public class Click extends FluentCommand {
   private final JavaScript jsSource = new JavaScript("click.js");
 
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public void execute(WebElementSource locator, Object @Nullable [] args) {
     ClickOptions clickOptions = options(args);
     click(locator.driver(), findElement(locator, clickOptions.isForce()), clickOptions);
-    return proxy;
   }
 
-  @Nonnull
-  @CheckReturnValue
-  protected ClickOptions options(@Nullable Object[] args) {
+  protected ClickOptions options(Object @Nullable [] args) {
     return switch (size(args)) {
       case 0 -> usingDefaultMethod();
       case 1 -> firstOf(args);
@@ -45,8 +36,6 @@ public class Click implements Command<SelenideElement> {
     };
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected WebElement findElement(WebElementSource locator, boolean force) {
     return force ?
       locator.getWebElement() :
@@ -93,7 +82,6 @@ public class Click implements Command<SelenideElement> {
     }
   }
 
-  @Nonnull
   private ClickMethod detectMethod(Driver driver, ClickOptions clickOptions) {
     ClickMethod method = clickOptions.clickMethod();
     return method == DEFAULT && driver.config().clickViaJs() ?

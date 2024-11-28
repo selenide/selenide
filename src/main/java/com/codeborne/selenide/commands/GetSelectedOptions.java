@@ -7,20 +7,17 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.Alias;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.impl.Alias.NONE;
+import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
 public class GetSelectedOptions implements Command<ElementsCollection> {
   @Override
-  public ElementsCollection execute(SelenideElement proxy, final WebElementSource selectElement, @Nullable Object[] args) {
+  public ElementsCollection execute(SelenideElement proxy, final WebElementSource selectElement, Object @Nullable [] args) {
     return new ElementsCollection(new SelectedOptionsCollection(selectElement));
   }
 
@@ -33,26 +30,20 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     }
 
     @Override
-    @CheckReturnValue
-    @Nonnull
     public List<WebElement> getElements() {
-      return selectElement.driver().executeJavaScript(
+      return requireNonNull(selectElement.driver().executeJavaScript(
         "return arguments[0].selectedOptions", selectElement.getWebElement()
-      );
+      ));
     }
 
     @Override
-    @CheckReturnValue
-    @Nonnull
     public WebElement getElement(int index) {
-      return selectElement.driver().executeJavaScript(
+      return requireNonNull(selectElement.driver().executeJavaScript(
         "return arguments[0].selectedOptions[arguments[1]]", selectElement.getWebElement(), index
-      );
+      ));
     }
 
     @Override
-    @CheckReturnValue
-    @Nonnull
     public String getSearchCriteria() {
       return selectElement.description() + " selected options";
     }
@@ -63,13 +54,10 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     }
 
     @Override
-    @CheckReturnValue
-    @Nonnull
     public Driver driver() {
       return selectElement.driver();
     }
 
-    @Nonnull
     @Override
     public Alias getAlias() {
       return alias;

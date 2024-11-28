@@ -10,6 +10,20 @@
       padding: 10px;
       border: 1px solid black;
     }
+
+    #container {
+      position: relative; width: 100%; height: 100px;
+    }
+    #timer {
+      margin: 20px;
+      padding: 10px;
+      width: 160px;
+      height: 30px;
+      text-align: center;
+      vertical-align: center;
+      background: #fcefa1;
+      font-size: x-large;
+    }
   </style>
   <script>
     function allowDrop(ev) {
@@ -26,17 +40,28 @@
       ev.target.appendChild(document.getElementById(data));
     }
   </script>
+  <title>Drag'n'Drop</title>
 </head>
 <body>
 
 <h2>Drag and Drop</h2>
 <p>Drag the image back and forth between the two div elements.</p>
 
-<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
-  <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" draggable="true" ondragstart="drag(event)" id="drag1" width="40" height="40">
+<div id="container">
+  <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" draggable="true" ondragstart="drag(event)"
+         id="drag1" width="40" height="40">
+  </div>
+
+  <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
 </div>
+<hr>
+<div id="timer"></div>
 
-<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-
+<script>
+  setInterval(() => {
+    document.getElementById('timer').innerText = new Date().toLocaleTimeString()
+  }, 100)
+</script>
 </body>
 </html>

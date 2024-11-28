@@ -6,47 +6,34 @@ import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.function.Supplier;
 
-@ParametersAreNonnullByDefault
 public class DownloadFileWithProxyServer {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithProxyServer.class);
 
   private final Waiter waiter;
-  private final WindowsCloser windowsCloser;
 
-  DownloadFileWithProxyServer(Waiter waiter, WindowsCloser windowsCloser) {
+  DownloadFileWithProxyServer(Waiter waiter) {
     this.waiter = waiter;
-    this.windowsCloser = windowsCloser;
   }
 
   public DownloadFileWithProxyServer() {
-    this(new Waiter(), new WindowsCloser());
+    this(new Waiter());
   }
 
-  @CheckReturnValue
-  @Nonnull
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
 
-    WebDriver webDriver = anyClickableElement.driver().getWebDriver();
-    return windowsCloser.runAndCloseArisedWindows(webDriver, () ->
-      clickAndInterceptFileByProxyServer(anyClickableElement, clickable, timeout, fileFilter, action)
-    );
+    return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, timeout, fileFilter, action);
   }
 
-  @Nonnull
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
                                                   long timeout, FileFilter fileFilter,
                                                   DownloadAction action) {
@@ -77,7 +64,7 @@ public class DownloadFileWithProxyServer {
         log.info("Downloaded {}", filter.downloads().filesAsString());
         log.info("Just in case, intercepted {}", filter.responsesAsString());
       }
-      return filter.downloads().firstDownloadedFile(driver, timeout, fileFilter);
+      return filter.downloads().firstDownloadedFile(timeout, fileFilter);
     }
     finally {
       filter.deactivate();
@@ -92,7 +79,6 @@ public class DownloadFileWithProxyServer {
     waiter.wait(timeout, pollingInterval, new PreviousDownloadsCompleted(filter));
   }
 
-  @ParametersAreNonnullByDefault
   private static class PreviousDownloadsCompleted implements Supplier<Boolean> {
     private final FileDownloadFilter filter;
     private int downloadsCount = -1;

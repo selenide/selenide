@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <style>
+    body {
+      margin: 50px 50px 0 50px;
+    }
+    input[type=text] {
+      width: 400px;
+    }
+
+    #timer {
+      padding: 10px;
+      margin-top: 40px;
+      border-top: 1px solid black;
+      width: 160px;
+      height: 30px;
+      text-align: center;
+      vertical-align: center;
+      background: #fcefa1;
+      font-size: x-large;
+    }
+  </style>
+  <title>Search</title>
+</head>
+<body>
+
+<h2>Search</h2>
+
+<input name="q" type="text" placeholder="Type your query here">
+<input type="button" value="Search">
+
+<div id="timer"></div>
+
+<script>
+  setInterval(() => {
+    document.getElementById('timer').innerText = new Date().toLocaleTimeString()
+  }, 100)
+</script>
+
+</body>
+</html>

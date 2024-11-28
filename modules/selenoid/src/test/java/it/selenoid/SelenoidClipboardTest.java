@@ -47,4 +47,5 @@ public class SelenoidClipboardTest {
     clipboard().shouldHave(content(multilineText));
     assertThat(clipboard().getText()).isEqualTo(multilineText);
   }
+
 }

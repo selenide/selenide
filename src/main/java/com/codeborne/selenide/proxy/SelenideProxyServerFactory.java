@@ -1,19 +1,15 @@
 package com.codeborne.selenide.proxy;
 
 import com.codeborne.selenide.Config;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * <p>
  * Interface for creating custom SelenideProxyServer in your tests
  * </p>
  */
-@ParametersAreNonnullByDefault
+@FunctionalInterface
 public interface SelenideProxyServerFactory {
 
   /**
@@ -28,8 +24,5 @@ public interface SelenideProxyServerFactory {
    * @param userProvidedProxy - additional proxy provided from user
    * @return new {@link SelenideProxyServer} instance
    */
-  @Nonnull
-  @CheckReturnValue
   SelenideProxyServer create(Config config, @Nullable Proxy userProvidedProxy);
-
 }

@@ -7,12 +7,11 @@ import com.codeborne.selenide.impl.WebElementWrapper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Set;
 
 import static com.codeborne.selenide.WebDriverRunner.driver;
+import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 
 /**
  * The main starting point of Selenide-Appium.
@@ -24,7 +23,6 @@ public class SelenideAppium {
   private static final DeepLinkLauncher deepLinkLauncher = new DeepLinkLauncher();
 
   private SelenideAppium() {
-
   }
 
   /**
@@ -39,8 +37,8 @@ public class SelenideAppium {
    * Open a deep link for an IOS application
    * @param deepLinkUrl - deep link url
    */
-  public static void openIOSDeepLink(@Nonnull String deepLinkUrl) {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
+  public static void openIOSDeepLink(String deepLinkUrl) {
+    if (!hasWebDriverStarted()) {
       launchApp();
     }
     deepLinkLauncher.openDeepLinkOnIos(AppiumDriverRunner.getIosDriver(), deepLinkUrl);
@@ -50,8 +48,8 @@ public class SelenideAppium {
    * @param deepLinkUrl - deep link url
    * @param appPackage - Android application package
    */
-  public static void openAndroidDeepLink(@Nonnull String deepLinkUrl, @Nonnull String appPackage) {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
+  public static void openAndroidDeepLink(String deepLinkUrl, String appPackage) {
+    if (!hasWebDriverStarted()) {
       launchApp();
     }
     deepLinkLauncher.openDeepLinkOnAndroid(AppiumDriverRunner.getMobileDriver(), deepLinkUrl, appPackage);
@@ -84,38 +82,26 @@ public class SelenideAppium {
     return switchTo().getCurrentContext();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumElement $x(String xpathExpression) {
     return $(By.xpath(xpathExpression), 0);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumElement $(By seleniumSelector) {
     return $(seleniumSelector, 0);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumElement $(By seleniumSelector, int index) {
     return ElementFinder.wrap(driver(), SelenideAppiumElement.class, null, seleniumSelector, index);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumElement $(WebElement webElement) {
     return WebElementWrapper.wrap(SelenideAppiumElement.class, driver(), webElement);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumCollection $$(By selector) {
     return new SelenideAppiumCollection(driver(), selector);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideAppiumCollection $$(Collection<? extends WebElement> elements) {
     return new SelenideAppiumCollection(driver(), elements);
   }

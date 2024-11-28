@@ -2,9 +2,8 @@ package com.codeborne.selenide.logevents;
 
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.ex.SoftAssertionError;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -14,7 +13,6 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
-@ParametersAreNonnullByDefault
 public class ErrorsCollector implements LogEventListener {
   private static final AtomicLong counter = new AtomicLong(0);
   public static final String LISTENER_SOFT_ASSERT = "softAssert";
@@ -72,18 +70,18 @@ public class ErrorsCollector implements LogEventListener {
    */
   @Nullable
   public AssertionError cleanAndGetAssertionError(String testName, @Nullable Throwable testFailure, boolean fullStacktraces) {
-    List<Throwable> errors = new ArrayList<>(this.errors);
+    List<Throwable> result = new ArrayList<>(this.errors);
     if (testFailure != null) {
-      errors.add(testFailure);
+      result.add(testFailure);
     }
     this.errors.clear();
 
-    if (errors.size() == 1 && errors.get(0) instanceof AssertionError assertionError) {
+    if (result.size() == 1 && result.get(0) instanceof AssertionError assertionError) {
       return assertionError;
     }
-    if (!errors.isEmpty()) {
+    if (!result.isEmpty()) {
       String message = String.format("Test %s failed", testName);
-      return new SoftAssertionError(message, errors, fullStacktraces);
+      return new SoftAssertionError(message, result, fullStacktraces);
     }
     return null;
   }

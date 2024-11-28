@@ -33,7 +33,7 @@ final class AnimationTest extends ITest {
   }
 
   @Test
-  void shouldFailIfTabIsNotActive() throws InterruptedException {
+  void shouldFailIfTabIsNotActive() {
     $(byText("New tab")).click();
     $("#move-box").click();
     driver().webdriver().shouldHave(WebDriverConditions.numberOfWindows(2));

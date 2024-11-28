@@ -6,9 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.NOPLogger;
 import org.slf4j.helpers.NOPLoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -22,7 +19,6 @@ import static java.util.Comparator.comparingLong;
  * <p>
  * Class is thread-safe: the same instance of SimpleReport can be reused by different threads simultaneously.
  */
-@ParametersAreNonnullByDefault
 public class SimpleReport {
   private static final Logger log = LoggerFactory.getLogger(SimpleReport.class);
   private static final int MIN_FIRST_COLUMN_WIDTH = 20;
@@ -49,19 +45,16 @@ public class SimpleReport {
       return;
     }
 
-    List<LogEvent> events = new ArrayList<>(logEventListener.events());
-
-    events.sort(comparingLong(LogEvent::getStartTime));
-
-    String report = generateReport(title, events);
+    String report = generateReport(title, logEventListener.events());
     log.info(report);
 
     logEventListener.clear();
   }
 
-  @Nonnull
-  @CheckReturnValue
-  String generateReport(String title, List<LogEvent> events) {
+  protected String generateReport(String title, List<LogEvent> rawEvents) {
+    List<LogEvent> events = new ArrayList<>(rawEvents);
+
+    events.sort(comparingLong(LogEvent::getStartTime));
     var eventsWithNestingLevel = escapeSubjectAndComputeNestingLevel(events);
 
     int firstColumnWidth = Math.max(maxLocatorLength(eventsWithNestingLevel), MIN_FIRST_COLUMN_WIDTH);
@@ -127,20 +120,14 @@ public class SimpleReport {
       sb.append(delimiterLine);
     }
 
-    @CheckReturnValue
-    @Nonnull
     private String line(int count) {
       return repeat("-", count);
     }
 
-    @CheckReturnValue
-    @Nonnull
     private String indent(int count) {
       return repeat(INDENT, count);
     }
 
-    @CheckReturnValue
-    @Nonnull
     private String repeat(String value, int count) {
       return new String(new char[count]).replace("\0", value);
     }
@@ -185,7 +172,6 @@ public class SimpleReport {
     }
   }
 
-  @CheckReturnValue
   private int maxLocatorLength(List<LogEventWithNestingLevel> events) {
     var maxLength = 0;
     for (var wrapper : events) {
@@ -198,7 +184,6 @@ public class SimpleReport {
     return maxLength;
   }
 
-  @CheckReturnValue
   private int maxSubjectLength(List<LogEventWithNestingLevel> events) {
     var maxLength = MIN_SECOND_COLUMN_WIDTH;
 

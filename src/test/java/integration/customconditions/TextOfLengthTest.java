@@ -9,12 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ParametersAreNonnullByDefault
 final class TextOfLengthTest extends ITest {
   @BeforeEach
   void openPage() {
@@ -37,7 +33,6 @@ final class TextOfLengthTest extends ITest {
 
   public static WebElementCondition textOfLength(int expectedLength) {
     return new WebElementCondition("text of length " + expectedLength) {
-      @Nonnull
       @Override
       public CheckResult check(Driver driver, WebElement webElement) {
         String text = webElement.getText();

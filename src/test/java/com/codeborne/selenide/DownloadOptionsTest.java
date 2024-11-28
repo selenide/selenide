@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
+import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -27,13 +28,13 @@ final class DownloadOptionsTest {
     DownloadOptions options = using(PROXY).withTimeout(9999);
 
     assertThat(options.getMethod()).isEqualTo(PROXY);
-    assertThat(options.timeout().toMillis()).isEqualTo(9999);
+    assertThat(options.timeout()).isEqualTo(Duration.ofMillis(9999));
     assertThat(options.getFilter()).isEqualTo(none());
   }
 
   @Test
   void customFileFilter() {
-    DownloadOptions options = using(FOLDER).withFilter(withExtension("pdf"));
+    DownloadOptions options = using(FOLDER).withExtension("pdf");
 
     assertThat(options.getMethod()).isEqualTo(FOLDER);
     assertThat(options.timeout()).isNull();
@@ -42,10 +43,10 @@ final class DownloadOptionsTest {
 
   @Test
   void customSettings() {
-    DownloadOptions options = using(FOLDER).withFilter(withExtension("ppt")).withTimeout(Duration.ofMillis(1234));
+    DownloadOptions options = using(FOLDER).withExtension("ppt").withTimeout(Duration.ofMillis(1234));
 
     assertThat(options.getMethod()).isEqualTo(FOLDER);
-    assertThat(options.timeout().toMillis()).isEqualTo(1234);
+    assertThat(options.timeout()).isEqualTo(Duration.ofMillis(1234));
     assertThat(options.getFilter()).usingRecursiveComparison().isEqualTo(withExtension("ppt"));
   }
 
@@ -57,10 +58,16 @@ final class DownloadOptionsTest {
     assertThat(using(PROXY).withTimeout(9999))
       .hasToString("method: PROXY, timeout: 9999 ms");
 
-    assertThat(using(HTTPGET).withTimeout(9999).withFilter(withExtension("ppt")))
-      .hasToString("method: HTTPGET, timeout: 9999 ms, filter: with extension \"ppt\"");
+    assertThat(using(HTTPGET).withTimeout(9999).withExtension("ppt"))
+      .hasToString("method: HTTPGET, timeout: 9999 ms, with extension \"ppt\"");
 
     assertThat(using(FOLDER).withFilter(withExtension("exe")))
-      .hasToString("method: FOLDER, filter: with extension \"exe\"");
+      .hasToString("method: FOLDER, with extension \"exe\"");
+
+    assertThat(using(FOLDER).withExtension("exe"))
+      .hasToString("method: FOLDER, with extension \"exe\"");
+
+    assertThat(file().withExtension("exe"))
+      .hasToString("with extension \"exe\"");
   }
 }

@@ -9,15 +9,11 @@ import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import com.google.common.collect.ImmutableSet;
-import org.openqa.selenium.WebDriver;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -27,45 +23,35 @@ import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
 
-@ParametersAreNonnullByDefault
 public class DownloadFileToFolder {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolder.class);
   private static final Set<String> CHROMIUM_TEMPORARY_FILES = ImmutableSet.of("crdownload", "tmp");
   private static final Set<String> FIREFOX_TEMPORARY_FILES = ImmutableSet.of("part");
 
   private final Downloader downloader;
-  private final WindowsCloser windowsCloser;
 
-  DownloadFileToFolder(Downloader downloader, WindowsCloser windowsCloser) {
+  DownloadFileToFolder(Downloader downloader) {
     this.downloader = downloader;
-    this.windowsCloser = windowsCloser;
   }
 
   public DownloadFileToFolder() {
-    this(new Downloader(), new WindowsCloser());
+    this(new Downloader());
   }
 
-  @CheckReturnValue
-  @Nonnull
-  public File download(WebElementSource anyClickableElement,
+  public File download(WebElementSource link,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
 
-    WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     long minimalIncrementTimeout = Math.max(incrementTimeout, 1000);
-    return windowsCloser.runAndCloseArisedWindows(webDriver, () ->
-      clickAndWaitForNewFilesInDownloadsFolder(anyClickableElement, clickable, timeout, minimalIncrementTimeout, fileFilter, action)
-    );
+    return clickAndWaitForNewFilesInDownloadsFolder(link, clickable, timeout, minimalIncrementTimeout, fileFilter, action);
   }
 
-  @CheckReturnValue
-  @Nonnull
-  File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource anyClickableElement, WebElement clickable,
+  File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource link, WebElement clickable,
                                                 long timeout, long incrementTimeout,
                                                 FileFilter fileFilter,
                                                 DownloadAction action) {
-    Driver driver = anyClickableElement.driver();
+    Driver driver = link.driver();
     Config config = driver.config();
     long pollingInterval = Math.max(config.pollingInterval(), 50);
     DownloadsFolder folder = getDownloadsFolder(driver);
@@ -90,7 +76,7 @@ public class DownloadFileToFolder {
       log.debug("All downloaded files: {}", folder.filesAsString());
     }
 
-    File downloadedFile = newDownloads.firstDownloadedFile(driver, timeout, fileFilter);
+    File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
     return archiveFile(driver, downloadedFile);
   }
 
@@ -125,7 +111,7 @@ public class DownloadFileToFolder {
     if (folder.hasFiles(extension, filter)) {
       String message = String.format("Folder %s still contains files %s after %s ms. " +
                                      "Apparently, the downloading hasn't completed in time.", folder, extension, timeout);
-      throw new FileNotDownloadedError(driver, message, timeout);
+      throw new FileNotDownloadedError(message, timeout);
     }
   }
 
@@ -187,7 +173,7 @@ public class DownloadFileToFolder {
         filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs,
         start, lastFileUpdate, now, incrementTimeout,
         folder.modificationTimes());
-      throw new FileNotDownloadedError(driver, message, timeout);
+      throw new FileNotDownloadedError(message, timeout);
     }
   }
 
@@ -204,7 +190,6 @@ public class DownloadFileToFolder {
     }
   }
 
-  @Nonnull
   protected File archiveFile(Driver driver, File downloadedFile) {
     File uniqueFolder = downloader.prepareTargetFolder(driver.config());
     File archivedFile = new File(uniqueFolder, downloadedFile.getName());

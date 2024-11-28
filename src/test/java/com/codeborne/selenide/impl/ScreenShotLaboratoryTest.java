@@ -129,7 +129,7 @@ final class ScreenShotLaboratoryTest {
     screenshots.takeScreenshot(driver, true, true);
     screenshots.takeScreenshot(driver, true, true);
 
-    List<File> allThreadScreenshots = screenshots.getThreadScreenshots();
+    var allThreadScreenshots = screenshots.getThreadScreenshots();
     assertThat(allThreadScreenshots).hasSize(5);
     assertThat(allThreadScreenshots.get(0))
       .hasToString(dir + normalize(String.format("/build/reports/tests/ui/MyTest/test_some_method/%s.0.png", ts)));
@@ -150,7 +150,7 @@ final class ScreenShotLaboratoryTest {
     screenshots.takeScreenshot(driver, true, true);
     screenshots.takeScreenshot(driver, true, true);
 
-    List<File> contextScreenshots = screenshots.getContextScreenshots();
+    var contextScreenshots = screenshots.getContextScreenshots();
     assertThat(contextScreenshots)
       .hasSize(3);
 
@@ -342,7 +342,7 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void imageIsAccesableFromThreadScreenshots() {
+  void imageIsAccessibleFromThreadScreenshots() {
     config.screenshots(true);
     Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
 
@@ -366,7 +366,7 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void sourceIsAccesableFromThreadScreenshots() {
+  void sourceIsAccessibleFromThreadScreenshots() {
     config.screenshots(true);
     Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
 
@@ -374,7 +374,7 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void imageIsAccesableFromCurrentContextScreenshots() {
+  void imageIsAccessibleFromCurrentContextScreenshots() {
     config.screenshots(true);
     screenshots.startContext("ui/MyTest/test_some_method/");
     Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
@@ -401,7 +401,7 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-  void sourceIsAccesableFromCurrentContextScreenshots() {
+  void sourceIsAccessibleFromCurrentContextScreenshots() {
     config.screenshots(true);
     screenshots.startContext("ui/MyTest/test_some_method/");
     Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);

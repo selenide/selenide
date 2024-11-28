@@ -78,8 +78,8 @@ final class ConditionsTest extends ITest {
       .hasMessageStartingWith("Element should be satisfied: be hidden or not visible or have css class \"list\"" +
         " or have text \"nope\" or be disabled or not enabled or have attribute foo=\"bar\"" +
         " or have attribute href=\"https://nope.ee\" {#multirowTable}")
-      .hasMessageContaining("Actual value: visible, visible, class=\"table multirow_table\", text=\"Chack Norris\n" +
-        "Chack L'a Baskerville\", enabled, enabled, foo=\"\", href=\"\"");
+      .hasMessageContaining("Actual value: visible, visible, class=\"table multirow_table\", text=\"Chack Norris\n",
+        "Chack\"", "Baskerville", ", enabled, enabled, foo=\"\", href=\"\"");
   }
 
   @Test

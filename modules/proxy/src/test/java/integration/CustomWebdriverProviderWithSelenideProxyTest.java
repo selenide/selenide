@@ -13,10 +13,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.AuthenticationType.BASIC;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
@@ -46,23 +42,20 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends ProxyIntegratio
     $("#greeting").shouldHave(text("Hello, scott:" + scottPassword()));
   }
 
-  @ParametersAreNonnullByDefault
   private static class MyWebDriverProvider implements WebDriverProvider {
     @Override
-    @CheckReturnValue
-    @Nonnull
-    public WebDriver createDriver(@Nonnull Capabilities capabilities) {
+    public WebDriver createDriver(Capabilities capabilities) {
       if (browser().isChrome()) return chrome(capabilities);
       if (browser().isFirefox()) return firefox(capabilities);
       throw new IllegalStateException("Unsupported browser: " + browser().name);
     }
 
-    private ChromeDriver chrome(@Nonnull Capabilities desiredCapabilities) {
+    private ChromeDriver chrome(Capabilities desiredCapabilities) {
       ChromeOptions options = chromeOptions(null);
       return new ChromeDriver(options.merge(desiredCapabilities));
     }
 
-    private FirefoxDriver firefox(@Nonnull Capabilities desiredCapabilities) {
+    private FirefoxDriver firefox(Capabilities desiredCapabilities) {
       FirefoxOptions options = firefoxOptions(null);
       return new FirefoxDriver(options.merge(desiredCapabilities));
     }

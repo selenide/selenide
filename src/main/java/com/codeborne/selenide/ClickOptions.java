@@ -1,17 +1,13 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.HasTimeout;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 
 import static com.codeborne.selenide.ClickMethod.DEFAULT;
 import static com.codeborne.selenide.ClickMethod.JS;
 
-@ParametersAreNonnullByDefault
 public class ClickOptions implements HasTimeout {
   private final int offsetX;
   private final int offsetY;
@@ -28,72 +24,52 @@ public class ClickOptions implements HasTimeout {
     this.force = force;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static ClickOptions usingDefaultMethod() {
     return new ClickOptions(DEFAULT, 0, 0, null, false);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static ClickOptions usingJavaScript() {
     return new ClickOptions(JS, 0, 0, null, false);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static ClickOptions withOffset(int offsetX, int offsetY) {
     return new ClickOptions(DEFAULT, offsetX, offsetY, null, false);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static ClickOptions withTimeout(Duration timeout) {
     return new ClickOptions(DEFAULT, 0, 0, timeout, false);
   }
 
-  @CheckReturnValue
   public int offsetX() {
     return offsetX;
   }
 
-  @CheckReturnValue
   public int offsetY() {
     return offsetY;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public ClickMethod clickMethod() {
     return clickMethod;
   }
 
-  @CheckReturnValue
   @Nullable
   @Override
   public Duration timeout() {
     return timeout;
   }
 
-  @CheckReturnValue
   public boolean isForce() {
     return force;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public ClickOptions offsetX(int offsetX) {
     return new ClickOptions(clickMethod, offsetX, offsetY, timeout, force);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public ClickOptions offsetY(int offsetY) {
     return new ClickOptions(clickMethod, offsetX, offsetY, timeout, force);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public ClickOptions offset(int offsetX, int offsetY) {
     return new ClickOptions(clickMethod, offsetX, offsetY, timeout, force);
   }
@@ -111,19 +87,11 @@ public class ClickOptions implements HasTimeout {
    *   NB! We strongly recommend to optimize such slow pages instead of increasing timeout.
    *   These pages make your tests slower.
    * </p>
-   * @since 6.6.0
    */
-  @CheckReturnValue
-  @Nonnull
   public ClickOptions timeout(Duration timeout) {
     return new ClickOptions(clickMethod, offsetX, offsetY, timeout, force);
   }
 
-  /**
-   * @since 7.1.0
-   */
-  @CheckReturnValue
-  @Nonnull
   public ClickOptions force() {
     return new ClickOptions(clickMethod, offsetX, offsetY, timeout, true);
   }

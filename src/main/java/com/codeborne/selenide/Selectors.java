@@ -1,8 +1,8 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.selector.ByAttribute;
-import com.codeborne.selenide.selector.ByShadow;
 import com.codeborne.selenide.selector.ByDeepShadow;
+import com.codeborne.selenide.selector.ByShadow;
 import com.codeborne.selenide.selector.ByTagAndText;
 import com.codeborne.selenide.selector.ByText;
 import com.codeborne.selenide.selector.ByTextCaseInsensitive;
@@ -11,11 +11,6 @@ import com.codeborne.selenide.selector.WithText;
 import com.codeborne.selenide.selector.WithTextCaseInsensitive;
 import org.openqa.selenium.By;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class Selectors {
   /**
    * Find element CONTAINING given text (as a substring).
@@ -26,8 +21,6 @@ public class Selectors {
    * @param elementText Text to search inside element
    * @return standard selenium By criteria`
    */
-  @CheckReturnValue
-  @Nonnull
   public static By withText(String elementText) {
     return new WithText(elementText);
   }
@@ -41,20 +34,14 @@ public class Selectors {
    * @param tag Html tag name (e.g. "dev", "span", "li", "a", "td")
    * @param elementText Text to search inside element
    * @return standard selenium By criteria`
-   * @since 6.3.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static By withTagAndText(String tag, String elementText) {
     return new WithTagAndText(tag, elementText);
   }
 
   /**
    * Same as {@link #withText(String)}, but case-insensitive.
-   * @since 5.22.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static By withTextCaseInsensitive(String elementText) {
     return new WithTextCaseInsensitive(elementText);
   }
@@ -69,8 +56,6 @@ public class Selectors {
    * @param elementText Text that searched element should have
    * @return standard selenium By criteria
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byText(String elementText) {
     return new ByText(elementText);
   }
@@ -85,20 +70,14 @@ public class Selectors {
    * @param tag Html tag name (e.g. "dev", "span", "li", "a", "td")
    * @param elementText Text that searched element should have
    * @return standard selenium By criteria
-   * @since 6.3.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byTagAndText(String tag, String elementText) {
     return new ByTagAndText(tag, elementText);
   }
 
   /**
    * Same as {@link #byText(String)}, but case-insensitive.
-   * @since 5.22.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byTextCaseInsensitive(String elementText) {
     return new ByTextCaseInsensitive(elementText);
   }
@@ -132,28 +111,20 @@ public class Selectors {
    * @param attributeValue value of attribute, should not contain both apostrophes and quotes
    * @return standard selenium By cssSelector criteria
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byAttribute(String attributeName, String attributeValue) {
     return new ByAttribute(attributeName, attributeValue);
   }
 
   /**
    * @see ByShadow#cssSelector(java.lang.String, java.lang.String, java.lang.String...)
-   * @since 5.10
    */
-  @CheckReturnValue
-  @Nonnull
   public static By shadowCss(String target, String shadowHost, String... innerShadowHosts) {
     return ByShadow.cssSelector(target, shadowHost, innerShadowHosts);
   }
 
   /**
    * @see ByDeepShadow#cssSelector(java.lang.String)
-   * @since v6.8.0
    */
-  @CheckReturnValue
-  @Nonnull
   public static By shadowDeepCss(String target) {
     return ByDeepShadow.cssSelector(target);
   }
@@ -161,8 +132,6 @@ public class Selectors {
   /**
    * Synonym for #byAttribute
    */
-  @CheckReturnValue
-  @Nonnull
   public static By by(String attributeName, String attributeValue) {
     return byAttribute(attributeName, attributeValue);
   }
@@ -170,8 +139,6 @@ public class Selectors {
   /**
    * Find element with given title ("title" attribute)
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byTitle(String title) {
     return byAttribute("title", title);
   }
@@ -179,88 +146,62 @@ public class Selectors {
   /**
    * Find input element with given value ("value" attribute)
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byValue(String value) {
     return byAttribute("value", value);
   }
 
   /**
    * @see By#name(java.lang.String)
-   * @since 3.1
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byName(String name) {
     return By.name(name);
   }
 
   /**
    * @see By#xpath(java.lang.String)
-   * @since 3.1
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byXpath(String xpath) {
     return By.xpath(xpath);
   }
 
   /**
    * @see By#linkText(java.lang.String)
-   * @since 3.1
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byLinkText(String linkText) {
     return By.linkText(linkText);
   }
 
   /**
    * @see By#partialLinkText(java.lang.String)
-   * @since 3.1
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byPartialLinkText(String partialLinkText) {
     return By.partialLinkText(partialLinkText);
   }
 
   /**
    * @see By#id(java.lang.String)
-   * @since 3.1
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byId(String id) {
     return By.id(id);
   }
 
   /**
    * @see By#cssSelector(java.lang.String)
-   * @since 3.8
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byCssSelector(String css) {
     return By.cssSelector(css);
   }
 
   /**
    * @see By#className(java.lang.String)
-   * @since 3.8
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byClassName(String className) {
     return By.className(className);
   }
 
   /**
    * @see By#tagName(java.lang.String)
-   * @since 5.11
    */
-  @CheckReturnValue
-  @Nonnull
   public static By byTagName(String tagName) {
     return By.tagName(tagName);
   }

@@ -8,12 +8,10 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.AuthenticationFilter;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.URL;
 import java.util.regex.Pattern;
 
@@ -21,9 +19,9 @@ import static com.codeborne.selenide.AuthenticationType.BASIC;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.drivercommands.BasicAuthUtils.appendBasicAuthToURL;
 import static com.codeborne.selenide.drivercommands.BasicAuthUtils.registerBasicAuth;
+import static java.util.Objects.requireNonNull;
 import static java.util.regex.Pattern.DOTALL;
 
-@ParametersAreNonnullByDefault
 public class Navigator {
   private static final Pattern ABSOLUTE_URL_REGEX = Pattern.compile("^[a-zA-Z-]+:.*", DOTALL);
 
@@ -49,10 +47,9 @@ public class Navigator {
   }
 
   private AuthenticationFilter basicAuthRequestFilter(SelenideDriver driver) {
-    return driver.getProxy().requestFilter("authentication");
+    return requireNonNull(driver.getProxy().requestFilter("authentication"));
   }
 
-  @Nonnull
   String absoluteUrl(Config config, String relativeOrAbsoluteUrl) {
     return isAbsoluteUrl(relativeOrAbsoluteUrl) ? relativeOrAbsoluteUrl : config.baseUrl() + relativeOrAbsoluteUrl;
   }

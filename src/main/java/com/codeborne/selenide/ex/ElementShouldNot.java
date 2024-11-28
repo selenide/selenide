@@ -5,15 +5,12 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.Alias;
 import com.codeborne.selenide.impl.ElementDescriber;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
-
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.ex.Strings.join;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
-@ParametersAreNonnullByDefault
 public class ElementShouldNot extends UIAssertionError {
   private static final ElementDescriber describe = inject(ElementDescriber.class);
 
@@ -21,7 +18,6 @@ public class ElementShouldNot extends UIAssertionError {
                           WebElementCondition expectedCondition, @Nullable CheckResult lastCheckResult,
                           WebElement element, @Nullable Throwable cause) {
     super(
-      driver,
       join(
         String.format("Element%s should not %s%s {%s}", alias.appendable(), prefix, expectedCondition, searchCriteria),
         String.format("Element: '%s'", describe.fully(driver, element)),

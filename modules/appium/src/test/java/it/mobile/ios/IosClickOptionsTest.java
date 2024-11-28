@@ -1,18 +1,18 @@
 package it.mobile.ios;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.appium.AppiumClickOptions;
+import com.codeborne.selenide.appium.SelenideAppium;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Condition.visible;
 
-class IosClickOptionsTest extends BaseIosCalculatorTest {
+class IosClickOptionsTest extends BaseSwagLabsAppIosTest {
   @Test
   void testIosTap() {
-    $(By.name("IntegerA")).sendKeys("3");
-    $(By.name("IntegerB")).sendKeys("3");
-    $(By.name("ComputeSumButton")).click(AppiumClickOptions.tap());
-    $(By.name("Answer")).shouldHave(Condition.text("6"));
+    SelenideAppium.openIOSDeepLink("mydemoapprn://login");
+
+    SelenideAppium.$(By.name("Login button")).click(AppiumClickOptions.tap());
+    SelenideAppium.$(By.name("Username is required")).shouldBe(visible);
   }
 }

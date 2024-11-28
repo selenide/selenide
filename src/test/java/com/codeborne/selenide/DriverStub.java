@@ -1,27 +1,25 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.SessionId;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
+import static java.util.Objects.requireNonNull;
 import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.mock;
 
 /**
  * A dummy `Driver` implementation used in tests.
  */
-@ParametersAreNonnullByDefault
 public class DriverStub implements Driver {
   private final Config config;
   private final Browser browser;
   private final WebDriver webDriver;
+  @Nullable
   private final SelenideProxyServer proxy;
   private final BrowserDownloadsFolder browserDownloadsFolder;
   private final Actions actionsMock = mock();
@@ -76,34 +74,26 @@ public class DriverStub implements Driver {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Config config() {
     return config;
   }
 
   @Override
-  @CheckReturnValue
   public boolean hasWebDriverStarted() {
-    return webDriver != null;
+    return true;
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Browser browser() {
     return browser;
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebDriver getWebDriver() {
-    return webDriver;
+    return requireNonNull(webDriver);
   }
 
   @Override
-  @Nonnull
   public SelenideProxyServer getProxy() {
     if (!config.proxyEnabled()) {
       throw new IllegalStateException("Proxy server is not enabled. You need to set proxyEnabled=true before opening a browser.");
@@ -116,14 +106,11 @@ public class DriverStub implements Driver {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebDriver getAndCheckWebDriver() {
-    return webDriver;
+    return requireNonNull(webDriver);
   }
 
   @Override
-  @CheckReturnValue
   @Nullable
   public BrowserDownloadsFolder browserDownloadsFolder() {
     return browserDownloadsFolder;
@@ -135,17 +122,20 @@ public class DriverStub implements Driver {
   }
 
   @Override
-  @CheckReturnValue
   public boolean supportsJavascript() {
     return hasWebDriverStarted() && webDriver instanceof JavascriptExecutor;
   }
 
+  @Nullable
+  @CanIgnoreReturnValue
   @Override
   @SuppressWarnings("unchecked")
   public <T> T executeJavaScript(String jsCode, Object... arguments) {
     return (T) ((JavascriptExecutor) webDriver).executeScript(jsCode, arguments);
   }
 
+  @Nullable
+  @CanIgnoreReturnValue
   @Override
   @SuppressWarnings("unchecked")
   public <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
@@ -153,29 +143,16 @@ public class DriverStub implements Driver {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String getUserAgent() {
     return "zhopera";
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public SessionId getSessionId() {
     return new SessionId("testSession");
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
-  public SelenideTargetLocator switchTo() {
-    return new SelenideTargetLocator(this);
-  }
-
-  @Override
-  @CheckReturnValue
-  @Nonnull
   public Actions actions() {
     return actionsMock;
   }

@@ -7,17 +7,13 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.WebDriverInstance;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.annotation.concurrent.NotThreadSafe;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +25,6 @@ import static java.lang.Thread.currentThread;
  *
  * This class is NOT thread-safe. Every thread should use its own instance.
  */
-@ParametersAreNonnullByDefault
-@NotThreadSafe
 public class LazyDriver implements Driver {
   private static final Logger log = LoggerFactory.getLogger(LazyDriver.class);
 
@@ -38,6 +32,7 @@ public class LazyDriver implements Driver {
   private final BrowserHealthChecker browserHealthChecker;
   private final WebDriverFactory factory;
   private final CreateDriverCommand createDriverCommand;
+  @Nullable
   private final Proxy userProvidedProxy;
   private final List<WebDriverListener> listeners;
   private final Browser browser;
@@ -65,13 +60,11 @@ public class LazyDriver implements Driver {
   }
 
   @Override
-  @Nonnull
   public Config config() {
     return config;
   }
 
   @Override
-  @Nonnull
   public Browser browser() {
     return browser;
   }
@@ -82,18 +75,15 @@ public class LazyDriver implements Driver {
   }
 
   @Override
-  @Nonnull
   public WebDriver getWebDriver() {
     return checkDriverIsStarted().webDriver();
   }
 
-  @Nonnull
   @Override
   public SelenideProxyServer getProxy() {
     return checkDriverIsStarted().proxy();
   }
 
-  @Nonnull
   private WebDriverInstance checkDriverIsStarted() {
     if (closed) {
       throw new IllegalStateException("Webdriver has been closed. You need to call open(url) to open a browser again.");
@@ -106,8 +96,6 @@ public class LazyDriver implements Driver {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebDriver getAndCheckWebDriver() {
     if (wd != null && wd.webDriver() != null && !browserHealthChecker.isBrowserStillOpen(wd.webDriver())) {
       if (config.reopenBrowserOnFail()) {
@@ -128,7 +116,6 @@ public class LazyDriver implements Driver {
     return getWebDriver();
   }
 
-  @CheckReturnValue
   @Nullable
   @Override
   public DownloadsFolder browserDownloadsFolder() {

@@ -1,5 +1,6 @@
 package it.mobile.android;
 
+import com.codeborne.selenide.Container;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.appium.SelenideAppium;
@@ -43,6 +44,18 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
     loginPage.inputFields.get(1).setValue("wrongpassword");
     loginPage.loginButton.click();
     loginPage.errorMessage.shouldHave(text("Provided credentials do not match any user in this service."));
+  }
+
+  @Test
+  public void pageObjectWithContainer() {
+    LoginPageWithContainer loginPage = page();
+    assertThat(loginPage.inputFields).hasSize(2);
+    loginPage.inputFields.get(0).sendKeys("bob@example.com");
+    loginPage.inputFields.get(1).scroll(up());
+    loginPage.inputFields.get(1).setValue("wrongpassword");
+    loginPage.loginButton.click();
+    assertThat(loginPage.errors).hasSize(1);
+    loginPage.errors.get(0).message.shouldHave(text("Provided credentials do not match any user in this service."));
   }
 
   @Test
@@ -114,6 +127,22 @@ class LoginPageWithCollections {
 
   @AndroidFindBy(xpath = "//*[@content-desc='generic-error-message']/android.widget.TextView")
   SelenideAppiumElement errorMessage;
+}
+
+class LoginPageWithContainer {
+  @AndroidFindBy(xpath = "//android.widget.EditText")
+  List<SelenideAppiumElement> inputFields;
+
+  @AndroidFindBy(accessibility = "Login button")
+  WebElement loginButton;
+
+  @AndroidFindBy(xpath = "//*[@content-desc='generic-error-message']")
+  List<ErrorsWidget> errors;
+
+  static class ErrorsWidget implements Container {
+    @AndroidFindBy(xpath = ".//android.widget.TextView")
+    SelenideAppiumElement message;
+  }
 }
 
 class LoginPageWithSelenideCollection {

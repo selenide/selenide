@@ -6,19 +6,13 @@ import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
 import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 
-@ParametersAreNonnullByDefault
 public class CollectionElementByCondition extends WebElementSource {
 
-  @CheckReturnValue
-  @Nonnull
   public static SelenideElement wrap(CollectionSource collection, WebElementCondition condition) {
     return (SelenideElement) Proxy.newProxyInstance(
       collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
@@ -34,15 +28,11 @@ public class CollectionElementByCondition extends WebElementSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Driver driver() {
     return collection.driver();
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebElement getWebElement() {
     List<WebElement> list = collection.getElements();
 
@@ -56,15 +46,11 @@ public class CollectionElementByCondition extends WebElementSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String getSearchCriteria() {
     return collection.getSearchCriteria() + ".findBy(" + condition + ")";
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String description() {
     return getAlias().getOrElse(() -> collection.shortDescription() + ".findBy(" + condition + ")");
   }

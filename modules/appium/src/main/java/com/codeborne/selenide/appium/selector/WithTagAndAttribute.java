@@ -3,9 +3,6 @@ package com.codeborne.selenide.appium.selector;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Quotes;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-
 public class WithTagAndAttribute extends By.ByXPath {
 
   protected final String tag;
@@ -20,8 +17,6 @@ public class WithTagAndAttribute extends By.ByXPath {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String toString() {
     return "*".equals(tag) ?
       String.format("[%s*=%s]", attributeName, attributeValue) :

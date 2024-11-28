@@ -8,8 +8,6 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
@@ -32,9 +30,7 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
  * <br>
  *
  * @author Aliaksandr Rasolka
- * @since 4.12.2
  */
-@ParametersAreNonnullByDefault
 public class SoftAssertsExtension implements BeforeAllCallback, BeforeEachCallback, AfterEachCallback, AfterAllCallback {
   private static final ExtensionContext.Namespace namespace = create(SoftAssertsExtension.class);
 
@@ -80,6 +76,7 @@ public class SoftAssertsExtension implements BeforeAllCallback, BeforeEachCallba
   public void afterAll(ExtensionContext context) {
     removeListener(LISTENER_SOFT_ASSERT);
     ErrorsCollector errorsCollector = context.getStore(namespace).remove(LISTENER_SOFT_ASSERT, ErrorsCollector.class);
+    //noinspection ConstantValue
     if (errorsCollector != null) {
       errorsCollector.cleanAndThrowAssertionError(context.getDisplayName(),
         context.getExecutionException().orElse(null), fullStacktraces
@@ -87,7 +84,6 @@ public class SoftAssertsExtension implements BeforeAllCallback, BeforeEachCallba
     }
   }
 
-  @Nonnull
   private Optional<ErrorsCollector> getErrorsCollector(ExtensionContext context) {
     return Optional.ofNullable(
       context.getStore(namespace).get(LISTENER_SOFT_ASSERT, ErrorsCollector.class)

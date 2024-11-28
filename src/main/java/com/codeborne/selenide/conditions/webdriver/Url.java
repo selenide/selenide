@@ -1,17 +1,16 @@
 package com.codeborne.selenide.conditions.webdriver;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
 
-@ParametersAreNonnullByDefault
+import java.util.Objects;
+
 public class Url extends UrlCondition {
   public Url(String expectedUrl) {
     super("", expectedUrl);
   }
 
-  @CheckReturnValue
   @Override
-  public boolean test(String url) {
-    return url.equals(expectedUrl);
+  public boolean test(@Nullable String url) {
+    return Objects.equals(url, expectedUrl);
   }
 }

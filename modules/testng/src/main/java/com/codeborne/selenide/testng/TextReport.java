@@ -1,6 +1,7 @@
 package com.codeborne.selenide.testng;
 
 import com.codeborne.selenide.logevents.SimpleReport;
+import org.jspecify.annotations.Nullable;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestNGListener;
@@ -8,21 +9,17 @@ import org.testng.ITestResult;
 import org.testng.annotations.Listeners;
 import org.testng.internal.ConstructorOrMethod;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Arrays;
 import java.util.List;
 
+import static com.codeborne.selenide.testng.Annotations.annotation;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
 /**
  * Reports for all method of annotated class in the suite.
  * Annotate test classes to be reported with {@code @Listeners({TextReport.class})}.
  * Child classes inherit {@code @Listeners({TextReport.class})} from parent classes.
- *
- * @since Selenide 3.6
  */
-@ParametersAreNonnullByDefault
 public class TextReport implements IInvokedMethodListener {
   protected SimpleReport report = new SimpleReport();
 
@@ -61,8 +58,8 @@ public class TextReport implements IInvokedMethodListener {
   }
 
   private List<Class<? extends ITestNGListener>> getListeners(Class<?> testClass) {
-    Listeners annotation = testClass.getAnnotation(Listeners.class);
-    return annotation != null ? Arrays.asList(annotation.value()) : emptyList();
+    Listeners annotation = annotation(testClass, Listeners.class);
+    return annotation != null ? asList(annotation.value()) : emptyList();
   }
 
   private boolean isTextReportListener(Class<? extends ITestNGListener> listener) {

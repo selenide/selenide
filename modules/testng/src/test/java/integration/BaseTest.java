@@ -7,6 +7,7 @@ import com.codeborne.selenide.testng.SoftAsserts;
 import com.codeborne.selenide.testng.TextReport;
 import com.google.common.collect.ImmutableMap;
 import integration.server.LocalHttpServer;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeSuite;
@@ -17,6 +18,7 @@ import static com.codeborne.selenide.AssertionMode.STRICT;
 @Listeners({SoftAsserts.class, TextReport.class, BrowserPerTest.class, ScreenShooter.class})
 abstract class BaseTest {
   private static final Logger log = LoggerFactory.getLogger(BaseTest.class);
+  @Nullable
   private static LocalHttpServer server;
 
   @BeforeSuite

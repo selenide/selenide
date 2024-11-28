@@ -2,13 +2,10 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.impl.FileHelper;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -25,7 +22,6 @@ import static org.apache.commons.io.FileUtils.listFiles;
  * A unique folder per browser.
  * It effectively means that Selenide can delete all files in this folder before starting every new download.
  */
-@ParametersAreNonnullByDefault
 public class BrowserDownloadsFolder implements DownloadsFolder {
   private static final Logger log = LoggerFactory.getLogger(BrowserDownloadsFolder.class);
   private final File folder;
@@ -34,22 +30,16 @@ public class BrowserDownloadsFolder implements DownloadsFolder {
     this.folder = folder.getAbsoluteFile();
   }
 
-  @Nonnull
-  @CheckReturnValue
   public File getFolder() {
     return folder;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public List<File> files() {
     File[] files = folder.listFiles();
     return files == null ? emptyList() : asList(files);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public List<DownloadedFile> filesNewerThan(long modifiedAfterTs) {
     return files().stream()
@@ -67,8 +57,6 @@ public class BrowserDownloadsFolder implements DownloadsFolder {
     return file.lastModified() - timestamp >= -1000L;
   }
 
-  @Nonnull
-  @CheckReturnValue
   public File file(String fileName) {
     return new File(folder, fileName).getAbsoluteFile();
   }
@@ -99,7 +87,6 @@ public class BrowserDownloadsFolder implements DownloadsFolder {
     FileHelper.deleteFolderIfEmpty(folder);
   }
 
-  @Nonnull
   @Override
   public String getPath() {
     return folder.getPath();
@@ -111,7 +98,6 @@ public class BrowserDownloadsFolder implements DownloadsFolder {
   }
 
   @Nullable
-  @CheckReturnValue
   public static BrowserDownloadsFolder from(@Nullable File folder) {
     return folder == null ? null : new BrowserDownloadsFolder(folder);
   }

@@ -9,10 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.CheckResult.accepted;
 import static com.codeborne.selenide.CheckResult.rejected;
 import static com.codeborne.selenide.Configuration.baseUrl;
@@ -50,10 +46,34 @@ final class WebDriverConditionsTest extends IntegrationTest {
   @Test
   void errorMessageForWrongUrl() {
     assertThatThrownBy(() ->
-      webdriver().shouldHave(url("page_with_frames.html"), ofMillis(10))
+                         webdriver().shouldHave(url("page_with_frames.html"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("webdriver should have url page_with_frames.html")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source: ")
+      .hasMessageContaining("Timeout: 10 ms.");
+  }
+
+  @Test
+  void errorMessageShouldHaveForWrongUrlWithBecause() {
+    assertThatThrownBy(() ->
+                         webdriver().shouldHave(url("page_with_frames.html").because("wrong url"), ofMillis(10))
+    )
+      .isInstanceOf(ConditionNotMetError.class)
+      .hasMessageStartingWith("webdriver should have url page_with_frames.html (because wrong url)")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source: ")
+      .hasMessageContaining("Timeout: 10 ms.");
+  }
+
+  @Test
+  void errorMessageShouldNotHaveForWrongUrlWithBecause() {
+    assertThatThrownBy(() ->
+                         webdriver().shouldNotHave(url(baseUrl + "/page_with_frames_with_delays.html").because("wrong url"),
+                                                   ofMillis(10))
+    )
+      .hasMessageStartingWith("webdriver should not have url " + baseUrl + "/page_with_frames_with_delays.html (because wrong url)")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 10 ms.");
@@ -65,7 +85,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     String url = baseUrl + "/page_with_frames.html";
 
     assertThatThrownBy(() ->
-      webdriver().shouldNotHave(urlStartingWith(url), ofMillis(11))
+                         webdriver().shouldNotHave(urlStartingWith(url), ofMillis(11))
     )
       .isInstanceOf(ConditionMetError.class)
       .hasMessageStartingWith("webdriver should not have url starting with " + url)
@@ -88,7 +108,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   @Test
   void errorMessageForWrongUrlStartingWith() {
     assertThatThrownBy(() ->
-      webdriver().shouldHave(urlStartingWith("https://google.ee/"), ofMillis(10))
+                         webdriver().shouldHave(urlStartingWith("https://google.ee/"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("webdriver should have url starting with https://google.ee/")
@@ -106,7 +126,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   @Test
   void errorMessageForWrongCurrentFrameUrl() {
     assertThatThrownBy(() ->
-      webdriver().shouldHave(currentFrameUrl("https://google.ee/"), ofMillis(20))
+                         webdriver().shouldHave(currentFrameUrl("https://google.ee/"), ofMillis(20))
     )
       .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("current frame should have url https://google.ee/")
@@ -129,7 +149,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   @Test
   void errorMessageForWrongCurrentFrameUrlStartingWith() {
     assertThatThrownBy(() ->
-      webdriver().shouldHave(currentFrameUrlStartingWith("https://google.ee/"), ofMillis(5))
+                         webdriver().shouldHave(currentFrameUrlStartingWith("https://google.ee/"), ofMillis(5))
     )
       .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("current frame should have url starting with https://google.ee/")
@@ -159,13 +179,13 @@ final class WebDriverConditionsTest extends IntegrationTest {
   @Test
   void errorMessageForNumberOfWindows() {
     assertThatThrownBy(() ->
-      webdriver().shouldHave(numberOfWindows(2)))
+                         webdriver().shouldHave(numberOfWindows(2)))
       .isInstanceOf(ConditionNotMetError.class)
       .hasMessageContaining("webdriver should have 2 window(s)")
       .hasMessageContaining("Actual value: 1");
 
     assertThatThrownBy(() ->
-      webdriver().shouldNotHave(numberOfWindows(1)))
+                         webdriver().shouldNotHave(numberOfWindows(1)))
       .isInstanceOf(ConditionMetError.class)
       .hasMessageContaining("webdriver should not have 1 window(s)")
       .hasMessageContaining("Actual value: 1");
@@ -179,7 +199,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   @Test
   void errorMessageForWrongTitle() {
     assertThatThrownBy(() ->
-      webdriver().shouldHave(title("Selenide-test-page"), ofMillis(10))
+                         webdriver().shouldHave(title("Selenide-test-page"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetError.class)
       .hasMessageContaining("Actual value: Test::frames with delays");
@@ -188,7 +208,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
   @Test
   void errorMessageWhenWebdriverShouldNotHaveTitle() {
     assertThatThrownBy(() ->
-      webdriver().shouldNotHave(title("Test::frames with delays"), ofMillis(10))
+                         webdriver().shouldNotHave(title("Test::frames with delays"), ofMillis(10))
     )
       .isInstanceOf(ConditionMetError.class)
       .hasMessageStartingWith("Page should not have title Test::frames with delays")
@@ -201,23 +221,19 @@ final class WebDriverConditionsTest extends IntegrationTest {
     webdriver().shouldNotHave(customCookie("nonexistent_cookie"));
   }
 
-  @ParametersAreNonnullByDefault
   @SuppressWarnings("AnonymousInnerClassMayBeStatic")
   private ObjectCondition<WebDriver> customCookie(String expectedCookieName) {
     return new ObjectCondition<>() {
-      @Nonnull
       @Override
       public String description() {
         return "should have a cookie with name '" + expectedCookieName + "'";
       }
 
-      @Nonnull
       @Override
       public String negativeDescription() {
         return "should not have a cookie with name '" + expectedCookieName + "'";
       }
 
-      @CheckReturnValue
       @Override
       public CheckResult check(WebDriver webdriver) {
         return webdriver.manage().getCookieNamed(expectedCookieName) != null ?
@@ -225,19 +241,15 @@ final class WebDriverConditionsTest extends IntegrationTest {
           rejected(message(webdriver), actualValue(webdriver));
       }
 
-      @Nonnull
-      @CheckReturnValue
       private String actualValue(WebDriver webdriver) {
         return "Available cookies: " + webdriver.manage().getCookies();
       }
 
       @Override
-      @CheckReturnValue
       public String expectedValue() {
         return expectedCookieName;
       }
 
-      @Nonnull
       @Override
       public String describe(WebDriver object) {
         return "webdriver";

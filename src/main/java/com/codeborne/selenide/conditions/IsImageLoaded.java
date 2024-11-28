@@ -6,10 +6,8 @@ import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.impl.JavaScript;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
 public class IsImageLoaded extends WebElementCondition {
   private static final JavaScript js = new JavaScript("is-image.js");
 
@@ -17,7 +15,6 @@ public class IsImageLoaded extends WebElementCondition {
     super("image");
   }
 
-  @Nonnull
   @Override
   public CheckResult check(Driver driver, WebElement webElement) {
     boolean image = isImage(driver, webElement);
@@ -25,6 +22,6 @@ public class IsImageLoaded extends WebElementCondition {
   }
 
   public static boolean isImage(Driver driver, WebElement webElement) {
-    return js.execute(driver, webElement);
+    return requireNonNull(js.execute(driver, webElement));
   }
 }

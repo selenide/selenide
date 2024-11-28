@@ -4,12 +4,10 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.ContextAware;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Set;
 
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 
-@ParametersAreNonnullByDefault
 public class SelenideAppiumTargetLocator {
   private final Driver driver;
 

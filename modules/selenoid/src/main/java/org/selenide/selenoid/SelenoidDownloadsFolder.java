@@ -4,8 +4,6 @@ import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.DownloadedFile;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.List;
 
@@ -29,16 +27,12 @@ public class SelenoidDownloadsFolder implements DownloadsFolder {
   public void deleteIfEmpty() {
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public List<File> files() {
     List<String> files = selenoidClient.downloads();
     return files.stream().map(name -> new File(name)).collect(toList());
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public List<DownloadedFile> filesNewerThan(long modifiedAfterTs) {
     return files().stream()
@@ -51,7 +45,6 @@ public class SelenoidDownloadsFolder implements DownloadsFolder {
     return selenoidClient.toString();
   }
 
-  @Nonnull
   @Override
   public String getPath() {
     return "/tmp/not/really/used";

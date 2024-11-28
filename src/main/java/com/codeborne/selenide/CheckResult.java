@@ -1,9 +1,7 @@
 package com.codeborne.selenide;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Supplier;
@@ -12,10 +10,6 @@ import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static java.util.Objects.requireNonNull;
 
-/**
- * @since 6.0.0
- */
-@ParametersAreNonnullByDefault
 public record CheckResult(
   Verdict verdict,
   @Nullable String message,
@@ -54,28 +48,21 @@ public record CheckResult(
     return String.format("%s @ %s%n", actualValue, timeFormat.format(timestamp));
   }
 
-  @Nonnull
-  @CheckReturnValue
   public String getMessageOrElse(Supplier<String> defaultMessage) {
     return message() == null ? defaultMessage.get() : message();
   }
 
   @Nullable
-  @CheckReturnValue
   @SuppressWarnings("unchecked")
   public <T> T getActualValue() {
     return (T) actualValue();
   }
 
-  @Nonnull
-  @CheckReturnValue
   @SuppressWarnings("unchecked")
   public <T> T getActualValueOrElse(T defaultValue) {
     return actualValue() == null ? defaultValue : (T) actualValue();
   }
 
-  @Nonnull
-  @CheckReturnValue
   @SuppressWarnings("unchecked")
   public <T> T requireActualValue() {
     return requireNonNull((T) actualValue());

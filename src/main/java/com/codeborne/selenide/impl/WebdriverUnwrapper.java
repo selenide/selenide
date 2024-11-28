@@ -1,10 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
-import java.util.Optional;
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,6 +9,8 @@ import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.WrapsElement;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.util.Optional;
 
 public class WebdriverUnwrapper {
   public static <T> boolean instanceOf(Driver driver, Class<T> klass) {
@@ -49,7 +48,6 @@ public class WebdriverUnwrapper {
   }
 
   @Nullable
-  @CheckReturnValue
   public static WebDriver unwrap(SearchContext driverOrElement) {
     if (driverOrElement instanceof WrapsDriver wrapper) {
       return unwrap(wrapper.getWrappedDriver());
@@ -64,8 +62,6 @@ public class WebdriverUnwrapper {
     return null;
   }
 
-  @Nonnull
-  @CheckReturnValue
   public static RemoteWebDriver unwrapRemoteWebDriver(WebDriver driver) {
     return driver instanceof WrapsDriver wrapper ? (RemoteWebDriver) wrapper.getWrappedDriver() : (RemoteWebDriver) driver;
   }
