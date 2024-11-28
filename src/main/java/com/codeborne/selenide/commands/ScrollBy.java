@@ -8,21 +8,16 @@ import com.codeborne.selenide.impl.Arguments;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ScrollByOptions.defaultScrollByOptions;
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.commands.Util.size;
+import org.jspecify.annotations.Nullable;
 
-@ParametersAreNonnullByDefault
 public class ScrollBy implements Command<SelenideElement> {
   @Override
-  @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     ScrollByOptions options = extractOptions(args);
     WebElement webElement = locator.getWebElement();
@@ -37,9 +32,7 @@ public class ScrollBy implements Command<SelenideElement> {
     return proxy;
   }
 
-  @Nonnull
-  @CheckReturnValue
-  protected ScrollByOptions extractOptions(@Nullable Object[] args) {
+  protected ScrollByOptions extractOptions(Object[] args) {
     if (args[0] instanceof ScrollByOptions options)
       return options;
     else
