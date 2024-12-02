@@ -1,14 +1,5 @@
-ext {
-  artifactId = "selenide-video-recorder-testng"
-}
-
-repositories {
-  mavenCentral()
-}
-
 dependencies {
   testImplementation project(":modules:video-recorder")
-  testImplementation project(':modules:core').sourceSets.test.output
 
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
   testImplementation("org.testng:testng:$testngVersion") {
