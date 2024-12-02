@@ -17,8 +17,4 @@ subprojects {
       languageVersion = JavaLanguageVersion.of(17)
     }
   }
-
-  tasks.withType(Javadoc).configureEach {
-    failOnError = false
-  }
 }
