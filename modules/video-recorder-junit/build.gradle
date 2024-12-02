@@ -1,15 +1,3 @@
-plugins {
-  id 'java'
-}
-
-ext {
-  artifactId = "selenide-video-recorder-junit"
-}
-
-repositories {
-  mavenCentral()
-}
-
 dependencies {
   testImplementation project(":modules:video-recorder")
   testImplementation project(':modules:core').sourceSets.test.output
