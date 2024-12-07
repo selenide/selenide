@@ -1,6 +1,6 @@
 # Selenide = UI Testing Framework powered by Selenium WebDriver
 
-![Build Status](https://github.com/selenide/selenide/workflows/Run%20tests/badge.svg)
+![Build Status](https://github.com/selenide/selenide/actions/workflows/test.yml/badge.svg)
 [![Maven Central](https://img.shields.io/maven-central/v/com.codeborne/selenide.svg)](https://central.sonatype.com/search?q=selenide&namespace=com.codeborne)
 [![MIT License](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/selenide/selenide/blob/main/LICENSE)
 ![Free](https://img.shields.io/badge/free-open--source-green.svg)
@@ -78,7 +78,7 @@ Feel free to fork, clone, build, run tests and contribute pull requests for Sele
 
 ## Authors
 
-Selenide was originally designed and developed by [Andrei Solntsev](http://asolntsev.github.io/) in 2011-2021
+Selenide was originally designed and developed by [Andrei Solntsev](http://asolntsev.github.io/) in 2011-2024
  and is maintained by [a group of enthusiast](https://github.com/orgs/selenide/people).
 
 ## Thanks

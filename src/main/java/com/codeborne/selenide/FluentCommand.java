@@ -17,9 +17,13 @@ import org.jspecify.annotations.Nullable;
  * </pre>
  */
 public abstract class FluentCommand implements Command<SelenideElement> {
+  /**
+   * @deprecated It's easier to override method {@link #execute(WebElementSource, Object[])} instead.
+   */
   @Override
   @CanIgnoreReturnValue
-  public final SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object @Nullable [] args) {
+  @Deprecated
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object @Nullable [] args) {
     execute(locator, args);
     return proxy;
   }

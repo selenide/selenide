@@ -1,7 +1,10 @@
 # Changelog
 
-## 7.6.1 (26.11.2024)
+## 7.6.1 (02.12.2024)
 * bump Selenium from 4.26.0 to 4.27.0 (incl. CDP 130 -> 131)  (#2904)
+* fix double click appium  --  thanks to Petro Ovcharenko (#2905)
+* #2906 make method `Click.execute()` overridable again (#2909)
+* Bump jacksonVersion from 2.18.1 to 2.18.2 (#2907)
 
 ## 7.6.0 (24.11.2024)
 * #2145 Add tests video recorder (#2768) (#2890)  --  thanks to Sergey Brit
@@ -12,7 +15,7 @@
 * #2859 add method `inNewBrowser(Config config, Runnable lambda)` (#2902)
 * #2859 fix bug with using custom config inside method `inNewBrowser(Runnable lambda)` (#2902)
 * Fix browser not created exception with AppiumPageFactory (#2879) --  thanks to Petro Ovcharenko
-* #2896 fix method `Selenide.screeshot(filename)` to match the description in javadoc (#2901)
+* #2896 fix method `Selenide.screenshot(filename)` to match the description in javadoc (#2901)
 * bump Selenium from 4.25.0 to 4.26.0 (incl. CDP 129 -> 130)
 * JSR305 -> JSpecify (#2889)
 * convert some Selenide "info" logs to "debug" (#2892)

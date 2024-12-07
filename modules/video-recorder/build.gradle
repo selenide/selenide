@@ -1,13 +1,5 @@
-plugins {
-  id 'java'
-}
-
 ext {
   artifactId = 'selenide-video-recorder'
-}
-
-repositories {
-  mavenCentral()
 }
 
 dependencies {
