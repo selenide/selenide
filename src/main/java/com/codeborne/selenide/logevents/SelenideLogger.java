@@ -15,8 +15,11 @@ import java.util.regex.Pattern;
 import static com.codeborne.selenide.logevents.ArgumentsPrinter.readableArguments;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static java.lang.Thread.currentThread;
+import static java.util.Collections.emptyMap;
 import static java.util.Locale.ROOT;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNullElse;
 
 /**
  * Logs Selenide test steps and notifies all registered LogEventListener about it
@@ -25,6 +28,7 @@ public class SelenideLogger {
   private static final Logger LOG = LoggerFactory.getLogger(SelenideLogger.class);
   private static final ThreadLocal<@Nullable Map<String, LogEventListener>> listeners = new ThreadLocal<>();
   private static final Pattern REGEX_UPPER_CASE = Pattern.compile("([A-Z])");
+  private static final Map<String, LogEventListener> NO_LISTENERS = emptyMap();
 
   /**
    * Add a listener (to the current thread).
@@ -41,6 +45,7 @@ public class SelenideLogger {
 
     threadListeners.put(name, listener);
     listeners.set(threadListeners);
+    LOG.debug("Added listener '{}' to thread '{}' (now it has {} listeners)", name, currentThread().getId(), threadListeners.size());
   }
 
   public static SelenideLog beginStep(String source, String methodName, Object @Nullable... args) {
@@ -131,10 +136,7 @@ public class SelenideLogger {
   }
 
   private static Collection<LogEventListener> getEventLoggerListeners() {
-    if (listeners.get() == null) {
-      listeners.set(new HashMap<>());
-    }
-    return requireNonNull(listeners.get()).values();
+    return requireNonNullElse(listeners.get(), NO_LISTENERS).values();
   }
 
   /**
@@ -149,17 +151,39 @@ public class SelenideLogger {
   @CanIgnoreReturnValue
   public static <T extends LogEventListener> T removeListener(String name) {
     Map<String, LogEventListener> threadListeners = SelenideLogger.listeners.get();
-    return threadListeners == null ? null : (T) threadListeners.remove(name);
+    if (threadListeners == null) {
+      LOG.debug("Cannot remove listener '{}' for thread {} because no such listeners were registered", name, currentThread().getId());
+      return null;
+    }
+    T listener = (T) threadListeners.remove(name);
+    LOG.debug("Removed listener '{}' for thread '{}' (now it has {} listeners)", name, currentThread().getId(), threadListeners.size());
+    return listener;
   }
 
   @Nullable
   @SuppressWarnings("unchecked")
   static <T extends LogEventListener> T getListener(String name) {
     Map<String, LogEventListener> threadListeners = SelenideLogger.listeners.get();
-    return threadListeners == null ? null : (T) threadListeners.get(name);
+    if (threadListeners == null) {
+      LOG.warn("No listeners found for thread '{}'", currentThread().getId());
+      return null;
+    }
+    T listener = (T) threadListeners.get(name);
+    if (listener == null) {
+      LOG.warn("No listener '{}' found for thread '{}' (it has {} listeners)", name, currentThread().getId(), threadListeners.size());
+    }
+
+    LOG.debug("Found listener '{}' for thread '{}': {} (it has {} listeners)",
+      name, currentThread().getId(), listener, threadListeners.size());
+    return listener;
   }
 
+  /**
+   * Remove all listeners FOR CURRENT THREAD
+   */
   public static void removeAllListeners() {
+    Map<String, LogEventListener> threadListeners = requireNonNullElse(listeners.get(), NO_LISTENERS);
+    LOG.debug("Removing {} listeners from thread '{}'", threadListeners.size(), currentThread().getId());
     listeners.remove();
   }
 
