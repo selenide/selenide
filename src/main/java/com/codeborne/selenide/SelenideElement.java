@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.commands.GetSelectedOptionText;
 import com.codeborne.selenide.commands.GetSelectedOptionValue;
 import com.codeborne.selenide.commands.ScrollIntoCenter;
+import com.codeborne.selenide.commands.ScrollBy;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -1117,6 +1118,28 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @CanIgnoreReturnValue
   SelenideElement scrollIntoCenter();
+
+  /**
+   * Scrolls the element by a specified distance in a specified direction.<p>
+   * It takes {@link ScrollByOptions} to specify the direction, distance and other options.
+   *
+   * For example, if you want to scroll the element down by 100 pixels, you can do:
+   *
+   * <pre>
+   * {@code element.scrollBy(ScrollByOptions.direction(ScrollByDirection.DOWN).distance(100))}
+   * </pre>
+   *
+   * If you want to scroll the element right by 250 pixels, you can do:
+   *
+   * <pre>
+   * {@code element.scrollBy(ScrollByOptions.direction(ScrollByDirection.RIGHT).distance(250))}
+   * </pre>
+   *
+   * @param scrollByOptions
+   * @see com.codeborne.selenide.commands.ScrollBy
+   */
+  @CanIgnoreReturnValue
+  SelenideElement scrollBy(ScrollByOptions scrollByOptions);
 
   /**
    * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
