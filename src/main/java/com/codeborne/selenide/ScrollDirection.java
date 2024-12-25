@@ -1,6 +1,6 @@
 package com.codeborne.selenide;
 
-public enum ScrollByDirection {
+public enum ScrollDirection {
   UP,
   DOWN,
   RIGHT,
