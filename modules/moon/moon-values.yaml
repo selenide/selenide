@@ -1,0 +1,17 @@
+browsers:
+  default:
+    playwright: {}
+    cypress: {}
+    devtools: {}
+    selenium:
+      MicrosoftEdge: null
+      opera: null
+      chrome:
+        default: 124.0.6367.60-1
+        repository: quay.io/browser/chromium
+      firefox:
+        default: 125.0.3-1
+        repository: quay.io/browser/firefox
+      safari:
+        default: 613.1.6.1
+        repository: quay.io/browser/webkit
