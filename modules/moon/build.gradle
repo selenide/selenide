@@ -1,0 +1,32 @@
+ext {
+  artifactId = 'selenide-moon'
+}
+
+dependencies {
+  api project(":statics")
+  implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
+  implementation("commons-io:commons-io:2.18.0")
+  implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+
+  testImplementation project(':statics').sourceSets.test.output
+  testImplementation project(':modules:core').sourceSets.test.output
+  testRuntimeOnly("org.seleniumhq.selenium:selenium-devtools-v124:4.+") {transitive = false}
+  testRuntimeOnly project(':modules:proxy')
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+
+  testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+  testImplementation("org.assertj:assertj-core:$assertjVersion")
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
+  testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
+}
+
+tasks.register('moonTests', Test) {
+  systemProperties['selenide.browser'] = 'chrome'
+  include 'it/moon/**/*'
+  exclude 'org/selenide/**/*'
+  exclude 'com/codeborne/**/*'
+  outputs.upToDateWhen { false }
+  maxParallelForks = 1
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')
