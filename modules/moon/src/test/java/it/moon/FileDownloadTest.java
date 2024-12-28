@@ -1,6 +1,8 @@
 package it.moon;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.junit5.TextReportExtension;
+import integration.LogTestNameExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -21,7 +23,7 @@ import static org.apache.commons.lang3.StringUtils.rightPad;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-@ExtendWith(MoonSetup.class)
+@ExtendWith({MoonSetup.class, LogTestNameExtension.class, TextReportExtension.class})
 public class FileDownloadTest {
   @Test
   void downloadFileFromMoon_using_httpGet() throws IOException {

@@ -1,6 +1,8 @@
 package it.moon;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.junit5.TextReportExtension;
+import integration.LogTestNameExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +17,7 @@ import static it.moon.MoonSetup.capabilities;
 import static it.moon.MoonSetup.checkDownload;
 import static it.moon.MoonSetup.moonUrl;
 
-@ExtendWith(MoonSetup.class)
+@ExtendWith({MoonSetup.class, LogTestNameExtension.class, TextReportExtension.class})
 public class RemoteWebdriverTest {
   @BeforeEach
   void setUp() {
