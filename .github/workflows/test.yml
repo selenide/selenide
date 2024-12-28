@@ -149,10 +149,53 @@ jobs:
             **/build/reports
             **/build/test-results
 
+  run-moon-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          cache: 'gradle'
+          java-version: '17'
+      - name: Start minikube
+        uses: medyagh/setup-minikube@latest
+        with:
+          cpus: 2
+          memory: '2g'
+          addons: ingress
+      - name: Setup Moon
+        run: |
+          sudo echo "`minikube ip` moon.aerokube.local" | sudo tee -a /etc/hosts
+          cat /etc/hosts
+          minikube addons enable ingress
+          kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+          helm repo add aerokube https://charts.aerokube.com/
+          helm repo update
+          kubectl create namespace moon
+          helm upgrade --install -n moon moon aerokube/moon2
+          kubectl patch svc moon -n moon --patch "{\"spec\":{\"externalIPs\":[\"$(minikube ip)\"]}}"
+          kubectl wait pod --all --for=condition=Ready --namespace=moon
+          kubectl describe service moon -n moon
+          mkdir -p modules/moon/build/reports
+          nohup minikube tunnel &> modules/moon/build/reports/minikube-tunnel.log &
+          nc -zv `minikube ip` 4444
+          curl "http://moon.aerokube.local/wd/hub"
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew moonTests
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-report-moon
+          retention-days: 14
+          path: |
+            **/build/reports
+            **/build/test-results
+
   auto-merge-dependabot:
     name: 🤖 Auto merge dependabot PR
     timeout-minutes: 10
-    needs: [run-tests-on-linux, run-tests-on-windows, run-android-tests, run-ios-tests, run-selenoid-tests]
+    needs: [run-tests-on-linux, run-tests-on-windows, run-android-tests, run-ios-tests, run-selenoid-tests, run-moon-tests]
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     permissions:
@@ -160,7 +203,7 @@ jobs:
       contents: write
     steps:
       - name: 🤖 Merge PR from dependabot
-        uses: fastify/github-action-merge-dependabot@v3.11.0
+        uses: fastify/github-action-merge-dependabot@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           target: minor

@@ -53,7 +53,6 @@ public class MoonSetup implements BeforeEachCallback, AfterEachCallback  {
   static MutableCapabilities capabilities() {
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setBrowserName("chrome");
-    capabilities.setCapability("browserVersion", "124.0.6367.60-1");
     capabilities.setCapability("moon:options", Map.of(
       "enableVNC", true,
       "enableVideo", true
