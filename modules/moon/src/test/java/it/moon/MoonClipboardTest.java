@@ -1,6 +1,8 @@
 package it.moon;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.junit5.TextReportExtension;
+import integration.LogTestNameExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +16,7 @@ import static com.codeborne.selenide.Selenide.clipboard;
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MoonSetup.class)
+@ExtendWith({MoonSetup.class, LogTestNameExtension.class, TextReportExtension.class})
 public class MoonClipboardTest {
 
   @BeforeEach

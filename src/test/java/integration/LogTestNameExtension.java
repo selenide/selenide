@@ -10,7 +10,7 @@ import org.opentest4j.TestAbortedException;
 import static integration.BaseIntegrationTest.browser;
 import static org.slf4j.LoggerFactory.getLogger;
 
-final class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback {
+public final class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback {
   @Override
   public void beforeAll(ExtensionContext context) {
     getLogger(context.getDisplayName()).info("Starting tests @ {} ({})", browser, memory());
