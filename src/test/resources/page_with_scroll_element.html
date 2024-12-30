@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title>Scroll Down to See Button</title>
   <style>
     #debug {
       position: absolute;
       top: 20px;
-      left: 280px;
-      height: 1000px;
+      left: 300px;
+      width: 600px;
+      height: 800px;
+      overflow-y: scroll;
     }
     #scrollable-div {
       height: 200px;
-      width: 200px;
+      width: 220px;
       overflow-y: scroll;
       border: 1px solid #ccc;
       padding: 10px;
@@ -20,7 +24,7 @@
 
     #scrollable-div2 {
       height: 200px;
-      width: 200px;
+      width: 220px;
       overflow-x: scroll;
       border: 1px solid #ccc;
       padding: 10px;
@@ -30,7 +34,7 @@
 
     #scrollable-div3 {
       height: 200px;
-      width: 200px;
+      width: 220px;
       overflow-y: scroll;
       border: 1px solid #ccc;
       padding: 10px;
@@ -39,7 +43,7 @@
 
     #scrollable-div4 {
       height: 200px;
-      width: 200px;
+      width: 220px;
       overflow-x: scroll;
       border: 1px solid #ccc;
       padding: 10px;
@@ -59,31 +63,37 @@
 <body>
 
 <div id="scrollable-div">
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nulla eget tincidunt lacinia, lectus lectus tincidunt ipsum, non dignissim dui augue sed lacus. Praesent id enim non justo elementum semper sit amet eget tortor. </p>
-  <p>Nulla facilisi. Donec maximus bibendum sapien, vitae laoreet neque blandit sit amet. Morbi ac libero vitae sapien ultricies rhoncus. Suspendisse potenti. Proin sed tellus ac nulla dictum pharetra. Aenean vitae magna sed libero fringilla sollicitudin. </p>
-  <p>Sed ut elit id tortor sodales rhoncus. Suspendisse nec mauris eget tellus tincidunt varius. Nunc pharetra, ante at ultrices imperdiet, nibh elit tincidunt mauris, sed iaculis sem odio at sem.</p>
-  <p>Aenean non risus eu nulla tincidunt varius. Nulla facilisi. Donec maximus bibendum sapien, vitae laoreet neque blandit sit amet. Morbi ac libero vitae sapien ultricies rhoncus. Suspendisse potenti. Proin sed tellus ac nulla dictum pharetra. Aenean vitae magna sed libero fringilla sollicitudin. </p>
-  <p>Sed ut elit id tortor sodales rhoncus. Suspendisse nec mauris eget tellus tincidunt varius. Nunc pharetra, ante at ultrices imperdiet, nibh elit tincidunt mauris, sed iaculis sem odio at sem.</p><br><br><br>
-  <button id="button">Show Me 1</button>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <button id="button">Bottom button</button>
 </div>
 
 <div id="scrollable-div2">
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nulla eget tincidunt lacinia, lectus lectus tincidunt ipsum, non dignissim dui augue sed lacus. Praesent id enim non justo elementum semper sit amet eget tortor.</p>
-  <button id="button2">Show Me 2</button>
+  <p> ⇢ Scroll to the right to see the button. Scroll more. And more. And even more. ⇢ </p>
+  <button id="button2">Right button</button>
 </div>
 
 <div id="scrollable-div3">
-  <button id="button3">Show Me 3</button>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nulla eget tincidunt lacinia, lectus lectus tincidunt ipsum, non dignissim dui augue sed lacus. Praesent id enim non justo elementum semper sit amet eget tortor. </p>
-  <p>Nulla facilisi. Donec maximus bibendum sapien, vitae laoreet neque blandit sit amet. Morbi ac libero vitae sapien ultricies rhoncus. Suspendisse potenti. Proin sed tellus ac nulla dictum pharetra. Aenean vitae magna sed libero fringilla sollicitudin. </p>
-  <p>Sed ut elit id tortor sodales rhoncus. Suspendisse nec mauris eget tellus tincidunt varius. Nunc pharetra, ante at ultrices imperdiet, nibh elit tincidunt mauris, sed iaculis sem odio at sem.</p>
-  <p>Aenean non risus eu nulla tincidunt varius. Nulla facilisi. Donec maximus bibendum sapien, vitae laoreet neque blandit sit amet. Morbi ac libero vitae sapien ultricies rhoncus. Suspendisse potenti. Proin sed tellus ac nulla dictum pharetra. Aenean vitae magna sed libero fringilla sollicitudin. </p>
-  <p>Sed ut elit id tortor sodales rhoncus. Suspendisse nec mauris eget tellus tincidunt varius. Nunc pharetra, ante at ultrices imperdiet, nibh elit tincidunt mauris, sed iaculis sem odio at sem.</p><br><br><br>
+  <button id="button3">Top button</button>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
 </div>
 
 <div id="scrollable-div4">
-  <button id="button4">Show Me 4</button>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nulla eget tincidunt lacinia, lectus lectus tincidunt ipsum, non dignissim dui augue sed lacus. Praesent id enim non justo elementum semper sit amet eget tortor.</p>
+  <button id="button4">Left button</button>
+  <p> ⇠ Scroll to the left to see the button. Scroll more. And more. And even more. ⇠ </p>
 </div>
 
 <div id="debug"></div>
@@ -108,30 +118,40 @@
   }
   function debug(message) {
     debugContainer.innerHTML += `<pre>${message}</pre>`
-    debugContainer.scrollBy(0, 100);
+    debugContainer.scrollBy(0, 1000);
   }
-  scrollableDiv.addEventListener('scroll', () => {
+  function toggleButton1() {
     const result = scrollableDiv.scrollTop + scrollableDiv.clientHeight >= scrollableDiv.scrollHeight - tolerance;
     debug(`<pre>[${button.id}] ${scrollableDiv.scrollTop} + ${scrollableDiv.clientHeight} = ${scrollableDiv.scrollTop + scrollableDiv.clientHeight} >= ${scrollableDiv.scrollHeight}    ->  ${result}</pre>`)
     toggle(button, result);
-  });
-  scrollableDiv2.addEventListener('scroll', () => {
+  }
+  function toggleButton2() {
     const result = scrollableDiv2.scrollWidth - scrollableDiv2.scrollLeft <= scrollableDiv2.clientWidth;
     debug(`<pre>[${button2.id}] ${scrollableDiv2.scrollWidth} - ${scrollableDiv2.scrollLeft} = ${scrollableDiv2.scrollWidth - scrollableDiv2.scrollLeft} <= ${scrollableDiv2.clientWidth}    ->  ${result}</pre>`);
     toggle(button2, result);
-  });
-  scrollableDiv3.addEventListener('scroll', () => {
+  }
+  function toggleButton3() {
     const result = scrollableDiv3.scrollTop <= tolerance;
     debug(`<pre>[${button3.id}] ${scrollableDiv3.scrollTop} <= 0    ->  ${result}</pre>`);
     toggle(button3, result);
-  });
-  scrollableDiv4.addEventListener('scroll', () => {
+  }
+  function toggleButton4() {
     const result = scrollableDiv4.scrollLeft <= tolerance;
     debug(`<pre>[${button4.id}] ${scrollableDiv4.scrollLeft} <= 0    ->  ${result}</pre>`);
     toggle(button4, result);
-  });
+  }
+  scrollableDiv.addEventListener('scroll', toggleButton1);
+  scrollableDiv2.addEventListener('scroll', toggleButton2);
+  scrollableDiv3.addEventListener('scroll', toggleButton3);
+  scrollableDiv4.addEventListener('scroll', toggleButton4);
 
-  debugContainer.innerHTML = 'Start'
+  setTimeout(() => {
+    toggleButton1();
+    toggleButton2();
+    toggleButton3();
+    toggleButton4();
+    debugContainer.innerHTML = 'Start';
+  }, 10)
 </script>
 
 </body>
