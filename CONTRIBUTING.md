@@ -70,25 +70,7 @@ Selenide project has two types of tests: unit tests and UI tests.
   - `./gradlew ie`
   - `./gradlew edge`
   - `./gradlew testng`  
-  Note that you typically don't need to run them locally because our Continuous Integration server will run them anyway when you send a pull request. 
-
-#### Run test locally inside docker containers
-
-You can also try to run Selenide tests inside of docker container (sometimes you want to check how Selenide works with Selenoid, for example).  
-The following is a short instruction how to do it. 
-
-- Syncing browser images from existing configuration file
-  - Install [jq](https://stedolan.github.io/jq)
-  - Extract image names from JSON and automatically pull them:
-     ```
-     cat /config/selenoid/browsers.json | jq -r '..|.image?|strings' | xargs -I{} docker pull {}
-     ```
-     
-- Start selenoid container
-  - Install [docker](https://www.docker.com/products/docker-desktop)
-  - Based on your operating system execute script. Check official [document](https://aerokube.com/selenoid/latest/#_option_2_start_selenoid_container) for correct script.
-- Start tests passing `selenide.remote` configuration variable with `http://localhost:4444/wd/hub` value
-
+  Note that you typically don't need to run them locally because our Continuous Integration server will run them anyway when you send a pull request.
 
 ## Continuous integration
 
