@@ -5,8 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.ScrollDirection.*;
+import static com.codeborne.selenide.ScrollDirection.LEFT;
+import static com.codeborne.selenide.ScrollDirection.RIGHT;
+import static com.codeborne.selenide.ScrollDirection.UP;
 import static com.codeborne.selenide.ScrollOptions.defaultScrollOptions;
 import static com.codeborne.selenide.ScrollOptions.direction;
 
@@ -22,8 +25,9 @@ final class ScrollTest extends ITest {
 
   @BeforeEach
   void openTestPage() {
-    openFile("page_with_scroll_element.html");
     setTimeout(1000);
+    openFile("page_with_scroll_element.html");
+    $("#debug").shouldHave(text("Start"));
   }
 
   @Test
