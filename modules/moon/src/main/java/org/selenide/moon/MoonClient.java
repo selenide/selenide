@@ -25,6 +25,8 @@ import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.io.FilenameUtils.getName;
+import static org.apache.commons.io.FilenameUtils.normalize;
 
 public class MoonClient {
   private static final Logger log = LoggerFactory.getLogger(MoonClient.class);
@@ -150,6 +152,9 @@ public class MoonClient {
   }
 
   URL urlOfDownloadedFile(String fileName) {
+    if (!fileName.equals(normalize(getName(fileName)))) {
+      throw new IllegalArgumentException("Invalid file name: " + fileName);
+    }
     return url(baseUrl, "session", sessionId, "aerokube", "download", fileName);
   }
 
