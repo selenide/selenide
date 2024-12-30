@@ -23,6 +23,7 @@ final class ScrollTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_scroll_element.html");
+    setTimeout(1000);
   }
 
   @Test

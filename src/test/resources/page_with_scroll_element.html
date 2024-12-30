@@ -3,6 +3,12 @@
 <head>
   <title>Scroll Down to See Button</title>
   <style>
+    #debug {
+      position: absolute;
+      top: 20px;
+      left: 280px;
+      height: 1000px;
+    }
     #scrollable-div {
       height: 200px;
       width: 200px;
@@ -41,15 +47,13 @@
       white-space: nowrap;
     }
 
-    #button {
-      display: none;
+    #button, #button2, #button3, #button4 {
+      visibility: hidden;
     }
 
     #button2 {
-      display: none;
       position: absolute;
     }
-
   </style>
 </head>
 <body>
@@ -60,16 +64,16 @@
   <p>Sed ut elit id tortor sodales rhoncus. Suspendisse nec mauris eget tellus tincidunt varius. Nunc pharetra, ante at ultrices imperdiet, nibh elit tincidunt mauris, sed iaculis sem odio at sem.</p>
   <p>Aenean non risus eu nulla tincidunt varius. Nulla facilisi. Donec maximus bibendum sapien, vitae laoreet neque blandit sit amet. Morbi ac libero vitae sapien ultricies rhoncus. Suspendisse potenti. Proin sed tellus ac nulla dictum pharetra. Aenean vitae magna sed libero fringilla sollicitudin. </p>
   <p>Sed ut elit id tortor sodales rhoncus. Suspendisse nec mauris eget tellus tincidunt varius. Nunc pharetra, ante at ultrices imperdiet, nibh elit tincidunt mauris, sed iaculis sem odio at sem.</p><br><br><br>
-  <button id="button" style='display:none'>Show Me</button>
+  <button id="button">Show Me 1</button>
 </div>
 
 <div id="scrollable-div2">
   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nulla eget tincidunt lacinia, lectus lectus tincidunt ipsum, non dignissim dui augue sed lacus. Praesent id enim non justo elementum semper sit amet eget tortor.</p>
-  <button id="button2" style='display:none'>Show Me</button>
+  <button id="button2">Show Me 2</button>
 </div>
 
 <div id="scrollable-div3">
-  <button id="button3" style='display:none'>Show Me</button>
+  <button id="button3">Show Me 3</button>
   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nulla eget tincidunt lacinia, lectus lectus tincidunt ipsum, non dignissim dui augue sed lacus. Praesent id enim non justo elementum semper sit amet eget tortor. </p>
   <p>Nulla facilisi. Donec maximus bibendum sapien, vitae laoreet neque blandit sit amet. Morbi ac libero vitae sapien ultricies rhoncus. Suspendisse potenti. Proin sed tellus ac nulla dictum pharetra. Aenean vitae magna sed libero fringilla sollicitudin. </p>
   <p>Sed ut elit id tortor sodales rhoncus. Suspendisse nec mauris eget tellus tincidunt varius. Nunc pharetra, ante at ultrices imperdiet, nibh elit tincidunt mauris, sed iaculis sem odio at sem.</p>
@@ -78,11 +82,14 @@
 </div>
 
 <div id="scrollable-div4">
-  <button id="button4" style='display:none'>Show Me</button>
+  <button id="button4">Show Me 4</button>
   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nulla eget tincidunt lacinia, lectus lectus tincidunt ipsum, non dignissim dui augue sed lacus. Praesent id enim non justo elementum semper sit amet eget tortor.</p>
 </div>
 
+<div id="debug"></div>
+
 <script>
+  const tolerance = 5;
   const scrollableDiv = document.getElementById('scrollable-div');
   const button = document.getElementById('button');
   const scrollableDiv2 = document.getElementById('scrollable-div2');
@@ -91,43 +98,38 @@
   const button3 = document.getElementById('button3');
   const scrollableDiv4 = document.getElementById('scrollable-div4');
   const button4 = document.getElementById('button4');
+  const debugContainer = document.getElementById('debug');
 
   scrollableDiv3.scrollTop = scrollableDiv3.scrollHeight;
   scrollableDiv4.scrollLeft = scrollableDiv4.scrollWidth;
 
+  function toggle(element, visible) {
+    element.style.visibility = visible ? 'visible' : 'hidden';
+  }
+  function debug(message) {
+    debugContainer.innerHTML += `<pre>${message}</pre>`
+    debugContainer.scrollBy(0, 100);
+  }
   scrollableDiv.addEventListener('scroll', () => {
-    if (scrollableDiv.scrollTop + scrollableDiv.clientHeight >= scrollableDiv.scrollHeight - 1) {
-      button.style.display = 'block';
-    }
-    else {
-      button.style.display = 'none';
-    }
+    const result = scrollableDiv.scrollTop + scrollableDiv.clientHeight >= scrollableDiv.scrollHeight - tolerance;
+    debug(`<pre>[${button.id}] ${scrollableDiv.scrollTop} + ${scrollableDiv.clientHeight} = ${scrollableDiv.scrollTop + scrollableDiv.clientHeight} >= ${scrollableDiv.scrollHeight}    ->  ${result}</pre>`)
+    toggle(button, result);
   });
   scrollableDiv2.addEventListener('scroll', () => {
-    if (scrollableDiv2.scrollWidth - scrollableDiv2.scrollLeft <= scrollableDiv2.clientWidth) {
-      button2.style.display = 'block';
-    }
-    else {
-      button2.style.display = 'none';
-    }
+    const result = scrollableDiv2.scrollWidth - scrollableDiv2.scrollLeft <= scrollableDiv2.clientWidth;
+    debug(`<pre>[${button2.id}] ${scrollableDiv2.scrollWidth} - ${scrollableDiv2.scrollLeft} = ${scrollableDiv2.scrollWidth - scrollableDiv2.scrollLeft} <= ${scrollableDiv2.clientWidth}    ->  ${result}</pre>`);
+    toggle(button2, result);
   });
   scrollableDiv3.addEventListener('scroll', () => {
-    if (scrollableDiv3.scrollTop === 0) {
-      button3.style.display = 'block';
-    }
-    else {
-      button3.style.display = 'none';
-    }
+    const result = scrollableDiv3.scrollTop <= tolerance;
+    debug(`<pre>[${button3.id}] ${scrollableDiv3.scrollTop} <= 0    ->  ${result}</pre>`);
+    toggle(button3, result);
   });
   scrollableDiv4.addEventListener('scroll', () => {
-    if (scrollableDiv4.scrollLeft === 0) {
-      button4.style.display = 'block';
-    }
-    else {
-      button4.style.display = 'none';
-    }
+    const result = scrollableDiv4.scrollLeft <= tolerance;
+    debug(`<pre>[${button4.id}] ${scrollableDiv4.scrollLeft} <= 0    ->  ${result}</pre>`);
+    toggle(button4, result);
   });
-
 </script>
 
 </body>
