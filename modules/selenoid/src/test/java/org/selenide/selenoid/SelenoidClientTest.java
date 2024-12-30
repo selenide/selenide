@@ -1,4 +1,4 @@
-package org.selenide.moon;
+package org.selenide.selenoid;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,35 +8,27 @@ import java.net.URL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class MoonClientTest {
+class SelenoidClientTest {
   @Test
-  void urlForAccessingClipboard() {
-    MoonClient client = new MoonClient("http://moon.aerokube.local/wd/hub", "chrome-124-0-d6e");
-    assertThat(client.clipboardAccessUrl().toExternalForm())
-      .isEqualTo("http://moon.aerokube.local/wd/hub/session/chrome-124-0-d6e/aerokube/clipboard");
-  }
-
-  @Test
-  void urlForAccessingDownloadedFiles() {
-    MoonClient client = new MoonClient("http://moon.aerokube.local/wd/hub", "chrome-124-0-d6e");
-    assertThat(client.downloadedFilesAccessUrl().toExternalForm())
-      .isEqualTo("http://moon.aerokube.local/wd/hub/session/chrome-124-0-d6e/aerokube/download");
+  void extractsSelenoidBaseUrlFromHubUrl() {
+    SelenoidClient client = new SelenoidClient("http://localhost:4444/wd/hub", "sid-01");
+    assertThat(client.baseUrl).isEqualTo("http://localhost:4444");
   }
 
   @Test
   void encodesFileNameInUrl() throws MalformedURLException {
-    MoonClient client = new MoonClient("http://localhost:4444/wd/hub", "sid-01");
+    SelenoidClient client = new SelenoidClient("http://localhost:4444/wd/hub", "sid-01");
     assertThat(client.urlOfDownloadedFile("some-file.txt")).isEqualTo(
-        new URL("http://localhost:4444/wd/hub/session/sid-01/aerokube/download/some-file.txt")
+      new URL("http://localhost:4444/download/sid-01/some-file.txt")
     );
     assertThat(client.urlOfDownloadedFile("some file (2).txt")).isEqualTo(
-        new URL("http://localhost:4444/wd/hub/session/sid-01/aerokube/download/some%20file%20%282%29.txt")
+      new URL("http://localhost:4444/download/sid-01/some%20file%20%282%29.txt")
     );
   }
 
   @Test
   void validatesFileName() {
-    MoonClient client = new MoonClient("", "");
+    SelenoidClient client = new SelenoidClient("", "");
     assertThatThrownBy(() -> client.urlOfDownloadedFile("../../etc/hosts"))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Invalid file name: ../../etc/hosts");
@@ -46,5 +38,14 @@ class MoonClientTest {
     assertThatThrownBy(() -> client.urlOfDownloadedFile(".../...//etc/hosts"))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Invalid file name: .../...//etc/hosts");
+  }
+
+  @Test
+  void readsFileNamesFromJson() {
+    String selenoidDownloadsResponse = "[\"test.txt\", \"report.pdf\"]";
+    SelenoidClient client = new SelenoidClient("http://localhost:4444/wd/hub", "sid-01");
+    assertThat(client.parseJson(selenoidDownloadsResponse)).containsExactly(
+      "test.txt", "report.pdf"
+    );
   }
 }

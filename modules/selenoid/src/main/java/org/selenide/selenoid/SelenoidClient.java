@@ -24,6 +24,8 @@ import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.io.FilenameUtils.getName;
+import static org.apache.commons.io.FilenameUtils.normalize;
 
 public class SelenoidClient {
   private static final Logger log = LoggerFactory.getLogger(SelenoidClient.class);
@@ -135,6 +137,9 @@ public class SelenoidClient {
   }
 
   URL urlOfDownloadedFile(String fileName) {
+    if (!fileName.equals(normalize(getName(fileName)))) {
+      throw new IllegalArgumentException("Invalid file name: " + fileName);
+    }
     return url(baseUrl, "download", sessionId, fileName);
   }
 
