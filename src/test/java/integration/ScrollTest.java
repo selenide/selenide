@@ -20,7 +20,6 @@ final class ScrollTest extends ITest {
   private final SelenideElement hiddenButtonUp = $("#button3");
   private final SelenideElement hiddenButtonLeft = $("#button4");
 
-
   @BeforeEach
   void openTestPage() {
     openFile("page_with_scroll_element.html");

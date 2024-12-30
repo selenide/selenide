@@ -41,7 +41,7 @@
       white-space: nowrap;
     }
 
-    #button, {
+    #button {
       display: none;
     }
 
@@ -99,20 +99,32 @@
     if (scrollableDiv.scrollTop + scrollableDiv.clientHeight >= scrollableDiv.scrollHeight) {
       button.style.display = 'block';
     }
+    else {
+      button.style.display = 'none';
+    }
   });
   scrollableDiv2.addEventListener('scroll', () => {
     if (scrollableDiv2.scrollWidth - scrollableDiv2.scrollLeft <= scrollableDiv2.clientWidth) {
-        button2.style.display = 'block';
-      }
+      button2.style.display = 'block';
+    }
+    else {
+      button2.style.display = 'none';
+    }
   });
   scrollableDiv3.addEventListener('scroll', () => {
     if (scrollableDiv3.scrollTop === 0) {
       button3.style.display = 'block';
     }
+    else {
+      button3.style.display = 'none';
+    }
   });
   scrollableDiv4.addEventListener('scroll', () => {
     if (scrollableDiv4.scrollLeft === 0) {
       button4.style.display = 'block';
+    }
+    else {
+      button4.style.display = 'none';
     }
   });
 

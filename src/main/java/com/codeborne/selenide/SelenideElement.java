@@ -1134,7 +1134,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * {@code element.scroll(ScrollOptions.direction(ScrollDirection.RIGHT).distance(250))}
    * </pre>
    *
-   * @param scrollOptions
+   * @param scrollOptions direction, distance etc.
    * @see com.codeborne.selenide.commands.Scroll
    */
   @CanIgnoreReturnValue

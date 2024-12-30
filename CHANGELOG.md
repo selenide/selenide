@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.7.0 (31.12.2024)
+* #2769 add method `$.scroll()` with direction and length parameters --  thanks to donnieHub (#2809)
+* #2910 add BrowserUpProxy dependency to runtime scope (#2912)
+* #2914 add debug logs for adding/removing listeners (#2915)
+
 ## 7.6.1 (02.12.2024)
 * bump Selenium from 4.26.0 to 4.27.0 (incl. CDP 130 -> 131)  (#2904)
 * fix double click appium  --  thanks to Petro Ovcharenko (#2905)
