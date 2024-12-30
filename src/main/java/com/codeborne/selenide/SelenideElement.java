@@ -1119,6 +1119,28 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement scrollIntoCenter();
 
   /**
+   * Scrolls the element by a specified distance in a specified direction.<p>
+   * It takes {@link ScrollOptions} to specify the direction, distance and other options.
+   *
+   * For example, if you want to scroll the element down by 100 pixels, you can do:
+   *
+   * <pre>
+   * {@code element.scroll(ScrollOptions.direction(ScrollDirection.DOWN).distance(100))}
+   * </pre>
+   *
+   * If you want to scroll the element right by 250 pixels, you can do:
+   *
+   * <pre>
+   * {@code element.scroll(ScrollOptions.direction(ScrollDirection.RIGHT).distance(250))}
+   * </pre>
+   *
+   * @param scrollOptions
+   * @see com.codeborne.selenide.commands.Scroll
+   */
+  @CanIgnoreReturnValue
+  SelenideElement scroll(ScrollOptions scrollOptions);
+
+  /**
    * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
    *
    * @throws RuntimeException      if 50x status code was returned from server

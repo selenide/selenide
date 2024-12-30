@@ -55,6 +55,7 @@ public class Commands {
     add("scrollTo", new ScrollTo());
     add("scrollIntoView", new ScrollIntoView());
     add("scrollIntoCenter", new ScrollIntoCenter());
+    add("scroll", new Scroll());
     add("unfocus", new Unfocus());
   }
 
