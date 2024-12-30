@@ -96,7 +96,7 @@
   scrollableDiv4.scrollLeft = scrollableDiv4.scrollWidth;
 
   scrollableDiv.addEventListener('scroll', () => {
-    if (scrollableDiv.scrollTop + scrollableDiv.clientHeight >= scrollableDiv.scrollHeight) {
+    if (scrollableDiv.scrollTop + scrollableDiv.clientHeight >= scrollableDiv.scrollHeight - 1) {
       button.style.display = 'block';
     }
     else {
