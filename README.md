@@ -78,7 +78,7 @@ Feel free to fork, clone, build, run tests and contribute pull requests for Sele
 
 ## Authors
 
-Selenide was originally designed and developed by [Andrei Solntsev](http://asolntsev.github.io/) in 2011-2024
+Selenide was originally designed and developed by [Andrei Solntsev](http://asolntsev.github.io/) in 2011-2025
  and is maintained by [a group of enthusiast](https://github.com/orgs/selenide/people).
 
 ## Thanks

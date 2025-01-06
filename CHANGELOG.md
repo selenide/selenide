@@ -1,15 +1,21 @@
 # Changelog
 
-## 7.7.0 (31.12.2024)
+## 7.7.0 (07.01.2025)
+* #2304 add support for Moon browser automation solution (#2924)
 * #2769 add method `$.scroll()` with direction and length parameters --  thanks to donnieHub (#2809)
-* #2910 add BrowserUpProxy dependency to runtime scope (#2912)
 * #2914 add debug logs for adding/removing listeners (#2915)
+* #2910 add BrowserUpProxy dependency to runtime scope (#2912)
+* [hotfix] update BrowserUpProxy MITM certificate (#2930)
+
+See https://github.com/selenide/selenide/milestone/216?closed=1
 
 ## 7.6.1 (02.12.2024)
 * bump Selenium from 4.26.0 to 4.27.0 (incl. CDP 130 -> 131)  (#2904)
 * fix double click appium  --  thanks to Petro Ovcharenko (#2905)
 * #2906 make method `Click.execute()` overridable again (#2909)
 * Bump jacksonVersion from 2.18.1 to 2.18.2 (#2907)
+
+See https://github.com/selenide/selenide/milestone/215?closed=1
 
 ## 7.6.0 (24.11.2024)
 * #2145 Add tests video recorder (#2768) (#2890)  --  thanks to Sergey Brit
