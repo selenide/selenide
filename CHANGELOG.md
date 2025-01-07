@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.7.1 (under construction)
+* #2930 bump BrowserUpProxy from 3.0.0 to 3.0.1 (updates MITM certificate for the next 10 years)
+ 
 ## 7.7.0 (07.01.2025)
 * #2304 add support for Moon browser automation solution (#2924)
 * #2769 add method `$.scroll()` with direction and length parameters --  thanks to donnieHub (#2809)
