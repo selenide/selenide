@@ -140,6 +140,9 @@ class LoginPageWithContainer {
   List<ErrorsWidget> errors;
 
   static class ErrorsWidget implements Container {
+    @Self
+    SelenideAppiumElement self;
+
     @AndroidFindBy(xpath = ".//android.widget.TextView")
     SelenideAppiumElement message;
   }

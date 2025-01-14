@@ -219,13 +219,17 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   private SelenideElement injectSelf(@Nullable WebElementSource searchContext, Field field) {
     if (searchContext != null) {
-      return ElementFinder.wrap(SelenideElement.class, searchContext);
+      return createSelf(searchContext);
     }
     else {
       String message = String.format("Cannot initialize field %s.%s: it's not bound to any page object",
         field.getDeclaringClass().getSimpleName(), field.getName());
       throw new IllegalArgumentException(message);
     }
+  }
+
+  protected SelenideElement createSelf(WebElementSource searchContext) {
+    return ElementFinder.wrap(SelenideElement.class, searchContext);
   }
 
   private List<WebElement> createWebElementsList(ClassLoader loader, Driver driver, @Nullable WebElementSource searchContext,
