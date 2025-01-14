@@ -126,6 +126,11 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   }
 
   @Override
+  protected SelenideElement createSelf(WebElementSource searchContext) {
+    return ElementFinder.wrap(SelenideAppiumElement.class, searchContext);
+  }
+
+  @Override
   protected SelenideElement decorateWebElement(Driver driver, @Nullable WebElementSource searchContext, By selector,
                                                Field field, @Nullable String alias) {
     return shouldCache(field) ?
