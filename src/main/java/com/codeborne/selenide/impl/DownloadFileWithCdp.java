@@ -200,6 +200,7 @@ public class DownloadFileWithCdp {
 
   private static class CdpDownload {
     private final DownloadsFolder folder;
+    @Nullable
     private String fileName;
     private long lastModifiedAt = currentTimeMillis();
     private boolean completed;
@@ -209,7 +210,7 @@ public class DownloadFileWithCdp {
     }
 
     private File file() {
-      return new File(folder.getPath(), fileName);
+      return new File(folder.getPath(), requireNonNull(fileName));
     }
   }
 
