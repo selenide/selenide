@@ -81,6 +81,11 @@ public class ElementFinder extends WebElementSource {
   }
 
   @Override
+  public final void setAlias(String alias) {
+    super.setAlias(alias);
+  }
+
+  @Override
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
     if (arg instanceof By by) {
       return wrap(driver, this, by, index);

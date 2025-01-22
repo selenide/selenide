@@ -2,11 +2,13 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,9 +22,15 @@ final class CollectionSnapshotTest {
 
   private final CollectionSource originalCollection = mock();
 
+  @BeforeEach
+  void setUp() {
+    when(originalCollection.getAlias()).thenReturn(NONE);
+  }
+
   @AfterEach
   void verifyNoMoreInteractionsOnOriginalCollection() {
     verify(originalCollection).getElements();
+    verify(originalCollection).getAlias();
     verifyNoMoreInteractions(originalCollection);
   }
 
@@ -71,7 +79,6 @@ final class CollectionSnapshotTest {
 
     verify(originalCollection, times(2)).description();
   }
-
 
   @Test
   void driver() {
