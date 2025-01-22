@@ -1,8 +1,14 @@
 # Changelog
 
-## 7.7.1 (under construction)
+## 7.7.1 (22.01.2025)
 * #2930 bump BrowserUpProxy from 3.0.0 to 3.0.1 (updates MITM certificate for the next 10 years)
- 
+* #2933 allow declaring @Self field of type SelenideAppiumElement (#2934)
+* #2931 Inherit @As alias for elements extended from the Container (#2942)
+* bump Selenium from 4.27.0 to 4.28.0 (incl. CDP from v131 to v132) (#2940)
+* bump Appium from 9.3.0 to 9.4.0 (#2941)
+
+see https://github.com/selenide/selenide/milestone/217?closed=1
+
 ## 7.7.0 (07.01.2025)
 * #2304 add support for Moon browser automation solution (#2924)
 * #2769 add method `$.scroll()` with direction and length parameters --  thanks to donnieHub (#2809)
