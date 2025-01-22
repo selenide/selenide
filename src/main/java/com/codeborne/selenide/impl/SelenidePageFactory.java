@@ -138,7 +138,7 @@ public class SelenidePageFactory implements PageObjectFactory {
   @Override
   public Container createElementsContainer(Driver driver, @Nullable WebElementSource searchContext, Field field, By selector) {
     try {
-      WebElementSource self = new ElementFinder(driver, searchContext, selector, 0);
+      WebElementSource self = new ElementFinder(driver, searchContext, selector, 0, alias(field));
       if (shouldCache(field)) {
         self = new LazyWebElementSnapshot(self);
       }

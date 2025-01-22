@@ -1,5 +1,6 @@
 package it.mobile.android;
 
+import com.codeborne.selenide.As;
 import com.codeborne.selenide.Container;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -8,6 +9,8 @@ import com.codeborne.selenide.appium.SelenideAppiumCollection;
 import com.codeborne.selenide.appium.SelenideAppiumElement;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import it.mobile.android.LoginPageWithContainer.ErrorsWidget;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -19,6 +22,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.Selenide.sleep;
@@ -56,6 +60,20 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
     loginPage.loginButton.click();
     assertThat(loginPage.errors).hasSize(1);
     loginPage.errors.get(0).message.shouldHave(text("Provided credentials do not match any user in this service."));
+    loginPage.error.message.shouldHave(text("Provided credentials do not match any user in this service."));
+    loginPage.error.self.shouldBe(visible);
+  }
+
+  @Test
+  public void pageObjectWithErrors() {
+    LoginPageWithContainer loginPage = page();
+    loginPage.inputFields.get(0).sendKeys("bob@example.com");
+    loginPage.inputFields.get(1).setValue("wrongpassword");
+    loginPage.loginButton.click();
+
+    LoginPageWithErrors page = page();
+    assertThat(page.errors).hasSize(1);
+    page.errors.get(0).message.shouldHave(text("Provided credentials do not match any user in this service."));
   }
 
   @Test
@@ -119,23 +137,33 @@ public class LoginTestWithCollectionsTest extends BaseSwagLabsAndroidTest {
 }
 
 class LoginPageWithCollections {
+  @As("inputs")
   @AndroidFindBy(xpath = "//android.widget.EditText")
   SelenideAppiumCollection inputFields;
 
+  @As("Login button")
   @AndroidFindBy(accessibility = "Login button")
   WebElement loginButton;
 
+  @As("Error message")
   @AndroidFindBy(xpath = "//*[@content-desc='generic-error-message']/android.widget.TextView")
   SelenideAppiumElement errorMessage;
 }
 
 class LoginPageWithContainer {
+  @As("inputs")
   @AndroidFindBy(xpath = "//android.widget.EditText")
   List<SelenideAppiumElement> inputFields;
 
+  @As("Login button")
   @AndroidFindBy(accessibility = "Login button")
   WebElement loginButton;
 
+  @As("error")
+  @AndroidFindBy(xpath = "//*[@content-desc='generic-error-message']")
+  ErrorsWidget error;
+
+  @As("errors")
   @AndroidFindBy(xpath = "//*[@content-desc='generic-error-message']")
   List<ErrorsWidget> errors;
 
@@ -143,30 +171,41 @@ class LoginPageWithContainer {
     @Self
     SelenideAppiumElement self;
 
+    // @As("message")
     @AndroidFindBy(xpath = ".//android.widget.TextView")
     SelenideAppiumElement message;
   }
 }
+class LoginPageWithErrors {
+  @As("errors")
+  @AndroidFindBy(xpath = "//*[@content-desc='generic-error-message']")
+  List<ErrorsWidget> errors;
+}
 
 class LoginPageWithSelenideCollection {
+  @As("inputs")
   @AndroidFindBy(xpath = "//android.widget.EditText")
   ElementsCollection selenideElements;
 }
 
 class LoginPageWithSelenideElementList {
+  @As("inputs")
   @AndroidFindBy(xpath = "//android.widget.EditText")
   List<SelenideElement> elements;
 }
 
 class LoginPageWithSelenideAppiumElementList {
+  @As("inputs")
   @AndroidFindBy(xpath = "//android.widget.EditText")
   List<SelenideAppiumElement> elements;
 
   @AndroidFindBy(xpath = "//android.widget.EditText")
+  @Nullable
   List<WebDriver> nonWebElements;
 }
 
 class LoginPageWithSelenideAppiumElementIterable {
+  @As("inputs")
   @AndroidFindBy(xpath = "//android.widget.EditText")
   Iterable<SelenideAppiumElement> elements;
 }

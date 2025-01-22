@@ -6,16 +6,15 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codeborne.selenide.impl.Alias.NONE;
-
 public class CollectionSnapshot implements CollectionSource {
 
   private final CollectionSource originalCollection;
   private final List<WebElement> elementsSnapshot;
-  private Alias alias = NONE;
+  private Alias alias;
 
   public CollectionSnapshot(CollectionSource collection) {
     this.originalCollection = collection;
+    this.alias = collection.getAlias();
     this.elementsSnapshot = new ArrayList<>(collection.getElements());
   }
 
