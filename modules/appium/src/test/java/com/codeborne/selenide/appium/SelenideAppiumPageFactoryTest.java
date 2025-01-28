@@ -44,6 +44,15 @@ class SelenideAppiumPageFactoryTest {
       .hasToString("{By.id: element}");
   }
 
+  @Test
+  void mobile_element_with_custom_type_successfully_init() {
+    AndroidDriver androidDriver = mock(AndroidDriver.class);
+    when(androidDriver.getCapabilities()).thenReturn(new DesiredCapabilities());
+    WebDriverRunner.setWebDriver(androidDriver);
+    var page = Selenide.page(PageWithCustomElementType.class);
+    assertThat(page.element).isNotNull();
+  }
+
   private static class PageWithPlatformSelectors {
     @AndroidFindBy(id = "element")
     public SelenideElement element;
@@ -52,5 +61,14 @@ class SelenideAppiumPageFactoryTest {
   private static class PageWithWebSelectors {
     @FindBy(id = "someId")
     public SelenideElement element;
+  }
+
+  private static class PageWithCustomElementType {
+    @AndroidFindBy(id = "element")
+    public CustomSelenideAppiumElement element;
+  }
+
+  private interface CustomSelenideAppiumElement extends SelenideAppiumElement {
+    void method();
   }
 }
