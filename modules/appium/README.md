@@ -156,6 +156,40 @@ CombinedBy username = CombinedBy
 $(username).setValue("selenide-rocks");
 ```
 
+10. Want to add additional custom methods to SelenideAppiumElement? Just extend base interface and register your Command.
+
+Custom element type:
+```java
+public interface CustomElement extends SelenideAppiumElement {
+  CustomElement myCommand(Object... args);
+}
+```
+
+Page Object:
+```java
+public class MyPage {
+    @AndroidFindBy(id = "element")
+    public CustomElement element;
+}
+```
+
+Custom Command:
+```java
+public class CustomCommand implements Command<CustomElement> {
+  
+  public CustomElement execute(SelenideElement proxy, WebElementSource source, @Nullable Object[] args) {
+    // your implementation here
+    return (CustomElement) proxy;
+  }
+}
+```
+
+Usage:
+```java
+Commands.getInstance().add("myCommand", new CustomCommand());
+MyPage page = Selenide.page(MyPage.class);
+page.element.myCommand("argument");
+```
 
 
 ### Changelog
