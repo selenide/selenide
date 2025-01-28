@@ -135,7 +135,7 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
                                                Field field, @Nullable String alias) {
     return shouldCache(field) ?
       LazyWebElementSnapshot.wrap(new ElementFinder(driver, searchContext, selector, 0, alias)) :
-      ElementFinder.wrap(driver, SelenideAppiumElement.class, searchContext, selector, 0, alias);
+      ElementFinder.wrap(driver, getTargetType(field), searchContext, selector, 0, alias);
   }
 
   @Override
@@ -155,5 +155,11 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
 
   private boolean isPlatformAnnotationAdded(Field field) {
     return platformAnnotations.stream().anyMatch(field::isAnnotationPresent);
+  }
+
+  @SuppressWarnings("unchecked")
+  private <T extends SelenideAppiumElement> Class<T> getTargetType(Field field) {
+    return SelenideAppiumElement.class.isAssignableFrom(field.getType()) ?
+      (Class<T>) field.getType() : (Class<T>) SelenideAppiumElement.class;
   }
 }
