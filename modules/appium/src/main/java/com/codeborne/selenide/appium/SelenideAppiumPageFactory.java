@@ -5,8 +5,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.CollectionSource;
-import com.codeborne.selenide.impl.ElementFinder;
-import com.codeborne.selenide.impl.LazyWebElementSnapshot;
 import com.codeborne.selenide.impl.NoOpsList;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -126,19 +124,6 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   }
 
   @Override
-  protected SelenideElement createSelf(WebElementSource searchContext) {
-    return ElementFinder.wrap(SelenideAppiumElement.class, searchContext);
-  }
-
-  @Override
-  protected SelenideElement decorateWebElement(Driver driver, @Nullable WebElementSource searchContext, By selector,
-                                               Field field, @Nullable String alias) {
-    return shouldCache(field) ?
-      LazyWebElementSnapshot.wrap(new ElementFinder(driver, searchContext, selector, 0, alias)) :
-      ElementFinder.wrap(driver, getTargetType(field), searchContext, selector, 0, alias);
-  }
-
-  @Override
   protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createCollection(
     CollectionSource collection, Class<?> klass
   ) {
@@ -157,9 +142,8 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     return platformAnnotations.stream().anyMatch(field::isAnnotationPresent);
   }
 
-  @SuppressWarnings("unchecked")
-  private <T extends SelenideAppiumElement> Class<T> getTargetType(Field field) {
-    return SelenideAppiumElement.class.isAssignableFrom(field.getType()) ?
-      (Class<T>) field.getType() : (Class<T>) SelenideAppiumElement.class;
+  @Override
+  protected Class<?> elementsBaseType() {
+    return SelenideAppiumElement.class;
   }
 }
