@@ -219,7 +219,7 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   private SelenideElement injectSelf(@Nullable WebElementSource searchContext, Field field) {
     if (searchContext != null) {
-      return createSelf(searchContext);
+      return createSelf(searchContext, getTargetType(field));
     }
     else {
       String message = String.format("Cannot initialize field %s.%s: it's not bound to any page object",
@@ -228,8 +228,8 @@ public class SelenidePageFactory implements PageObjectFactory {
     }
   }
 
-  protected SelenideElement createSelf(WebElementSource searchContext) {
-    return ElementFinder.wrap(SelenideElement.class, searchContext);
+  protected <T extends SelenideElement> SelenideElement createSelf(WebElementSource searchContext, Class<T> targetType) {
+    return ElementFinder.wrap(targetType, searchContext);
   }
 
   private List<WebElement> createWebElementsList(ClassLoader loader, Driver driver, @Nullable WebElementSource searchContext,
@@ -243,8 +243,8 @@ public class SelenidePageFactory implements PageObjectFactory {
   protected SelenideElement decorateWebElement(Driver driver, @Nullable WebElementSource searchContext, By selector,
                                                Field field, @Nullable String alias) {
     return shouldCache(field) ?
-      LazyWebElementSnapshot.wrap(new ElementFinder(driver, searchContext, selector, 0, alias)) :
-      ElementFinder.wrap(driver, SelenideElement.class, searchContext, selector, 0, alias);
+      LazyWebElementSnapshot.wrap(getTargetType(field), new ElementFinder(driver, searchContext, selector, 0, alias)) :
+      ElementFinder.wrap(driver, getTargetType(field), searchContext, selector, 0, alias);
   }
 
   protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createElementsCollection(
@@ -336,5 +336,24 @@ public class SelenidePageFactory implements PageObjectFactory {
     ElementsList(CollectionSource collection) {
       super(collection);
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  private <T extends SelenideElement> Class<T> getTargetType(Field field) {
+    Class<?> result;
+    if (elementsBaseType().isAssignableFrom(field.getType())) {
+      result = field.getType();
+    } else if (field.getType().isAssignableFrom(elementsBaseType())) {
+      // this is for case when we use SelenideElement for elements in Appium Page Object
+      result = elementsBaseType();
+    } else {
+      throw new IllegalArgumentException(("%s or subclasses are supported as type for page factory." +
+        " Field name: %s, provided class: %s").formatted(elementsBaseType().getName(), field.getName(), field.getType()));
+    }
+    return (Class<T>) result;
+  }
+
+  protected Class<?> elementsBaseType() {
+    return SelenideElement.class;
   }
 }
