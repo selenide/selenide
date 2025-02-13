@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.7.2 (13.02.2025)
+* Added ability to use custom types for elements in appium page factory  --  thanks to qwez (#2945)
+* Bump BrowserUpProxy from 3.0.1 to 3.1.1 (#2946) (#2950)
+
+see https://github.com/selenide/selenide/milestone/218?closed=1
+
 ## 7.7.1 (22.01.2025)
 * #2930 bump BrowserUpProxy from 3.0.0 to 3.0.1 (updates MITM certificate for the next 10 years)
 * #2933 allow declaring @Self field of type SelenideAppiumElement (#2934)
