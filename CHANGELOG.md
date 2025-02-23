@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.7.3 (24.02.2025)
+* bump Selenium from 4.28.1 to 4.29.0 (#2957)
+* bump BrowserUpProxy from 3.1.1 to 3.1.2 (#2957)
+
+see https://github.com/selenide/selenide/milestone/219?closed=1
+
 ## 7.7.2 (13.02.2025)
 * Added ability to use custom types for elements in appium page factory  --  thanks to qwez (#2945)
 * Bump BrowserUpProxy from 3.0.1 to 3.1.1 (#2946) (#2950)

@@ -19,7 +19,7 @@ Currently, the plugin supports the following features:
 We are going to implement more features like reading logs and videos etc.
 
 ## Usage
-1. Import `com.codeborne:selenide-moon:7.7.2`
+1. Import `com.codeborne:selenide-moon:7.7.3`
 2. Set `Configuration.fileDownload = FOLDER;`
 3. Use method `$.download()` as usually.
 
