@@ -6,7 +6,6 @@ dependencies {
   api project(":statics")
   testImplementation project(':statics').sourceSets.test.output
   testImplementation project(':modules:core').sourceSets.test.output
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 
   api("io.appium:java-client:9.4.0") {
     exclude group: 'io.opentelemetry'
@@ -15,8 +14,7 @@ dependencies {
     exclude group: 'cglib'
   }
   implementation('commons-io:commons-io:2.18.0')
-  testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-params")
   testImplementation("org.assertj:assertj-core:$assertjVersion")
   testImplementation("org.mockito:mockito-core:$mockitoVersion")
   testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")

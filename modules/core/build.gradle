@@ -23,9 +23,8 @@ dependencies {
   }
   compileOnly("io.github.littleproxy:littleproxy:$littleProxyVersion")
 
-  compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+  compileOnly("org.junit.jupiter:junit-jupiter-api")
+  testImplementation("org.junit.jupiter:junit-jupiter-params")
 
   testImplementation("org.mockito:mockito-core:$mockitoVersion")
   testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}

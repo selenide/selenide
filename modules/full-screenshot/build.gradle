@@ -6,9 +6,8 @@ dependencies {
   api project(":statics")
   testImplementation project(':statics').sourceSets.test.output
   testImplementation project(':modules:core').sourceSets.test.output
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-  testImplementation("org.junit.platform:junit-platform-suite-engine:1.12.0")
+  testImplementation("org.junit.jupiter:junit-jupiter")
+  testImplementation("org.junit.platform:junit-platform-suite-engine")
   testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}
 }
 
