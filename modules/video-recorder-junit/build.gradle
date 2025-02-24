@@ -2,10 +2,7 @@ dependencies {
   testImplementation project(":modules:video-recorder")
   testImplementation project(':modules:core').sourceSets.test.output
 
-  testImplementation platform("org.junit:junit-bom:$junitVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
-  implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-  implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+  implementation("org.junit.jupiter:junit-jupiter-api")
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
 }
 

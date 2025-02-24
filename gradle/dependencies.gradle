@@ -34,6 +34,9 @@ subprojects {
   }
 
   dependencies {
+    compileOnly platform("org.junit:junit-bom:$junitVersion")
+    testImplementation platform("org.junit:junit-bom:$junitVersion")
+
     constraints {
       testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
       api("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}") {because 'used by browserup-proxy'}
