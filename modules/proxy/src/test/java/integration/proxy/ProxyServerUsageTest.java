@@ -2,9 +2,12 @@ package integration.proxy;
 
 import com.browserup.bup.filters.RequestFilter;
 import com.browserup.bup.filters.ResponseFilter;
+import com.browserup.bup.util.HttpMessageContents;
+import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import integration.ProxyIntegrationTest;
+import io.netty.handler.codec.http.HttpMethod;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
@@ -21,12 +25,18 @@ import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static com.codeborne.selenide.proxy.RequestMatcher.HttpMethod.GET;
 import static com.codeborne.selenide.proxy.RequestMatchers.urlEndsWith;
+import static io.netty.handler.codec.http.HttpMethod.CONNECT;
+import static io.netty.handler.codec.http.HttpMethod.HEAD;
+import static io.netty.handler.codec.http.HttpMethod.OPTIONS;
+import static io.netty.handler.codec.http.HttpMethod.TRACE;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class ProxyServerUsageTest extends ProxyIntegrationTest {
   private static final Logger log = LoggerFactory.getLogger(ProxyServerUsageTest.class);
+  private static final Set<HttpMethod> IGNORED_METHODS = Set.of(CONNECT, HEAD, OPTIONS, TRACE);
+
   private final List<String> requests = new ArrayList<>();
   private final List<String> responses = new ArrayList<>();
 
@@ -37,22 +47,21 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
     SelenideProxyServer selenideProxy = getSelenideProxy();
 
     selenideProxy.addRequestFilter("proxy-usages.request", (request, contents, messageInfo) -> {
-      String url = messageInfo.getUrl();
-      if (!isBrowserOwnTechnicalRequest(url)) {
+      if (!isIgnored(messageInfo)) {
         request.headers().add("User-Agent", "hacker");
-        requests.add(url + "\n\n" + contents.getTextContents());
+        requests.add(describe(contents, messageInfo));
       }
       return null;
     });
     selenideProxy.addResponseFilter("proxy-usages.response", (response, contents, messageInfo) -> {
-      String url = messageInfo.getUrl();
-      if (!isBrowserOwnTechnicalRequest(url)) {
-        responses.add(url + "\n\n" + contents.getTextContents());
+      if (!isIgnored(messageInfo)) {
+        responses.add(describe(contents, messageInfo));
       }
     });
 
     $("#cv").uploadFromClasspath("hello_world.txt");
     $("#submit").click();
+    $("h3").shouldHave(text("Uploaded 1 files"));
 
     assertThat(getSelenideProxy().getProxy())
       .as("Check browser up proxy instance")
@@ -65,9 +74,12 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
       .withFailMessage("All responses: " + responses)
       .hasSize(1);
 
+    assertThat(requests).hasSize(1);
     assertThat(requests.get(0)).contains("/upload");
     assertThat(requests.get(0)).contains("Content-Disposition: form-data; name=\"cv\"; filename=\"hello_world.txt\"");
     assertThat(requests.get(0)).contains("Hello, WinRar!");
+
+    assertThat(responses).hasSize(1);
     assertThat(responses.get(0)).contains("<h3>Uploaded 1 files</h3>");
   }
 
@@ -152,6 +164,15 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
     assertThatThrownBy(() -> selenideProxy.addResponseFilter("proxy-usages.auth-response", responseLogger2))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Duplicate response filter: proxy-usages.auth-response");
+  }
+
+  private String describe(HttpMessageContents contents, HttpMessageInfo messageInfo) {
+    return messageInfo.getOriginalRequest().method() + " " + messageInfo.getUrl() + "\n\n" + contents.getTextContents();
+  }
+
+  private boolean isIgnored(HttpMessageInfo messageInfo) {
+    return IGNORED_METHODS.contains(messageInfo.getOriginalRequest().method()) ||
+           isBrowserOwnTechnicalRequest(messageInfo.getUrl());
   }
 
   private boolean isBrowserOwnTechnicalRequest(String url) {
