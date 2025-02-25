@@ -24,6 +24,7 @@ dependencies {
   compileOnly("io.github.littleproxy:littleproxy:$littleProxyVersion")
 
   compileOnly("org.junit.jupiter:junit-jupiter-api")
+  testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.junit.jupiter:junit-jupiter-params")
 
   testImplementation("org.mockito:mockito-core:$mockitoVersion")

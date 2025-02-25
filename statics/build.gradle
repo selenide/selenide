@@ -6,6 +6,7 @@ dependencies {
   api project(':modules:core')
   testImplementation project(':modules:core').sourceSets.test.output
   compileOnly("org.junit.jupiter:junit-jupiter-api")
+  testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.junit.jupiter:junit-jupiter-params")
   testImplementation("org.mockito:mockito-core:$mockitoVersion")
   testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}

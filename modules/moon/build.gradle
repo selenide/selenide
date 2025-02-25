@@ -13,7 +13,7 @@ dependencies {
   testRuntimeOnly("org.seleniumhq.selenium:selenium-devtools-v124:4.+") {transitive = false}
   testRuntimeOnly("org.seleniumhq.selenium:selenium-devtools-v129:4.+") {transitive = false}
   testRuntimeOnly project(':modules:proxy')
-  testImplementation("org.junit.jupiter:junit-jupiter-api")
+  testImplementation("org.junit.jupiter:junit-jupiter")
 
   testImplementation("org.assertj:assertj-core:$assertjVersion")
   testImplementation("org.mockito:mockito-core:$mockitoVersion")

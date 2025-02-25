@@ -10,7 +10,7 @@ dependencies {
   testImplementation project(':modules:full-screenshot')
   testImplementation project(':modules:full-screenshot').sourceSets.test.output
 
-  testImplementation("org.junit.jupiter:junit-jupiter-api")
+  testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.junit.jupiter:junit-jupiter-params")
 
   testImplementation("org.seleniumhq.selenium:selenium-grid:$seleniumVersion") {
