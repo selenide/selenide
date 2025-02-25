@@ -55,6 +55,10 @@ subprojects {
     testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core") {
       exclude group: 'xyz.rogfam' // "xyz.rogfam:littleproxy" was moved to "io.github.littleproxy:littleproxy"
     }
+
+    testImplementation "org.junit.platform:junit-platform-engine"
+    testImplementation "org.junit.platform:junit-platform-launcher"
+
     testImplementation("io.github.littleproxy:littleproxy") {because 'used by browserup-proxy'}
     testImplementation("io.netty:netty-all:$nettyVersion")
     testImplementation("io.netty:netty-codec:$nettyVersion")
