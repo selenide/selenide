@@ -3,8 +3,27 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '.idea/**'
+      - '.run/**'
+      - '**/*.iml'
+      - '**/*.md'
+      - '**/.editorconfig'
+      - '**/.gitattributes'
+      - '**/.gitignore'
+      - 'LICENSE'
+      - 'release'
   pull_request:
-
+    paths-ignore:
+      - '.idea/**'
+      - '.run/**'
+      - '**/*.iml'
+      - '**/*.md'
+      - '**/.editorconfig'
+      - '**/.gitattributes'
+      - '**/.gitignore'
+      - 'LICENSE'
+      - 'release'
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
