@@ -104,7 +104,7 @@ public class SelenideAppium {
    * @param timeout - The count of milliseconds to wait until the app is terminated
    */
   public static void relaunchApp(String appId, @Nullable Duration timeout) {
-    appiumNavigator.terminateApp(AppiumDriverRunner.getMobileDriver(), appId, timeout);
+    terminateApp(appId, timeout);
     activateApp(appId);
   }
 
