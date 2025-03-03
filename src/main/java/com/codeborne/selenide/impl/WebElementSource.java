@@ -33,6 +33,7 @@ import static java.util.Objects.requireNonNull;
 public abstract class WebElementSource {
   @Nonnull
   private Alias alias = NONE;
+  private boolean isShadowRoot;
 
   @CheckReturnValue
   @Nonnull
@@ -60,6 +61,15 @@ public abstract class WebElementSource {
   @Nonnull
   public String description() {
     return alias.getOrElse(this::getSearchCriteria);
+  }
+
+  @CheckReturnValue
+  public boolean isShadowRoot() {
+    return isShadowRoot;
+  }
+
+  public void setShadowRoot(boolean isShadowRoot) {
+    this.isShadowRoot = isShadowRoot;
   }
 
   @Override

@@ -24,6 +24,7 @@ import static com.codeborne.selenide.SelectorMode.CSS;
  */
 @ParametersAreNonnullByDefault
 public class WebElementSelector {
+
   public static WebElementSelector instance = new WebElementSelector();
 
   protected final FileContent sizzleSource = new FileContent("sizzle.js");
@@ -39,7 +40,7 @@ public class WebElementSelector {
   @CheckReturnValue
   @Nonnull
   public WebElement findElement(Driver driver, @Nullable WebElementSource parent, By selector) {
-    SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
+    SearchContext context = getSearchContext(driver, parent);
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
@@ -55,8 +56,27 @@ public class WebElementSelector {
 
   @CheckReturnValue
   @Nonnull
+  private static SearchContext getSearchContext(Driver driver, @Nullable WebElementSource parent) {
+    if (parent == null) {
+      return driver.getWebDriver();
+    }
+
+    WebElement parentElement = parent.getWebElement();
+    if (!parent.isShadowRoot()) {
+      return parentElement;
+    }
+
+    SearchContext context = driver.executeJavaScript("return arguments[0].shadowRoot", parentElement);
+    if (context == null) {
+      throw new IllegalArgumentException(parentElement + " does not contain shadow root");
+    }
+    return context;
+  }
+
+  @CheckReturnValue
+  @Nonnull
   public List<WebElement> findElements(Driver driver, @Nullable WebElementSource parent, By selector) {
-    SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
+    SearchContext context = getSearchContext(driver, parent);
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {

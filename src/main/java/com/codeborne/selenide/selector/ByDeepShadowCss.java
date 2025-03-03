@@ -15,8 +15,15 @@ import java.io.Serializable;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public class ByDeepShadow {
+public class ByDeepShadowCss extends By implements Serializable {
+
   private static final JavaScript jsSource = new JavaScript("query-selector-shadow-dom.js");
+
+  private final String target;
+
+  public ByDeepShadowCss(String target) {
+    this.target = target;
+  }
 
   /***
    * Find target elements. It pierces Shadow DOM roots without knowing the path through nested shadow roots.
@@ -31,42 +38,32 @@ public class ByDeepShadow {
     return new ByDeepShadowCss(target);
   }
 
-  @ParametersAreNonnullByDefault
-  public static class ByDeepShadowCss extends By implements Serializable {
-    private final String target;
-
-    ByDeepShadowCss(String target) {
-      this.target = target;
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public WebElement findElement(SearchContext context) {
+    List<WebElement> found = findElements(context);
+    if (found.isEmpty()) {
+      throw new NoSuchElementException("Cannot locate an element in shadow dom " + this);
     }
+    return found.get(0);
+  }
 
-    @Override
-    @CheckReturnValue
-    @Nonnull
-    public WebElement findElement(SearchContext context) {
-      List<WebElement> found = findElements(context);
-      if (found.isEmpty()) {
-        throw new NoSuchElementException("Cannot locate an element in shadow dom " + this);
-      }
-      return found.get(0);
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public List<WebElement> findElements(SearchContext context) {
+    try {
+      return jsSource.execute(context, target);
+    } catch (JavascriptException e) {
+      throw new NoSuchElementException(Cleanup.of.webdriverExceptionMessage(e));
     }
+  }
 
-    @Override
-    @CheckReturnValue
-    @Nonnull
-    public List<WebElement> findElements(SearchContext context) {
-      try {
-        return jsSource.execute(context, target);
-      }
-      catch (JavascriptException e) {
-        throw new NoSuchElementException(Cleanup.of.webdriverExceptionMessage(e));
-      }
-    }
-
-    @Override
-    @CheckReturnValue
-    @Nonnull
-    public String toString() {
-      return "By.shadowDeepCss: " +  target;
-    }
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public String toString() {
+    return "By.shadowDeepCss: " + target;
   }
 }
