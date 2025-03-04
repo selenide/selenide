@@ -10,10 +10,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.CheckResult.accepted;
 import static com.codeborne.selenide.CheckResult.rejected;
 import static com.codeborne.selenide.LocalStorageConditions.item;
@@ -166,22 +162,18 @@ final class LocalStorageTest extends IntegrationTest {
     localStorage().shouldHave(allItemsContaining("foo"));
   }
 
-  @ParametersAreNonnullByDefault
   private ObjectCondition<LocalStorage> allItemsContaining(String expectedValue) {
     return new ObjectCondition<>() {
-      @Nonnull
       @Override
       public String description() {
         return String.format("should have all items containing '%s'", expectedValue);
       }
 
-      @Nonnull
       @Override
       public String negativeDescription() {
         return String.format("should not have all items containing '%s'", expectedValue);
       }
 
-      @CheckReturnValue
       @Override
       public CheckResult check(LocalStorage localStorage) {
         return localStorage.getItems().values().stream()
@@ -189,19 +181,15 @@ final class LocalStorageTest extends IntegrationTest {
           accepted() : rejected(message(localStorage), actualValue(localStorage));
       }
 
-      @Nonnull
-      @CheckReturnValue
       private String actualValue(LocalStorage localStorage) {
         return localStorage.getItems().toString();
       }
 
       @Override
-      @CheckReturnValue
       public String expectedValue() {
         return expectedValue;
       }
 
-      @Nonnull
       @Override
       public String describe(LocalStorage object) {
         return "localStorage";

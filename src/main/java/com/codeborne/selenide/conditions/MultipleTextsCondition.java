@@ -13,6 +13,7 @@ abstract class MultipleTextsCondition extends TextCondition {
     if (targets.isEmpty()) {
       throw new IllegalArgumentException("No expected texts given");
     }
+    //noinspection ConstantValue
     if (targets.stream().anyMatch(target -> isNull(target))) {
       throw new IllegalArgumentException("The expected texts should not contain null");
     }

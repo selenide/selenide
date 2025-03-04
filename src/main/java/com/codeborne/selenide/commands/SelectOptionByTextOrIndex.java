@@ -7,9 +7,8 @@ import com.codeborne.selenide.ex.InvalidStateError;
 import com.codeborne.selenide.impl.Arguments;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -18,26 +17,27 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.commands.Util.arrayToString;
 import static com.codeborne.selenide.commands.Util.cast;
 import static com.codeborne.selenide.commands.Util.merge;
+import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
 public class SelectOptionByTextOrIndex implements Command<Void> {
   private static final JavaScript selectOptionByIndex = new JavaScript("select-options-by-index.js");
   private static final JavaScript selectOptionByText = new JavaScript("select-options-by-text.js");
 
   @Override
   @Nullable
-  public Void execute(SelenideElement proxy, WebElementSource selectField, @Nullable Object[] args) {
+  public Void execute(SelenideElement proxy, WebElementSource selectField, Object @Nullable [] args) {
     Arguments arguments = new Arguments(args);
     if (args == null || args.length == 0) {
       throw new IllegalArgumentException("Missing arguments");
     }
     else if (args[0] instanceof String firstOptionText) {
-      List<String> texts = merge(firstOptionText, arguments.nth(1));
+      String[] otherTexts = requireNonNull(arguments.nth(1));
+      List<String> texts = merge(firstOptionText, otherTexts);
       selectOptionsByTexts(selectField, texts);
       return null;
     }
     else if (args[0] instanceof Integer firstOptionIndex) {
-      int[] otherIndexes = arguments.nth(1);
+      int[] otherIndexes = requireNonNull(arguments.nth(1));
       selectOptionsByIndexes(selectField, merge(firstOptionIndex, otherIndexes));
       return null;
     }
@@ -47,7 +47,7 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
   }
 
   private void selectOptionsByTexts(WebElementSource selectField, List<String> texts) {
-    Map<String, String> error = selectOptionByText.execute(selectField.driver(), selectField.getWebElement(), texts);
+    Map<String, String> error = requireNonNull(selectOptionByText.execute(selectField.driver(), selectField.getWebElement(), texts));
     if (error.containsKey("nonSelect")) {
       throw new IllegalArgumentException("Cannot select option from a non-select element");
     }
@@ -67,7 +67,7 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
   }
 
   private void selectOptionsByIndexes(WebElementSource selectField, List<Integer> indexes) {
-    Map<String, Object> error = selectOptionByIndex.execute(selectField.driver(), selectField.getWebElement(), indexes);
+    Map<String, Object> error = requireNonNull(selectOptionByIndex.execute(selectField.driver(), selectField.getWebElement(), indexes));
     if (error.containsKey("nonSelect")) {
       throw new IllegalArgumentException("Cannot select option from a non-select element");
     }

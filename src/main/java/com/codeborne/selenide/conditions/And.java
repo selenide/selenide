@@ -5,16 +5,12 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static java.util.stream.Collectors.joining;
 
-@ParametersAreNonnullByDefault
 public class And extends WebElementCondition {
   private final List<? extends WebElementCondition> conditions;
 
@@ -37,7 +33,6 @@ public class And extends WebElementCondition {
     return conditions;
   }
 
-  @Nonnull
   @Override
   public WebElementCondition negate() {
     return new Not(this,
@@ -45,8 +40,6 @@ public class And extends WebElementCondition {
     );
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     List<CheckResult> results = new ArrayList<>();
@@ -65,8 +58,6 @@ public class And extends WebElementCondition {
     return new CheckResult(ACCEPT, actualValues);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String toString() {
     return getName() + ": " + conditions.stream().map(WebElementCondition::toString).collect(joining(" and "));

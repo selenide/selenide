@@ -4,7 +4,7 @@ set -e
 version=$1
 
 if [ -z "$version" ] ; then
-  echo "Usage: ./release 6.1.0"
+  echo "Usage: ./release 7.7.0"
   exit 0
 fi
 
@@ -23,17 +23,19 @@ fi
 
 echo "Releasing version: ${version}"
 
-git tag -a "v${version}" -m "released selenide ${version}"
-git push origin --tags
 ./gradlew clean check javadocForSite
 ./gradlew publish --no-parallel --info
-mkdir "../selenide-web/javadoc/${version}/"
-cp -r build/javadoc-for-site/. "../selenide-web/javadoc/${version}/"
-rm -fr "../selenide-web/javadoc/current/*"
-cp -r build/javadoc-for-site/. ../selenide-web/javadoc/current/
+
+git tag -a "v${version}" -m "released selenide ${version}"
+git push origin --tags
+
+mkdir "../selenide-web/_site/javadoc/${version}"
+cp -r build/javadoc-for-site/. "../selenide-web/_site/javadoc/${version}/"
+rm -fr "../selenide-web/_site/javadoc/current/*"
+cp -r build/javadoc-for-site/. ../selenide-web/_site/javadoc/current/
 cd ../selenide-web || exit 2
-git add "javadoc/${version}"
-git add javadoc/current
+git add "_site/javadoc/${version}"
+git add "_site/javadoc/current"
 git commit -m "publish javadoc for Selenide ${version}"
 git push
 cd - || exit 3

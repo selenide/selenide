@@ -3,14 +3,11 @@ package com.codeborne.selenide.conditions;
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
-@ParametersAreNonnullByDefault
 public class DomPropertyValue extends WebElementCondition {
   private final String domPropertyName;
 
@@ -23,7 +20,6 @@ public class DomPropertyValue extends WebElementCondition {
     this.expectedDomPropertyValue = expectedDomPropertyValue;
   }
 
-  @Nonnull
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     String domPropertyValue = element.getDomProperty(domPropertyName);

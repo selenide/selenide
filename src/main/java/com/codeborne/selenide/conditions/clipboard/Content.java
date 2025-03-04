@@ -4,12 +4,6 @@ import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Clipboard;
 import com.codeborne.selenide.ObjectCondition;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class Content implements ObjectCondition<Clipboard> {
   private final String expectedContent;
 
@@ -17,21 +11,16 @@ public class Content implements ObjectCondition<Clipboard> {
     this.expectedContent = expectedContent;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String description() {
     return String.format("should have content '%s'", expectedContent);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String negativeDescription() {
     return String.format("should not have content '%s'", expectedContent);
   }
 
-  @CheckReturnValue
   @Override
   public CheckResult check(Clipboard clipboard) {
     String clipboardText = clipboard.getText();
@@ -39,14 +28,10 @@ public class Content implements ObjectCondition<Clipboard> {
   }
 
   @Override
-  @Nullable
-  @CheckReturnValue
   public String expectedValue() {
     return expectedContent;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String describe(Clipboard clipboard) {
     return "clipboard";

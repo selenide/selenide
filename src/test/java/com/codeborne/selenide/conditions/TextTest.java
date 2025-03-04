@@ -9,9 +9,6 @@ import com.codeborne.selenide.commands.GetSelectedOptionText;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.Mocks.mockElement;
@@ -51,8 +48,6 @@ final class TextTest {
       .isEqualTo(new CheckResult(REJECT, "text=\"Hello from js underworld\""));
   }
 
-  @Nonnull
-  @CheckReturnValue
   private GetSelectedOptionText mockSelectedTextExtractor(String selectedText) {
     GetSelectedOptionText command = mock();
     when(command.execute(any(), any())).thenReturn(selectedText);

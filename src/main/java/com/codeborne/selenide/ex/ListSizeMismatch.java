@@ -1,11 +1,8 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.impl.CollectionSource;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class ListSizeMismatch extends UIAssertionError {
   public ListSizeMismatch(String operator,
                           int expectedSize,

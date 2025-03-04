@@ -17,15 +17,14 @@ import com.codeborne.selenide.impl.TailOfCollection;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Iterator;
@@ -42,7 +41,6 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
-@ParametersAreNonnullByDefault
 public abstract class BaseElementsCollection<T extends SelenideElement, SELF extends BaseElementsCollection<T, SELF>>
   implements Iterable<T> {
   private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
@@ -83,7 +81,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * }
    * </pre>
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public SELF should(WebElementsCondition... conditions) {
     return should("", Duration.ofMillis(driver().config().timeout()), conditions);
   }
@@ -93,7 +91,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    *
    * @param timeout maximum waiting time
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public SELF should(WebElementsCondition condition, Duration timeout) {
     return should("", timeout, toArray(condition));
   }
@@ -101,12 +99,12 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
   /**
    * For example: {@code $$(".error").shouldBe(empty)}
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public SELF shouldBe(WebElementsCondition... conditions) {
     return should("be", Duration.ofMillis(driver().config().timeout()), conditions);
   }
 
-  @Nonnull
+  @CanIgnoreReturnValue
   public SELF shouldBe(WebElementsCondition condition, Duration timeout) {
     return should("be", timeout, toArray(condition));
   }
@@ -116,7 +114,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * {@code $$(".error").shouldHave(size(3))}
    * {@code $$(".error").shouldHave(texts("Error1", "Error2"))}
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public SELF shouldHave(WebElementsCondition... conditions) {
     return should("have", Duration.ofMillis(driver().config().timeout()), conditions);
   }
@@ -126,18 +124,15 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    *
    * @param timeout maximum waiting time
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public SELF shouldHave(WebElementsCondition condition, Duration timeout) {
     return should("have", timeout, toArray(condition));
   }
 
-  @CheckReturnValue
-  @Nonnull
   private WebElementsCondition[] toArray(WebElementsCondition condition) {
     return new WebElementsCondition[]{condition};
   }
 
-  @Nonnull
   @SuppressWarnings("ErrorNotRethrown")
   protected SELF should(String prefix, Duration timeout, WebElementsCondition... conditions) {
     validateAssertionMode(driver().config());
@@ -164,7 +159,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
     }
   }
 
-  @Nonnull
   @SuppressWarnings("unchecked")
   private SELF self() {
     return (SELF) this;
@@ -174,7 +168,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
   protected void waitUntil(WebElementsCondition condition, Duration timeout) {
     Throwable lastError = null;
     CheckResult lastCheckResult = new CheckResult(REJECT, null);
-    Stopwatch stopwatch = new Stopwatch(timeout.toMillis());
+    Stopwatch stopwatch = new Stopwatch(timeout);
     do {
       try {
         lastCheckResult = condition.check(collection);
@@ -194,7 +188,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
         }
         lastError = elementNotFound;
       }
-      sleep(driver().config().pollingInterval());
+      sleep(stopwatch);
     }
     while (!stopwatch.isTimeoutReached());
 
@@ -209,14 +203,8 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
     }
   }
 
-  void sleep(long ms) {
-    try {
-      Thread.sleep(ms);
-    }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new RuntimeException(e);
-    }
+  void sleep(Stopwatch stopwatch) {
+    stopwatch.sleep(driver().config().pollingInterval());
   }
 
   /**
@@ -226,8 +214,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @return ElementsCollection
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public SELF filter(WebElementCondition condition) {
     return create(new FilteringCollection(collection, condition));
   }
@@ -242,8 +228,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @see #filter(WebElementCondition)
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public SELF filterBy(WebElementCondition condition) {
     return filter(condition);
   }
@@ -255,8 +239,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @return ElementsCollection
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public SELF exclude(WebElementCondition condition) {
     return create(new FilteringCollection(collection, not(condition)));
   }
@@ -269,8 +251,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @see #exclude(WebElementCondition)
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public SELF excludeWith(WebElementCondition condition) {
     return exclude(condition);
   }
@@ -282,8 +262,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @return SelenideElement
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement find(WebElementCondition condition) {
     return CollectionElementByCondition.wrap(collection, condition);
   }
@@ -296,14 +274,10 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @see #find(WebElementCondition)
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement findBy(WebElementCondition condition) {
     return find(condition);
   }
 
-  @CheckReturnValue
-  @Nonnull
   private List<WebElement> getElements() {
     return collection.getElements();
   }
@@ -313,8 +287,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * Instead of just getting texts, we highly recommend to verify them with {@code $$.shouldHave(texts(...));}.
    */
-  @CheckReturnValue
-  @Nonnull
   public List<String> texts() {
     return communicator.texts(driver(), getElements());
   }
@@ -324,9 +296,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * Instead of just getting attributes, we highly recommend to verify them with {@code $$.shouldHave(attributes(...));}.
    */
-  @CheckReturnValue
-  @Nonnull
-  public List<String> attributes(String attribute) {
+  public List<@Nullable String> attributes(String attribute) {
     return communicator.attributes(driver(), getElements(), attribute);
   }
 
@@ -337,8 +307,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @return the n-th element of collection
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public T get(int index) {
     return CollectionElement.wrap(clazz, collection, index);
   }
@@ -355,8 +323,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @return the first element of the collection
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement first() {
     return get(0);
   }
@@ -367,8 +333,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @return the last element of the collection
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement last() {
     return LastCollectionElement.wrap(collection);
   }
@@ -379,8 +343,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @param elements number of elements 1…N
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public SELF first(int elements) {
     return create(new HeadOfCollection(collection, elements));
   }
@@ -391,8 +353,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @param elements number of elements 1…N
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public SELF last(int elements) {
     return create(new TailOfCollection(collection, elements));
   }
@@ -405,7 +365,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @return actual size of the collection
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
   public int size() {
     try {
       return getElements().size();
@@ -436,8 +395,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @return current state of this collection
    * @see #asFixedIterable()
    */
-  @CheckReturnValue
-  @Nonnull
   public SELF snapshot() {
     return create(new CollectionSnapshot(collection));
   }
@@ -453,8 +410,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * To make it explicit, we recommend to use method {@link #asFixedIterable()} or {@link #asDynamicIterable()} instead.
    */
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Iterator<T> iterator() {
     return asFixedIterable().iterator();
   }
@@ -467,8 +422,6 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    *
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public Stream<T> stream() {
     return StreamSupport.stream(spliterator(), false);
   }
@@ -481,10 +434,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * if elements are re-rendered during the iteration.
    *
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   * @since 6.2.0
    */
-  @CheckReturnValue
-  @Nonnull
   public SelenideElementIterable<T> asFixedIterable() {
     return () -> new SelenideElementIterator<>(new CollectionSnapshot(collection), clazz);
   }
@@ -495,10 +445,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * It's slower than {@link #asFixedIterable()}, but helps to avoid {@link org.openqa.selenium.StaleElementReferenceException} etc.
    *
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
-   * @since 6.2.0
    */
-  @CheckReturnValue
-  @Nonnull
   public SelenideElementIterable<T> asDynamicIterable() {
     return () -> new SelenideElementIterator<>(collection, clazz);
   }
@@ -511,17 +458,14 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    *
    * @param alias a human-readable name of this collection (null or empty string not allowed)
    * @return this collection
-   * @since 5.20.0
    */
-  @CheckReturnValue
-  @Nonnull
+  @CanIgnoreReturnValue
   public SELF as(String alias) {
     this.collection.setAlias(alias);
     return self();
   }
 
   @Override
-  @CheckReturnValue
   public String toString() {
     return collection.getAlias().getOrElse(collection::toString);
   }
@@ -537,14 +481,10 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @see com.codeborne.selenide.commands.DescribeElement
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
-  @Nonnull
   public String describe() {
     return stream().map(el -> el.describe()).toList().toString();
   }
 
-  @CheckReturnValue
-  @Nonnull
   private Driver driver() {
     return collection.driver();
   }

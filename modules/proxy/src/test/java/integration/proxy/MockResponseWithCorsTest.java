@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.MockResponseFilter;
 import integration.ProxyIntegrationTest;
 import integration.server.LocalHttpServer;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import static java.util.Objects.requireNonNull;
 
 final class MockResponseWithCorsTest extends ProxyIntegrationTest {
   private static final Logger log = LoggerFactory.getLogger(MockResponseWithCorsTest.class);
+  @Nullable
   private LocalHttpServer corsProtectedService;
 
   @BeforeEach
@@ -30,12 +32,12 @@ final class MockResponseWithCorsTest extends ProxyIntegrationTest {
     Configuration.timeout = 2000;
 
     log.info("Started AUT on {}", getBaseUrl());
-    log.info("Started CORS-protected service on {}", corsProtectedService.getPort());
+    log.info("Started CORS-protected service on {}", port());
   }
 
   @Test
   void proxySupportsCors() {
-    open("/page_with_cross-origin-request.html?anotherPort=" + corsProtectedService.getPort());
+    open("/page_with_cross-origin-request.html?anotherPort=" + port());
     $("#moria").shouldHave(text("[200] Say CORS and enter, friend Frodo!"));
   }
 
@@ -43,7 +45,7 @@ final class MockResponseWithCorsTest extends ProxyIntegrationTest {
   void canMockServerResponse() {
     open();
     proxyMocker().mockText("cors-mock", urlContains(POST, "/try-cors/Frodo"), this::mockedResponse);
-    open("/page_with_cross-origin-request.html?anotherPort=" + corsProtectedService.getPort());
+    open("/page_with_cross-origin-request.html?anotherPort=" + port());
     $("#moria").shouldHave(text("[200] You hacked the CORS, Frodo!"));
   }
 
@@ -51,7 +53,7 @@ final class MockResponseWithCorsTest extends ProxyIntegrationTest {
   void canMockServerResponseWithAnyHttpStatus() {
     open();
     proxyMocker().mockText("cors-mock", urlContains(POST, "/try-cors/Frodo"), 429, this::mockedResponse);
-    open("/page_with_cross-origin-request.html?anotherPort=" + corsProtectedService.getPort());
+    open("/page_with_cross-origin-request.html?anotherPort=" + port());
     $("#moria").shouldHave(text("[429] You hacked the CORS, Frodo!"));
   }
 
@@ -65,6 +67,10 @@ final class MockResponseWithCorsTest extends ProxyIntegrationTest {
     if (corsProtectedService != null) {
       corsProtectedService.stop();
     }
+  }
+
+  private int port() {
+    return requireNonNull(corsProtectedService).getPort();
   }
 
   private static MockResponseFilter proxyMocker() {

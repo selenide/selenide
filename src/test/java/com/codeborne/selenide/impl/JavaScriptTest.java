@@ -7,19 +7,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JavaScriptTest {
   @Test
   void readsScriptFromFile() {
-    assertThat(new JavaScript("customer-click-logger.js").content()).isEqualToIgnoringNewLines("""
+    assertThat(new JavaScript("custom-click-logger.js").content()).isEqualToIgnoringNewLines("""
       function logClick(element) {}""");
 
-    assertThat(new JavaScript("customer-click-helper.js").content()).isEqualToIgnoringNewLines("""
-      function customClick(element) {}""");
+    assertThat(new JavaScript("custom-click-helper.js").content().trim()).isEqualToIgnoringNewLines("""
+      function customClick(element) {
+        const text = element.textContent.replace(/\\s+/i, ' ')
+        console.log(`Clicked element ${text} ${1}`)
+      }
+      """);
   }
 
   @Test
   void scriptCanImportOtherScripts() {
-    JavaScript js = new JavaScript("customer-click-handler.js");
+    JavaScript js = new JavaScript("custom-click-handler.js");
     assertThat(js.content()).isEqualToIgnoringNewLines("""
       (function (element) {
-        function customClick(element) {}
+        function customClick(element) {
+        const text = element.textContent.replace(/\\s+/i, ' ')
+        console.log(`Clicked element ${text} ${1}`)
+      }
         function logClick(element) {}
         logClick(element)
         customClick(element)

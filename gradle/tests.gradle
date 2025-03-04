@@ -134,8 +134,9 @@ subprojects {
       exceptionFormat 'full'
     }
   }
+
+  tasks.register("allTests") {
+    dependsOn tasks.named('clean'), tasks.named('check'), tasks.named('firefox_headless'), tasks.named('chrome_headless')
+  }
 }
 
-tasks.register("allTests") {
-  dependsOn tasks.named('clean'), tasks.named('check'), tasks.named('firefox_headless'), tasks.named('chrome_headless')
-}

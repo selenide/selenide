@@ -1,6 +1,7 @@
 package integration.pageobjects;
 
 import com.codeborne.selenide.As;
+import com.codeborne.selenide.Container;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementShould;
@@ -54,15 +55,29 @@ public class PageObjectWithAliasesTest extends IntegrationTest {
   }
 
   @Test
-  void collectionWithAlias() {
-    assertThatThrownBy(() ->
-      page.header2.shouldHave(size(666))
-    )
-      .isInstanceOf(ListSizeMismatch.class)
+  void selfWithAlias() {
+    assertThatThrownBy(() -> $(page.header.self).shouldHave(text("Nope")))
+      .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("""
-          List size mismatch: expected: = 666, actual: 4, collection: Middle headers {h2}
+          Element "The header" should have text "Nope" {h1}
           """.trim()
       );
+  }
+
+  @Test
+  void collectionWithAlias() {
+    assertThatThrownBy(() -> page.header2.shouldHave(size(666))).isInstanceOf(ListSizeMismatch.class)
+      .hasMessageStartingWith("""
+        List size mismatch: expected: = 666, actual: 4, collection: Middle headers {h2}
+        """.trim());
+  }
+
+  @Test
+  void collectionWithAlias_singleElement() {
+    assertThatThrownBy(() -> page.header2.get(2).shouldHave(text("Nope"))).isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("""
+        Element should have text "Nope" {h2[2]}
+        """.trim());
   }
 
   @Test
@@ -90,6 +105,10 @@ public class PageObjectWithAliasesTest extends IntegrationTest {
   }
 
   static class PageObject {
+    @As("The header")
+    @FindBy(tagName = "h1")
+    Header header;
+
     @As("Large header")
     @FindBy(tagName = "h1")
     SelenideElement header1;
@@ -107,5 +126,10 @@ public class PageObjectWithAliasesTest extends IntegrationTest {
 
     @As("Dollar collection")
     ElementsCollection header5 = $$("h2");
+  }
+
+  static class Header implements Container {
+    @Self
+    SelenideElement self;
   }
 }

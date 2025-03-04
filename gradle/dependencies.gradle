@@ -1,19 +1,21 @@
 ext {
-  seleniumVersionStable = '4.25.0'
+  seleniumVersionStable = '4.29.0'
   seleniumVersion = project.properties['seleniumVersionNightlyBuild'] ?: seleniumVersionStable
-  httpClientVersion = '5.4'
-  junitVersion = '5.11.1'
+  httpClientVersion = '5.4.2'
+  junitVersion = '5.12.0'
+  testngVersion = '7.10.2'
   jettyVersion = '11.0.19'
-  nettyVersion = '4.1.113.Final'
-  assertjVersion = '3.26.3'
-  mockitoVersion = '5.13.0'
-  slf4jVersion = '2.0.16'
-  browserupProxyVersion = '2.2.19'
-  littleProxyVersion = '2.3.0'
+  nettyVersion = '4.1.119.Final'
+  assertjVersion = '3.27.3'
+  mockitoVersion = '5.15.2'
+  slf4jVersion = '2.0.17'
+  browserupProxyVersion = '3.1.2'
+  littleProxyVersion = '2.4.0'
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.9'
-  archunitVersion = '1.3.0'
-  jacksonVersion = '2.18.0'
+  archunitVersion = '1.4.0'
+  jacksonVersion = '2.18.3'
+  javacvVersion = '1.5.11'
 }
 
 subprojects {
@@ -27,7 +29,14 @@ subprojects {
     }
   }
 
+  configurations.implementation {
+    exclude(group: 'com.google.code.findbugs')
+  }
+
   dependencies {
+    compileOnly platform("org.junit:junit-bom:$junitVersion")
+    testImplementation platform("org.junit:junit-bom:$junitVersion")
+
     constraints {
       testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion")
       api("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}") {because 'used by browserup-proxy'}
@@ -36,18 +45,25 @@ subprojects {
 
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
       exclude group: 'org.slf4j'
+      exclude group: 'com.google.code.findbugs'
     }
-    implementation("com.google.guava:guava:33.3.1-jre")
+    implementation('org.jspecify:jspecify:1.0.0')
+    implementation('com.google.errorprone:error_prone_annotations:2.36.0')
+    implementation("com.google.guava:guava:33.4.0-jre")
     implementation("org.apache.commons:commons-lang3:3.17.0")
-    implementation("commons-io:commons-io:2.17.0")
+    implementation("commons-io:commons-io:2.18.0")
     testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core") {
       exclude group: 'xyz.rogfam' // "xyz.rogfam:littleproxy" was moved to "io.github.littleproxy:littleproxy"
     }
+
+    testImplementation "org.junit.platform:junit-platform-engine"
+    testImplementation "org.junit.platform:junit-platform-launcher"
+
     testImplementation("io.github.littleproxy:littleproxy") {because 'used by browserup-proxy'}
     testImplementation("io.netty:netty-all:$nettyVersion")
     testImplementation("io.netty:netty-codec:$nettyVersion")
     testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
-    testImplementation("org.apache.commons:commons-text:1.12.0")
+    testImplementation("org.apache.commons:commons-text:1.13.0")
     testImplementation("com.tngtech.archunit:archunit-junit5:${archunitVersion}")
     api("org.slf4j:slf4j-api:$slf4jVersion")
     testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")

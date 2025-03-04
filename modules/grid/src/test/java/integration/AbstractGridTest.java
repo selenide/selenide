@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,12 +18,18 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static java.util.Objects.requireNonNull;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 abstract class AbstractGridTest extends IntegrationTest {
   private static final Logger log = LoggerFactory.getLogger(AbstractGridTest.class);
 
-  protected static URL gridUrl;
+  @Nullable
+  private static URL gridUrl;
+
+  protected static URL gridUrl() {
+    return requireNonNull(gridUrl);
+  }
 
   @BeforeEach
   @AfterEach

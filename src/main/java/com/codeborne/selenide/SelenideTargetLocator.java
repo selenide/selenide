@@ -8,6 +8,8 @@ import com.codeborne.selenide.impl.windows.FrameByIdOrName;
 import com.codeborne.selenide.impl.windows.WindowByIndex;
 import com.codeborne.selenide.impl.windows.WindowByNameOrHandle;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.NoSuchElementException;
@@ -17,16 +19,12 @@ import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 
 import static com.codeborne.selenide.impl.Lists.list;
 import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 import static org.openqa.selenium.support.ui.ExpectedConditions.frameToBeAvailableAndSwitchToIt;
 
-@ParametersAreNonnullByDefault
 public class SelenideTargetLocator implements TargetLocator {
   private static final String SWITCH_TO = SelenideLogger.getReadableSubject("switchTo");
 
@@ -48,8 +46,8 @@ public class SelenideTargetLocator implements TargetLocator {
    *
    * @param index index of frame (0-based)
    */
+  @CanIgnoreReturnValue
   @Override
-  @Nonnull
   public WebDriver frame(int index) {
     return frame(Wait(), index);
   }
@@ -61,7 +59,7 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param index    index of frame (0-based)
    * @param timeout the timeout duration. It overrides default Config.timeout()
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public WebDriver frame(int index, Duration timeout) {
     return frame(Wait(timeoutMs(timeout)), index);
   }
@@ -72,7 +70,7 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param nameOrId name or id of frame
    */
   @Override
-  @Nonnull
+  @CanIgnoreReturnValue
   public WebDriver frame(String nameOrId) {
     return frame(Wait(), nameOrId);
   }
@@ -83,12 +81,12 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param nameOrId name or id of frame
    * @param timeout            the timeout duration. It overrides default Config.timeout()
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public WebDriver frame(String nameOrId, Duration timeout) {
     return frame(Wait(timeoutMs(timeout)), nameOrId);
   }
 
-  @Nonnull
+  @CanIgnoreReturnValue
   private WebDriver frame(SelenideWait wait, int index) {
     return SelenideLogger.get(String.format("frame(index: %s)", index), SWITCH_TO, () -> {
       try {
@@ -106,7 +104,6 @@ public class SelenideTargetLocator implements TargetLocator {
     });
   }
 
-  @Nonnull
   private WebDriver frame(SelenideWait wait, String nameOrId) {
     return SelenideLogger.get("frame(" + nameOrId + ")", SWITCH_TO, () -> {
       try {
@@ -124,8 +121,8 @@ public class SelenideTargetLocator implements TargetLocator {
     });
   }
 
+  @CanIgnoreReturnValue
   @Override
-  @Nonnull
   public WebDriver frame(WebElement frameElement) {
     return SelenideLogger.get(String.format("frame(%s)", frameElement), SWITCH_TO, () -> {
       try {
@@ -151,31 +148,31 @@ public class SelenideTargetLocator implements TargetLocator {
     return e.getMessage().contains("invalid argument: 'id' out of range");
   }
 
+  @CanIgnoreReturnValue
   @Override
-  @Nonnull
   public WebDriver parentFrame() {
     return SelenideLogger.get("parent frame", SWITCH_TO, delegate::parentFrame);
   }
 
+  @CanIgnoreReturnValue
   @Override
-  @Nonnull
   public WebDriver defaultContent() {
     return SelenideLogger.get("default context", SWITCH_TO, delegate::defaultContent);
   }
 
+  @CanIgnoreReturnValue
   @Override
-  @Nonnull
   public WebElement activeElement() {
     return SelenideLogger.get("active element", SWITCH_TO, delegate::activeElement);
   }
 
+  @CanIgnoreReturnValue
   @Override
-  @Nonnull
   public Alert alert() {
     return alert(Duration.ofMillis(config.timeout()));
   }
 
-  @Nonnull
+  @CanIgnoreReturnValue
   public Alert alert(@Nullable Duration timeout) {
     long timeoutMs = timeoutMs(timeout);
     try {
@@ -217,7 +214,7 @@ public class SelenideTargetLocator implements TargetLocator {
    *
    * @param index index of window (0-based)
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public WebDriver window(int index) {
     return window(Wait(), index);
   }
@@ -230,7 +227,7 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param index    index of window (0-based)
    * @param timeout the timeout duration. It overrides default Config.timeout()
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public WebDriver window(int index, Duration timeout) {
     return window(Wait(timeoutMs(timeout)), index);
   }
@@ -240,8 +237,8 @@ public class SelenideTargetLocator implements TargetLocator {
    *
    * @param nameOrHandleOrTitle name or handle or title of window/tab
    */
+  @CanIgnoreReturnValue
   @Override
-  @Nonnull
   public WebDriver window(String nameOrHandleOrTitle) {
     return window(Wait(), nameOrHandleOrTitle);
   }
@@ -252,7 +249,7 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param nameOrHandleOrTitle name or handle or title of window/tab
    * @param timeout            the timeout duration. It overrides default Config.timeout()
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public WebDriver window(String nameOrHandleOrTitle, Duration timeout) {
     return window(Wait(timeoutMs(timeout)), nameOrHandleOrTitle);
   }
@@ -279,6 +276,7 @@ public class SelenideTargetLocator implements TargetLocator {
     });
   }
 
+  @CanIgnoreReturnValue
   @Override
   public WebDriver newWindow(WindowType typeHint) {
     return webDriver.switchTo().newWindow(typeHint);

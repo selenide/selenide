@@ -1,13 +1,10 @@
 package com.codeborne.selenide.logevents;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
-@ParametersAreNonnullByDefault
 public class SelenideLog implements LogEvent {
 
   private final long startNs;
@@ -15,6 +12,7 @@ public class SelenideLog implements LogEvent {
   private final String subject;
   private final String element;
   private EventStatus status = IN_PROGRESS;
+  @Nullable
   private Throwable error;
 
   public SelenideLog(String element, String subject) {
@@ -24,13 +22,11 @@ public class SelenideLog implements LogEvent {
   }
 
   @Override
-  @Nonnull
   public String getSubject() {
     return this.subject;
   }
 
   @Override
-  @Nonnull
   public EventStatus getStatus() {
     return this.status;
   }
@@ -41,7 +37,6 @@ public class SelenideLog implements LogEvent {
   }
 
   @Override
-  @Nonnull
   public String getElement() {
     return this.element;
   }
@@ -72,7 +67,6 @@ public class SelenideLog implements LogEvent {
   }
 
   @Override
-  @Nonnull
   public String toString() {
     return String.format("$(\"%s\") %s", element, subject);
   }

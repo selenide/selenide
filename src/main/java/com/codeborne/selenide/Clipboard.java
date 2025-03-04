@@ -1,13 +1,5 @@
 package com.codeborne.selenide;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-/**
- * @since 5.20.0
- */
-@ParametersAreNonnullByDefault
 public interface Clipboard extends Conditional<Clipboard> {
 
   /**
@@ -15,8 +7,6 @@ public interface Clipboard extends Conditional<Clipboard> {
    *
    * @return string content of clipboard
    */
-  @CheckReturnValue
-  @Nonnull
   String getText();
 
   /**

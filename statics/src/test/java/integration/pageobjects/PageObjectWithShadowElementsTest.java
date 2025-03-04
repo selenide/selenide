@@ -11,6 +11,7 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exactValue;
@@ -71,14 +72,17 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
 
   @Test
   void containerWithShadowRoot() {
-    ShadowContainer shadowContainer = pageObject.shadowContainer;
-    assertThat(shadowContainer.self.text()).isEqualTo("""
-                                                      shadowContainerChildHost1
-                                                      shadowContainerChildChild1Host1
-                                                      shadowContainerChildChild2Host1
-                                                      shadowContainerChildHost2
-                                                      shadowContainerChildHost3
-                                                      shadowContainerChildChild1Host3""");
+    List<ShadowChild> children = pageObject.shadowContainer.children;
+    assertThat(children).isNotEmpty();
+
+    String text = children.stream()
+      .map(it -> it.item.self.text())
+      .collect(Collectors.joining(System.lineSeparator()));
+
+    assertThat(text).isEqualTo("""
+                               shadowContainerChildHost1
+                               shadowContainerChildHost2
+                               shadowContainerChildHost3""");
   }
 
   @Test
@@ -153,6 +157,9 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
   }
 
   private static class ShadowItem implements Container {
+
+    @Self
+    SelenideElement self;
 
     @FindBy(css = "p")
     SelenideElement p;

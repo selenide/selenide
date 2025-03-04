@@ -8,16 +8,9 @@ import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriverException;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.Condition.exist;
 
-@ParametersAreNonnullByDefault
 class ExceptionWrapper {
-  @CheckReturnValue
-  @Nonnull
   Throwable wrap(Throwable error, WebElementSource webElementSource) {
     if (error instanceof UIAssertionError) {
       return error;
@@ -34,7 +27,6 @@ class ExceptionWrapper {
     return error;
   }
 
-  @CheckReturnValue
   private boolean isElementNotClickableException(Throwable e) {
     return e instanceof WebDriverException && e.getMessage().contains("is not clickable");
   }

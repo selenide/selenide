@@ -3,13 +3,14 @@ package integration.errormessages;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import integration.IntegrationTest;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
 
-import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.timeout;
@@ -17,11 +18,12 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static integration.errormessages.Helper.getReportsFolder;
 import static integration.errormessages.Helper.screenshot;
+import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
-  private String reportsUrl;
-  private String reportsFolder;
+  @Nullable private String reportsUrl;
+  @Nullable private String reportsFolder;
 
   @BeforeEach
   void setTimeout() {
@@ -40,7 +42,7 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
   @AfterEach
   void restoreScreenshots() {
     Configuration.reportsUrl = reportsUrl;
-    Configuration.reportsFolder = reportsFolder;
+    Configuration.reportsFolder = requireNonNull(reportsFolder);
   }
 
   @Test

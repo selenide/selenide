@@ -6,12 +6,8 @@ import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 
-@ParametersAreNonnullByDefault
 public class SelenideAppiumCollection extends BaseElementsCollection<SelenideAppiumElement, SelenideAppiumCollection> {
   SelenideAppiumCollection(CollectionSource collection) {
     super(collection);
@@ -25,8 +21,6 @@ public class SelenideAppiumCollection extends BaseElementsCollection<SelenideApp
     super(driver, seleniumSelector);
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   protected SelenideAppiumCollection create(CollectionSource source) {
     return new SelenideAppiumCollection(source);

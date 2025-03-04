@@ -18,6 +18,10 @@ dependencies {
   testImplementation("org.mockito:mockito-core:$mockitoVersion")
 }
 
+configurations {
+  testImplementation.exclude group: "org.junit.platform"
+}
+
 tasks.withType(Test).configureEach{
   useTestNG()
 }

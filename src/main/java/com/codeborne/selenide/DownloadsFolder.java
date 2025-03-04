@@ -3,9 +3,6 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -17,14 +14,9 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 
-@ParametersAreNonnullByDefault
 public interface DownloadsFolder {
-  @CheckReturnValue
-  @Nonnull
   List<File> files();
 
-  @CheckReturnValue
-  @Nonnull
   List<DownloadedFile> filesNewerThan(long modifiedAfterTs);
 
   void cleanupBeforeDownload();
@@ -48,7 +40,5 @@ public interface DownloadsFolder {
     return '[' + files().stream().map(f -> f.getName()).collect(joining(", ")) + ']';
   }
 
-  @CheckReturnValue
-  @Nonnull
   String getPath();
 }

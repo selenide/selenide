@@ -1,22 +1,18 @@
 package com.codeborne.selenide.appium.commands;
 
-import com.codeborne.selenide.Command;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.appium.AppiumScrollCoordinates;
 import com.codeborne.selenide.appium.AppiumScrollOptions;
 import com.codeborne.selenide.appium.ScrollDirection;
 import com.codeborne.selenide.commands.ScrollTo;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.AppiumDriver;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -27,29 +23,24 @@ import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
-@ParametersAreNonnullByDefault
-public class AppiumScrollTo implements Command<SelenideElement> {
+public class AppiumScrollTo extends FluentCommand {
   private static final AppiumScrollOptions DEFAULT_OPTIONS = with(DOWN, 30);
   private final ScrollTo webImplementation = new ScrollTo();
 
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     AppiumScrollOptions scrollOptions = extractOptions(args);
 
     Optional<AppiumDriver> driver = cast(locator.driver(), AppiumDriver.class);
     if (!driver.isPresent()) {
-      scrollInWebBrowser(proxy, locator, args, scrollOptions);
+      scrollInWebBrowser(locator, args, scrollOptions);
     }
     else {
       scrollInMobile(driver.get(), locator, scrollOptions);
     }
-    return proxy;
   }
 
-  @Nonnull
-  @CheckReturnValue
-  private AppiumScrollOptions extractOptions(@Nullable Object[] args) {
+  private AppiumScrollOptions extractOptions(Object @Nullable [] args) {
     if (args == null || args.length == 0) {
       return DEFAULT_OPTIONS;
     } else if (args.length == 1) {
@@ -59,12 +50,12 @@ public class AppiumScrollTo implements Command<SelenideElement> {
     }
   }
 
-  private void scrollInWebBrowser(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args,
-                                             AppiumScrollOptions appiumScrollOptions) {
+  private void scrollInWebBrowser(WebElementSource locator, Object @Nullable [] args,
+                                  AppiumScrollOptions appiumScrollOptions) {
     if (appiumScrollOptions != DEFAULT_OPTIONS) {
       throw new IllegalArgumentException("Scrolling with options is only supported for mobile drivers");
     }
-    webImplementation.execute(proxy, locator, args);
+    webImplementation.execute(locator, args);
   }
 
   private void scrollInMobile(AppiumDriver appiumDriver, WebElementSource locator, AppiumScrollOptions scrollOptions) {

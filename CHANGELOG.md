@@ -1,11 +1,64 @@
 # Changelog
 
-## 7.5.2 (under construction)
-* 
+## 7.7.3 (24.02.2025)
+* bump Selenium from 4.28.1 to 4.29.0 (#2957)
+* bump BrowserUpProxy from 3.1.1 to 3.1.2 (#2957)
+
+see https://github.com/selenide/selenide/milestone/219?closed=1
+
+## 7.7.2 (13.02.2025)
+* Added ability to use custom types for elements in appium page factory  --  thanks to qwez (#2945)
+* Bump BrowserUpProxy from 3.0.1 to 3.1.1 (#2946) (#2950)
+
+see https://github.com/selenide/selenide/milestone/218?closed=1
+
+## 7.7.1 (22.01.2025)
+* #2930 bump BrowserUpProxy from 3.0.0 to 3.0.1 (updates MITM certificate for the next 10 years)
+* #2933 allow declaring @Self field of type SelenideAppiumElement (#2934)
+* #2931 Inherit @As alias for elements extended from the Container (#2942)
+* bump Selenium from 4.27.0 to 4.28.0 (incl. CDP from v131 to v132) (#2940)
+* bump Appium from 9.3.0 to 9.4.0 (#2941)
+
+see https://github.com/selenide/selenide/milestone/217?closed=1
+
+## 7.7.0 (07.01.2025)
+* #2304 add support for Moon browser automation solution (#2924)
+* #2769 add method `$.scroll()` with direction and length parameters --  thanks to donnieHub (#2809)
+* #2914 add debug logs for adding/removing listeners (#2915)
+* #2910 add BrowserUpProxy dependency to runtime scope (#2912)
+* [hotfix] update BrowserUpProxy MITM certificate (#2930)
+
+See https://github.com/selenide/selenide/milestone/216?closed=1
+
+## 7.6.1 (02.12.2024)
+* bump Selenium from 4.26.0 to 4.27.0 (incl. CDP 130 -> 131)  (#2904)
+* fix double click appium  --  thanks to Petro Ovcharenko (#2905)
+* #2906 make method `Click.execute()` overridable again (#2909)
+* Bump jacksonVersion from 2.18.1 to 2.18.2 (#2907)
+
+See https://github.com/selenide/selenide/milestone/215?closed=1
+
+## 7.6.0 (24.11.2024)
+* #2145 Add tests video recorder (#2768) (#2890)  --  thanks to Sergey Brit
+* add "because" function for webDriverConditions (#2853) --  thanks to Daniil Moiseev
+* add method `$.scrollIntoCenter()` (#2842)
+* support special space characters when asserting texts (#2858) --  thanks to Daniil Moiseev
+* support special space characters when finding element by text (#2884)
+* #2859 add method `inNewBrowser(Config config, Runnable lambda)` (#2902)
+* #2859 fix bug with using custom config inside method `inNewBrowser(Runnable lambda)` (#2902)
+* Fix browser not created exception with AppiumPageFactory (#2879) --  thanks to Petro Ovcharenko
+* #2896 fix method `Selenide.screenshot(filename)` to match the description in javadoc (#2901)
+* bump Selenium from 4.25.0 to 4.26.0 (incl. CDP 129 -> 130)
+* JSR305 -> JSpecify (#2889)
+* convert some Selenide "info" logs to "debug" (#2892)
+
+See https://github.com/selenide/selenide/milestone/214?closed=1
 
 ## 7.5.1 (21.09.2024)
 * bump Selenium from 4.24.0 to 4.25.0 (#2851)
 * add method `Configuration.config()` (#2852)
+
+See https://github.com/selenide/selenide/milestone/213?closed=1
 
 ## 7.5.0 (15.09.2024)
 * #1372 allow to open every new browser with its own Configuration (#2846)
@@ -17,6 +70,8 @@
 * bump BrowserUpProxy from 2.2.18 to 2.2.19
 * bump dnsjava from 3.6.0 to 3.6.1
 * bump LittleProxy from 2.2.4 to 2.3.0 (#2837)
+
+See https://github.com/selenide/selenide/milestone/212?closed=1
 
 ## 7.4.3 (released 05.09.2024)
 * bump Selenium from 4.23.1 to 4.24.0 (#2825)

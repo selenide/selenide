@@ -3,14 +3,13 @@ package com.codeborne.selenide.junit5;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.UIAssertionError;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -61,9 +60,7 @@ import java.util.Optional;
  * </p>
  *
  * @author Aliaksandr Rasolka
- * @since 4.12.2
  */
-@ParametersAreNonnullByDefault
 public class ScreenShooterExtension implements BeforeEachCallback, AfterTestExecutionCallback {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooterExtension.class);
 
@@ -86,7 +83,7 @@ public class ScreenShooterExtension implements BeforeEachCallback, AfterTestExec
    * @param folderWithScreenshots Folder to put screenshots to
    * @return current extension instance
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   public ScreenShooterExtension to(final String folderWithScreenshots) {
     Configuration.reportsFolder = folderWithScreenshots;
     return this;

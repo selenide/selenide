@@ -2,10 +2,14 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.commands.GetSelectedOptionText;
 import com.codeborne.selenide.commands.GetSelectedOptionValue;
+import com.codeborne.selenide.commands.ScrollIntoCenter;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.WebElementSource;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import com.google.errorprone.annotations.CheckReturnValue;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -15,10 +19,6 @@ import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.WrapsElement;
 import org.openqa.selenium.interactions.Locatable;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.Duration;
@@ -27,7 +27,6 @@ import java.time.Duration;
  * Wrapper around {@link WebElement} with additional methods like
  * {@link #shouldBe(WebElementCondition...)} and {@link #shouldHave(WebElementCondition...)}
  */
-@ParametersAreNonnullByDefault
 public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, Locatable, TakesScreenshot {
   /**
    * Set value to given input element.<p>
@@ -49,7 +48,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param text Any text to enter into the text field or set by value for select/radio.
    * @see com.codeborne.selenide.commands.SetValue
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement setValue(@Nullable String text);
 
@@ -58,7 +56,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.Val
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement val(@Nullable String text);
 
@@ -67,7 +64,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.Val
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement val(SetValueOptions options);
 
@@ -75,9 +71,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Similar to {@link #setValue(java.lang.String)}
    *
    * @see com.codeborne.selenide.commands.SetValue
-   * @since 6.5.0
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement setValue(SetValueOptions options);
 
@@ -86,7 +80,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Useful to work with autosuggestion dropdown
    * @see com.codeborne.selenide.commands.Type
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement type(CharSequence text);
 
@@ -95,10 +88,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param options parameters specifying how exactly you want to type the text
    * @see com.codeborne.selenide.commands.Type
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement type(TypeOptions options);
-
 
   /**
    * Append given text to the text field and trigger "change" event.<p>
@@ -116,7 +107,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param text Any text to append into the text field.
    * @see com.codeborne.selenide.commands.Append
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement append(String text);
 
@@ -126,7 +116,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see Clipboard
    * @see com.codeborne.selenide.commands.Paste
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement paste();
 
@@ -151,7 +140,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.PressEnter
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement pressEnter();
 
@@ -165,7 +153,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.PressTab
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement pressTab();
 
@@ -175,7 +162,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.Unfocus
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement unfocus();
 
@@ -190,7 +176,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.PressEscape
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement pressEscape();
 
@@ -207,9 +192,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.Press
    * @see Keys
-   * @since 6.10.2
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement press(CharSequence... keysToPress);
 
@@ -221,8 +204,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetText
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
-  @Nonnull
+  @NonNull
   @Override
   String getText();
 
@@ -233,9 +215,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return Alias of this element or null, if element alias is not set
    * @see com.codeborne.selenide.commands.GetAlias
-   * @since 5.20.0
    */
-  @CheckReturnValue
   @Nullable
   String getAlias();
 
@@ -246,8 +226,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetText
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
-  @Nonnull
   String text();
 
   /**
@@ -256,8 +234,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetOwnText
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
-  @Nonnull
   String getOwnText();
 
   /**
@@ -269,8 +245,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetInnerText
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
-  @Nonnull
   String innerText();
 
   /**
@@ -281,8 +255,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetInnerHtml
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
-  @Nonnull
   String innerHtml();
 
   /**
@@ -292,7 +264,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetAttribute
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
   @Nullable
   String attr(String attributeName);
 
@@ -303,7 +274,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetName
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
   @Nullable
   String name();
 
@@ -315,7 +285,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Val
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
   @Nullable
   String val();
 
@@ -324,10 +293,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return attribute "value" value or null if attribute is missing
    * @see com.codeborne.selenide.commands.GetValue
-   * @since 3.1
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
   @Nullable
   String getValue();
 
@@ -341,8 +308,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetPseudoValue
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
-  @Nonnull
   String pseudo(String pseudoElementName, String propertyName);
 
   /**
@@ -353,8 +318,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetPseudoValue
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
-  @Nonnull
   String pseudo(String pseudoElementName);
 
   /**
@@ -364,7 +327,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return selected "input type=radio" element
    * @see com.codeborne.selenide.commands.SelectRadio
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement selectRadio(String value);
 
@@ -374,7 +336,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetDataAttribute
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
   @Nullable
   String data(String dataAttributeName);
 
@@ -384,7 +345,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @Override
   @Nullable
-  @CheckReturnValue
   String getAttribute(String name);
 
   /**
@@ -392,8 +352,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
-  @Nonnull
-  @CheckReturnValue
+  @NonNull
   String getCssValue(String propertyName);
 
   /**
@@ -403,7 +362,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Exists
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
   boolean exists();
 
   /**
@@ -427,7 +385,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Matches
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
   boolean is(WebElementCondition condition);
 
   /**
@@ -459,14 +416,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Matches
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
   boolean has(WebElementCondition condition);
 
   /**
    * Same as {@link #is(WebElementCondition, Duration)}
    * @see com.codeborne.selenide.commands.Matches
    */
-  @CheckReturnValue
   boolean has(WebElementCondition condition, Duration timeout);
 
   /**
@@ -475,7 +430,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param selected true for checked and false for unchecked
    * @see com.codeborne.selenide.commands.SetSelected
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement setSelected(boolean selected);
 
@@ -496,7 +450,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.Config#timeout
    * @see com.codeborne.selenide.commands.Should
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement should(WebElementCondition... condition);
 
@@ -504,7 +457,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Wait until given element meets given condition (with given timeout)
    * @see com.codeborne.selenide.commands.Should
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement should(WebElementCondition condition, Duration timeout);
 
@@ -518,7 +470,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see SelenideElement#should(WebElementCondition...)
    * @see com.codeborne.selenide.commands.ShouldHave
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldHave(WebElementCondition... condition);
 
@@ -526,7 +477,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Wait until given element meets given condition (with given timeout)
    * @see com.codeborne.selenide.commands.ShouldHave
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldHave(WebElementCondition condition, Duration timeout);
 
@@ -540,7 +490,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see SelenideElement#should(WebElementCondition...)
    * @see com.codeborne.selenide.commands.ShouldBe
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldBe(WebElementCondition... condition);
 
@@ -548,7 +497,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Wait until given element meets given condition (with given timeout)
    * @see com.codeborne.selenide.commands.ShouldBe
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldBe(WebElementCondition condition, Duration timeout);
 
@@ -567,7 +515,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.Config#timeout
    * @see com.codeborne.selenide.commands.ShouldNot
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldNot(WebElementCondition... condition);
 
@@ -575,7 +522,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Wait until given element meets given condition (with given timeout)
    * @see com.codeborne.selenide.commands.ShouldNot
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldNot(WebElementCondition condition, Duration timeout);
 
@@ -589,7 +535,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see SelenideElement#shouldNot(WebElementCondition...)
    * @see com.codeborne.selenide.commands.ShouldNotHave
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldNotHave(WebElementCondition... condition);
 
@@ -597,7 +542,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Wait until given element does NOT meet given condition (with given timeout)
    * @see com.codeborne.selenide.commands.ShouldNotHave
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldNotHave(WebElementCondition condition, Duration timeout);
 
@@ -611,7 +555,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see SelenideElement#shouldNot(WebElementCondition...)
    * @see com.codeborne.selenide.commands.ShouldNotBe
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldNotBe(WebElementCondition... condition);
 
@@ -619,7 +562,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Wait until given element does NOT meet given condition (with given timeout)
    * @see com.codeborne.selenide.commands.ShouldNotBe
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldNotBe(WebElementCondition condition, Duration timeout);
 
@@ -633,8 +575,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
-  @CheckReturnValue
-  @Nonnull
   String toString();
 
   /**
@@ -643,27 +583,22 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Not recommended to use for test verifications.
    * May work relatively slowly because it fetches actual element information from browser.
    *
-   * @since 6.14.0
    * @return e.g. <strong id=orderConfirmedStatus class=>Order has been confirmed</strong>
    * @see com.codeborne.selenide.commands.DescribeElement
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
-  @Nonnull
   String describe();
 
   /**
    * @see com.codeborne.selenide.commands.Highlight
-   * @since 6.17.0
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   SelenideElement highlight();
 
   /**
    * @see com.codeborne.selenide.commands.Highlight
-   * @since 6.17.0
    */
-  @Nonnull
+  @CanIgnoreReturnValue
   SelenideElement highlight(HighlightOptions options);
 
   /**
@@ -675,10 +610,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param alias a human-readable name of this element (null or empty string not allowed)
    * @return this element
    * @see com.codeborne.selenide.commands.As
-   * @since 5.17.0
    */
-  @CheckReturnValue
-  @Nonnull
+  @CanIgnoreReturnValue
   SelenideElement as(String alias);
 
   /**
@@ -690,8 +623,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetParent
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement parent();
 
   /**
@@ -704,8 +635,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetSibling
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement sibling(int index);
 
   /**
@@ -718,8 +647,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetPreceding
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement preceding(int index);
 
   /**
@@ -730,8 +657,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    * @see com.codeborne.selenide.commands.GetLastChild
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement lastChild();
 
   /**
@@ -758,8 +683,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Ancestor
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement ancestor(String selector);
 
   /**
@@ -784,8 +707,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Ancestor
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement ancestor(String selector, int index);
 
   /**
@@ -814,8 +735,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Ancestor
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement closest(String selector);
 
   /**
@@ -826,8 +745,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Find
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement find(String cssSelector);
 
   /**
@@ -836,8 +753,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Find
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement find(String cssSelector, int index);
 
   /**
@@ -846,8 +761,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Find
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement find(By selector);
 
   /**
@@ -856,8 +769,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Find
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement find(By selector, int index);
 
   /**
@@ -866,8 +777,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Find
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement $(String cssSelector);
 
   /**
@@ -876,8 +785,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Find
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement $(String cssSelector, int index);
 
   /**
@@ -886,8 +793,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Find
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement $(By selector);
 
   /**
@@ -896,8 +801,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Find
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement $(By selector, int index);
 
   /**
@@ -908,8 +811,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.FindByXpath
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement $x(String xpath);
 
   /**
@@ -918,8 +819,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.FindByXpath
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement $x(String xpath, int index);
 
   /**
@@ -932,8 +831,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.FindAll
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   ElementsCollection findAll(String cssSelector);
 
   /**
@@ -946,23 +843,17 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.FindAll
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   ElementsCollection findAll(By selector);
 
   /**
    * Same as {@link #findAll(String)}
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   ElementsCollection $$(String cssSelector);
 
   /**
    * Same as {@link #findAll(By)}
    */
-  @CheckReturnValue
-  @Nonnull
   ElementsCollection $$(By selector);
 
   /**
@@ -975,8 +866,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.FindAllByXpath
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  @CheckReturnValue
-  @Nonnull
   ElementsCollection $$x(String xpath);
 
   /**
@@ -990,7 +879,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @throws IllegalArgumentException if any of the files is not found
    * @see com.codeborne.selenide.commands.UploadFileFromClasspath
    */
-  @Nonnull
   @CanIgnoreReturnValue
   File uploadFromClasspath(String... fileName);
 
@@ -1005,7 +893,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @throws IllegalArgumentException if any of the files is not found, or other errors
    * @see com.codeborne.selenide.commands.UploadFile
    */
-  @Nonnull
   @CanIgnoreReturnValue
   File uploadFile(File... file);
 
@@ -1019,7 +906,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * </select>
    * }</pre>
    *
-   * @param index 0..N (0 means first option)
+   * @param index from 0 to N (0 means first option)
    * @param otherIndexes other indexes (if you need to select multiple options)
    * @see com.codeborne.selenide.commands.SelectOptionByTextOrIndex
    */
@@ -1086,8 +973,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return WebElement for selected &lt;option&gt; element
    * @see com.codeborne.selenide.commands.GetSelectedOption
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement getSelectedOption() throws NoSuchElementException;
 
   /**
@@ -1103,8 +988,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return ElementsCollection for selected &lt;option&gt; elements (empty list if no options are selected)
    * @see com.codeborne.selenide.commands.GetSelectedOptions
    */
-  @CheckReturnValue
-  @Nonnull
   ElementsCollection getSelectedOptions();
 
   /**
@@ -1119,11 +1002,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return ElementsCollection for all &lt;option&gt; elements
    * @see com.codeborne.selenide.commands.GetOptions
-   * @since 6.18.0
    */
-  @CheckReturnValue
-  @Nonnull
   ElementsCollection getOptions();
+
+  /**
+   * Same as {@link #getOptions()}
+   */
+  ElementsCollection options();
 
   /**
    * Get value of selected option in select field
@@ -1139,7 +1024,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return null if the selected option doesn't have "value" attribute (or the select doesn't have options at all)
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
   @Nullable
   String getSelectedOptionValue();
 
@@ -1158,7 +1042,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see GetSelectedOptionText
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
-  @CheckReturnValue
   @Nullable
   String getSelectedOptionText();
 
@@ -1167,7 +1050,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.ScrollTo
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement scrollTo();
 
@@ -1191,7 +1073,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.ScrollIntoView
    * @see <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView">Web API reference</a>
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement scrollIntoView(boolean alignToTop);
 
@@ -1225,9 +1106,39 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.ScrollIntoView
    * @see <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView">Web API reference</a>
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement scrollIntoView(String scrollIntoViewOptions);
+
+  /**
+   * Scroll element vertically to the center of viewport.
+   * Same as {@code $.scrollIntoView("{block: 'center'}")}
+   * @see ScrollIntoCenter
+   * @since 7.6.0
+   */
+  @CanIgnoreReturnValue
+  SelenideElement scrollIntoCenter();
+
+  /**
+   * Scrolls the element by a specified distance in a specified direction.<p>
+   * It takes {@link ScrollOptions} to specify the direction, distance and other options.
+   *
+   * For example, if you want to scroll the element down by 100 pixels, you can do:
+   *
+   * <pre>
+   * {@code element.scroll(ScrollOptions.direction(ScrollDirection.DOWN).distance(100))}
+   * </pre>
+   *
+   * If you want to scroll the element right by 250 pixels, you can do:
+   *
+   * <pre>
+   * {@code element.scroll(ScrollOptions.direction(ScrollDirection.RIGHT).distance(250))}
+   * </pre>
+   *
+   * @param scrollOptions direction, distance etc.
+   * @see com.codeborne.selenide.commands.Scroll
+   */
+  @CanIgnoreReturnValue
+  SelenideElement scroll(ScrollOptions scrollOptions);
 
   /**
    * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
@@ -1237,8 +1148,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see FileDownloadMode
    * @see com.codeborne.selenide.commands.DownloadFile
    */
-  @CheckReturnValue
-  @Nonnull
   File download() throws FileNotDownloadedError;
 
   /**
@@ -1250,8 +1159,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.DownloadFile
    * @deprecated Use method {{@link #download(DownloadOptions)}} instead
    */
-  @CheckReturnValue
-  @Nonnull
   @Deprecated
   File download(long timeout) throws FileNotDownloadedError;
 
@@ -1268,8 +1175,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.files.FileFilters
    * @see com.codeborne.selenide.commands.DownloadFile
    */
-  @CheckReturnValue
-  @Nonnull
   File download(FileFilter fileFilter) throws FileNotDownloadedError;
 
   /**
@@ -1287,16 +1192,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.DownloadFile
    * @deprecated Use method {{@link #download(DownloadOptions)}} instead
    */
-  @CheckReturnValue
-  @Nonnull
   @Deprecated
   File download(long timeout, FileFilter fileFilter) throws FileNotDownloadedError;
 
   /**
    * @see com.codeborne.selenide.commands.DownloadFile
    */
-  @CheckReturnValue
-  @Nonnull
   File download(DownloadOptions options) throws FileNotDownloadedError;
 
   /**
@@ -1305,8 +1206,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return e.g. "#multirowTable.findBy(text 'INVALID-TEXT')/valid-selector"
    * @see com.codeborne.selenide.commands.GetSearchCriteria
    */
-  @CheckReturnValue
-  @Nonnull
   String getSearchCriteria();
 
   /**
@@ -1314,8 +1213,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @throws org.openqa.selenium.NoSuchElementException if element does not exist (without waiting for the element)
    * @see com.codeborne.selenide.commands.ToWebElement
    */
-  @CheckReturnValue
-  @Nonnull
   WebElement toWebElement();
 
   /**
@@ -1324,17 +1221,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetWrappedElement
    */
   @Override
-  @CheckReturnValue
-  @Nonnull
+  @NonNull
   WebElement getWrappedElement();
 
   /**
    * Cache this web element. The following calls to this object will not re-load this element from browser.
    * @see com.codeborne.selenide.commands.CacheSelenideElement
-   * @since 6.13.0
    */
-  @CheckReturnValue
-  @Nonnull
   SelenideElement cached();
 
   /**
@@ -1355,6 +1248,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return this element
    * @see com.codeborne.selenide.commands.Click
    */
+  @CanIgnoreReturnValue
   SelenideElement click(ClickOptions clickOption);
 
   /**
@@ -1371,6 +1265,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.Click
    */
+  @CanIgnoreReturnValue
   @Override
   void click();
 
@@ -1380,7 +1275,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return this element
    * @see com.codeborne.selenide.commands.ContextClick
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement contextClick();
 
@@ -1394,7 +1288,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return this element
    * @see com.codeborne.selenide.commands.DoubleClick
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement doubleClick();
 
@@ -1412,9 +1305,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return this element
    * @see com.codeborne.selenide.commands.DoubleClick
-   * @since 6.13.0
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement doubleClick(ClickOptions clickOption);
 
@@ -1424,7 +1315,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return this element
    * @see com.codeborne.selenide.commands.Hover
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement hover();
 
@@ -1435,7 +1325,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return this element
    * @see com.codeborne.selenide.commands.Hover
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement hover(HoverOptions options);
 
@@ -1472,7 +1361,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDrop
    */
-  @Nonnull
   @CanIgnoreReturnValue
   SelenideElement dragAndDrop(DragAndDropOptions options);
 
@@ -1486,7 +1374,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Execute
    * @see com.codeborne.selenide.Command
    */
+  @Nullable
+  @CanIgnoreReturnValue
   <ReturnType> ReturnType execute(Command<ReturnType> command);
+
+  @CanIgnoreReturnValue
+  <ReturnType extends SelenideElement> ReturnType execute(FluentCommand command);
 
   /**
    * Execute custom implemented command with given timeout (this command will not receive
@@ -1498,8 +1391,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return whatever the command returns (incl. null)
    * @see com.codeborne.selenide.commands.Execute
    * @see com.codeborne.selenide.Command
-   * @since 5.24.0
    */
+  @Nullable
+  @CanIgnoreReturnValue
   <ReturnType> ReturnType execute(Command<ReturnType> command, Duration timeout);
 
   /**
@@ -1509,7 +1403,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @throws IllegalArgumentException if argument is not an "img" element
    * @see com.codeborne.selenide.commands.IsImage
-   * @since 2.13
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   boolean isImage();
@@ -1521,7 +1414,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * or null if Selenide failed to take a screenshot (due to some technical problem)
    * @see com.codeborne.selenide.commands.TakeScreenshot
    */
-  @CheckReturnValue
   @Nullable
   File screenshot();
 
@@ -1531,7 +1423,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return buffered image with screenshot
    * @see com.codeborne.selenide.commands.TakeScreenshotAsImage
    */
-  @CheckReturnValue
   @Nullable
   BufferedImage screenshotAsImage();
 }

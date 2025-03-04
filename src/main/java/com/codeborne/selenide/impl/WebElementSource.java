@@ -8,15 +8,13 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import com.codeborne.selenide.ex.UIAssertionError;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
@@ -29,41 +27,29 @@ import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
 public abstract class WebElementSource {
-  @Nonnull
+
   private Alias alias = NONE;
   private boolean isShadowRoot;
 
-  @CheckReturnValue
-  @Nonnull
   public abstract Driver driver();
 
-  @CheckReturnValue
-  @Nonnull
   public abstract WebElement getWebElement();
 
-  @CheckReturnValue
-  @Nonnull
   public abstract String getSearchCriteria();
 
   public void setAlias(String alias) {
     this.alias = new Alias(alias);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Alias getAlias() {
     return alias;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public String description() {
     return alias.getOrElse(this::getSearchCriteria);
   }
 
-  @CheckReturnValue
   public boolean isShadowRoot() {
     return isShadowRoot;
   }
@@ -73,48 +59,38 @@ public abstract class WebElementSource {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String toString() {
     return description();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
     return ElementFinder.wrap(driver(), this, getSelector(arg), index);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public List<WebElement> findAll() throws IndexOutOfBoundsException {
     return singletonList(getWebElement());
   }
 
-  @CheckReturnValue
-  @Nonnull
-  public ElementNotFound createElementNotFoundError(WebElementCondition condition, Throwable cause) {
+  public ElementNotFound createElementNotFoundError(WebElementCondition condition, @Nullable Throwable cause) {
     if (cause instanceof UIAssertionError) {
       throw new IllegalArgumentException("Unexpected UIAssertionError as a cause of ElementNotFound: " + cause, cause);
     }
     return new ElementNotFound(alias, getSearchCriteria(), condition, cause);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static By getSelector(Object arg) {
     if (arg instanceof By by) return by;
     if (arg instanceof String cssSelector) return By.cssSelector(cssSelector);
     throw new IllegalArgumentException("Unsupported selector type: " + arg);
   }
 
-  @SuppressWarnings("ResultOfMethodCallIgnored")
   public void checkCondition(String prefix, WebElementCondition condition, boolean invert) {
     checkConditionAndReturnElement(prefix, condition, invert);
   }
 
   @Nullable
-  @CheckReturnValue
+  @CanIgnoreReturnValue
+  @SuppressWarnings("ErrorNotRethrown")
   private WebElement checkConditionAndReturnElement(String prefix, WebElementCondition condition, boolean invert) {
     WebElementCondition check = invert ? not(condition) : condition;
 
@@ -136,8 +112,10 @@ public abstract class WebElementSource {
     return handleError(prefix, condition, invert, check, lastError, element, checkResult);
   }
 
+  @Nullable
   private WebElement handleError(String prefix, WebElementCondition condition, boolean invert, WebElementCondition check,
-                                 @Nullable Throwable lastError, @Nullable WebElement element, @Nullable CheckResult checkResult) {
+                                 @Nullable Throwable lastError, @Nullable WebElement element, @Nullable CheckResult checkResult
+  ) {
     if (lastError != null && Cleanup.of.isInvalidSelectorError(lastError)) {
       throw Cleanup.of.wrapInvalidSelectorException(lastError);
     }
@@ -159,8 +137,6 @@ public abstract class WebElementSource {
     }
   }
 
-  @Nonnull
-  @CheckReturnValue
   public WebElement findAndAssertElementIsVisible() {
     return requireNonNull(checkConditionAndReturnElement("be ", visible, false));
   }
@@ -170,8 +146,6 @@ public abstract class WebElementSource {
    *
    * @return element or throws ElementShould/ElementShouldNot exceptions
    */
-  @Nonnull
-  @CheckReturnValue
   public WebElement findAndAssertElementIsInteractable() {
     return requireNonNull(checkConditionAndReturnElement("be ", interactable, false));
   }
@@ -180,21 +154,16 @@ public abstract class WebElementSource {
    * Asserts that returned element is enabled and can be interacted with.
    *
    * @return element or throws ElementShould/ElementShouldNot exceptions
-   * @since 6.15.0
    */
-  @Nonnull
-  @CheckReturnValue
   public WebElement findAndAssertElementIsClickable() {
     return requireNonNull(checkConditionAndReturnElement("be ", clickable, false));
   }
 
   /**
    * Asserts that returned element is editable.
+   *
    * @return element or throws ElementShould/ElementShouldNot exceptions
-   * @since 6.5.0
    */
-  @Nonnull
-  @CheckReturnValue
   public WebElement findAndAssertElementIsEditable() {
     return requireNonNull(checkConditionAndReturnElement("be ", editable, false));
   }

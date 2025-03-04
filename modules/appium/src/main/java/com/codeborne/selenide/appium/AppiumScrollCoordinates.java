@@ -1,9 +1,5 @@
 package com.codeborne.selenide.appium;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class AppiumScrollCoordinates {
 
   private final int startX;
@@ -18,22 +14,18 @@ public class AppiumScrollCoordinates {
     this.endY = endY;
   }
 
-  @CheckReturnValue
   public int getStartX() {
     return startX;
   }
 
-  @CheckReturnValue
   public int getStartY() {
     return startY;
   }
 
-  @CheckReturnValue
   public int getEndX() {
     return endX;
   }
 
-  @CheckReturnValue
   public int getEndY() {
     return endY;
   }

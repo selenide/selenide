@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.net.NetworkUtils;
 
@@ -31,6 +32,7 @@ import org.openqa.selenium.net.NetworkUtils;
  * Example: homepage=http://google.com,"intl.allowed_languages=en,ru,es"
  * </p>
  */
+@SuppressWarnings({"DeprecatedIsStillUsed", "deprecation"})
 public class Configuration {
   private static final SelenideConfig defaults = new SelenideConfig();
 
@@ -99,6 +101,7 @@ public class Configuration {
    * <br>
    * Default value: none
    */
+  @Nullable
   public static String browserVersion = defaults.browserVersion();
 
   /**
@@ -108,6 +111,7 @@ public class Configuration {
    * <br>
    * Default value: null (Grid is not used).
    */
+  @Nullable
   public static String remote = defaults.remote();
 
   /**
@@ -116,6 +120,7 @@ public class Configuration {
    * <br>
    * Default value: 1366x768
    */
+  @Nullable
   public static String browserSize = defaults.browserSize();
 
   /**
@@ -124,6 +129,7 @@ public class Configuration {
    * <br>
    * Default value: none
    */
+  @Nullable
   public static String browserPosition = defaults.browserPosition();
 
   /**
@@ -150,7 +156,6 @@ public class Configuration {
    * <br>
    *
    * @see <a href="https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy">documentation</a>
-   * @since 3.5
    */
   public static String pageLoadStrategy = defaults.pageLoadStrategy();
 
@@ -158,8 +163,6 @@ public class Configuration {
    * Timeout for loading a web page (in milliseconds).
    * Default timeout in Selenium WebDriver is 300 seconds (which is incredibly long).
    * Selenide default is 30 seconds.
-   *
-   * @since 5.15.0
    */
   public static long pageLoadTimeout = defaults.pageLoadTimeout();
 
@@ -218,6 +221,7 @@ public class Configuration {
    * "http://ci.mycompany.com/job/my-job/446/artifact/build/reports/tests/my_test.png" - it's useful to analyze test
    * failures in CI server.
    */
+  @Nullable
   public static String reportsUrl = defaults.reportsUrl();
 
   /**
@@ -252,8 +256,6 @@ public class Configuration {
    * Possible values: "CSS" or "Sizzle"
    * <br>
    * Default value: CSS
-   *
-   * @see SelectorMode
    */
   public static SelectorMode selectorMode = defaults.selectorMode();
 
@@ -267,8 +269,6 @@ public class Configuration {
    * Possible values: "STRICT" or "SOFT"
    * <br>
    * Default value: STRICT
-   *
-   * @see AssertionMode
    */
   public static AssertionMode assertionMode = defaults.assertionMode();
 
@@ -301,6 +301,7 @@ public class Configuration {
    *
    * @see NetworkUtils#getNonLoopbackAddressOfThisMachine()
    */
+  @Nullable
   public static String proxyHost = defaults.proxyHost();
 
   /**
@@ -324,8 +325,6 @@ public class Configuration {
    * </p>
    * <p>
    * Default: false
-   *
-   * @since 5.18.0
    */
   public static boolean webdriverLogsEnabled = defaults.webdriverLogsEnabled();
 
@@ -344,6 +343,7 @@ public class Configuration {
    * Can be configured either programmatically, via selenide.properties file
    * or by system property "-Dselenide.browserBinary=/path/to/binary"
    */
+  @Nullable
   public static String browserBinary = defaults.browserBinary();
 
   /**
@@ -353,8 +353,6 @@ public class Configuration {
    * or by system property "-Dselenide.remoteReadTimeout=180000"
    * <br>
    * Default: 90000
-   *
-   * @since 6.7.4
    */
   public static long remoteReadTimeout = defaults.remoteReadTimeout();
 
@@ -365,8 +363,6 @@ public class Configuration {
    * or by system property "-Dselenide.remoteConnectionTimeout=180000"
    * <br>
    * Default: 10000
-   *
-   * @since 6.9.0
    */
   public static long remoteConnectionTimeout = defaults.remoteConnectionTimeout();
 

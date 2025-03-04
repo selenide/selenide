@@ -5,14 +5,9 @@ import com.codeborne.selenide.impl.WebElementWrapper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.ACTIONS;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.JS;
 
-@ParametersAreNonnullByDefault
 public class DragAndDropOptions {
   private final DragAndDropTarget target;
   private final DragAndDropMethod method;
@@ -22,38 +17,26 @@ public class DragAndDropOptions {
     this.method = method;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static DragAndDropOptions to(String cssSelector) {
     return new DragAndDropOptions(new DragAndDropTarget.CssSelector(cssSelector), JS);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public static DragAndDropOptions to(WebElement element) {
     return new DragAndDropOptions(new DragAndDropTarget.Element(element), JS);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public DragAndDropOptions usingJS() {
     return new DragAndDropOptions(target, JS);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public DragAndDropOptions usingSeleniumActions() {
     return new DragAndDropOptions(target, ACTIONS);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public DragAndDropMethod getMethod() {
     return method;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public SelenideElement getTarget(Driver driver) {
     return target.toSelenideElement(driver);
   }
@@ -109,20 +92,6 @@ public class DragAndDropOptions {
       @Override
       public String toString() {
         return element.toString();
-      }
-    }
-
-    // Remove after all deprecated methods are gone
-    class Deprecated implements DragAndDropTarget {
-
-      @Override
-      public SelenideElement toSelenideElement(Driver driver) {
-        throw new IllegalArgumentException("Incorrect usage of deprecated API of DragAndDropOptions");
-      }
-
-      @Override
-      public String toString() {
-        return "deprecated";
       }
     }
   }

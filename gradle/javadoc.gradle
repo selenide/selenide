@@ -1,6 +1,6 @@
 tasks.register('javadocForSite', Javadoc) {
   source = subprojects.sourceSets.main.allJava
-  destinationDir = file("${project.buildDir}/javadoc-for-site")
+  destinationDir = file(project.layout.buildDirectory.dir("javadoc-for-site"))
   classpath = project(":modules:core").sourceSets.main.compileClasspath
   classpath += project(":statics").sourceSets.main.compileClasspath
   classpath += project(":modules:appium").sourceSets.main.compileClasspath
@@ -11,4 +11,5 @@ tasks.register('javadocForSite', Javadoc) {
   classpath += project(":modules:proxy").sourceSets.main.compileClasspath
   classpath += project(":modules:selenoid").sourceSets.main.compileClasspath
   classpath += project(":modules:testng").sourceSets.main.compileClasspath
+  classpath += project(":modules:video-recorder").sourceSets.main.compileClasspath
 }

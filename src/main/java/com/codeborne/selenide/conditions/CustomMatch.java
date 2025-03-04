@@ -5,12 +5,8 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
 
-@ParametersAreNonnullByDefault
 public class CustomMatch extends WebElementCondition {
   protected final Predicate<WebElement> predicate;
 
@@ -19,8 +15,6 @@ public class CustomMatch extends WebElementCondition {
     this.predicate = predicate;
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public CheckResult check(Driver driver, WebElement element) {
     boolean matched = predicate.test(element);
@@ -28,8 +22,6 @@ public class CustomMatch extends WebElementCondition {
   }
 
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("match '%s' predicate.", getName());

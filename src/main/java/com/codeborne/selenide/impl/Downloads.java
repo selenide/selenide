@@ -4,9 +4,6 @@ import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +12,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static java.lang.System.currentTimeMillis;
 import static java.util.stream.Collectors.toList;
 
-@ParametersAreNonnullByDefault
 public class Downloads {
   private final List<DownloadedFile> files = new CopyOnWriteArrayList<>();
 
@@ -34,26 +30,18 @@ public class Downloads {
     files.add(file);
   }
 
-  @CheckReturnValue
-  @Nonnull
   public List<DownloadedFile> files() {
     return files;
   }
 
-  @CheckReturnValue
-  @Nonnull
   public List<DownloadedFile> files(FileFilter fileFilter) {
     return files.stream().filter(fileFilter::match).collect(toList());
   }
 
-  @CheckReturnValue
-  @Nonnull
   public Optional<DownloadedFile> firstMatchingFile(FileFilter fileFilter) {
     return files.stream().filter(fileFilter::match).sorted(new DownloadDetector()).findFirst();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public String filesAsString() {
     if (files.isEmpty()) {
       return "[]";
@@ -75,8 +63,6 @@ public class Downloads {
     return files.size();
   }
 
-  @CheckReturnValue
-  @Nonnull
   public File firstDownloadedFile(long timeout, FileFilter fileFilter) {
     return firstMatchingFile(fileFilter)
       .orElseThrow(() -> {

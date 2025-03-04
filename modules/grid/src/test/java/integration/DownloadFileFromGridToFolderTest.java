@@ -35,7 +35,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
 
   @BeforeEach
   void openFileUploadForm() {
-    Configuration.remote = gridUrl.toString();
+    Configuration.remote = gridUrl().toString();
     Configuration.browserCapabilities.setCapability("se:downloadsEnabled", true);
     Configuration.fileDownload = FOLDER;
     openFile("page_with_uploads.html");
@@ -77,7 +77,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
     timeout = 111;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 111 ms.");
+      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 111 ms");
   }
 
   @Test

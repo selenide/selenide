@@ -1,7 +1,7 @@
 package it.mobile.android;
 
-import io.appium.java_client.AppiumBy;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -13,36 +13,36 @@ import static java.time.Duration.ofSeconds;
 class AndroidTapTest extends BaseApiDemosTest {
   @Test
   void androidTap() {
-    $(AppiumBy.xpath(".//*[@text='Views']")).tap();
-    $(AppiumBy.xpath(".//*[@text='Animation']")).shouldBe(visible);
+    $(By.xpath(".//*[@text='Views']")).tap();
+    $(By.xpath(".//*[@text='Animation']")).shouldBe(visible);
   }
 
   @Test
   void androidTapWithOffset() {
     // Find "Views" list item
     // But tap on "Text" list item by calculating offset of list item height
-    int heightOffset = $(AppiumBy.xpath(".//*[@text='Views']"))
+    int heightOffset = $(By.xpath(".//*[@text='Views']"))
       .shouldBe(visible)
       .getSize()
       .getHeight();
-    $(AppiumBy.xpath(".//*[@text='Views']")).tap(tapWithOffset(0, -heightOffset)); //Find view but click Text
-    $(AppiumBy.xpath(".//*[@text='KeyEventText']")).shouldBe(visible);
+    $(By.xpath(".//*[@text='Views']")).tap(tapWithOffset(0, -heightOffset)); //Find view but click Text
+    $(By.xpath(".//*[@text='KeyEventText']")).shouldBe(visible);
   }
 
   @Test
   void androidLongPress() {
-    $(AppiumBy.xpath(".//*[@text='Views']")).click();
-    $(AppiumBy.xpath(".//*[@text='Expandable Lists']")).click();
-    $(AppiumBy.xpath(".//*[@text='1. Custom Adapter']")).click();
-    $(AppiumBy.xpath(".//*[@text='People Names']")).tap(longPressFor(ofSeconds(4)));
-    $(AppiumBy.xpath(".//*[@text='Sample menu']")).shouldBe(visible);
+    $(By.xpath(".//*[@text='Views']")).click();
+    $(By.xpath(".//*[@text='Expandable Lists']")).click();
+    $(By.xpath(".//*[@text='1. Custom Adapter']")).click();
+    $(By.xpath(".//*[@text='People Names']")).tap(longPressFor(ofSeconds(4)));
+    $(By.xpath(".//*[@text='Sample menu']")).shouldBe(visible);
   }
 
   @Test
   void androidDoubleTap() {
-    $(AppiumBy.xpath(".//*[@text='Views']")).click();
-    $(AppiumBy.xpath(".//*[@text='TextSwitcher']")).scrollTo().click();
-    $(AppiumBy.xpath("//android.widget.Button")).doubleTap();
-    $(AppiumBy.xpath("(.//android.widget.TextView)[2]")).shouldHave(text("2"));
+    $(By.xpath(".//*[@text='Views']")).click();
+    $(By.xpath(".//*[@text='TextSwitcher']")).scrollTo().click();
+    $(By.xpath("//android.widget.Button")).doubleTap();
+    $(By.xpath("(.//android.widget.TextView)[2]")).shouldHave(text("2"));
   }
 }

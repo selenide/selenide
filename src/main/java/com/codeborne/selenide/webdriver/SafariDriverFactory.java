@@ -2,25 +2,19 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariDriverService;
 import org.openqa.selenium.safari.SafariOptions;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-@ParametersAreNonnullByDefault
 public class SafariDriverFactory extends AbstractDriverFactory {
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     SafariDriverService driverService = createDriverService(config);
@@ -32,8 +26,6 @@ public class SafariDriverFactory extends AbstractDriverFactory {
     return withLog(config, new SafariDriverService.Builder());
   }
 
-  @Nonnull
-  @CheckReturnValue
   @Override
   public SafariOptions createCapabilities(Config config, Browser browser,
                                           @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {

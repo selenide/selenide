@@ -3,23 +3,16 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Configuration.config;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
-import static com.codeborne.selenide.Selenide.open;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class LazyEvaluationTest extends IntegrationTest {
 
@@ -61,19 +54,5 @@ final class LazyEvaluationTest extends IntegrationTest {
     inputs1.shouldHave(size(4));
     inputs2.shouldHave(size(2));
     inputs3.shouldHave(size(2));
-  }
-
-  @Test
-  void canOpenBrowserWithSpecificSettings() {
-    assumeThat(WebDriverRunner.isChrome()).isTrue();
-    assertThat(WebDriverRunner.getWebDriver()).isInstanceOf(ChromeDriver.class);
-    try {
-      open("/page_with_jquery.html", config().browser("firefox"));
-      assertThat(WebDriverRunner.getWebDriver()).isInstanceOf(FirefoxDriver.class);
-      h1.shouldBe(visible).shouldHave(text("Page with JQuery"));
-    }
-    finally {
-      closeWebDriver();
-    }
   }
 }

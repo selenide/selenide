@@ -3,22 +3,21 @@ package com.codeborne.selenide.selector;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.Lists;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@ParametersAreNonnullByDefault
+
 public class ByShadow extends By implements Serializable {
+
+  public static final String GET_SHADOW_ROOT_SCRIPT = "return arguments[0].shadowRoot";
 
   private final By target;
   private final List<By> shadowHosts;
@@ -33,8 +32,6 @@ public class ByShadow extends By implements Serializable {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public WebElement findElement(SearchContext context) {
     List<WebElement> found = findElements(context);
     if (found.isEmpty()) {
@@ -44,8 +41,6 @@ public class ByShadow extends By implements Serializable {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public List<WebElement> findElements(SearchContext context) {
     if (shadowHosts.isEmpty()) {
       return context.findElements(target);
@@ -67,20 +62,26 @@ public class ByShadow extends By implements Serializable {
       .toList();
   }
 
-  @CheckReturnValue
-  @Nonnull
   private static List<SearchContext> findShadowRoots(SearchContext searchContext, By shadowHost) {
     return searchContext.findElements(shadowHost)
       .stream()
       .map(ByShadow::getShadowRoot)
-      .filter(Objects::nonNull)
+      .filter(Optional::isPresent)
+      .map(Optional::get)
       .toList();
   }
 
-  @CheckReturnValue
-  @Nullable
-  private static SearchContext getShadowRoot(WebElement element) {
-    return (SearchContext) JavaScript.jsExecutor(element).executeScript("return arguments[0].shadowRoot", element);
+  /**
+   * Returns a shadow root of the given element if it presents.
+   *
+   * @param element element whose shadow root has to be obtained
+   * @return shadow root context if it presents
+   * @see ByShadow#GET_SHADOW_ROOT_SCRIPT
+   */
+  public static Optional<SearchContext> getShadowRoot(WebElement element) {
+    JavascriptExecutor executor = JavaScript.jsExecutor(element);
+    SearchContext shadowRoot = (SearchContext) executor.executeScript(GET_SHADOW_ROOT_SCRIPT, element);
+    return Optional.ofNullable(shadowRoot);
   }
 
   @Override
@@ -88,8 +89,6 @@ public class ByShadow extends By implements Serializable {
     return String.format("By.shadow: { %s -> %s }", describeShadowRoots(), target);
   }
 
-  @CheckReturnValue
-  @Nonnull
   private String describeShadowRoots() {
     return shadowHosts.stream()
       .map(By::toString)

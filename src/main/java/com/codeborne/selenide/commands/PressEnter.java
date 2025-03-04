@@ -1,20 +1,13 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Command;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Keys;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
-public class PressEnter implements Command<SelenideElement> {
+public class PressEnter extends FluentCommand {
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     locator.findAndAssertElementIsInteractable().sendKeys(Keys.ENTER);
-    return proxy;
   }
 }

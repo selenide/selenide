@@ -54,8 +54,8 @@ class AndroidScreenshotTest extends BaseApiDemosTest {
   @Test
   void elementScreenshotAsImage() throws IOException {
     BufferedImage screenshot = $(By.xpath(".//*[@text='Views']")).screenshotAsImage();
-    logScreenshot(screenshot);
     assertThat(screenshot).isNotNull();
+    logScreenshot(screenshot);
     assertThat(screenshot.getWidth()).isGreaterThan(100);
   }
 

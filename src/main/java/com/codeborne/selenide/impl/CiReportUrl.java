@@ -1,35 +1,31 @@
 package com.codeborne.selenide.impl;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@ParametersAreNonnullByDefault
 public class CiReportUrl {
   private static final Logger log = LoggerFactory.getLogger(CiReportUrl.class);
 
-  @CheckReturnValue
   @Nullable
-  public String getReportsUrl(@Nullable String reportsUrl) {
+  public String getReportsUrl(final @Nullable String reportsUrl) {
     if (!isEmpty(reportsUrl)) {
       log.debug("Using variable selenide.reportsUrl={}", reportsUrl);
       return resolveUrlSource(reportsUrl);
     }
-    reportsUrl = getJenkinsReportsUrl();
-    if (!isEmpty(reportsUrl)) {
-      log.debug("Using Jenkins BUILD_URL: {}", reportsUrl);
-      return reportsUrl;
+    String jenkinsReportsUrl = getJenkinsReportsUrl();
+    if (!isEmpty(jenkinsReportsUrl)) {
+      log.debug("Using Jenkins BUILD_URL: {}", jenkinsReportsUrl);
+      return jenkinsReportsUrl;
     }
-    reportsUrl = getTeamCityUrl();
-    if (!isEmpty(reportsUrl)) {
-      log.debug("Using Teamcity artifacts url: {}", reportsUrl);
-      return reportsUrl;
+    String teamCityUrl = getTeamCityUrl();
+    if (!isEmpty(teamCityUrl)) {
+      log.debug("Using Teamcity artifacts url: {}", teamCityUrl);
+      return teamCityUrl;
     }
     log.debug("Variable selenide.reportsUrl not found");
     return reportsUrl;

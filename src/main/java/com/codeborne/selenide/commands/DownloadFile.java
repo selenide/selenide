@@ -8,18 +8,15 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.files.FileFilters;
 import com.codeborne.selenide.impl.DownloadFileToFolder;
+import com.codeborne.selenide.impl.DownloadFileWithCdp;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.DownloadFileWithProxyServer;
-import com.codeborne.selenide.impl.DownloadFileWithCdp;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.time.Duration;
 
@@ -28,7 +25,6 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Objects.requireNonNullElse;
 import static java.util.Optional.ofNullable;
 
-@ParametersAreNonnullByDefault
 public class DownloadFile implements Command<File> {
   private static final Logger log = LoggerFactory.getLogger(DownloadFile.class);
 
@@ -51,9 +47,7 @@ public class DownloadFile implements Command<File> {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
-  public File execute(SelenideElement selenideElement, WebElementSource linkWithHref, @Nullable Object[] args) {
+  public File execute(SelenideElement selenideElement, WebElementSource linkWithHref, Object @Nullable [] args) {
     WebElement link = linkWithHref.findAndAssertElementIsInteractable();
     Config config = linkWithHref.driver().config();
     DownloadOptions options = getDownloadOptions(config, args);
@@ -73,9 +67,7 @@ public class DownloadFile implements Command<File> {
     };
   }
 
-  @CheckReturnValue
-  @Nonnull
-  private DownloadOptions getDownloadOptions(Config config, @Nullable Object[] args) {
+  private DownloadOptions getDownloadOptions(Config config, Object @Nullable [] args) {
     if (args != null && args.length > 0 && args[0] instanceof DownloadOptions downloadOptions) {
       return downloadOptions;
     }
@@ -84,8 +76,7 @@ public class DownloadFile implements Command<File> {
       .withTimeout(getTimeout(config, args));
   }
 
-  @CheckReturnValue
-  long getTimeout(Config config, @Nullable Object[] args) {
+  long getTimeout(Config config, Object @Nullable [] args) {
     if (args != null && args.length > 0 && args[0] instanceof Long timeoutArgument) {
       return timeoutArgument;
     } else {
@@ -93,9 +84,7 @@ public class DownloadFile implements Command<File> {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
-  FileFilter getFileFilter(@Nullable Object[] args) {
+  FileFilter getFileFilter(Object @Nullable [] args) {
     if (args != null && args.length > 0 && args[0] instanceof FileFilter fileFilter) {
       return fileFilter;
     }

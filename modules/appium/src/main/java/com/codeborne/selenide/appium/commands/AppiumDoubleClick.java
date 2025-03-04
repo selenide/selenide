@@ -1,32 +1,26 @@
 package com.codeborne.selenide.appium.commands;
 
 import com.codeborne.selenide.ClickOptions;
-import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.commands.DoubleClick;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
 import static com.codeborne.selenide.commands.Util.firstOf;
 
-@ParametersAreNonnullByDefault
-public class AppiumDoubleClick implements Command<SelenideElement> {
+public class AppiumDoubleClick extends FluentCommand {
 
   private final DoubleClick defaultDoubleClick = new DoubleClick();
 
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     if (!isMobile(locator.driver())) {
-      return defaultDoubleClick.execute(proxy, locator, args);
+      defaultDoubleClick.execute(locator, args);
+      return;
     }
     Driver driver = locator.driver();
     WebElement webElement = findElement(locator);
@@ -40,19 +34,14 @@ public class AppiumDoubleClick implements Command<SelenideElement> {
     else {
       driver.actions().doubleClick(webElement);
     }
-    return proxy;
   }
 
-  @Nonnull
-  @CheckReturnValue
-  private ClickOptions options(@Nullable Object[] args) {
+  private ClickOptions options(Object @Nullable [] args) {
     return (args == null || args.length == 0) ?
       ClickOptions.usingDefaultMethod() :
       firstOf(args);
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected WebElement findElement(WebElementSource locator) {
     return locator.getWebElement();
   }

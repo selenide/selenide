@@ -1,26 +1,19 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.ClipboardService;
-import com.codeborne.selenide.Command;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
 
-@ParametersAreNonnullByDefault
-public class Paste implements Command<SelenideElement> {
+public class Paste extends FluentCommand {
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     WebElement input = locator.getWebElement();
     input.sendKeys(
       inject(ClipboardService.class).getClipboard(locator.driver()).getText()
     );
-    return proxy;
   }
 }

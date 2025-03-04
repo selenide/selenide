@@ -1,19 +1,17 @@
 package com.codeborne.selenide.appium.selector;
 
 import com.codeborne.selenide.WebDriverRunner;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isAndroid;
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isIos;
 import static java.util.Objects.requireNonNull;
 
-@ParametersAreNonnullByDefault
 public class CombinedBy extends By {
   @Nullable
   private final By androidSelector;

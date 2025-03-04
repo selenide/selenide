@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Scroll Down to See Button</title>
+  <style>
+    #debug {
+      position: absolute;
+      top: 20px;
+      left: 300px;
+      width: 600px;
+      height: 800px;
+      overflow-y: scroll;
+    }
+    #scrollable-div {
+      height: 200px;
+      width: 220px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+    }
+
+    #scrollable-div2 {
+      height: 200px;
+      width: 220px;
+      overflow-x: scroll;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+      white-space: nowrap;
+    }
+
+    #scrollable-div3 {
+      height: 200px;
+      width: 220px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+    }
+
+    #scrollable-div4 {
+      height: 200px;
+      width: 220px;
+      overflow-x: scroll;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+      white-space: nowrap;
+    }
+
+    #button, #button2, #button3, #button4 {
+      visibility: hidden;
+    }
+
+    #button2 {
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+
+<div id="scrollable-div">
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <p> ⇣ Scroll down to see the button ⇣ </p>
+  <button id="button">Bottom button</button>
+</div>
+
+<div id="scrollable-div2">
+  <p> ⇢ Scroll to the right to see the button. Scroll more. And more. And even more. ⇢ </p>
+  <button id="button2">Right button</button>
+</div>
+
+<div id="scrollable-div3">
+  <button id="button3">Top button</button>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+  <p> ⇡ Scroll up to see the button ⇡ </p>
+</div>
+
+<div id="scrollable-div4">
+  <button id="button4">Left button</button>
+  <p> ⇠ Scroll to the left to see the button. Scroll more. And more. And even more. ⇠ </p>
+</div>
+
+<div id="debug"></div>
+
+<script>
+  const tolerance = 5;
+  const scrollableDiv = document.getElementById('scrollable-div');
+  const button = document.getElementById('button');
+  const scrollableDiv2 = document.getElementById('scrollable-div2');
+  const button2 = document.getElementById('button2');
+  const scrollableDiv3 = document.getElementById('scrollable-div3');
+  const button3 = document.getElementById('button3');
+  const scrollableDiv4 = document.getElementById('scrollable-div4');
+  const button4 = document.getElementById('button4');
+  const debugContainer = document.getElementById('debug');
+
+  scrollableDiv3.scrollTop = scrollableDiv3.scrollHeight;
+  scrollableDiv4.scrollLeft = scrollableDiv4.scrollWidth;
+
+  function toggle(element, visible) {
+    element.style.visibility = visible ? 'visible' : 'hidden';
+  }
+  function debug(message) {
+    debugContainer.innerHTML += `<pre>${message}</pre>`
+    debugContainer.scrollBy(0, 1000);
+  }
+  function toggleButton1() {
+    const result = scrollableDiv.scrollTop + scrollableDiv.clientHeight >= scrollableDiv.scrollHeight - tolerance;
+    debug(`<pre>[${button.id}] ${scrollableDiv.scrollTop} + ${scrollableDiv.clientHeight} = ${scrollableDiv.scrollTop + scrollableDiv.clientHeight} >= ${scrollableDiv.scrollHeight}    ->  ${result}</pre>`)
+    toggle(button, result);
+  }
+  function toggleButton2() {
+    const result = scrollableDiv2.scrollWidth - scrollableDiv2.scrollLeft <= scrollableDiv2.clientWidth;
+    debug(`<pre>[${button2.id}] ${scrollableDiv2.scrollWidth} - ${scrollableDiv2.scrollLeft} = ${scrollableDiv2.scrollWidth - scrollableDiv2.scrollLeft} <= ${scrollableDiv2.clientWidth}    ->  ${result}</pre>`);
+    toggle(button2, result);
+  }
+  function toggleButton3() {
+    const result = scrollableDiv3.scrollTop <= tolerance;
+    debug(`<pre>[${button3.id}] ${scrollableDiv3.scrollTop} <= 0    ->  ${result}</pre>`);
+    toggle(button3, result);
+  }
+  function toggleButton4() {
+    const result = scrollableDiv4.scrollLeft <= tolerance;
+    debug(`<pre>[${button4.id}] ${scrollableDiv4.scrollLeft} <= 0    ->  ${result}</pre>`);
+    toggle(button4, result);
+  }
+  scrollableDiv.addEventListener('scroll', toggleButton1);
+  scrollableDiv2.addEventListener('scroll', toggleButton2);
+  scrollableDiv3.addEventListener('scroll', toggleButton3);
+  scrollableDiv4.addEventListener('scroll', toggleButton4);
+
+  setTimeout(() => {
+    toggleButton1();
+    toggleButton2();
+    toggleButton3();
+    toggleButton4();
+    debugContainer.innerHTML = 'Start';
+  }, 10)
+</script>
+
+</body>
+</html>

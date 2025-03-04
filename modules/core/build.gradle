@@ -18,14 +18,14 @@ dependencies {
 
   implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
 
-  compileOnly("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion") {
+  implementation("com.github.valfirst.browserup-proxy:browserup-proxy-core:$browserupProxyVersion") {
     transitive false
   }
   compileOnly("io.github.littleproxy:littleproxy:$littleProxyVersion")
 
-  compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+  compileOnly("org.junit.jupiter:junit-jupiter-api")
+  testImplementation("org.junit.jupiter:junit-jupiter")
+  testImplementation("org.junit.jupiter:junit-jupiter-params")
 
   testImplementation("org.mockito:mockito-core:$mockitoVersion")
   testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}

@@ -30,7 +30,7 @@ final class ThreadLocalSelenideDriver extends SelenideDriver {
   }
 
   private void resetConfig(Config config) {
-    if (!conf().get().equals(config)) {
+    if (!conf().unwrap().equals(config)) {
       close();
     }
     conf().set(config);

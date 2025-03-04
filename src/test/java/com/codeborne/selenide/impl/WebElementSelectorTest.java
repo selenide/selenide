@@ -6,6 +6,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.selector.ByShadow;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -144,17 +145,17 @@ final class WebElementSelectorTest {
     SelenideElement parentElement = mockElement("div", "the parent");
     when(parent.getWebElement()).thenReturn(parentElement);
     when(parent.isShadowRoot()).thenReturn(true);
+    when(parentElement.getWrappedDriver()).thenReturn(webDriver);
 
-    String findShadowRootJs = "return arguments[0].shadowRoot";
     SearchContext shadowRoot = mock();
-    when(webDriver.executeScript(findShadowRootJs, parentElement)).thenReturn(shadowRoot);
+    when(webDriver.executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement)).thenReturn(shadowRoot);
 
     WebElement div = mock();
     when(shadowRoot.findElement(any())).thenReturn(div);
 
     assertThat(selector.findElement(driver, parent, By.cssSelector("a.active"))).isSameAs(div);
 
-    verify(webDriver).executeScript(findShadowRootJs, parentElement);
+    verify(webDriver).executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement);
   }
 
   @Test
@@ -165,17 +166,17 @@ final class WebElementSelectorTest {
     SelenideElement parentElement = mockElement("div", "the parent");
     when(parent.getWebElement()).thenReturn(parentElement);
     when(parent.isShadowRoot()).thenReturn(true);
+    when(parentElement.getWrappedDriver()).thenReturn(webDriver);
 
-    String findShadowRootJs = "return arguments[0].shadowRoot";
     SearchContext shadowRoot = mock();
-    when(webDriver.executeScript(findShadowRootJs, parentElement)).thenReturn(shadowRoot);
+    when(webDriver.executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement)).thenReturn(shadowRoot);
 
     List<WebElement> divs = asList(mock(), mock());
     when(shadowRoot.findElements(any())).thenReturn(divs);
 
     assertThat(selector.findElements(driver, parent, By.cssSelector("a.active"))).isSameAs(divs);
 
-    verify(webDriver).executeScript(findShadowRootJs, parentElement);
+    verify(webDriver).executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement);
   }
 
   @Test
@@ -186,15 +187,15 @@ final class WebElementSelectorTest {
     SelenideElement parentElement = mockElement("div", "the parent");
     when(parent.getWebElement()).thenReturn(parentElement);
     when(parent.isShadowRoot()).thenReturn(true);
+    when(parentElement.getWrappedDriver()).thenReturn(webDriver);
 
-    String findShadowRootJs = "return arguments[0].shadowRoot";
-    when(webDriver.executeScript(findShadowRootJs, parentElement)).thenReturn(null);
+    when(webDriver.executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement)).thenReturn(null);
 
     assertThatExceptionOfType(IllegalArgumentException.class)
       .isThrownBy(() -> selector.findElement(driver, parent, By.cssSelector("a.active")))
       .withMessage(String.format("%s does not contain shadow root", parentElement));
 
-    verify(webDriver).executeScript(findShadowRootJs, parentElement);
+    verify(webDriver).executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement);
   }
 
   interface JSWebDriver extends WebDriver, JavascriptExecutor {

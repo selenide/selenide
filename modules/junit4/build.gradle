@@ -8,6 +8,11 @@ dependencies {
   testImplementation project(':modules:core').sourceSets.test.output
 
   api "junit:junit:4.13.2"
+  testImplementation "junit:junit:4.13.2"
+}
+
+configurations {
+  testImplementation.exclude group: "org.junit.platform"
 }
 
 tasks.withType(Test).configureEach {

@@ -3,11 +3,10 @@ package com.codeborne.selenide.junit;
 import com.codeborne.selenide.logevents.ErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.logevents.SoftAssertsErrorsCollector;
+import org.jspecify.annotations.Nullable;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
 import static java.util.Objects.requireNonNull;
@@ -20,8 +19,8 @@ import static java.util.Objects.requireNonNull;
  * <br>
  * 2. Configure selenide to assert softly: {@code Configuration.assertionMode = SOFT;}
  */
-@ParametersAreNonnullByDefault
 public class SoftAsserts extends ExternalResource {
+  @Nullable
   private Description currentTest;
   private final boolean fullStacktraces;
 
@@ -50,6 +49,7 @@ public class SoftAsserts extends ExternalResource {
 
     // if both test and "after" method threw an error, JUnit4 collects all of them
     // and throws org.junit.internal.runners.model.MultipleFailureException
-    errorsCollector.cleanAndThrowAssertionError(currentTest.getDisplayName(), null, fullStacktraces);
+    String testName = currentTest == null ? "?" : currentTest.getDisplayName();
+    errorsCollector.cleanAndThrowAssertionError(testName, null, fullStacktraces);
   }
 }

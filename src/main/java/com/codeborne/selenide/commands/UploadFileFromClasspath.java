@@ -3,11 +3,8 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -21,14 +18,11 @@ import static java.lang.Thread.currentThread;
 import static org.apache.commons.io.FileUtils.copyURLToFile;
 import static org.apache.commons.io.FilenameUtils.getName;
 
-@ParametersAreNonnullByDefault
 public class UploadFileFromClasspath implements Command<File> {
-  UploadFile uploadFile = new UploadFile();
+  private final UploadFile uploadFile = new UploadFile();
 
   @Override
-  @CheckReturnValue
-  @Nonnull
-  public File execute(SelenideElement proxy, WebElementSource inputField, @Nullable Object[] args) {
+  public File execute(SelenideElement proxy, WebElementSource inputField, Object @Nullable [] args) {
     String[] fileName = firstOf(args);
     File[] files = new File[fileName.length];
     for (int i = 0; i < fileName.length; i++) {
@@ -38,8 +32,6 @@ public class UploadFileFromClasspath implements Command<File> {
     return uploadFile.execute(proxy, inputField, files);
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected File findFileInClasspath(String name) {
     URL resource = currentThread().getContextClassLoader().getResource(name);
     if (resource == null) {

@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.DragAndDrop;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.AppiumDriver;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Pause;
@@ -13,10 +14,6 @@ import org.openqa.selenium.interactions.Sequence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -26,17 +23,17 @@ import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
-@ParametersAreNonnullByDefault
 public class AppiumDragAndDrop extends DragAndDrop {
   private static final Logger log = LoggerFactory.getLogger(AppiumDragAndDrop.class);
 
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     Optional<AppiumDriver> appiumDriverOptional = cast(locator.driver(), AppiumDriver.class);
     if (!appiumDriverOptional.isPresent()) {
-      return super.execute(proxy, locator, args);
+      super.execute(locator, args);
+      return;
     }
+
     AppiumDriver appiumDriver = appiumDriverOptional.get();
 
     DragAndDropOptions options = dragAndDropOptions(args, ACTIONS);
@@ -48,11 +45,8 @@ public class AppiumDragAndDrop extends DragAndDrop {
 
     Sequence sequence = getSequenceToPerformDragAndDrop(getCenter(locator.getWebElement()), getCenter(target));
     appiumDriver.perform(singletonList(sequence));
-    return proxy;
   }
 
-  @Nonnull
-  @CheckReturnValue
   private Sequence getSequenceToPerformDragAndDrop(Point source, Point target) {
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
     return new Sequence(finger, 1)
@@ -65,8 +59,6 @@ public class AppiumDragAndDrop extends DragAndDrop {
       .addAction(finger.createPointerUp(PointerInput.MouseButton.MIDDLE.asArg()));
   }
 
-  @Nonnull
-  @CheckReturnValue
   private Point getCenter(WebElement element) {
     int x = element.getLocation().getX() + element.getSize().getWidth() / 2;
     int y = element.getLocation().getY() + element.getSize().getHeight() / 2;

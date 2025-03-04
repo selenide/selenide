@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static integration.ScreenshotTestHelper.verifyScreenshotSize;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ScreenshotsWithWebdriverListenersTest extends IntegrationTest {
   private final EmptyListener listener = new EmptyListener();
@@ -34,6 +35,7 @@ public class ScreenshotsWithWebdriverListenersTest extends IntegrationTest {
 
     File screenshot = Selenide.screenshot(OutputType.FILE);
 
+    assertThat(screenshot).isNotNull();
     verifyScreenshotSize(screenshot, width, height);
   }
 

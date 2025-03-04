@@ -9,7 +9,7 @@ public class AncestorWithAttributeAndValueRule extends SelectorValidation implem
   @Override
   public Optional<AncestorResult> evaluate(String selector, int index) {
     if (isAttribute(selector) && containsAttributeValue(selector)) {
-      int endIndex = selector.indexOf("=");
+      int endIndex = selector.indexOf('=');
       String attribute = selector.substring(1, endIndex);
       String attributeValue = selector.substring(endIndex + 1, selector.length() - 1);
       String xpath = format("ancestor::*[@%s='%s'][%s]", attribute, attributeValue, index);

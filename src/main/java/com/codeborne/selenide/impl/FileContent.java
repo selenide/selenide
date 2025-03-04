@@ -29,8 +29,8 @@ public class FileContent {
 
   private String readContent() {
     try {
-      URL sizzleJs = requireNonNull(currentThread().getContextClassLoader().getResource(filePath));
-      return IOUtils.toString(sizzleJs, UTF_8);
+      URL url = requireNonNull(currentThread().getContextClassLoader().getResource(filePath));
+      return IOUtils.toString(url, UTF_8);
     }
     catch (IOException e) {
       throw new IllegalArgumentException("Cannot load " + filePath + " from classpath", e);

@@ -8,6 +8,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.PageObjectException;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -17,10 +18,6 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -33,17 +30,13 @@ import java.util.List;
 /**
  * Factory class to make using Page Objects simpler and easier.
  *
- * @see <a href="https://github.com/SeleniumHQ/selenium/wiki/PageObjects">Page Objects Wiki</a>
+ * @see <a href="https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/">Selenium Page Objects</a>
  */
-@SuppressWarnings("ChainOfInstanceofChecks")
-@ParametersAreNonnullByDefault
 public class SelenidePageFactory implements PageObjectFactory {
 
   private static final Type[] NO_TYPE = new Type[0];
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public <PageObjectClass> PageObjectClass page(Driver driver, Class<PageObjectClass> pageObjectClass) {
     try {
       Constructor<PageObjectClass> constructor = pageObjectClass.getDeclaredConstructor();
@@ -56,8 +49,6 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(Driver driver, T pageObject) {
     Type[] types = pageObject.getClass().getGenericInterfaces();
     initElements(driver, null, pageObject, types);
@@ -94,7 +85,6 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @Nullable
-  @CheckReturnValue
   protected Object createFieldValue(Driver driver, @Nullable WebElementSource searchContext,
                                     Object page, Type[] genericTypes, Field field) {
     Object fieldValue = getFieldValue(page, field);
@@ -102,7 +92,7 @@ public class SelenidePageFactory implements PageObjectFactory {
       By selector = findSelector(driver, field);
       return decorate(page.getClass().getClassLoader(), driver, searchContext, field, selector, genericTypes);
     }
-    As as = field.getAnnotation(As.class);
+    As as = aliasOf(field);
     if (as != null && fieldValue instanceof SelenideElement element) {
       return element.as(as.value());
     }
@@ -113,12 +103,11 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   /**
-   * @param driver Used by subclasses (e.g. in selenide-appium plugin)
+   * @param driver May be used by subclasses (e.g. in selenide-appium plugin)
    * @param field  expected to be an element in a Page Object
    * @return {@link By} instance used by webdriver to locate elements
    */
-  @Nonnull
-  protected By findSelector(@SuppressWarnings("unused") Driver driver, Field field) {
+  protected By findSelector(Driver driver, Field field) {
     return new SelenideAnnotations(field).buildBy();
   }
 
@@ -136,7 +125,6 @@ public class SelenidePageFactory implements PageObjectFactory {
     }
   }
 
-  @CheckReturnValue
   @Nullable
   protected Object getFieldValue(Object page, Field field) {
     try {
@@ -149,11 +137,9 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Container createElementsContainer(Driver driver, @Nullable WebElementSource searchContext, Field field, By selector) {
     try {
-      WebElementSource self = new ElementFinder(driver, searchContext, selector, 0);
+      WebElementSource self = new ElementFinder(driver, searchContext, selector, 0, alias(field));
       if (shouldCache(field)) {
         self = new LazyWebElementSnapshot(self);
       }
@@ -164,8 +150,6 @@ public class SelenidePageFactory implements PageObjectFactory {
     }
   }
 
-  @CheckReturnValue
-  @Nonnull
   Container initElementsContainer(Driver driver, Field field, WebElementSource self) throws ReflectiveOperationException {
     Type[] genericTypes = field.getGenericType() instanceof ParameterizedType parameterizedType ?
       parameterizedType.getActualTypeArguments() : NO_TYPE;
@@ -173,8 +157,6 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public Container initElementsContainer(Driver driver,
                                          Field field,
                                          WebElementSource self,
@@ -199,13 +181,11 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @Nullable
-  @CheckReturnValue
   private String alias(Field field) {
-    As alias = field.getAnnotation(As.class);
+    As alias = aliasOf(field);
     return alias == null ? null : alias.value();
   }
 
-  @CheckReturnValue
   @Nullable
   public Object decorate(ClassLoader loader,
                          Driver driver, @Nullable WebElementSource searchContext,
@@ -243,17 +223,19 @@ public class SelenidePageFactory implements PageObjectFactory {
     return listGenericType != null && SelenideElement.class.isAssignableFrom(listGenericType);
   }
 
-  @Nonnull
-  @CheckReturnValue
   private SelenideElement injectSelf(@Nullable WebElementSource searchContext, Field field) {
     if (searchContext != null) {
-      return ElementFinder.wrap(SelenideElement.class, searchContext);
+      return createSelf(searchContext, getTargetType(field));
     }
     else {
       String message = String.format("Cannot initialize field %s.%s: it's not bound to any page object",
         field.getDeclaringClass().getSimpleName(), field.getName());
       throw new IllegalArgumentException(message);
     }
+  }
+
+  protected <T extends SelenideElement> SelenideElement createSelf(WebElementSource searchContext, Class<T> targetType) {
+    return ElementFinder.wrap(targetType, searchContext);
   }
 
   private List<WebElement> createWebElementsList(ClassLoader loader, Driver driver, @Nullable WebElementSource searchContext,
@@ -264,15 +246,13 @@ public class SelenidePageFactory implements PageObjectFactory {
     return decorator.proxyForListLocator(loader, locator);
   }
 
-  @Nonnull
   protected SelenideElement decorateWebElement(Driver driver, @Nullable WebElementSource searchContext, By selector,
                                                Field field, @Nullable String alias) {
     return shouldCache(field) ?
-      LazyWebElementSnapshot.wrap(new ElementFinder(driver, searchContext, selector, 0, alias)) :
-      ElementFinder.wrap(driver, SelenideElement.class, searchContext, selector, 0, alias);
+      LazyWebElementSnapshot.wrap(getTargetType(field), new ElementFinder(driver, searchContext, selector, 0, alias)) :
+      ElementFinder.wrap(driver, getTargetType(field), searchContext, selector, 0, alias);
   }
 
-  @Nonnull
   protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createElementsCollection(
     Driver driver, @Nullable WebElementSource searchContext,
     By selector, Field field, @Nullable String alias) {
@@ -286,33 +266,24 @@ public class SelenidePageFactory implements PageObjectFactory {
     return createCollection(collection, field.getType());
   }
 
-  @Nonnull
   protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createCollection(
     CollectionSource collection, Class<?> klass) {
     return new ElementsList(collection);
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected FieldDecorator defaultFieldDecorator(Driver driver, @Nullable WebElementSource searchContext) {
     return new DefaultFieldDecorator(fieldLocatorFactory(driver, searchContext));
   }
 
-  @Nonnull
-  @CheckReturnValue
   private DefaultElementLocatorFactory fieldLocatorFactory(Driver driver, @Nullable WebElementSource searchContext) {
     SearchContext context = getSearchContext(driver, searchContext);
     return new DefaultElementLocatorFactory(context);
   }
 
-  @Nonnull
-  @CheckReturnValue
   protected SearchContext getSearchContext(Driver driver, @Nullable WebElementSource searchContext) {
     return searchContext == null ? driver.getWebDriver() : searchContext.getWebElement();
   }
 
-  @CheckReturnValue
-  @Nonnull
   protected List<Container> createElementsContainerList(Driver driver, @Nullable WebElementSource searchContext,
                                                         Field field, Type[] genericTypes, By selector) {
     Class<?> listType = getListGenericType(field, genericTypes);
@@ -326,7 +297,6 @@ public class SelenidePageFactory implements PageObjectFactory {
     return new ElementsContainerCollection(this, driver, field, listType, genericTypes, collection);
   }
 
-  @CheckReturnValue
   protected boolean isDecoratableList(Field field, @Nullable By selector, Type[] genericTypes, Class<?> type) {
     if (!List.class.isAssignableFrom(field.getType())) {
       return false;
@@ -336,7 +306,6 @@ public class SelenidePageFactory implements PageObjectFactory {
     return listType != null && type.isAssignableFrom(listType) && selector != null;
   }
 
-  @CheckReturnValue
   @Nullable
   protected Class<?> getListGenericType(Field field, Type[] genericTypes) {
     Type fieldType = field.getGenericType();
@@ -362,10 +331,35 @@ public class SelenidePageFactory implements PageObjectFactory {
     return -1;
   }
 
+  @Nullable
+  @SuppressWarnings("DataFlowIssue")
+  private static As aliasOf(Field field) {
+    return field.getAnnotation(As.class);
+  }
+
   private static class ElementsList extends ElementsCollection implements NoOpsList<SelenideElement> {
 
     ElementsList(CollectionSource collection) {
       super(collection);
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  private <T extends SelenideElement> Class<T> getTargetType(Field field) {
+    Class<?> result;
+    if (elementsBaseType().isAssignableFrom(field.getType())) {
+      result = field.getType();
+    } else if (field.getType().isAssignableFrom(elementsBaseType())) {
+      // this is for case when we use SelenideElement for elements in Appium Page Object
+      result = elementsBaseType();
+    } else {
+      throw new IllegalArgumentException(("%s or subclasses are supported as type for page factory." +
+        " Field name: %s, provided class: %s").formatted(elementsBaseType().getName(), field.getName(), field.getType()));
+    }
+    return (Class<T>) result;
+  }
+
+  protected Class<?> elementsBaseType() {
+    return SelenideElement.class;
   }
 }

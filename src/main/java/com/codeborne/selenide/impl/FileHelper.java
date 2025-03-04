@@ -1,11 +1,10 @@
 package com.codeborne.selenide.impl;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,7 +16,6 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-@ParametersAreNonnullByDefault
 public final class FileHelper {
   private static final Logger log = LoggerFactory.getLogger(FileHelper.class);
 
@@ -40,10 +38,10 @@ public final class FileHelper {
     ensureFolderExists(targetFile.getParentFile());
   }
 
-  @Nonnull
+  @CanIgnoreReturnValue
   public static File ensureFolderExists(File folder) {
     if (!folder.exists() || !folder.getAbsoluteFile().exists()) {
-      log.info("Creating folder: {}", folder.getAbsolutePath());
+      log.debug("Creating folder: {}", folder.getAbsolutePath());
       try {
         createDirectories(folder.toPath());
       } catch (IOException e) {
@@ -74,12 +72,12 @@ public final class FileHelper {
     }
   }
 
-  public static void deleteFolderIfEmpty(@Nonnull File folder) {
+  public static void deleteFolderIfEmpty(File folder) {
     if (folder.isDirectory()) {
       File[] files = folder.listFiles();
       if (files == null || files.length == 0) {
         if (folder.delete()) {
-          log.info("Deleted empty folder: {}", folder.getAbsolutePath());
+          log.debug("Deleted empty folder: {}", folder.getAbsolutePath());
         } else {
           log.error("Failed to delete empty folder: {}", folder.getAbsolutePath());
         }

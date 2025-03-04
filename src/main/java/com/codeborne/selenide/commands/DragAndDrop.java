@@ -1,31 +1,26 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Command;
 import com.codeborne.selenide.DragAndDropOptions;
 import com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod;
 import com.codeborne.selenide.DragAndDropOptions.DragAndDropTarget;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.JS;
 
-@ParametersAreNonnullByDefault
-public class DragAndDrop implements Command<SelenideElement> {
+public class DragAndDrop extends FluentCommand {
   private static final JavaScript js = new JavaScript("drag_and_drop_script.js");
 
   @Override
-  @Nonnull
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  protected void execute(WebElementSource locator, Object @Nullable [] args) {
     DragAndDropOptions options = dragAndDropOptions(args, JS);
 
     DragAndDropMethod method = options.getMethod();
@@ -33,13 +28,9 @@ public class DragAndDrop implements Command<SelenideElement> {
     target.shouldBe(visible);
 
     dragAndDrop(locator, target, method);
-
-    return proxy;
   }
 
-  @CheckReturnValue
-  @Nonnull
-  protected DragAndDropOptions dragAndDropOptions(@Nullable Object[] args, DragAndDropMethod defaultMethod) {
+  protected DragAndDropOptions dragAndDropOptions(Object @Nullable [] args, DragAndDropMethod defaultMethod) {
     if (args == null || args.length == 0) {
       throw new IllegalArgumentException("Missing Drag'n'Drop arguments");
     }
@@ -55,8 +46,6 @@ public class DragAndDrop implements Command<SelenideElement> {
     return new DragAndDropOptions(findTarget(args), method);
   }
 
-  @Nonnull
-  @CheckReturnValue
   private DragAndDropTarget findTarget(Object[] args) {
     if (args[0] instanceof String cssSelector)
       return new DragAndDropTarget.CssSelector(cssSelector);

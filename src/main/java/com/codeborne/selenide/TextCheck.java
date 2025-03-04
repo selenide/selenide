@@ -1,8 +1,5 @@
 package com.codeborne.selenide;
 
-/**
- * @since 6.7.0
- */
 public enum TextCheck {
   /**
    * <p>Match the full text.</p>

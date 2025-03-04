@@ -1,14 +1,10 @@
 package com.codeborne.selenide;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Base64;
 import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-@ParametersAreNonnullByDefault
 public class BasicAuthCredentials implements Credentials {
   private static final Pattern REGEX_ANY_CHAR = Pattern.compile(".");
 
@@ -34,20 +30,17 @@ public class BasicAuthCredentials implements Credentials {
     this.password = password;
   }
 
-  @Nonnull
   @Override
   public String domain() {
     return domain;
   }
 
   /**
-   * The resulting string is base64 encoded (YWxhZGRpbjpvcGVuc2VzYW1l).
+   * The resulting string is base64 encoded (e.g. "YWxhZGRpbjpvcGVuc2VzYW1l").
    *
    * @return encoded string
    */
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String encode() {
     byte[] credentialsBytes = combine().getBytes(UTF_8);
     return Base64.getEncoder().encodeToString(credentialsBytes);
@@ -58,8 +51,6 @@ public class BasicAuthCredentials implements Credentials {
   }
 
   @Override
-  @CheckReturnValue
-  @Nonnull
   public String toString() {
     return String.format("%s:%s:%s", domain, login, REGEX_ANY_CHAR.matcher(password).replaceAll("*"));
   }

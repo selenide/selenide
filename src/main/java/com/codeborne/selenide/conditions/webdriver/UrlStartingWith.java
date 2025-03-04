@@ -1,17 +1,14 @@
 package com.codeborne.selenide.conditions.webdriver;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
 
-@ParametersAreNonnullByDefault
 public class UrlStartingWith extends UrlCondition {
   public UrlStartingWith(String expectedUrl) {
     super("starting with ", expectedUrl);
   }
 
-  @CheckReturnValue
   @Override
-  public boolean test(String url) {
-    return url.startsWith(expectedUrl);
+  public boolean test(@Nullable String url) {
+    return url != null && url.startsWith(expectedUrl);
   }
 }
