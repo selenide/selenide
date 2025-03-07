@@ -52,4 +52,9 @@ public class AppiumAttributeValues extends ExactTexts {
       .map(element -> attribute.getAttributeValue(driver, element))
       .toList();
   }
+
+  @Override
+  public String toString() {
+    return "%s %s".formatted(attribute, expectedTexts);
+  }
 }
