@@ -1,6 +1,6 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.selector.ByShadow;
+import com.codeborne.selenide.selector.ByShadowCss;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
@@ -120,7 +120,7 @@ final class SelectorsTest {
   void byShadowCss() {
     By cssSelector = Selectors.shadowCss("#target", "#shadow", "#inner-shadow");
     assertThat(cssSelector)
-      .isInstanceOf(ByShadow.ByShadowCss.class);
+      .isInstanceOf(ByShadowCss.class);
     assertThat(cssSelector)
       .hasToString("By.cssSelector: #shadow -> #inner-shadow -> #target");
   }

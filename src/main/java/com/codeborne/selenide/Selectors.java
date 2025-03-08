@@ -1,8 +1,8 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.selector.ByAttribute;
-import com.codeborne.selenide.selector.ByDeepShadow;
-import com.codeborne.selenide.selector.ByShadow;
+import com.codeborne.selenide.selector.ByDeepShadowCss;
+import com.codeborne.selenide.selector.ByShadowCss;
 import com.codeborne.selenide.selector.ByTagAndText;
 import com.codeborne.selenide.selector.ByText;
 import com.codeborne.selenide.selector.ByTextCaseInsensitive;
@@ -12,6 +12,7 @@ import com.codeborne.selenide.selector.WithTextCaseInsensitive;
 import org.openqa.selenium.By;
 
 public class Selectors {
+
   /**
    * Find element CONTAINING given text (as a substring).
    * <p>
@@ -31,7 +32,7 @@ public class Selectors {
    * This method ignores difference between space, \n, \r, \t and &nbsp;
    * This method ignores multiple spaces.
    *
-   * @param tag Html tag name (e.g. "dev", "span", "li", "a", "td")
+   * @param tag         Html tag name (e.g. "dev", "span", "li", "a", "td")
    * @param elementText Text to search inside element
    * @return standard selenium By criteria`
    */
@@ -41,6 +42,7 @@ public class Selectors {
 
   /**
    * Same as {@link #withText(String)}, but case-insensitive.
+   * @since 5.22.0
    */
   public static By withTextCaseInsensitive(String elementText) {
     return new WithTextCaseInsensitive(elementText);
@@ -67,7 +69,7 @@ public class Selectors {
    * This method ignores multiple spaces.
    * This method is case-sensitive.
    *
-   * @param tag Html tag name (e.g. "dev", "span", "li", "a", "td")
+   * @param tag         Html tag name (e.g. "dev", "span", "li", "a", "td")
    * @param elementText Text that searched element should have
    * @return standard selenium By criteria
    */
@@ -77,6 +79,7 @@ public class Selectors {
 
   /**
    * Same as {@link #byText(String)}, but case-insensitive.
+   * @since 5.22.0
    */
   public static By byTextCaseInsensitive(String elementText) {
     return new ByTextCaseInsensitive(elementText);
@@ -116,17 +119,19 @@ public class Selectors {
   }
 
   /**
-   * @see ByShadow#cssSelector(java.lang.String, java.lang.String, java.lang.String...)
+   * @see ByShadowCss#cssSelector(java.lang.String, java.lang.String, java.lang.String...)
+   * @since 5.10
    */
   public static By shadowCss(String target, String shadowHost, String... innerShadowHosts) {
-    return ByShadow.cssSelector(target, shadowHost, innerShadowHosts);
+    return ByShadowCss.cssSelector(target, shadowHost, innerShadowHosts);
   }
 
   /**
-   * @see ByDeepShadow#cssSelector(java.lang.String)
+   * @see ByDeepShadowCss#cssSelector(java.lang.String)
+   * @since v6.8.0
    */
   public static By shadowDeepCss(String target) {
-    return ByDeepShadow.cssSelector(target);
+    return ByDeepShadowCss.cssSelector(target);
   }
 
   /**
