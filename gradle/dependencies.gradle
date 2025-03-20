@@ -48,7 +48,7 @@ subprojects {
       exclude group: 'com.google.code.findbugs'
     }
     implementation('org.jspecify:jspecify:1.0.0')
-    implementation('com.google.errorprone:error_prone_annotations:2.36.0')
+    implementation('com.google.errorprone:error_prone_annotations:2.37.0')
     implementation("com.google.guava:guava:33.4.5-jre")
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("commons-io:commons-io:2.18.0")
