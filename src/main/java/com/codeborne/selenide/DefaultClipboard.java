@@ -3,7 +3,7 @@ package com.codeborne.selenide;
 import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v133.browser.Browser;
+import org.openqa.selenium.devtools.v134.browser.Browser;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -17,8 +17,8 @@ import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.instanceOf;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
-import static org.openqa.selenium.devtools.v133.browser.model.PermissionType.CLIPBOARDREADWRITE;
-import static org.openqa.selenium.devtools.v133.browser.model.PermissionType.CLIPBOARDSANITIZEDWRITE;
+import static org.openqa.selenium.devtools.v134.browser.model.PermissionType.CLIPBOARDREADWRITE;
+import static org.openqa.selenium.devtools.v134.browser.model.PermissionType.CLIPBOARDSANITIZEDWRITE;
 
 public class DefaultClipboard implements Clipboard {
   private final Driver driver;
