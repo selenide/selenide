@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.selector.ByShadow;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByCssSelector;
@@ -21,6 +22,7 @@ import static java.util.Objects.requireNonNull;
  * Thanks to http://selenium.polteq.com/en/injecting-the-sizzle-css-selector-library/
  */
 public class WebElementSelector {
+
   public static WebElementSelector instance = new WebElementSelector();
 
   protected final FileContent sizzleSource = new FileContent("sizzle.js");
@@ -32,7 +34,7 @@ public class WebElementSelector {
   }
 
   public WebElement findElement(Driver driver, @Nullable WebElementSource parent, By selector) {
-    SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
+    SearchContext context = getSearchContext(driver, parent);
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
@@ -46,8 +48,20 @@ public class WebElementSelector {
     return webElements.get(0);
   }
 
+  private static SearchContext getSearchContext(Driver driver, @Nullable WebElementSource parent) {
+    if (parent == null) {
+      return driver.getWebDriver();
+    }
+
+    WebElement parentElement = parent.getWebElement();
+    return parent.isShadowRoot()
+           ? ByShadow.getShadowRoot(parentElement)
+             .orElseThrow(() -> new IllegalArgumentException(parentElement + " does not contain shadow root"))
+           : parentElement;
+  }
+
   public List<WebElement> findElements(Driver driver, @Nullable WebElementSource parent, By selector) {
-    SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
+    SearchContext context = getSearchContext(driver, parent);
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {

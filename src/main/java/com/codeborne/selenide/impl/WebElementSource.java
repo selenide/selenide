@@ -28,7 +28,9 @@ import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
 public abstract class WebElementSource {
+
   private Alias alias = NONE;
+  private boolean isShadowRoot;
 
   public abstract Driver driver();
 
@@ -46,6 +48,14 @@ public abstract class WebElementSource {
 
   public String description() {
     return alias.getOrElse(this::getSearchCriteria);
+  }
+
+  public boolean isShadowRoot() {
+    return isShadowRoot;
+  }
+
+  public void setShadowRoot(boolean isShadowRoot) {
+    this.isShadowRoot = isShadowRoot;
   }
 
   @Override
@@ -104,7 +114,8 @@ public abstract class WebElementSource {
 
   @Nullable
   private WebElement handleError(String prefix, WebElementCondition condition, boolean invert, WebElementCondition check,
-                                 @Nullable Throwable lastError, @Nullable WebElement element, @Nullable CheckResult checkResult) {
+                                 @Nullable Throwable lastError, @Nullable WebElement element, @Nullable CheckResult checkResult
+  ) {
     if (lastError != null && Cleanup.of.isInvalidSelectorError(lastError)) {
       throw Cleanup.of.wrapInvalidSelectorException(lastError);
     }
@@ -150,6 +161,7 @@ public abstract class WebElementSource {
 
   /**
    * Asserts that returned element is editable.
+   *
    * @return element or throws ElementShould/ElementShouldNot exceptions
    */
   public WebElement findAndAssertElementIsEditable() {

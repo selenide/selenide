@@ -6,9 +6,11 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.selector.ByShadow;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -19,6 +21,7 @@ import static com.codeborne.selenide.SelectorMode.CSS;
 import static com.codeborne.selenide.SelectorMode.Sizzle;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -28,6 +31,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 final class WebElementSelectorTest {
+
   private final WebElementSelector selector = new WebElementSelector();
   private final Browser browser = new Browser("netscape navigator", false);
   private final JSWebDriver webDriver = mock();
@@ -133,6 +137,68 @@ final class WebElementSelectorTest {
       .hasMessage("XPath starting from / searches from root");
   }
 
+  @Test
+  void findElement_withShadowRoot() {
+    Config config = new SelenideConfig().selectorMode(CSS);
+    Driver driver = new DriverStub(config, browser, webDriver, null);
+
+    SelenideElement parentElement = mockElement("div", "the parent");
+    when(parent.getWebElement()).thenReturn(parentElement);
+    when(parent.isShadowRoot()).thenReturn(true);
+    when(parentElement.getWrappedDriver()).thenReturn(webDriver);
+
+    SearchContext shadowRoot = mock();
+    when(webDriver.executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement)).thenReturn(shadowRoot);
+
+    WebElement div = mock();
+    when(shadowRoot.findElement(any())).thenReturn(div);
+
+    assertThat(selector.findElement(driver, parent, By.cssSelector("a.active"))).isSameAs(div);
+
+    verify(webDriver).executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement);
+  }
+
+  @Test
+  void findElements_withShadowRoot() {
+    Config config = new SelenideConfig().selectorMode(CSS);
+    Driver driver = new DriverStub(config, browser, webDriver, null);
+
+    SelenideElement parentElement = mockElement("div", "the parent");
+    when(parent.getWebElement()).thenReturn(parentElement);
+    when(parent.isShadowRoot()).thenReturn(true);
+    when(parentElement.getWrappedDriver()).thenReturn(webDriver);
+
+    SearchContext shadowRoot = mock();
+    when(webDriver.executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement)).thenReturn(shadowRoot);
+
+    List<WebElement> divs = asList(mock(), mock());
+    when(shadowRoot.findElements(any())).thenReturn(divs);
+
+    assertThat(selector.findElements(driver, parent, By.cssSelector("a.active"))).isSameAs(divs);
+
+    verify(webDriver).executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement);
+  }
+
+  @Test
+  void findElement_withoutShadowRoot() {
+    Config config = new SelenideConfig().selectorMode(CSS);
+    Driver driver = new DriverStub(config, browser, webDriver, null);
+
+    SelenideElement parentElement = mockElement("div", "the parent");
+    when(parent.getWebElement()).thenReturn(parentElement);
+    when(parent.isShadowRoot()).thenReturn(true);
+    when(parentElement.getWrappedDriver()).thenReturn(webDriver);
+
+    when(webDriver.executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement)).thenReturn(null);
+
+    assertThatExceptionOfType(IllegalArgumentException.class)
+      .isThrownBy(() -> selector.findElement(driver, parent, By.cssSelector("a.active")))
+      .withMessage(String.format("%s does not contain shadow root", parentElement));
+
+    verify(webDriver).executeScript(ByShadow.GET_SHADOW_ROOT_SCRIPT, parentElement);
+  }
+
   interface JSWebDriver extends WebDriver, JavascriptExecutor {
+
   }
 }
