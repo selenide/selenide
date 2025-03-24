@@ -5,6 +5,7 @@ import com.browserup.bup.client.ClientUtil;
 import com.browserup.bup.filters.RequestFilter;
 import com.browserup.bup.filters.ResponseFilter;
 import com.codeborne.selenide.Config;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.net.DefaultNetworkInterfaceProvider;
@@ -125,6 +126,20 @@ public class SelenideProxyServer {
   }
 
   /**
+   * Remove (previously added) request filter by name
+   * @param name Name of the filter used in method {@link #addRequestFilter(String, RequestFilter)}
+   * @return the removed filter, or {@code null} if such filter hadn't been added
+   * @since 7.5.0
+   */
+  @Nullable
+  @CanIgnoreReturnValue
+  public RequestFilter removeRequestFilter(String name) {
+    RequestFilter filter = requestFilters.remove(name);
+    proxy.removeRequestFilter(filter);
+    return filter;
+  }
+
+  /**
    * Add a custom response filter which allows to track/modify all server responses to browser
    *
    * @param name           unique name of filter
@@ -139,6 +154,20 @@ public class SelenideProxyServer {
       proxy.addResponseFilter(responseFilter);
       responseFilters.put(name, responseFilter);
     }
+  }
+
+  /**
+   * Remove (previously added) response filter by name
+   * @param name Name of the filter used in method {@link #addResponseFilter(String, ResponseFilter)}
+   * @return the removed filter, or {@code null} if such filter hadn't been added
+   * @since 7.5.0
+   */
+  @Nullable
+  @CanIgnoreReturnValue
+  public ResponseFilter removeResponseFilter(String name) {
+    ResponseFilter filter = responseFilters.remove(name);
+    proxy.removeResponseFilter(filter);
+    return filter;
   }
 
   static InetSocketAddress getProxyAddress(Proxy proxy) {
