@@ -9,7 +9,7 @@ ext {
   assertjVersion = '3.27.3'
   mockitoVersion = '5.16.1'
   slf4jVersion = '2.0.17'
-  browserupProxyVersion = '3.1.2'
+  browserupProxyVersion = '3.2.0'
   littleProxyVersion = '2.4.0'
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.9'
