@@ -81,6 +81,15 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
 
     assertThat(responses).hasSize(1);
     assertThat(responses.get(0)).contains("<h3>Uploaded 1 files</h3>");
+
+    // Can remove listeners:
+    selenideProxy.removeRequestFilter("proxy-usages.request");
+    selenideProxy.removeResponseFilter("proxy-usages.response");
+
+    refresh();
+
+    assertThat(requests).hasSize(1);
+    assertThat(responses).hasSize(1);
   }
 
   @Test
@@ -181,6 +190,10 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
 
   @AfterEach
   void tearDown() {
+    getSelenideProxy().removeRequestFilter("proxy-usages.request");
+    getSelenideProxy().removeResponseFilter("proxy-usages.response");
+    getSelenideProxy().removeResponseFilter("proxy-usages.response-logger");
+    getSelenideProxy().removeResponseFilter("proxy-usages.auth-response");
     getSelenideProxy().responseMocker().resetAll();
   }
 }
