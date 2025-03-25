@@ -13,8 +13,15 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
-public class ByDeepShadow {
+public class ByDeepShadowCss extends By implements Serializable {
+
   private static final JavaScript jsSource = new JavaScript("query-selector-shadow-dom.js");
+
+  private final String target;
+
+  ByDeepShadowCss(String target) {
+    this.target = target;
+  }
 
   /***
    * Find target elements. It pierces Shadow DOM roots without knowing the path through nested shadow roots.
@@ -27,35 +34,26 @@ public class ByDeepShadow {
     return new ByDeepShadowCss(target);
   }
 
-  public static class ByDeepShadowCss extends By implements Serializable {
-    private final String target;
-
-    ByDeepShadowCss(String target) {
-      this.target = target;
+  @Override
+  public WebElement findElement(SearchContext context) {
+    List<WebElement> found = findElements(context);
+    if (found.isEmpty()) {
+      throw new NoSuchElementException("Cannot locate an element in shadow dom " + this);
     }
+    return found.get(0);
+  }
 
-    @Override
-    public WebElement findElement(SearchContext context) {
-      List<WebElement> found = findElements(context);
-      if (found.isEmpty()) {
-        throw new NoSuchElementException("Cannot locate an element in shadow dom " + this);
-      }
-      return found.get(0);
+  @Override
+  public List<WebElement> findElements(SearchContext context) {
+    try {
+      return requireNonNull(jsSource.execute(context, target));
+    } catch (JavascriptException e) {
+      throw new NoSuchElementException(Cleanup.of.webdriverExceptionMessage(e));
     }
+  }
 
-    @Override
-    public List<WebElement> findElements(SearchContext context) {
-      try {
-        return requireNonNull(jsSource.execute(context, target));
-      }
-      catch (JavascriptException e) {
-        throw new NoSuchElementException(Cleanup.of.webdriverExceptionMessage(e));
-      }
-    }
-
-    @Override
-    public String toString() {
-      return "By.shadowDeepCss: " +  target;
-    }
+  @Override
+  public String toString() {
+    return "By.shadowDeepCss: " + target;
   }
 }

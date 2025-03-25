@@ -13,6 +13,12 @@ public interface Container {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.FIELD)
   @interface Self {
+
   }
 
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({ElementType.FIELD, ElementType.TYPE})
+  @interface ShadowRoot {
+
+  }
 }

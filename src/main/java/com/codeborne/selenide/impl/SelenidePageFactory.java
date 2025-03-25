@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.As;
 import com.codeborne.selenide.BaseElementsCollection;
 import com.codeborne.selenide.Container;
+import com.codeborne.selenide.Container.ShadowRoot;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -11,7 +12,6 @@ import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
@@ -33,6 +33,7 @@ import java.util.List;
  * @see <a href="https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/">Selenium Page Objects</a>
  */
 public class SelenidePageFactory implements PageObjectFactory {
+
   private static final Type[] NO_TYPE = new Type[0];
 
   @Override
@@ -107,11 +108,11 @@ public class SelenidePageFactory implements PageObjectFactory {
    * @return {@link By} instance used by webdriver to locate elements
    */
   protected By findSelector(Driver driver, Field field) {
-    return new Annotations(field).buildBy();
+    return new SelenideAnnotations(field).buildBy();
   }
 
   protected boolean shouldCache(Field field) {
-    return new Annotations(field).isLookupCached();
+    return new SelenideAnnotations(field).isLookupCached();
   }
 
   protected void setFieldValue(Object page, Field field, Object value) {
@@ -170,6 +171,11 @@ public class SelenidePageFactory implements PageObjectFactory {
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
     Container result = (Container) constructor.newInstance();
+
+    if (field.isAnnotationPresent(ShadowRoot.class) || type.isAnnotationPresent(ShadowRoot.class)) {
+      self.setShadowRoot(true);
+    }
+
     initElements(driver, self, result, genericTypes);
     return result;
   }
@@ -297,7 +303,6 @@ public class SelenidePageFactory implements PageObjectFactory {
     }
 
     Class<?> listType = getListGenericType(field, genericTypes);
-
     return listType != null && type.isAssignableFrom(listType) && selector != null;
   }
 
@@ -333,6 +338,7 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   private static class ElementsList extends ElementsCollection implements NoOpsList<SelenideElement> {
+
     ElementsList(CollectionSource collection) {
       super(collection);
     }
