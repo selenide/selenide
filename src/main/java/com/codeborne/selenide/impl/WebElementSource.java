@@ -114,8 +114,7 @@ public abstract class WebElementSource {
 
   @Nullable
   private WebElement handleError(String prefix, WebElementCondition condition, boolean invert, WebElementCondition check,
-                                 @Nullable Throwable lastError, @Nullable WebElement element, @Nullable CheckResult checkResult
-  ) {
+                                 @Nullable Throwable lastError, @Nullable WebElement element, @Nullable CheckResult checkResult) {
     if (lastError != null && Cleanup.of.isInvalidSelectorError(lastError)) {
       throw Cleanup.of.wrapInvalidSelectorException(lastError);
     }

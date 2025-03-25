@@ -31,7 +31,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 final class WebElementSelectorTest {
-
   private final WebElementSelector selector = new WebElementSelector();
   private final Browser browser = new Browser("netscape navigator", false);
   private final JSWebDriver webDriver = mock();
@@ -199,6 +198,5 @@ final class WebElementSelectorTest {
   }
 
   interface JSWebDriver extends WebDriver, JavascriptExecutor {
-
   }
 }
