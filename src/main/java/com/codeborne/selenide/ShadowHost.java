@@ -10,13 +10,14 @@ import java.lang.annotation.Target;
 /**
  * Provides to find specific page factory locators inside shadow roots. For example:
  *
- * <pre>
- *    &#064;ShadowHost({&#064;FindBy(...shadowHost...), &#064;FindBy(...innerShadowHost...)})
- *    &#064;FindBy(...targetLocator...)
+ * <pre>{@code
+ *    @ShadowHost({@FindBy(...shadowHost...), @FindBy(...innerShadowHost...)})
+ *    @FindBy(...targetLocator...)
  *    public SelenideElement locatorInShadowRoot;
- * </pre>
+ * }</pre>
  *
  * The order of locators inside this annotation is important. Every next locator means more deep shadow host.
+ * @since 7.8.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
