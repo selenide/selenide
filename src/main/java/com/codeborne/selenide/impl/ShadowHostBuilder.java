@@ -1,5 +1,6 @@
-package com.codeborne.selenide;
+package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.ShadowHost;
 import com.codeborne.selenide.selector.ByShadow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.AbstractFindByBuilder;

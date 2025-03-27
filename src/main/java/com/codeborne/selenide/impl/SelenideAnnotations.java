@@ -1,7 +1,6 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.ShadowHost;
-import com.codeborne.selenide.ShadowHostBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.pagefactory.Annotations;
 
