@@ -14,10 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 public class ByShadow extends By implements Serializable {
 
-  public static final String GET_SHADOW_ROOT_SCRIPT = "return arguments[0].shadowRoot";
+  private static final String GET_SHADOW_ROOT_SCRIPT = "return arguments[0].shadowRoot";
 
   private final By target;
   private final List<By> shadowHosts;
