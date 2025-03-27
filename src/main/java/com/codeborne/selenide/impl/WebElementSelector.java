@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.SelectorMode.CSS;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.lang3.StringUtils.contains;
 
 /**
  * Thanks to http://selenium.polteq.com/en/injecting-the-sizzle-css-selector-library/
@@ -91,8 +92,8 @@ public class WebElementSelector {
   }
 
   private static WebDriverException unwrapInvalidSelectorException(JavascriptException e) {
-    return e.getMessage().contains("An invalid or illegal selector was specified") ||
-           e.getMessage().contains("not a valid XPath expression") ?
+    return contains(e.getMessage(), "An invalid or illegal selector was specified") ||
+           contains(e.getMessage(), "not a valid XPath expression") ?
       new InvalidSelectorException(e.getMessage(), e.getCause()) : e;
   }
 
