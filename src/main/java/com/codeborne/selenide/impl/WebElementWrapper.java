@@ -43,6 +43,11 @@ public class WebElementWrapper extends WebElementSource {
   @Nullable private final String searchCriteria;
 
   protected WebElementWrapper(Driver driver, WebElement delegate, @Nullable String searchCriteria) {
+    this(driver, delegate, searchCriteria, false);
+  }
+
+  protected WebElementWrapper(Driver driver, WebElement delegate, @Nullable String searchCriteria, boolean shadowRoot) {
+    super(shadowRoot);
     this.driver = driver;
     this.delegate = delegate;
     this.searchCriteria = searchCriteria;
