@@ -22,7 +22,6 @@ import static java.util.Objects.requireNonNull;
  * Thanks to http://selenium.polteq.com/en/injecting-the-sizzle-css-selector-library/
  */
 public class WebElementSelector {
-
   public static WebElementSelector instance = new WebElementSelector();
 
   protected final FileContent sizzleSource = new FileContent("sizzle.js");
