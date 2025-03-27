@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.selector.ByShadow;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByCssSelector;
@@ -47,15 +46,7 @@ public class WebElementSelector {
   }
 
   private static SearchContext getSearchContext(Driver driver, @Nullable WebElementSource parent) {
-    if (parent == null) {
-      return driver.getWebDriver();
-    }
-
-    WebElement parentElement = parent.getWebElement();
-    return parent.isShadowRoot()
-           ? ByShadow.getShadowRoot(parentElement)
-             .orElseThrow(() -> new IllegalArgumentException(parentElement + " does not contain shadow root"))
-           : parentElement;
+    return parent == null ? driver.getWebDriver() : parent.getSearchContext();
   }
 
   public List<WebElement> findElements(Driver driver, @Nullable WebElementSource parent, By selector) {

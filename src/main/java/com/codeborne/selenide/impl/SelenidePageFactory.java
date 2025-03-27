@@ -139,7 +139,7 @@ public class SelenidePageFactory implements PageObjectFactory {
   @Override
   public Container createElementsContainer(Driver driver, @Nullable WebElementSource searchContext, Field field, By selector) {
     try {
-      WebElementSource self = new ElementFinder(driver, searchContext, selector, 0, alias(field));
+      WebElementSource self = new ElementFinder(driver, searchContext, selector, 0, isShadowRoot(field, field.getType()), alias(field));
       if (shouldCache(field)) {
         self = new LazyWebElementSnapshot(self);
       }
@@ -148,6 +148,10 @@ public class SelenidePageFactory implements PageObjectFactory {
     catch (ReflectiveOperationException e) {
       throw new PageObjectException("Failed to create elements container for field " + field.getName(), e);
     }
+  }
+
+  static boolean isShadowRoot(Field field, Class<?> type) {
+    return field.isAnnotationPresent(ShadowRoot.class) || type.isAnnotationPresent(ShadowRoot.class);
   }
 
   Container initElementsContainer(Driver driver, Field field, WebElementSource self) throws ReflectiveOperationException {
@@ -171,10 +175,6 @@ public class SelenidePageFactory implements PageObjectFactory {
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
     Container result = (Container) constructor.newInstance();
-
-    if (field.isAnnotationPresent(ShadowRoot.class) || type.isAnnotationPresent(ShadowRoot.class)) {
-      self.setShadowRoot(true);
-    }
 
     initElements(driver, self, result, genericTypes);
     return result;
