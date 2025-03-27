@@ -25,7 +25,7 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_shadow_dom.html");
-    pageObject = page(PageObjectWithShadowElementsTest.PageObject.class);
+    pageObject = page();
   }
 
   @Test

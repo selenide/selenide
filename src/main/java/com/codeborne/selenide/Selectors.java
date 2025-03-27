@@ -12,7 +12,6 @@ import com.codeborne.selenide.selector.WithTextCaseInsensitive;
 import org.openqa.selenium.By;
 
 public class Selectors {
-
   /**
    * Find element CONTAINING given text (as a substring).
    * <p>

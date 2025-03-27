@@ -28,7 +28,6 @@ import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
 public abstract class WebElementSource {
-
   private Alias alias = NONE;
   private boolean isShadowRoot;
 

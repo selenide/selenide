@@ -7,9 +7,9 @@ import org.openqa.selenium.support.pagefactory.Annotations;
 
 import java.lang.reflect.Field;
 
-public class SelenideAnnotations extends Annotations {
+class SelenideAnnotations extends Annotations {
 
-  public SelenideAnnotations(Field field) {
+  SelenideAnnotations(Field field) {
     super(field);
   }
 

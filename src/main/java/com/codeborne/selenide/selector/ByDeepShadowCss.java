@@ -19,7 +19,7 @@ public class ByDeepShadowCss extends By implements Serializable {
 
   private final String target;
 
-  ByDeepShadowCss(String target) {
+  private ByDeepShadowCss(String target) {
     this.target = target;
   }
 

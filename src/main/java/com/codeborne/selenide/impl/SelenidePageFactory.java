@@ -338,7 +338,6 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   private static class ElementsList extends ElementsCollection implements NoOpsList<SelenideElement> {
-
     ElementsList(CollectionSource collection) {
       super(collection);
     }
