@@ -15,12 +15,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Objects.requireNonNull;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class ScreenshotsTest extends IntegrationTest {
-  private final ScreenShotLaboratory screenshots = ScreenShotLaboratory.getInstance();
+  private static final ScreenShotLaboratory screenshots = inject();
 
   @BeforeEach
   void openTestPageWithJQuery() {

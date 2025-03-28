@@ -8,9 +8,13 @@ import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
+
 public class TakeScreenshot implements Command<File> {
+  private static final ScreenShotLaboratory screenshots = inject();
+
   @Override
   public File execute(SelenideElement proxy, WebElementSource element, Object @Nullable [] args) {
-    return ScreenShotLaboratory.getInstance().takeScreenshot(element.driver(), element.getWebElement());
+    return screenshots.takeScreenshot(element.driver(), element.getWebElement());
   }
 }
