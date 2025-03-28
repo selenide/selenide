@@ -12,9 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.codeborne.selenide.WebDriverRunner.driver;
+import static com.codeborne.selenide.impl.Plugins.inject;
 
 public class Screenshots {
-  public static ScreenShotLaboratory screenshots = ScreenShotLaboratory.getInstance();
+  private static final ScreenShotLaboratory screenshots = inject();
 
   public static String saveScreenshotAndPageSource() {
     Driver driver = driver();

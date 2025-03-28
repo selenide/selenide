@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.codeborne.selenide.commands.Util.classOf;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -21,6 +22,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class Plugins {
   private static final Logger logger = LoggerFactory.getLogger(Plugins.class);
   private static final Map<Class<?>, Object> cache = new ConcurrentHashMap<>();
+
+  @SafeVarargs
+  public static synchronized <T> T inject(T... reified) {
+    return inject(classOf(reified));
+  }
 
   @SuppressWarnings("unchecked")
   public static synchronized <T> T inject(Class<T> klass) {

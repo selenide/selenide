@@ -8,9 +8,13 @@ import org.jspecify.annotations.Nullable;
 
 import java.awt.image.BufferedImage;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
+
 public class TakeScreenshotAsImage implements Command<BufferedImage> {
+  private static final ScreenShotLaboratory screenshots = inject();
+
   @Override
   public BufferedImage execute(SelenideElement proxy, WebElementSource element, Object @Nullable [] args) {
-    return ScreenShotLaboratory.getInstance().takeScreenshotAsImage(element.driver(), element.getWebElement());
+    return screenshots.takeScreenshotAsImage(element.driver(), element.getWebElement());
   }
 }
