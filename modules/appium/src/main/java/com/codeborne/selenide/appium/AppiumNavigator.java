@@ -4,11 +4,11 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.InteractsWithApps;
-import io.appium.java_client.appmanagement.BaseTerminateApplicationOptions;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.appmanagement.AndroidTerminateApplicationOptions;
 import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -41,9 +41,10 @@ public class AppiumNavigator {
       appId,
       () -> cast(driver, InteractsWithApps.class)
         .map(mobileDriver -> {
-          if (Objects.nonNull(timeout)) {
-            BaseTerminateApplicationOptions options = (BaseTerminateApplicationOptions) Map.of("timeout", timeout.toMillis());
-            return mobileDriver.terminateApp(appId, options);
+          if (mobileDriver instanceof AndroidDriver androidDriver && Objects.nonNull(timeout)) {
+            AndroidTerminateApplicationOptions options = new AndroidTerminateApplicationOptions();
+            options.withTimeout(timeout);
+            return androidDriver.terminateApp(appId, options);
           } else {
             return mobileDriver.terminateApp(appId);
           }
