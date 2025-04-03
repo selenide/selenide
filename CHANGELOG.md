@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.8.1 (04.04.2025)
+* Fix ClassCastException in terminateApp method  --  thanks to Aliaksandr Rasolka (#2988)
+* #2968 restore method `ByShadow.cssSelector` to avoid breaking backward compatibility
+
+see https://github.com/selenide/selenide/milestone/221?closed=1
+
 ## 7.8.0 (02.04.2025)
 * Extend appium interacts with apps abilities  --  thanks to Aliaksandr Rasolka (#2964)
 * add methods to remove proxy listeners (#2981)
