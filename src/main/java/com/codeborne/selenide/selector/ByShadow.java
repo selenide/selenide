@@ -12,7 +12,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.joining;
 
 public class ByShadow extends By implements Serializable {
 
@@ -91,6 +92,10 @@ public class ByShadow extends By implements Serializable {
   private String describeShadowRoots() {
     return shadowHosts.stream()
       .map(By::toString)
-      .collect(Collectors.joining(" -> "));
+      .collect(joining(" -> "));
+  }
+
+  public static By cssSelector(String target, String shadowHost, String... innerShadowHosts) {
+    return ByShadowCss.cssSelector(target, shadowHost, innerShadowHosts);
   }
 }
