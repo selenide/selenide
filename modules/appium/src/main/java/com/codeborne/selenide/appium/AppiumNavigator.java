@@ -9,7 +9,6 @@ import io.appium.java_client.android.appmanagement.AndroidTerminateApplicationOp
 import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
@@ -41,15 +40,17 @@ public class AppiumNavigator {
       appId,
       () -> cast(driver, InteractsWithApps.class)
         .map(mobileDriver -> {
-          if (mobileDriver instanceof AndroidDriver androidDriver && Objects.nonNull(timeout)) {
-            AndroidTerminateApplicationOptions options = new AndroidTerminateApplicationOptions();
-            options.withTimeout(timeout);
-            return androidDriver.terminateApp(appId, options);
+          if (mobileDriver instanceof AndroidDriver androidDriver && timeout != null) {
+            return androidDriver.terminateApp(appId, options(timeout));
           } else {
             return mobileDriver.terminateApp(appId);
           }
         })
         .orElseThrow(() -> new UnsupportedOperationException("Driver does not support app termination: " + driver.getClass()))
     );
+  }
+
+  private AndroidTerminateApplicationOptions options(Duration timeout) {
+    return new AndroidTerminateApplicationOptions().withTimeout(timeout);
   }
 }
