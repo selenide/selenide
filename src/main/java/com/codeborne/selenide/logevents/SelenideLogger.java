@@ -164,18 +164,7 @@ public class SelenideLogger {
   @SuppressWarnings("unchecked")
   static <T extends LogEventListener> T getListener(String name) {
     Map<String, LogEventListener> threadListeners = SelenideLogger.listeners.get();
-    if (threadListeners == null) {
-      LOG.warn("No listeners found for thread '{}'", currentThread().getId());
-      return null;
-    }
-    T listener = (T) threadListeners.get(name);
-    if (listener == null) {
-      LOG.warn("No listener '{}' found for thread '{}' (it has {} listeners)", name, currentThread().getId(), threadListeners.size());
-    }
-
-    LOG.debug("Found listener '{}' for thread '{}': {} (it has {} listeners)",
-      name, currentThread().getId(), listener, threadListeners.size());
-    return listener;
+    return threadListeners == null ? null : (T) threadListeners.get(name);
   }
 
   /**
