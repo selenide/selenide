@@ -23,7 +23,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v3
         with:
-          arguments: ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.31.0-SNAPSHOT --no-parallel --no-daemon --console=plain
+          arguments: ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.32.0-SNAPSHOT --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v4
         if: always()
         with:
