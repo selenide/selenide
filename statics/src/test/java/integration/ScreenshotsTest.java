@@ -4,7 +4,11 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.OutputType;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.stream.SystemOut;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,9 +23,14 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Objects.requireNonNull;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.org.webcompere.systemstubs.stream.output.OutputFactories.tapAndOutput;
 
+@ExtendWith(SystemStubsExtension.class)
 final class ScreenshotsTest extends IntegrationTest {
   private static final ScreenShotLaboratory screenshots = inject();
+
+  @SystemStub
+  SystemOut systemOut = new SystemOut(tapAndOutput());
 
   @BeforeEach
   void openTestPageWithJQuery() {
@@ -63,9 +72,15 @@ final class ScreenshotsTest extends IntegrationTest {
 
     assertThat(screenshot).startsWith("file:/");
     assertThat(screenshot).endsWith(".png");
-    assertThat(new File(new URI(requireNonNull(screenshot)))).exists();
+    assertThatFileExistsAndIsReferencedInSystemOut(screenshot);
 
     String pageSource = screenshot.replace(".png", ".html");
-    assertThat(new File(new URI(pageSource))).exists();
+    assertThatFileExistsAndIsReferencedInSystemOut(pageSource);
+  }
+
+  private void assertThatFileExistsAndIsReferencedInSystemOut(String url) throws URISyntaxException {
+    File file = new File(new URI(url));
+    assertThat(file).exists();
+    assertThat(systemOut.getLines()).containsOnlyOnce("[[ATTACHMENT|%s]]".formatted(file));
   }
 }
