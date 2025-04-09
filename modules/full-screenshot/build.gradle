@@ -4,11 +4,12 @@ ext {
 
 dependencies {
   api project(":statics")
-  testImplementation project(':statics').sourceSets.test.output
   testImplementation project(':modules:core').sourceSets.test.output
+  testImplementation project(':modules:core').sourceSets.test.compileClasspath
+  testImplementation project(':statics').sourceSets.test.output
+  testImplementation project(':statics').sourceSets.test.compileClasspath
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.junit.platform:junit-platform-suite-engine")
-  testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')
