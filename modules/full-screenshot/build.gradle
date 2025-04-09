@@ -5,6 +5,7 @@ ext {
 dependencies {
   api project(":statics")
   testImplementation project(':statics').sourceSets.test.output
+  testImplementation project(':statics').sourceSets.test.compileClasspath
   testImplementation project(':modules:core').sourceSets.test.output
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.junit.platform:junit-platform-suite-engine")
