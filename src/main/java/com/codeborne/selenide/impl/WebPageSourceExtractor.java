@@ -66,6 +66,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
   protected void writeToFile(String content, File targetFile) {
     try (ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes(UTF_8))) {
       FileHelper.copyFile(in, targetFile);
+      AttachmentConsolePrinter.printAttachmentLine(targetFile);
     }
     catch (IOException e) {
       log.error("Failed to write file {}", targetFile.getAbsolutePath(), e);
