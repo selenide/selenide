@@ -16,7 +16,7 @@ ext {
   archunitVersion = '1.4.0'
   jacksonVersion = '2.18.3'
   javacvVersion = '1.5.11'
-  systemStubsVersion = '2.1.8'
+  logcaptorVersion = '2.10.1'
 }
 
 subprojects {
