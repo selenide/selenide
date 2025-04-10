@@ -1,40 +1,53 @@
 package integration;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class AttachmentTest {
   private static final Logger log = LoggerFactory.getLogger(AttachmentTest.class);
 
-  @Test
-  void one() {
-    System.out.printf("[[ATTACHMENT|%s]]%n", new File("build.gradle").getAbsolutePath()); // ok
-    System.out.printf("[[ATTACHMENT|%s]]%n", new File("CHANGELOG.md").getAbsolutePath()); // ok
+  private File create(String name) throws IOException {
+    File file = new File("build/" + name + ".txt");
+    FileUtils.writeStringToFile(file, "Hello, " + name, UTF_8);
+    return file;
   }
 
   @Test
-  void two() {
-    System.out.printf("SHOT [[ATTACHMENT|%s]] SAVED%n", new File("LICENSE").getAbsolutePath()); // NOK: /Users/andrei/.jenkins/workspace/selenide/statics/LICENSE
-    System.out.printf("SHOT [[ATTACHMENT|%s]] SAVED%n", new File("README.md").getAbsolutePath()); // ok
+  void one() throws IOException {
+    File file = create("one");
+    System.out.printf("[[ATTACHMENT|%s]]%n", file.getAbsolutePath());
   }
 
   @Test
-  void three() {
-    log.info("[[ATTACHMENT|{}]]", new File("release").getAbsolutePath()); // NOK /Users/andrei/.jenkins/workspace/selenide/statics/release
+  void two() throws IOException {
+    File file = create("two");
+    System.out.printf("SHOT [[ATTACHMENT|%s]] SAVED%n", file.getAbsolutePath());
   }
 
   @Test
-  void four() {
-    log.info("SHOT [[ATTACHMENT|{}]] SAVED", new File("settings.gradle").getAbsolutePath()); // NOK: /Users/andrei/.jenkins/workspace/selenide/statics/settings.gradle
+  void three() throws IOException {
+    File file = create("three");
+
+    log.info("[[ATTACHMENT|{}]]", file.getAbsolutePath());
+  }
+
+  @Test
+  void four() throws IOException {
+    File file = create("four");
+
+    log.info("SHOT [[ATTACHMENT|{}]] SAVED", file.getAbsolutePath());
   }
 
   @AfterEach
   void tearDown() {
-    Assertions.fail("zopa!");
+//    Assertions.fail("zopa!");
   }
 }
