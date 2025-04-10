@@ -1,5 +1,7 @@
 package integration;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,5 +31,10 @@ public class AttachmentTest {
   @Test
   void four() {
     log.info("SHOT [[ATTACHMENT|{}]] SAVED", new File("settings.gradle").getAbsolutePath());
+  }
+
+  @AfterEach
+  void tearDown() {
+    Assertions.fail("zopa!");
   }
 }
