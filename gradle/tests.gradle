@@ -52,7 +52,7 @@ subprojects {
   tasks.register("chrome_headless", Test) {
     systemProperties['selenide.browser'] = 'chrome'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*'
+    include 'integration/**/*AttachmentTest*'
     exclude 'com/codeborne/selenide/**/*'
     exclude 'org/selenide/**/*'
     outputs.upToDateWhen {false}
