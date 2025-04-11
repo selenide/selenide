@@ -268,6 +268,7 @@ public class ScreenShotLaboratory {
   private static void writeToFileSafely(byte[] srcFile, File imageFile) {
     try {
       FileUtils.writeByteArrayToFile(imageFile, srcFile);
+      AttachmentConsolePrinter.printAttachmentLine(imageFile);
     }
     catch (IOException e) {
       log.error("Failed to save screenshot to {}", imageFile, e);
