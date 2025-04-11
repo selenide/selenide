@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class AttachmentConsolePrinter {
+class AttachmentConsolePrinter {
 
   private static final Logger log = LoggerFactory.getLogger(AttachmentConsolePrinter.class);
 
@@ -16,7 +16,7 @@ public class AttachmentConsolePrinter {
    *
    * @param file the file to be attached
    */
-  public static void printAttachmentLine(File file) {
+  static void printAttachmentLine(File file) {
     log.info("[[ATTACHMENT|{}]]", file.getAbsolutePath());
   }
 }
