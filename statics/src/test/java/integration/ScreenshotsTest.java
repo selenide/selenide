@@ -1,9 +1,12 @@
 package integration;
 
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.impl.AttachmentConsolePrinter;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
-import nl.altindag.log.LogCaptor;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.stream.SystemErr;
+
+import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,9 +25,15 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Objects.requireNonNull;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.org.webcompere.systemstubs.stream.output.OutputFactories.tapAndOutput;
 
+@ExtendWith(SystemStubsExtension.class)
 final class ScreenshotsTest extends IntegrationTest {
   private static final ScreenShotLaboratory screenshots = inject();
+
+  // sl4j-simple is used in tests, qnd it logs to System.err by default
+  @SystemStub
+  SystemErr systemErr = new SystemErr(tapAndOutput());
 
   @BeforeEach
   void openTestPageWithJQuery() {
@@ -61,22 +70,23 @@ final class ScreenshotsTest extends IntegrationTest {
 
   @Test
   void canTakeScreenshotAtEveryMoment() throws URISyntaxException {
-    LogCaptor logCaptor = LogCaptor.forClass(AttachmentConsolePrinter.class);
-
     String fileName = "screenshot-" + randomUUID();
     String screenshot = Selenide.screenshot(fileName);
 
     assertThat(screenshot).startsWith("file:/");
     assertThat(screenshot).endsWith(".png");
-    assertThatFileExistsAndIsReferencedInSystemOut(screenshot, logCaptor);
+    assertThatFileExistsAndAttachmentIsLogged(screenshot);
 
     String pageSource = screenshot.replace(".png", ".html");
-    assertThatFileExistsAndIsReferencedInSystemOut(pageSource, logCaptor);
+    assertThatFileExistsAndAttachmentIsLogged(pageSource);
   }
 
-  private static void assertThatFileExistsAndIsReferencedInSystemOut(String url, LogCaptor logCaptor) throws URISyntaxException {
+  private void assertThatFileExistsAndAttachmentIsLogged(String url) throws URISyntaxException {
     File file = new File(new URI(url));
     assertThat(file).exists();
-    assertThat(logCaptor.getLogs()).containsOnlyOnce("[[ATTACHMENT|%s]]".formatted(file));
+
+    String attachmentLog = "INFO AttachmentConsolePrinter - [[ATTACHMENT|%s]]".formatted(file);
+    Condition<String> containsAttachmentLog = new Condition<>(s -> s.contains(attachmentLog), "contains '%s'", attachmentLog);
+    assertThat(systemErr.getLines()).haveExactly(1, containsAttachmentLog);
   }
 }
