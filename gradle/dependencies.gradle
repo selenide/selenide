@@ -2,7 +2,7 @@ ext {
   seleniumVersionStable = '4.31.0'
   seleniumVersion = project.properties['seleniumVersionNightlyBuild'] ?: seleniumVersionStable
   httpClientVersion = '5.4.3'
-  junitVersion = '5.12.1'
+  junitVersion = '5.12.2'
   testngVersion = '7.11.0'
   jettyVersion = '11.0.25'
   nettyVersion = '4.2.0.Final'
@@ -52,7 +52,7 @@ subprojects {
     implementation('com.google.errorprone:error_prone_annotations:2.37.0')
     implementation("com.google.guava:guava:33.4.7-jre")
     implementation("org.apache.commons:commons-lang3:3.17.0")
-    implementation("commons-io:commons-io:2.18.0")
+    implementation("commons-io:commons-io:2.19.0")
     testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core") {
       exclude group: 'xyz.rogfam' // "xyz.rogfam:littleproxy" was moved to "io.github.littleproxy:littleproxy"
     }
