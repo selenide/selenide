@@ -1,8 +1,12 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.TextCheck;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.regex.PatternSyntaxException;
 
@@ -22,6 +26,7 @@ import static com.codeborne.selenide.Condition.partialTextCaseSensitive;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.TextCheck.FULL_TEXT;
 import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -228,5 +233,49 @@ final class ElementTextTest extends IntegrationTest {
     $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive("foo", "this is sparta!", "bar").because("case-sensitive"));
     $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive("foo", "Sparta", "bar").because("only full text match"));
     $("#upper-case").shouldNotHave(oneOfExactTextsCaseSensitive("foo", "bar"));
+  }
+
+  @ParameterizedTest
+  @EnumSource(TextCheck.class)
+  @SuppressWarnings("DataFlowIssue")
+  void shouldHaveText_doesNotAccept_nullParameter(TextCheck textCheck) {
+    Configuration.textCheck = textCheck;
+
+    assertThatThrownBy(() -> $("h1").shouldHave(text(null)))
+      .isInstanceOf(NullPointerException.class)
+      .hasMessage("Expected text must not be null");
+  }
+
+  @Test
+  @SuppressWarnings("SelenideEmptyMatchText")
+  void shouldHaveText_doesNotAccept_emptyString() {
+    Configuration.textCheck = PARTIAL_TEXT;
+
+    assertThatThrownBy(() -> $("h1").should(text("")))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Expected substring must not be null or empty string. Consider setting Configuration.textCheck = FULL_TEXT;");
+  }
+
+  @Test
+  @SuppressWarnings("SelenideEmptyMatchText")
+  void shouldHaveText_accept_emptyString() {
+    Configuration.textCheck = FULL_TEXT;
+
+    $("#error").shouldHave(text(""));
+    $("#error").shouldHave(text("  "));
+    $("#error").shouldHave(text("\t"));
+    $("#error").shouldHave(text("\n"));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {
+    " ", "  ", "\t", "\n"
+  })
+  void shouldHaveText_doesNotAccept_blankOrEmptyString(String expectedEmptyText) {
+    Configuration.textCheck = PARTIAL_TEXT;
+
+    assertThatThrownBy(() -> $("h1").shouldHave(text(expectedEmptyText)))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Expected substring must not be null or empty string. Consider setting Configuration.textCheck = FULL_TEXT;");
   }
 }
