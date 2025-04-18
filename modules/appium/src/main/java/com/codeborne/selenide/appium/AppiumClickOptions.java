@@ -1,13 +1,14 @@
 package com.codeborne.selenide.appium;
 
-import com.codeborne.selenide.ClickMethod;
 import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.appium.commands.AppiumClickMethod;
 
 import java.time.Duration;
 
+import static com.codeborne.selenide.ClickMethod.DEFAULT;
 import static java.time.Duration.ZERO;
 import static java.time.Duration.ofSeconds;
+import static java.util.Collections.emptyList;
 
 public class AppiumClickOptions extends ClickOptions {
 
@@ -17,7 +18,7 @@ public class AppiumClickOptions extends ClickOptions {
   private static final Duration DEFAULT_LONG_PRESS_DURATION = ofSeconds(3);
 
   private AppiumClickOptions(AppiumClickMethod appiumClickMethod, int offsetX, int offsetY, Duration longPressHoldDuration) {
-    super(ClickMethod.DEFAULT, offsetX, offsetY, null, true);
+    super(DEFAULT, offsetX, offsetY, null, true, emptyList());
     this.appiumClickMethod = appiumClickMethod;
     this.longPressHoldDuration = longPressHoldDuration;
   }
