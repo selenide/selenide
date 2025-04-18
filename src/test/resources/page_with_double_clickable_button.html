@@ -49,17 +49,31 @@
   </div>
 
   <script>
-    function onDbClickButton(event) {
-      const e = event || window.event;
+    function onDbClickButton(e) {
       e.target.value = 'do not click me anymore';
       e.target.disabled = true;
       e.stopImmediatePropagation();
-      document.querySelector('h2').innerText = 'Status: double-clicked the button';
+      document.querySelector('h2').innerText = 'Status: double-clicked' + keys(e);
+      showClickCoordinates(e);
+    }
+
+    function onClickButton(event) {
+      event.stopImmediatePropagation();
+      document.querySelector('h2').innerText = `Status: clicked` + keys(event)
+      showClickCoordinates(event);
+    }
+
+    function keys(event) {
+      return `${event.shiftKey ? '+shift' : ''}${event.altKey ? '+alt' : ''}${event.ctrlKey ? '+ctrl' : ''}${event.metaKey ? '+meta' : ''}`;
+    }
+
+    function showClickCoordinates(event) {
       document.querySelector('#coords').innerText = `(${event.offsetX}, ${event.offsetY})`;
     }
 
     const button = document.querySelector('#double-clickable-button');
     button.addEventListener('dblclick', onDbClickButton);
+    button.addEventListener('click', onClickButton);
     button.disabled = false;
   </script>
 
@@ -67,8 +81,7 @@
     const area = document.querySelector('#double-clickable-area');
 
     function onDbClickArea(event) {
-      const e = event || window.event;
-      e.stopImmediatePropagation();
+      event.stopImmediatePropagation();
       const areaRect = area.getBoundingClientRect();
       const x = Math.round(event.clientX - areaRect.left);
       const y = Math.round(event.clientY - areaRect.top);
