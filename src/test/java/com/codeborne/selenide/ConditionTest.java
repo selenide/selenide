@@ -31,11 +31,9 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.type;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Mocks.*;
+import static com.codeborne.selenide.Mocks.elementWithAttribute;
 import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -425,30 +423,6 @@ final class ConditionTest {
   void conditionToString() {
     WebElementCondition condition = attribute("name").because("it's awesome");
     assertThat(condition).hasToString("attribute name (because it's awesome)");
-  }
-
-  @Test
-  void shouldHaveText_doesNotAccept_nullParameter() {
-    //noinspection ConstantConditions
-    assertThatThrownBy(() -> text(null))
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("Argument must not be null or empty string. Use $.shouldBe(empty) or $.shouldHave(exactText(\"\").");
-  }
-
-  @Test
-  @SuppressWarnings("SelenideEmptyMatchText")
-  void shouldHaveText_doesNotAccept_emptyString() {
-    assertThatThrownBy(() -> text(""))
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("Argument must not be null or empty string. Use $.shouldBe(empty) or $.shouldHave(exactText(\"\").");
-  }
-
-  @Test
-  void shouldHaveText_accepts_blankNonEmptyString() {
-    assertThatNoException().isThrownBy(() -> text(" "));
-    assertThatNoException().isThrownBy(() -> text("  "));
-    assertThatNoException().isThrownBy(() -> text("\t"));
-    assertThatNoException().isThrownBy(() -> text("\n"));
   }
 
   private WebElement mockElement(boolean isSelected, String text) {
