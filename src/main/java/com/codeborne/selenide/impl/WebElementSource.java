@@ -8,9 +8,11 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import com.codeborne.selenide.ex.UIAssertionError;
+import com.codeborne.selenide.selector.ByShadow;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -29,10 +31,29 @@ import static java.util.Objects.requireNonNull;
 
 public abstract class WebElementSource {
   private Alias alias = NONE;
+  private final boolean shadowRoot;
+
+  protected WebElementSource() {
+    this(false);
+  }
+
+  protected WebElementSource(boolean shadowRoot) {
+    this.shadowRoot = shadowRoot;
+  }
 
   public abstract Driver driver();
 
   public abstract WebElement getWebElement();
+
+  public SearchContext getSearchContext() {
+    WebElement webElement = getWebElement();
+    if (shadowRoot) {
+      return ByShadow.getShadowRoot(webElement)
+        .orElseThrow(() -> new IllegalArgumentException(description() + " does not contain shadow root"));
+    }
+
+    return webElement;
+  }
 
   public abstract String getSearchCriteria();
 
@@ -150,6 +171,7 @@ public abstract class WebElementSource {
 
   /**
    * Asserts that returned element is editable.
+   *
    * @return element or throws ElementShould/ElementShouldNot exceptions
    */
   public WebElement findAndAssertElementIsEditable() {

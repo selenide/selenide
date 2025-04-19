@@ -15,4 +15,8 @@ public interface Container {
   @interface Self {
   }
 
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({ElementType.FIELD, ElementType.TYPE})
+  @interface ShadowRoot {
+  }
 }

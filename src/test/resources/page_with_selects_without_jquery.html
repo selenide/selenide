@@ -16,13 +16,13 @@
         document.getElementById('text-area').innerHTML = 'This is text area';
       }
 
-      var changedCounter = 0;
+      let changedCounter = 0;
       function onUsernameChanged(input) {
         changedCounter++;
         document.getElementById('username-mirror').innerHTML = input.value + ' (' + changedCounter + ')';
       }
 
-      var blurCounter = 0;
+      let blurCounter = 0;
       function onUsernameBlur() {
         blurCounter++;
         document.getElementById('username-blur-counter').innerHTML = "blur: " + blurCounter;
@@ -35,9 +35,22 @@
       function onDomainChanged(select) {
         document.getElementById('selectedDomain').innerHTML = select.options[select.selectedIndex].text;
       }
+
+      function listenRightClick(id) {
+        document.getElementById(id).addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+          document.getElementById('username-mirror').innerText = 'Right click (#' + id + ')';
+          return false;
+        }, false);
+      }
+
+      function initRightClick() {
+        listenRightClick('login')
+        listenRightClick('domain')
+      }
   </script>
 </head>
-<body onload="initBlur(); scheduleFillTextArea();">
+<body onload="initBlur(); scheduleFillTextArea(); initRightClick();">
 <div style="display: none">abcd</div>
 <div id="non-clickable-element"
      style="z-index: -100; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">

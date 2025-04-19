@@ -42,7 +42,7 @@ import static java.util.Objects.requireNonNull;
 public class SelenideDriver {
   private static final JavaScript zoomJs = new JavaScript("zoom.js");
   private static final Navigator navigator = new Navigator();
-  private static final ScreenShotLaboratory screenshots = ScreenShotLaboratory.getInstance();
+  private static final ScreenShotLaboratory screenshots = inject();
 
   private final Config config;
   private final Driver driver;

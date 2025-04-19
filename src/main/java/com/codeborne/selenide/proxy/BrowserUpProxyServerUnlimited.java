@@ -19,7 +19,17 @@ class BrowserUpProxyServerUnlimited extends BrowserUpProxyServer {
   }
 
   @Override
+  public void removeRequestFilter(RequestFilter filter) {
+    removeHttpFilterFactory(new RequestFilterAdapter.FilterSource(filter, MAX_FILE_SIZE));
+  }
+
+  @Override
   public void addResponseFilter(ResponseFilter filter) {
     addLastHttpFilterFactory(new ResponseFilterAdapter.FilterSource(filter, MAX_FILE_SIZE));
+  }
+
+  @Override
+  public void removeResponseFilter(ResponseFilter filter) {
+    removeHttpFilterFactory(new ResponseFilterAdapter.FilterSource(filter, MAX_FILE_SIZE));
   }
 }

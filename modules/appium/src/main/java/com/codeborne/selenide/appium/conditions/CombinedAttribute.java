@@ -43,4 +43,9 @@ public class CombinedAttribute {
     }
     throw new UnsupportedOperationException("Unsupported webdriver: " + WebDriverRunner.getWebDriver());
   }
+
+  @Override
+  public String toString() {
+    return "@%s|@%s".formatted(androidAttribute, iosAttribute);
+  }
 }

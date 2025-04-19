@@ -16,13 +16,12 @@ import java.util.List;
 
 import static com.codeborne.selenide.SelectorMode.CSS;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.lang3.StringUtils.contains;
 
 /**
  * Thanks to http://selenium.polteq.com/en/injecting-the-sizzle-css-selector-library/
  */
 public class WebElementSelector {
-  public static WebElementSelector instance = new WebElementSelector();
-
   protected final FileContent sizzleSource = new FileContent("sizzle.js");
 
   public WebElement findElement(Driver driver, @Nullable WebElementSource parent, By selector, int index) {
@@ -32,7 +31,7 @@ public class WebElementSelector {
   }
 
   public WebElement findElement(Driver driver, @Nullable WebElementSource parent, By selector) {
-    SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
+    SearchContext context = getSearchContext(driver, parent);
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
@@ -46,8 +45,12 @@ public class WebElementSelector {
     return webElements.get(0);
   }
 
+  private static SearchContext getSearchContext(Driver driver, @Nullable WebElementSource parent) {
+    return parent == null ? driver.getWebDriver() : parent.getSearchContext();
+  }
+
   public List<WebElement> findElements(Driver driver, @Nullable WebElementSource parent, By selector) {
-    SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
+    SearchContext context = getSearchContext(driver, parent);
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
@@ -80,8 +83,8 @@ public class WebElementSelector {
   }
 
   private static WebDriverException unwrapInvalidSelectorException(JavascriptException e) {
-    return e.getMessage().contains("An invalid or illegal selector was specified") ||
-           e.getMessage().contains("not a valid XPath expression") ?
+    return contains(e.getMessage(), "An invalid or illegal selector was specified") ||
+           contains(e.getMessage(), "not a valid XPath expression") ?
       new InvalidSelectorException(e.getMessage(), e.getCause()) : e;
   }
 

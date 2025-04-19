@@ -432,12 +432,15 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanRightClickOnElement() {
+    timeout = 100;
     $(By.name("password")).contextClick();
 
-    $("#login").contextClick().click();
+    $("#login").contextClick().shouldBe(visible);
+    $("#username-mirror").shouldHave(text("Right click (#login)"));
 
     $(By.name("domain")).click();
     $(By.name("domain")).contextClick();
+    $("#username-mirror").shouldHave(text("Right click (#domain)"));
   }
 
   @Test

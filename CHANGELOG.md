@@ -1,5 +1,41 @@
 # Changelog
 
+## 7.9.0 (19.04.2025)
+* #2763 Can click with JS holding keys ALT, CTRL etc. (#3008)
+* #2992 Write screenshots in a format that Jenkins and GitLab treat as attachments (#2998)
+* bump Selenium from 4.30.0 to 4.31.0; and CDP from 134 to 135 (#2994)
+* check for empty expected value (#3007)
+
+see https://github.com/selenide/selenide/milestone/222?closed=1
+
+## 7.8.1 (04.04.2025)
+* Fix ClassCastException in terminateApp method  --  thanks to Aliaksandr Rasolka (#2988)
+* #2968 restore method `ByShadow.cssSelector` to avoid breaking backward compatibility
+
+see https://github.com/selenide/selenide/milestone/221?closed=1
+
+## 7.8.0 (02.04.2025)
+* Extend appium interacts with apps abilities  --  thanks to Aliaksandr Rasolka (#2964)
+* add methods to remove proxy listeners (#2981)
+* Add working with Shadow DOM for selenide page factory  --  thanks to Ilya Koshaleu (#2968)
+* #2967 improve how the Android/iOS combined attribute looks in error messages (#2971)
+* bump Selenium from 4.29.0 to 4.30.0 (#2979)
+* Bump BrowserUpProxy from 3.1.2 to 3.2.0 (#2980)
+
+see https://github.com/selenide/selenide/milestone/220?closed=1
+
+## 7.7.3 (24.02.2025)
+* bump Selenium from 4.28.1 to 4.29.0 (#2957)
+* bump BrowserUpProxy from 3.1.1 to 3.1.2 (#2957)
+
+see https://github.com/selenide/selenide/milestone/219?closed=1
+
+## 7.7.2 (13.02.2025)
+* Added ability to use custom types for elements in appium page factory  --  thanks to qwez (#2945)
+* Bump BrowserUpProxy from 3.0.1 to 3.1.1 (#2946) (#2950)
+
+see https://github.com/selenide/selenide/milestone/218?closed=1
+
 ## 7.7.1 (22.01.2025)
 * #2930 bump BrowserUpProxy from 3.0.0 to 3.0.1 (updates MITM certificate for the next 10 years)
 * #2933 allow declaring @Self field of type SelenideAppiumElement (#2934)

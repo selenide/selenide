@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ImageTestHelper {
   static final Set<Color> RED = Sets.set(
+    new Color(234, 51, 35),
     new Color(235, 51, 35),
     new Color(233, 54, 32),
     new Color(255, 0, 0)
@@ -17,6 +18,7 @@ class ImageTestHelper {
   static final Set<Color> BLUE = Sets.set(
     new Color(115, 251, 253),
     new Color(115, 252, 253),
+    new Color(117, 251, 253),
     new Color(121, 251, 254),
     new Color(0, 255, 255)
   );

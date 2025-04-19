@@ -12,6 +12,7 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import static java.lang.System.lineSeparator;
+import static java.lang.Thread.currentThread;
 import static java.util.Comparator.comparingLong;
 
 /**
@@ -26,19 +27,21 @@ public class SimpleReport {
   private static final int MIN_SECOND_COLUMN_WIDTH = 7;
   private static final String TWO_SPACES = "  ";
   private static final String INDENT = System.getProperty("selenide.report.indent", TWO_SPACES);
+  private static final String LISTENER = "simpleReport";
 
   public void start() {
     checkThatSlf4jIsConfigured();
 
-    EventsCollector logEventListener = SelenideLogger.getListener("simpleReport");
+    EventsCollector logEventListener = SelenideLogger.getListener(LISTENER);
     if (logEventListener != null && logEventListener.events().isEmpty()) {
-      throw new ConcurrentModificationException("Concurrent usage of the listener, lost events: " + logEventListener.events());
+      throw new ConcurrentModificationException("Concurrent usage of listener '%s' in thread '%s', lost events: %s".formatted(
+        LISTENER, currentThread().getId(), logEventListener.events()));
     }
-    SelenideLogger.addListener("simpleReport", new EventsCollector());
+    SelenideLogger.addListener(LISTENER, new EventsCollector());
   }
 
   public void finish(String title) {
-    EventsCollector logEventListener = SelenideLogger.removeListener("simpleReport");
+    EventsCollector logEventListener = SelenideLogger.removeListener(LISTENER);
 
     if (logEventListener == null) {
       log.warn("Can not publish report because Selenide logger has not started.");
@@ -197,7 +200,7 @@ public class SimpleReport {
   }
 
   public void clean() {
-    SelenideLogger.removeListener("simpleReport");
+    SelenideLogger.removeListener(LISTENER);
   }
 
   private static void checkThatSlf4jIsConfigured() {

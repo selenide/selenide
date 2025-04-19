@@ -4,9 +4,11 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.WebElementWrapper;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Set;
 
@@ -35,6 +37,7 @@ public class SelenideAppium {
 
   /**
    * Open a deep link for an IOS application
+   *
    * @param deepLinkUrl - deep link url
    */
   public static void openIOSDeepLink(String deepLinkUrl) {
@@ -43,10 +46,12 @@ public class SelenideAppium {
     }
     deepLinkLauncher.openDeepLinkOnIos(AppiumDriverRunner.getIosDriver(), deepLinkUrl);
   }
+
   /**
    * Open a deep link for an Android application
+   *
    * @param deepLinkUrl - deep link url
-   * @param appPackage - Android application package
+   * @param appPackage  - Android application package
    */
   public static void openAndroidDeepLink(String deepLinkUrl, String appPackage) {
     if (!hasWebDriverStarted()) {
@@ -56,11 +61,51 @@ public class SelenideAppium {
   }
 
   /**
+   * Activate application
+   *
+   * @param appId - applicationId for Android or bundleId for iOS
+   */
+  public static void activateApp(String appId) {
+    appiumNavigator.activateApp(AppiumDriverRunner.getMobileDriver(), appId);
+  }
+
+  /**
    * Terminate application
+   *
    * @param appId - applicationId for Android or bundleId for iOS
    */
   public static void terminateApp(String appId) {
-    appiumNavigator.terminateApp(AppiumDriverRunner.getMobileDriver(), appId);
+    terminateApp(appId, null);
+  }
+
+  /**
+   * Terminate application
+   *
+   * @param appId   - applicationId for Android or bundleId for iOS
+   * @param timeout - The count of milliseconds to wait until the app is terminated
+   */
+  public static void terminateApp(String appId, @Nullable Duration timeout) {
+    appiumNavigator.terminateApp(AppiumDriverRunner.getMobileDriver(), appId, timeout);
+  }
+
+  /**
+   * Re-launch application
+   *
+   * @param appId - applicationId for Android or bundleId for iOS
+   */
+  public static void relaunchApp(String appId) {
+    relaunchApp(appId, null);
+  }
+
+  /**
+   * Re-launch application
+   *
+   * @param appId   - applicationId for Android or bundleId for iOS
+   * @param timeout - The count of milliseconds to wait until the app is terminated
+   */
+  public static void relaunchApp(String appId, @Nullable Duration timeout) {
+    terminateApp(appId, timeout);
+    activateApp(appId);
   }
 
   /**

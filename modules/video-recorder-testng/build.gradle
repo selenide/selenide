@@ -11,6 +11,10 @@ dependencies {
   }
 }
 
+configurations {
+  testImplementation.exclude group: "org.junit.platform"
+}
+
 tasks.withType(Test).configureEach {
   useTestNG() {
     suites "src/test/resources/suite.xml"

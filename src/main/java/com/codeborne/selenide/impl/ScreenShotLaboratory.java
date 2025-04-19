@@ -51,12 +51,7 @@ import static org.openqa.selenium.OutputType.FILE;
 public class ScreenShotLaboratory {
   private static final Logger log = LoggerFactory.getLogger(ScreenShotLaboratory.class);
 
-  private static final ScreenShotLaboratory instance = new ScreenShotLaboratory();
   private static final Pattern REGEX_PLUS = Pattern.compile("\\+");
-
-  public static ScreenShotLaboratory getInstance() {
-    return instance;
-  }
 
   private final Photographer photographer;
   private final PageSourceExtractor extractor;
@@ -273,6 +268,7 @@ public class ScreenShotLaboratory {
   private static void writeToFileSafely(byte[] srcFile, File imageFile) {
     try {
       FileUtils.writeByteArrayToFile(imageFile, srcFile);
+      AttachmentConsolePrinter.printAttachmentLine(imageFile);
     }
     catch (IOException e) {
       log.error("Failed to save screenshot to {}", imageFile, e);

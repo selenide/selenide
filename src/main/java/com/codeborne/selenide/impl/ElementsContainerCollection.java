@@ -13,6 +13,7 @@ import java.util.AbstractList;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.impl.Alias.NONE;
+import static com.codeborne.selenide.impl.SelenidePageFactory.isShadowRoot;
 
 public class ElementsContainerCollection extends AbstractList<Container> {
   private final PageObjectFactory pageFactory;
@@ -39,7 +40,7 @@ public class ElementsContainerCollection extends AbstractList<Container> {
   @Override
   public Container get(int index) {
     String searchCriteria = String.format("%s[%s]", collection.getSearchCriteria(), index);
-    WebElementSource self = new WebElementWrapper(driver, collection.getElement(index), searchCriteria);
+    WebElementSource self = new WebElementWrapper(driver, collection.getElement(index), searchCriteria, isShadowRoot(field, listType));
     try {
       return pageFactory.initElementsContainer(driver, field, self, listType, genericTypes);
     } catch (ReflectiveOperationException e) {

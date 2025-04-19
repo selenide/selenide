@@ -15,6 +15,8 @@ import org.openqa.selenium.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.browserup.bup.filters.RequestFilterAdapter.FilterSource.DEFAULT_MAXIMUM_REQUEST_BUFFER_SIZE;
+import static com.browserup.bup.filters.ResponseFilterAdapter.FilterSource.DEFAULT_MAXIMUM_RESPONSE_BUFFER_SIZE;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
@@ -44,7 +46,7 @@ final class ChainedProxyTest extends ProxyIntegrationTest {
   void setUp() {
     closeWebDriver();
 
-    chainedProxy = new BrowserUpProxyServer();
+    chainedProxy = new BrowserUpProxyServer(DEFAULT_MAXIMUM_REQUEST_BUFFER_SIZE * 2, DEFAULT_MAXIMUM_RESPONSE_BUFFER_SIZE * 2);
     chainedProxy.setTrustAllServers(true);
     chainedProxy.start(0);
 

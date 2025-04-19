@@ -9,7 +9,7 @@ import static org.mockito.Mockito.mock;
 
 final class BySelectorCollectionTest {
   private final Driver driver = mock();
-  private final WebElementSource webElement = new ElementFinder(driver, null, By.tagName("table"), 3);
+  private final WebElementSource webElement = new ElementFinder(driver, null, By.tagName("table"), 3, false);
 
   @Test
   void constructorWithoutParent() {

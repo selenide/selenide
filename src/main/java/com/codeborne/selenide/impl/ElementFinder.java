@@ -68,11 +68,18 @@ public class ElementFinder extends WebElementSource {
   private final By criteria;
   private final int index;
 
-  ElementFinder(Driver driver, @Nullable WebElementSource parent, By criteria, int index) {
-    this(driver, parent, criteria, index, null);
+  ElementFinder(Driver driver, @Nullable WebElementSource parent, By criteria, int index, boolean shadowRoot) {
+    this(driver, parent, criteria, index, shadowRoot, null);
   }
 
-  public ElementFinder(Driver driver, @Nullable WebElementSource parent, By criteria, int index, @Nullable String alias) {
+  public ElementFinder(Driver driver, @Nullable WebElementSource parent,
+                       By criteria, int index, @Nullable String alias) {
+    this(driver, parent, criteria, index, false, alias);
+  }
+
+  public ElementFinder(Driver driver, @Nullable WebElementSource parent,
+                       By criteria, int index, boolean shadowRoot, @Nullable String alias) {
+    super(shadowRoot);
     this.driver = driver;
     this.parent = parent;
     this.criteria = criteria;

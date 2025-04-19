@@ -1,6 +1,5 @@
 ext {
   artifactId = 'selenide-testng'
-  testngVersion = '7.9.0'
 }
 
 dependencies {
@@ -16,6 +15,10 @@ dependencies {
     exclude(group: 'com.google.inject')
   }
   testImplementation("org.mockito:mockito-core:$mockitoVersion")
+}
+
+configurations {
+  testImplementation.exclude group: "org.junit.platform"
 }
 
 tasks.withType(Test).configureEach{
