@@ -7,17 +7,25 @@ import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static com.codeborne.selenide.ClickMethod.DEFAULT;
 import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.commands.Util.size;
+import static org.openqa.selenium.Keys.ALT;
+import static org.openqa.selenium.Keys.CONTROL;
+import static org.openqa.selenium.Keys.META;
+import static org.openqa.selenium.Keys.SHIFT;
 
 public class Click extends FluentCommand {
   private final JavaScript jsSource = new JavaScript("click.js");
@@ -69,11 +77,11 @@ public class Click extends FluentCommand {
 
     switch (method) {
       case DEFAULT: {
-        defaultClick(driver, webElement, clickOptions.offsetX(), clickOptions.offsetY());
+        defaultClick(driver, webElement, clickOptions.offsetX(), clickOptions.offsetY(), clickOptions.holdingKeys());
         break;
       }
       case JS: {
-        clickViaJS(driver, webElement, clickOptions.offsetX(), clickOptions.offsetY());
+        clickViaJS(driver, webElement, clickOptions.offsetX(), clickOptions.offsetY(), clickOptions.holdingKeys());
         break;
       }
       default: {
@@ -89,15 +97,30 @@ public class Click extends FluentCommand {
       method;
   }
 
-  protected void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY) {
-    if (isCenter(offsetX, offsetY)) {
+  protected void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY, List<Keys> holdingKeys) {
+    if (isCenter(offsetX, offsetY) && holdingKeys.isEmpty()) {
       element.click();
     }
     else {
-      driver.actions()
+      Actions actions = driver.actions();
+      holdKeys(actions, holdingKeys);
+      actions
         .moveToElement(element, offsetX, offsetY)
-        .click()
-        .perform();
+        .click();
+      releaseKeys(actions, holdingKeys);
+      actions.perform();
+    }
+  }
+
+  protected void holdKeys(Actions actions, List<Keys> keys) {
+    for (Keys key : keys) {
+      actions.keyDown(key);
+    }
+  }
+
+  protected void releaseKeys(Actions actions, List<Keys> holdingKeys) {
+    for (Keys key : holdingKeys) {
+      actions.keyUp(key);
     }
   }
 
@@ -105,7 +128,16 @@ public class Click extends FluentCommand {
     return offsetX == 0 && offsetY == 0;
   }
 
-  protected void clickViaJS(Driver driver, WebElement element, int offsetX, int offsetY) {
-    jsSource.execute(driver, element, offsetX, offsetY);
+  protected void clickViaJS(Driver driver, WebElement element, int offsetX, int offsetY, List<Keys> holdingKeys) {
+    jsSource.execute(driver, element, offsetX, offsetY, toClickEventOptions(holdingKeys));
+  }
+
+  protected Map<String, Boolean> toClickEventOptions(List<Keys> keys) {
+    return Map.of(
+      "altKey", keys.contains(ALT),
+      "ctrlKey", keys.contains(CONTROL),
+      "shiftKey", keys.contains(SHIFT),
+      "metaKey", keys.contains(META)
+    );
   }
 }

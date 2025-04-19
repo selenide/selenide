@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import static java.util.Locale.ROOT;
 import static java.util.regex.Pattern.DOTALL;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class Html {
   private static final Pattern REGEX_SPACES = Pattern.compile("[\\s\\p{Zs}\u200B\u200C\u200D\u2060]+");
@@ -19,7 +20,16 @@ public class Html {
   }
 
   public boolean contains(String text, String subtext) {
-    return reduceSpaces(text.toLowerCase(ROOT)).contains(reduceSpaces(subtext.toLowerCase(ROOT)));
+    String expected = reduceSpaces(subtext.toLowerCase(ROOT));
+    verifyNotEmptySubstring(expected);
+    return reduceSpaces(text.toLowerCase(ROOT)).contains(expected);
+  }
+
+  private static void verifyNotEmptySubstring(String expectedText) {
+    if (isEmpty(expectedText)) {
+      throw new IllegalArgumentException("Expected substring must not be null or empty string. " +
+                                         "Consider setting Configuration.textCheck = FULL_TEXT;");
+    }
   }
 
   public boolean containsCaseSensitive(String text, String subtext) {

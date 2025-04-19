@@ -200,7 +200,7 @@ public final class Condition {
 
   /**
    * Assert that element contains given "value" attribute as substring
-   * NB! Ignores difference in non-visible characters like spaces, non-breakable spaces, tabs, newlines  etc.
+   * NB! Ignores difference in non-visible characters like spaces, non-breakable spaces, tabs, newlines etc.
    *
    * <p>Sample: {@code $("input").shouldHave(value("12345 666 77"));}</p>
    *

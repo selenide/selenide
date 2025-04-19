@@ -1,15 +1,22 @@
 package integration;
 
+import com.codeborne.selenide.ClickMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
+import static com.codeborne.selenide.ClickOptions.using;
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
 import static integration.Coordinates.coordinates;
+import static org.openqa.selenium.Keys.ALT;
+import static org.openqa.selenium.Keys.SHIFT;
 
 /**
  * button size is 200x20  -> center point is at 100x10
@@ -34,7 +41,7 @@ final class DoubleClickTest extends ITest {
         .shouldHave(value("do not click me anymore"))
         .shouldBe(disabled);
 
-      $("h2").shouldHave(text("Status: double-clicked the button"));
+      $("h2").shouldHave(text("Status: double-clicked"));
       $("#coords").shouldHave(coordinates(100, 10));
     });
   }
@@ -51,7 +58,7 @@ final class DoubleClickTest extends ITest {
         .shouldHave(value("do not click me anymore"))
         .shouldBe(disabled);
 
-      $("h2").shouldHave(text("Status: double-clicked the button"));
+      $("h2").shouldHave(text("Status: double-clicked"));
       $("#coords").shouldHave(coordinates(100, 10));
     });
   }
@@ -68,7 +75,7 @@ final class DoubleClickTest extends ITest {
         .shouldHave(value("do not click me anymore"))
         .shouldBe(disabled);
 
-      $("h2").shouldHave(text("Status: double-clicked the button"));
+      $("h2").shouldHave(text("Status: double-clicked"));
       $("#coords").shouldHave(coordinates(100, 10));
     });
   }
@@ -99,5 +106,15 @@ final class DoubleClickTest extends ITest {
     $("#double-clickable-area").doubleClick(usingJavaScript().offset(66, 33));
     $("h2").shouldHave(text("Status: double-clicked the area"));
     $("#coords").shouldHave(coordinates(466, 233));
+  }
+
+  @ParameterizedTest
+  @EnumSource(ClickMethod.class)
+  void userCanDoubleClick_whileHoldingKeys(ClickMethod clickMethod) {
+    openFile("page_with_double_clickable_button.html");
+    $("h2").shouldHave(exactText("Status: not clicked yet"));
+
+    $("#double-clickable-button").doubleClick(using(clickMethod).holdingKeys(ALT, SHIFT));
+    $("h2").shouldHave(exactText("Status: double-clicked+shift+alt"));
   }
 }

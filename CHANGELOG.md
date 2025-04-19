@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.9.0 (19.04.2025)
+* #2763 Can click with JS holding keys ALT, CTRL etc. (#3008)
+* #2992 Write screenshots in a format that Jenkins and GitLab treat as attachments (#2998)
+* bump Selenium from 4.30.0 to 4.31.0; and CDP from 134 to 135 (#2994)
+* check for empty expected value (#3007)
+
+see https://github.com/selenide/selenide/milestone/222?closed=1
+
 ## 7.8.1 (04.04.2025)
 * Fix ClassCastException in terminateApp method  --  thanks to Aliaksandr Rasolka (#2988)
 * #2968 restore method `ByShadow.cssSelector` to avoid breaking backward compatibility

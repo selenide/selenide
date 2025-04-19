@@ -7,6 +7,8 @@ import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.openqa.selenium.Keys.ALT;
+import static org.openqa.selenium.Keys.SHIFT;
 
 final class ClickOptionsTest {
   @Test
@@ -49,15 +51,18 @@ final class ClickOptionsTest {
       .hasToString("method: JS");
 
     assertThat(usingJavaScript().offset(100, 500))
-      .hasToString("method: JS, offsetX: 100, offsetY: 500");
+      .hasToString("method: JS, offsetX: 100, offsetY: 500, force: false, keys: []");
 
     assertThat(usingJavaScript().offsetX(100))
-      .hasToString("method: JS, offsetX: 100, offsetY: 0");
+      .hasToString("method: JS, offsetX: 100, offsetY: 0, force: false, keys: []");
 
     assertThat(usingJavaScript().offsetY(500))
-      .hasToString("method: JS, offsetX: 0, offsetY: 500");
+      .hasToString("method: JS, offsetX: 0, offsetY: 500, force: false, keys: []");
 
     assertThat(usingDefaultMethod().offsetX(100).offsetY(500))
-      .hasToString("method: DEFAULT, offsetX: 100, offsetY: 500");
+      .hasToString("method: DEFAULT, offsetX: 100, offsetY: 500, force: false, keys: []");
+
+    assertThat(usingDefaultMethod().holdingKeys(ALT, SHIFT))
+      .hasToString("method: DEFAULT, offsetX: 0, offsetY: 0, force: false, keys: [alt, shift]");
   }
 }
