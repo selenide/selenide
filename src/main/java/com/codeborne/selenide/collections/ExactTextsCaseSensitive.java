@@ -1,5 +1,6 @@
 package com.codeborne.selenide.collections;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.impl.Html;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class ExactTextsCaseSensitive extends ExactTexts {
   }
 
   @Override
-  protected boolean check(String actualText, String expectedText) {
+  protected boolean check(Config config, String actualText, String expectedText) {
     return Html.text.equalsCaseSensitive(actualText, expectedText);
   }
 

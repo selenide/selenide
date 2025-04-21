@@ -12,6 +12,7 @@ import org.openqa.selenium.devtools.v135.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.lang.ThreadLocal.withInitial;
 
@@ -23,11 +24,20 @@ public abstract class ITest extends BaseIntegrationTest {
     new SelenideConfig().browser(browser).baseUrl(getBaseUrl()).timeout(1));
 
   private static final ThreadLocal<SelenideDriver> driver = withInitial(() ->
-    new SelenideDriver(config.get()));
+    new SelenideDriver(config()));
 
   @BeforeEach
+  final void resetDefaults() {
+    resetShortTimeout();
+    config().textCheck(PARTIAL_TEXT);
+  }
+
   final void resetShortTimeout() {
     config.get().timeout(1);
+  }
+
+  protected static SelenideConfig config() {
+    return config.get();
   }
 
   protected final void setTimeout(long timeoutMs) {
