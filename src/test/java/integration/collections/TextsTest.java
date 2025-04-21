@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
 
 import static com.codeborne.selenide.CollectionCondition.texts;
+import static com.codeborne.selenide.TextCheck.FULL_TEXT;
+import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -45,6 +47,17 @@ public class TextsTest extends ITest {
     $$(".element").shouldHave(texts("On", "Two", "Three"));
     $$(".element").shouldHave(texts("One", "wo", "Three"));
     $$(".element").shouldHave(texts("One", "Two", "hre"));
+  }
+
+  @Test
+  void verifiesFullTexts() {
+    config().textCheck(FULL_TEXT);
+
+    $$(".element").shouldHave(texts("One", "Two", "Three"));
+
+    assertThatThrownBy(() -> $$(".element").shouldHave(texts("One", "Tw", "Three")))
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("Text #1 mismatch (expected: \"Tw\", actual: \"Two\")");
   }
 
   @Test
@@ -113,6 +126,22 @@ public class TextsTest extends ITest {
     assertThatThrownBy(() -> $$(".element").shouldHave(texts(emptyList())))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("No expected texts given");
+  }
+
+  @Test
+  void shouldNotContainEmptyString() {
+    config().textCheck(PARTIAL_TEXT);
+
+    assertThatThrownBy(() -> $$(".empty li").shouldHave(texts("First", "", "Third", "")))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageStartingWith("Expected substring must not be null or empty string");
+  }
+
+  @Test
+  void verifiesFullTexts_allowsEmptyStrings() {
+    config().textCheck(FULL_TEXT);
+
+    $$(".empty li").shouldHave(texts("First", "", "Third", ""));
   }
 
   @Test

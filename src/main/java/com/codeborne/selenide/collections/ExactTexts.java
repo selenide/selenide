@@ -1,6 +1,7 @@
 package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.CheckResult;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
@@ -44,7 +45,7 @@ public class ExactTexts extends WebElementsCondition {
     for (int i = 0; i < expectedTexts.size(); i++) {
       String expectedText = expectedTexts.get(i);
       String actualText = actualTexts.get(i);
-      if (!check(actualText, expectedText)) {
+      if (!check(driver.config(), actualText, expectedText)) {
         String message = String.format("Text #%s mismatch (expected: \"%s\", actual: \"%s\")", i, expectedText, actualText);
         return rejected(message, actualTexts);
       }
@@ -52,7 +53,7 @@ public class ExactTexts extends WebElementsCondition {
     return CheckResult.accepted();
   }
 
-  protected boolean check(String actualText, String expectedText) {
+  protected boolean check(Config config, String actualText, String expectedText) {
     return Html.text.equals(actualText, expectedText);
   }
 
