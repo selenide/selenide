@@ -25,8 +25,9 @@ public class ShadowHostBuilder extends AbstractFindByBuilder {
     FindBy[] findBys = shadowHost.value();
     By byHost = buildByFromFindBy(findBys[0]);
 
-    By[] byInnerHosts = new By[findBys.length - 1];
-    for (int i = 1; i < findBys.length; i++) {
+    int findByCount = findBys.length;
+    By[] byInnerHosts = new By[findByCount - 1];
+    for (int i = 1; i < findByCount; i++) {
       byInnerHosts[i - 1] = buildByFromFindBy(findBys[i]);
     }
 

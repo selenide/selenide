@@ -34,12 +34,13 @@ public class Attributes extends WebElementsCondition {
   @Override
   public CheckResult check(Driver driver, List<WebElement> elements) {
     List<@Nullable String> actualValues = communicator.attributes(driver, elements, attribute);
-    if (actualValues.size() != expectedValues.size()) {
-      String message = String.format("List size mismatch (expected: %s, actual: %s)", expectedValues.size(), actualValues.size());
+    int expectedValuesSize = expectedValues.size();
+    int actualValuesSize = actualValues.size();
+    if (actualValuesSize != expectedValuesSize) {
+      String message = String.format("List size mismatch (expected: %s, actual: %s)", expectedValuesSize, actualValuesSize);
       return CheckResult.rejected(message, actualValues);
     }
-
-    for (int i = 0; i < expectedValues.size(); i++) {
+    for (int i = 0; i < expectedValuesSize; i++) {
       String expectedValue = expectedValues.get(i);
       String actualValue = actualValues.get(i);
 

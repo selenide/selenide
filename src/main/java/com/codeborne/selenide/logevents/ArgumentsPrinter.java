@@ -79,7 +79,8 @@ public class ArgumentsPrinter {
   }
 
   private static void arrayCopy(int[] source, Object[] destination, int destinationPosition) {
-    for (int i = 0; i < source.length; i++) {
+    int sourceLength = source.length;
+    for (int i = 0; i < sourceLength; i++) {
       destination[destinationPosition + i] = source[i];
     }
   }
