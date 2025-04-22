@@ -24,8 +24,9 @@ public class UploadFileFromClasspath implements Command<File> {
   @Override
   public File execute(SelenideElement proxy, WebElementSource inputField, Object @Nullable [] args) {
     String[] fileName = firstOf(args);
-    File[] files = new File[fileName.length];
-    for (int i = 0; i < fileName.length; i++) {
+    int fileCount = fileName.length;
+    File[] files = new File[fileCount];
+    for (int i = 0; i < fileCount; i++) {
       files[i] = findFileInClasspath(fileName[i]);
     }
 

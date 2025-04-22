@@ -227,8 +227,9 @@ public class SimpleReport {
   }
 
   private static String escape(String text) {
-    var builder = new StringBuilder((int) (text.length() * 1.5));
-    for (int i = 0; i < text.length(); i++) {
+    int textLength = text.length();
+    var builder = new StringBuilder((int) (textLength * 1.5));
+    for (int i = 0; i < textLength; i++) {
       var symbol = text.charAt(i);
 
       switch (symbol) {

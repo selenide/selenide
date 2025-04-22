@@ -47,7 +47,8 @@ public class ByShadow extends By implements Serializable {
     }
 
     List<SearchContext> shadowRoots = findShadowRoots(context, shadowHosts.get(0));
-    for (int i = 1; i < shadowHosts.size(); i++) {
+    int shadowRootCount = shadowRoots.size();
+    for (int i = 1; i < shadowRootCount; i++) {
       By shadowHost = shadowHosts.get(i);
 
       shadowRoots = shadowRoots.stream()
