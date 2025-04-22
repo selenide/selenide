@@ -1,7 +1,9 @@
 # Changelog
 
-## 7.9.1 (work in progress)
-*
+## 7.9.1 (22.04.2025)
+* #3010 respect `Configuration.textCheck` in `$$.shouldHave(texts("First", "", "Third"));` (#3011)
+* bump LittleProxy from 2.4.0 to 2.4.1
+
 see https://github.com/selenide/selenide/milestone/223
 
 ## 7.9.0 (19.04.2025)
