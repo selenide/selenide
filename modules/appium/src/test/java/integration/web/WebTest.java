@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.ScrollOptions.defaultScrollOptions;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.up;
@@ -27,6 +28,7 @@ public class WebTest {
     open("https://selenide.org");
 
     SelenideAppiumElement testimonials = $(By.cssSelector(".testimonials"));
+    testimonials.scroll(defaultScrollOptions());
     testimonials.scrollTo();
 
     assertThatThrownBy(() -> testimonials.scroll(up()))
