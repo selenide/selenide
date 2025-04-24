@@ -325,7 +325,8 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   protected int indexOf(Class<?> klass, Type firstArgument) {
     Object[] objects = Arrays.stream(klass.getTypeParameters()).toArray();
-    for (int i = 0; i < objects.length; i++) {
+    int typeParameterCount = objects.length;
+    for (int i = 0; i < typeParameterCount; i++) {
       if (objects[i].equals(firstArgument)) return i;
     }
     return -1;

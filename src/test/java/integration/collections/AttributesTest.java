@@ -30,7 +30,7 @@ public class AttributesTest extends ITest {
   void canCheckBooleanValues_readOnly() {
     $$(".field").shouldHave(attributes("readOnly", "true", "true", "true"));
     $$(".element").shouldHave(attributes("readOnly", null, null, null));
-    $$("h1").shouldHave(attributes("readOnly", null, "true"));
+    $$("h1").shouldHave(attributes("readOnly", null, "true", "true"));
   }
 
   @Test

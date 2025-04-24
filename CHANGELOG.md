@@ -1,8 +1,14 @@
 # Changelog
 
+## 7.9.1 (22.04.2025)
+* #3010 respect `Configuration.textCheck` in `$$.shouldHave(texts("First", "", "Third"));` (#3011)
+* bump LittleProxy from 2.4.0 to 2.4.1
+
+see https://github.com/selenide/selenide/milestone/223
+
 ## 7.9.0 (19.04.2025)
+* #2992 Write screenshots in a format that Jenkins and GitLab treat as attachments  --  thanks to Vivien Tintillier (#2998)
 * #2763 Can click with JS holding keys ALT, CTRL etc. (#3008)
-* #2992 Write screenshots in a format that Jenkins and GitLab treat as attachments (#2998)
 * bump Selenium from 4.30.0 to 4.31.0; and CDP from 134 to 135 (#2994)
 * check for empty expected value (#3007)
 

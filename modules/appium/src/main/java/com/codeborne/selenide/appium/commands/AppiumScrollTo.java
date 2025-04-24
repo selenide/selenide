@@ -1,10 +1,12 @@
 package com.codeborne.selenide.appium.commands;
 
 import com.codeborne.selenide.FluentCommand;
+import com.codeborne.selenide.ScrollOptions;
 import com.codeborne.selenide.appium.AppiumScrollCoordinates;
 import com.codeborne.selenide.appium.AppiumScrollOptions;
 import com.codeborne.selenide.appium.ScrollDirection;
 import com.codeborne.selenide.commands.ScrollTo;
+import com.codeborne.selenide.impl.Arguments;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.AppiumDriver;
 import org.jspecify.annotations.Nullable;
@@ -29,14 +31,12 @@ public class AppiumScrollTo extends FluentCommand {
 
   @Override
   protected void execute(WebElementSource locator, Object @Nullable [] args) {
-    AppiumScrollOptions scrollOptions = extractOptions(args);
-
     Optional<AppiumDriver> driver = cast(locator.driver(), AppiumDriver.class);
     if (!driver.isPresent()) {
-      scrollInWebBrowser(locator, args, scrollOptions);
+      scrollInWebBrowser(locator, args);
     }
     else {
-      scrollInMobile(driver.get(), locator, scrollOptions);
+      scrollInMobile(driver.get(), locator, args);
     }
   }
 
@@ -50,15 +50,19 @@ public class AppiumScrollTo extends FluentCommand {
     }
   }
 
-  private void scrollInWebBrowser(WebElementSource locator, Object @Nullable [] args,
-                                  AppiumScrollOptions appiumScrollOptions) {
-    if (appiumScrollOptions != DEFAULT_OPTIONS) {
+  private void scrollInWebBrowser(WebElementSource locator, Object @Nullable [] args) {
+    if (new Arguments(args).ofType(AppiumScrollOptions.class).isPresent()) {
       throw new IllegalArgumentException("Scrolling with options is only supported for mobile drivers");
     }
     webImplementation.execute(locator, args);
   }
 
-  private void scrollInMobile(AppiumDriver appiumDriver, WebElementSource locator, AppiumScrollOptions scrollOptions) {
+  private void scrollInMobile(AppiumDriver appiumDriver, WebElementSource locator, Object @Nullable [] args) {
+    if (new Arguments(args).ofType(ScrollOptions.class).isPresent()) {
+      throw new IllegalArgumentException("Use scroll(AppiumScrollOptions) instead of scroll(ScrollOptions)");
+    }
+
+    AppiumScrollOptions scrollOptions = extractOptions(args);
     int currentSwipeCount = 0;
 
     while (isElementNotDisplayed(locator)

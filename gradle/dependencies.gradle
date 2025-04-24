@@ -10,7 +10,7 @@ ext {
   mockitoVersion = '5.17.0'
   slf4jVersion = '2.0.17'
   browserupProxyVersion = '3.2.0'
-  littleProxyVersion = '2.4.0'
+  littleProxyVersion = '2.4.1'
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.9'
   archunitVersion = '1.4.0'
@@ -49,7 +49,7 @@ subprojects {
       exclude group: 'com.google.code.findbugs'
     }
     implementation('org.jspecify:jspecify:1.0.0')
-    implementation('com.google.errorprone:error_prone_annotations:2.37.0')
+    implementation('com.google.errorprone:error_prone_annotations:2.38.0')
     implementation("com.google.guava:guava:33.4.8-jre")
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("commons-io:commons-io:2.19.0")
