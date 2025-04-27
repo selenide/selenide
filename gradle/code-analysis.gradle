@@ -1,3 +1,17 @@
+/**
+ * Workaround for configuring SpotBugs {@code effort} and {@code reportLevel}.
+ * <p>
+ * Due to the way the SpotBugs Gradle plugin loads its classes,
+ * direct access via {@code classLoader} is required to properly
+ * reference {@code Effort} and {@code Confidence} enums.
+ * <p>
+ * Standard configuration using string literals or enum values
+ * is not supported and will not work as expected.
+ * <p>
+ * See: <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/972#issuecomment-1769247750">
+ * Related discussion and solution on GitHub
+ * </a>
+ */
 def classLoader = plugins['com.github.spotbugs'].class.classLoader
 def SpotBugsEffort = classLoader.findLoadedClass('com.github.spotbugs.snom.Effort')
 def SpotBugsConfidence = classLoader.findLoadedClass('com.github.spotbugs.snom.Confidence')
