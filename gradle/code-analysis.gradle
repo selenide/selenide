@@ -1,21 +1,28 @@
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-  dependencies {
-    classpath "com.github.spotbugs.snom:spotbugs-gradle-plugin:6.1.7"
-  }
-}
+/**
+ * Workaround for configuring SpotBugs {@code effort} and {@code reportLevel}.
+ * <p>
+ * Due to the way the SpotBugs Gradle plugin loads its classes,
+ * direct access via {@code classLoader} is required to properly
+ * reference {@code Effort} and {@code Confidence} enums.
+ * <p>
+ * Standard configuration using string literals or enum values
+ * is not supported and will not work as expected.
+ * <p>
+ * See: <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/972#issuecomment-1769247750">
+ * Related discussion and solution on GitHub
+ * </a>
+ */
+def classLoader = plugins['com.github.spotbugs'].class.classLoader
+def SpotBugsEffort = classLoader.findLoadedClass('com.github.spotbugs.snom.Effort')
+def SpotBugsConfidence = classLoader.findLoadedClass('com.github.spotbugs.snom.Confidence')
 
 subprojects {
 
   apply plugin: "com.github.spotbugs"
 
   spotbugs {
-    // Doesn't work after upgrading Spotbugs from 5.x to 6.0.2 :(
-    // effort = com.github.spotbugs.snom.Effort.valueOf('MAX')
+    effort = SpotBugsEffort.MAX
+    reportLevel = SpotBugsConfidence.DEFAULT
     excludeFilter = rootProject.file('config/spotbugs/excludeFilter.xml')
   }
 
@@ -24,7 +31,6 @@ subprojects {
       xml { required = true }
       html {
         required = true
-        outputLocation = file("$buildDir/reports/spotbugs/main.html")
         stylesheet = 'fancy-hist.xsl'
       }
     }
@@ -35,7 +41,6 @@ subprojects {
       xml { required = true }
       html {
         required = true
-        outputLocation = file("$buildDir/reports/spotbugs/test.html")
         stylesheet = 'fancy-hist.xsl'
       }
     }
