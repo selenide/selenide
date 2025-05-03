@@ -3,8 +3,6 @@ package integration.videorecorder.testng;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.selenide.videorecorder.core.Video;
 import org.selenide.videorecorder.testng.VideoRecorderListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Listeners;
@@ -27,8 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Listeners(VideoRecorderTester.class)
 public class VideoRecorderTestNg2Test {
-
-  private static final Logger log = LoggerFactory.getLogger(VideoRecorderTestNg2Test.class);
 
   @Test
   @Video
