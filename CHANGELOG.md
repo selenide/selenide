@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.9.2 (**.05.2025)
+* bump Selenium from 4.31.0 to 4.32.0; and CDP from 135 to 136 (#3020)
+* #3014 fix ClassCastException in selenide-appium when calling scroll(ScrollOptions) on a web browser (#3015)
+* Improve performance by caching list size in loops  --  thanks to Luis Serna (#3013)
+*  Fix SpotBugs config  --  thanks to Yaraslau Lazakovich (#3018)
+
 ## 7.9.1 (22.04.2025)
 * #3010 respect `Configuration.textCheck` in `$$.shouldHave(texts("First", "", "Third"));` (#3011)
 * bump LittleProxy from 2.4.0 to 2.4.1
