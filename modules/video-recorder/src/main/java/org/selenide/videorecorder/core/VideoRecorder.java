@@ -64,7 +64,8 @@ public class VideoRecorder {
 
     try {
       screenshooter.shutdown();
-      stop("Screenshooter", screenshooter, config.videoProcessingTimeout());
+      stop("Screenshooter", screenshooter, 1000);
+      screenshooter.shutdownNow();
       screenShooterTask.finish();
 
       videoMerger.shutdown();
