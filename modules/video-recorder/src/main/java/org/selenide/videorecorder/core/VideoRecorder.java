@@ -16,6 +16,7 @@ import static java.util.concurrent.Executors.newScheduledThreadPool;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.selenide.videorecorder.core.VideoSaveMode.ALL;
 
 /**
  * Created by Serhii Bryt
@@ -45,7 +46,19 @@ public class VideoRecorder {
   public void start() {
     log.info("Starting screenshooter every {} nanoseconds to achieve fps {}", delayBetweenFramesNanos(), fps);
     RecordedVideos.remove(currentThread().getId());
+    startScreenShooter();
+    if (mergeVideoOnTheFly()) {
+      startVideoMerger();
+    }
+  }
+
+  private void startScreenShooter() {
+    log.debug("Start screen shooter x {} {}", delayBetweenFramesNanos(), NANOSECONDS);
     screenshooter.scheduleAtFixedRate(screenShooterTask, 0, delayBetweenFramesNanos(), NANOSECONDS);
+  }
+
+  private void startVideoMerger() {
+    log.debug("Start video merger x {} {}", 1, MILLISECONDS);
     videoMerger.scheduleWithFixedDelay(videoMergerTask, 0, 1, MILLISECONDS);
   }
 
@@ -60,6 +73,10 @@ public class VideoRecorder {
    * Complete video processing and save the video file
    */
   public void finish() {
+    if (!mergeVideoOnTheFly() && !screenshots.isEmpty()) {
+      startVideoMerger();
+    }
+
     log.debug("Stopping video recorder...");
 
     try {
@@ -100,6 +117,10 @@ public class VideoRecorder {
     else {
       log.debug("{} thread stopped in {} ms.", name, NANOSECONDS.toMillis(nanoTime() - start));
     }
+  }
+
+  private boolean mergeVideoOnTheFly() {
+    return config.saveMode() == ALL;
   }
 
   @Override
