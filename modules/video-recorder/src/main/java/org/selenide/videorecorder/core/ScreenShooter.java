@@ -1,6 +1,7 @@
 package org.selenide.videorecorder.core;
 
 import com.codeborne.selenide.drivercommands.WebdriversRegistry;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -33,7 +34,8 @@ class ScreenShooter extends TimerTask {
       WebDriver webDriver = driver.webDriver();
       byte[] screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(BYTES);
       long timestamp = nanoTime();
-      screenshots.add(new Screenshot(start, webDriver.manage().window().getSize(), driver.config(), screenshot));
+      Dimension windowSize = screenshots.isEmpty() ? webDriver.manage().window().getSize() : new Dimension(-1, -1);
+      screenshots.add(new Screenshot(start, windowSize, driver.config(), screenshot));
       log.debug("Taken a screenshot in thread {} at {} in {} ms.", threadId, timestamp, NANOSECONDS.toMillis(timestamp - start));
     }, () -> {
       log.trace("Skip taking a screenshot because webdriver is not started in thread {}", threadId);
