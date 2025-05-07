@@ -85,7 +85,7 @@ final class ScreenshotsTest extends IntegrationTest {
     File file = new File(new URI(url));
     assertThat(file).exists();
 
-    String attachmentLog = "INFO AttachmentConsolePrinter - [[ATTACHMENT|%s]]".formatted(file);
+    String attachmentLog = "INFO AttachmentPrinter - [[ATTACHMENT|%s]]".formatted(file);
     Condition<String> containsAttachmentLog = new Condition<>(s -> s.contains(attachmentLog), "contains '%s'", attachmentLog);
     assertThat(systemErr.getLines()).haveExactly(1, containsAttachmentLog);
   }
