@@ -7,13 +7,14 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.Queue;
 import java.util.TimerTask;
 
 import static java.lang.System.nanoTime;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.openqa.selenium.OutputType.BYTES;
+import static org.openqa.selenium.OutputType.FILE;
 import static org.selenide.videorecorder.core.Screenshot.endMarker;
 
 class ScreenShooter extends TimerTask {
@@ -32,11 +33,12 @@ class ScreenShooter extends TimerTask {
       long start = nanoTime();
       log.debug("Taking a screenshot for webdriver in thread {} at {} ...", threadId, start);
       WebDriver webDriver = driver.webDriver();
-      byte[] screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(BYTES);
+      File screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(FILE);
       long timestamp = nanoTime();
       Dimension windowSize = screenshots.isEmpty() ? webDriver.manage().window().getSize() : new Dimension(-1, -1);
-      screenshots.add(new Screenshot(start, windowSize, driver.config(), screenshot));
-      log.debug("Taken a screenshot in thread {} at {} in {} ms.", threadId, timestamp, NANOSECONDS.toMillis(timestamp - start));
+      screenshots.add(new Screenshot(start, windowSize, driver.config(), new FileImageSource(screenshot)));
+      long duration = NANOSECONDS.toMillis(timestamp - start);
+      log.debug("Taken a screenshot in thread {} at {} in {} ms: {}", threadId, timestamp, duration, screenshot);
     }, () -> {
       log.trace("Skip taking a screenshot because webdriver is not started in thread {}", threadId);
     });
