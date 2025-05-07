@@ -1,5 +1,6 @@
 package org.selenide.videorecorder.core;
 
+import com.codeborne.selenide.impl.AttachmentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,6 +8,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledExecutorService;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.impl.ThreadNamer.named;
 import static java.lang.Integer.toHexString;
 import static java.lang.System.nanoTime;
@@ -24,6 +26,7 @@ import static org.selenide.videorecorder.core.VideoSaveMode.ALL;
 public class VideoRecorder {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorder.class);
   private static final VideoConfiguration config = new VideoConfiguration();
+  private final AttachmentHandler attachmentHandler = inject();
 
   private final ScheduledExecutorService screenshooter = newScheduledThreadPool(1, named("video-recorder:screenshots:"));
   private final ScheduledExecutorService videoMerger = newScheduledThreadPool(1, named("video-recorder:stream:"));
@@ -88,6 +91,7 @@ public class VideoRecorder {
       videoMergerTask.finish();
 
       log.info("Video recorded: {}", videoUrl());
+      attachmentHandler.attach(videoMergerTask.videoFile().toFile());
     }
     catch (InterruptedException e) {
       Thread.currentThread().interrupt();
