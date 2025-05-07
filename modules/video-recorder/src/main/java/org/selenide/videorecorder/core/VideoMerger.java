@@ -9,10 +9,7 @@ import org.openqa.selenium.Dimension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Queue;
@@ -89,6 +86,8 @@ class VideoMerger extends TimerTask {
       long durationMs = NANOSECONDS.toMillis(nanoTime() - start);
       log.debug("Added {} to video x {} times in {} ms. (queue size: {})", current, framesCount, durationMs, screenshots.size());
 
+      current.screenshot.dispose();
+
       if (current.isEnd()) {
         log.debug("Detected end of screenshots queue: {}", current);
         cancel();
@@ -157,9 +156,9 @@ class VideoMerger extends TimerTask {
     }
   }
 
-  private static Frame screenshotToFrame(Java2DFrameConverter converter, byte[] screenshot) {
-    try (InputStream in = new ByteArrayInputStream(screenshot)) {
-      return converter.getFrame(ImageIO.read(in), 1.0, true);
+  private static Frame screenshotToFrame(Java2DFrameConverter converter, ImageSource screenshot) {
+    try {
+      return converter.getFrame(screenshot.getImage(), 1.0, true);
     }
     catch (IOException e) {
       log.error("Failed to convert screenshot to frame", e);
