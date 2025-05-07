@@ -158,7 +158,7 @@ class VideoMerger extends TimerTask {
 
   private static Frame screenshotToFrame(Java2DFrameConverter converter, ImageSource screenshot) {
     try {
-      return converter.getFrame(screenshot.getImage(), 1.0, true);
+      return converter.getFrame(screenshot.getImage(), 1.0, false);
     }
     catch (IOException e) {
       log.error("Failed to convert screenshot to frame", e);
