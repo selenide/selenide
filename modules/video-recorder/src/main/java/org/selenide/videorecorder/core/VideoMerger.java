@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
@@ -39,22 +38,27 @@ class VideoMerger extends TimerTask {
   @Nullable
   private FFmpegFrameRecorder recorder;
 
-  @Nullable
-  private Path videoFile;
+  private final Path videoFile;
 
-  VideoMerger(long threadId, int fps, int crf, Queue<Screenshot> screenshots) {
+  VideoMerger(long threadId, String folder, int fps, int crf, Queue<Screenshot> screenshots) {
     this.threadId = threadId;
     this.fps = fps;
     this.crf = crf;
     this.screenshots = screenshots;
+    videoFile = Path.of(folder, generateVideoFileName()).toAbsolutePath();
+    RecordedVideos.add(threadId, videoFile);
   }
 
-  public Optional<Path> videoFile() {
-    return Optional.ofNullable(videoFile);
+  private String generateVideoFileName() {
+    return currentTimeMillis() + "." + videoFileCounter.getAndIncrement() + ".webm";
   }
 
-  public Optional<String> videoUrl() {
-    return videoFile().map(f -> f.toUri().toString());
+  public Path videoFile() {
+    return videoFile;
+  }
+
+  public String videoUrl() {
+    return videoFile().toUri().toString();
   }
 
   @Override
@@ -112,16 +116,11 @@ class VideoMerger extends TimerTask {
   }
 
   private FFmpegFrameRecorder initVideoRecording(Screenshot screenshot) {
-    String fileName = currentTimeMillis() + "." + videoFileCounter.getAndIncrement() + ".webm";
-    videoFile = Path.of(screenshot.config.reportsFolder(), fileName).toAbsolutePath();
-
     Dimension window = screenshot.window;
     log.debug("Start FFMpeg video recorder of size {}x{} in file {}", window.width, window.height, videoFile.toAbsolutePath());
 
     Path videoFolder = prepareVideoFolder(videoFile);
     log.debug("Created folder for video: {}", videoFolder.toAbsolutePath());
-
-    RecordedVideos.add(threadId, videoFile);
 
     FFmpegFrameRecorder rec = new FFmpegFrameRecorder(videoFile.toFile(), window.width, window.height);
     rec.setFormat("webm");
@@ -212,14 +211,11 @@ class VideoMerger extends TimerTask {
   }
 
   private void deleteVideoFile() {
-    if (videoFile != null) {
-      try {
-        Files.deleteIfExists(videoFile);
-      }
-      catch (IOException e) {
-        log.error("Failed to delete video file {}", videoFile, e);
-      }
-      videoFile = null;
+    try {
+      Files.deleteIfExists(videoFile);
+    }
+    catch (IOException e) {
+      log.error("Failed to delete video file {}", videoFile, e);
     }
   }
 }

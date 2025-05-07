@@ -26,6 +26,16 @@ public class VideoConfiguration {
   }
 
   /**
+   * The folder to save the videos to
+   *
+   * @return true by default
+   */
+  public String videoFolder() {
+    return properties.getProperty("selenide.video.folder",
+      System.getProperty("selenide.reportsFolder", "build/reports/tests"));
+  }
+
+  /**
    * Should the videos be recorded for all tests, or only for annotated with {@link Video}.
    * @return {@link RecordingMode#ANNOTATED} by default
    */

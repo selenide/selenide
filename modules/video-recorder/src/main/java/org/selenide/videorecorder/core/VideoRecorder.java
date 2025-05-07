@@ -3,7 +3,6 @@ package org.selenide.videorecorder.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,16 +35,15 @@ public class VideoRecorder {
   public VideoRecorder() {
     fps = config.fps();
     screenShooterTask = new ScreenShooter(currentThread().getId(), screenshots);
-    videoMergerTask = new VideoMerger(currentThread().getId(), fps, config.crf(), screenshots);
+    videoMergerTask = new VideoMerger(currentThread().getId(), config.videoFolder(), fps, config.crf(), screenshots);
   }
 
-  public Optional<String> videoUrl() {
+  public String videoUrl() {
     return videoMergerTask.videoUrl();
   }
 
   public void start() {
     log.info("Starting screenshooter every {} nanoseconds to achieve fps {}", delayBetweenFramesNanos(), fps);
-    RecordedVideos.remove(currentThread().getId());
     startScreenShooter();
     if (mergeVideoOnTheFly()) {
       startVideoMerger();
@@ -89,9 +87,7 @@ public class VideoRecorder {
       stop("Video merger", videoMerger, config.videoProcessingTimeout());
       videoMergerTask.finish();
 
-      videoUrl().ifPresentOrElse(
-        url -> log.info("Video recorded: {}", videoUrl().orElseThrow()),
-        () -> log.info("Video not recorded."));
+      log.info("Video recorded: {}", videoUrl());
     }
     catch (InterruptedException e) {
       Thread.currentThread().interrupt();
