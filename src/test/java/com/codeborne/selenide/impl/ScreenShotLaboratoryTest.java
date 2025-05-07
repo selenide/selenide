@@ -35,9 +35,10 @@ final class ScreenShotLaboratoryTest {
   private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);
   private final Photographer photographer = mock();
   private final PageSourceExtractor extractor = mock();
+  private final AttachmentHandler attachmentHandler = mock();
   private final long ts = System.currentTimeMillis();
   private final Clock clock = new DummyClock(ts);
-  private final ScreenShotLaboratory screenshots = new ScreenShotLaboratory(photographer, extractor, clock);
+  private final ScreenShotLaboratory screenshots = new ScreenShotLaboratory(photographer, extractor, attachmentHandler, clock);
 
   @BeforeEach
   void setUp() {
@@ -419,7 +420,6 @@ final class ScreenShotLaboratoryTest {
   }
 
   @Test
-
   void printHtmlPath_if_savePageSourceIsEnabled() {
     config.savePageSource(false);
     config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
@@ -430,6 +430,14 @@ final class ScreenShotLaboratoryTest {
       "Screenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/%s.0.png" +
         "%nPage source: http://ci.mycompany.com/job/666/artifact/build/reports/page123.html", ts
     ));
+  }
+
+  @Test
+  void screenshotIsAttached() {
+    config.screenshots(true);
+    Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
+
+    verify(attachmentHandler).attach(screenshot.getImageFile());
   }
 
   private String normalize(String path) {

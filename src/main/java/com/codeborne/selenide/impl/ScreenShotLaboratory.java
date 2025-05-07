@@ -55,6 +55,7 @@ public class ScreenShotLaboratory {
 
   private final Photographer photographer;
   private final PageSourceExtractor extractor;
+  private final AttachmentHandler attachmentHandler;
   private final Clock clock;
   protected final List<Screenshot> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
@@ -64,12 +65,13 @@ public class ScreenShotLaboratory {
   protected final ThreadLocal<List<Screenshot>> threadScreenshots = withInitial(ArrayList::new);
 
   private ScreenShotLaboratory() {
-    this(inject(Photographer.class), inject(PageSourceExtractor.class), new Clock());
+    this(inject(), inject(), inject(), new Clock());
   }
 
-  ScreenShotLaboratory(Photographer photographer, PageSourceExtractor extractor, Clock clock) {
+  ScreenShotLaboratory(Photographer photographer, PageSourceExtractor extractor, AttachmentHandler attachmentHandler, Clock clock) {
     this.photographer = photographer;
     this.extractor = extractor;
+    this.attachmentHandler = attachmentHandler;
     this.clock = clock;
   }
 
@@ -257,6 +259,7 @@ public class ScreenShotLaboratory {
       }
       File imageFile = new File(config.reportsFolder(), fileName + ".png").getAbsoluteFile();
       writeToFileSafely(srcFile.get(), imageFile);
+      attachmentHandler.attach(imageFile);
       return imageFile;
     }
     catch (WebDriverException e) {
@@ -268,7 +271,6 @@ public class ScreenShotLaboratory {
   private static void writeToFileSafely(byte[] srcFile, File imageFile) {
     try {
       FileUtils.writeByteArrayToFile(imageFile, srcFile);
-      AttachmentConsolePrinter.printAttachmentLine(imageFile);
     }
     catch (IOException e) {
       log.error("Failed to save screenshot to {}", imageFile, e);
