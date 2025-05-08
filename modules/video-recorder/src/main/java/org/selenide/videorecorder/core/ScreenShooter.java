@@ -34,6 +34,7 @@ class ScreenShooter extends TimerTask {
       log.debug("Taking a screenshot for webdriver in thread {} at {} ...", threadId, start);
       WebDriver webDriver = driver.webDriver();
       File screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(FILE);
+      screenshot.deleteOnExit();
       long timestamp = nanoTime();
       Dimension windowSize = screenshots.isEmpty() ? webDriver.manage().window().getSize() : new Dimension(-1, -1);
       screenshots.add(new Screenshot(start, windowSize, driver.config(), new FileImageSource(screenshot)));
