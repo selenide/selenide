@@ -16,6 +16,7 @@ import org.openqa.selenium.support.events.WebDriverListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.ClickOptions.using;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static com.codeborne.selenide.Condition.exactText;
@@ -24,6 +25,10 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openqa.selenium.Keys.ALT;
+import static org.openqa.selenium.Keys.LEFT_ALT;
+import static org.openqa.selenium.Keys.LEFT_CONTROL;
+import static org.openqa.selenium.Keys.LEFT_SHIFT;
+import static org.openqa.selenium.Keys.META;
 import static org.openqa.selenium.Keys.SHIFT;
 
 final class ClickUsingJavascriptTest extends IntegrationTest {
@@ -88,6 +93,17 @@ final class ClickUsingJavascriptTest extends IntegrationTest {
 
     $("#double-clickable-button").click(using(clickMethod).holdingKeys(ALT, SHIFT));
     $("h2").shouldHave(exactText("Status: clicked+shift+alt"));
+
+    $("#double-clickable-button").click(using(clickMethod).holdingKeys(META));
+    $("h2").shouldHave(exactText("Status: clicked+meta"));
+  }
+
+  @Test
+  void userCanClick_whileHoldingControl() {
+    openFile("page_with_double_clickable_button.html");
+
+    $("#double-clickable-button").click(using(JS).holdingKeys(LEFT_CONTROL, LEFT_SHIFT, LEFT_ALT));
+    $("h2").shouldHave(exactText("Status: clicked+shift+alt+control"));
   }
 
   public static class MyListener implements WebDriverListener {

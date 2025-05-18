@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
+import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.ClickOptions.using;
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
@@ -16,6 +17,9 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
 import static integration.Coordinates.coordinates;
 import static org.openqa.selenium.Keys.ALT;
+import static org.openqa.selenium.Keys.LEFT_ALT;
+import static org.openqa.selenium.Keys.LEFT_CONTROL;
+import static org.openqa.selenium.Keys.LEFT_SHIFT;
 import static org.openqa.selenium.Keys.SHIFT;
 
 /**
@@ -116,5 +120,13 @@ final class DoubleClickTest extends ITest {
 
     $("#double-clickable-button").doubleClick(using(clickMethod).holdingKeys(ALT, SHIFT));
     $("h2").shouldHave(exactText("Status: double-clicked+shift+alt"));
+  }
+
+  @Test
+  void userCanDoubleClick_whileHoldingControl() {
+    openFile("page_with_double_clickable_button.html");
+
+    $("#double-clickable-button").doubleClick(using(JS).holdingKeys(LEFT_CONTROL, LEFT_SHIFT, LEFT_ALT));
+    $("h2").shouldHave(exactText("Status: double-clicked+shift+alt+control"));
   }
 }
