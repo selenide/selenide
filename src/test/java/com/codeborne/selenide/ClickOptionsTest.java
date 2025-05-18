@@ -8,6 +8,10 @@ import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openqa.selenium.Keys.ALT;
+import static org.openqa.selenium.Keys.CONTROL;
+import static org.openqa.selenium.Keys.LEFT_ALT;
+import static org.openqa.selenium.Keys.LEFT_CONTROL;
+import static org.openqa.selenium.Keys.LEFT_SHIFT;
 import static org.openqa.selenium.Keys.SHIFT;
 
 final class ClickOptionsTest {
@@ -62,7 +66,10 @@ final class ClickOptionsTest {
     assertThat(usingDefaultMethod().offsetX(100).offsetY(500))
       .hasToString("method: DEFAULT, offsetX: 100, offsetY: 500, force: false, keys: []");
 
-    assertThat(usingDefaultMethod().holdingKeys(ALT, SHIFT))
-      .hasToString("method: DEFAULT, offsetX: 0, offsetY: 0, force: false, keys: [alt, shift]");
+    assertThat(usingDefaultMethod().holdingKeys(ALT, SHIFT, CONTROL))
+      .hasToString("method: DEFAULT, offsetX: 0, offsetY: 0, force: false, keys: [alt, shift, control]");
+
+    assertThat(usingDefaultMethod().holdingKeys(LEFT_ALT, LEFT_SHIFT, LEFT_CONTROL))
+      .hasToString("method: DEFAULT, offsetX: 0, offsetY: 0, force: false, keys: [left alt, left shift, left control]");
   }
 }

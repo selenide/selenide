@@ -138,8 +138,11 @@ public class ClickOptions implements HasTimeout {
   private String keyToString(Keys key) {
     return switch (key) {
       case ALT -> "alt";
-      case CONTROL -> "ctrl";
+      case LEFT_ALT -> "left alt";
+      case CONTROL -> "control";
+      case LEFT_CONTROL -> "left control";
       case SHIFT -> "shift";
+      case LEFT_SHIFT -> "left shift";
       case META -> "meta";
       default -> key.toString();
     };
