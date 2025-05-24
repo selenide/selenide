@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.shadowDeepCss;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
@@ -16,6 +17,7 @@ final class ShadowDomDeepSelectorsInsideIFrameTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     openFile("page_with_shadow_dom_inside_iframe.html");
+    timeout = 300;
   }
 
   @Test
