@@ -20,6 +20,7 @@ final class ShadowElementTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_shadow_dom.html");
+    setTimeout(300);
   }
 
   @Test

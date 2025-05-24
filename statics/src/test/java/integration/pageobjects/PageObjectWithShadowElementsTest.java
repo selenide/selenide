@@ -10,11 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exactValue;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.page;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,6 +28,7 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
   void openTestPage() {
     openFile("page_with_shadow_dom.html");
     pageObject = page();
+    pageObject.header.shouldBe(visible, Duration.ofMillis(50));
   }
 
   @Test
@@ -106,6 +109,9 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
   }
 
   private static class PageObject {
+
+    @FindBy(tagName = "h1")
+    SelenideElement header;
 
     @ShadowHost(@FindBy(id = "shadow-host"))
     @FindBy(css = "#inputInShadow")

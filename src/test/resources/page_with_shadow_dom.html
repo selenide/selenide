@@ -4,7 +4,6 @@
   <title>Test: elements with Shadow-DOM</title>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript">
 
     function newElement(tag, attributes, text) {
@@ -45,7 +44,7 @@
       return button;
     }
 
-    $(function () {
+    function initPage() {
       const shadow = document.getElementById('shadow-host').attachShadow({mode: "open"});
 
       shadow.appendChild(newElement('p', {}, 'Inside Shadow-DOM'));
@@ -68,12 +67,14 @@
       appendChildItem(shadowContainerChild1, 'shadow-container-child-child', 'shadowContainerChildChild1Host1')
       appendChildItem(shadowContainerChild1, 'shadow-container-child-child', 'shadowContainerChildChild2Host1')
       appendChildItem(shadowContainerChild3, 'shadow-container-child-child', 'shadowContainerChildChild1Host3')
-    });
+
+      document.querySelector('h1').style.display = 'block'
+    }
 
   </script>
 </head>
 <body>
-<h1>Page with Shadow DOM</h1>
+<h1 style="display: none">Page with Shadow DOM</h1>
 
 <h2>Nested Shadow DOM</h2>
 <div id="shadow-host" class="shadow-host"></div>
@@ -81,5 +82,8 @@
 <h2>Multiple nested Shadow hosts</h2>
 <div id="shadow-container"></div>
 
+<script>
+  setTimeout(initPage, 20)
+</script>
 </body>
 </html>
