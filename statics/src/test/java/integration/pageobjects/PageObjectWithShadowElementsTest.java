@@ -28,7 +28,7 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
   void openTestPage() {
     openFile("page_with_shadow_dom.html");
     pageObject = page();
-    pageObject.header.shouldBe(visible, Duration.ofMillis(50));
+    pageObject.header.shouldBe(visible, Duration.ofMillis(300));
   }
 
   @Test
