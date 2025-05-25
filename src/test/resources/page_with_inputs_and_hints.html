@@ -46,8 +46,50 @@
       </label>
       <div id="passwordHint" style="display: none">password hint</div>
       <br/>
+      <br/>
+      <br/>
+      <div id="greeting">
+        <span class="view"></span>
+        <input type="text" style="display: none">
+      </div>
+      <br/>
     </fieldset>
   </form>
 </div>
+<script>
+  let greeting = 'Dear'
+  const greetingContainer = document.querySelector('#greeting');
+  const greetingDisplay = greetingContainer.querySelector('span');
+  const greetingInput = greetingContainer.querySelector('input');
+
+  greetingDisplay.innerText = greeting;
+
+  function toggleGreetingViewMode() {
+    greetingDisplay.innerText = greeting
+    greetingInput.style.display = 'none'
+    greetingDisplay.style.display = 'inline'
+  }
+
+  greetingInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+      greeting = greetingInput.value
+      toggleGreetingViewMode()
+    }
+    else if (e.key === 'Escape') {
+      toggleGreetingViewMode()
+    }
+  })
+
+  greetingInput.addEventListener('blur', () => {
+    toggleGreetingViewMode()
+  })
+
+  greetingContainer.addEventListener('dblclick', () => {
+    greetingDisplay.style.display = 'none'
+    greetingInput.value = greeting
+    greetingInput.style.display = 'inline'
+    greetingInput.focus()
+  })
+</script>
 </body>
 </html>
