@@ -14,8 +14,6 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
-import org.openqa.selenium.support.pagefactory.ElementLocator;
-import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import java.lang.reflect.Constructor;
@@ -212,7 +210,7 @@ public class SelenidePageFactory implements PageObjectFactory {
       return createElementsContainerList(driver, searchContext, field, genericTypes, selector);
     }
     else if (isDecoratableList(field, selector, genericTypes, WebElement.class)) {
-      return createWebElementsList(loader, driver, searchContext, field);
+      return createElementsCollection(driver, searchContext, selector, field, alias);
     }
 
     return defaultFieldDecorator(driver, searchContext).decorate(loader, field);
@@ -236,14 +234,6 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   protected <T extends SelenideElement> SelenideElement createSelf(WebElementSource searchContext, Class<T> targetType) {
     return ElementFinder.wrap(targetType, searchContext);
-  }
-
-  private List<WebElement> createWebElementsList(ClassLoader loader, Driver driver, @Nullable WebElementSource searchContext,
-                                                 Field field) {
-    ElementLocatorFactory factory = fieldLocatorFactory(driver, searchContext);
-    ElementLocator locator = factory.createLocator(field);
-    SelenideFieldDecorator decorator = new SelenideFieldDecorator(factory);
-    return decorator.proxyForListLocator(loader, locator);
   }
 
   protected SelenideElement decorateWebElement(Driver driver, @Nullable WebElementSource searchContext, By selector,
@@ -333,7 +323,6 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @Nullable
-  @SuppressWarnings("DataFlowIssue")
   private static As aliasOf(Field field) {
     return field.getAnnotation(As.class);
   }
