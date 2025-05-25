@@ -11,7 +11,8 @@ import org.openqa.selenium.WebElement;
 import java.io.Serializable;
 import java.util.List;
 
-import static java.util.Objects.requireNonNull;
+import static java.util.Collections.emptyList;
+import static java.util.Objects.requireNonNullElse;
 
 public class ByDeepShadowCss extends By implements Serializable {
 
@@ -46,7 +47,7 @@ public class ByDeepShadowCss extends By implements Serializable {
   @Override
   public List<WebElement> findElements(SearchContext context) {
     try {
-      return requireNonNull(jsSource.execute(context, target));
+      return requireNonNullElse(jsSource.execute(context, target), emptyList());
     } catch (JavascriptException e) {
       throw new NoSuchElementException(Cleanup.of.webdriverExceptionMessage(e));
     }
