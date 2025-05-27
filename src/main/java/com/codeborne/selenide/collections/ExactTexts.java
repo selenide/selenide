@@ -3,6 +3,7 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.TextCheck;
 import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
@@ -57,6 +58,13 @@ public class ExactTexts extends WebElementsCondition {
 
   protected boolean check(Config config, String actualText, String expectedText) {
     return Html.text.equals(actualText, expectedText);
+  }
+
+  protected boolean matches(TextCheck mode, String actual, String expected) {
+    return switch (mode) {
+      case PARTIAL_TEXT -> Html.text.contains(actual, expected);
+      case FULL_TEXT -> Html.text.equals(actual, expected);
+    };
   }
 
   @Override

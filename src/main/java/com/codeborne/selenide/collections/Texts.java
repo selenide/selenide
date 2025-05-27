@@ -1,7 +1,6 @@
 package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.Config;
-import com.codeborne.selenide.impl.Html;
 
 import java.util.List;
 
@@ -16,10 +15,7 @@ public class Texts extends ExactTexts {
 
   @Override
   protected boolean check(Config config, String actualText, String expectedText) {
-    return switch (config.textCheck()) {
-      case PARTIAL_TEXT -> Html.text.contains(actualText, expectedText);
-      case FULL_TEXT -> Html.text.equals(actualText, expectedText);
-    };
+    return matches(config.textCheck(), actualText, expectedText);
   }
 
   @Override
