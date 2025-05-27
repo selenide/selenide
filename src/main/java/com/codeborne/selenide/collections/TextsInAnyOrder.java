@@ -1,9 +1,9 @@
 package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.CheckResult;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.ElementCommunicator;
-import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class TextsInAnyOrder extends ExactTexts {
 
     for (int i = 0; i < expectedTextsSize; i++) {
       String expectedText = expectedTexts.get(i);
-      boolean found = find(actualTexts, expectedText);
+      boolean found = find(driver.config(), actualTexts, expectedText);
       if (!found) {
         String message = String.format("Text #%s not found: \"%s\"", i, expectedText);
         return CheckResult.rejected(message, actualTexts);
@@ -43,9 +43,9 @@ public class TextsInAnyOrder extends ExactTexts {
     return CheckResult.accepted();
   }
 
-  private boolean find(List<String> texts, String text) {
+  private boolean find(Config config, List<String> texts, String text) {
     for (String elementText : texts) {
-      if (Html.text.contains(elementText, text)) {
+      if (matches(config.textCheck(), elementText, text)) {
         return true;
       }
     }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.textsInAnyOrder;
+import static com.codeborne.selenide.TextCheck.FULL_TEXT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,6 +41,21 @@ public class TextsInAnyOrderTest extends ITest {
   @Test
   void acceptSubstrings() {
     $$(".element").shouldHave(textsInAnyOrder("On", "wo", "hre"));
+  }
+
+  @Test
+  void verifiesFullTexts() {
+    config().textCheck(FULL_TEXT);
+
+    $$(".element").shouldHave(textsInAnyOrder("One", "Two", "Three"));
+    $$(".element").shouldHave(textsInAnyOrder("Three", "One", "Two"));
+    $$(".element").shouldHave(textsInAnyOrder("Three", "Two", "One"));
+
+    assertThatThrownBy(() -> $$(".element").shouldHave(textsInAnyOrder("One", "Tw", "Three")))
+      .isInstanceOf(TextsMismatch.class)
+      .hasMessageStartingWith("Text #1 not found: \"Tw\"")
+      .hasMessageContaining("Actual (3): [One, Two, Three]")
+      .hasMessageContaining("Expected (3): [One, Tw, Three]");
   }
 
   @Test
