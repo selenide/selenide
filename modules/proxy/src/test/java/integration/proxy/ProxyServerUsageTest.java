@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -61,7 +62,7 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
 
     $("#cv").uploadFromClasspath("hello_world.txt");
     $("#submit").click();
-    $("h3").shouldHave(text("Uploaded 1 files"));
+    $("h3").shouldHave(text("Uploaded 1 files"), Duration.ofSeconds(1));
 
     assertThat(getSelenideProxy().getProxy())
       .as("Check browser up proxy instance")
