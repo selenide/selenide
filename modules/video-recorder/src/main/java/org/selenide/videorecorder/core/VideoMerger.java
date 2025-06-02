@@ -9,6 +9,8 @@ import org.openqa.selenium.Dimension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +18,7 @@ import java.util.Queue;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static java.awt.image.BufferedImage.TYPE_3BYTE_BGR;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.nanoTime;
 import static java.util.Objects.requireNonNull;
@@ -158,7 +161,8 @@ class VideoMerger extends TimerTask {
 
   private static Frame screenshotToFrame(Java2DFrameConverter converter, ImageSource screenshot) {
     try {
-      return converter.getFrame(screenshot.getImage(), 1.0, false);
+      BufferedImage rgbImage = removeAlpha(screenshot.getImage());
+      return converter.getFrame(rgbImage, 1.0, false);
     }
     catch (IOException e) {
       log.error("Failed to convert screenshot to frame", e);
@@ -167,6 +171,26 @@ class VideoMerger extends TimerTask {
     catch (Error | RuntimeException e) {
       log.error("Failed to convert screenshot to frame", e);
       throw e;
+    }
+  }
+
+  private static BufferedImage removeAlpha(BufferedImage image) {
+    if (!image.getColorModel().hasAlpha()) {
+      return image;
+    }
+
+    BufferedImage rgbImage = new BufferedImage(image.getWidth(), image.getHeight(), TYPE_3BYTE_BGR);
+    copy(image, rgbImage);
+    return rgbImage;
+  }
+
+  private static void copy(BufferedImage source, BufferedImage target) {
+    Graphics2D g = target.createGraphics();
+    try {
+      g.drawImage(source, 0, 0, null);
+    }
+    finally {
+      g.dispose();
     }
   }
 
