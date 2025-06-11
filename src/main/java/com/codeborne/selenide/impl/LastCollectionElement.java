@@ -13,9 +13,11 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.visible;
 
 public class LastCollectionElement extends WebElementSource {
-  public static SelenideElement wrap(CollectionSource collection) {
-    return (SelenideElement) Proxy.newProxyInstance(
-      collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
+
+  @SuppressWarnings("unchecked")
+  public static <T extends SelenideElement> T wrap(CollectionSource collection, Class<T> clazz) {
+    return (T) Proxy.newProxyInstance(
+      collection.getClass().getClassLoader(), new Class<?>[]{clazz},
       new SelenideElementProxy<>(new LastCollectionElement(collection)));
   }
 

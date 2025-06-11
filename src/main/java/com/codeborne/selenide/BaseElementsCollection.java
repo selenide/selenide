@@ -262,8 +262,8 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @return SelenideElement
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  public SelenideElement find(WebElementCondition condition) {
-    return CollectionElementByCondition.wrap(collection, condition);
+  public T find(WebElementCondition condition) {
+    return CollectionElementByCondition.wrap(collection, condition, clazz);
   }
 
   /**
@@ -274,7 +274,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @see #find(WebElementCondition)
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  public SelenideElement findBy(WebElementCondition condition) {
+  public T findBy(WebElementCondition condition) {
     return find(condition);
   }
 
@@ -323,7 +323,7 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @return the first element of the collection
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  public SelenideElement first() {
+  public T first() {
     return get(0);
   }
 
@@ -333,8 +333,8 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
    * @return the last element of the collection
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
-  public SelenideElement last() {
-    return LastCollectionElement.wrap(collection);
+  public T last() {
+    return LastCollectionElement.wrap(collection, clazz);
   }
 
   /**

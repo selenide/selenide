@@ -29,7 +29,7 @@ final class CollectionElementByConditionTest {
     WebElement mockedWebElement = mockWebElement("a", "hello");
 
     SelenideElement selenideElement = CollectionElementByCondition.wrap(
-      new WebElementsCollectionWrapper(driver, singletonList(mockedWebElement)), visible);
+      new WebElementsCollectionWrapper(driver, singletonList(mockedWebElement)), visible, SelenideElement.class);
     assertThat(selenideElement)
       .hasToString("$$(1 elements).findBy(visible)");
   }

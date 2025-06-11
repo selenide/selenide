@@ -1,6 +1,9 @@
 package com.codeborne.selenide.appium;
 
+import java.time.Duration;
+
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebElementCondition;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 
 public interface SelenideAppiumElement extends SelenideElement {
@@ -56,4 +59,52 @@ public interface SelenideAppiumElement extends SelenideElement {
    */
   @CanIgnoreReturnValue
   SelenideAppiumElement doubleTap();
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement shouldNotBe(WebElementCondition condition, Duration timeout);
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement shouldNotBe(WebElementCondition... condition);
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement shouldNotHave(WebElementCondition condition, Duration timeout);
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement shouldNotHave(WebElementCondition... condition);
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement shouldNot(WebElementCondition condition, Duration timeout);
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement shouldNot(WebElementCondition... condition);
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement shouldBe(WebElementCondition condition, Duration timeout);
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement shouldBe(WebElementCondition... condition);
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement shouldHave(WebElementCondition condition, Duration timeout);
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement shouldHave(WebElementCondition... condition);
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement should(WebElementCondition condition, Duration timeout);
+
+  @Override
+  @CanIgnoreReturnValue
+  SelenideAppiumElement should(WebElementCondition... condition);
 }
