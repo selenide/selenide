@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Queue;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.awt.image.BufferedImage.TYPE_3BYTE_BGR;
@@ -33,7 +34,7 @@ class VideoMerger extends TimerTask {
   private final int fps;
   private final int crf;
   private final Queue<Screenshot> screenshots;
-  private boolean cancelled;
+  private final AtomicBoolean cancelled = new AtomicBoolean(false);
 
   @Nullable
   private FFmpegFrameRecorder recorder;
@@ -81,7 +82,7 @@ class VideoMerger extends TimerTask {
       try (Java2DFrameConverter converter = new Java2DFrameConverter();
            Frame frame = screenshotToFrame(converter, current.screenshot)) {
         log.trace("Adding {} to video x {} times (queue size: {}) ...", current, framesCount, screenshots.size());
-        for (int i = 0; !cancelled && i < framesCount; i++) {
+        for (int i = 0; !cancelled.get() && i < framesCount; i++) {
           videoRecorder.record(frame);
         }
       }
@@ -199,7 +200,7 @@ class VideoMerger extends TimerTask {
    */
   void finish() {
     if (recorder != null) {
-      while (!cancelled && screenshots.size() > 1) {
+      while (!cancelled.get() && screenshots.size() > 1) {
         run();
       }
       try {
@@ -218,7 +219,7 @@ class VideoMerger extends TimerTask {
   @Override
   @CanIgnoreReturnValue
   public boolean cancel() {
-    cancelled = true;
+    cancelled.set(true);
     return super.cancel();
   }
 

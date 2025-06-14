@@ -130,7 +130,7 @@ public class Selectors {
    * @since v6.8.0
    */
   public static By shadowDeepCss(String target) {
-    return ByDeepShadowCss.cssSelector(target);
+    return new ByDeepShadowCss(target);
   }
 
   /**

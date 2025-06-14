@@ -20,19 +20,14 @@ public class ByDeepShadowCss extends By implements Serializable {
 
   private final String target;
 
-  private ByDeepShadowCss(String target) {
-    this.target = target;
-  }
-
-  /***
+  /**
    * Find target elements. It pierces Shadow DOM roots without knowing the path through nested shadow roots.
    * <p>
    * <br/> For example: #shadow-host #inner-shadow-host target-element
    * @param target CSS expression of target element
-   * @return A By which locates elements by CSS inside DOM with shadow-roots.
    */
-  public static By cssSelector(String target) {
-    return new ByDeepShadowCss(target);
+  public ByDeepShadowCss(String target) {
+    this.target = target;
   }
 
   @Override
