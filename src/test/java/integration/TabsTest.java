@@ -15,7 +15,6 @@ import static com.codeborne.selenide.Selectors.byText;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class TabsTest extends ITest {
   @BeforeEach
@@ -68,27 +67,7 @@ final class TabsTest extends ITest {
   }
 
   @Test
-  void canSwitchToWindowByIndex_chrome() {
-    assumeThat(browser().isChrome()).isTrue();
-    $(byText("Page2: alerts")).click();
-    $(byText("Page1: uploads")).click();
-    $(byText("Page3: jquery")).click();
-
-    $("h1").shouldHave(text("Tabs"));
-
-    switchTo().window(1);
-    $("h1").shouldHave(text("Page with JQuery"));
-    switchTo().window(2);
-    $("h1").shouldHave(text("File uploads"));
-    switchTo().window(3);
-    $("h1").shouldHave(text("Page with alerts"));
-    switchTo().window(0);
-    $("h1").shouldHave(text("Tabs"));
-  }
-
-  @Test
-  void canSwitchToWindowByIndex_other_browsers_but_chrome() {
-    assumeThat(browser().isChrome()).isFalse();
+  void canSwitchToWindowByIndex() {
     $(byText("Page2: alerts")).click();
     $(byText("Page1: uploads")).click();
     $(byText("Page3: jquery")).click();
