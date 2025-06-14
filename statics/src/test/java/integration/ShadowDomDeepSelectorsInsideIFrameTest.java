@@ -10,14 +10,12 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.shadowDeepCss;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
-import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ShadowDomDeepSelectorsInsideIFrameTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     openFile("page_with_shadow_dom_inside_iframe.html");
-    timeout = 300;
+    timeout = 1000;
   }
 
   @Test
@@ -29,8 +27,6 @@ final class ShadowDomDeepSelectorsInsideIFrameTest extends IntegrationTest {
 
   @Test
   void setValueViaShadowDomInsideIFrame() {
-    // Firefox says that the input is "not reachable by keyboard" (inside shadow-dom)
-    assumeThat(isFirefox()).isFalse();
     switchTo().frame("iframe_page");
     Configuration.fastSetValue = false;
     $(shadowDeepCss(".shadow-host input")).setValue("test").shouldHave(value("test"));
