@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 import static com.browserup.bup.client.ClientUtil.getConnectableAddress;
@@ -45,7 +46,7 @@ public class SelenideProxyServer {
   private final BrowserUpProxy proxy;
   private final Map<String, RequestFilter> requestFilters = new HashMap<>();
   private final Map<String, ResponseFilter> responseFilters = new HashMap<>();
-  private int port;
+  private final AtomicInteger port = new AtomicInteger();
 
   /**
    * Create server
@@ -101,7 +102,7 @@ public class SelenideProxyServer {
     addResponseFilter("download", downloadFilter);
 
     proxy.start(config.proxyPort());
-    port = proxy.getPort();
+    port.set(proxy.getPort());
   }
 
   public boolean isStarted() {
@@ -237,7 +238,7 @@ public class SelenideProxyServer {
 
   @Override
   public String toString() {
-    return String.format("Selenide proxy server: %s", port);
+    return String.format("Selenide proxy server: %s", port.get());
   }
 
   /**
