@@ -15,10 +15,12 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class WebPageSourceExtractor implements PageSourceExtractor {
   private static final Logger log = LoggerFactory.getLogger(WebPageSourceExtractor.class);
+  private final AttachmentHandler attachmentHandler = inject();
   private final Set<String> printedErrors = new ConcurrentSkipListSet<>();
 
   @Override
@@ -37,6 +39,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
       }
       else {
         writeToFile(source, pageSource);
+        attachmentHandler.attach(pageSource);
       }
     }
     catch (UnhandledAlertException e) {
@@ -66,7 +69,6 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
   protected void writeToFile(String content, File targetFile) {
     try (ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes(UTF_8))) {
       FileHelper.copyFile(in, targetFile);
-      AttachmentConsolePrinter.printAttachmentLine(targetFile);
     }
     catch (IOException e) {
       log.error("Failed to write file {}", targetFile.getAbsolutePath(), e);

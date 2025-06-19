@@ -12,7 +12,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import static com.codeborne.selenide.impl.Lists.list;
-import static java.util.Objects.requireNonNull;
+import static java.util.Collections.emptyList;
+import static java.util.Objects.requireNonNullElse;
 
 public class ByShadowCss extends By implements Serializable {
 
@@ -48,9 +49,9 @@ public class ByShadowCss extends By implements Serializable {
   public List<WebElement> findElements(SearchContext context) {
     try {
       if (context instanceof WebElement) {
-        return requireNonNull(jsSource.execute(context, target, shadowHostsChain, context));
+        return requireNonNullElse(jsSource.execute(context, target, shadowHostsChain, context), emptyList());
       } else {
-        return requireNonNull(jsSource.execute(context, target, shadowHostsChain));
+        return requireNonNullElse(jsSource.execute(context, target, shadowHostsChain), emptyList());
       }
     } catch (JavascriptException e) {
       throw new NoSuchElementException(Cleanup.of.webdriverExceptionMessage(e));

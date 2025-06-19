@@ -3,21 +3,27 @@
 <head>
   <style>
     body {
-      margin: 50px 50px 0 50px;
+      margin: 40px 40px 0 40px;
     }
     input[type=text] {
       width: 400px;
     }
 
-    #timer {
-      padding: 10px;
-      margin-top: 40px;
+    #colors {
+      margin-top: 30px;
+      width: 470px;
+      border: 1px solid darkgray;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .timer {
+      padding: 8px;
+      margin: 8px;
       border-top: 1px solid black;
       width: 160px;
       height: 30px;
       text-align: center;
       vertical-align: center;
-      background: #fcefa1;
       font-size: x-large;
     }
   </style>
@@ -30,11 +36,22 @@
 <input name="q" type="text" placeholder="Type your query here">
 <input type="button" value="Search">
 
-<div id="timer"></div>
+<div id="colors">
+  <div class="timer" id="timer" style="background: #fcefa1;"></div>
+  <div class="timer" id="blue" style="background: blue; color: greenyellow;"></div>
+  <div class="timer" id="lightblue" style="background: lightblue;"></div>
+  <div class="timer" id="green" style="background: green;"></div>
+  <div class="timer" id="red" style="background: red;"></div>
+  <div class="timer" id="brown" style="background: brown; color: white;"></div>
+  <div class="timer" id="black" style="background: black; color: yellow;"></div>
+  <div class="timer" id="fuchsia" style="background: fuchsia;"></div>
+</div>
 
 <script>
   setInterval(() => {
-    document.getElementById('timer').innerText = new Date().toLocaleTimeString()
+    document.querySelectorAll('.timer').forEach(div => {
+      div.innerText = new Date().toLocaleTimeString()
+    })
   }, 100)
 </script>
 

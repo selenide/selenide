@@ -17,20 +17,23 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.tagName;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.page;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class LazyPageObjectTest extends IntegrationTest {
+  private MyPage myPage;
+
   @BeforeEach
   final void setUp() {
+    closeWebDriver();
+    myPage = page(MyPage.class);
     openFile("fortest.html");
   }
 
   @Test
   public void pageObject() {
-    MyPage myPage = page(MyPage.class);
-
     // level 2
     assertThat(myPage.myContent.forms).hasSize(1);
 
@@ -52,7 +55,6 @@ public class LazyPageObjectTest extends IntegrationTest {
 
   @Test
   public void shouldLoadElementsLazily() {
-    MyPage myPage = page(MyPage.class);
     myPage.wrongContent.h42.shouldNot(exist);
     myPage.h3.shouldNot(exist);
     List<MyForm> thisLineShouldNotFail = myPage.wrongContent.forms;
@@ -77,6 +79,9 @@ public class LazyPageObjectTest extends IntegrationTest {
 
     @FindBy(tagName = "h3")
     private SelenideElement h3;
+
+    @FindBy(tagName = "h3")
+    private List<WebElement> webElements;
   }
 
   static class MyContent implements Container {

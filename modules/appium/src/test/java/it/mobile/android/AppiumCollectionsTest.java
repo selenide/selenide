@@ -2,12 +2,14 @@ package it.mobile.android;
 
 import com.codeborne.selenide.appium.SelenideAppium;
 import com.codeborne.selenide.appium.SelenideAppiumCollection;
+import com.codeborne.selenide.appium.SelenideAppiumElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.down;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.up;
 import static com.codeborne.selenide.appium.SelenideAppium.$$;
@@ -34,7 +36,13 @@ public class AppiumCollectionsTest extends BaseSwagLabsAndroidTest {
     inputFields.first(1).shouldHave(size(1));
     inputFields.last(2).shouldHave(size(2));
 
+    assertThat(inputFields.first()).isInstanceOf(SelenideAppiumElement.class);
+    assertThat(inputFields.last()).isInstanceOf(SelenideAppiumElement.class);
+
     inputFields.first(1).get(0).scroll(up()).shouldHave(attribute("password", "false"));
     inputFields.last(1).get(0).scroll(down()).shouldHave(attribute("password", "true"));
+
+    SelenideAppiumElement field = inputFields.find(attribute("password", "true")).shouldBe(visible);
+    assertThat(field).isInstanceOf(SelenideAppiumElement.class);
   }
 }

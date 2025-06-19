@@ -36,6 +36,7 @@ import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
+import static org.openqa.selenium.remote.CapabilityType.ENABLE_DOWNLOADS;
 
 final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileFromGridWithCdpTest.class);
@@ -47,7 +48,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
       .as("Firefox doesn't support CDP download method")
       .isFalse();
     Configuration.remote = gridUrl().toString();
-    Configuration.browserCapabilities.setCapability("se:downloadsEnabled", true);
+    Configuration.browserCapabilities.setCapability(ENABLE_DOWNLOADS, true);
     Configuration.fileDownload = CDP;
     openFile("page_with_uploads.html");
   }

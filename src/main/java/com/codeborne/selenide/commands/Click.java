@@ -24,6 +24,9 @@ import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.commands.Util.size;
 import static org.openqa.selenium.Keys.ALT;
 import static org.openqa.selenium.Keys.CONTROL;
+import static org.openqa.selenium.Keys.LEFT_ALT;
+import static org.openqa.selenium.Keys.LEFT_CONTROL;
+import static org.openqa.selenium.Keys.LEFT_SHIFT;
 import static org.openqa.selenium.Keys.META;
 import static org.openqa.selenium.Keys.SHIFT;
 
@@ -134,9 +137,9 @@ public class Click extends FluentCommand {
 
   protected Map<String, Boolean> toClickEventOptions(List<Keys> keys) {
     return Map.of(
-      "altKey", keys.contains(ALT),
-      "ctrlKey", keys.contains(CONTROL),
-      "shiftKey", keys.contains(SHIFT),
+      "altKey", keys.contains(ALT) || keys.contains(LEFT_ALT),
+      "ctrlKey", keys.contains(CONTROL) || keys.contains(LEFT_CONTROL),
+      "shiftKey", keys.contains(SHIFT) || keys.contains(LEFT_SHIFT),
       "metaKey", keys.contains(META)
     );
   }

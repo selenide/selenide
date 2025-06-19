@@ -1,7 +1,7 @@
 (function (element, offsetX, offsetY, options) {
   const rect = element.getBoundingClientRect();
 
-  function mouseEvent() {
+  function createEvent() {
     if (typeof (Event) === 'function') {
       return new MouseEvent('click', Object.assign({
         'view': window,
@@ -25,5 +25,5 @@
       return event;
     }
   }
-  element.dispatchEvent(mouseEvent());
+  element.dispatchEvent(createEvent());
 })(arguments[0], arguments[1], arguments[2], arguments[3]);

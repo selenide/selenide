@@ -11,7 +11,8 @@ import org.openqa.selenium.WebElement;
 import java.io.Serializable;
 import java.util.List;
 
-import static java.util.Objects.requireNonNull;
+import static java.util.Collections.emptyList;
+import static java.util.Objects.requireNonNullElse;
 
 public class ByDeepShadowCss extends By implements Serializable {
 
@@ -19,19 +20,14 @@ public class ByDeepShadowCss extends By implements Serializable {
 
   private final String target;
 
-  private ByDeepShadowCss(String target) {
-    this.target = target;
-  }
-
-  /***
+  /**
    * Find target elements. It pierces Shadow DOM roots without knowing the path through nested shadow roots.
    * <p>
    * <br/> For example: #shadow-host #inner-shadow-host target-element
    * @param target CSS expression of target element
-   * @return A By which locates elements by CSS inside DOM with shadow-roots.
    */
-  public static By cssSelector(String target) {
-    return new ByDeepShadowCss(target);
+  public ByDeepShadowCss(String target) {
+    this.target = target;
   }
 
   @Override
@@ -46,7 +42,7 @@ public class ByDeepShadowCss extends By implements Serializable {
   @Override
   public List<WebElement> findElements(SearchContext context) {
     try {
-      return requireNonNull(jsSource.execute(context, target));
+      return requireNonNullElse(jsSource.execute(context, target), emptyList());
     } catch (JavascriptException e) {
       throw new NoSuchElementException(Cleanup.of.webdriverExceptionMessage(e));
     }

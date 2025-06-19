@@ -5,20 +5,17 @@ import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.impl.Lazy;
 import org.openqa.selenium.Dimension;
 
-import java.io.IOException;
-
 import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
-import static org.apache.commons.io.IOUtils.resourceToByteArray;
 
 class Screenshot {
-  private static final Lazy<byte[]> LAST_SCREEN = lazyEvaluated(() -> lastScreen());
+  private static final Lazy<ImageSource> LAST_SCREEN = lazyEvaluated(() -> lastScreen());
 
   final long timestamp;
   final Dimension window;
   final Config config;
-  final byte[] screenshot;
+  final ImageSource screenshot;
 
-  Screenshot(long timestamp, Dimension window, Config config, byte[] screenshot) {
+  Screenshot(long timestamp, Dimension window, Config config, ImageSource screenshot) {
     this.timestamp = timestamp;
     this.window = window;
     this.config = config;
@@ -31,20 +28,15 @@ class Screenshot {
 
   @Override
   public String toString() {
-    return "%s(%s)".formatted(getClass().getSimpleName(), timestamp);
+    return "%s(%s:%s)".formatted(getClass().getSimpleName(), timestamp, screenshot);
   }
 
   static Screenshot endMarker(long timestamp) {
     return new EndMarker(timestamp);
   }
 
-  private static byte[] lastScreen() {
-    try {
-      return resourceToByteArray("/selenide-screen.png");
-    }
-    catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+  private static ImageSource lastScreen() {
+    return new ClasspathResource("/selenide-screen.png");
   }
 
   private static class EndMarker extends Screenshot {

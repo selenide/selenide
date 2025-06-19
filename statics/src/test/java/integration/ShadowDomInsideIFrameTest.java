@@ -16,6 +16,7 @@ final class ShadowDomInsideIFrameTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     openFile("page_with_shadow_dom_inside_iframe.html");
+    Configuration.timeout = 300;
   }
 
   @Test

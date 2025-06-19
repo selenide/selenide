@@ -12,7 +12,9 @@ import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.ownText;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.$$x;
+import static com.codeborne.selenide.Selenide.containers;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ElementsContainersPageFactoryTest extends IntegrationTest {

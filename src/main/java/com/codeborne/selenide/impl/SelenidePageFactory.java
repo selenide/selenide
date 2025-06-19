@@ -3,7 +3,6 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.As;
 import com.codeborne.selenide.BaseElementsCollection;
 import com.codeborne.selenide.Container;
-import com.codeborne.selenide.Container.ShadowRoot;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -14,8 +13,6 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
-import org.openqa.selenium.support.pagefactory.ElementLocator;
-import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import java.lang.reflect.Constructor;
@@ -25,10 +22,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-import static com.codeborne.selenide.impl.SelenideAnnotations.*;
+import static com.codeborne.selenide.impl.SelenideAnnotations.aliasOf;
 import static com.codeborne.selenide.impl.SelenideAnnotations.isShadowRoot;
 
 /**
@@ -215,7 +211,7 @@ public class SelenidePageFactory implements PageObjectFactory {
       return createElementsContainerList(driver, searchContext, field, genericTypes, selector);
     }
     else if (isDecoratableList(field, selector, genericTypes, WebElement.class)) {
-      return createWebElementsList(loader, driver, searchContext, field);
+      return createElementsCollection(driver, searchContext, selector, field, alias);
     }
 
     return defaultFieldDecorator(driver, searchContext).decorate(loader, field);
@@ -239,14 +235,6 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   protected <T extends SelenideElement> SelenideElement createSelf(WebElementSource searchContext, Class<T> targetType) {
     return ElementFinder.wrap(targetType, searchContext);
-  }
-
-  private List<WebElement> createWebElementsList(ClassLoader loader, Driver driver, @Nullable WebElementSource searchContext,
-                                                 Field field) {
-    ElementLocatorFactory factory = fieldLocatorFactory(driver, searchContext);
-    ElementLocator locator = factory.createLocator(field);
-    SelenideFieldDecorator decorator = new SelenideFieldDecorator(factory);
-    return decorator.proxyForListLocator(loader, locator);
   }
 
   protected SelenideElement decorateWebElement(Driver driver, @Nullable WebElementSource searchContext, By selector,
@@ -299,15 +287,6 @@ public class SelenidePageFactory implements PageObjectFactory {
       collection = new LazyCollectionSnapshot(collection);
     }
     return new ElementsContainerCollection<>(this, driver, field, listType, genericTypes, collection);
-  }
-
-  @Override
-  public <ContainerClass extends Container> List<ContainerClass> createElementsContainerList(Driver driver,
-                                                                                             Collection<? extends WebElement> elements,
-                                                                                             Class<ContainerClass> listType,
-                                                                                             Type[] genericTypes) {
-    CollectionSource collection = new WebElementsCollectionWrapper(driver, elements);
-    return new ElementsContainerCollection<>(this, driver, null, listType, genericTypes, collection);
   }
 
   protected boolean isDecoratableList(Field field, @Nullable By selector, Type[] genericTypes, Class<?> type) {

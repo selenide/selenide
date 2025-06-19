@@ -3,7 +3,12 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.drivercommands.LazyDriver;
 import com.codeborne.selenide.drivercommands.Navigator;
 import com.codeborne.selenide.drivercommands.WebDriverWrapper;
-import com.codeborne.selenide.impl.*;
+import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
+import com.codeborne.selenide.impl.ElementFinder;
+import com.codeborne.selenide.impl.JavaScript;
+import com.codeborne.selenide.impl.Lazy;
+import com.codeborne.selenide.impl.PageObjectFactory;
+import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.selector.FocusedElementLocator;
@@ -146,15 +151,20 @@ public class SelenideDriver {
     return pageFactory.createElementsContainer(driver(), seleniumSelector, 0, containerClass, containerClass.getGenericInterfaces());
   }
 
-  public <ContainerClass extends Container> ContainerClass container(By seleniumSelector, int index, Class<ContainerClass> containerClass) {
-    return pageFactory.createElementsContainer(driver(), seleniumSelector, index, containerClass, containerClass.getGenericInterfaces());
+  public <ContainerClass extends Container> ContainerClass container(By seleniumSelector,
+                                                                     int index,
+                                                                     Class<ContainerClass> containerClass) {
+    return pageFactory.createElementsContainer(driver(), seleniumSelector, index, containerClass,
+      containerClass.getGenericInterfaces());
   }
 
   public <ContainerClass extends Container> ContainerClass container(String cssSelector, Class<ContainerClass> containerClass) {
     return container(By.cssSelector(cssSelector), containerClass);
   }
 
-  public <ContainerClass extends Container> ContainerClass container(String cssSelector, int index, Class<ContainerClass> containerClass) {
+  public <ContainerClass extends Container> ContainerClass container(String cssSelector,
+                                                                     int index,
+                                                                     Class<ContainerClass> containerClass) {
     return container(By.cssSelector(cssSelector), index, containerClass);
   }
 

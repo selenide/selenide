@@ -1,6 +1,5 @@
 package integration.videorecorder.core;
 
-import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,12 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.selenide.videorecorder.core.RecordedVideos.getRecordedVideo;
 
 public class VideoRecorder3Test {
-  @Nullable
-  private VideoRecorder videoRecorder;
+  private final VideoRecorder videoRecorder = new VideoRecorder();
 
   @BeforeEach
   public void beforeEach() {
-    videoRecorder = new VideoRecorder();
     videoRecorder.start();
   }
 
@@ -41,7 +38,7 @@ public class VideoRecorder3Test {
 
   @AfterEach
   public void checkVideo() {
-    requireNonNull(videoRecorder).finish();
+    videoRecorder.finish();
     Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow();
     assertThat(videoFile.toFile().length()).isGreaterThan(0);
     assertThat(videoFile).hasExtension("webm");

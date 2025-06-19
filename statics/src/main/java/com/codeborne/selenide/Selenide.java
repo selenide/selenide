@@ -513,7 +513,8 @@ public class Selenide {
    * @param containerClass type of Selenide Container to create
    * @return collection of containers of a specific type
    */
-  public static <ContainerClass extends Container> List<ContainerClass> $$x(String xpathExpression, Class<ContainerClass> containerClass) {
+  public static <ContainerClass extends Container> List<ContainerClass> $$x(String xpathExpression,
+                                                                            Class<ContainerClass> containerClass) {
     return getSelenideDriver().$$x(xpathExpression, containerClass);
   }
 
@@ -880,7 +881,9 @@ public class Selenide {
    * @param containerClass type of Selenide Container to create
    * @return Selenide Container
    */
-  public static <ContainerClass extends Container> ContainerClass container(By seleniumSelector, int index, Class<ContainerClass> containerClass) {
+  public static <ContainerClass extends Container> ContainerClass container(By seleniumSelector,
+                                                                            int index,
+                                                                            Class<ContainerClass> containerClass) {
     return getSelenideDriver().container(seleniumSelector, index, containerClass);
   }
 
@@ -903,7 +906,9 @@ public class Selenide {
    * @param containerClass type of Selenide Container to create
    * @return Selenide Container
    */
-  public static <ContainerClass extends Container> ContainerClass container(String cssSelector, int index, Class<ContainerClass> containerClass) {
+  public static <ContainerClass extends Container> ContainerClass container(String cssSelector,
+                                                                            int index,
+                                                                            Class<ContainerClass> containerClass) {
     return getSelenideDriver().container(cssSelector, index, containerClass);
   }
 
@@ -927,7 +932,8 @@ public class Selenide {
    * @param containerClass type of Selenide Container to create
    * @return collection of containers of a specific type
    */
-  public static <ContainerClass extends Container> List<ContainerClass> containers(String cssSelector, Class<ContainerClass> containerClass) {
+  public static <ContainerClass extends Container> List<ContainerClass> containers(String cssSelector,
+                                                                                   Class<ContainerClass> containerClass) {
     return getSelenideDriver().containers(cssSelector, containerClass);
   }
 

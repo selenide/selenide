@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.SetValueMethod.JS;
@@ -59,5 +60,16 @@ final class FastSetValueTest extends IntegrationTest {
     $("#password").setValue(withText("admin").sensitive().usingMethod(JS));
     $("#usernameHint").should(disappear);
     $("#passwordHint").should(appear);
+  }
+
+  @Test
+  void setValueInFloatingInput() {
+    $("#greeting").doubleClick();
+    $("#greeting input")
+      .setValue(withText("The lord of the Galaxy").usingMethod(JS))
+      .pressEnter();
+
+    $("#greeting input").should(disappear);
+    $("#greeting .view").shouldBe(visible).shouldHave(text("The lord of the Galaxy"));
   }
 }

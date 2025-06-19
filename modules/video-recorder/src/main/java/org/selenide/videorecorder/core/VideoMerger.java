@@ -9,17 +9,17 @@ import org.openqa.selenium.Dimension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
-import java.io.ByteArrayInputStream;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static java.awt.image.BufferedImage.TYPE_3BYTE_BGR;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.nanoTime;
 import static java.util.Objects.requireNonNull;
@@ -34,27 +34,32 @@ class VideoMerger extends TimerTask {
   private final int fps;
   private final int crf;
   private final Queue<Screenshot> screenshots;
-  private boolean cancelled;
+  private final AtomicBoolean cancelled = new AtomicBoolean(false);
 
   @Nullable
   private FFmpegFrameRecorder recorder;
 
-  @Nullable
-  private Path videoFile;
+  private final Path videoFile;
 
-  VideoMerger(long threadId, int fps, int crf, Queue<Screenshot> screenshots) {
+  VideoMerger(long threadId, String folder, int fps, int crf, Queue<Screenshot> screenshots) {
     this.threadId = threadId;
     this.fps = fps;
     this.crf = crf;
     this.screenshots = screenshots;
+    videoFile = Path.of(folder, generateVideoFileName()).toAbsolutePath();
+    RecordedVideos.add(threadId, videoFile);
   }
 
-  public Optional<Path> videoFile() {
-    return Optional.ofNullable(videoFile);
+  private String generateVideoFileName() {
+    return currentTimeMillis() + "." + videoFileCounter.getAndIncrement() + ".webm";
   }
 
-  public Optional<String> videoUrl() {
-    return videoFile().map(f -> f.toUri().toString());
+  public Path videoFile() {
+    return videoFile;
+  }
+
+  public String videoUrl() {
+    return videoFile().toUri().toString();
   }
 
   @Override
@@ -77,13 +82,15 @@ class VideoMerger extends TimerTask {
       try (Java2DFrameConverter converter = new Java2DFrameConverter();
            Frame frame = screenshotToFrame(converter, current.screenshot)) {
         log.trace("Adding {} to video x {} times (queue size: {}) ...", current, framesCount, screenshots.size());
-        for (int i = 0; !cancelled && i < framesCount; i++) {
+        for (int i = 0; !cancelled.get() && i < framesCount; i++) {
           videoRecorder.record(frame);
         }
       }
 
       long durationMs = NANOSECONDS.toMillis(nanoTime() - start);
       log.debug("Added {} to video x {} times in {} ms. (queue size: {})", current, framesCount, durationMs, screenshots.size());
+
+      current.screenshot.dispose();
 
       if (current.isEnd()) {
         log.debug("Detected end of screenshots queue: {}", current);
@@ -112,16 +119,11 @@ class VideoMerger extends TimerTask {
   }
 
   private FFmpegFrameRecorder initVideoRecording(Screenshot screenshot) {
-    String fileName = currentTimeMillis() + "." + videoFileCounter.getAndIncrement() + ".webm";
-    videoFile = Path.of(screenshot.config.reportsFolder(), fileName).toAbsolutePath();
-
     Dimension window = screenshot.window;
     log.debug("Start FFMpeg video recorder of size {}x{} in file {}", window.width, window.height, videoFile.toAbsolutePath());
 
     Path videoFolder = prepareVideoFolder(videoFile);
     log.debug("Created folder for video: {}", videoFolder.toAbsolutePath());
-
-    RecordedVideos.add(threadId, videoFile);
 
     FFmpegFrameRecorder rec = new FFmpegFrameRecorder(videoFile.toFile(), window.width, window.height);
     rec.setFormat("webm");
@@ -158,9 +160,10 @@ class VideoMerger extends TimerTask {
     }
   }
 
-  private static Frame screenshotToFrame(Java2DFrameConverter converter, byte[] screenshot) {
-    try (InputStream in = new ByteArrayInputStream(screenshot)) {
-      return converter.getFrame(ImageIO.read(in), 1.0, true);
+  private static Frame screenshotToFrame(Java2DFrameConverter converter, ImageSource screenshot) {
+    try {
+      BufferedImage rgbImage = removeAlpha(screenshot.getImage());
+      return converter.getFrame(rgbImage, 1.0, false);
     }
     catch (IOException e) {
       log.error("Failed to convert screenshot to frame", e);
@@ -172,12 +175,32 @@ class VideoMerger extends TimerTask {
     }
   }
 
+  private static BufferedImage removeAlpha(BufferedImage image) {
+    if (!image.getColorModel().hasAlpha()) {
+      return image;
+    }
+
+    BufferedImage rgbImage = new BufferedImage(image.getWidth(), image.getHeight(), TYPE_3BYTE_BGR);
+    copy(image, rgbImage);
+    return rgbImage;
+  }
+
+  private static void copy(BufferedImage source, BufferedImage target) {
+    Graphics2D g = target.createGraphics();
+    try {
+      g.drawImage(source, 0, 0, null);
+    }
+    finally {
+      g.dispose();
+    }
+  }
+
   /**
    * Complete video processing and save the video file
    */
   void finish() {
     if (recorder != null) {
-      while (!cancelled && screenshots.size() > 1) {
+      while (!cancelled.get() && screenshots.size() > 1) {
         run();
       }
       try {
@@ -196,7 +219,7 @@ class VideoMerger extends TimerTask {
   @Override
   @CanIgnoreReturnValue
   public boolean cancel() {
-    cancelled = true;
+    cancelled.set(true);
     return super.cancel();
   }
 
@@ -212,14 +235,11 @@ class VideoMerger extends TimerTask {
   }
 
   private void deleteVideoFile() {
-    if (videoFile != null) {
-      try {
-        Files.deleteIfExists(videoFile);
-      }
-      catch (IOException e) {
-        log.error("Failed to delete video file {}", videoFile, e);
-      }
-      videoFile = null;
+    try {
+      Files.deleteIfExists(videoFile);
+    }
+    catch (IOException e) {
+      log.error("Failed to delete video file {}", videoFile, e);
     }
   }
 }

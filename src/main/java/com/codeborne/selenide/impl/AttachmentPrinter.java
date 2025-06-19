@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-class AttachmentConsolePrinter {
+class AttachmentPrinter implements AttachmentHandler {
 
-  private static final Logger log = LoggerFactory.getLogger(AttachmentConsolePrinter.class);
+  private static final Logger log = LoggerFactory.getLogger(AttachmentPrinter.class);
 
   /**
    * Prints an attachment line to the console. This is recognised by at least
@@ -16,7 +16,8 @@ class AttachmentConsolePrinter {
    *
    * @param file the file to be attached
    */
-  static void printAttachmentLine(File file) {
+  @Override
+  public void attach(File file) {
     log.info("[[ATTACHMENT|{}]]", file.getAbsolutePath());
   }
 }

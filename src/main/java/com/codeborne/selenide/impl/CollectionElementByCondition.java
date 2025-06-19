@@ -13,9 +13,10 @@ import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 
 public class CollectionElementByCondition extends WebElementSource {
 
-  public static SelenideElement wrap(CollectionSource collection, WebElementCondition condition) {
-    return (SelenideElement) Proxy.newProxyInstance(
-      collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
+  @SuppressWarnings("unchecked")
+  public static <T extends SelenideElement> T wrap(CollectionSource collection, WebElementCondition condition, Class<T> clazz) {
+    return (T) Proxy.newProxyInstance(
+      collection.getClass().getClassLoader(), new Class<?>[]{clazz},
       new SelenideElementProxy<>(new CollectionElementByCondition(collection, condition)));
   }
 
