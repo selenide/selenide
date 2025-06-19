@@ -25,7 +25,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
+import static com.codeborne.selenide.impl.SelenideAnnotations.*;
+import static com.codeborne.selenide.impl.SelenideAnnotations.isShadowRoot;
 
 /**
  * Factory class to make using Page Objects simpler and easier.
@@ -150,10 +154,6 @@ public class SelenidePageFactory implements PageObjectFactory {
     }
   }
 
-  static boolean isShadowRoot(Field field, Class<?> type) {
-    return field.isAnnotationPresent(ShadowRoot.class) || type.isAnnotationPresent(ShadowRoot.class);
-  }
-
   Container initElementsContainer(Driver driver, Field field, WebElementSource self) throws ReflectiveOperationException {
     Type[] genericTypes = field.getGenericType() instanceof ParameterizedType parameterizedType ?
       parameterizedType.getActualTypeArguments() : NO_TYPE;
@@ -162,15 +162,19 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   @Override
   public Container initElementsContainer(Driver driver,
-                                         Field field,
+                                         @Nullable Field field,
                                          WebElementSource self,
                                          Class<?> type,
                                          Type[] genericTypes) throws ReflectiveOperationException {
+    String errorMessage = field == null
+      ? "Cannot initialize type " + type.getName()
+      : "Cannot initialize field " + field;
+
     if (Modifier.isInterface(type.getModifiers())) {
-      throw new IllegalArgumentException("Cannot initialize field " + field + ": " + type + " is interface");
+      throw new IllegalArgumentException(errorMessage + ": " + type + " is interface");
     }
     if (Modifier.isAbstract(type.getModifiers())) {
-      throw new IllegalArgumentException("Cannot initialize field " + field + ": " + type + " is abstract");
+      throw new IllegalArgumentException(errorMessage + ": " + type + " is abstract");
     }
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
@@ -182,8 +186,7 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   @Nullable
   private String alias(Field field) {
-    As alias = aliasOf(field);
-    return alias == null ? null : alias.value();
+    return new SelenideAnnotations(field).getAlias();
   }
 
   @Nullable
@@ -286,7 +289,8 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   protected List<Container> createElementsContainerList(Driver driver, @Nullable WebElementSource searchContext,
                                                         Field field, Type[] genericTypes, By selector) {
-    Class<?> listType = getListGenericType(field, genericTypes);
+    @SuppressWarnings("unchecked")
+    Class<Container> listType = (Class<Container>) getListGenericType(field, genericTypes);
     if (listType == null) {
       throw new IllegalArgumentException("Cannot detect list type for " + field);
     }
@@ -294,7 +298,16 @@ public class SelenidePageFactory implements PageObjectFactory {
     if (shouldCache(field)) {
       collection = new LazyCollectionSnapshot(collection);
     }
-    return new ElementsContainerCollection(this, driver, field, listType, genericTypes, collection);
+    return new ElementsContainerCollection<>(this, driver, field, listType, genericTypes, collection);
+  }
+
+  @Override
+  public <ContainerClass extends Container> List<ContainerClass> createElementsContainerList(Driver driver,
+                                                                                             Collection<? extends WebElement> elements,
+                                                                                             Class<ContainerClass> listType,
+                                                                                             Type[] genericTypes) {
+    CollectionSource collection = new WebElementsCollectionWrapper(driver, elements);
+    return new ElementsContainerCollection<>(this, driver, null, listType, genericTypes, collection);
   }
 
   protected boolean isDecoratableList(Field field, @Nullable By selector, Type[] genericTypes, Class<?> type) {
@@ -330,12 +343,6 @@ public class SelenidePageFactory implements PageObjectFactory {
       if (objects[i].equals(firstArgument)) return i;
     }
     return -1;
-  }
-
-  @Nullable
-  @SuppressWarnings("DataFlowIssue")
-  private static As aliasOf(Field field) {
-    return field.getAnnotation(As.class);
   }
 
   private static class ElementsList extends ElementsCollection implements NoOpsList<SelenideElement> {
