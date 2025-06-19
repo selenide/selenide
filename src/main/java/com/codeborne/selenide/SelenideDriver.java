@@ -143,6 +143,52 @@ public class SelenideDriver {
     return pageFactory.page(driver(), pageObject);
   }
 
+  public <ContainerClass extends Container> ContainerClass container(WebElement webElement, Class<ContainerClass> containerClass) {
+    return pageFactory.createElementsContainer(driver(), webElement, containerClass, containerClass.getGenericInterfaces());
+  }
+
+  public <ContainerClass extends Container> ContainerClass container(By seleniumSelector, Class<ContainerClass> containerClass) {
+    return pageFactory.createElementsContainer(driver(), seleniumSelector, 0, containerClass, containerClass.getGenericInterfaces());
+  }
+
+  public <ContainerClass extends Container> ContainerClass container(By seleniumSelector,
+                                                                     int index,
+                                                                     Class<ContainerClass> containerClass) {
+    return pageFactory.createElementsContainer(driver(), seleniumSelector, index, containerClass,
+      containerClass.getGenericInterfaces());
+  }
+
+  public <ContainerClass extends Container> ContainerClass container(String cssSelector, Class<ContainerClass> containerClass) {
+    return container(By.cssSelector(cssSelector), containerClass);
+  }
+
+  public <ContainerClass extends Container> ContainerClass container(String cssSelector,
+                                                                     int index,
+                                                                     Class<ContainerClass> containerClass) {
+    return container(By.cssSelector(cssSelector), index, containerClass);
+  }
+
+  public <ContainerClass extends Container> ContainerClass $x(String xpathExpression, Class<ContainerClass> containerClass) {
+    return container(By.xpath(xpathExpression), containerClass);
+  }
+
+  public <ContainerClass extends Container> List<ContainerClass> containers(Collection<? extends WebElement> elements,
+                                                                            Class<ContainerClass> containerClass) {
+    return pageFactory.createElementsContainerList(driver(), elements, containerClass, containerClass.getGenericInterfaces());
+  }
+
+  public <ContainerClass extends Container> List<ContainerClass> containers(By seleniumSelector, Class<ContainerClass> containerClass) {
+    return pageFactory.createElementsContainerList(driver(), seleniumSelector, containerClass, containerClass.getGenericInterfaces());
+  }
+
+  public <ContainerClass extends Container> List<ContainerClass> containers(String cssSelector, Class<ContainerClass> containerClass) {
+    return containers(By.cssSelector(cssSelector), containerClass);
+  }
+
+  public <ContainerClass extends Container> List<ContainerClass> $$x(String xpathExpression, Class<ContainerClass> containerClass) {
+    return containers(By.xpath(xpathExpression), containerClass);
+  }
+
   public void refresh() {
     navigator.refresh(driver());
   }
