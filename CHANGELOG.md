@@ -1,7 +1,13 @@
 # Changelog
 
 ## 7.9.4 (under construction)
-* 
+* update Selenium from 4.33.0 to 4.34.0 (CDP 137 -> 138) (#3059)
+* update Appium from 9.4.0 to 9.5.0 (#3059)
+* #3042 fix colors on video recorder in Firefox (#3043)
+* change return type to SelenideAppiumElement on appium methods  --  thanks to @qwez (#3049)
+* replace `*.selenium.ContextAware` by `*.appium.*.SupportsContextSwitching` (#3040)
+* update LittleProxy from 2.4.2 to 2.4.3
+* Publish jars to Maven Central instead of OSS
 
 ## 7.9.3 (27.05.2025)
 * bump Selenium from 4.32.0 to 4.33.0, including CDP v136 -> v137 (#3034)
