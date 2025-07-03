@@ -24,7 +24,7 @@ fi
 echo "Releasing version: ${version}"
 
 ./gradlew clean check javadocForSite
-./gradlew publish --no-parallel --info
+./gradlew publishToMavenCentral --no-parallel --info
 
 git tag -a "v${version}" -m "released selenide ${version}"
 git push origin --tags

@@ -1,15 +1,8 @@
-apply plugin: 'maven-publish'
-
 ext {
   groupId = 'com.codeborne'
 }
 
 archivesBaseName = artifactId
-
-java {
-  withJavadocJar()
-  withSourcesJar()
-}
 
 tasks.withType(Jar).configureEach {
   manifest {
@@ -21,78 +14,46 @@ tasks.withType(Jar).configureEach {
   }
 }
 
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      groupId project.groupId
-      artifactId project.artifactId
-      from components.java
-
-      pom {
-        name = archivesBaseName
-        description = 'Selenide = concise API for Selenium WebDriver'
-        url = 'https://selenide.org'
-        inceptionYear = '2011'
-        licenses {
-          license {
-            name = 'MIT'
-            url = 'https://opensource.org/licenses/MIT'
-          }
-        }
-        developers {
-          developer {
-            id = 'asolntsev'
-            name = 'Andrei Solntsev'
-          }
-          developer {
-            id = 'BorisOsipov'
-            name = 'Boris Osipov'
-          }
-          developer {
-            id = 'rosolko'
-            name = 'Aliaksandr Rasolka'
-          }
-          developer {
-            id = 'vinogradoff'
-            name = 'Alexei Vinogradov'
-          }
-          developer {
-            id = 'dstekanov'
-            name = 'Dmytro Stekanov'
-          }
-        }
-        scm {
-          connection = 'scm:git@github.com:selenide/selenide.git'
-          developerConnection = 'scm:git@github.com:selenide/selenide.git'
-          url = 'https://github.com/selenide/selenide'
-        }
-      }
-    }
-  }
-}
-
 if (project.hasProperty("signing.keyId")) {
-  apply plugin: 'signing'
-
-  signing {
-    afterEvaluate {
-      sign publishing.publications.mavenJava
-    }
-  }
-
-  publishing {
-    repositories {
-      maven {
-        name 'Maven'
-        url project.version.endsWith("-SNAPSHOT") ?
-          'https://oss.sonatype.org/content/repositories/snapshots/' :
-          'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-        credentials {
-          username "$sonatypeUsername"
-          password "$sonatypePassword"
+  mavenPublishing {
+    pom {
+      name = archivesBaseName
+      description = 'Selenide = concise API for Selenium WebDriver'
+      url = 'https://selenide.org'
+      inceptionYear = '2011'
+      licenses {
+        license {
+          name = 'MIT'
+          url = 'https://opensource.org/licenses/MIT'
         }
+      }
+      developers {
+        developer {
+          id = 'asolntsev'
+          name = 'Andrei Solntsev'
+        }
+        developer {
+          id = 'BorisOsipov'
+          name = 'Boris Osipov'
+        }
+        developer {
+          id = 'rosolko'
+          name = 'Aliaksandr Rasolka'
+        }
+        developer {
+          id = 'vinogradoff'
+          name = 'Alexei Vinogradov'
+        }
+        developer {
+          id = 'dstekanov'
+          name = 'Dmytro Stekanov'
+        }
+      }
+      scm {
+        connection = 'scm:git@github.com:selenide/selenide.git'
+        developerConnection = 'scm:git@github.com:selenide/selenide.git'
+        url = 'https://github.com/selenide/selenide'
       }
     }
   }
 }
-
