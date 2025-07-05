@@ -1,3 +1,5 @@
+apply plugin: "com.vanniktech.maven.publish"
+
 ext {
   groupId = 'com.codeborne'
 }
