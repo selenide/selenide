@@ -55,7 +55,12 @@ public final class CollectionCondition {
   }
 
   /**
-   * Checks that given collection has given texts (each collection element CONTAINS corresponding text)
+   * Checks that given collection has given texts.
+   *
+   * <ul>
+   * <li>each collection element HAS corresponding text (if {@code Configuration.textCheck = FULL_TEXT;}), or</li>
+   * <li>each collection element CONTAINS corresponding text (if {@code Configuration.textCheck = PARTIAL_TEXT;})</li>
+   * </ul>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
@@ -64,7 +69,12 @@ public final class CollectionCondition {
   }
 
   /**
-   * Checks that given collection has given texts (each collection element CONTAINS corresponding text)
+   * Checks that given collection has given texts
+   *
+   * <ul>
+   * <li>each collection element HAS corresponding text (if {@code Configuration.textCheck = FULL_TEXT;}), or</li>
+   * <li>each collection element CONTAINS corresponding text (if {@code Configuration.textCheck = PARTIAL_TEXT;})</li>
+   * </ul>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
@@ -73,7 +83,7 @@ public final class CollectionCondition {
   }
 
   /**
-   * Checks that given collection has given texts in any order (each collection element CONTAINS corresponding text)
+   * Checks that given collection has given texts in any order
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
@@ -82,7 +92,7 @@ public final class CollectionCondition {
   }
 
   /**
-   * Checks that given collection has given texts in any order (each collection element CONTAINS corresponding text)
+   * Checks that given collection has given texts in any order
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
