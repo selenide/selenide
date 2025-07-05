@@ -18,6 +18,7 @@ tasks.withType(Jar).configureEach {
 
 if (project.hasProperty("signing.keyId")) {
   mavenPublishing {
+    coordinates(project.groupId, project.artifactId, project.version)
     pom {
       name = archivesBaseName
       description = 'Selenide = concise API for Selenium WebDriver'
