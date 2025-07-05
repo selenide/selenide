@@ -9,7 +9,7 @@ plugins {
 
 allprojects {
   group = 'com.codeborne'
-  version = '7.9.4-SNAPSHOT'
+  version = '7.9.4'
 }
 
 subprojects {

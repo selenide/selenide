@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.9.4 (under construction)
+## 7.9.4 (05.07.2025)
 * update Selenium from 4.33.0 to 4.34.0 (CDP 137 -> 138) (#3059)
 * update Appium from 9.4.0 to 9.5.0 (#3059)
 * #3042 fix colors on video recorder in Firefox (#3043)
