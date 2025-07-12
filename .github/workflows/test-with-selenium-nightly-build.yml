@@ -20,10 +20,9 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
           java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@v3
-        with:
-          arguments: ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.35.0-SNAPSHOT --no-parallel --no-daemon --console=plain
+        run: ./gradlew ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.35.0-SNAPSHOT --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v4
         if: always()
         with:
