@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.10.0 (under construction)
+* #3058 speed up video recorder (#3071) 
+
 ## 7.9.4 (05.07.2025)
 * update Selenium from 4.33.0 to 4.34.0 (CDP 137 -> 138) (#3059)
 * update Appium from 9.4.0 to 9.5.0 (#3059)
