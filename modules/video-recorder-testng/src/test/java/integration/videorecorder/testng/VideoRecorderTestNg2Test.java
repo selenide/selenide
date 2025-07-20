@@ -44,7 +44,7 @@ public class VideoRecorderTestNg2Test {
   final void assertVideoHasBeenSaved(ITestResult result) {
     Path path = VideoRecorderListener.getRecordedVideo().orElseThrow();
     assertThat(path.toFile().length()).isGreaterThan(0);
-    assertThat(path.toFile()).hasExtension("webm");
+    assertThat(path.toFile()).hasExtension("mp4");
 
     assertThat(assertionErrors()).hasSize(1);
     assertThat(assertionErrors().get(0)).isInstanceOf(ElementNotFound.class);

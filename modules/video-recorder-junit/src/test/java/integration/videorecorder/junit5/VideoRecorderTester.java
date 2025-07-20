@@ -12,7 +12,7 @@ import static java.util.regex.Pattern.DOTALL;
 
 public class VideoRecorderTester extends VideoRecorderExtension {
   private static final ThreadLocal<List<AssertionError>> threadErrors = withInitial(() -> new ArrayList<>(1));
-  static final Pattern RE_VIDEO_URL = Pattern.compile(".+Video: file:/.+\\.webm.*", DOTALL);
+  static final Pattern RE_VIDEO_URL = Pattern.compile(".+Video: file:/.+\\.mp4.*", DOTALL);
 
   static List<AssertionError> assertionErrors() {
     return threadErrors.get();

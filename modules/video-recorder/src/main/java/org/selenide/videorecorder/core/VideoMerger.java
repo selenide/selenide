@@ -1,57 +1,43 @@
 package org.selenide.videorecorder.core;
 
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import org.bytedeco.javacv.FFmpegFrameRecorder;
-import org.bytedeco.javacv.Frame;
-import org.bytedeco.javacv.Java2DFrameConverter;
-import org.jspecify.annotations.Nullable;
-import org.openqa.selenium.Dimension;
+import net.bramp.ffmpeg.FFmpeg;
+import net.bramp.ffmpeg.FFmpegExecutor;
+import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import org.bytedeco.javacpp.Loader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Queue;
-import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
 
-import static java.awt.image.BufferedImage.TYPE_3BYTE_BGR;
-import static java.lang.System.currentTimeMillis;
 import static java.lang.System.nanoTime;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.bytedeco.ffmpeg.global.avutil.AV_PIX_FMT_YUV420P;
 
-class VideoMerger extends TimerTask {
+class VideoMerger {
   private static final Logger log = LoggerFactory.getLogger(VideoMerger.class);
-  private static final AtomicLong videoFileCounter = new AtomicLong(0);
   private final long threadId;
-  private final int fps;
-  private final int crf;
+  private final VideoConfiguration config;
   private final Queue<Screenshot> screenshots;
   private final AtomicBoolean cancelled = new AtomicBoolean(false);
-
-  @Nullable
-  private FFmpegFrameRecorder recorder;
-
   private final Path videoFile;
+  private final File screenshotsFolder;
 
-  VideoMerger(long threadId, String folder, int fps, int crf, Queue<Screenshot> screenshots) {
+  VideoMerger(long threadId, String videoId, VideoConfiguration config, File screenshotsFolder, Queue<Screenshot> screenshots) {
     this.threadId = threadId;
-    this.fps = fps;
-    this.crf = crf;
+    this.config = config;
     this.screenshots = screenshots;
-    videoFile = Path.of(folder, generateVideoFileName()).toAbsolutePath();
+    this.screenshotsFolder = screenshotsFolder;
+    videoFile = Path.of(config.videoFolder(), generateVideoFileName(videoId)).toAbsolutePath();
     RecordedVideos.add(threadId, videoFile);
   }
 
-  private String generateVideoFileName() {
-    return currentTimeMillis() + "." + videoFileCounter.getAndIncrement() + ".webm";
+  private static String generateVideoFileName(String videoId) {
+    return "video.%s.mp4".formatted(videoId);
   }
 
   public Path videoFile() {
@@ -62,89 +48,34 @@ class VideoMerger extends TimerTask {
     return videoFile().toUri().toString();
   }
 
-  @Override
-  public void run() {
-    if (screenshots.size() < 2) {
-      log.trace("Skip processing because of empty queue (queue size: {})", screenshots.size());
-      return;
-    }
+  private void generateVideo() throws IOException {
+    FFmpegBuilder builder = new FFmpegBuilder()
+      .addInput(screenshotsFolder.getAbsolutePath() + "/screenshot.%d.png")
+      .addOutput(videoFile.toAbsolutePath().toString())
+      .setVideoFrameRate(config.fps(), 1)
+      .setVideoCodec("h264")
+      .setVideoPixelFormat("yuv420p")
+      .disableAudio()
+      .setConstantRateFactor(config.crf())
+      .done();
 
-    Screenshot current = screenshots.poll();
-    Screenshot next = screenshots.element();
+    FFmpeg ffmpeg = ffmpeg();
+    log.debug("Using {} of version {}", ffmpeg.getPath(), ffmpeg.version());
+    FFmpegExecutor executor = new FFmpegExecutor(ffmpeg);
+    executor.createJob(builder).run();
+  }
 
-    log.debug("Processing {} (queue size: {})", current, screenshots.size());
-
+  @SuppressWarnings("ErrorNotRethrown")
+  private static FFmpeg ffmpeg() throws IOException {
     try {
-      long start = nanoTime();
-      FFmpegFrameRecorder videoRecorder = getVideoRecorder(current);
-      int framesCount = Math.max(1, framesCount(fps, current.timestamp, next.timestamp));
-
-      try (Java2DFrameConverter converter = new Java2DFrameConverter();
-           Frame frame = screenshotToFrame(converter, current.screenshot)) {
-        log.trace("Adding {} to video x {} times (queue size: {}) ...", current, framesCount, screenshots.size());
-        for (int i = 0; !cancelled.get() && i < framesCount; i++) {
-          videoRecorder.record(frame);
-        }
-      }
-
-      long durationMs = NANOSECONDS.toMillis(nanoTime() - start);
-      log.debug("Added {} to video x {} times in {} ms. (queue size: {})", current, framesCount, durationMs, screenshots.size());
-
-      current.screenshot.dispose();
-
-      if (current.isEnd()) {
-        log.debug("Detected end of screenshots queue: {}", current);
-        cancel();
-      }
+      String ffmpegPath = Loader.load(org.bytedeco.ffmpeg.ffmpeg.class);
+      log.debug("FFmpeg binaries were found in ByteDeco wrapper: {}", ffmpegPath);
+      return new FFmpeg(ffmpegPath);
     }
-    catch (FFmpegFrameRecorder.Exception e) {
-      log.error("Failed to add screenshot to video", e);
-      throw new RuntimeException(e);
-    }
-    catch (Error | RuntimeException e) {
-      log.error("Failed to add screenshot to video", e);
-      throw e;
-    }
-  }
-
-  static int framesCount(int fps, long startMomentNanos, long endMomentNanos) {
-    return (int) ((endMomentNanos - startMomentNanos) * fps / SECONDS.toNanos(1));
-  }
-
-  private FFmpegFrameRecorder getVideoRecorder(Screenshot screenshot) {
-    if (recorder == null) {
-      recorder = initVideoRecording(screenshot);
-    }
-    return requireNonNull(recorder);
-  }
-
-  private FFmpegFrameRecorder initVideoRecording(Screenshot screenshot) {
-    Dimension window = screenshot.window;
-    log.debug("Start FFMpeg video recorder of size {}x{} in file {}", window.width, window.height, videoFile.toAbsolutePath());
-
-    Path videoFolder = prepareVideoFolder(videoFile);
-    log.debug("Created folder for video: {}", videoFolder.toAbsolutePath());
-
-    FFmpegFrameRecorder rec = new FFmpegFrameRecorder(videoFile.toFile(), window.width, window.height);
-    rec.setFormat("webm");
-    rec.setVideoCodecName("libx264");
-    rec.setVideoOption("crf", String.valueOf(crf));
-    rec.setPixelFormat(AV_PIX_FMT_YUV420P);
-    rec.setFrameRate(fps);
-    try {
-      rec.start();
-      log.debug("Started FFMpeg video recorder of size {}x{} in file {}", window.width, window.height, videoFile.toAbsolutePath());
-      return rec;
-    }
-    catch (FFmpegFrameRecorder.Exception e) {
-      String message = "Failed to start video recording in file %s".formatted(videoFile.toAbsolutePath());
-      log.error(message, e);
-      throw new RuntimeException(message, e);
-    }
-    catch (Error | RuntimeException e) {
-      String message = "Failed to start video recording in file %s".formatted(videoFile.toAbsolutePath());
-      log.error(message, e);
-      throw e;
+    catch (LinkageError ffmpegBinariesNotAttached) {
+      log.debug("FFmpeg binaries were not found in ByteDeco wrapper", ffmpegBinariesNotAttached);
+      log.info("FFmpeg binaries were not found in ByteDeco wrapper. FFmpeg will be executed from PATH.");
+      return new FFmpeg();
     }
   }
 
@@ -160,67 +91,41 @@ class VideoMerger extends TimerTask {
     }
   }
 
-  private static Frame screenshotToFrame(Java2DFrameConverter converter, ImageSource screenshot) {
-    try {
-      BufferedImage rgbImage = removeAlpha(screenshot.getImage());
-      return converter.getFrame(rgbImage, 1.0, false);
-    }
-    catch (IOException e) {
-      log.error("Failed to convert screenshot to frame", e);
-      throw new RuntimeException("Failed to convert screenshot to frame", e);
-    }
-    catch (Error | RuntimeException e) {
-      log.error("Failed to convert screenshot to frame", e);
-      throw e;
-    }
-  }
-
-  private static BufferedImage removeAlpha(BufferedImage image) {
-    if (!image.getColorModel().hasAlpha()) {
-      return image;
-    }
-
-    BufferedImage rgbImage = new BufferedImage(image.getWidth(), image.getHeight(), TYPE_3BYTE_BGR);
-    copy(image, rgbImage);
-    return rgbImage;
-  }
-
-  private static void copy(BufferedImage source, BufferedImage target) {
-    Graphics2D g = target.createGraphics();
-    try {
-      g.drawImage(source, 0, 0, null);
-    }
-    finally {
-      g.dispose();
-    }
-  }
-
   /**
    * Complete video processing and save the video file
    */
   void finish() {
-    if (recorder != null) {
-      while (!cancelled.get() && screenshots.size() > 1) {
-        run();
-      }
+    if (cancelled.get()) return;
+    if (screenshots.isEmpty()) {
+      log.trace("Skip generating video because no screenshots have been taken");
+      return;
+    }
+    else {
+      log.debug("Generating video from {} screenshots in {} to file {}...", screenshots.size(), screenshotsFolder, videoFile);
+      Path videoFolder = prepareVideoFolder(videoFile);
+      log.debug("Created folder for video: {}", videoFolder.toAbsolutePath());
       try {
-        log.debug("Stopping video merger ...");
-        recorder.stop();
-        recorder = null;
-        log.debug("Stopped video merger.");
+        long start = nanoTime();
+        generateVideo();
+        long durationMs = NANOSECONDS.toMillis(nanoTime() - start);
+        log.debug("Generated video from {} screenshots in {} to file {} in {} ms.",
+          screenshots.size(), screenshotsFolder, videoFile, durationMs);
       }
-      catch (FFmpegFrameRecorder.Exception e) {
-        log.error("Failed to stop video recorder", e);
-        throw new RuntimeException(e);
+      catch (IOException e) {
+        log.error("Failed to generate video {} from {} screenshots in {}", videoFile, screenshots.size(), screenshotsFolder, e);
+        throw new RuntimeException("Failed to generate video %s from %s screenshots in %s".formatted(
+          videoFile, screenshots.size(), screenshotsFolder), e);
+      }
+      catch (Error | RuntimeException e) {
+        log.error("Failed to generate video {} from {} screenshots in {}", videoFile, screenshots.size(), screenshotsFolder, e);
+        throw e;
       }
     }
+    log.debug("Stopped video merger.");
   }
 
-  @Override
-  @CanIgnoreReturnValue
-  public boolean cancel() {
+  public void cancel() {
     cancelled.set(true);
-    return super.cancel();
   }
 
   /**

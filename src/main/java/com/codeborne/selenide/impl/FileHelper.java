@@ -84,4 +84,13 @@ public final class FileHelper {
       }
     }
   }
+
+  public static void deleteFolder(File folder) {
+    try {
+      FileUtils.deleteDirectory(folder);
+    }
+    catch (IOException e) {
+      throw new RuntimeException("Failed to delete folder: " + folder.getAbsolutePath(), e);
+    }
+  }
 }

@@ -28,7 +28,7 @@ public class VideoConfiguration {
   /**
    * The folder to save the videos to
    *
-   * @return true by default
+   * @return "build/reports/tests" by default
    */
   public String videoFolder() {
     return properties.getProperty("selenide.video.folder",
@@ -57,7 +57,7 @@ public class VideoConfiguration {
    * but processing this amount of frames causes too high CPU usage.
    */
   int fps() {
-    return properties.getInt("selenide.video.fps", 12);
+    return properties.getInt("selenide.video.fps", 24);
   }
 
   /**
@@ -75,5 +75,14 @@ public class VideoConfiguration {
    */
   long videoProcessingTimeout() {
     return properties.getLong("selenide.video.processing.timeout", 300_000L);
+  }
+
+  /**
+   * Is it needed to keep the taken screenshots after the video has been created from them.
+   *
+   * Default value: false
+   */
+  boolean keepScreenshots() {
+    return properties.getBoolean("selenide.video.keep-screenshots", false);
   }
 }

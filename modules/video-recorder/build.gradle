@@ -10,8 +10,9 @@ dependencies {
   testImplementation project(':modules:core').sourceSets.test.output
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
-  implementation("org.bytedeco:javacv:$javacvVersion")
-  implementation("org.bytedeco:javacv-platform:$javacvVersion")
+
+  implementation("net.bramp.ffmpeg:ffmpeg:0.8.0")
+  implementation("org.bytedeco:ffmpeg-platform:7.1.1-1.5.12")
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')

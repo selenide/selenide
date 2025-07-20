@@ -14,7 +14,7 @@ import static java.util.regex.Pattern.DOTALL;
 
 public class VideoRecorderTester extends VideoRecorderListener {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorderTester.class);
-  static final Pattern RE_VIDEO_URL = Pattern.compile(".+Video: file:/.+\\.webm.*", DOTALL);
+  static final Pattern RE_VIDEO_URL = Pattern.compile(".+Video: file:/.+\\.mp4.*", DOTALL);
 
   private static final ThreadLocal<List<AssertionError>> threadErrors = withInitial(() -> new ArrayList<>(1));
 

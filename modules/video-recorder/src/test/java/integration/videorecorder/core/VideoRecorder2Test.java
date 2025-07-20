@@ -43,7 +43,7 @@ public class VideoRecorder2Test {
     videoRecorder.finish();
     Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow();
     assertThat(videoFile.toFile().length()).isGreaterThan(0);
-    assertThat(videoFile).hasExtension("webm");
+    assertThat(videoFile).hasExtension("mp4");
   }
 
   @AfterEach
