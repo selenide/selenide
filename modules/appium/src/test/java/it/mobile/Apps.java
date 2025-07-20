@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import static com.codeborne.selenide.impl.FileHelper.ensureParentFolderExists;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 
 public class Apps {
@@ -34,9 +35,7 @@ public class Apps {
       return app;
     }
 
-    if (!app.getParentFile().exists() && !app.getParentFile().mkdirs()) {
-      throw new RuntimeException("Failed to create dir " + app.getParentFile().getAbsolutePath());
-    }
+    ensureParentFolderExists(app);
 
     String url = remoteFilePath + filename;
     log.info("Downloading app {} to {}...", url, app.getAbsolutePath());
