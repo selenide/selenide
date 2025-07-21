@@ -111,16 +111,12 @@ videoRecorder.finish();
 
 ## How it works
 
-Video recorder starts in the beginning of your test, 
+Video recorder starts at the beginning of your test, 
 and constantly takes screenshots of a current browser window (using a standard WebDriver API).
 
-When the test finishes, recorder puts all these screenshots together into a video file using [FFMPeg](https://ffmpeg.org/).
+When the test finishes, the recorder puts all these screenshots together into a video file using [FFMPeg](https://ffmpeg.org/).
 
-By default, `selenide-video-recorder` has transitive dependency `org.bytedeco:ffmpeg-platform` that contains all needed FFMPeg binaries.
-So you don't need to install FFMPeg by yourself.
-
-If you already have FFMPeg installed, you can exclude dependency `org.bytedeco:ffmpeg-platform`, and then FFmpeg from PATH will be used. 
-
+The `selenide-video-recorder` module requires installed FFMPeg on system.
 
 Feel free to share your [experience](https://github.com/selenide/selenide/discussions)
 and [suggestions](https://github.com/selenide/selenide/issues/new)!
