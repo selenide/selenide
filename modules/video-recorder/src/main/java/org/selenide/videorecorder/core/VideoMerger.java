@@ -3,7 +3,6 @@ package org.selenide.videorecorder.core;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
-import org.bytedeco.javacpp.Loader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,25 +59,10 @@ class VideoMerger {
       .setConstantRateFactor(config.crf())
       .done();
 
-    FFmpeg ffmpeg = ffmpeg();
+    FFmpeg ffmpeg = new FFmpeg();
     log.debug("Using {} of version {}", ffmpeg.getPath(), ffmpeg.version());
     FFmpegExecutor executor = new FFmpegExecutor(ffmpeg);
     executor.createJob(builder).run();
-  }
-
-  @SuppressWarnings("ErrorNotRethrown")
-  private static FFmpeg ffmpeg() throws IOException {
-    try {
-      String ffmpegPath = Loader.load(org.bytedeco.ffmpeg.ffmpeg.class);
-      log.debug("FFmpeg binaries were found in ByteDeco wrapper: {}", ffmpegPath);
-      return new FFmpeg(ffmpegPath);
-    }
-    catch (LinkageError ffmpegBinariesNotAttached) {
-      log.debug("FFmpeg binaries were not found in ByteDeco wrapper", ffmpegBinariesNotAttached);
-      log.info("FFmpeg binaries were not found in ByteDeco wrapper ({}). FFmpeg will be executed from PATH.",
-        ffmpegBinariesNotAttached.toString());
-      return new FFmpeg();
-    }
   }
 
   private static Path prepareVideoFolder(Path videoFile) {
