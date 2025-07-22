@@ -44,7 +44,7 @@ public class VideoRecorder {
     fps = config.fps();
     String videoId = "%s.%s".formatted(currentTimeMillis(), videoCounter.getAndIncrement());
     screenshotsFolder = createScreenshotsFolder(videoId);
-    screenShooterTask = new ScreenShooter(currentThread().getId(), screenshotsFolder, fps, screenshots);
+    screenShooterTask = new ScreenShooter(currentThread().getId(), screenshotsFolder, screenshots);
     videoMerger = new VideoMerger(currentThread().getId(), videoId, config, screenshotsFolder, screenshots);
   }
 
@@ -89,7 +89,6 @@ public class VideoRecorder {
       screenshooter.shutdown();
       stop("Screenshooter", screenshooter, 2000);
       screenshooter.shutdownNow();
-      screenShooterTask.finish();
 
       videoMerger.finish();
 

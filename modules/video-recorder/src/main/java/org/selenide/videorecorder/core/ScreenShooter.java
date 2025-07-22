@@ -16,22 +16,18 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.System.nanoTime;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.openqa.selenium.OutputType.BYTES;
-import static org.selenide.videorecorder.core.Screenshot.endMarker;
 
 class ScreenShooter extends TimerTask {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooter.class);
   private final AtomicLong screenshotCounter = new AtomicLong();
   private final long threadId;
   private final File screenshotsFolder;
-  private final int fps;
   private final Queue<Screenshot> screenshots;
 
-  ScreenShooter(long threadId, File screenshotsFolder, int fps, Queue<Screenshot> screenshots) {
+  ScreenShooter(long threadId, File screenshotsFolder, Queue<Screenshot> screenshots) {
     this.threadId = threadId;
-    this.fps = fps;
     this.screenshots = screenshots;
     this.screenshotsFolder = screenshotsFolder;
   }
@@ -47,7 +43,7 @@ class ScreenShooter extends TimerTask {
       File screenshot = saveScreenshot(screenshotBytes);
 
       long timestamp = nanoTime();
-      screenshots.add(new Screenshot(start, new FileImageSource(screenshot)));
+      screenshots.add(new Screenshot(start, new ImageSource(screenshot)));
       long duration = NANOSECONDS.toMillis(timestamp - start);
       log.debug("Taken a screenshot in thread {} at {} in {} ms: {}", threadId, timestamp, duration, screenshot);
     }, () -> {
@@ -66,21 +62,6 @@ class ScreenShooter extends TimerTask {
       return file;
     } catch (IOException e) {
       throw new RuntimeException("Failed to save screenshot to %s".formatted(file.getAbsolutePath()), e);
-    }
-  }
-
-  void finish() {
-    try {
-      for (int i = 0; i < fps; i++) {
-        long ts = nanoTime() + SECONDS.toNanos(1);
-        Screenshot endMarker = endMarker(ts);
-        File file = saveScreenshot(endMarker.screenshot.getImage());
-        screenshots.add(endMarker);
-        log.debug("Added an end marker at {}: {}", ts, file);
-      }
-    }
-    catch (IOException e) {
-      throw new RuntimeException(e);
     }
   }
 }
