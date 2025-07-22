@@ -14,7 +14,7 @@ ext {
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.9'
   archunitVersion = '1.4.1'
-  jacksonVersion = '2.19.1'
+  jacksonVersion = '2.19.2'
   javacvVersion = '1.5.12'
   systemStubsVersion = '2.1.8'
 }
