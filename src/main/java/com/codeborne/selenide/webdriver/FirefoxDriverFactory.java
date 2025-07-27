@@ -52,6 +52,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   public FirefoxOptions createCapabilities(Config config, Browser browser,
                                            @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     FirefoxOptions initialOptions = new FirefoxOptions();
+    initialOptions.enableBiDi();
     setHeadless(config, initialOptions);
     setupBrowserBinary(config, initialOptions);
     setupPreferences(initialOptions);
