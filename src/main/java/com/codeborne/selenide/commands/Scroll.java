@@ -14,10 +14,10 @@ public class Scroll extends FluentCommand {
     WebElement webElement = locator.getWebElement();
     int distance = options.distance();
     String js = switch (options.direction()) {
-      case DOWN -> "arguments[0].scrollBy(0, arguments[1])";
-      case UP -> "arguments[0].scrollBy(0, -arguments[1])";
-      case RIGHT -> "arguments[0].scrollBy(arguments[1], 0)";
-      case LEFT -> "arguments[0].scrollBy(-arguments[1], 0)";
+      case DOWN -> "arguments[0].scrollBy({left: 0, top: arguments[1], behavior: 'instant'})";
+      case UP -> "arguments[0].scrollBy({left: 0, top: -arguments[1], behavior: 'instant'})";
+      case RIGHT -> "arguments[0].scrollBy({left: arguments[1], top: 0, behavior: 'instant'})";
+      case LEFT -> "arguments[0].scrollBy({left: -arguments[1], top: 0, behavior: 'instant'})";
     };
     locator.driver().executeJavaScript(js, webElement, distance);
   }

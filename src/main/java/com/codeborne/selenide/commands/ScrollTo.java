@@ -9,6 +9,8 @@ public class ScrollTo extends FluentCommand {
   @Override
   public void execute(WebElementSource locator, Object @Nullable [] args) {
     Point location = locator.getWebElement().getLocation();
-    locator.driver().executeJavaScript("window.scrollTo(" + location.getX() + ", " + location.getY() + ')');
+    locator.driver().executeJavaScript(
+      "window.scrollTo({top: %s, left: %s, behavior: 'instant'})".formatted(location.getY(), location.getX())
+    );
   }
 }

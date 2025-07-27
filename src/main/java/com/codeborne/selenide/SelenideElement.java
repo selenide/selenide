@@ -1048,26 +1048,32 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Ask browser to scroll to this element
    *
+   * The scrolling is performed instantly (ignoring CSS property "scroll-behavior: smooth").
+   *
    * @see com.codeborne.selenide.commands.ScrollTo
    */
   @CanIgnoreReturnValue
   SelenideElement scrollTo();
 
   /**
-   * Ask browser to scroll the element on which it's called into the visible area of the browser window.<p>
+   * Scroll the element into the visible area of the browser window.<p>
    *
    * If <b>alignToTop</b> boolean value is <i>true</i> - the top of the element will be aligned to the top.<p>
    *
    * If <b>alignToTop</b> boolean value is <i>false</i> - the bottom of the element will be aligned to the bottom.<p>
    *
    * <b>Usage:</b>
-   * <pre>
+   * <pre>{@code
    *   element.scrollIntoView(true);
-   *   // Corresponds to scrollIntoViewOptions: {block: "start", inline: "nearest"}
+   *   // Equivalent to $.scrollIntoView(instant().block(start))
    *
    *   element.scrollIntoView(false);
-   *   // Corresponds to scrollIntoViewOptions: {block: "end", inline: "nearest"}
-   * </pre>
+   *   // Equivalent to $.scrollIntoView(instant().block(end))
+   * }</pre>
+   *
+   * <p>
+   *   The scrolling is performed instantly (ignoring CSS property "scroll-behavior: smooth").
+   * </p>
    *
    * @param alignToTop boolean value that indicate how element will be aligned to the visible area of the scrollable ancestor.
    * @see com.codeborne.selenide.commands.ScrollIntoView
@@ -1110,8 +1116,22 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement scrollIntoView(String scrollIntoViewOptions);
 
   /**
+   * For example:
+   * <pre>
+   * {@code $(".logo").scrollIntoView(instant().block(center).inline(end));}
+   * </pre>
+   * @see com.codeborne.selenide.commands.ScrollIntoView
+   * @since 7.10.0
+   */
+  @CanIgnoreReturnValue
+  SelenideElement scrollIntoView(ScrollIntoViewOptions options);
+
+  /**
    * Scroll element vertically to the center of viewport.
-   * Same as {@code $.scrollIntoView("{block: 'center'}")}
+   *
+   * The scrolling is performed instantly (ignoring CSS property "scroll-behavior: smooth").
+   *
+   * Same as {@code $.scrollIntoView("{block: 'center', behavior: 'instant'}")}
    * @see ScrollIntoCenter
    * @since 7.6.0
    */
@@ -1125,14 +1145,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * For example, if you want to scroll the element down by 100 pixels, you can do:
    *
    * <pre>
-   * {@code element.scroll(ScrollOptions.direction(ScrollDirection.DOWN).distance(100))}
+   * {@code element.scroll(direction(DOWN).distance(100))}
    * </pre>
    *
    * If you want to scroll the element right by 250 pixels, you can do:
    *
    * <pre>
-   * {@code element.scroll(ScrollOptions.direction(ScrollDirection.RIGHT).distance(250))}
+   * {@code element.scroll(direction(RIGHT).distance(250))}
    * </pre>
+   *
+   * The scrolling is performed instantly (ignoring CSS property "scroll-behavior: smooth").
    *
    * @param scrollOptions direction, distance etc.
    * @see com.codeborne.selenide.commands.Scroll
