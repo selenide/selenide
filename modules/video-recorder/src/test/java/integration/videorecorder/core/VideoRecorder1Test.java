@@ -4,6 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.selenide.videorecorder.core.VideoRecorder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 
@@ -19,10 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.selenide.videorecorder.core.RecordedVideos.getRecordedVideo;
 
 public class VideoRecorder1Test {
+  private static final Logger log =  LoggerFactory.getLogger(VideoRecorder1Test.class);
+
   private final VideoRecorder videoRecorder = new VideoRecorder();
 
   @BeforeEach
   public void beforeEach() {
+    log.info("before first test");
     videoRecorder.start();
   }
 
@@ -38,14 +43,20 @@ public class VideoRecorder1Test {
 
   @AfterEach
   public void checkVideo() {
+    log.info("finishing first test");
     videoRecorder.finish();
+    log.info("finished first test");
     Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow();
-    assertThat(videoFile.toFile().length()).isGreaterThan(0);
     assertThat(videoFile).hasExtension("mp4");
+    assertThat(videoFile.toFile().length())
+      .as(() -> "Video file: " + videoFile)
+      .isGreaterThan(0);
   }
 
   @AfterEach
   void closeBrowser() {
+    log.info("closing first browser");
     closeWebDriver();
+    log.info("closed first browser");
   }
 }
