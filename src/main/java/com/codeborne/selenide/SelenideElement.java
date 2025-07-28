@@ -1056,20 +1056,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement scrollTo();
 
   /**
-   * Scroll the element into the visible area of the browser window.<p>
+   * <p>Scroll the element into the visible area of the browser window.</p>
    *
-   * If <b>alignToTop</b> boolean value is <i>true</i> - the top of the element will be aligned to the top.<p>
+   * <p>If <b>alignToTop</b> boolean value is <i>true</i> - the top of the element will be aligned to the top.</p>
    *
-   * If <b>alignToTop</b> boolean value is <i>false</i> - the bottom of the element will be aligned to the bottom.<p>
-   *
-   * <b>Usage:</b>
-   * <pre>{@code
-   *   element.scrollIntoView(true);
-   *   // Equivalent to $.scrollIntoView(instant().block(start))
-   *
-   *   element.scrollIntoView(false);
-   *   // Equivalent to $.scrollIntoView(instant().block(end))
-   * }</pre>
+   * <p>If <b>alignToTop</b> boolean value is <i>false</i> - the bottom of the element will be aligned to the bottom.</p>
    *
    * <p>
    *   The scrolling is performed instantly (ignoring CSS property "scroll-behavior: smooth").
@@ -1078,7 +1069,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param alignToTop boolean value that indicate how element will be aligned to the visible area of the scrollable ancestor.
    * @see com.codeborne.selenide.commands.ScrollIntoView
    * @see <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView">Web API reference</a>
+   *
+   * @deprecated The boolean parameter is not well-readable.
+   * We recommend using method {@link #scrollIntoView(ScrollIntoViewOptions)} instead:
+   * <ol>
+   *   <li>replace {@code $.scrollIntoView(true)} by {@code $.scrollIntoView(instant().block(start))}</li>
+   *   <li>replace {@code $.scrollIntoView(false)} by {@code $.scrollIntoView(instant().block(end))}</li>
+   * </ol>
+   * Option {@code instant()} ignores "scroll-behavior" and performs the scrolling instantly.
    */
+  @Deprecated
   @CanIgnoreReturnValue
   SelenideElement scrollIntoView(boolean alignToTop);
 
@@ -1111,7 +1111,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param scrollIntoViewOptions is an object with the align properties: behavior, block and inline.
    * @see com.codeborne.selenide.commands.ScrollIntoView
    * @see <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView">Web API reference</a>
+   *
+   * @deprecated The String parameter is not convenient to write.
+   * We recommend using method {@link #scrollIntoView(ScrollIntoViewOptions)} instead:
+   * <ol>
+   *   <li>{@code $.scrollIntoView(instant().block(start))}</li>
+   *   <li>{@code $.scrollIntoView(instant().block(end).inline(nearest))}</li>
+   * </ol>
+   * Option {@code instant()} ignores "scroll-behavior" and performs the scrolling instantly.
    */
+  @Deprecated
   @CanIgnoreReturnValue
   SelenideElement scrollIntoView(String scrollIntoViewOptions);
 
