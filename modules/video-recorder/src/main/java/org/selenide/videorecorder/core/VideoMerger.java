@@ -61,6 +61,8 @@ class VideoMerger {
     FFmpeg ffmpeg = new FFmpeg();
     log.debug("Using {} of version {}", ffmpeg.getPath(), ffmpeg.version());
     ffmpeg.run(builder);
+    log.debug("executed {}/{} to generate video file {} in thread {} (file exists: {})", ffmpeg.getPath(), ffmpeg.version(),
+      videoFile, threadId, videoFile.toFile().exists());
   }
 
   private static Path prepareVideoFolder(Path videoFile) {
@@ -87,7 +89,7 @@ class VideoMerger {
     else {
       log.debug("Generating video from {} screenshots in {} to file {}...", screenshots.size(), screenshotsFolder, videoFile);
       Path videoFolder = prepareVideoFolder(videoFile);
-      log.debug("Created folder for video: {}", videoFolder.toAbsolutePath());
+      log.debug("Created folder for video: {} (folder exists: {})", videoFolder.toAbsolutePath(), videoFolder.toFile().exists());
       try {
         long start = nanoTime();
         generateVideo();
