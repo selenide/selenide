@@ -42,8 +42,14 @@ class ScreenShooter extends TimerTask {
 
   @Override
   public boolean cancel() {
-    cancelled = true;
-    return super.cancel();
+    log.debug("Cancelling screen shooter...");
+    try {
+      cancelled = true;
+      return super.cancel();
+    }
+    finally {
+      log.debug("Cancelled screen shooter.");
+    }
   }
 
   @Override
