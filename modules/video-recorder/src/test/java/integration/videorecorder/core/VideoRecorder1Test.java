@@ -32,7 +32,7 @@ public class VideoRecorder1Test {
     videoRecorder.start();
   }
 
-  @RepeatedTest(10)
+  @RepeatedTest(20)
   public void firstTest() {
     open(config().browserPosition("50x5").browserSize("800x500"));
     for (int i = 0; i < 3; i++) {

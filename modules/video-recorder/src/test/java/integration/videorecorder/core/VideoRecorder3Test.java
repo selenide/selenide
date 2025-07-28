@@ -31,7 +31,7 @@ public class VideoRecorder3Test {
     videoRecorder.start();
   }
 
-  @RepeatedTest(10)
+  @RepeatedTest(20)
   public void thirdTest() {
     log.info("start third test");
     open(config().browserPosition("500x600").browserSize("800x500"));

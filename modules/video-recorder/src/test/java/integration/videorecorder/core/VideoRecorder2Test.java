@@ -33,7 +33,7 @@ public class VideoRecorder2Test {
     videoRecorder.start();
   }
 
-  @RepeatedTest(10)
+  @RepeatedTest(20)
   @Video
   public void secondTest() {
     log.info("start second test");
