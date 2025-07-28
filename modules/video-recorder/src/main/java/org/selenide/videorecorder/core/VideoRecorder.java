@@ -85,11 +85,15 @@ public class VideoRecorder {
     log.debug("Stopping video recorder...");
 
     try {
+      log.debug("  Cancel screen shooter");
       screenShooterTask.cancel();
+      log.debug("  Shutdown screen shooter");
       screenshooter.shutdown();
       stop("Screenshooter", screenshooter, 2000);
+      log.debug("  Shutdown screen shooter now");
       screenshooter.shutdownNow();
 
+      log.debug("  Finish video merger");
       videoMerger.finish();
 
       log.info("Video recorded: {}", videoUrl());
