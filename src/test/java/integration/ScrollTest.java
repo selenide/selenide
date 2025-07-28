@@ -5,11 +5,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.ScrollDirection.LEFT;
 import static com.codeborne.selenide.ScrollDirection.RIGHT;
 import static com.codeborne.selenide.ScrollDirection.UP;
+import static com.codeborne.selenide.ScrollIntoViewOptions.Block.center;
+import static com.codeborne.selenide.ScrollIntoViewOptions.instant;
 import static com.codeborne.selenide.ScrollOptions.defaultScrollOptions;
 import static com.codeborne.selenide.ScrollOptions.direction;
 
@@ -22,6 +25,7 @@ final class ScrollTest extends ITest {
   private final SelenideElement hiddenButtonRight = $("#button2");
   private final SelenideElement hiddenButtonUp = $("#button3");
   private final SelenideElement hiddenButtonLeft = $("#button4");
+  private final SelenideElement outOfViewportButton = $("#out-of-viewport-button");
 
   @BeforeEach
   void openTestPage() {
@@ -42,6 +46,14 @@ final class ScrollTest extends ITest {
     hiddenButtonRight.shouldBe(hidden);
     scrollableDivRight.scroll(direction(RIGHT).distance(2000));
     hiddenButtonRight.shouldBe(visible);
+  }
+
+  @Test
+  void scrollIntoView() {
+    outOfViewportButton.shouldBe(visible);
+    outOfViewportButton.scrollIntoView(instant().block(center));
+    outOfViewportButton.click();
+    $("#debug").shouldHave(partialText("[#out-of-viewport-button] CLICKED"));
   }
 
   @Test

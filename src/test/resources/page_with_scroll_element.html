@@ -5,6 +5,9 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title>Scroll Down to See Button</title>
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
     #debug {
       position: absolute;
       top: 20px;
@@ -96,6 +99,11 @@
   <p> ⇠ Scroll to the left to see the button. Scroll more. And more. And even more. ⇠ </p>
 </div>
 
+<div id="out-of-viewport-container" style="height: 800px">
+  <button id="out-of-viewport-button">Out of viewport button</button>
+  <p>This button is not visible initially. Need to scroll it into view.</p>
+</div>
+
 <div id="debug"></div>
 
 <script>
@@ -118,7 +126,7 @@
   }
   function debug(message) {
     debugContainer.innerHTML += `<pre>${message}</pre>`
-    debugContainer.scrollBy(0, 1000);
+    debugContainer.scrollBy({left: 0, top: 1000, behavior: 'instant'});
   }
   function toggleButton1() {
     const result = scrollableDiv.scrollTop + scrollableDiv.clientHeight >= scrollableDiv.scrollHeight - tolerance;
@@ -144,6 +152,10 @@
   scrollableDiv2.addEventListener('scroll', toggleButton2);
   scrollableDiv3.addEventListener('scroll', toggleButton3);
   scrollableDiv4.addEventListener('scroll', toggleButton4);
+
+  document.querySelector('#out-of-viewport-button').addEventListener('click', () => {
+    debug(`<pre>[#out-of-viewport-button] CLICKED</pre>`);
+  });
 
   setTimeout(() => {
     toggleButton1();

@@ -5,10 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.animated;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
+import static com.codeborne.selenide.Selenide.sleep;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,15 +51,21 @@ final class ScrollTest extends IntegrationTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   void scrollIntoView_alignToTop() {
     $("#rabbit").scrollIntoView(true);
+    sleep(100);
+    $("#rabbit").shouldNotBe(animated, Duration.ofSeconds(1));
 
     assertTopPosition(rabbitPosition(), 0);
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   void scrollIntoView_alignToBottom() {
     $("#rabbit").scrollIntoView(false);
+    sleep(100);
+    $("#rabbit").shouldNotBe(animated, Duration.ofSeconds(1));
 
     assertTopPosition(rabbitPosition(), windowHeight() - rabbitHeight);
   }
@@ -95,10 +104,10 @@ final class ScrollTest extends IntegrationTest {
   }
 
   private Location rabbitPosition() {
-    List<Number> array = executeJavaScript("""
+    List<Number> array = requireNonNull(executeJavaScript("""
         const rect = document.querySelector('#rabbit').getBoundingClientRect();
         return [rect.left, rect.top]
-      """);
+      """));
     return new Location(array.get(0).intValue(), array.get(1).intValue());
   }
 
