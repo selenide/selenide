@@ -1,7 +1,6 @@
 package org.selenide.videorecorder.core;
 
 import net.bramp.ffmpeg.FFmpeg;
-import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,8 +60,7 @@ class VideoMerger {
 
     FFmpeg ffmpeg = new FFmpeg();
     log.debug("Using {} of version {}", ffmpeg.getPath(), ffmpeg.version());
-    FFmpegExecutor executor = new FFmpegExecutor(ffmpeg);
-    executor.createJob(builder).run();
+    ffmpeg.run(builder);
   }
 
   private static Path prepareVideoFolder(Path videoFile) {
