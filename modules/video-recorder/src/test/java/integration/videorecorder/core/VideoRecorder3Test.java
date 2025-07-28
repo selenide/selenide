@@ -4,6 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.selenide.videorecorder.core.VideoRecorder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 
@@ -19,16 +21,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.selenide.videorecorder.core.RecordedVideos.getRecordedVideo;
 
 public class VideoRecorder3Test {
+  private static final Logger log =  LoggerFactory.getLogger(VideoRecorder3Test.class);
   private final VideoRecorder videoRecorder = new VideoRecorder();
 
   @BeforeEach
   public void beforeEach() {
+    log.info("before third test");
     videoRecorder.start();
   }
 
   @Test
   public void thirdTest() {
-    open(config().browserPosition("50x600").browserSize("800x500"));
+    log.info("start third test");
+    open(config().browserPosition("500x600").browserSize("800x500"));
     for (int i = 0; i < 3; i++) {
       open(requireNonNull(getClass().getClassLoader().getResource("search.html")));
       $("[name=q]").type(text("#3 JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit #333")
@@ -38,14 +43,20 @@ public class VideoRecorder3Test {
 
   @AfterEach
   public void checkVideo() {
+    log.info("finishing third test");
     videoRecorder.finish();
+    log.info("finish third test");
     Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow();
-    assertThat(videoFile.toFile().length()).isGreaterThan(0);
     assertThat(videoFile).hasExtension("mp4");
+    assertThat(videoFile.toFile().length())
+      .as(() -> "Video file: " + videoFile)
+      .isGreaterThan(0);
   }
 
   @AfterEach
   void closeBrowser() {
+    log.info("closing third browser");
     closeWebDriver();
+    log.info("closed third browser");
   }
 }
