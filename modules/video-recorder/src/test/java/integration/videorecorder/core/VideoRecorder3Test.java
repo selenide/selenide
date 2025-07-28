@@ -2,6 +2,7 @@ package integration.videorecorder.core;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.selenide.videorecorder.core.VideoRecorder;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public class VideoRecorder3Test {
     videoRecorder.start();
   }
 
-  @Test
+  @RepeatedTest(10)
   public void thirdTest() {
     log.info("start third test");
     open(config().browserPosition("500x600").browserSize("800x500"));
