@@ -1,8 +1,10 @@
 package integration.videorecorder.core;
 
+import com.codeborne.selenide.junit5.TextReportExtension;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.selenide.videorecorder.core.VideoRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +22,9 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.selenide.videorecorder.core.RecordedVideos.getRecordedVideo;
 
+@ExtendWith({TextReportExtension.class, TestSetup.class})
 public class VideoRecorder1Test {
-  private static final Logger log =  LoggerFactory.getLogger(VideoRecorder1Test.class);
+  private static final Logger log = LoggerFactory.getLogger(VideoRecorder1Test.class);
 
   private final VideoRecorder videoRecorder = new VideoRecorder();
   private final String threadName = currentThread().getName();
