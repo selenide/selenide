@@ -37,9 +37,12 @@ public class VideoRecorder1Test {
   }
 
   @RepeatedTest(20)
-  public void firstTest() {
+  public void firstTest() throws InterruptedException {
     log.info("[first] open()");
     open(config().browserPosition("50x5").browserSize("800x500"));
+    ThreadDumper threadDumper = new ThreadDumper(videoRecorder.videoId);
+    threadDumper.start();
+
     for (int i = 0; i < 3; i++) {
       log.info("[first] #{} open('search.html')", i);
       open(requireNonNull(getClass().getClassLoader().getResource("search.html")));
@@ -49,6 +52,7 @@ public class VideoRecorder1Test {
       log.info("[first] #{} typeed(#1 ... #111)", i);
     }
     log.info("[first] end()");
+    threadDumper.stop();
   }
 
   @AfterEach
