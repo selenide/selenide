@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.impl.AttachmentHandler;
 import com.codeborne.selenide.impl.FileNamer;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Capabilities;
@@ -16,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.lang.Integer.parseInt;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.openqa.selenium.UnexpectedAlertBehaviour.ACCEPT;
@@ -30,12 +32,14 @@ public abstract class AbstractDriverFactory implements DriverFactory {
   private static final Pattern REGEX_SIGNED_INTEGER = Pattern.compile("^-?\\d+$");
   private static final Pattern REGEX_VERSION = Pattern.compile("(\\d+)(\\..*)?");
   private final FileNamer fileNamer = new FileNamer();
+  private final AttachmentHandler attachmentHandler = inject();
 
   protected File webdriverLog(Config config) {
     File logFolder = ensureFolderExists(new File(config.reportsFolder()).getAbsoluteFile());
     String logFileName = String.format("webdriver.%s.log", fileNamer.generateFileName());
     File logFile = new File(logFolder, logFileName).getAbsoluteFile();
     log.info("Write webdriver logs to: {}", logFile);
+    attachmentHandler.attach(logFile);
     return logFile;
   }
 
