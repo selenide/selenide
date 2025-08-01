@@ -1,10 +1,15 @@
 package integration.videorecorder.core;
 
+import com.codeborne.selenide.junit5.TextReportExtension;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.selenide.videorecorder.core.Video;
 import org.selenide.videorecorder.core.VideoRecorder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 
@@ -19,35 +24,61 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.selenide.videorecorder.core.RecordedVideos.getRecordedVideo;
 
+@ExtendWith({TextReportExtension.class, TestSetup.class})
 public class VideoRecorder2Test {
+  private static final Logger log = LoggerFactory.getLogger(VideoRecorder2Test.class);
+
   private final VideoRecorder videoRecorder = new VideoRecorder();
+  private final String threadName = currentThread().getName();
 
   @BeforeEach
   public void beforeEach() {
+    currentThread().setName(threadName + " #" + videoRecorder.videoId);
+    Runtime runtime = Runtime.getRuntime();
+    log.info("before second test, cores: {}, freeMem: {}, totalMem: {}, maxMem: {}", runtime.availableProcessors(),
+      runtime.freeMemory(), runtime.totalMemory(), runtime.maxMemory());
     videoRecorder.start();
   }
 
-  @Test
+  @RepeatedTest(20)
   @Video
-  public void secondTest() {
-    open(config().browserPosition("200x300").browserSize("800x500"));
+  public void secondTest() throws InterruptedException {
+    log.info("[second] open()");
+    open(config().browserPosition("700x300").browserSize("800x500"));
+    ThreadDumper threadDumper = new ThreadDumper(videoRecorder.videoId);
+    threadDumper.start();
+
     for (int i = 0; i < 3; i++) {
+      log.info("[second] #{} open('search.html')", i);
       open(requireNonNull(getClass().getClassLoader().getResource("search.html")));
+      log.info("[second] #{} type(#2 ... #222)", i);
       $("[name=q]").type(text("#2 JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit #222")
         .withDelay(ofMillis(5)));
+      log.info("[second] #{} typeed(#2 ... #222)", i);
     }
+    log.info("[second] end()");
+    threadDumper.stop();
   }
 
   @AfterEach
   public void checkVideo() {
+    log.info("finishing second test");
     videoRecorder.finish();
-    Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow();
-    assertThat(videoFile.toFile().length()).isGreaterThan(0);
+    log.info("finished second test");
+    currentThread().setName(threadName);
+
+    Path videoFile = getRecordedVideo(currentThread().getId())
+      .orElseThrow(() -> new AssertionError("video file not found in thread " + currentThread().getId()));
     assertThat(videoFile).hasExtension("mp4");
+    assertThat(videoFile.toFile().length())
+      .as(() -> "Video file %s for thread %s".formatted(videoFile, currentThread().getId()))
+      .isGreaterThan(0);
   }
 
   @AfterEach
   void closeBrowser() {
+    log.info("closing second browser");
     closeWebDriver();
+    log.info("closed second browser");
   }
 }

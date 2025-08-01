@@ -16,9 +16,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.System.nanoTime;
@@ -32,7 +34,7 @@ class ScreenShooter extends TimerTask {
   private final long threadId;
   private final File screenshotsFolder;
   private final Queue<Screenshot> screenshots;
-  private volatile boolean cancelled;
+  private final AtomicBoolean cancelled = new AtomicBoolean();
 
   ScreenShooter(long threadId, File screenshotsFolder, Queue<Screenshot> screenshots) {
     this.threadId = threadId;
@@ -42,13 +44,19 @@ class ScreenShooter extends TimerTask {
 
   @Override
   public boolean cancel() {
-    cancelled = true;
-    return super.cancel();
+    log.debug("Cancelling screen shooter...");
+    try {
+      cancelled.set(true);
+      return super.cancel();
+    }
+    finally {
+      log.debug("Cancelled screen shooter.");
+    }
   }
 
   @Override
   public void run() {
-    if (cancelled) {
+    if (cancelled.get()) {
       log.warn("Screen shooter has been cancelled");
       return;
     }
@@ -89,8 +97,11 @@ class ScreenShooter extends TimerTask {
   }
 
   private <T extends WebDriver & HasDevTools> byte[] takeScreenshotWithDevtools(T driver) {
+    log.trace("Taking a screenshot with devtools for webdriver in thread {} ...", threadId);
     DevTools devTools = driver.getDevTools();
+    log.trace("    Got devtools for webdriver in thread {}: {}", threadId, toString(devTools));
     devTools.createSessionIfThereIsNotOne(driver.getWindowHandle());
+    log.trace("    Created devtools session for webdriver in thread {}: {}", threadId, devTools);
 
     String base64 = devTools.send(Page.captureScreenshot(
         Optional.empty(),
@@ -99,10 +110,14 @@ class ScreenShooter extends TimerTask {
         Optional.empty(),
         Optional.empty(),
         Optional.of(true)
-      )
+      ), Duration.ofSeconds(4)
     );
-
+    log.trace("    Taken a screenshot with devtools for webdriver in thread {}: {} chars (base64)", threadId, base64.length());
     return BYTES.convertFromBase64Png(base64);
+  }
+
+  private String toString(DevTools devTools) {
+    return "DevTools{%s}".formatted(devTools.getCdpSession());
   }
 
   private static byte[] takeScreenshotWithWebdriver(WebDriver webDriver) {
