@@ -1,14 +1,10 @@
 package integration.videorecorder.core;
 
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.junit5.TextReportExtension;
-import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.devtools.HasDevTools;
 import org.selenide.videorecorder.core.VideoRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +21,6 @@ import static java.time.Duration.ofMillis;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.selenide.videorecorder.core.RecordedVideos.getRecordedVideo;
-import static org.selenide.videorecorder.core.ScreenShooter.takeScreenshotWithDevtools;
 
 @ExtendWith({TextReportExtension.class, TestSetup.class})
 public class VideoRecorder3Test {
