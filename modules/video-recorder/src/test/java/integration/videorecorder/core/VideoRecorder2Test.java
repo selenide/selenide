@@ -34,7 +34,9 @@ public class VideoRecorder2Test {
   @BeforeEach
   public void beforeEach() {
     currentThread().setName(threadName + " #" + videoRecorder.videoId);
-    log.info("before second test");
+    Runtime runtime = Runtime.getRuntime();
+    log.info("before second test, cores: {}, freeMem: {}, totalMem: {}, maxMem: {}", runtime.availableProcessors(),
+      runtime.freeMemory(), runtime.totalMemory(), runtime.maxMemory());
     videoRecorder.start();
   }
 
