@@ -38,12 +38,17 @@ public class VideoRecorder1Test {
 
   @RepeatedTest(20)
   public void firstTest() {
+    log.info("[first] open()");
     open(config().browserPosition("50x5").browserSize("800x500"));
     for (int i = 0; i < 3; i++) {
+      log.info("[first] #{} open('search.html')", i);
       open(requireNonNull(getClass().getClassLoader().getResource("search.html")));
+      log.info("[first] #{} type(#1 ... #111)", i);
       $("[name=q]").type(text("#1 JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit #111")
         .withDelay(ofMillis(5)));
+      log.info("[first] #{} typeed(#1 ... #111)", i);
     }
+    log.info("[first] end()");
   }
 
   @AfterEach

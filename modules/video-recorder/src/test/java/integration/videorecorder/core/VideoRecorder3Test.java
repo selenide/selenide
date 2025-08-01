@@ -37,13 +37,17 @@ public class VideoRecorder3Test {
 
   @RepeatedTest(20)
   public void thirdTest() {
-    log.info("start third test");
+    log.info("[third] open()");
     open(config().browserPosition("500x600").browserSize("800x500"));
     for (int i = 0; i < 3; i++) {
+      log.info("[third] #{} open('search.html')", i);
       open(requireNonNull(getClass().getClassLoader().getResource("search.html")));
+      log.info("[third] #{} type(#3 ... #333)", i);
       $("[name=q]").type(text("#3 JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit #333")
         .withDelay(ofMillis(5)));
+      log.info("[third] #{} typeed(#3 ... #333)", i);
     }
+    log.info("[third] end()");
   }
 
   @AfterEach

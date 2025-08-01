@@ -20,7 +20,6 @@ import static java.lang.Integer.toHexString;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.nanoTime;
 import static java.lang.Thread.currentThread;
-import static java.util.concurrent.Executors.newScheduledThreadPool;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -37,7 +36,8 @@ public class VideoRecorder {
 
   private final long threadId = currentThread().getId();
   public final String videoId = "%s.%s.%s".formatted(currentTimeMillis(), videoCounter.getAndIncrement(), threadId);
-  private final ScheduledThreadPoolExecutor screenshooter = new ThreadPool(1, named("%s:screen-shooter:%s:".formatted(currentThread().getName(), videoId)));
+  private final ScheduledThreadPoolExecutor screenshooter =
+    new ThreadPool(1, named("%s:screen-shooter:%s:".formatted(currentThread().getName(), videoId)));
   private final int fps;
   private final Queue<Screenshot> screenshots = new ConcurrentLinkedQueue<>();
   private final File screenshotsFolder;
@@ -130,7 +130,8 @@ public class VideoRecorder {
   private void stop(String name, ScheduledThreadPoolExecutor threadPool, long timeoutMs) throws InterruptedException {
     long start = nanoTime();
     if (!threadPool.awaitTermination(timeoutMs, MILLISECONDS)) {
-      log.warn("{} thread hasn't completed in {} ms. (pool size: {}, queue size: {}, active count: {}, max pool size: {}, task count: {}, terminating: {}, terminated: {} " +
+      log.warn("{} thread hasn't completed in {} ms. (pool size: {}, queue size: {}, " +
+               "active count: {}, max pool size: {}, task count: {}, terminating: {}, terminated: {} " +
                "getContinueExistingPeriodicTasksAfterShutdownPolicy: {}, " +
                "getExecuteExistingDelayedTasksAfterShutdownPolicy: {})",
         name, timeoutMs,
