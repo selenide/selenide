@@ -26,9 +26,11 @@ public class VideoRecorder2Test {
   private static final Logger log =  LoggerFactory.getLogger(VideoRecorder2Test.class);
 
   private final VideoRecorder videoRecorder = new VideoRecorder();
+  private final String threadName = currentThread().getName();
 
   @BeforeEach
   public void beforeEach() {
+    currentThread().setName(threadName + " #" + videoRecorder.videoId);
     log.info("before second test");
     videoRecorder.start();
   }
@@ -50,10 +52,13 @@ public class VideoRecorder2Test {
     log.info("finishing second test");
     videoRecorder.finish();
     log.info("finished second test");
-    Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow();
+    currentThread().setName(threadName);
+
+    Path videoFile = getRecordedVideo(currentThread().getId())
+      .orElseThrow(() -> new AssertionError("video file not found in thread " + currentThread().getId()));
     assertThat(videoFile).hasExtension("mp4");
     assertThat(videoFile.toFile().length())
-      .as(() -> "Video file: " + videoFile)
+      .as(() -> "Video file %s for thread %s".formatted(videoFile, currentThread().getId()))
       .isGreaterThan(0);
   }
 

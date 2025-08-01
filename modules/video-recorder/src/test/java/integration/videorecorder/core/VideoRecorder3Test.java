@@ -1,9 +1,9 @@
 package integration.videorecorder.core;
 
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 import org.selenide.videorecorder.core.VideoRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +24,11 @@ import static org.selenide.videorecorder.core.RecordedVideos.getRecordedVideo;
 public class VideoRecorder3Test {
   private static final Logger log =  LoggerFactory.getLogger(VideoRecorder3Test.class);
   private final VideoRecorder videoRecorder = new VideoRecorder();
+  private final String threadName = currentThread().getName();
 
   @BeforeEach
   public void beforeEach() {
+    currentThread().setName(threadName + " #" + videoRecorder.videoId);
     log.info("before third test");
     videoRecorder.start();
   }
@@ -47,10 +49,13 @@ public class VideoRecorder3Test {
     log.info("finishing third test");
     videoRecorder.finish();
     log.info("finish third test");
-    Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow();
+    currentThread().setName(threadName);
+
+    Path videoFile = getRecordedVideo(currentThread().getId())
+      .orElseThrow(() -> new AssertionError("video file not found in thread " + currentThread().getId()));
     assertThat(videoFile).hasExtension("mp4");
     assertThat(videoFile.toFile().length())
-      .as(() -> "Video file: " + videoFile)
+      .as(() -> "Video file %s for thread %s".formatted(videoFile, currentThread().getId()))
       .isGreaterThan(0);
   }
 

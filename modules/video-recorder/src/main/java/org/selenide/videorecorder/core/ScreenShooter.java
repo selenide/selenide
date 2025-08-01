@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.System.nanoTime;
@@ -32,7 +33,7 @@ class ScreenShooter extends TimerTask {
   private final long threadId;
   private final File screenshotsFolder;
   private final Queue<Screenshot> screenshots;
-  private volatile boolean cancelled;
+  private final AtomicBoolean cancelled = new AtomicBoolean();
 
   ScreenShooter(long threadId, File screenshotsFolder, Queue<Screenshot> screenshots) {
     this.threadId = threadId;
@@ -44,7 +45,7 @@ class ScreenShooter extends TimerTask {
   public boolean cancel() {
     log.debug("Cancelling screen shooter...");
     try {
-      cancelled = true;
+      cancelled.set(true);
       return super.cancel();
     }
     finally {
@@ -54,7 +55,7 @@ class ScreenShooter extends TimerTask {
 
   @Override
   public void run() {
-    if (cancelled) {
+    if (cancelled.get()) {
       log.warn("Screen shooter has been cancelled");
       return;
     }

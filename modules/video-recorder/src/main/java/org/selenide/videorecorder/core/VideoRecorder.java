@@ -1,13 +1,15 @@
 package org.selenide.videorecorder.core;
 
 import com.codeborne.selenide.impl.AttachmentHandler;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.codeborne.selenide.impl.FileHelper.deleteFolder;
@@ -33,19 +35,23 @@ public class VideoRecorder {
   private static final AtomicLong videoCounter = new AtomicLong(0);
   private final AttachmentHandler attachmentHandler = inject();
 
-  private final ScheduledExecutorService screenshooter = newScheduledThreadPool(1, named("video-recorder:screenshots:"));
+  private final long threadId = currentThread().getId();
+  public final String videoId = "%s.%s.%s".formatted(currentTimeMillis(), videoCounter.getAndIncrement(), threadId);
+  private final ScheduledThreadPoolExecutor screenshooter = new ThreadPool(1, named("%s:screen-shooter:%s:".formatted(currentThread().getName(), videoId)));
   private final int fps;
   private final Queue<Screenshot> screenshots = new ConcurrentLinkedQueue<>();
   private final File screenshotsFolder;
   private final ScreenShooter screenShooterTask;
+  @Nullable
+  private ScheduledFuture<?> future;
   private final VideoMerger videoMerger;
 
   public VideoRecorder() {
     fps = config.fps();
-    String videoId = "%s.%s".formatted(currentTimeMillis(), videoCounter.getAndIncrement());
     screenshotsFolder = createScreenshotsFolder(videoId);
-    screenShooterTask = new ScreenShooter(currentThread().getId(), screenshotsFolder, screenshots);
-    videoMerger = new VideoMerger(currentThread().getId(), videoId, config, screenshotsFolder, screenshots);
+    screenShooterTask = new ScreenShooter(threadId, screenshotsFolder, screenshots);
+    videoMerger = new VideoMerger(threadId, videoId, config, screenshotsFolder, screenshots);
+    log.debug("Created video recorder for video {}, folder: {}", videoId, screenshotsFolder);
   }
 
   private static File createScreenshotsFolder(String videoId) {
@@ -54,6 +60,7 @@ public class VideoRecorder {
     if (!config.keepScreenshots()) {
       screenshotsFolder.deleteOnExit();
     }
+    log.debug("Created screenshots folder {} for video {}", screenshotsFolder.getAbsolutePath(), videoId);
     return screenshotsFolder;
   }
 
@@ -62,13 +69,8 @@ public class VideoRecorder {
   }
 
   public void start() {
-    log.info("Starting screenshooter every {} nanoseconds to achieve fps {}", delayBetweenFramesNanos(), fps);
-    startScreenShooter();
-  }
-
-  private void startScreenShooter() {
-    log.debug("Start screen shooter x {} {}", delayBetweenFramesNanos(), NANOSECONDS);
-    screenshooter.scheduleAtFixedRate(screenShooterTask, 0, delayBetweenFramesNanos(), NANOSECONDS);
+    log.info("Starting screenshooter {} every {} nanoseconds to achieve fps {}", videoId, delayBetweenFramesNanos(), fps);
+    future = screenshooter.scheduleAtFixedRate(screenShooterTask, 0, delayBetweenFramesNanos(), NANOSECONDS);
   }
 
   /**
@@ -85,9 +87,11 @@ public class VideoRecorder {
     log.debug("Stopping video recorder...");
 
     try {
-      log.debug("  Cancel screen shooter");
-      screenShooterTask.cancel();
-      log.debug("  Shutdown screen shooter");
+      log.debug("  Cancel screen shooter task");
+      boolean cancelled = screenShooterTask.cancel();
+      log.debug("  Cancel screen shooter future");
+      future.cancel(false);
+      log.debug("  Shutdown screen shooter (cancelled: {})", cancelled);
       screenshooter.shutdown();
       stop("Screenshooter", screenshooter, 2000);
       log.debug("  Shutdown screen shooter now");
@@ -104,7 +108,7 @@ public class VideoRecorder {
       }
     }
     catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
+      currentThread().interrupt();
       throw new RuntimeException(e);
     }
   }
@@ -113,16 +117,31 @@ public class VideoRecorder {
    * Stop video processing and delete the video file
    */
   public void cancel() {
+    log.debug("Cancel video recorder task");
     screenShooterTask.cancel();
+    log.debug("Cancel video recorder future");
+    future.cancel(false);
+    log.debug("shutdown now video recorder thread pool");
     screenshooter.shutdownNow();
     videoMerger.rollback();
     videoMerger.cancel();
   }
 
-  private void stop(String name, ScheduledExecutorService threadPool, long timeoutMs) throws InterruptedException {
+  private void stop(String name, ScheduledThreadPoolExecutor threadPool, long timeoutMs) throws InterruptedException {
     long start = nanoTime();
     if (!threadPool.awaitTermination(timeoutMs, MILLISECONDS)) {
-      log.warn("{} thread hasn't completed in {} ms.", name, timeoutMs);
+      log.warn("{} thread hasn't completed in {} ms. (pool size: {}, queue size: {}, active count: {}, max pool size: {}, task count: {}, terminating: {}, terminated: {} " +
+               "getContinueExistingPeriodicTasksAfterShutdownPolicy: {}, " +
+               "getExecuteExistingDelayedTasksAfterShutdownPolicy: {})",
+        name, timeoutMs,
+        threadPool.getPoolSize(), threadPool.getQueue().size(), threadPool.getActiveCount(),
+        threadPool.getMaximumPoolSize(),
+        threadPool.getTaskCount(),
+        threadPool.isTerminating(),
+        threadPool.isTerminated(),
+        threadPool.getContinueExistingPeriodicTasksAfterShutdownPolicy(),
+        threadPool.getExecuteExistingDelayedTasksAfterShutdownPolicy()
+      );
     }
     else {
       log.debug("{} thread stopped in {} ms.", name, NANOSECONDS.toMillis(nanoTime() - start));
