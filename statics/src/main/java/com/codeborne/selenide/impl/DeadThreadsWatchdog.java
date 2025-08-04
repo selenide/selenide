@@ -53,8 +53,8 @@ public class DeadThreadsWatchdog extends Thread {
     }
 
     log.info("Thread {} is dead. Let's close its webdriver {}.", thread.getId(), driver.webDriver());
-    driver.dispose();
     WebdriversRegistry.unregister(driver);
+    driver.dispose();
   }
 }
 
