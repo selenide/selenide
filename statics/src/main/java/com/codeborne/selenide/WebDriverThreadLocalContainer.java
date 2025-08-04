@@ -199,8 +199,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     long threadId = currentThread().getId();
     WebDriverInstance driver = threadWebDriver.get(threadId);
     if (driver != null) {
-      driver.dispose();
       WebdriversRegistry.unregister(driver);
+      driver.dispose();
     }
 
     resetWebDriver();
