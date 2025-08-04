@@ -130,8 +130,8 @@ public class LazyDriver implements Driver {
   @Override
   public void close() {
     if (wd != null) {
-      wd.dispose();
       WebdriversRegistry.unregister(wd);
+      wd.dispose();
     }
     wd = null;
     closed = true;
