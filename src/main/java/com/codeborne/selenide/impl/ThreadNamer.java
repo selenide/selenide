@@ -17,6 +17,8 @@ public class ThreadNamer implements ThreadFactory {
 
   @Override
   public Thread newThread(Runnable runnable) {
-    return new Thread(runnable, name + counter.incrementAndGet());
+    Thread thread = new Thread(runnable, name + counter.incrementAndGet());
+    thread.setDaemon(true);
+    return thread;
   }
 }

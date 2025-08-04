@@ -9,6 +9,7 @@ import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v138.page.Page;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +23,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.System.nanoTime;
+import static java.lang.Thread.currentThread;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.openqa.selenium.OutputType.BYTES;
@@ -56,11 +58,29 @@ class ScreenShooter extends TimerTask {
       log.warn("Screen shooter thread has been interrupted");
       return;
     }
-    WebdriversRegistry.webdriver(threadId).ifPresentOrElse(driver -> {
-      takeScreenshot(driver);
-    }, () -> {
-      log.trace("Skip taking a screenshot because webdriver is not started in thread {}", threadId);
-    });
+    String originalName = currentThread().getName();
+    currentThread().setName("%s id:%s folder:%s count:%s".formatted(
+      originalName, threadId, screenshotsFolder.getName(), screenshots.size()));
+    try {
+      WebdriversRegistry.webdriver(threadId).ifPresentOrElse(driver -> {
+        takeScreenshot(driver);
+      }, () -> {
+        log.trace("Skip taking a screenshot because webdriver is not started in thread {}", threadId);
+      });
+    }
+    catch (UnreachableBrowserException | IllegalStateException browserHasBeenClosed) {
+      log.info("Failed to take screenshot for thread {} to folder {}: {}",
+        threadId, screenshotsFolder.getName(), browserHasBeenClosed.toString());
+    }
+    catch (org.openqa.selenium.TimeoutException timeout) {
+      log.warn("Failed to take screenshot for thread {} to folder {}: {}", threadId, screenshotsFolder.getName(), timeout.toString());
+    }
+    catch (Throwable e) {
+      log.error("Failed to take screenshot for thread {} to folder {}: {}", threadId, screenshotsFolder.getName(), e, e);
+    }
+    finally {
+      currentThread().setName(originalName);
+    }
   }
 
   private void takeScreenshot(WebDriverInstance driver) {
