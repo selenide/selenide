@@ -81,9 +81,14 @@ class VideoMerger {
    * Complete video processing and save the video file
    */
   void finish() {
-    if (cancelled.get()) return;
+    if (cancelled.get()) {
+      log.trace("Skip generating video because task has been cancelled");
+      RecordedVideos.remove(threadId);
+      return;
+    }
     if (screenshots.isEmpty()) {
       log.trace("Skip generating video because no screenshots have been taken");
+      RecordedVideos.remove(threadId);
       return;
     }
     else {
@@ -99,11 +104,13 @@ class VideoMerger {
       }
       catch (IOException e) {
         log.error("Failed to generate video {} from {} screenshots in {}", videoFile, screenshots.size(), screenshotsFolder, e);
+        RecordedVideos.remove(threadId);
         throw new RuntimeException("Failed to generate video %s from %s screenshots in %s".formatted(
           videoFile, screenshots.size(), screenshotsFolder), e);
       }
       catch (Error | RuntimeException e) {
         log.error("Failed to generate video {} from {} screenshots in {}", videoFile, screenshots.size(), screenshotsFolder, e);
+        RecordedVideos.remove(threadId);
         throw e;
       }
     }
