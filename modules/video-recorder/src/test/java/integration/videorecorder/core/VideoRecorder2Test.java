@@ -1,5 +1,6 @@
 package integration.videorecorder.core;
 
+import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -23,6 +24,7 @@ import static org.selenide.videorecorder.core.RecordedVideos.getRecordedVideo;
 
 public class VideoRecorder2Test {
   private static final Logger log =  LoggerFactory.getLogger(VideoRecorder2Test.class);
+  private static final SelenideConfig config = config().browserPosition("700x300").browserSize("800x500");
 
   private final VideoRecorder videoRecorder = new VideoRecorder();
 
@@ -36,7 +38,7 @@ public class VideoRecorder2Test {
   @Video
   public void secondTest() {
     log.info("start second test");
-    open(config().browserPosition("700x300").browserSize("800x500"));
+    open(config);
     for (int i = 0; i < 3; i++) {
       open(requireNonNull(getClass().getClassLoader().getResource("search.html")));
       $("[name=q]").type(text("#2 JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit #222")
