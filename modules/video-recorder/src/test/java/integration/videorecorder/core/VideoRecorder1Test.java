@@ -1,5 +1,6 @@
 package integration.videorecorder.core;
 
+import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
-import java.util.concurrent.ForkJoinPool;
 
 import static com.codeborne.selenide.Configuration.config;
 import static com.codeborne.selenide.Selenide.$;
@@ -23,6 +23,7 @@ import static org.selenide.videorecorder.core.RecordedVideos.getRecordedVideo;
 
 public class VideoRecorder1Test {
   private static final Logger log =  LoggerFactory.getLogger(VideoRecorder1Test.class);
+  private static final SelenideConfig config = config().browserPosition("50x5").browserSize("800x500");
 
   private final VideoRecorder videoRecorder = new VideoRecorder();
 
@@ -34,7 +35,7 @@ public class VideoRecorder1Test {
 
   @Test
   public void firstTest() {
-    open(config().browserPosition("50x5").browserSize("800x500"));
+    open(config);
     for (int i = 0; i < 3; i++) {
       open(requireNonNull(getClass().getClassLoader().getResource("search.html")));
       $("[name=q]").type(text("#1 JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit #111")
