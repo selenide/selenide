@@ -48,7 +48,8 @@ public class VideoRecorder1Test {
     log.info("finishing first test");
     videoRecorder.finish();
     log.info("finished first test");
-    Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow();
+    Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow(() -> new AssertionError("video file not found in thread " + currentThread()));
+    assertThat(videoFile).as(() -> "video file not found in thread " + currentThread()).exists();
     assertThat(videoFile).hasExtension("mp4");
     assertThat(videoFile.toFile().length())
       .as(() -> "Video file: " + videoFile)
