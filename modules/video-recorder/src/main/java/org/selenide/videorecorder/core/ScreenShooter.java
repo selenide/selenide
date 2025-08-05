@@ -17,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.TimerTask;
@@ -121,7 +122,7 @@ class ScreenShooter extends TimerTask {
         Optional.empty(),
         Optional.empty(),
         Optional.of(true)
-      )
+      ), Duration.ofSeconds(4)
     );
 
     return BYTES.convertFromBase64Png(base64);
