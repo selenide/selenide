@@ -88,7 +88,8 @@ class VideoMerger {
     }
     if (screenshots.isEmpty()) {
       log.trace("Skip generating video because no screenshots have been taken");
-      RecordedVideos.remove(threadId);
+      // TODO remove me
+      // RecordedVideos.remove(threadId);
       return;
     }
     else {
