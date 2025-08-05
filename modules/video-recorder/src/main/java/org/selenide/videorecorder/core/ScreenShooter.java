@@ -110,8 +110,9 @@ class ScreenShooter extends TimerTask {
   }
 
   private <T extends WebDriver & HasDevTools> byte[] takeScreenshotWithDevtools(T driver) {
+    String windowHandle = driver.getWindowHandle();
     DevTools devTools = driver.getDevTools();
-    devTools.createSessionIfThereIsNotOne(driver.getWindowHandle());
+    devTools.createSessionIfThereIsNotOne(windowHandle);
 
     String base64 = devTools.send(Page.captureScreenshot(
         Optional.empty(),
