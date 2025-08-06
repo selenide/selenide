@@ -16,10 +16,8 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.impl.ThreadNamer.named;
 import static java.lang.Integer.toHexString;
 import static java.lang.System.currentTimeMillis;
-import static java.lang.System.nanoTime;
 import static java.lang.Thread.currentThread;
 import static java.util.concurrent.Executors.newScheduledThreadPool;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -33,7 +31,7 @@ public class VideoRecorder {
   private static final AtomicLong videoCounter = new AtomicLong(0);
   private final AttachmentHandler attachmentHandler = inject();
 
-  private final ScheduledExecutorService screenshooter = newScheduledThreadPool(1, named("video-recorder:screenshots:"));
+  private static final ScheduledExecutorService screenshooter = newScheduledThreadPool(100, named("video-recorder:screenshots:"));
   private final int fps;
   private final Queue<Screenshot> screenshots = new ConcurrentLinkedQueue<>();
   private final File screenshotsFolder;
@@ -84,24 +82,14 @@ public class VideoRecorder {
   public void finish() {
     log.debug("Stopping video recorder...");
 
-    try {
-      screenShooterTask.cancel();
-      screenshooter.shutdown();
-      stop("Screenshooter", screenshooter, 2000);
-      screenshooter.shutdownNow();
+    screenShooterTask.cancel();
+    videoMerger.finish();
 
-      videoMerger.finish();
+    log.info("Video recorded: {}", videoUrl());
+    attachmentHandler.attach(videoMerger.videoFile().toFile());
 
-      log.info("Video recorded: {}", videoUrl());
-      attachmentHandler.attach(videoMerger.videoFile().toFile());
-
-      if (!config.keepScreenshots()) {
-        deleteFolder(screenshotsFolder);
-      }
-    }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new RuntimeException(e);
+    if (!config.keepScreenshots()) {
+      deleteFolder(screenshotsFolder);
     }
   }
 
@@ -110,19 +98,8 @@ public class VideoRecorder {
    */
   public void cancel() {
     screenShooterTask.cancel();
-    screenshooter.shutdownNow();
     videoMerger.rollback();
     videoMerger.cancel();
-  }
-
-  private void stop(String name, ScheduledExecutorService threadPool, long timeoutMs) throws InterruptedException {
-    long start = nanoTime();
-    if (!threadPool.awaitTermination(timeoutMs, MILLISECONDS)) {
-      log.warn("{} thread hasn't completed in {} ms.", name, timeoutMs);
-    }
-    else {
-      log.debug("{} thread stopped in {} ms.", name, NANOSECONDS.toMillis(nanoTime() - start));
-    }
   }
 
   @Override
