@@ -1,9 +1,12 @@
 package integration.videorecorder.core;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.junit5.TextReportExtension;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.selenide.videorecorder.core.VideoRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,14 +24,17 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.selenide.videorecorder.core.RecordedVideos.getRecordedVideo;
 
+@ExtendWith(TextReportExtension.class)
 public class VideoRecorder1Test {
-  private static final Logger log =  LoggerFactory.getLogger(VideoRecorder1Test.class);
+  private static final Logger log = LoggerFactory.getLogger(VideoRecorder1Test.class);
   private static final SelenideConfig config = config().browserPosition("50x5").browserSize("800x500");
 
   private final VideoRecorder videoRecorder = new VideoRecorder();
 
   @BeforeEach
   public void beforeEach() {
+    Configuration.webdriverLogsEnabled = true;
+    currentThread().setName("video-test-1-%s".formatted(videoRecorder.videoId()));
     log.info("before first test");
     videoRecorder.start();
   }

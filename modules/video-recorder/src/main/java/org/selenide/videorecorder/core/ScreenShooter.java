@@ -61,7 +61,7 @@ class ScreenShooter extends TimerTask {
       return;
     }
     String originalName = currentThread().getName();
-    currentThread().setName("%s id:%s folder:%s count:%s".formatted(
+    currentThread().setName("%s id:%s videoId:%s count:%s".formatted(
       originalName, threadId, screenshotsFolder.getName(), screenshots.size()));
     try {
       WebdriversRegistry.webdriver(threadId).ifPresentOrElse(driver -> {

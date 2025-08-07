@@ -32,6 +32,7 @@ public class VideoRecorder {
   private final AttachmentHandler attachmentHandler = inject();
 
   private static final ScheduledExecutorService screenshooter = newScheduledThreadPool(100, named("video-recorder:screenshots:"));
+  private final String videoId;
   private final int fps;
   private final Queue<Screenshot> screenshots = new ConcurrentLinkedQueue<>();
   private final File screenshotsFolder;
@@ -40,7 +41,7 @@ public class VideoRecorder {
 
   public VideoRecorder() {
     fps = config.fps();
-    String videoId = "%s.%s".formatted(currentTimeMillis(), videoCounter.getAndIncrement());
+    videoId = "%s.%s".formatted(currentTimeMillis(), videoCounter.getAndIncrement());
     screenshotsFolder = createScreenshotsFolder(videoId);
     screenShooterTask = new ScreenShooter(currentThread().getId(), screenshotsFolder, screenshots);
     videoMerger = new VideoMerger(currentThread().getId(), videoId, config, screenshotsFolder, screenshots);
@@ -53,6 +54,10 @@ public class VideoRecorder {
       screenshotsFolder.deleteOnExit();
     }
     return screenshotsFolder;
+  }
+
+  public String videoId() {
+    return videoId;
   }
 
   public String videoUrl() {
