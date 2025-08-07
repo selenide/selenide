@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Holds the recorded videos per thread.
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class RecordedVideos {
   private static final Logger log = LoggerFactory.getLogger(RecordedVideos.class);
 
-  private static final Map<Long, Path> videos = new HashMap<>();
+  private static final Map<Long, Path> videos = new ConcurrentHashMap<>();
 
   public static void add(long threadId, Path videoFile) {
     log.debug("add video file {} in thread {} (exists: {})", videoFile, threadId, videoFile.toFile().exists());
