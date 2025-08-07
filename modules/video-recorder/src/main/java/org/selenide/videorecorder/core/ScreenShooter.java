@@ -52,18 +52,21 @@ class ScreenShooter extends TimerTask {
 
   @Override
   public void run() {
-    if (cancelled.get()) {
-      log.warn("Screen shooter has been cancelled");
-      return;
-    }
     if (Thread.interrupted()) {
       log.warn("Screen shooter thread has been interrupted");
       return;
     }
+
     String originalName = currentThread().getName();
     currentThread().setName("%s id:%s videoId:%s count:%s".formatted(
       originalName, threadId, screenshotsFolder.getName(), screenshots.size()));
+
     try {
+      if (cancelled.get()) {
+        log.warn("Screen shooter has been cancelled");
+        return;
+      }
+
       WebdriversRegistry.webdriver(threadId).ifPresentOrElse(driver -> {
         takeScreenshot(driver);
       }, () -> {
