@@ -16,7 +16,6 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.assertj:assertj-core:$assertjVersion")
   testImplementation("org.mockito:mockito-core:$mockitoVersion")
-  testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
 }
 
 tasks.register('selenoidTests', Test) {

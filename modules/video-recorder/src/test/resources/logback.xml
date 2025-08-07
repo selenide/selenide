@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration>
+
+<configuration>
+  <import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"/>
+  <import class="ch.qos.logback.classic.AsyncAppender"/>
+  <import class="ch.qos.logback.core.FileAppender"/>
+
+  <appender name="FILE" class="FileAppender">
+    <file>${user.dir}/build/reports/tests/test.log</file>
+    <encoder class="PatternLayoutEncoder">
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="ASYNC" class="AsyncAppender">
+    <appender-ref ref="FILE"/>
+  </appender>
+
+  <root level="DEBUG">
+    <appender-ref ref="ASYNC"/>
+  </root>
+</configuration>

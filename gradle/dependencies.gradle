@@ -36,8 +36,13 @@ subprojects {
   configurations.implementation {
     exclude(group: 'com.google.code.findbugs')
   }
+  configurations.testRuntimeOnly {
+    exclude group: 'org.slf4j', module: 'slf4j-simple'
+  }
 
   dependencies {
+    testRuntimeOnly("ch.qos.logback:logback-classic:1.5.18")
+
     compileOnly platform("org.junit:junit-bom:$junitVersion")
     testImplementation platform("org.junit:junit-bom:$junitVersion")
 
