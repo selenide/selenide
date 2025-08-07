@@ -1,9 +1,12 @@
 package integration.videorecorder.core;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.junit5.TextReportExtension;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.selenide.videorecorder.core.VideoRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +24,7 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.selenide.videorecorder.core.RecordedVideos.getRecordedVideo;
 
+@ExtendWith(TextReportExtension.class)
 public class VideoRecorder3Test {
   private static final Logger log =  LoggerFactory.getLogger(VideoRecorder3Test.class);
   private static final SelenideConfig config = config().browserPosition("500x600").browserSize("800x500");
@@ -28,6 +32,8 @@ public class VideoRecorder3Test {
 
   @BeforeEach
   public void beforeEach() {
+    Configuration.webdriverLogsEnabled = true;
+    currentThread().setName("video-test-3-%s".formatted(videoRecorder.videoId()));
     log.info("before third test");
     videoRecorder.start();
   }
@@ -48,7 +54,8 @@ public class VideoRecorder3Test {
     log.info("finishing third test");
     videoRecorder.finish();
     log.info("finish third test");
-    Path videoFile = getRecordedVideo(currentThread().getId()).orElseThrow(() -> new AssertionError("video file not found in thread " + currentThread()));
+    Path videoFile = getRecordedVideo(currentThread().getId())
+      .orElseThrow(() -> new AssertionError("video file not found in thread " + currentThread()));
     assertThat(videoFile).as(() -> "video file not found in thread " + currentThread()).exists();
     assertThat(videoFile).hasExtension("mp4");
     assertThat(videoFile.toFile().length())
