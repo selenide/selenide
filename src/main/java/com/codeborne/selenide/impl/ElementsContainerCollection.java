@@ -5,6 +5,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.PageObjectException;
 import com.codeborne.selenide.ex.UIAssertionError;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.NoSuchElementException;
 
 import java.lang.reflect.Field;
@@ -13,20 +14,21 @@ import java.util.AbstractList;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.impl.Alias.NONE;
-import static com.codeborne.selenide.impl.SelenidePageFactory.isShadowRoot;
+import static com.codeborne.selenide.impl.SelenideAnnotations.isShadowRoot;
 
-public class ElementsContainerCollection extends AbstractList<Container> {
+public class ElementsContainerCollection<T extends Container> extends AbstractList<T> {
   private final PageObjectFactory pageFactory;
   private final Driver driver;
+  @Nullable
   private final Field field;
-  private final Class<?> listType;
+  private final Class<T> listType;
   private final Type[] genericTypes;
   private final CollectionSource collection;
 
   public ElementsContainerCollection(PageObjectFactory pageFactory,
                                      Driver driver,
-                                     Field field,
-                                     Class<?> listType,
+                                     @Nullable Field field,
+                                     Class<T> listType,
                                      Type[] genericTypes,
                                      CollectionSource collection) {
     this.pageFactory = pageFactory;
@@ -38,14 +40,27 @@ public class ElementsContainerCollection extends AbstractList<Container> {
   }
 
   @Override
-  public Container get(int index) {
+  public T get(int index) {
     String searchCriteria = String.format("%s[%s]", collection.getSearchCriteria(), index);
     WebElementSource self = new WebElementWrapper(driver, collection.getElement(index), searchCriteria, isShadowRoot(field, listType));
     try {
-      return pageFactory.initElementsContainer(driver, field, self, listType, genericTypes);
+      return initElementsContainer(self);
     } catch (ReflectiveOperationException e) {
-      throw new PageObjectException("Failed to initialize field " + field, e);
+      throw pageObjectException(e);
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  private T initElementsContainer(WebElementSource self) throws ReflectiveOperationException {
+    return (T) pageFactory.initElementsContainer(driver, field, self, listType, genericTypes);
+  }
+
+  private PageObjectException pageObjectException(ReflectiveOperationException e) {
+    String message = field == null
+      ? "Failed to initialize type " + listType.getName()
+      : "Failed to initialize field " + field;
+
+    return new PageObjectException(message, e);
   }
 
   @Override
