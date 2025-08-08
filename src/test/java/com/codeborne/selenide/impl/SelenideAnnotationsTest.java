@@ -1,7 +1,9 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.DeepShadow;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ShadowHost;
+import com.codeborne.selenide.selector.ByDeepShadow;
 import com.codeborne.selenide.selector.ByShadow;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -15,6 +17,7 @@ import org.openqa.selenium.support.pagefactory.ByChained;
 import java.lang.reflect.Field;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SelenideAnnotationsTest {
 
@@ -48,6 +51,26 @@ public class SelenideAnnotationsTest {
   @FindAll({@FindBy(xpath = "cheese"), @FindBy(id = "fruit")})
   private SelenideElement findAllWithInnerShadowHost;
 
+  @DeepShadow
+  private SelenideElement defaultWithDeepShadow;
+
+  @DeepShadow
+  @FindBy(css = "cheese")
+  private SelenideElement findByWithDeepShadow;
+
+  @DeepShadow
+  @FindBys({@FindBy(xpath = "cheese"), @FindBy(id = "fruit")})
+  private SelenideElement findBysWithDeepShadow;
+
+  @DeepShadow
+  @FindAll({@FindBy(xpath = "cheese"), @FindBy(id = "fruit")})
+  private SelenideElement findAllWithDeepShadow;
+
+  @DeepShadow
+  @ShadowHost(@FindBy(css = "cheese"))
+  @FindBy(css = "cheese")
+  private SelenideElement fieldWithShadowHostAndDeepShadow;
+
   private static By buildBy(String fieldName) throws NoSuchFieldException {
     Field field = SelenideAnnotationsTest.class.getDeclaredField(fieldName);
     return new SelenideAnnotations(field).buildBy();
@@ -55,6 +78,10 @@ public class SelenideAnnotationsTest {
 
   private static By byShadow(By target, By shadowHost, By... innerShadowHosts) {
     return new ByShadow(target, shadowHost, innerShadowHosts);
+  }
+
+  private static By byDeepShadow(By target) {
+    return new ByDeepShadow(target);
   }
 
   @Test
@@ -121,5 +148,40 @@ public class SelenideAnnotationsTest {
       By.id("cheese"),
       By.cssSelector("fruit")
     ));
+  }
+
+  @Test
+  void default_withDeepShadow() throws NoSuchFieldException {
+    By result = buildBy("defaultWithDeepShadow");
+    assertThat(result).isEqualTo(byDeepShadow(new ByIdOrName("defaultWithDeepShadow")));
+  }
+
+  @Test
+  void findBy_withDeepShadow() throws NoSuchFieldException {
+    By result = buildBy("findByWithDeepShadow");
+    assertThat(result).isEqualTo(byDeepShadow(By.cssSelector("cheese")));
+  }
+
+  @Test
+  void findBys_withDeepShadow() throws NoSuchFieldException {
+    By result = buildBy("findBysWithDeepShadow");
+    assertThat(result).isEqualTo(byDeepShadow(
+      new ByChained(By.xpath("cheese"), By.id("fruit"))
+    ));
+  }
+
+  @Test
+  void findAll_withDeepShadow() throws NoSuchFieldException {
+    By result = buildBy("findAllWithDeepShadow");
+    assertThat(result).isEqualTo(byDeepShadow(
+      new ByAll(By.xpath("cheese"), By.id("fruit"))
+    ));
+  }
+
+  @Test
+  void fieldWithShadowHostAndDeepShadow() {
+    assertThatThrownBy(() -> buildBy("fieldWithShadowHostAndDeepShadow"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("If you use a '@ShadowHost' annotation, you must not also use a '@DeepShadow' annotation");
   }
 }

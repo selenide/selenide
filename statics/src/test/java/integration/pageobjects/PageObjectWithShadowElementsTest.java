@@ -2,6 +2,7 @@ package integration.pageobjects;
 
 import com.codeborne.selenide.Container;
 import com.codeborne.selenide.Container.ShadowRoot;
+import com.codeborne.selenide.DeepShadow;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ShadowHost;
 import integration.IntegrationTest;
@@ -38,9 +39,21 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
   }
 
   @Test
-  void elementWithInnerShadowHost() {
+  void elementWithDeepShadow() {
+    pageObject.deepInput.setValue("I can type text inside of shadow dom");
+    pageObject.deepInput.shouldHave(exactValue("I can type text inside of shadow dom"));
+  }
+
+  @Test
+  void innerElementWithShadowHost() {
     pageObject.innerInput.setValue("I can type text inside of shadow dom");
     pageObject.innerInput.shouldHave(exactValue("I can type text inside of shadow dom"));
+  }
+
+  @Test
+  void innerElementWithDeepShadow() {
+    pageObject.deepInnerInput.setValue("I can type text inside of shadow dom");
+    pageObject.deepInnerInput.shouldHave(exactValue("I can type text inside of shadow dom"));
   }
 
   @Test
@@ -59,8 +72,38 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
   }
 
   @Test
-  void elementsListWithInnerShadowHost() {
+  void elementsListWithDeepShadow() {
+    List<SelenideElement> elementsList = pageObject.deepEelementsList;
+    assertThat(elementsList).as("Mismatch in the size of expected elements").hasSize(2);
+
+    SelenideElement input = elementsList.get(0);
+    input.setValue("I can type text inside of shadow dom");
+    input.shouldHave(exactValue("I can type text inside of shadow dom"));
+
+    SelenideElement button = elementsList.get(1);
+    button.shouldHave(exactText("Button 1"));
+    button.click();
+    button.shouldHave(exactText("Changed Button 1"));
+  }
+
+  @Test
+  void innerElementsListWithShadowHost() {
     List<SelenideElement> elementsList = pageObject.innerElementsList;
+    assertThat(elementsList).as("Mismatch in the size of expected elements").hasSize(2);
+
+    SelenideElement input = elementsList.get(0);
+    input.setValue("I can type text inside of shadow dom");
+    input.shouldHave(exactValue("I can type text inside of shadow dom"));
+
+    SelenideElement button = elementsList.get(1);
+    button.shouldHave(exactText("Button 2"));
+    button.click();
+    button.shouldHave(exactText("Changed Button 2"));
+  }
+
+  @Test
+  void innerElementsListWithDeepShadow() {
+    List<SelenideElement> elementsList = pageObject.deepInnerElementsList;
     assertThat(elementsList).as("Mismatch in the size of expected elements").hasSize(2);
 
     SelenideElement input = elementsList.get(0);
@@ -83,13 +126,13 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
       .collect(Collectors.joining(System.lineSeparator()));
 
     assertThat(text).isEqualTo("""
-                               shadowContainerChildHost1
-                               shadowContainerChildHost2
-                               shadowContainerChildHost3""");
+      shadowContainerChildHost1
+      shadowContainerChildHost2
+      shadowContainerChildHost3""");
   }
 
   @Test
-  void containerWithInnerShadowRoot() {
+  void innerContainerWithShadowRoot() {
     List<ShadowChild> children = pageObject.shadowContainer.children;
     assertThat(children.get(0).item.p.text()).isEqualTo("shadowContainerChildHost1");
     assertThat(children.get(1).item.p.text()).isEqualTo("shadowContainerChildHost2");
@@ -103,9 +146,39 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
   }
 
   @Test
-  void containerWithInnerShadowHostAndShadowRoot() {
-    ShadowInnerItem shadowInnerItem = pageObject.innerShadowChild.item;
+  void containerWithDeepShadowAndShadowRoot() {
+    ShadowItem item = pageObject.deepInnerShadowContainer.item;
+    assertThat(item.p.text()).isEqualTo("shadowContainerChildHost1");
+  }
+
+  @Test
+  void innerContainerWithShadowHostAndShadowRoot() {
+    ShadowInnerItem shadowInnerItem = pageObject.innerInnerShadowContainer.item;
     assertThat(shadowInnerItem.self.text()).isEqualTo("shadowContainerChildChild1Host1");
+  }
+
+  @Test
+  void innerContainerWithDeepShadowAndShadowRoot() {
+    ShadowInnerItem shadowInnerItem = pageObject.deepInnerInnerShadowContainer.item;
+    assertThat(shadowInnerItem.self.text()).isEqualTo("shadowContainerChildChild1Host1");
+  }
+
+  @Test
+  void elementsFromDifferentShadowRoots() {
+    List<SelenideElement> elements = pageObject.elementsFromDifferentShadowRoots;
+    assertThat(elements).as("Mismatch in the size of expected elements").hasSize(6);
+
+    String text = elements.stream()
+      .map(SelenideElement::text)
+      .collect(Collectors.joining(System.lineSeparator()));
+
+    assertThat(text).isEqualTo("""
+      shadowContainerChildChild1Host1
+      shadowContainerChildChild2Host1
+      shadowContainerChildChild1Host1
+      shadowContainerChildChild2Host1
+      shadowContainerChildChild1Host3
+      shadowContainerChildChild1Host3""");
   }
 
   private static class PageObject {
@@ -117,17 +190,33 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
     @FindBy(css = "#inputInShadow")
     SelenideElement input;
 
+    @DeepShadow
+    @FindBy(css = "#inputInShadow")
+    SelenideElement deepInput;
+
     @ShadowHost({@FindBy(id = "shadow-host"), @FindBy(css = "#inner-shadow-host")})
     @FindBy(css = "#inputInInnerShadow")
     SelenideElement innerInput;
+
+    @DeepShadow
+    @FindBy(css = "#inputInInnerShadow")
+    SelenideElement deepInnerInput;
 
     @ShadowHost(@FindBy(id = "shadow-host"))
     @FindAll({@FindBy(css = "#inputInShadow"), @FindBy(css = "#buttonInShadow")})
     List<SelenideElement> elementsList;
 
+    @DeepShadow
+    @FindAll({@FindBy(css = "#inputInShadow"), @FindBy(css = "#buttonInShadow")})
+    List<SelenideElement> deepEelementsList;
+
     @ShadowHost({@FindBy(xpath = "//*[@id='shadow-host']"), @FindBy(css = "#inner-shadow-host")})
     @FindAll({@FindBy(css = "#inputInInnerShadow"), @FindBy(css = "#buttonInInnerShadow")})
     List<SelenideElement> innerElementsList;
+
+    @DeepShadow
+    @FindAll({@FindBy(css = "#inputInInnerShadow"), @FindBy(css = "#buttonInInnerShadow")})
+    List<SelenideElement> deepInnerElementsList;
 
     @ShadowRoot
     @FindBy(css = "#shadow-container")
@@ -138,9 +227,22 @@ public class PageObjectWithShadowElementsTest extends IntegrationTest {
     @FindBy(css = ".shadow-container-child")
     ShadowChild innerShadowContainer;
 
+    @ShadowRoot
+    @DeepShadow
+    @FindBy(css = ".shadow-container-child")
+    ShadowChild deepInnerShadowContainer;
+
     @ShadowHost({@FindBy(id = "shadow-container"), @FindBy(css = ".shadow-container-child")})
     @FindBy(css = ".shadow-container-child-child")
-    ShadowInnerChild innerShadowChild;
+    ShadowInnerChild innerInnerShadowContainer;
+
+    @DeepShadow
+    @FindBy(css = ".shadow-container-child-child")
+    ShadowInnerChild deepInnerInnerShadowContainer;
+
+    @DeepShadow
+    @FindBy(css = "[class^=shadow-container-child-child]")
+    List<SelenideElement> elementsFromDifferentShadowRoots;
   }
 
   private static class ShadowContainer implements Container {
