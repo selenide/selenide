@@ -38,4 +38,9 @@ public class TypeOptions {
   public Duration timeDelay() {
     return this.timeDelayWhileTyping;
   }
+
+  @Override
+  public String toString() {
+    return String.format("\"%s\" (delay: %s, clearFirst: %s)", charSequence, timeDelayWhileTyping, shouldClearFieldBeforeTyping);
+  }
 }

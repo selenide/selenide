@@ -9,6 +9,7 @@ import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v138.page.Page;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,12 +17,15 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.System.nanoTime;
+import static java.lang.Thread.currentThread;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.openqa.selenium.OutputType.BYTES;
@@ -32,7 +36,7 @@ class ScreenShooter extends TimerTask {
   private final long threadId;
   private final File screenshotsFolder;
   private final Queue<Screenshot> screenshots;
-  private volatile boolean cancelled;
+  private final AtomicBoolean cancelled = new AtomicBoolean(false);
 
   ScreenShooter(long threadId, File screenshotsFolder, Queue<Screenshot> screenshots) {
     this.threadId = threadId;
@@ -42,25 +46,46 @@ class ScreenShooter extends TimerTask {
 
   @Override
   public boolean cancel() {
-    cancelled = true;
+    cancelled.set(true);
     return super.cancel();
   }
 
   @Override
   public void run() {
-    if (cancelled) {
-      log.warn("Screen shooter has been cancelled");
-      return;
-    }
     if (Thread.interrupted()) {
       log.warn("Screen shooter thread has been interrupted");
       return;
     }
-    WebdriversRegistry.webdriver(threadId).ifPresentOrElse(driver -> {
-      takeScreenshot(driver);
-    }, () -> {
-      log.trace("Skip taking a screenshot because webdriver is not started in thread {}", threadId);
-    });
+
+    String originalName = currentThread().getName();
+    currentThread().setName("%s id:%s videoId:%s count:%s".formatted(
+      originalName, threadId, screenshotsFolder.getName(), screenshots.size()));
+
+    try {
+      if (cancelled.get()) {
+        log.warn("Screen shooter has been cancelled");
+        return;
+      }
+
+      WebdriversRegistry.webdriver(threadId).ifPresentOrElse(driver -> {
+        takeScreenshot(driver);
+      }, () -> {
+        log.trace("Skip taking a screenshot because webdriver is not started in thread {}", threadId);
+      });
+    }
+    catch (UnreachableBrowserException | IllegalStateException browserHasBeenClosed) {
+      log.info("Failed to take screenshot for thread {} to folder {}: {}",
+        threadId, screenshotsFolder.getName(), browserHasBeenClosed.toString());
+    }
+    catch (org.openqa.selenium.TimeoutException timeout) {
+      log.warn("Failed to take screenshot for thread {} to folder {}: {}", threadId, screenshotsFolder.getName(), timeout.toString());
+    }
+    catch (Throwable e) {
+      log.error("Failed to take screenshot for thread {} to folder {}: {}", threadId, screenshotsFolder.getName(), e, e);
+    }
+    finally {
+      currentThread().setName(originalName);
+    }
   }
 
   private void takeScreenshot(WebDriverInstance driver) {
@@ -89,8 +114,9 @@ class ScreenShooter extends TimerTask {
   }
 
   private <T extends WebDriver & HasDevTools> byte[] takeScreenshotWithDevtools(T driver) {
+    String windowHandle = driver.getWindowHandle();
     DevTools devTools = driver.getDevTools();
-    devTools.createSessionIfThereIsNotOne(driver.getWindowHandle());
+    devTools.createSessionIfThereIsNotOne(windowHandle);
 
     String base64 = devTools.send(Page.captureScreenshot(
         Optional.empty(),
@@ -99,7 +125,7 @@ class ScreenShooter extends TimerTask {
         Optional.empty(),
         Optional.empty(),
         Optional.of(true)
-      )
+      ), Duration.ofSeconds(4)
     );
 
     return BYTES.convertFromBase64Png(base64);

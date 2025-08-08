@@ -317,6 +317,17 @@ public class Selenide {
   }
 
   /**
+   * Creates new Selenide container instance of a specific type using the provided element as the "self" element of this container
+   *
+   * @param webElement standard Selenium WebElement
+   * @param containerClass type of Selenide Container to create
+   * @return Selenide Container
+   */
+  public static <ContainerClass extends Container> ContainerClass $(WebElement webElement, Class<ContainerClass> containerClass) {
+    return getSelenideDriver().container(webElement, containerClass);
+  }
+
+  /**
    * Locates the first element matching given CSS selector (lazy evaluation)
    *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
@@ -325,6 +336,18 @@ public class Selenide {
    */
   public static SelenideElement $(String cssSelector) {
     return getSelenideDriver().find(cssSelector);
+  }
+
+  /**
+   * Locates the first element matching given CSS selector and creates Selenide container of a specific type using this element as a
+   * "self" element of the container
+   *
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param containerClass type of Selenide Container to create
+   * @return Selenide Container
+   */
+  public static <ContainerClass extends Container> ContainerClass $(String cssSelector, Class<ContainerClass> containerClass) {
+    return getSelenideDriver().container(cssSelector, containerClass);
   }
 
   /**
@@ -339,7 +362,19 @@ public class Selenide {
   }
 
   /**
-   * Locates the first element matching given CSS selector (lazy evaluation)
+   * Locates the first element matching given XPath selector and creates Selenide container of a specific type using this element as a
+   * "self" element of the container
+   *
+   * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
+   * @param containerClass type of Selenide Container to create
+   * @return Selenide Container
+   */
+  public static <ContainerClass extends Container> ContainerClass $x(String xpathExpression, Class<ContainerClass> containerClass) {
+    return getSelenideDriver().$x(xpathExpression, containerClass);
+  }
+
+  /**
+   * Locates the first element matching given Selenium selector (lazy evaluation)
    *
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
@@ -350,10 +385,37 @@ public class Selenide {
   }
 
   /**
+   * Locates the first element matching given Selenium selector and creates Selenide container of a specific type using this element
+   * as a "self" element of the container
+   *
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc
+   * @param containerClass type of Selenide Container to create
+   * @return Selenide Container
+   */
+  public static <ContainerClass extends Container> ContainerClass $(By seleniumSelector, Class<ContainerClass> containerClass) {
+    return getSelenideDriver().container(seleniumSelector, containerClass);
+  }
+
+  /**
    * @see #element(By, int)
    */
   public static SelenideElement $(By seleniumSelector, int index) {
     return getSelenideDriver().find(seleniumSelector, index);
+  }
+
+  /**
+   * Locates Nth element matching given Selenium selector and creates Selenide container of a specific type using this element as a
+   * "self" element of the container
+   *
+   * @param seleniumSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param index 0..N
+   * @param containerClass type of Selenide Container to create
+   * @return Selenide Container
+   */
+  public static <ContainerClass extends Container> ContainerClass $(By seleniumSelector,
+                                                                    int index,
+                                                                    Class<ContainerClass> containerClass) {
+    return getSelenideDriver().container(seleniumSelector, index, containerClass);
   }
 
   /**
@@ -369,10 +431,38 @@ public class Selenide {
   }
 
   /**
+   * Locates Nth element matching the given CSS selector and creates Selenide container of a specific type using this element as a
+   * "self" element of the container
+   *
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param index 0..N
+   * @param containerClass type of Selenide Container to create
+   * @return Selenide Container
+   */
+  public static <ContainerClass extends Container> ContainerClass $(String cssSelector,
+                                                                    int index,
+                                                                    Class<ContainerClass> containerClass) {
+    return getSelenideDriver().container(cssSelector, index, containerClass);
+  }
+
+  /**
    * Initialize collection with Elements
    */
   public static ElementsCollection $$(Collection<? extends WebElement> elements) {
     return getSelenideDriver().$$(elements);
+  }
+
+  /**
+   * Wrap standard Selenium WebElement collection into the Containers collection of a specific type where each element
+   * of this collection would be the <b>self</b> element of each container
+   *
+   * @param elements standard Selenium WebElement collection
+   * @param containerClass type of Selenide Container to create
+   * @return collection of containers of a specific type
+   */
+  public static <ContainerClass extends Container> List<ContainerClass> $$(Collection<? extends WebElement> elements,
+                                                                           Class<ContainerClass> containerClass) {
+    return getSelenideDriver().containers(elements, containerClass);
   }
 
   /**
@@ -391,6 +481,17 @@ public class Selenide {
   }
 
   /**
+   * Locates all elements matching given CSS selector and use them as <b>self</b> elements of Selenide containers
+   *
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param containerClass type of Selenide Container to create
+   * @return collection of containers of a specific type
+   */
+  public static <ContainerClass extends Container> List<ContainerClass> $$(String cssSelector, Class<ContainerClass> containerClass) {
+    return getSelenideDriver().containers(cssSelector, containerClass);
+  }
+
+  /**
    * Locates all elements matching given XPATH expression (lazy evaluation)
    * <p>
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
@@ -406,7 +507,19 @@ public class Selenide {
   }
 
   /**
-   * Locates all elements matching given CSS selector.
+   * Locates all elements matching given CSS selector and use them as <b>self</b> elements of Selenide containers
+   *
+   * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
+   * @param containerClass type of Selenide Container to create
+   * @return collection of containers of a specific type
+   */
+  public static <ContainerClass extends Container> List<ContainerClass> $$x(String xpathExpression,
+                                                                            Class<ContainerClass> containerClass) {
+    return getSelenideDriver().$$x(xpathExpression, containerClass);
+  }
+
+  /**
+   * Locates all elements matching given Selenium selector.
    * <p>
    * Method returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
@@ -418,6 +531,17 @@ public class Selenide {
    */
   public static ElementsCollection $$(By seleniumSelector) {
     return getSelenideDriver().$$(seleniumSelector);
+  }
+
+  /**
+   * Locates all elements matching given CSS selector and use them as <b>self</b> elements of Selenide containers
+   *
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @param containerClass type of Selenide Container to create
+   * @return collection of containers of a specific type
+   */
+  public static <ContainerClass extends Container> List<ContainerClass> $$(By seleniumSelector, Class<ContainerClass> containerClass) {
+    return getSelenideDriver().containers(seleniumSelector, containerClass);
   }
 
   /**
@@ -725,6 +849,104 @@ public class Selenide {
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
     return getSelenideDriver().page(pageObject);
+  }
+
+  /**
+   * Creates new Selenide container instance of a specific type using the provided element as the "self" element of this container
+   *
+   * @param element standard Selenium WebElement
+   * @param containerClass type of Selenide Container to create
+   * @return Selenide Container
+   */
+  public static <ContainerClass extends Container> ContainerClass container(WebElement element, Class<ContainerClass> containerClass) {
+    return getSelenideDriver().container(element, containerClass);
+  }
+
+  /**
+   * Creates new Selenide container instance of a specific type using provided locator to find "self" element of this container
+   *
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @param containerClass type of Selenide Container to create
+   * @return Selenide Container
+   */
+  public static <ContainerClass extends Container> ContainerClass container(By seleniumSelector, Class<ContainerClass> containerClass) {
+    return getSelenideDriver().container(seleniumSelector, containerClass);
+  }
+
+  /**
+   * Creates new Selenide container instance of a specific type using provided locator to find "self" element of this container
+   *
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @param index 0..N
+   * @param containerClass type of Selenide Container to create
+   * @return Selenide Container
+   */
+  public static <ContainerClass extends Container> ContainerClass container(By seleniumSelector,
+                                                                            int index,
+                                                                            Class<ContainerClass> containerClass) {
+    return getSelenideDriver().container(seleniumSelector, index, containerClass);
+  }
+
+  /**
+   * Creates new Selenide container instance of a specific type using provided CSS locator to find "self" element of this container
+   *
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param containerClass type of Selenide Container to create
+   * @return Selenide Container
+   */
+  public static <ContainerClass extends Container> ContainerClass container(String cssSelector, Class<ContainerClass> containerClass) {
+    return getSelenideDriver().container(cssSelector, containerClass);
+  }
+
+  /**
+   * Creates new Selenide container instance of a specific type using provided CSS locator to find "self" element of this container
+   *
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param index 0..N
+   * @param containerClass type of Selenide Container to create
+   * @return Selenide Container
+   */
+  public static <ContainerClass extends Container> ContainerClass container(String cssSelector,
+                                                                            int index,
+                                                                            Class<ContainerClass> containerClass) {
+    return getSelenideDriver().container(cssSelector, index, containerClass);
+  }
+
+  /**
+   * Wrap standard Selenium WebElement collection into the Containers collection of a specific type where each element
+   * of this collection would be the <b>self</b> element of each container
+   *
+   * @param elements standard Selenium WebElement collection
+   * @param containerClass type of Selenide Container to create
+   * @return collection of containers of a specific type
+   */
+  public static <ContainerClass extends Container> List<ContainerClass> containers(Collection<? extends WebElement> elements,
+                                                                                   Class<ContainerClass> containerClass) {
+    return getSelenideDriver().containers(elements, containerClass);
+  }
+
+  /**
+   * Locates all elements matching given CSS selector and use them as <b>self</b> elements of Selenide containers
+   *
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param containerClass type of Selenide Container to create
+   * @return collection of containers of a specific type
+   */
+  public static <ContainerClass extends Container> List<ContainerClass> containers(String cssSelector,
+                                                                                   Class<ContainerClass> containerClass) {
+    return getSelenideDriver().containers(cssSelector, containerClass);
+  }
+
+  /**
+   * Locates all elements matching given CSS selector and use them as <b>self</b> elements of Selenide containers
+   *
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @param containerClass type of Selenide Container to create
+   * @return collection of containers of a specific type
+   */
+  public static <ContainerClass extends Container> List<ContainerClass> containers(By seleniumSelector,
+                                                                                   Class<ContainerClass> containerClass) {
+    return getSelenideDriver().containers(seleniumSelector, containerClass);
   }
 
   /**
