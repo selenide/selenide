@@ -63,8 +63,15 @@ public class ByShadow extends By implements Serializable {
       .toList();
   }
 
-  private static List<SearchContext> findShadowRoots(SearchContext searchContext, By shadowHost) {
-    return searchContext.findElements(shadowHost)
+  /**
+   * Looks for shadow roots by the provided shadow host selector inside the giving context.
+   *
+   * @param context search context where the search has to be performed
+   * @param shadowHost shadow host selector
+   * @return list of shadow roots
+   */
+  public static List<SearchContext> findShadowRoots(SearchContext context, By shadowHost) {
+    return context.findElements(shadowHost)
       .stream()
       .map(ByShadow::getShadowRoot)
       .filter(Optional::isPresent)
