@@ -7,7 +7,8 @@ dependencies {
   testImplementation project(':statics').sourceSets.test.output
   testImplementation project(':modules:core').sourceSets.test.output
 
-  api("io.appium:java-client:9.5.0") {
+
+  api("io.appium:java-client:10.0.0") {
     exclude group: 'io.opentelemetry'
     exclude group: 'org.slf4j'
     exclude group: 'org.seleniumhq'
