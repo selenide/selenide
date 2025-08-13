@@ -1,5 +1,5 @@
 ext {
-  seleniumVersionStable = '4.34.0'
+  seleniumVersionStable = '4.35.0'
   seleniumVersion = project.properties['seleniumVersionNightlyBuild'] ?: seleniumVersionStable
   httpClientVersion = '5.5'
   junitVersion = '5.13.4'
