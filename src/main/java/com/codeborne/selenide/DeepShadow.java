@@ -1,7 +1,5 @@
 package com.codeborne.selenide;
 
-import org.openqa.selenium.support.FindBy;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,23 +9,17 @@ import java.lang.annotation.Target;
  * Provides to find specific page factory locators inside shadow roots. For example:
  *
  * <pre>{@code
- *    @ShadowHost({@FindBy(...shadowHost...), @FindBy(...innerShadowHost...)})
+ *    @DeepShadow
  *    @FindBy(...targetLocator...)
  *    public SelenideElement locatorInShadowRoot;
  * }</pre>
  * <p>
- * The order of locators inside this annotation is important. Every next locator means more deep shadow host.
+ * This mechanism does not care how deep the desired locator is situated inside the Shadow DOM, it would traverse across the whole
+ * tree to find it.
  *
- * @see DeepShadow
- * @since 7.8.0
+ * @see ShadowHost
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ShadowHost {
-
-  /**
-   * @return array of shadow hosts
-   */
-  FindBy[] value();
-
+public @interface DeepShadow {
 }
