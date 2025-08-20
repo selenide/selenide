@@ -53,6 +53,10 @@ public class DownloadFile implements Command<File> {
     DownloadOptions options = getDownloadOptions(config, args);
     long timeout = ofNullable(options.timeout()).map(Duration::toMillis).orElse(config.timeout());
     long incrementTimeout = ofNullable(options.incrementTimeout()).map(Duration::toMillis).orElse(timeout);
+    if (timeout < incrementTimeout) {
+      String error = "Timeout (%s ms) must be greater than increment timeout (%s ms)".formatted(timeout, incrementTimeout);
+      throw new IllegalArgumentException(error);
+    }
 
     log.debug("Download file: {}", options);
 

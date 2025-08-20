@@ -228,6 +228,17 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
+  public void incrementTimeout_shouldNotBeLongerThanTimeout() {
+    var shortIncrementTimeout = using(FOLDER)
+      .withTimeout(ofMillis(1000))
+      .withIncrementTimeout(ofMillis(1001));
+    assertThatThrownBy(() -> $("h1")
+      .download(shortIncrementTimeout))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Timeout (1000 ms) must be greater than increment timeout (1001 ms)");
+  }
+
+  @Test
   public void canSpecifyTimeoutForFileIncrement_filesHasNotBeenModifiedForNms() {
     var shortIncrementTimeout = using(FOLDER)
       .withTimeout(ofSeconds(10))
