@@ -4,7 +4,7 @@ ext {
   groupId = 'com.codeborne'
 }
 
-archivesBaseName = artifactId
+base.archivesName.set(artifactId)
 
 tasks.withType(Jar).configureEach {
   manifest {
@@ -20,7 +20,7 @@ if (project.hasProperty("signing.keyId")) {
   mavenPublishing {
     coordinates(project.groupId, project.artifactId, project.version)
     pom {
-      name = archivesBaseName
+      name = base.archivesName
       description = 'Selenide = concise API for Selenium WebDriver'
       url = 'https://selenide.org'
       inceptionYear = '2011'

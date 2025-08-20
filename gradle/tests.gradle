@@ -113,8 +113,8 @@ subprojects {
 
   tasks.withType(Test).configureEach {
     useJUnitPlatform()
-    systemProperties['selenide.reportsFolder'] = "${reportsDir}/tests/${name}"
-    systemProperties['selenide.downloadsFolder'] = "${buildDir}/tests/downloads"
+    systemProperties['selenide.reportsFolder'] = layout.buildDirectory.dir("reports/tests/${name}").get().asFile
+    systemProperties['selenide.downloadsFolder'] = layout.buildDirectory.dir("tests/downloads").get().asFile
 
     System.properties.stringPropertyNames()
       .findAll { it.startsWith("selenide.") }
