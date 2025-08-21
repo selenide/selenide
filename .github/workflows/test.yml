@@ -39,7 +39,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           cache: 'gradle'
@@ -76,7 +76,7 @@ jobs:
         uses: AnimMouse/setup-ffmpeg@v1
       - run: ffmpeg -version
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           cache: 'gradle'
@@ -105,7 +105,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           cache: 'gradle'
@@ -131,7 +131,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           cache: 'gradle'
@@ -155,7 +155,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           cache: 'gradle'
@@ -179,7 +179,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           cache: 'gradle'
