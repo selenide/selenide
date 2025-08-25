@@ -2,7 +2,7 @@ dependencies {
   testImplementation project(":modules:video-recorder")
   testImplementation project(':modules:core').sourceSets.test.output
 
-  testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
+  testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
   testImplementation("org.testng:testng:$testngVersion") {
     exclude(group: 'junit')
     exclude(group: 'testng')
