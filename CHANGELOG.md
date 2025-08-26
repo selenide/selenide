@@ -2,12 +2,14 @@
 
 ## 7.10.0 (20.08.2025)
 * #3058 speed up video recorder (#3071) (#3079)
+  * Now the video recorder requires `ffmpeg` to be installed on the computer.
+  * The video file extension has changed from `webm` to `mp4`.
 * #3058 take screenshots for video recorder using BiDi or DevTools method (#3077)
-* add method $.scrollIntoView(options) (#3078)
+* add method `$.scrollIntoView(options)` (#3078)
 * properly show arguments of `$.type()` in reports
 * add static methods for containers initialization  --  thanks to Ilya Koshaleu (#3053)
 * add DeepShadow annotation  --  thanks to Ilya Koshaleu (#3083)
-* validate that incrementTimeout is no longer than the overall download timeout (#3093)
+* validate that `incrementTimeout` is no longer than the overall download timeout (#3093)
 * Update Selenium 4.34.0 -> 4.35.0 (incl. CDP 138 -> 139)  --  thanks to Aliaksandr Rasolka (#3087)
 * bump Appium 9.5.0 -> 10.0.0 (#3087)
 
