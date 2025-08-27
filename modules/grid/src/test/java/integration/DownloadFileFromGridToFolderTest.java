@@ -82,6 +82,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   void downloadsPdfFile() {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
@@ -130,6 +131,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   void downloadsFileWithCrdownloadExtension() {
     File downloadedFile = $(byText("Download file *crdownload")).download(900, withName("hello_world.crdownload"));
 
@@ -139,6 +141,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   public void download_slowly() {
     File downloadedFile = $(byText("Download me slowly"))
       .download(4000, withName("hello_world.txt"));
@@ -148,6 +151,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   public void download_super_slowly() {
     File downloadedFile = $(byText("Download me super slowly")).download(6000, withExtension("txt"));
 
@@ -156,6 +160,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   void downloadLargeFile() {
     File downloadedFile = $(byText("Download large file")).download(8000, withExtension("txt"));
 

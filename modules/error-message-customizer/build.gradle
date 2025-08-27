@@ -8,4 +8,5 @@ dependencies {
   testImplementation project(':modules:core').sourceSets.test.output
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive = false}
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
 }
