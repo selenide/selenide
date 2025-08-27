@@ -36,6 +36,13 @@ tasks.register('ios', Test) {
   maxParallelForks = 1
 }
 
+tasks.register('web', Test) {
+  include 'integration/web/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+  outputs.upToDateWhen { false }
+  maxParallelForks = 1
+}
+
 tasks.withType(Test).configureEach {
   useJUnitPlatform()
   System.properties.stringPropertyNames()
