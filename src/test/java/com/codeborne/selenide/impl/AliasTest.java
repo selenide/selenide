@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class AliasTest {
   @Test
   void userCanProvideAliasForSomething() {
-    assertThat(new Alias("login button").getOrElse(() -> "//[id=login]")).isEqualTo("login button OOOOOPS TODO");
+    assertThat(new Alias("login button").getOrElse(() -> "//[id=login]")).isEqualTo("login button");
   }
 
   @Test
