@@ -22,9 +22,11 @@ dependencies {
 
 tasks.register('moonTests', Test) {
   systemProperties['selenide.browser'] = 'chrome'
-  include 'it/moon/**/*'
-  exclude 'org/selenide/**/*'
-  exclude 'com/codeborne/**/*'
+  filter {
+    includeTestsMatching "it.moon.*"
+    excludeTestsMatching "com.codeborne.selenide.*"
+    excludeTestsMatching "org.selenide.*"
+  }
   outputs.upToDateWhen { false }
   maxParallelForks = 1
 }

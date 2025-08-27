@@ -1,103 +1,127 @@
 subprojects {
-  tasks.withType(Test).configureEach {
-    include 'com/codeborne/selenide/**/*'
-    include 'org/selenide/**/*'
+  test {
+    filter {
+      includeTestsMatching "com.codeborne.selenide.*"
+      includeTestsMatching "org.selenide.*"
+    }
   }
 
   tasks.register("ie", Test) {
     systemProperties['selenide.browser'] = 'ie'
     systemProperties['selenide.timeout'] = '8000'
-    include 'integration/**/*'
-    exclude '**/AlertText.*'
-    exclude '**/ConfirmTest.*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*"
+      excludeTestsMatching "*.AlertText"
+      excludeTestsMatching "*.ConfirmTest"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     outputs.upToDateWhen {false}
   }
 
   tasks.register("edge", Test) {
     systemProperties['selenide.browser'] = 'edge'
-    include 'integration/**/*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     outputs.upToDateWhen {false}
   }
 
   tasks.register("edge_headless", Test) {
     systemProperties['selenide.browser'] = 'edge'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     outputs.upToDateWhen {false}
   }
 
   tasks.register("edge_headless_smoke", Test) {
     systemProperties['selenide.browser'] = 'edge'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*Download*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*Download*"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     outputs.upToDateWhen {false}
   }
 
   tasks.register("chrome", Test) {
     systemProperties['selenide.browser'] = 'chrome'
-    include 'integration/**/*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     outputs.upToDateWhen {false}
   }
 
   tasks.register("chrome_headless", Test) {
     systemProperties['selenide.browser'] = 'chrome'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     outputs.upToDateWhen {false}
   }
 
   tasks.register("chrome_headless_smoke", Test) {
     systemProperties['selenide.browser'] = 'chrome'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*Download*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*Download*"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     outputs.upToDateWhen {false}
   }
 
   tasks.register("chrome_remote", Test) {
     systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
     systemProperties['selenide.browser'] = 'chrome'
-    include 'integration/**/*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     outputs.upToDateWhen {false}
   }
 
   tasks.register("firefox", Test) {
     systemProperties['selenide.browser'] = 'firefox'
-    include 'integration/**/*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     outputs.upToDateWhen {false}
   }
 
   tasks.register("firefox_headless", Test) {
     systemProperties['selenide.browser'] = 'firefox'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     outputs.upToDateWhen {false}
   }
 
   tasks.register("safari", Test) {
     systemProperties['selenide.browser'] = 'safari'
-    include 'integration/**/*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     maxParallelForks = 1
     outputs.upToDateWhen {false}
   }
@@ -105,9 +129,11 @@ subprojects {
   tasks.register("firefox_remote", Test) {
     systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
     systemProperties['selenide.browser'] = 'firefox'
-    include 'integration/**/*'
-    exclude 'com/codeborne/selenide/**/*'
-    exclude 'org/selenide/**/*'
+    filter {
+      includeTestsMatching "integration.*"
+      excludeTestsMatching "com.codeborne.selenide.*"
+      excludeTestsMatching "org.selenide.*"
+    }
     outputs.upToDateWhen {false}
   }
 

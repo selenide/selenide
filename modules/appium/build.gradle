@@ -23,15 +23,28 @@ dependencies {
 }
 
 tasks.register('android', Test) {
-  include 'it/mobile/android/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+  filter {
+    includeTestsMatching "it.mobile.android.*"
+    excludeTestsMatching "com.codeborne.selenide.*"
+  }
   outputs.upToDateWhen { false }
   maxParallelForks = 1
 }
 
 tasks.register('ios', Test) {
-  include 'it/mobile/ios/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+  filter {
+    includeTestsMatching "it.mobile.ios.*"
+    excludeTestsMatching "com.codeborne.selenide.*"
+  }
+  outputs.upToDateWhen { false }
+  maxParallelForks = 1
+}
+
+tasks.register('web', Test) {
+  filter {
+    includeTestsMatching "integration.web.*"
+    excludeTestsMatching "com.codeborne.selenide.*"
+  }
   outputs.upToDateWhen { false }
   maxParallelForks = 1
 }

@@ -21,9 +21,11 @@ dependencies {
 
 tasks.register('selenoidTests', Test) {
   systemProperties['selenide.browser'] = 'chrome'
-  include 'it/selenoid/**/*'
-  exclude 'org/selenide/**/*'
-  exclude 'com/codeborne/**/*'
+  filter {
+    includeTestsMatching "it.selenoid.*"
+    excludeTestsMatching "com.codeborne.selenide.*"
+    excludeTestsMatching "org.selenide.*"
+  }
   outputs.upToDateWhen { false }
   maxParallelForks = 1
 }
