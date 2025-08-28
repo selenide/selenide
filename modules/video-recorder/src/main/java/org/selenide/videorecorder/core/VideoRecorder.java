@@ -1,6 +1,7 @@
 package org.selenide.videorecorder.core;
 
 import com.codeborne.selenide.impl.AttachmentHandler;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +9,7 @@ import java.io.File;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.codeborne.selenide.impl.FileHelper.deleteFolder;
@@ -36,14 +38,14 @@ public class VideoRecorder {
   private final int fps;
   private final Queue<Screenshot> screenshots = new ConcurrentLinkedQueue<>();
   private final File screenshotsFolder;
-  private final ScreenShooter screenShooterTask;
+  @Nullable
+  private ScheduledFuture<?> screenShooter;
   private final VideoMerger videoMerger;
 
   public VideoRecorder() {
     fps = config.fps();
     videoId = "%s.%s".formatted(currentTimeMillis(), videoCounter.getAndIncrement());
     screenshotsFolder = createScreenshotsFolder(videoId);
-    screenShooterTask = new ScreenShooter(currentThread().getId(), screenshotsFolder, screenshots);
     videoMerger = new VideoMerger(currentThread().getId(), videoId, config, screenshotsFolder, screenshots);
   }
 
@@ -71,7 +73,8 @@ public class VideoRecorder {
 
   private void startScreenShooter() {
     log.debug("Start screen shooter x {} {}", delayBetweenFramesNanos(), NANOSECONDS);
-    screenshooter.scheduleAtFixedRate(screenShooterTask, 0, delayBetweenFramesNanos(), NANOSECONDS);
+    ScreenShooter task = new ScreenShooter(currentThread().getId(), screenshotsFolder, screenshots);
+    screenShooter = screenshooter.scheduleAtFixedRate(task, 0, delayBetweenFramesNanos(), NANOSECONDS);
   }
 
   /**
@@ -87,7 +90,9 @@ public class VideoRecorder {
   public void finish() {
     log.debug("Stopping video recorder...");
 
-    screenShooterTask.cancel();
+    if (screenShooter != null) {
+      screenShooter.cancel(true);
+    }
     videoMerger.finish();
 
     log.info("Video recorded: {}", videoUrl());
@@ -102,7 +107,9 @@ public class VideoRecorder {
    * Stop video processing and delete the video file
    */
   public void cancel() {
-    screenShooterTask.cancel();
+    if (screenShooter != null) {
+      screenShooter.cancel(true);
+    }
     videoMerger.rollback();
     videoMerger.cancel();
   }

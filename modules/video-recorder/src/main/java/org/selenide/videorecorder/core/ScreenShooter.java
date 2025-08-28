@@ -20,8 +20,6 @@ import java.io.InputStream;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.Queue;
-import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.System.nanoTime;
@@ -30,24 +28,17 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.openqa.selenium.OutputType.BYTES;
 
-class ScreenShooter extends TimerTask {
+class ScreenShooter implements Runnable {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooter.class);
   private final AtomicLong screenshotCounter = new AtomicLong();
   private final long threadId;
   private final File screenshotsFolder;
   private final Queue<Screenshot> screenshots;
-  private final AtomicBoolean cancelled = new AtomicBoolean(false);
 
   ScreenShooter(long threadId, File screenshotsFolder, Queue<Screenshot> screenshots) {
     this.threadId = threadId;
     this.screenshots = screenshots;
     this.screenshotsFolder = screenshotsFolder;
-  }
-
-  @Override
-  public boolean cancel() {
-    cancelled.set(true);
-    return super.cancel();
   }
 
   @Override
@@ -62,11 +53,6 @@ class ScreenShooter extends TimerTask {
       originalName, threadId, screenshotsFolder.getName(), screenshots.size()));
 
     try {
-      if (cancelled.get()) {
-        log.warn("Screen shooter has been cancelled");
-        return;
-      }
-
       WebdriversRegistry.webdriver(threadId).ifPresentOrElse(driver -> {
         takeScreenshot(driver);
       }, () -> {
