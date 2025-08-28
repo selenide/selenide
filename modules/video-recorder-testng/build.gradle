@@ -17,8 +17,20 @@ configurations {
 
 test {
   useTestNG() {
-    suites "src/test/resources/unit-tests.suite.xml"
+    suiteXmlBuilder()
+      .suite(
+        name: 'Video recorder TestNG',
+        parallel: 'classes',
+        'thread-count': '3'
+      ) {
+        test(name: 'in 3 parallel threads') {
+          packages([:]) {
+            'package'(name: 'integration.videorecorder.testng')
+          }
+        }
+      }
   }
+  failOnNoDiscoveredTests = false
 }
 
 tasks.withType(Test).configureEach {
