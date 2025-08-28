@@ -51,6 +51,7 @@ tasks.register('web', Test) {
 
 tasks.withType(Test).configureEach {
   useJUnitPlatform()
+  failOnNoDiscoveredTests = false
   System.properties.stringPropertyNames()
     .findAll { it.startsWith("selenide.") }
     .forEach {

@@ -143,6 +143,7 @@ subprojects {
 
   tasks.withType(Test).configureEach {
     useJUnitPlatform()
+    failOnNoDiscoveredTests = false
     systemProperties['selenide.reportsFolder'] = layout.buildDirectory.dir("reports/tests/${name}").get().asFile
     systemProperties['selenide.downloadsFolder'] = layout.buildDirectory.dir("tests/downloads").get().asFile
 
