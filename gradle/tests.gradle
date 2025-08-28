@@ -2,6 +2,7 @@ subprojects {
   tasks.withType(Test).configureEach {
     testClassesDirs = testing.suites.test.sources.output.classesDirs
     classpath = testing.suites.test.sources.runtimeClasspath
+    failOnNoDiscoveredTests = false
 
     filter {
       includeTestsMatching "com.codeborne.selenide.*"
