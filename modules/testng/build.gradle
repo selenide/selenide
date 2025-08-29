@@ -23,6 +23,7 @@ configurations {
 
 tasks.withType(Test).configureEach{
   useTestNG()
+  failOnNoDiscoveredTests = false
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')

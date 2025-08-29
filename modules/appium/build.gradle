@@ -23,28 +23,35 @@ dependencies {
 }
 
 tasks.register('android', Test) {
-  include 'it/mobile/android/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+  filter {
+    includeTestsMatching "it.mobile.android.*"
+    excludeTestsMatching "com.codeborne.selenide.*"
+  }
   outputs.upToDateWhen { false }
   maxParallelForks = 1
 }
 
 tasks.register('ios', Test) {
-  include 'it/mobile/ios/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+  filter {
+    includeTestsMatching "it.mobile.ios.*"
+    excludeTestsMatching "com.codeborne.selenide.*"
+  }
   outputs.upToDateWhen { false }
   maxParallelForks = 1
 }
 
 tasks.register('web', Test) {
-  include 'integration/web/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+  filter {
+    includeTestsMatching "integration.web.*"
+    excludeTestsMatching "com.codeborne.selenide.*"
+  }
   outputs.upToDateWhen { false }
   maxParallelForks = 1
 }
 
 tasks.withType(Test).configureEach {
   useJUnitPlatform()
+  failOnNoDiscoveredTests = false
   System.properties.stringPropertyNames()
     .findAll { it.startsWith("selenide.") }
     .forEach {
