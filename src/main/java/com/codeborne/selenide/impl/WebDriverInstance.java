@@ -19,6 +19,7 @@ public record WebDriverInstance(
   @Nullable SelenideProxyServer proxy,
   @Nullable DownloadsFolder downloadsFolder) implements Disposable {
 
+  private static final String NOTICE = "Be sure to enable proxy BEFORE you open the browser.";
   private static final CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
 
   public WebDriverInstance(
@@ -40,10 +41,10 @@ public record WebDriverInstance(
       throw new IllegalStateException("Proxy server is not enabled. You need to set proxyEnabled=true before opening a browser.");
     }
     if (proxy == null) {
-      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not created.");
+      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not created. " + NOTICE);
     }
     if (!proxy.isStarted()) {
-      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not started.");
+      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not started. " + NOTICE);
     }
     return proxy;
   }
