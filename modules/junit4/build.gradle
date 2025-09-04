@@ -17,6 +17,7 @@ configurations {
 
 tasks.withType(Test).configureEach {
   useJUnit()
+  failOnNoDiscoveredTests = false
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')

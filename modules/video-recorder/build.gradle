@@ -9,7 +9,7 @@ dependencies {
 
   testImplementation project(':modules:core').sourceSets.test.output
   testImplementation("org.junit.jupiter:junit-jupiter")
-  testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive false }
+  testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
 
   implementation("net.bramp.ffmpeg:ffmpeg:0.8.0")
 }
