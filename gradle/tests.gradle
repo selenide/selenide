@@ -1,8 +1,11 @@
 subprojects {
+  tasks.withType(AbstractTestTask).configureEach {
+    failOnNoDiscoveredTests = false
+  }
+
   tasks.withType(Test).configureEach {
     testClassesDirs = testing.suites.test.sources.output.classesDirs
     classpath = testing.suites.test.sources.runtimeClasspath
-    failOnNoDiscoveredTests = false
 
     filter {
       includeTestsMatching "com.codeborne.selenide.*"
@@ -143,7 +146,6 @@ subprojects {
 
   tasks.withType(Test).configureEach {
     useJUnitPlatform()
-    failOnNoDiscoveredTests = false
     systemProperties['selenide.reportsFolder'] = layout.buildDirectory.dir("reports/tests/${name}").get().asFile
     systemProperties['selenide.downloadsFolder'] = layout.buildDirectory.dir("tests/downloads").get().asFile
 

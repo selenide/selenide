@@ -21,9 +21,12 @@ configurations {
   testImplementation.exclude group: "org.junit.platform"
 }
 
+tasks.withType(AbstractTestTask).configureEach {
+  failOnNoDiscoveredTests = false
+}
+
 tasks.withType(Test).configureEach{
   useTestNG()
-  failOnNoDiscoveredTests = false
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')

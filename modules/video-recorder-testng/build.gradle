@@ -15,7 +15,11 @@ configurations {
   testImplementation.exclude group: "org.junit.platform"
 }
 
-test {
+tasks.withType(AbstractTestTask).configureEach {
+  failOnNoDiscoveredTests = false
+}
+
+tasks.withType(Test).configureEach {
   useTestNG() {
     suiteXmlBuilder()
       .suite(
@@ -30,12 +34,10 @@ test {
         }
       }
   }
-  failOnNoDiscoveredTests = false
 }
 
 tasks.withType(Test).configureEach {
   useTestNG()
-  failOnNoDiscoveredTests = false
 
 //  if (it.name != "test") {
 //    println("TEST TEST TEST TEST TEST ${it.name} ${it.failOnNoDiscoveredTests.get()}")
