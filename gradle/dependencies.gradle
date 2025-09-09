@@ -5,7 +5,7 @@ ext {
   junitVersion = '5.13.4'
   testngVersion = '7.11.0'
   jettyVersion = '11.0.25'
-  nettyVersion = '4.2.5.Final'
+  nettyVersion = '4.2.6.Final'
   assertjVersion = '3.27.4'
   mockitoVersion = '5.19.0'
   slf4jVersion = '2.0.17'
