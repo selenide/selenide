@@ -47,7 +47,6 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     assumeThat(isFirefox())
       .as("Firefox doesn't support CDP download method")
       .isFalse();
-    Configuration.remote = gridUrl().toString();
     Configuration.browserCapabilities.setCapability(ENABLE_DOWNLOADS, true);
     Configuration.fileDownload = CDP;
     openFile("page_with_uploads.html");

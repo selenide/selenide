@@ -24,6 +24,15 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 abstract class AbstractGridTest extends IntegrationTest {
   private static final Logger log = LoggerFactory.getLogger(AbstractGridTest.class);
 
+  private static final WebDriverListener LISTENER = new WebDriverListener() {
+    @Override
+    public void beforeAnyCall(Object target, Method method, Object[] args) {
+      if ("quit".equals(method.getName())) {
+        log.debug("before call {}", method);
+      }
+    }
+  };
+
   @Nullable
   private static URL gridUrl;
 
@@ -32,19 +41,19 @@ abstract class AbstractGridTest extends IntegrationTest {
   }
 
   @BeforeEach
+  final void prepareWebDriver() {
+    closeWebDriver();
+    timeout = 4000;
+    Configuration.remote = gridUrl().toString();
+    WebDriverRunner.addListener(LISTENER);
+  }
+
   @AfterEach
   final void resetWebDriver() {
     closeWebDriver();
     timeout = 4000;
     Configuration.remote = null;
-    WebDriverRunner.addListener(new WebDriverListener() {
-      @Override
-      public void beforeAnyCall(Object target, Method method, Object[] args) {
-        if ("quit".equals(method.getName())) {
-          log.debug("before call {}", method);
-        }
-      }
-    });
+    WebDriverRunner.removeListener(LISTENER);
   }
 
   @BeforeAll

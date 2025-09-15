@@ -1,10 +1,7 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.OutputType;
 
@@ -27,16 +24,6 @@ public class FullScreenshotsGridTest extends AbstractGridTest {
   static void beforeAll() {
     assumeThat(isEdge()).as("Edge throws 'unknown command: session/*/goog/cdp/execute'").isFalse();
     assumeThat(isFirefox()).as("Broken after upgrading to Firefox 105").isFalse();
-  }
-
-  @BeforeEach
-  void setUp() {
-    Configuration.remote = gridUrl().toString();
-  }
-
-  @AfterEach
-  void tearDown() {
-    Configuration.remote = null;
   }
 
   @Test

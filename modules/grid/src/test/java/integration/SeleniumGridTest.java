@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 final class SeleniumGridTest extends AbstractGridTest {
   @BeforeEach
   void setUp() {
-    Configuration.remote = gridUrl().toString();
     System.setProperty("chromeoptions.mobileEmulation", "deviceName=Nexus 5");
   }
 

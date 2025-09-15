@@ -1,7 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 final class FileUploadToGridTest extends AbstractGridTest {
   @BeforeEach
   void openFileUploadForm() {
-    Configuration.remote = gridUrl().toString();
     openFile("file_upload_form.html");
-  }
-
-  @AfterEach
-  void tearDown() {
-    Configuration.remote = null;
-    System.clearProperty("chromeoptions.mobileEmulation");
   }
 
   @Test
