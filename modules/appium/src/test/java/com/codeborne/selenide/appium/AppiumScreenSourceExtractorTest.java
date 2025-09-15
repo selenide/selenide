@@ -24,7 +24,9 @@ class AppiumScreenSourceExtractorTest {
   @ValueSource(classes = {AndroidDriver.class, IOSDriver.class})
   void shouldUseXMLFileExtension_forMobileDriver(Class<AppiumDriver> webdriver) {
     AppiumDriver driver = mock(webdriver);
-    when(driver.getCapabilities()).thenReturn(new DesiredCapabilities());
+    DesiredCapabilities capabilities = new DesiredCapabilities();
+    capabilities.setCapability("appium:automationName", "Android Emulator");
+    when(driver.getCapabilities()).thenReturn(capabilities);
     Config config = new SelenideConfig().reportsFolder("foo");
     File sourceFile = new AppiumScreenSourceExtractor().createFile(config, driver, "test123");
     assertThat(sourceFile.getName()).isEqualTo("test123.xml");
