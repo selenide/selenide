@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.10.1 (16.09.2025)
+* #3107 Selenide's click fails on Selenium Grid (when websocket url is not accessible) #3108 #3109
+* #3098 fix multiple spamming logs "Screen shooter has been cancelled" #3099
+
 ## 7.10.0 (20.08.2025)
 * #3058 speed up video recorder (#3071) (#3079)
   * Now the video recorder requires `ffmpeg` to be installed on the computer.
