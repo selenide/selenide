@@ -5,18 +5,17 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.appium.AppiumClickOptions;
 import com.codeborne.selenide.commands.Click;
 import com.codeborne.selenide.impl.WebElementSource;
-import io.appium.java_client.AppiumDriver;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Interactive;
 import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 
 import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
@@ -98,8 +97,7 @@ public class AppiumClick extends Click {
 
   private void perform(Driver driver, Sequence sequence) {
     WebDriver webDriver = driver.getWebDriver();
-    AppiumDriver appiumDriver = cast(webDriver, AppiumDriver.class)
-      .orElseThrow(() -> new IllegalStateException("Not a mobile webdriver: " + webDriver));
+    Interactive appiumDriver = (Interactive) webDriver;
     appiumDriver.perform(singletonList(sequence));
   }
 

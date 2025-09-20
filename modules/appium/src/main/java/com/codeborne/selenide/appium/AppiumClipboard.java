@@ -4,10 +4,9 @@ import com.codeborne.selenide.Clipboard;
 import com.codeborne.selenide.DefaultClipboard;
 import com.codeborne.selenide.Driver;
 import io.appium.java_client.clipboard.HasClipboard;
+import org.openqa.selenium.WebDriver;
 
-import java.util.Optional;
-
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
 
 public class AppiumClipboard implements Clipboard {
   private final Driver driver;
@@ -30,23 +29,23 @@ public class AppiumClipboard implements Clipboard {
 
   @Override
   public String getText() {
-    return getWebDriver()
-      .map(HasClipboard::getClipboardText)
-      .orElseGet(defaultClipboard::getText);
+    WebDriver webDriver = driver.getWebDriver();
+    if (isMobile(webDriver)) {
+      return ((HasClipboard) webDriver).getClipboardText();
+    }
+    else {
+      return defaultClipboard.getText();
+    }
   }
 
   @Override
   public void setText(String text) {
-    Optional<HasClipboard> mobileDriver = getWebDriver();
-    if (mobileDriver.isPresent()) {
-      mobileDriver.get().setClipboardText(text);
+    WebDriver webDriver = driver.getWebDriver();
+    if (isMobile(webDriver)) {
+      ((HasClipboard) webDriver).setClipboardText(text);
     }
     else {
       defaultClipboard.setText(text);
     }
-  }
-
-  private Optional<HasClipboard> getWebDriver() {
-    return cast(driver, HasClipboard.class);
   }
 }

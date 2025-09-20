@@ -1,6 +1,5 @@
 package com.codeborne.selenide;
 
-import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v140.browser.Browser;
@@ -11,10 +10,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.instanceOf;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
 import static org.openqa.selenium.devtools.v140.browser.model.PermissionType.CLIPBOARDREADWRITE;
@@ -38,9 +34,8 @@ public class DefaultClipboard implements Clipboard {
   }
 
   private boolean grantPermission() {
-    Optional<HasDevTools> cdpBrowser = cast(driver, HasDevTools.class);
-    if (cdpBrowser.isPresent() && instanceOf(driver, ChromiumDriver.class)) {
-      DevTools devTools = cdpBrowser.get().getDevTools();
+    if (driver.getWebDriver() instanceof HasDevTools cdpBrowser) {
+      DevTools devTools = cdpBrowser.getDevTools();
       devTools.send(Browser.grantPermissions(List.of(CLIPBOARDREADWRITE, CLIPBOARDSANITIZEDWRITE), empty(), empty()));
       return true;
     }

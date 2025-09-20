@@ -2,19 +2,14 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.ios.IOSDriver;
-import io.appium.java_client.ios.options.XCUITestOptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Browser;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.WebDriverListener;
 
@@ -25,10 +20,7 @@ import java.util.stream.Stream;
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isAndroid;
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isIos;
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
-import static com.codeborne.selenide.appium.AppiumDriverUnwrapperTest.add;
-import static com.codeborne.selenide.appium.AppiumDriverUnwrapperTest.getUrl;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.openqa.selenium.remote.CapabilityType.BROWSER_NAME;
 
 class AppiumDriverUnwrapperTest {
   private final MutableCapabilities capabilities = new MutableCapabilities();
@@ -49,10 +41,8 @@ class AppiumDriverUnwrapperTest {
 
   @ParameterizedTest
   @MethodSource("webBrowsers")
-  void isMobile_false_forWebBrowser(String webBrowser) {
-    capabilities.setCapability(BROWSER_NAME, webBrowser);
-
-    WebDriver webDriver = new FakeWebDriver(capabilities);
+  void isMobile_false_forWebBrowser(Browser webBrowser) {
+    WebDriver webDriver = new FakeWebDriver(capabilities, webBrowser);
     assertThat(isMobile(driver(webDriver))).isFalse();
     assertThat(isMobile(driver(webDriver).getWebDriver())).isFalse();
   }
@@ -61,26 +51,26 @@ class AppiumDriverUnwrapperTest {
   void test_isIos() {
     assertThat(isIos(driver(new FakeIOSDriver(capabilities)))).isTrue();
     assertThat(isIos(driver(new FakeAndroidDriver(capabilities)))).isFalse();
-    assertThat(isIos(driver(new FakeWebDriver(capabilities)))).isFalse();
+    assertThat(isIos(driver(new FakeWebDriver(capabilities, Browser.CHROME)))).isFalse();
   }
 
   @Test
   void test_isAndroid() {
     assertThat(isAndroid(driver(new FakeAndroidDriver(capabilities)))).isTrue();
     assertThat(isAndroid(driver(new FakeIOSDriver(capabilities)))).isFalse();
-    assertThat(isAndroid(driver(new FakeWebDriver(capabilities)))).isFalse();
+    assertThat(isAndroid(driver(new FakeWebDriver(capabilities, Browser.CHROME)))).isFalse();
   }
 
-  private static Stream<Arguments> webBrowsers() {
+  static Stream<Arguments> webBrowsers() {
     return Stream.of(
-      Arguments.of(Browser.IE.browserName()),
-      Arguments.of(Browser.EDGE.browserName()),
-      Arguments.of(Browser.CHROME.browserName()),
-      Arguments.of(Browser.FIREFOX.browserName()),
-      Arguments.of(Browser.HTMLUNIT.browserName()),
-      Arguments.of(Browser.OPERA.browserName()),
-      Arguments.of(Browser.SAFARI.browserName()),
-      Arguments.of(Browser.SAFARI_TECH_PREVIEW.browserName())
+      Arguments.of(Browser.IE),
+      Arguments.of(Browser.EDGE),
+      Arguments.of(Browser.CHROME),
+      Arguments.of(Browser.FIREFOX),
+      Arguments.of(Browser.HTMLUNIT),
+      Arguments.of(Browser.OPERA),
+      Arguments.of(Browser.SAFARI),
+      Arguments.of(Browser.SAFARI_TECH_PREVIEW)
     );
   }
 
@@ -110,34 +100,4 @@ class AppiumDriverUnwrapperTest {
 }
 
 class EmptyWebDriverListener implements WebDriverListener {
-}
-
-class FakeIOSDriver extends IOSDriver {
-  FakeIOSDriver(Capabilities capabilities) {
-    super(getUrl(), new XCUITestOptions(capabilities));
-  }
-
-  @Override
-  protected void startSession(Capabilities capabilities) {
-  }
-}
-
-class FakeAndroidDriver extends AndroidDriver {
-  FakeAndroidDriver(Capabilities capabilities) {
-    super(getUrl(), new UiAutomator2Options(capabilities));
-  }
-
-  @Override
-  protected void startSession(Capabilities capabilities) {
-  }
-}
-
-class FakeWebDriver extends RemoteWebDriver {
-  FakeWebDriver(MutableCapabilities capabilities) {
-    super(getUrl(), add(capabilities, BROWSER_NAME, Browser.CHROME.browserName()));
-  }
-
-  @Override
-  protected void startSession(Capabilities capabilities) {
-  }
 }
