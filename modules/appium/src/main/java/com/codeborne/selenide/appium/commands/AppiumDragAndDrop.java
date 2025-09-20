@@ -4,22 +4,20 @@ import com.codeborne.selenide.DragAndDropOptions;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.DragAndDrop;
 import com.codeborne.selenide.impl.WebElementSource;
-import io.appium.java_client.AppiumDriver;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Interactive;
 import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
-
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.ACTIONS;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.JS;
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
@@ -28,13 +26,10 @@ public class AppiumDragAndDrop extends DragAndDrop {
 
   @Override
   protected void execute(WebElementSource locator, Object @Nullable [] args) {
-    Optional<AppiumDriver> appiumDriverOptional = cast(locator.driver(), AppiumDriver.class);
-    if (!appiumDriverOptional.isPresent()) {
+    if (!isMobile(locator.driver())) {
       super.execute(locator, args);
       return;
     }
-
-    AppiumDriver appiumDriver = appiumDriverOptional.get();
 
     DragAndDropOptions options = dragAndDropOptions(args, ACTIONS);
     if (options.getMethod() == JS) {
@@ -44,7 +39,7 @@ public class AppiumDragAndDrop extends DragAndDrop {
     target.shouldBe(visible);
 
     Sequence sequence = getSequenceToPerformDragAndDrop(getCenter(locator.getWebElement()), getCenter(target));
-    appiumDriver.perform(singletonList(sequence));
+    ((Interactive) locator.driver().getWebDriver()).perform(singletonList(sequence));
   }
 
   private Sequence getSequenceToPerformDragAndDrop(Point source, Point target) {

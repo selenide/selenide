@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.unwrap;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -53,7 +52,7 @@ public class FullSizePhotographer implements Photographer {
   }
 
   private <T> Optional<T> takeFullSizeScreenshot(Driver driver, OutputType<T> outputType) {
-    WebDriver webDriver = unwrap(driver.getWebDriver());
+    WebDriver webDriver = driver.getWebDriver();
 
     if (webDriver instanceof HasFullPageScreenshot firefoxDriver) {
       return Optional.of(firefoxDriver.getFullPageScreenshotAs(outputType));

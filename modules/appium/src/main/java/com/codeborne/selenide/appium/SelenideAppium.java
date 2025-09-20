@@ -44,7 +44,7 @@ public class SelenideAppium {
     if (!hasWebDriverStarted()) {
       launchApp();
     }
-    deepLinkLauncher.openDeepLinkOnIos(AppiumDriverRunner.getIosDriver(), deepLinkUrl);
+    deepLinkLauncher.openDeepLinkOnIos(WebDriverRunner.getWebDriver(), deepLinkUrl);
   }
 
   /**
@@ -57,7 +57,7 @@ public class SelenideAppium {
     if (!hasWebDriverStarted()) {
       launchApp();
     }
-    deepLinkLauncher.openDeepLinkOnAndroid(AppiumDriverRunner.getMobileDriver(), deepLinkUrl, appPackage);
+    deepLinkLauncher.openDeepLinkOnAndroid(WebDriverRunner.getWebDriver(), deepLinkUrl, appPackage);
   }
 
   /**
@@ -66,7 +66,7 @@ public class SelenideAppium {
    * @param appId - applicationId for Android or bundleId for iOS
    */
   public static void activateApp(String appId) {
-    appiumNavigator.activateApp(AppiumDriverRunner.getMobileDriver(), appId);
+    appiumNavigator.activateApp(WebDriverRunner.getWebDriver(), appId);
   }
 
   /**
@@ -85,7 +85,7 @@ public class SelenideAppium {
    * @param timeout - The count of milliseconds to wait until the app is terminated
    */
   public static void terminateApp(String appId, @Nullable Duration timeout) {
-    appiumNavigator.terminateApp(AppiumDriverRunner.getMobileDriver(), appId, timeout);
+    appiumNavigator.terminateApp(WebDriverRunner.getWebDriver(), appId, timeout);
   }
 
   /**

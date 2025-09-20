@@ -2,39 +2,38 @@ package com.codeborne.selenide.appium.commands;
 
 import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.impl.WebElementSource;
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.IOSDriver;
+import io.appium.java_client.HasOnScreenKeyboard;
+import io.appium.java_client.HidesKeyboard;
 import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.Optional;
-
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isAndroid;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isIos;
 
 public class HideKeyboard extends FluentCommand {
   @Override
   protected void execute(WebElementSource locator, Object @Nullable [] args) {
-    Optional<AndroidDriver> androidDriver = cast(locator.driver().getWebDriver(), AndroidDriver.class);
-    Optional<IOSDriver> iosDriver = cast(locator.driver().getWebDriver(), IOSDriver.class);
+    WebDriver webDriver = locator.driver().getWebDriver();
 
-    if (androidDriver.isPresent()) {
-      hideKeyBoardForAndroid(androidDriver.get());
+    if (isAndroid(webDriver)) {
+      hideKeyBoardForAndroid((HasOnScreenKeyboard & HidesKeyboard) webDriver);
     }
-    else if (iosDriver.isPresent()) {
-      hideKeyBoardForIos(iosDriver.get(), locator.getWebElement());
+    else if (isIos(webDriver)) {
+      hideKeyBoardForIos((HasOnScreenKeyboard) webDriver, locator.getWebElement());
     }
     else {
-      throw new UnsupportedOperationException("Cannot hide keyboard for webdriver " + locator.driver().getWebDriver());
+      throw new UnsupportedOperationException("Cannot hide keyboard for webdriver " + webDriver);
     }
   }
 
-  private void hideKeyBoardForAndroid(AndroidDriver driver) {
+  private <T extends HasOnScreenKeyboard & HidesKeyboard> void hideKeyBoardForAndroid(T driver) {
     if (driver.isKeyboardShown()) {
       driver.hideKeyboard();
     }
   }
 
-  private void hideKeyBoardForIos(IOSDriver driver, WebElement element) {
+  private void hideKeyBoardForIos(HasOnScreenKeyboard driver, WebElement element) {
     if (driver.isKeyboardShown()) {
       element.sendKeys("\n");
     }

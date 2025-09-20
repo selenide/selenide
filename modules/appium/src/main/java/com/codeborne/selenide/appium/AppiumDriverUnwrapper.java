@@ -23,14 +23,14 @@ public class AppiumDriverUnwrapper {
   public static boolean isMobile(SearchContext driver) {
     if (hasCapability(driver, APPIUM_PREFIX + AUTOMATION_NAME_OPTION)) return true;
     if (isWeb(driver)) return false;
-    return instanceOf(driver, AppiumDriver.class);
+    return instanceOf(driver, AppiumDriver.class); // TODO replace by {@code return false;}
   }
 
   public static boolean isAndroid(SearchContext driver) {
     if (isPlatform(driver, Platform.ANDROID)) return true;
     if (isPlatform(driver, Platform.IOS)) return false;
     if (isWeb(driver)) return false;
-    return instanceOf(driver, AndroidDriver.class);
+    return instanceOf(driver, AndroidDriver.class); // TODO replace by {@code return false;}
   }
 
   public static boolean isAndroid(Driver driver) {
@@ -41,7 +41,7 @@ public class AppiumDriverUnwrapper {
     if (isPlatform(driver, Platform.IOS)) return true;
     if (isPlatform(driver, Platform.ANDROID)) return false;
     if (isWeb(driver)) return false;
-    return instanceOf(driver, IOSDriver.class);
+    return instanceOf(driver, IOSDriver.class); // TODO replace by {@code return false;}
   }
 
   public static boolean isIos(Driver driver) {
