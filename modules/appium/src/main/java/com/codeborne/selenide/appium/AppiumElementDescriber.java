@@ -3,12 +3,12 @@ package com.codeborne.selenide.appium;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.SelenideElementDescriber;
-import io.appium.java_client.AppiumDriver;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnsupportedCommandException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isAndroid;
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isIos;
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
 import static java.util.Arrays.asList;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.compile;
@@ -53,13 +53,13 @@ public class AppiumElementDescriber implements ElementDescriber {
       return "null";
     }
 
-    return cast(driver, AppiumDriver.class).map(appiumDriver ->
-      new Builder(element, appiumDriver, supportedAttributes(driver))
+    return isMobile(driver) ?
+      new Builder(element, driver.getWebDriver(), supportedAttributes(driver))
         .appendTagName()
         .appendAttributes()
         .finish()
-        .build()
-    ).orElseGet(() -> webVersion.fully(driver, element));
+        .build() :
+      webVersion.fully(driver, element);
   }
 
   protected List<String> supportedAttributes(Driver driver) {
@@ -92,12 +92,12 @@ public class AppiumElementDescriber implements ElementDescriber {
 
   @Override
   public String briefly(Driver driver, WebElement element) {
-    return cast(driver, AppiumDriver.class).map(appiumDriver ->
-      new Builder(element, appiumDriver, supportedAttributes(driver))
+    return isMobile(driver) ?
+      new Builder(element, driver.getWebDriver(), supportedAttributes(driver))
         .appendTagName()
         .finish()
-        .build()
-    ).orElseGet(() -> webVersion.fully(driver, element));
+        .build() :
+      webVersion.fully(driver, element);
   }
 
   @Override
@@ -112,7 +112,7 @@ public class AppiumElementDescriber implements ElementDescriber {
 
   private static class Builder {
     private final WebElement element;
-    private final AppiumDriver webDriver;
+    private final WebDriver webDriver;
     private final List<String> supportedAttributes;
     private String tagName = "?";
     private String text = "?";
@@ -120,7 +120,7 @@ public class AppiumElementDescriber implements ElementDescriber {
     @Nullable
     private WebDriverException unforgivableException;
 
-    private Builder(WebElement element, AppiumDriver webDriver, List<String> supportedAttributes) {
+    private Builder(WebElement element, WebDriver webDriver, List<String> supportedAttributes) {
       this.element = element;
       this.webDriver = webDriver;
       this.supportedAttributes = supportedAttributes;

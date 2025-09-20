@@ -11,10 +11,10 @@ import it.mobile.android.driverproviders.local.LocalAndroidDriverWithDemos;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverListener;
 
 import static com.codeborne.selenide.appium.SelenideAppium.launchApp;
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static it.mobile.BrowserstackUtils.isCi;
 
 public abstract class BaseApiDemosTest extends ITTest {
@@ -38,8 +38,13 @@ public abstract class BaseApiDemosTest extends ITTest {
       launchApp();
       return;
     }
-    cast(WebDriverRunner.getWebDriver(), InteractsWithApps.class)
-      .ifPresentOrElse(mobileDriver -> prepareApp(mobileDriver, AndroidDriverWithDemos.appId), SelenideAppium::launchApp);
+    WebDriver webDriver = WebDriverRunner.getWebDriver();
+    if (webDriver instanceof InteractsWithApps mobileDriver) {
+      prepareApp(mobileDriver, AndroidDriverWithDemos.appId);
+    }
+    else {
+      SelenideAppium.launchApp();
+    }
   }
 }
 
