@@ -9,6 +9,7 @@ import java.time.Duration;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.appium.AppiumSelectors.byAttribute;
 
 class DeepLinkUrlIosTest extends BaseSwagLabsAppIosTest {
@@ -20,7 +21,9 @@ class DeepLinkUrlIosTest extends BaseSwagLabsAppIosTest {
 
   @AfterEach
   void tearDown() {
-    SelenideAppium.terminateApp("com.saucelabs.mydemoapp.rn");
-    closeWebDriver();
+    if (hasWebDriverStarted()) {
+      SelenideAppium.terminateApp("com.saucelabs.mydemoapp.rn");
+      closeWebDriver();
+    }
   }
 }
