@@ -47,4 +47,11 @@ public class Browser {
   public boolean supportsInsecureCerts() {
     return !isIE() && !isSafari();
   }
+
+  @Override
+  public String toString() {
+    return headless ?
+      "%s{%s:headless}".formatted(getClass().getSimpleName(), name) :
+      "%s{%s}".formatted(getClass().getSimpleName(), name);
+  }
 }
