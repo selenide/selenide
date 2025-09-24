@@ -191,6 +191,14 @@ final class ChromeDriverFactoryTest {
   }
 
   @Test
+  void disablesSmoothScrollingByDefault() {
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    List<String> optionArguments = getBrowserLaunchArgs(CAPABILITY, chromeOptions);
+
+    assertThat(optionArguments).contains("--disable-smooth-scrolling");
+  }
+
+  @Test
   void doesNotDisableSandboxByDefault() {
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     List<String> optionArguments = getBrowserLaunchArgs(CAPABILITY, chromeOptions);

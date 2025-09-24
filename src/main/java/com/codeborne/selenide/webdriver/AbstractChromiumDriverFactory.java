@@ -35,6 +35,7 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     arguments.add("--disable-dev-shm-usage");
     arguments.add("--disable-search-engine-choice-screen");
     arguments.add("--unsafely-disable-devtools-self-xss-warnings");
+    arguments.add("--disable-smooth-scrolling");
     arguments.addAll(parseArguments(externalArguments));
     arguments.addAll(createHeadlessArguments(config));
 
