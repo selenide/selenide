@@ -1,14 +1,14 @@
 package integration.server;
 
-import com.google.common.collect.ImmutableMap;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.util.Map;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 class CorsProtectedHandler extends BaseHandler {
   private static final Logger log = LoggerFactory.getLogger(CorsProtectedHandler.class);
@@ -32,6 +32,6 @@ class CorsProtectedHandler extends BaseHandler {
   public Result post(HttpServletRequest request, HttpServletResponse response) {
     String name = request.getPathInfo().substring(1);
     byte[] greeting = String.format("Say CORS and enter, friend %s!", name).getBytes(UTF_8);
-    return new Result(SC_OK, CONTENT_TYPE_PLAIN_TEXT, greeting, ImmutableMap.of("Access-Control-Allow-Origin", friendlyOrigin));
+    return new Result(SC_OK, CONTENT_TYPE_PLAIN_TEXT, greeting, Map.of("Access-Control-Allow-Origin", friendlyOrigin));
   }
 }

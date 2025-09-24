@@ -11,7 +11,6 @@ import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +24,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.enabled;
@@ -57,8 +58,7 @@ final class SelenideElementProxyTest {
 
   @BeforeEach
   void mockWebDriver() {
-    when(webdriver.executeScript(anyString(), same(element)))
-      .thenReturn(ImmutableMap.of("id", "id1", "class", "class1"));
+    when(webdriver.executeScript(anyString(), same(element))).thenReturn(Map.of("id", "id1", "class", "class1"));
     when(webdriver.getPageSource()).thenReturn("<html>mock</html>");
     when(webdriver.executeScript("return navigator.platform")).thenReturn("Win32");
     when(element.getTagName()).thenReturn("h1");

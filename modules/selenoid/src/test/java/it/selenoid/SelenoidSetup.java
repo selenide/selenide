@@ -2,7 +2,6 @@ package it.selenoid;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.FileDownloadMode;
-import com.google.common.collect.ImmutableMap;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -11,6 +10,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -53,7 +53,7 @@ public class SelenoidSetup implements BeforeEachCallback, AfterEachCallback  {
   static DesiredCapabilities capabilities() {
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setBrowserName("chrome");
-    capabilities.setCapability("selenoid:options", ImmutableMap.of(
+    capabilities.setCapability("selenoid:options", Map.of(
       "enableVNC", true,
       "enableVideo", true
     ));

@@ -1,6 +1,5 @@
 package integration.server;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import jakarta.servlet.MultipartConfigElement;
 import org.eclipse.jetty.server.Connector;
@@ -123,7 +122,7 @@ public class LocalHttpServer {
    * @param args not used
    */
   public static void main(String[] args) throws Exception {
-    new LocalHttpServer(8080, false, "no-cors-allowed", ImmutableMap.of("scott", "tiger")).start();
+    new LocalHttpServer(8080, false, "no-cors-allowed", Map.of("scott", "tiger")).start();
     Thread.currentThread().join();
   }
 }
