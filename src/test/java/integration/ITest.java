@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.lang.ThreadLocal.withInitial;
 
 public abstract class ITest extends BaseIntegrationTest {
@@ -111,14 +110,14 @@ public abstract class ITest extends BaseIntegrationTest {
       }
       else {
         driver().open();
-        cast(driver().getWebDriver(), HasDevTools.class).ifPresent(webdriver -> {
+        if (driver().getWebDriver() instanceof HasDevTools webdriver) {
           var devTools = webdriver.getDevTools();
           devTools.createSessionIfThereIsNotOne();
           devTools.send(Log.enable());
           devTools.addListener(Log.entryAdded(), log ->
             browserLogs.info("[{}] {} source:{} url:{}", log.getLevel(), log.getText(), log.getSource(), log.getUrl().orElse("-"))
           );
-        });
+        }
       }
       driver().open("/" + fileName + "?browser=" + browser +
                     "&timeout=" + driver().config().timeout());
