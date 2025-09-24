@@ -2,7 +2,6 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.Capabilities;
@@ -45,7 +44,7 @@ public class DeepLinkLauncher {
   // Life is so much easier
   public void openDeepLinkOnAndroid(AppiumDriver driver, String deepLinkUrl, String appPackage) {
     SelenideLogger.run("open android deeplink", deepLinkUrl, () -> {
-      Map<String, String> params = ImmutableMap.of(
+      Map<String, String> params = Map.of(
         "url", deepLinkUrl,
         "package", appPackage
       );
@@ -56,7 +55,7 @@ public class DeepLinkLauncher {
   private void openSafari(AppiumDriver driver) {
     driver.executeScript(
       "mobile:launchApp",
-      ImmutableMap.of("bundleId", SAFARI_BUNDLE_ID)
+      Map.of("bundleId", SAFARI_BUNDLE_ID)
     );
   }
 

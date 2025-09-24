@@ -8,7 +8,6 @@ import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
-import com.google.common.collect.ImmutableSet;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -25,8 +24,8 @@ import static java.lang.Thread.sleep;
 
 public class DownloadFileToFolder {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolder.class);
-  private static final Set<String> CHROMIUM_TEMPORARY_FILES = ImmutableSet.of("crdownload", "tmp");
-  private static final Set<String> FIREFOX_TEMPORARY_FILES = ImmutableSet.of("part");
+  private static final Set<String> CHROMIUM_TEMPORARY_FILES = Set.of("crdownload", "tmp");
+  private static final Set<String> FIREFOX_TEMPORARY_FILES = Set.of("part");
 
   private final Downloader downloader;
 

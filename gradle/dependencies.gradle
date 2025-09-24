@@ -53,7 +53,6 @@ subprojects {
     }
     implementation('org.jspecify:jspecify:1.0.0')
     implementation('com.google.errorprone:error_prone_annotations:2.42.0')
-    implementation("com.google.guava:guava:33.5.0-jre")
     implementation("org.apache.commons:commons-lang3:3.18.0")
     implementation("commons-io:commons-io:2.20.0")
     testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core") {

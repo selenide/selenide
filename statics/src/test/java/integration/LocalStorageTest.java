@@ -5,10 +5,11 @@ import com.codeborne.selenide.LocalStorage;
 import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.ex.ConditionMetError;
 import com.codeborne.selenide.ex.ConditionNotMetError;
-import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static com.codeborne.selenide.CheckResult.accepted;
 import static com.codeborne.selenide.CheckResult.rejected;
@@ -44,7 +45,7 @@ final class LocalStorageTest extends IntegrationTest {
   void getAllItems() {
     localStorage().setItem("cat", "Tom");
     localStorage().setItem("mouse", "Jerry");
-    assertThat(localStorage().getItems()).containsAllEntriesOf(ImmutableMap.of("cat", "Tom", "mouse", "Jerry"));
+    assertThat(localStorage().getItems()).containsAllEntriesOf(Map.of("cat", "Tom", "mouse", "Jerry"));
   }
 
   @Test

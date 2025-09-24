@@ -2,10 +2,11 @@ package integration;
 
 import com.codeborne.selenide.ex.ConditionMetError;
 import com.codeborne.selenide.ex.ConditionNotMetError;
-import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sessionStorage;
@@ -39,7 +40,7 @@ final class SessionStorageTest extends IntegrationTest {
   void getAllItems() {
     sessionStorage().setItem("cat", "Tom");
     sessionStorage().setItem("mouse", "Jerry");
-    assertThat(sessionStorage().getItems()).containsAllEntriesOf(ImmutableMap.of("cat", "Tom", "mouse", "Jerry"));
+    assertThat(sessionStorage().getItems()).containsAllEntriesOf(Map.of("cat", "Tom", "mouse", "Jerry"));
   }
 
   @Test

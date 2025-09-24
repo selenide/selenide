@@ -4,7 +4,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.Photographer;
 import com.codeborne.selenide.impl.WebdriverPhotographer;
-import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -95,8 +94,8 @@ public class FullSizePhotographer implements Photographer {
     WD cdpDriver, OutputType<ResultType> outputType
   ) {
     Options options = getOptions(cdpDriver);
-    Map<String, Object> captureScreenshotOptions = ImmutableMap.of(
-      "clip", ImmutableMap.of(
+    Map<String, Object> captureScreenshotOptions = Map.of(
+      "clip", Map.of(
         "x", 0,
         "y", 0,
         "width", options.fullWidth(),

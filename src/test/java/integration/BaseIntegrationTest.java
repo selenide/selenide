@@ -3,7 +3,6 @@ package integration;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.junit5.TextReportExtension;
 import com.codeborne.selenide.webdriver.HttpClientTimeouts;
-import com.google.common.collect.ImmutableMap;
 import integration.server.LocalHttpServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.net.URLEncoder;
 import java.time.Duration;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.SAFARI;
@@ -56,7 +56,7 @@ public abstract class BaseIntegrationTest {
       synchronized (BaseIntegrationTest.class) {
         if (server == null) {
           protocol = SSL ? "https://" : "http://";
-          server = startWithRetry(SSL, "no-cors-allowed", ImmutableMap.of("scott", scottPassword(), "john", johnPassword()));
+          server = startWithRetry(SSL, "no-cors-allowed", Map.of("scott", scottPassword(), "john", johnPassword()));
           log.info("Server started at {}", getBaseUrl());
         }
       }
