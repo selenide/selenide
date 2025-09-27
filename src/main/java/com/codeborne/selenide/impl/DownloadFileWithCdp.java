@@ -191,10 +191,7 @@ public class DownloadFileWithCdp {
     }
 
     private synchronized CdpDownload download(String guid) {
-      if (!downloads.containsKey(guid)) {
-        downloads.put(guid, new CdpDownload(folder));
-      }
-      return downloads.get(guid);
+      return downloads.computeIfAbsent(guid, __ -> new CdpDownload(folder));
     }
   }
 

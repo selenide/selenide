@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -36,14 +35,14 @@ public class WebDriverFactory {
   private final BrowserResizer browserResizer = new BrowserResizer();
 
   private Map<String, Class<? extends AbstractDriverFactory>> factories() {
-    Map<String, Class<? extends AbstractDriverFactory>> result = new HashMap<>();
-    result.put(CHROME, ChromeDriverFactory.class);
-    result.put(FIREFOX, FirefoxDriverFactory.class);
-    result.put(EDGE, EdgeDriverFactory.class);
-    result.put(INTERNET_EXPLORER, InternetExplorerDriverFactory.class);
-    result.put(IE, InternetExplorerDriverFactory.class);
-    result.put(SAFARI, SafariDriverFactory.class);
-    return result;
+    return Map.of(
+      CHROME, ChromeDriverFactory.class,
+      FIREFOX, FirefoxDriverFactory.class,
+      EDGE, EdgeDriverFactory.class,
+      INTERNET_EXPLORER, InternetExplorerDriverFactory.class,
+      IE, InternetExplorerDriverFactory.class,
+      SAFARI, SafariDriverFactory.class
+    );
   }
 
   public WebDriver createWebDriver(Config config, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {

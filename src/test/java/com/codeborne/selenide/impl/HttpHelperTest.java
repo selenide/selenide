@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -103,9 +102,10 @@ final class HttpHelperTest {
 
   @Test
   void getsFileNameFromResponseHeader() {
-    Map<String, String> headers = new HashMap<>();
-    headers.put("content-disposition", "attachement; filename=report.pdf");
-    headers.put("referrer", "http://google.kz");
+    var headers = Map.of(
+      "content-disposition", "attachement; filename=report.pdf",
+      "referrer", "http://google.kz"
+    );
 
     assertThat(helper.getFileNameFromContentDisposition(headers))
       .contains("report.pdf");
@@ -113,9 +113,10 @@ final class HttpHelperTest {
 
   @Test
   void fileNameIsNull_ifResponseDoesNotContainDispositionHeader() {
-    Map<String, String> headers = new HashMap<>();
-    headers.put("location", "/downloads");
-    headers.put("referrer", "http://google.kz");
+    var headers = Map.of(
+      "location", "/downloads",
+      "referrer", "http://google.kz"
+    );
 
     assertThat(helper.getFileNameFromContentDisposition(headers))
       .isEmpty();
