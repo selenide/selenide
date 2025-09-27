@@ -2,19 +2,17 @@ package it.mobile;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.Map;
 
 public class BrowserstackUtils {
-  private static final HashMap<String, Object> bstackOptions = new HashMap<>();
-
-  static {
-    bstackOptions.put("userName", "githubactions_qxmgVeB");
-    bstackOptions.put("accessKey", System.getProperty("selenide.bs_key"));
-    bstackOptions.put("appiumVersion", "2.6.0");
-    bstackOptions.put("projectName", "Selenide-Appium");
-    bstackOptions.put("buildName", getPrettyJobName());
-    bstackOptions.put("interactiveDebugging", true);
-  }
+  private static final Map<String, Object> bstackOptions = Map.of(
+    "userName", "githubactions_qxmgVeB",
+    "accessKey", System.getProperty("selenide.bs_key"),
+    "appiumVersion", "2.6.0",
+    "projectName", "Selenide-Appium",
+    "buildName", getPrettyJobName(),
+    "interactiveDebugging", true
+  );
 
   public static URL browserstackUrl() {
     try {
@@ -24,7 +22,7 @@ public class BrowserstackUtils {
     }
   }
 
-  public static HashMap<String, Object> getBrowserstackOptions() {
+  public static Map<String, Object> getBrowserstackOptions() {
     return bstackOptions;
   }
 

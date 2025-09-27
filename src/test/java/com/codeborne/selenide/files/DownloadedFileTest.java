@@ -3,7 +3,6 @@ package com.codeborne.selenide.files;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,8 +25,6 @@ final class DownloadedFileTest {
   }
 
   private Map<String, String> header(String name, String value) {
-    Map<String, String> headers = new HashMap<>();
-    headers.put(name, value);
-    return headers;
+    return Map.of(name, value);
   }
 }
