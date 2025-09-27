@@ -20,16 +20,16 @@ Currently, the plugin supports the following features:
 * File download 
 
 # Not yet supported
-* Access to clipboard  (get & set & verify clipboard contents)
-* Saving videos
+* Access to clipboard (get & set & verify clipboard contents)
+* Saving videos from Grid (but `selenide-video-recorder` can record its own videos)
 
 ## Usage
 1. Import `com.codeborne:selenide-grid:7.10.1`
-2. Set `Configuration.fileDownload = FOLDER;`
+2. Set `Configuration.fileDownload = FOLDER; // or CDP or HTTPGET or PROXY`
 3. Use method `$.download()` as usually.
 
 ## How it works?
-When you call `$("a#report").download()` method, selenide-grid plugin
+When you call `$("a#report").download()` method, `selenide-grid` plugin
 1. clicks the element,
 2. lets the browser download file to its default location, 
 3. uses [Selenium Grid API](https://www.selenium.dev/documentation/grid/configuration/cli_options/#enabling-managed-downloads-by-the-node) to get the downloaded file.  
