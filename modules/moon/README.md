@@ -13,18 +13,20 @@ This problem is addressed by `selenide-moon` plugin: _it can get files from Moon
 ## Features
 Currently, the plugin supports the following features:
 * File download 
-* Access to clipboard  (get & set & verify clipboard contents)
+* Access to clipboard (get & set & verify clipboard contents)
 * BasicAuth
 
-We are going to implement more features like reading logs and videos etc.
+We are going to implement more features like reading logs and videos from Moon.
 
 ## Usage
 1. Import `com.codeborne:selenide-moon:7.10.1`
-2. Set `Configuration.fileDownload = FOLDER;`
-3. Use method `$.download()` as usually.
+2. Use these methods as usually:
+   - `$.download(file().withMethod(FOLDER)); // or CDP or HTTPGET or PROXY`
+   - `clipboard().setText("Moonlight Shadow");`
+   - `clipboard().shouldHave(content("Moonlight Shadow"));`
 
 ## How it works?
-When you call `$("a#report").download()` method, Selenide-moon plugin
+When you call `$("a#report").download()` method, `selenide-moon` plugin:
 1. clicks the element,
 2. lets the browser download file to its default location, 
 3. uses [Moon API](https://aerokube.com/moon/latest/#accessing-downloaded-files) to get the downloaded file.  
