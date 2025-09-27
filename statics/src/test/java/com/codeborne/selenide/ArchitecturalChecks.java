@@ -3,12 +3,16 @@ package com.codeborne.selenide;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
+@TestInstance(PER_CLASS)
 public class ArchitecturalChecks {
-  private static final JavaClasses selenideClasses = new ClassFileImporter().importPackages("com.codeborne", "integration");
+  private final JavaClasses selenideClasses = new ClassFileImporter().importPackages("com.codeborne", "integration");
 
   @Test
   void noJunitAsserts() {
@@ -44,6 +48,17 @@ public class ArchitecturalChecks {
 
     noMethods()
       .should().beAnnotatedWith("org.junit.Ignore")
+      .check(selenideClasses);
+  }
+
+  @Test
+  void allFieldsInExceptionsShouldBeFinal() {
+    fields()
+      .that().areDeclaredInClassesThat().areAssignableTo(Throwable.class)
+      .and().doNotHaveName("timeoutMs")
+      .and().doNotHaveName("screenshot")
+      .and().doNotHaveName("detailedErrorMessage")
+      .should().beFinal()
       .check(selenideClasses);
   }
 }
