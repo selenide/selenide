@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.selector.ByAttribute;
 import com.codeborne.selenide.selector.ByDeepShadowCss;
+import com.codeborne.selenide.selector.ByLabel;
 import com.codeborne.selenide.selector.ByShadowCss;
 import com.codeborne.selenide.selector.ByTagAndText;
 import com.codeborne.selenide.selector.ByText;
@@ -82,6 +83,10 @@ public class Selectors {
    */
   public static By byTextCaseInsensitive(String elementText) {
     return new ByTextCaseInsensitive(elementText);
+  }
+
+  public static By byLabel(String elementText) {
+    return new ByLabel(elementText);
   }
 
   /**
