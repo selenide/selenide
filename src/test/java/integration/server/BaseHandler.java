@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -90,7 +91,13 @@ public abstract class BaseHandler extends HttpServlet {
   }
 
   String getFilenameFromRequest(HttpServletRequest request) {
-    return request.getPathInfo().replaceFirst("/(.*)", "$1");
+    String fileName = request.getPathInfo().replaceFirst("/(.*)", "$1");
+
+    if (fileName.contains("..") || fileName.contains("/") || fileName.contains("\\")) {
+      throw new IllegalArgumentException("Invalid filename: " + fileName);
+    }
+
+    return fileName;
   }
 
   byte @Nullable [] readFileContent(String fileName) throws IOException {
@@ -118,8 +125,7 @@ public abstract class BaseHandler extends HttpServlet {
       try (OutputStream os = response.getOutputStream()) {
         if (result.duration == 0) {
           writeQuickly(os, result.content);
-        }
-        else {
+        } else {
           writeSlowly(os, result.contentLength, result.content, result.duration);
         }
       }
