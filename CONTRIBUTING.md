@@ -52,9 +52,11 @@ Selenide has a very simple branching strategy
 
     git clone https://github.com/selenide/selenide.git
     cd selenide
-    ./gradlew    (or `gradlew.bat` on Windows)
+    ./gradlew    (or `gradlew.bat` on Windows)   - this runs tests and publishes JARs to local maven repo 
+    -- or:
+    ./gradlew publishToMavenLocal -x test     - this only publishes JARs to local maven repo without running tests
 
-After build, you'll find Selenide's .jar file under `build/libs/` directory as well as in local maven repository at `~/.m2/repository/com/codeborne/selenide/<version>/selenide-<version>.jar`.
+After build, you'll find Selenide's *.jar files under `build/libs/` directory as well as in local maven repository at `~/.m2/repository/com/codeborne/selenide`
 
 
 ### How to run tests?
