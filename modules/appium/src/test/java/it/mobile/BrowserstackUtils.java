@@ -5,14 +5,16 @@ import java.net.URL;
 import java.util.Map;
 
 public class BrowserstackUtils {
-  private static final Map<String, Object> bstackOptions = Map.of(
-    "userName", "githubactions_qxmgVeB",
-    "accessKey", System.getProperty("selenide.bs_key"),
-    "appiumVersion", "2.6.0",
-    "projectName", "Selenide-Appium",
-    "buildName", getPrettyJobName(),
-    "interactiveDebugging", true
-  );
+  public static Map<String, Object> getBrowserstackOptions() {
+    return Map.of(
+      "userName", "githubactions_qxmgVeB",
+      "accessKey", System.getProperty("selenide.bs_key"),
+      "appiumVersion", "2.6.0",
+      "projectName", "Selenide-Appium",
+      "buildName", getPrettyJobName(),
+      "interactiveDebugging", true
+    );
+  }
 
   public static URL browserstackUrl() {
     try {
@@ -20,10 +22,6 @@ public class BrowserstackUtils {
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  public static Map<String, Object> getBrowserstackOptions() {
-    return bstackOptions;
   }
 
   private static String getPrettyJobName() {
