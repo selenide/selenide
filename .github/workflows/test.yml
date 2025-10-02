@@ -48,7 +48,7 @@ jobs:
         shell: pwsh
         run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
       - name: Run the tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v4
@@ -82,7 +82,7 @@ jobs:
         if: ${{ matrix.gradle-task != 'check' && matrix.gradle-task != 'javadocForSite' }}
         uses: browser-actions/setup-firefox@latest
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
       - name: Run the tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v4
@@ -108,7 +108,7 @@ jobs:
           cache: 'gradle'
           java-version: '17'
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
       - name: Run the tests
         if: ${{ env.BS_KEY }}
         run: ./gradlew android --info -Dselenide.bs_key=${{ secrets.BS_KEY }}
@@ -134,7 +134,7 @@ jobs:
           cache: 'gradle'
           java-version: '17'
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
       - name: Run the tests
         if: ${{ env.BS_KEY }}
         run: ./gradlew ios --info -Dselenide.bs_key=${{ secrets.BS_KEY }}
@@ -160,7 +160,7 @@ jobs:
       - name: Start selenoid
         uses: BorisOsipov/selenoid-github-action@1
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
       - name: Run the tests
         run: ./gradlew selenoidTests
       - uses: actions/upload-artifact@v4
@@ -204,7 +204,7 @@ jobs:
           nohup minikube tunnel &> modules/moon/build/reports/minikube-tunnel.log &
           nc -zv `minikube ip` 4444
           curl "http://moon.aerokube.local/wd/hub"
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
       - run: ./gradlew moonTests
       - uses: actions/upload-artifact@v4
         if: always()
