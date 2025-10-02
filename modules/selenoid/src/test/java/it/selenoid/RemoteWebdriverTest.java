@@ -4,6 +4,8 @@ import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.IOException;
@@ -25,7 +27,7 @@ public class RemoteWebdriverTest {
 
   @Test
   void canStartRemoteWebDriver() throws IOException {
-    RemoteWebDriver driver = new RemoteWebDriver(new URL(selenoidUrl()), capabilities(), false);
+    WebDriver driver = new Augmenter().augment(new RemoteWebDriver(new URL(selenoidUrl()), capabilities(), false));
     setWebDriver(driver);
     checkDownload();
   }
