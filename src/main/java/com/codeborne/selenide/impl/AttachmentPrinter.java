@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-class AttachmentPrinter implements AttachmentHandler {
+public class AttachmentPrinter implements AttachmentHandler {
 
   private static final Logger log = LoggerFactory.getLogger(AttachmentPrinter.class);
 
