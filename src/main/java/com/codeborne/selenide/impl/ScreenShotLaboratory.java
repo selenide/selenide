@@ -57,7 +57,7 @@ public class ScreenShotLaboratory {
   private final Photographer photographer;
   private final PageSourceExtractor extractor;
   private final AttachmentHandler attachmentHandler;
-  private final Clock clock;
+  protected final Clock clock;
   protected final List<Screenshot> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
 
@@ -65,11 +65,12 @@ public class ScreenShotLaboratory {
   protected final ThreadLocal<@Nullable List<Screenshot>> currentContextScreenshots = new ThreadLocal<>();
   protected final ThreadLocal<List<Screenshot>> threadScreenshots = withInitial(ArrayList::new);
 
-  private ScreenShotLaboratory() {
+  protected ScreenShotLaboratory() {
     this(inject(), inject(), inject(), new Clock());
   }
 
-  ScreenShotLaboratory(Photographer photographer, PageSourceExtractor extractor, AttachmentHandler attachmentHandler, Clock clock) {
+  protected ScreenShotLaboratory(Photographer photographer, PageSourceExtractor extractor, AttachmentHandler attachmentHandler,
+                                 Clock clock) {
     this.photographer = photographer;
     this.extractor = extractor;
     this.attachmentHandler = attachmentHandler;
