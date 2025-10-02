@@ -41,6 +41,7 @@ import static com.codeborne.selenide.impl.Screenshot.none;
 import static java.io.File.separatorChar;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
 import static java.util.Objects.requireNonNullElseGet;
@@ -305,6 +306,12 @@ public class ScreenShotLaboratory {
         .map(screenshot -> screenshot.getImageFile())
         .filter(image -> image != null)
         .toList();
+    }
+  }
+
+  public List<Screenshot> screenshots() {
+    synchronized (allScreenshots) {
+      return unmodifiableList(allScreenshots);
     }
   }
 
