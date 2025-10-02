@@ -42,10 +42,10 @@ import static java.util.Objects.requireNonNull;
 public class SelenideDriver {
   private final JavaScript zoomJs = new JavaScript("zoom.js");
   private final Navigator navigator = new Navigator();
-  private final ScreenShotLaboratory screenshots = inject();
 
   private final Config config;
   private final Driver driver;
+  private final ScreenShotLaboratory screenshots;
 
   public SelenideDriver(Config config) {
     this(config, emptyList());
@@ -56,8 +56,11 @@ public class SelenideDriver {
   }
 
   public SelenideDriver(Config config, Driver driver) {
-    this.config = config;
-    this.driver = driver;
+    this(config, driver, inject());
+  }
+
+  public SelenideDriver(Config config, List<WebDriverListener> listeners, ScreenShotLaboratory screenshots) {
+    this(config, new LazyDriver(config, null, listeners), screenshots);
   }
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
@@ -66,8 +69,23 @@ public class SelenideDriver {
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
                         DownloadsFolder browserDownloadsFolder) {
+    this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder), inject());
+  }
+
+  public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
+                        ScreenShotLaboratory screenshots) {
+    this(config, webDriver, selenideProxy, new SharedDownloadsFolder(config.downloadsFolder()), screenshots);
+  }
+
+  public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
+                        DownloadsFolder browserDownloadsFolder, ScreenShotLaboratory screenshots) {
+    this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder), screenshots);
+  }
+
+  public SelenideDriver(Config config, Driver driver, ScreenShotLaboratory screenshots) {
     this.config = config;
-    this.driver = new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder);
+    this.driver = driver;
+    this.screenshots = screenshots;
   }
 
   public Config config() {
