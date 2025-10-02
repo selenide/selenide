@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -43,7 +44,7 @@ final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
     public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
       RemoteWebDriver webDriver = new RemoteWebDriver(requireNonNull(url), chromeOptions(proxy));
       webDriver.setFileDetector(new LocalFileDetector());
-      return webDriver;
+      return new Augmenter().augment(webDriver);
     }
   }
 }
