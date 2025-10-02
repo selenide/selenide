@@ -9,7 +9,7 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.junit.jupiter:junit-jupiter-params")
   testImplementation("org.mockito:mockito-core:$mockitoVersion")
-  testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}
+  testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive = false}
   testImplementation("uk.org.webcompere:system-stubs-jupiter:$systemStubsVersion")
 }
 
