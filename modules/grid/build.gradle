@@ -17,7 +17,7 @@ dependencies {
     exclude group: 'org.slf4j'
     exclude group: 'com.google.code.findbugs'
   }
-  testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive false}
+  testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive = false}
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')
