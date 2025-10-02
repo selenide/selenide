@@ -238,15 +238,7 @@ public class ScreenShotLaboratory {
 
   @CanIgnoreReturnValue
   private File addToImageHistory(Config config, File imageFile) {
-    Screenshot screenshot = new Screenshot(imageFile, toUrl(config, imageFile), null);
-    List<Screenshot> contextScreenshots = currentContextScreenshots.get();
-    if (contextScreenshots != null) {
-      contextScreenshots.add(screenshot);
-    }
-    synchronized (allScreenshots) {
-      allScreenshots.add(screenshot);
-    }
-    threadScreenshots.get().add(screenshot);
+    addToHistory(new Screenshot(imageFile, toUrl(config, imageFile), null));
     return imageFile;
   }
 
