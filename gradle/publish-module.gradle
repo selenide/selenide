@@ -16,47 +16,50 @@ tasks.withType(Jar).configureEach {
   }
 }
 
-if (project.hasProperty("signing.keyId")) {
-  mavenPublishing {
-    coordinates(project.groupId, project.artifactId, project.version)
-    pom {
-      name = base.archivesName
-      description = 'Selenide = concise API for Selenium WebDriver'
-      url = 'https://selenide.org'
-      inceptionYear = '2011'
-      licenses {
-        license {
-          name = 'MIT'
-          url = 'https://opensource.org/licenses/MIT'
-        }
+mavenPublishing {
+  if (project.hasProperty("signing.keyId")) {
+    publishToMavenCentral(true)
+    signAllPublications()
+  }
+
+  coordinates(project.groupId, project.artifactId, project.version)
+  pom {
+    name = base.archivesName
+    description = 'Selenide = concise API for Selenium WebDriver'
+    url = 'https://selenide.org'
+    inceptionYear = '2011'
+    licenses {
+      license {
+        name = 'MIT'
+        url = 'https://opensource.org/licenses/MIT'
       }
-      developers {
-        developer {
-          id = 'asolntsev'
-          name = 'Andrei Solntsev'
-        }
-        developer {
-          id = 'BorisOsipov'
-          name = 'Boris Osipov'
-        }
-        developer {
-          id = 'rosolko'
-          name = 'Aliaksandr Rasolka'
-        }
-        developer {
-          id = 'vinogradoff'
-          name = 'Alexei Vinogradov'
-        }
-        developer {
-          id = 'dstekanov'
-          name = 'Dmytro Stekanov'
-        }
+    }
+    developers {
+      developer {
+        id = 'asolntsev'
+        name = 'Andrei Solntsev'
       }
-      scm {
-        connection = 'scm:git@github.com:selenide/selenide.git'
-        developerConnection = 'scm:git@github.com:selenide/selenide.git'
-        url = 'https://github.com/selenide/selenide'
+      developer {
+        id = 'BorisOsipov'
+        name = 'Boris Osipov'
       }
+      developer {
+        id = 'rosolko'
+        name = 'Aliaksandr Rasolka'
+      }
+      developer {
+        id = 'vinogradoff'
+        name = 'Alexei Vinogradov'
+      }
+      developer {
+        id = 'dstekanov'
+        name = 'Dmytro Stekanov'
+      }
+    }
+    scm {
+      connection = 'scm:git@github.com:selenide/selenide.git'
+      developerConnection = 'scm:git@github.com:selenide/selenide.git'
+      url = 'https://github.com/selenide/selenide'
     }
   }
 }
