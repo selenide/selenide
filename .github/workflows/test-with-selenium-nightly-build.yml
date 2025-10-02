@@ -22,7 +22,7 @@ jobs:
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v5
       - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.36.0-SNAPSHOT --no-parallel --no-daemon --console=plain
+        run: ./gradlew ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.37.0-SNAPSHOT --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v4
         if: always()
         with:
