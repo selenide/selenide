@@ -40,9 +40,9 @@ import static java.util.Objects.requireNonNull;
  * "Selenide driver" is a container for WebDriver + proxy server + settings
  */
 public class SelenideDriver {
-  private static final JavaScript zoomJs = new JavaScript("zoom.js");
-  private static final Navigator navigator = new Navigator();
-  private static final ScreenShotLaboratory screenshots = inject();
+  private final JavaScript zoomJs = new JavaScript("zoom.js");
+  private final Navigator navigator = new Navigator();
+  private final ScreenShotLaboratory screenshots = inject();
 
   private final Config config;
   private final Driver driver;
@@ -452,10 +452,10 @@ public class SelenideDriver {
     return inject(ClipboardService.class).getClipboard(driver());
   }
 
-  private static final PageObjectFactory pageFactory = inject(PageObjectFactory.class);
-  private static final Lazy<DownloadFileWithHttpRequest> downloadFileWithHttpRequest = lazyEvaluated(DownloadFileWithHttpRequest::new);
+  private final PageObjectFactory pageFactory = inject(PageObjectFactory.class);
+  private final Lazy<DownloadFileWithHttpRequest> downloadFileWithHttpRequest = lazyEvaluated(DownloadFileWithHttpRequest::new);
 
-  private static synchronized DownloadFileWithHttpRequest downloadFileWithHttpRequest() {
+  private synchronized DownloadFileWithHttpRequest downloadFileWithHttpRequest() {
     return downloadFileWithHttpRequest.get();
   }
 
