@@ -19,9 +19,14 @@ import static java.util.Objects.requireNonNull;
 public class RemoteDriverFactory {
   public WebDriver create(Config config, MutableCapabilities capabilities) {
     try {
+      Object cdpEnabled = capabilities.getCapability("se:cdpEnabled");
       CommandExecutor commandExecutor = createExecutor(config);
       RemoteWebDriver webDriver = new RemoteWebDriver(commandExecutor, capabilities);
       webDriver.setFileDetector(new LocalFileDetector());
+      if (cdpEnabled != null && webDriver.getCapabilities() instanceof MutableCapabilities webdriverCapabilities) {
+        webdriverCapabilities.setCapability("se:cdpEnabled", cdpEnabled);
+      }
+
       return new Augmenter().augment(webDriver);
     }
     catch (MalformedURLException e) {
