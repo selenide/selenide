@@ -64,7 +64,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadsFiles() {
-    File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
+    File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
@@ -73,7 +73,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   @Test
   void downloadsFileWithAlert() {
     File downloadedFile = $(byText("Download me with alert")).download(
-      using(CDP).withExtension("txt").withAction(
+      using(CDP).withNameMatching("hello.*\\.txt").withAction(
         clickAndConfirm("Are you sure to download it?")
       )
     );
@@ -86,7 +86,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithCyrillicName() {
-    File downloadedFile = $(byText("Download file with cyrillic name")).download(withExtension("txt"));
+    File downloadedFile = $(byText("Download file with cyrillic name")).download(withNameMatching("файл.*\\.txt"));
 
     assertThat(downloadedFile.getName()).isEqualTo("файл-с-русским-названием.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед медвед!");
@@ -96,9 +96,9 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   @Test
   void downloadMissingFile() {
     timeout = 111;
-    assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
+    assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("png")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 111 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"png\" in 111 ms");
   }
 
   @Test
@@ -127,10 +127,9 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   public void download_byExtension() {
-    File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
+    File downloadedFile = $(byText("Download a PDF")).download(withExtension("pdf"));
 
-    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile.getName()).matches("minimal.*\\.pdf");
   }
 
   @Test
@@ -141,7 +140,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
     try {
       openFile("page_with_uploads.html");
-      File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
+      File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
 
       assertThat(downloadedFile.getAbsolutePath())
         .startsWith(new File(customDownloadsFolder).getAbsolutePath());
@@ -187,7 +186,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     Configuration.timeout = 1;
 
     File downloadedFile = $(byText("Download me")).download(using(CDP)
-      .withExtension("txt")
+      .withNameMatching("hello.*\\.txt")
       .withTimeout(4000)
     );
 
@@ -198,7 +197,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadEmptyFile() {
-    File downloadedFile = $(byText("Download empty file")).download(withExtension("txt"));
+    File downloadedFile = $(byText("Download empty file")).download(withNameMatching("empty.*\\.txt"));
 
     assertThat(downloadedFile.getName()).matches("empty-file.*\\.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("");
@@ -253,7 +252,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   public void download_super_slowly() {
-    File downloadedFile = $(byText("Download me super slowly")).download(6000, withExtension("txt"));
+    File downloadedFile = $(byText("Download me super slowly")).download(6000, withNameMatching("hello.*\\.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -261,7 +260,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
   @Test
   void downloadLargeFile() {
-    File downloadedFile = $(byText("Download large file")).download(8000, withExtension("txt"));
+    File downloadedFile = $(byText("Download large file")).download(8000, withNameMatching("large.*\\.txt"));
 
     assertThat(downloadedFile).hasName("large_file.txt");
     assertThat(downloadedFile).hasSize(5 * 1024 * 1024);

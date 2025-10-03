@@ -64,7 +64,7 @@ public class FileDownloadTest {
     $("[name=delay]").setValue("3000");
     $("#lore-ipsum").setValue(fileContent);
 
-    File file = $("#slow-download").download(using(FOLDER).withExtension("txt"));
+    File file = $("#slow-download").download(using(FOLDER).withNameMatching("hello.*\\.txt"));
 
     assertThat(file).hasName("hello.txt");
     assertThat(file).content().isEqualToIgnoringWhitespace(fileContent);

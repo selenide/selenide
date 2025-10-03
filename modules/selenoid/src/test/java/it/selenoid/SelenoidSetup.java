@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.files.FileFilters.withExtension;
+import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,7 +63,7 @@ public class SelenoidSetup implements BeforeEachCallback, AfterEachCallback  {
   @CanIgnoreReturnValue
   static void checkDownload() throws IOException {
     open("/download.html");
-    File file = $(byText("hello-world.txt")).download(withExtension("txt"));
+    File file = $(byText("hello-world.txt")).download(withNameMatching("hello.*\\.txt"));
     assertThat(file).hasName("hello-world.txt");
     assertThat(readFileToString(file, UTF_8)).isEqualTo("Hello, world!");
   }

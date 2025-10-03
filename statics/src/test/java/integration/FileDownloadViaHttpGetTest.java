@@ -23,6 +23,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
+import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.nio.file.Files.createTempDirectory;
@@ -100,7 +101,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   @Test
   void downloadsFileWithForbiddenCharactersInName() {
     File downloadedFile = $(byText("Download file with \"forbidden\" characters in name"))
-      .download(withExtension("txt"));
+      .download(withNameMatching("имя.*\\.txt"));
 
     assertThat(downloadedFile.getName())
       .isEqualTo("имя+с+_pound,_percent,_ampersand,_left,_right,_backslash," +
@@ -237,7 +238,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @Test
   void downloadLargeFile() {
-    File downloadedFile = $(byText("Download large file")).download(withExtension("txt"));
+    File downloadedFile = $(byText("Download large file")).download();
 
     assertThat(downloadedFile).hasName("large_file.txt");
     assertThat(downloadedFile).hasSize(5 * 1024 * 1024);

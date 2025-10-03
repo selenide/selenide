@@ -111,7 +111,7 @@ final class CustomWebdriverTest extends IntegrationTest {
       openFile("page_with_selects_without_jquery.html");
     });
 
-    File downloadedFile = $(byText("Download me")).download(file().withTimeout(ofSeconds(2)).withExtension("txt"));
+    File downloadedFile = $(byText("Download me")).download(file().withTimeout(ofSeconds(2)).withNameMatching("hello.*\\.txt"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
