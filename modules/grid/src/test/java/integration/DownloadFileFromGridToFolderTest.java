@@ -43,7 +43,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
 
   @Test
   void downloadFile() {
-    File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
+    File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
