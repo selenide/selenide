@@ -34,6 +34,7 @@ public class IosDriverProvider implements WebDriverProvider {
     options.setFullReset(false);
     options.setShouldTerminateApp(true);
     options.setCapability("bstack:options", getBrowserstackOptions());
+    options.setCapability("browserstack.video", false);
     return options;
   }
 
