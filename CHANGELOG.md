@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.11.1 (04.10.2025)
+* #3138 Workaround for CDP connectivity in Selenium Grid (#3139)
+
+See https://github.com/selenide/selenide/milestone/231?closed=1
+
 ## 7.11.0 (03.10.2025)
 * update Selenium from 4.35.0 to 4.36.0 (CDP v139 -> v140)   (#3133)
 * #2850 disable smooth scrolling by default (#3119)
