@@ -103,7 +103,7 @@ public class ByShadow extends By implements Serializable {
       .collect(joining(" -> "));
   }
 
-  public static By cssSelector(String target, String shadowHost, String... innerShadowHosts) {
-    return ByShadowCss.cssSelector(target, shadowHost, innerShadowHosts);
+  public static By cssSelector(String target, String... shadowHostsChain) {
+    return ByShadowCss.cssSelector(target, shadowHostsChain);
   }
 }
