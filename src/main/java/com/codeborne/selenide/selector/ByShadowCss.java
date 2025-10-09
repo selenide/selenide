@@ -11,7 +11,6 @@ import org.openqa.selenium.WebElement;
 import java.io.Serializable;
 import java.util.List;
 
-import static com.codeborne.selenide.impl.Lists.list;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNullElse;
 
@@ -22,18 +21,17 @@ public class ByShadowCss extends By implements Serializable {
   private final List<String> shadowHostsChain;
   private final String target;
 
-  public ByShadowCss(String target, String shadowHost, String... innerShadowHosts) {
+  public ByShadowCss(String target, String... shadowHostsChain) {
     //noinspection ConstantConditions
-    if (shadowHost == null || target == null) {
+    if (target == null) {
       throw new IllegalArgumentException("Cannot find elements when the selector is null");
     }
-    this.shadowHostsChain = list(shadowHost, innerShadowHosts);
+    this.shadowHostsChain = List.of(shadowHostsChain);
     this.target = target;
   }
 
-
-  public static By cssSelector(String target, String shadowHost, String... innerShadowHosts) {
-    return new ByShadowCss(target, shadowHost, innerShadowHosts);
+  public static By cssSelector(String target, String... shadowHostsChain) {
+    return new ByShadowCss(target, shadowHostsChain);
   }
 
   @Override

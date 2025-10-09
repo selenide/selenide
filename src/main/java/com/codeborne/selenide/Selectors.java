@@ -118,15 +118,15 @@ public class Selectors {
   }
 
   /**
-   * @see ByShadowCss#cssSelector(java.lang.String, java.lang.String, java.lang.String...)
+   * @see ByShadowCss#cssSelector(java.lang.String, java.lang.String...)
    * @since 5.10
    */
-  public static By shadowCss(String target, String shadowHost, String... innerShadowHosts) {
-    return ByShadowCss.cssSelector(target, shadowHost, innerShadowHosts);
+  public static By shadowCss(String target, String... shadowHostsChain) {
+    return ByShadowCss.cssSelector(target, shadowHostsChain);
   }
 
   /**
-   * @see ByDeepShadowCss#cssSelector(java.lang.String)
+   * @see ByDeepShadowCss#ByDeepShadowCss(java.lang.String)
    * @since v6.8.0
    */
   public static By shadowDeepCss(String target) {

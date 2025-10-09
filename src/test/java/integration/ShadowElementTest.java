@@ -105,6 +105,20 @@ final class ShadowElementTest extends ITest {
   }
 
   @Test
+  void getTargetElementViaShadowHostWithShadowHostAsContext() {
+    $("#shadow-host")
+      .find(shadowCss("p"))
+      .shouldHave(text("Inside Shadow-DOM"));
+  }
+
+  @Test
+  void getElementInsideInnerShadowHostWithShadowHostAsContext() {
+    $("#shadow-host")
+      .find(shadowCss("p", "#inner-shadow-host"))
+      .shouldHave(text("The Shadow-DOM inside another shadow tree"));
+  }
+
+  @Test
   void throwErrorWhenGetNonExistingTargetInsideShadowRoot() {
     assertThatThrownBy(() -> $(shadowCss("#nonexistent", "#shadow-host")).text())
       .isInstanceOf(ElementNotFound.class);
