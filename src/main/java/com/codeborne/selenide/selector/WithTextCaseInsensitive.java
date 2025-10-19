@@ -6,10 +6,11 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static com.codeborne.selenide.TextMatchOptions.partialText;
 import static java.util.Objects.requireNonNull;
 
 public class WithTextCaseInsensitive extends OptimizedBy {
-  private static final JavaScript js = new JavaScript("find-elements-with-text-case-insensitive.js");
+  private static final JavaScript js = new JavaScript("find-elements-by-text.js");
   private final String elementText;
 
   public WithTextCaseInsensitive(String elementText) {
@@ -18,7 +19,7 @@ public class WithTextCaseInsensitive extends OptimizedBy {
 
   @Override
   protected List<WebElement> findElements(SearchContext context, int limit) {
-    return requireNonNull(js.execute(context, js.node(context), elementText, limit));
+    return requireNonNull(js.execute(context, js.node(context), elementText, partialText().caseInsensitive().toMap(), limit));
   }
 
   @Override
