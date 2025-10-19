@@ -36,7 +36,7 @@ class FileRenderHandler extends BaseHandler {
     String fileName = getFilenameFromRequest(request);
     byte[] fileContent = readFileContent(fileName);
     if (fileContent == null) {
-      return new Result(SC_NOT_FOUND, CONTENT_TYPE_HTML_TEXT, "NOT_FOUND");
+      return new Result(SC_NOT_FOUND, CONTENT_TYPE_HTML_TEXT, "NOT_FOUND: " + fileName);
     }
 
     if (!"/favicon.ico".equals(request.getPathInfo())) {

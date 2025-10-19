@@ -12,6 +12,8 @@ import com.codeborne.selenide.selector.WithText;
 import com.codeborne.selenide.selector.WithTextCaseInsensitive;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.TextMatchOptions.fullText;
+
 public class Selectors {
   /**
    * Find element CONTAINING given text (as a substring).
@@ -86,7 +88,11 @@ public class Selectors {
   }
 
   public static By byLabel(String elementText) {
-    return new ByLabel(elementText);
+    return byLabel(elementText, fullText());
+  }
+
+  public static By byLabel(String elementText, TextMatchOptions options) {
+    return new ByLabel(elementText, options);
   }
 
   /**
