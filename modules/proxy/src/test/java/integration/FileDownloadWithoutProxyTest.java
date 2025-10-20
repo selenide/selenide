@@ -15,16 +15,15 @@ final class FileDownloadWithoutProxyTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     proxyEnabled = false;
-    timeout = 1000;
     openFile("page_with_uploads.html");
   }
 
   @Test
   public void cannotDownloadUsingProxy_ifBrowserIsOpenedWithoutProxy() {
+    timeout = 1;
     assertThatThrownBy(() -> $(byText("Download me")).download(using(PROXY)))
       .isInstanceOf(IllegalStateException.class)
       .hasMessageStartingWith("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
   }
-
 }
 

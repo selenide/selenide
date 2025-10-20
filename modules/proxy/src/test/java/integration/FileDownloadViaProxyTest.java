@@ -27,7 +27,6 @@ import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static java.nio.file.Files.createTempDirectory;
-import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
@@ -38,7 +37,6 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
   @BeforeEach
   void setUp() {
     openFile("page_with_uploads.html");
-    timeout = 1000;
     Configuration.fileDownload = PROXY;
   }
 
@@ -114,7 +112,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
 
   @Test
   public void download_byName() {
-    File downloadedFile = $(byText("Download me slowly")).download(file().withName("hello_world.txt").withTimeout(2000));
+    File downloadedFile = $(byText("Download me slowly")).download(file().withName("hello_world.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -122,7 +120,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
 
   @Test
   public void download_byNameRegex() {
-    File downloadedFile = $(byText("Download me slowly")).download(file().withNameMatching("hello_.\\w+\\.txt").withTimeout(2000));
+    File downloadedFile = $(byText("Download me slowly")).download(file().withNameMatching("hello_.\\w+\\.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -130,7 +128,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
 
   @Test
   public void download_byExtension() {
-    File downloadedFile = $(byText("Download a PDF")).download(file().withExtension("pdf").withTimeout(2000));
+    File downloadedFile = $(byText("Download a PDF")).download(file().withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).matches("minimal.*\\.pdf");
   }
@@ -194,6 +192,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
 
   @Test
   public void download_super_slowly() {
+    timeout = 1;
     File downloadedFile = $(byText("Download me super slowly")).download(file().withNameMatching("hello.*\\.txt").withTimeout(6000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
@@ -216,7 +215,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     useAnotherBrowser();
 
     File downloadedFile = $(byText("Download me")).download(
-      using(PROXY).withTimeout(ofSeconds(2)).withNameMatching("hello.*\\.txt")
+      using(PROXY).withNameMatching("hello.*\\.txt")
     );
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");

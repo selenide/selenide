@@ -29,7 +29,6 @@ final class MockResponseWithCorsTest extends ProxyIntegrationTest {
   void setUp() throws Exception {
     String allowedOrigin = Configuration.baseUrl;
     corsProtectedService = LocalHttpServer.startWithRetry(true, allowedOrigin, emptyMap()).start();
-    Configuration.timeout = 2000;
 
     log.info("Started AUT on {}", getBaseUrl());
     log.info("Started CORS-protected service on {}", port());

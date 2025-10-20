@@ -9,7 +9,6 @@ import org.openqa.selenium.remote.http.HttpResponse;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
@@ -21,7 +20,6 @@ import static org.openqa.selenium.remote.http.Contents.utf8String;
 final class MockResponseTest extends ProxyIntegrationTest {
   @BeforeEach
   void setUp() {
-    timeout = 1000;
     open();
     proxyMocker().resetAll();
   }
