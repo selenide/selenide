@@ -1,7 +1,16 @@
 const RE_WHITESPACES = new RegExp('[\\s\\n\\r\u00a0\u202F\u2060\u0020\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u200b\u200c\u200d\u205f\u3000]+', 'g');
 
+function trimWhitespaces(text, options) {
+  switch (options['whitespaceHandling']) {
+    case 'PRESERVE_WHITESPACES': return text;
+    case 'TRIM_WHITESPACES': return text.replace(RE_WHITESPACES, ' ').trim();
+    case 'IGNORE_WHITESPACES': return text.replace(RE_WHITESPACES, '').trim();
+    default: throw new Error('Unknown whitespace handling: ' + options['whitespaceHandling']);
+  }
+}
+
 function normalizeText(text, options) {
-  const trimmed = text.replace(RE_WHITESPACES, ' ').trim();
+  const trimmed = trimWhitespaces(text, options);
   switch (options['caseSensitivity']) {
     case 'CASE_SENSITIVE': return trimmed;
     case 'CASE_INSENSITIVE': return trimmed.toLowerCase();
