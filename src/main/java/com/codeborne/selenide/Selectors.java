@@ -6,13 +6,13 @@ import com.codeborne.selenide.selector.ByLabel;
 import com.codeborne.selenide.selector.ByShadowCss;
 import com.codeborne.selenide.selector.ByTagAndText;
 import com.codeborne.selenide.selector.ByText;
-import com.codeborne.selenide.selector.ByTextCaseInsensitive;
+import com.codeborne.selenide.selector.SearchByText;
 import com.codeborne.selenide.selector.WithTagAndText;
 import com.codeborne.selenide.selector.WithText;
-import com.codeborne.selenide.selector.WithTextCaseInsensitive;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.TextMatchOptions.fullText;
+import static com.codeborne.selenide.TextMatchOptions.partialText;
 
 public class Selectors {
   /**
@@ -47,7 +47,7 @@ public class Selectors {
    * @since 5.22.0
    */
   public static By withTextCaseInsensitive(String elementText) {
-    return new WithTextCaseInsensitive(elementText);
+    return new SearchByText(elementText, partialText().caseInsensitive());
   }
 
   /**
@@ -84,7 +84,7 @@ public class Selectors {
    * @since 5.22.0
    */
   public static By byTextCaseInsensitive(String elementText) {
-    return new ByTextCaseInsensitive(elementText);
+    return new SearchByText(elementText, fullText().caseInsensitive());
   }
 
   public static By byLabel(String elementText) {

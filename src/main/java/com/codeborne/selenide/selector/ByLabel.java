@@ -26,6 +26,6 @@ public class ByLabel extends OptimizedBy {
 
   @Override
   public String toString() {
-    return "by label: " + elementText;
+    return "by label \"%s\" (%s)".formatted(elementText, options);
   }
 }
