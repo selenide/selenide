@@ -9,6 +9,7 @@ import static com.codeborne.selenide.TextCheck.PARTIAL_TEXT;
 import static com.codeborne.selenide.WhitespaceHandling.IGNORE_WHITESPACES;
 import static com.codeborne.selenide.WhitespaceHandling.PRESERVE_WHITESPACES;
 import static com.codeborne.selenide.WhitespaceHandling.TRIM_WHITESPACES;
+import static java.util.Locale.ROOT;
 
 public record TextMatchOptions(TextCheck textCheck, CaseSensitivity caseSensitivity, WhitespaceHandling whitespaceHandling) {
   public static TextMatchOptions fullText() {
@@ -45,5 +46,16 @@ public record TextMatchOptions(TextCheck textCheck, CaseSensitivity caseSensitiv
       "caseSensitivity", caseSensitivity.name(),
       "whitespaceHandling", whitespaceHandling.name()
     );
+  }
+
+  @Override
+  public String toString() {
+    return whitespaceHandling == TRIM_WHITESPACES ?
+      "%s, %s".formatted(humanize(textCheck), humanize(caseSensitivity)) :
+      "%s, %s, %s".formatted(humanize(textCheck), humanize(caseSensitivity), humanize(whitespaceHandling));
+  }
+
+  private static String humanize(Enum<?> enumValue) {
+    return enumValue.name().toLowerCase(ROOT).replace('_', ' ');
   }
 }
