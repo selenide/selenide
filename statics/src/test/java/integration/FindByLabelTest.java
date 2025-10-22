@@ -77,4 +77,10 @@ final class FindByLabelTest extends IntegrationTest {
     $$(byLabel("Payment Date")).shouldHave(size(2), attributes("value", "01.12.2024", "05.12.2024"));
     $$(byLabel("Payment Date", fullText().preserveWhitespaces())).shouldHave(size(1), attributes("value", "01.12.2024"));
   }
+
+  @Test
+  void canFindInsideElement() {
+    $("form").$$(byLabel("To account"))
+      .shouldHave(size(1), attributes("value", "9999-888-77-6"));
+  }
 }
