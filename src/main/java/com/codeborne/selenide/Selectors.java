@@ -194,6 +194,24 @@ public class Selectors {
   }
 
   /**
+   * Find element with given "alt" attribute
+   *
+   * @since 7.12.0
+   */
+  public static By byAltText(String title) {
+    return byAttribute("alt", title);
+  }
+
+  /**
+   * Find element with given "alt" attribute
+   *
+   * @since 7.12.0
+   */
+  public static By byAltText(String title, TextMatchOptions options) {
+    return byAttribute("alt", title, options);
+  }
+
+  /**
    * Find input element with given value ("value" attribute)
    */
   public static By byValue(String value) {
