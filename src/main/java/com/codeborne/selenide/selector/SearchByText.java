@@ -26,6 +26,6 @@ public class SearchByText extends OptimizedBy {
 
   @Override
   public String toString() {
-    return "by text \"%s\" (%s)".formatted(options, elementText);
+    return "by text \"%s\" (%s)".formatted(elementText, options);
   }
 }
