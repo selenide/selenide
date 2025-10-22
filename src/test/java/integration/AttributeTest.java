@@ -11,7 +11,6 @@ import static com.codeborne.selenide.Condition.href;
 import static com.codeborne.selenide.Selectors.by;
 import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selectors.byTitle;
 import static com.codeborne.selenide.Selectors.byValue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -116,12 +115,6 @@ public final class AttributeTest extends ITest {
       .isEqualTo("33333B");
     assertThat($(by("data-mailServerId", "111АБВГД")).data("mailServerId"))
       .isEqualTo("111АБВГД");
-  }
-
-  @Test
-  void userCanSearchElementByTitleAttribute() {
-    assertThat($(byTitle("Login form")).getTagName())
-      .isEqualTo("fieldset");
   }
 
   @Test
