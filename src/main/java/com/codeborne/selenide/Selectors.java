@@ -6,6 +6,7 @@ import com.codeborne.selenide.selector.ByLabel;
 import com.codeborne.selenide.selector.ByShadowCss;
 import com.codeborne.selenide.selector.ByTagAndText;
 import com.codeborne.selenide.selector.ByText;
+import com.codeborne.selenide.selector.SearchByAttribute;
 import com.codeborne.selenide.selector.SearchByText;
 import com.codeborne.selenide.selector.WithTagAndText;
 import com.codeborne.selenide.selector.WithText;
@@ -96,6 +97,25 @@ public class Selectors {
   }
 
   /**
+   * Find element by "placeholder" attribute
+   * @param placeholderText the expected placeholder value to find by
+   * @since 7.12.0
+   */
+  public static By byPlaceholder(String placeholderText) {
+    return byPlaceholder(placeholderText, fullText());
+  }
+
+  /**
+   * Find element by "placeholder" attribute
+   * @param placeholderText the expected placeholder value to find by
+   * @param options either case-sensitive or insensitive, either full text or substring etc.
+   * @since 7.12.0
+   */
+  public static By byPlaceholder(String placeholderText, TextMatchOptions options) {
+    return byAttribute("placeholder", placeholderText, options);
+  }
+
+  /**
    * Find elements having attribute with given value.
    * <p>
    * Examples:
@@ -126,6 +146,13 @@ public class Selectors {
    */
   public static By byAttribute(String attributeName, String attributeValue) {
     return new ByAttribute(attributeName, attributeValue);
+  }
+
+  /**
+   * @since 7.12.0
+   */
+  public static By byAttribute(String attributeName, String attributeValue, TextMatchOptions options) {
+    return new SearchByAttribute(attributeName, attributeValue, options);
   }
 
   /**

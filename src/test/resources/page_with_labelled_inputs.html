@@ -13,12 +13,12 @@
     <fieldset title="Payment form">
       <div>
         <label>Recipient name
-          <input id="beneficiaryName" name="beneficiaryName" value="Dear grandma"/>
+          <input id="beneficiaryName" name="beneficiaryName" placeholder="Beneficiary name, e.g. John Smith" value="Dear grandma"/>
         </label>
       </div>
       <div>
         <label for="toAccount">To account</label>
-        <input id="toAccount" name="beneficiaryAccount" value="9999-888-77-6"/>
+        <input id="toAccount" name="beneficiaryAccount" placeholder="To account, e.g. EE111222333444" value="9999-888-77-6"/>
       </div>
       <div>
         <label for="fromAccount">From account</label>
@@ -58,5 +58,10 @@
 
 <span id="toAccount" style="visibility: hidden">Some random element with the same ID</span>
 
+<style>
+  input, select {
+    min-width: 300px;
+  }
+</style>
 </body>
 </html>
