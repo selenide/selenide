@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.SelenideProperties;
 import com.codeborne.selenide.selector.ByAttribute;
 import com.codeborne.selenide.selector.ByDeepShadowCss;
 import com.codeborne.selenide.selector.ByLabel;
@@ -16,7 +17,7 @@ import static com.codeborne.selenide.TextMatchOptions.fullText;
 import static com.codeborne.selenide.TextMatchOptions.partialText;
 
 public class Selectors {
-  private static final PropertiesReader properties = new PropertiesReader("selenide.properties");
+  private static final SelenideProperties properties = new SelenideProperties();
   private static final String DEFAULT_TEST_ID = "data-test-id";
 
   /**
