@@ -186,6 +186,14 @@ public class Selectors {
   }
 
   /**
+   * Find element with given title ("title" attribute)
+   * @since 7.12.0
+   */
+  public static By byTitle(String title, TextMatchOptions options) {
+    return byAttribute("title", title, options);
+  }
+
+  /**
    * Find input element with given value ("value" attribute)
    */
   public static By byValue(String value) {
