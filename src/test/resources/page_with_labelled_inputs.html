@@ -18,11 +18,13 @@
       </div>
       <div>
         <label for="toAccount">To account</label>
-        <input id="toAccount" name="beneficiaryAccount" placeholder="To account, e.g. EE111222333444" value="9999-888-77-6"/>
+        <input id="toAccount" name="beneficiaryAccount"
+               data-test-id="beneficiary-account"
+               placeholder="To account, e.g. EE111222333444" value="9999-888-77-6"/>
       </div>
       <div>
         <label for="fromAccount">From account</label>
-        <select id="fromAccount" name="beneficiaryAccount">
+        <select id="fromAccount" name="remitterAccount" data-test-id="remitter-account">
           <option value="1111-222-3-4444">1111-222-3-4444</option>
           <option value="1111-222-3-5555">1111-222-3-5555</option>
           <option value="1111-222-3-6666" selected>1111-222-3-6666</option>

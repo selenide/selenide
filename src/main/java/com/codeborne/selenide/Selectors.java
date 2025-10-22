@@ -16,6 +16,9 @@ import static com.codeborne.selenide.TextMatchOptions.fullText;
 import static com.codeborne.selenide.TextMatchOptions.partialText;
 
 public class Selectors {
+  private static final PropertiesReader properties = new PropertiesReader("selenide.properties");
+  private static final String DEFAULT_TEST_ID = "data-test-id";
+
   /**
    * Find element CONTAINING given text (as a substring).
    * <p>
@@ -209,6 +212,20 @@ public class Selectors {
    */
   public static By byAltText(String title, TextMatchOptions options) {
     return byAttribute("alt", title, options);
+  }
+
+  /**
+   * Find element with given "data-test-id" attribute
+   *
+   * Name of "data-test-id" attribute can be customized:
+   * <ul>
+   *   <li>via system property: {@code -Dselenide.test-id.attribute=data-testid}, or</li>
+   *   <li>in file "selenide.properties": {@code selenide.test-id.attribute=data-testid}</li>
+   * </ul>
+   * @since 7.12.0
+   */
+  public static By byTestId(String testId) {
+    return byAttribute(properties.getProperty("selenide.test-id.attribute", DEFAULT_TEST_ID), testId);
   }
 
   /**
