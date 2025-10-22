@@ -9,7 +9,7 @@
   function findElementsByLabel(label) {
     const id = label.getAttribute('for');
     if (id)
-      return Array.from(document.querySelectorAll(`[id="${id}"]`));
+      return Array.from(root.querySelectorAll(`[id="${id}"]`));
     else
       return Array.from(label.querySelectorAll(`input,select,textarea`));
   }
