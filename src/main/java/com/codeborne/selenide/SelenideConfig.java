@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.CiReportUrl;
+import com.codeborne.selenide.impl.SelenideProperties;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.MutableCapabilities;
@@ -11,7 +12,7 @@ import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.SelectorMode.CSS;
 
 public class SelenideConfig implements Config {
-  private final PropertiesReader properties = new PropertiesReader("selenide.properties");
+  private final SelenideProperties properties = new SelenideProperties();
 
   private String browser = getProperty("selenide.browser", CHROME);
   private boolean headless = properties.getBoolean("selenide.headless", false);
