@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test page :: focusable element</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+
+<h1>Page with focusable element</h1>
+
+<h3 id="username-mirror">_</h3>
+<div style="width: 400px">
+  <form>
+    <fieldset title="Login form">
+      <label> Username:
+        <input id="username" name="username" value=""/>
+      </label> <br/>
+      <input id="password" name="password" type="password"/>
+    </fieldset>
+  </form>
+</div>
+
+<script type="text/javascript">
+  (() => {
+    let value = '';
+    const username = document.getElementById('username');
+
+    username.addEventListener('keyup', (e) => {
+      console.log(e)
+      value = e.target.value;
+    });
+    username.addEventListener('focus', () => {
+      document.getElementById('username-mirror').innerHTML = `Focused: ${value}`;
+    });
+    username.addEventListener('blur', () => {
+      document.getElementById('username-mirror').innerHTML = `Blurred: ${value}`;
+    });
+  })()
+</script>
+
+</body>
+</html>
