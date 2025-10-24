@@ -1,6 +1,5 @@
 package com.codeborne.selenide.fullscreenshot;
 
-import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.Photographer;
 import com.codeborne.selenide.impl.WebdriverPhotographer;
@@ -39,21 +38,19 @@ public class FullSizePhotographer implements Photographer {
   }
 
   @Override
-  public <T> Optional<T> takeScreenshot(Driver driver, OutputType<T> outputType) {
+  public <T> Optional<T> takeScreenshot(WebDriver webDriver, OutputType<T> outputType) {
     try {
-      Optional<T> result = takeFullSizeScreenshot(driver, outputType);
+      Optional<T> result = takeFullSizeScreenshot(webDriver, outputType);
       return result.isPresent() ? result :
-        defaultImplementation.takeScreenshot(driver, outputType);
+        defaultImplementation.takeScreenshot(webDriver, outputType);
     }
     catch (WebDriverException e) {
       log.error("Failed to take full-size screenshot", e);
-      return defaultImplementation.takeScreenshot(driver, outputType);
+      return defaultImplementation.takeScreenshot(webDriver, outputType);
     }
   }
 
-  private <T> Optional<T> takeFullSizeScreenshot(Driver driver, OutputType<T> outputType) {
-    WebDriver webDriver = driver.getWebDriver();
-
+  private <T> Optional<T> takeFullSizeScreenshot(WebDriver webDriver, OutputType<T> outputType) {
     if (webDriver instanceof HasFullPageScreenshot firefoxDriver) {
       return Optional.of(firefoxDriver.getFullPageScreenshotAs(outputType));
     }
@@ -61,12 +58,12 @@ public class FullSizePhotographer implements Photographer {
       return takeScreenshotWithCDP((WebDriver & HasCdp) webDriver, outputType);
     }
     if (webDriver instanceof HasDevTools) {
-      return takeScreenshot((WebDriver & HasDevTools) webDriver, outputType);
+      return takeScreenshotWithDevTools((WebDriver & HasDevTools) webDriver, outputType);
     }
     return Optional.empty();
   }
 
-  private <WD extends WebDriver & HasDevTools, ResultType> Optional<ResultType> takeScreenshot(
+  private <WD extends WebDriver & HasDevTools, ResultType> Optional<ResultType> takeScreenshotWithDevTools(
     WD devtoolsDriver, OutputType<ResultType> outputType
   ) {
     DevTools devTools = devtoolsDriver.getDevTools();

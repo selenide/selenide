@@ -23,11 +23,12 @@ import static com.codeborne.selenide.Selenide.dismiss;
 import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.openqa.selenium.UnexpectedAlertBehaviour.ACCEPT_AND_NOTIFY;
+import static org.openqa.selenium.UnexpectedAlertBehaviour.IGNORE;
 import static org.openqa.selenium.remote.CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR;
 
 final class ConfirmTest extends IntegrationTest {
   private static final String USER_NAME = "John Mc'Clane";
+  private static final String ALERT_TEXT = "Get out of this page, %s?".formatted(USER_NAME);
 
   @AfterAll
   static void tearDown() {
@@ -42,7 +43,7 @@ final class ConfirmTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     timeout = 1000;
-    Configuration.browserCapabilities.setCapability(UNHANDLED_PROMPT_BEHAVIOUR, ACCEPT_AND_NOTIFY);
+    Configuration.browserCapabilities.setCapability(UNHANDLED_PROMPT_BEHAVIOUR, IGNORE);
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(USER_NAME);
@@ -51,14 +52,15 @@ final class ConfirmTest extends IntegrationTest {
   @Test
   void canSubmitConfirmDialogWithoutCheckingText() {
     $(byText("Confirm button")).click();
-    confirm();
+    String text = confirm();
     $("h1").shouldHave(text("Page with JQuery"));
+    assertThat(text).isEqualTo(ALERT_TEXT);
   }
 
   @Test
   void canSubmitConfirmDialogAndCheckText() {
     $(byText("Confirm button")).click();
-    confirm("Get out of this page, " + USER_NAME + '?');
+    confirm(ALERT_TEXT);
     $("h1").shouldHave(text("Page with JQuery"));
   }
 
@@ -74,33 +76,36 @@ final class ConfirmTest extends IntegrationTest {
   void canConfirm_withExpectedText_andCustomTimeout() {
     timeout = 1;
     $(byText("Slow confirm")).click();
-    confirm(withExpectedText("Get out of this page, " + USER_NAME + '?').timeout(ofSeconds(2)));
+    confirm(withExpectedText(ALERT_TEXT).timeout(ofSeconds(2)));
     $("h1").shouldHave(text("Page with JQuery"), ofSeconds(2));
   }
 
   @Test
   void canCancelConfirmDialog() {
     $(byText("Confirm button")).click();
-    dismiss();
+    String text = dismiss();
     $("#message").shouldHave(text("Stay here, " + USER_NAME));
     $("#container").shouldNotBe(empty);
+    assertThat(text).isEqualTo(ALERT_TEXT);
   }
 
   @Test
   void canCancelConfirmDialog_withExpectedText() {
     $(byText("Confirm button")).click();
-    dismiss(withExpectedText("Get out of this page, " + USER_NAME + '?'));
+    String text = dismiss(withExpectedText(ALERT_TEXT));
     $("#message").shouldHave(text("Stay here, " + USER_NAME));
     $("#container").shouldNotBe(empty);
+    assertThat(text).isEqualTo(ALERT_TEXT);
   }
 
   @Test
   void canCancelConfirmDialog_withExpectedText_andCustomTimeout() {
     timeout = 1;
     $(byText("Confirm button")).click();
-    dismiss(withExpectedText("Get out of this page, " + USER_NAME + '?').timeout(ofSeconds(2)));
+    String text = dismiss(withExpectedText(ALERT_TEXT).timeout(ofSeconds(2)));
     $("#message").shouldHave(text("Stay here, " + USER_NAME));
     $("#container").shouldNotBe(empty);
+    assertThat(text).isEqualTo(ALERT_TEXT);
   }
 
   @Test
@@ -108,7 +113,7 @@ final class ConfirmTest extends IntegrationTest {
     $(byText("Confirm button")).click();
     assertThatThrownBy(() -> confirm("Get out of this page, Maria?"))
       .isInstanceOf(DialogTextMismatch.class)
-      .hasMessageContaining("Actual: Get out of this page, John Mc'Clane?")
+      .hasMessageContaining("Actual: Get out of this page, %s?".formatted(USER_NAME))
       .hasMessageContaining("Expected: Get out of this page, Maria?")
       .hasMessageMatching("(?s).*Page source: file:.+\\.html.*")
       .hasMessageMatching("(?s).*Timeout: .+ m?s\\..*");
@@ -117,15 +122,19 @@ final class ConfirmTest extends IntegrationTest {
   @Test
   void confirmReturnsActualDialogText() {
     $(byText("Confirm button")).click();
-    assertThat(confirm())
-      .isEqualTo(String.format("Get out of this page, %s?", USER_NAME));
+    assertThat(confirm()).isEqualTo(ALERT_TEXT);
   }
 
   @Test
   void dismissReturnsActualDialogText() {
     $(byText("Confirm button")).click();
-    assertThat(dismiss())
-      .isEqualTo(String.format("Get out of this page, %s?", USER_NAME));
+    assertThat(dismiss()).isEqualTo(ALERT_TEXT);
+  }
+
+  @Test
+  void dismissWithExpectedText() {
+    $(byText("Confirm button")).click();
+    assertThat(dismiss(ALERT_TEXT)).isEqualTo(ALERT_TEXT);
   }
 
   @Test
@@ -134,8 +143,7 @@ final class ConfirmTest extends IntegrationTest {
     $(byText("Slow confirm")).click();
     String confirmDialogText = confirm();
 
-    assertThat(confirmDialogText)
-      .isEqualTo(String.format("Get out of this page, %s?", USER_NAME));
+    assertThat(confirmDialogText).isEqualTo(ALERT_TEXT);
   }
 
   @Test
@@ -148,5 +156,4 @@ final class ConfirmTest extends IntegrationTest {
       .hasMessageContaining("Page source:")
       .hasCauseInstanceOf(UnhandledAlertException.class);
   }
-
 }

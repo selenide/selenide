@@ -20,8 +20,9 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.Selenide.prompt;
 import static com.codeborne.selenide.Selenide.switchTo;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.openqa.selenium.UnexpectedAlertBehaviour.ACCEPT_AND_NOTIFY;
+import static org.openqa.selenium.UnexpectedAlertBehaviour.IGNORE;
 import static org.openqa.selenium.remote.CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR;
 
 final class AlertTest extends IntegrationTest {
@@ -37,7 +38,7 @@ final class AlertTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {
-    Configuration.browserCapabilities.setCapability(UNHANDLED_PROMPT_BEHAVIOUR, ACCEPT_AND_NOTIFY);
+    Configuration.browserCapabilities.setCapability(UNHANDLED_PROMPT_BEHAVIOUR, IGNORE);
     openFile("page_with_alerts.html");
   }
 
@@ -61,9 +62,10 @@ final class AlertTest extends IntegrationTest {
   @Test
   void canSubmitPromptDialog() {
     $(byValue("Prompt button")).click();
-    prompt("Please input your username", "Aegon Targaryen");
+    String text = prompt("Please input your username", "Aegon Targaryen");
     $("#message").shouldHave(text("Hello, Aegon Targaryen!"));
     $("#container").shouldBe(empty);
+    assertThat(text).isEqualTo("Please input your username");
   }
 
   @Test

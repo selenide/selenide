@@ -107,7 +107,7 @@ public class ScreenShotLaboratory {
   @Nullable
   public <T> T takeScreenShot(Driver driver, OutputType<T> outputType) {
     return ifWebDriverStarted(driver, webDriver ->
-      photographer.takeScreenshot(driver, outputType)
+      photographer.takeScreenshot(webDriver, outputType)
         .map(screenshot -> addToHistoryIfFile(driver.config(), screenshot, outputType))
         .orElse(null));
   }
@@ -215,7 +215,7 @@ public class ScreenShotLaboratory {
   public File takeScreenShotAsFile(Driver driver) {
     return ifWebDriverStarted(driver, webDriver -> {
       try {
-        return photographer.takeScreenshot(driver, FILE)
+        return photographer.takeScreenshot(webDriver, FILE)
           .map(imageFile -> addToImageHistory(driver.config(), imageFile))
           .orElse(null);
       }
@@ -246,7 +246,7 @@ public class ScreenShotLaboratory {
   @Nullable
   protected File savePageImageToFile(Config config, String fileName, Driver driver) {
     try {
-      Optional<byte[]> srcFile = photographer.takeScreenshot(driver, BYTES);
+      Optional<byte[]> srcFile = photographer.takeScreenshot(driver.getWebDriver(), BYTES);
       if (!srcFile.isPresent()) {
         log.info("Webdriver doesn't support screenshots");
         return null;
