@@ -2,7 +2,7 @@ package com.codeborne.selenide;
 
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v141.browser.Browser;
+import org.openqa.selenium.devtools.v142.browser.Browser;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -13,8 +13,8 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
-import static org.openqa.selenium.devtools.v141.browser.model.PermissionType.CLIPBOARDREADWRITE;
-import static org.openqa.selenium.devtools.v141.browser.model.PermissionType.CLIPBOARDSANITIZEDWRITE;
+import static org.openqa.selenium.devtools.v142.browser.model.PermissionType.CLIPBOARDREADWRITE;
+import static org.openqa.selenium.devtools.v142.browser.model.PermissionType.CLIPBOARDSANITIZEDWRITE;
 
 public class DefaultClipboard implements Clipboard {
   private final Driver driver;
