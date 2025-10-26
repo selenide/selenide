@@ -10,6 +10,7 @@ import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Thread.currentThread;
+import static java.util.Collections.emptyList;
 
 /**
  * A `Driver` implementation which opens browser on demand (on a first call).
@@ -120,6 +122,11 @@ public class LazyDriver implements Driver {
   @Override
   public DownloadsFolder browserDownloadsFolder() {
     return wd == null ? null : wd.downloadsFolder();
+  }
+
+  @Override
+  public List<LogEntry> getBrowserLogs() {
+    return wd == null ? emptyList() : wd.browserLogs();
   }
 
   void createDriver() {

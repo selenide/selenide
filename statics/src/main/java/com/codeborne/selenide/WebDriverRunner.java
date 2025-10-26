@@ -5,7 +5,10 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.events.WebDriverListener;
+
+import java.util.List;
 
 import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.headless;
@@ -119,6 +122,10 @@ public class WebDriverRunner {
     return webdriverContainer.getBrowserDownloadsFolder();
   }
 
+  public static List<LogEntry> getBrowserLogs() {
+    return webdriverContainer.getBrowserLogs();
+  }
+
   /**
    * Close the current window, quitting the browser if it's the last window currently open.
    *
@@ -180,6 +187,13 @@ public class WebDriverRunner {
    */
   public static boolean isChrome() {
     return browser().isChrome();
+  }
+
+  /**
+   * Is Selenide configured to use Safari browser
+   */
+  public static boolean isSafari() {
+    return browser().isSafari();
   }
 
   /**

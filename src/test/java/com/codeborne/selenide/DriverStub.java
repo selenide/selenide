@@ -6,8 +6,12 @@ import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.remote.SessionId;
 
+import java.util.List;
+
+import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.mock;
@@ -114,6 +118,11 @@ public class DriverStub implements Driver {
   @Nullable
   public BrowserDownloadsFolder browserDownloadsFolder() {
     return browserDownloadsFolder;
+  }
+
+  @Override
+  public List<LogEntry> getBrowserLogs() {
+    return emptyList();
   }
 
   @Override

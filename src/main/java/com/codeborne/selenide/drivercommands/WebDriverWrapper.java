@@ -8,8 +8,11 @@ import com.codeborne.selenide.impl.WebDriverInstance;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * A `Driver` implementation which uses given webdriver [and proxy].
@@ -70,6 +73,11 @@ public class WebDriverWrapper implements Driver {
   @Nullable
   public DownloadsFolder browserDownloadsFolder() {
     return wd.downloadsFolder();
+  }
+
+  @Override
+  public List<LogEntry> getBrowserLogs() {
+    return wd.browserLogs();
   }
 
   /**
