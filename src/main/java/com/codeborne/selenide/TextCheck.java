@@ -2,20 +2,21 @@ package com.codeborne.selenide;
 
 public enum TextCheck {
   /**
-   * <p>Match the full text.</p>
+   * <p>Match the full text</p>
+   * When this is enabled, command {@code $("h1").shouldHave(text("Hello"))}
+   * matches element {@code <h1>Hello</h1>}, but does not match {@code <h1>Hello World</h1>}
    * <p>
-   * It's a new default behaviour of {@code $.shouldHave(text)} since Selenide 6.5.0
+   * NB! It will be the default behaviour of {@code $.shouldHave(text)} since Selenide 8.0.0
    * </p>
    */
   FULL_TEXT,
 
   /**
    * <p>Match the partial text</p>
+   * When this is enabled, command {@code $("h1").shouldHave(text("Hello"))}
+   * matches both elements {@code <h1>Hello</h1>} and {@code <h1>Hello World</h1>}
    * <p>
-   * It was the default behaviour of {@code $.shouldHave(text)} until Selenide 6.4.0.
-   * </p>
-   * <p>Left here for compatibility:
-   * use it if you have you too many failing tests after upgrading to Selenide 6.5.0.
+   * It is the default behaviour of {@code $.shouldHave(text)} before Selenide 8.0.0.
    * </p>
    */
   PARTIAL_TEXT
