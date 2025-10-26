@@ -5,11 +5,27 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <script type="text/javascript">
-      function generateJSError(input) {
-        $('#my-id').val('tere');
-        document.getElementWithId('display').innerHTML = input.value;
-      }
+    const data = {};
 
+    function triggerReferenceError() {
+      $('#my-id').val('tere');
+    }
+
+    function triggerTypeError1() {
+      data['user1'].value = 'Name1';
+    }
+    function triggerTypeError2() {
+      data['user2'].value = 'Name2';
+    }
+    function triggerTypeError3() {
+      data['user3'].value = 'Name3';
+    }
+    function triggerTypeError4() {
+      data['user4'].value = 'Name4';
+    }
+    function triggerTypeError5() {
+      data['user5'].value = 'Name5';
+    }
   </script>
 </head>
 <body>
@@ -17,7 +33,12 @@
 
 <h3 id="display">___</h3>
 <div>
-  <button onclick="generateJSError(this); return false;">Generate JS Error</button>
+  <button id="trigger-js-error" onclick="triggerReferenceError(this); return false;">Generate JS Error</button>
+  <button id="trigger-type-error1" onclick="triggerTypeError1(); return false;">Trigger TypeError 1</button>
+  <button id="trigger-type-error2" onclick="triggerTypeError2(); return false;">Trigger TypeError 2</button>
+  <button id="trigger-type-error3" onclick="triggerTypeError3(); return false;">Trigger TypeError 3</button>
+  <button id="trigger-type-error4" onclick="triggerTypeError4(); return false;">Trigger TypeError 4</button>
+  <button id="trigger-type-error5" onclick="triggerTypeError5(); return false;">Trigger TypeError 5</button>
 </div>
 </body>
 </html>

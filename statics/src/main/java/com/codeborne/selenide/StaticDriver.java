@@ -3,6 +3,9 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntry;
+
+import java.util.List;
 
 /**
  * A `Driver` implementation which uses thread-local
@@ -45,6 +48,11 @@ class StaticDriver implements Driver {
   @Nullable
   public DownloadsFolder browserDownloadsFolder() {
     return WebDriverRunner.getBrowserDownloadsFolder();
+  }
+
+  @Override
+  public List<LogEntry> getBrowserLogs() {
+    return WebDriverRunner.getBrowserLogs();
   }
 
   @Override

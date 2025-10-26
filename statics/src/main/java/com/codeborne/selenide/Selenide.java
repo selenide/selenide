@@ -1013,6 +1013,10 @@ public class Selenide {
    * Be aware that currently "manage().logs()" is in the Beta stage, but it is beta-then-nothing :)
    * <br>
    *
+   * NB! Every call of this method clears all logs from current "buffer". In other words, the next call will return only the logs
+   * that have been written after the previous call.
+   * @see org.openqa.selenium.logging.Logs#get(String)
+   *
    * @param logType  WebDriver supported log types
    * @param logLevel logging level that will be used to control logging output
    * @return list of log entries

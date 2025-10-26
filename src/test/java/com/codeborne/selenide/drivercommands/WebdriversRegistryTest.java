@@ -8,6 +8,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.io.File;
 
 import static com.codeborne.selenide.BrowserDownloadsFolder.from;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -16,8 +17,8 @@ class WebdriversRegistryTest {
   void register_unregister() {
     RemoteWebDriver wd1 = mock();
     RemoteWebDriver wd2 = mock();
-    WebDriverInstance driver1 = new WebDriverInstance(-1L, new SelenideConfig(), wd1, null, from(new File("/tmp/t1")));
-    WebDriverInstance driver2 = new WebDriverInstance(-2L, new SelenideConfig(), wd2, null, from(new File("/tmp/t2")));
+    WebDriverInstance driver1 = new WebDriverInstance(-1L, new SelenideConfig(), wd1, null, from(new File("/tmp/t1")), emptyList());
+    WebDriverInstance driver2 = new WebDriverInstance(-2L, new SelenideConfig(), wd2, null, from(new File("/tmp/t2")), emptyList());
     WebdriversRegistry.register(driver1);
     WebdriversRegistry.register(driver2);
 

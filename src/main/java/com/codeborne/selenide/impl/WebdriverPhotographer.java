@@ -3,7 +3,6 @@ package com.codeborne.selenide.impl;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.bidi.BiDiException;
 import org.openqa.selenium.bidi.HasBiDi;
 import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
 import org.openqa.selenium.devtools.DevTools;
@@ -13,30 +12,22 @@ import org.openqa.selenium.devtools.v142.page.Page;
 import java.time.Duration;
 import java.util.Optional;
 
+import static com.codeborne.selenide.impl.BiDiUti.isBiDiEnabled;
+
 public class WebdriverPhotographer implements Photographer {
   @Override
   public <T> Optional<T> takeScreenshot(WebDriver webDriver, OutputType<T> outputType) {
     if (webDriver instanceof HasDevTools hasDevTools) { // Chromium - HasDevTools is the fastest way
       return Optional.of(outputType.convertFromBase64Png(takeScreenshotWithDevtools((WebDriver & HasDevTools) hasDevTools)));
     }
-    else if (webDriver instanceof HasBiDi hasBiDi && isBiDiEnabled(hasBiDi)) { // Firefox - BiDi is the fastest
-      return Optional.of(outputType.convertFromBase64Png(takeScreenshotWithBidi((WebDriver & HasBiDi) hasBiDi)));
+    else if (isBiDiEnabled(webDriver)) { // Firefox - BiDi is the fastest
+      return Optional.of(outputType.convertFromBase64Png(takeScreenshotWithBidi((WebDriver & HasBiDi) webDriver)));
     }
     else if (webDriver instanceof TakesScreenshot takesScreenshot) { // other browsers
       T screenshot = takesScreenshot.getScreenshotAs(outputType);
       return Optional.of(screenshot);
     }
     return Optional.empty();
-  }
-
-  private boolean isBiDiEnabled(HasBiDi hasBiDi) {
-    try {
-      hasBiDi.getBiDi();
-      return true;
-    }
-    catch (BiDiException notEnabled) {
-      return false;
-    }
   }
 
   private <T extends WebDriver & HasDevTools> String takeScreenshotWithDevtools(T driver) {
