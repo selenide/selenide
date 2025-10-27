@@ -74,10 +74,10 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
 
   @Test
   void downloadMissingFile() {
-    timeout = 111;
+    timeout = 11;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 111 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 11 ms");
   }
 
   @Test
@@ -132,7 +132,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   @Test
   @SuppressWarnings("deprecation")
   void downloadsFileWithCrdownloadExtension() {
-    File downloadedFile = $(byText("Download file *crdownload")).download(900, withName("hello_world.crdownload"));
+    File downloadedFile = $(byText("Download file *crdownload")).download(timeout, withName("hello_world.crdownload"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.crdownload");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
@@ -143,7 +143,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   @SuppressWarnings("deprecation")
   public void download_slowly() {
     File downloadedFile = $(byText("Download me slowly"))
-      .download(4000, withName("hello_world.txt"));
+      .download(timeout * 2, withName("hello_world.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -152,7 +152,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   @Test
   @SuppressWarnings("deprecation")
   public void download_super_slowly() {
-    File downloadedFile = $(byText("Download me super slowly")).download(6000, withExtension("txt"));
+    File downloadedFile = $(byText("Download me super slowly")).download(timeout * 3, withExtension("txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -161,7 +161,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   @Test
   @SuppressWarnings("deprecation")
   void downloadLargeFile() {
-    File downloadedFile = $(byText("Download large file")).download(8000, withExtension("txt"));
+    File downloadedFile = $(byText("Download large file")).download(timeout * 2, withExtension("txt"));
 
     assertThat(downloadedFile).hasName("large_file.txt");
     assertThat(downloadedFile).hasSize(5 * 1024 * 1024);
