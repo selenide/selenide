@@ -23,7 +23,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v5
       - name: Build with Gradle
         run: ./gradlew ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.39.0-SNAPSHOT --no-parallel --no-daemon --console=plain
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: test-report-linux-${{matrix.gradle-task}}
