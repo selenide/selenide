@@ -85,15 +85,15 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
   @Test
   void downloadMissingFile() {
-    timeout = 111;
+    timeout = 11;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("png")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"png\" in 111 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"png\" in 11 ms");
   }
 
   @Test
   void downloadsPdfFile() {
-    File downloadedFile = $(byText("Download a PDF")).download(file().withExtension("pdf").withTimeout(timeout));
+    File downloadedFile = $(byText("Download a PDF")).download(file().withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).matches("minimal.*.pdf");
     assertThat(downloadedFile).content().startsWith("%PDF-1.1");
@@ -141,7 +141,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
   @Test
   void downloadsFileWithCrdownloadExtension() {
-    File downloadedFile = $(byText("Download file *crdownload")).download(file().withName("hello_world.crdownload").withTimeout(900));
+    File downloadedFile = $(byText("Download file *crdownload")).download(file().withName("hello_world.crdownload"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.crdownload");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
@@ -151,7 +151,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
   @Test
   public void download_slowly() {
     File downloadedFile = $(byText("Download me slowly"))
-      .download(file().withName("hello_world.txt").withTimeout(4000));
+      .download(file().withName("hello_world.txt").withTimeout(timeout * 2));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -159,7 +159,9 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
   @Test
   public void download_super_slowly() {
-    File downloadedFile = $(byText("Download me super slowly")).download(file().withNameMatching("hello.*\\.txt").withTimeout(6000));
+    File downloadedFile = $(byText("Download me super slowly")).download(
+      file().withNameMatching("hello.*\\.txt").withTimeout(timeout * 3)
+    );
 
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
@@ -167,7 +169,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
   @Test
   void downloadLargeFile() {
-    File downloadedFile = $(byText("Download large file")).download(file().withNameMatching("large.*\\.txt").withTimeout(8000));
+    File downloadedFile = $(byText("Download large file")).download(file().withNameMatching("large.*\\.txt").withTimeout(timeout * 2));
 
     assertThat(downloadedFile).hasName("large_file.txt");
     assertThat(downloadedFile).hasSize(5 * 1024 * 1024);
