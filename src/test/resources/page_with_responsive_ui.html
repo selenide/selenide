@@ -12,12 +12,18 @@
       #mobile {
         display: block;
       }
+      body {
+        background-color: pink;
+      }
       @media (min-width: 800px) {
         #desktop {
           display: block;
         }
         #mobile {
           display: none;
+        }
+        body {
+          background-color: #eeeeee;
         }
       }
     </style>
@@ -26,5 +32,22 @@
     <h1>Responsive UI</h1>
     <h2 id="desktop">Desktop</h2>
     <h2 id="mobile">Mobile</h2>
+
+    <h5 id="width"></h5>
+    <h5 id="height"></h5>
+    <h5 id="ratio"></h5>
+
+    <script>
+      function showDeviceInfo() {
+        document.getElementById('width').innerText = `Width: ${window.innerWidth}`
+        document.getElementById('height').innerText = `Height: ${window.innerHeight}`
+        document.getElementById('ratio').innerText = `Device Pixel Ratio: ${window.devicePixelRatio.toFixed(3)}`
+      }
+
+      showDeviceInfo();
+      window.addEventListener('resize', showDeviceInfo);
+      window.addEventListener('orientationchange', showDeviceInfo);
+      setInterval(showDeviceInfo, 500)
+    </script>
   </body>
 </html>

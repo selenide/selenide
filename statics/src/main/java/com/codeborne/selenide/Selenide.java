@@ -129,6 +129,14 @@ public class Selenide {
     return getSelenideDriver().webdriver();
   }
 
+  public static void emulateDevice(Device device) {
+    getSelenideDriver().emulateDevice(device);
+  }
+
+  public static void resetEmulation() {
+    getSelenideDriver().resetEmulation();
+  }
+
   public static void using(WebDriver webDriver, Runnable lambda) {
     WebDriverRunner.using(webDriver, lambda);
   }

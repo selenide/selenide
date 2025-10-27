@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
@@ -47,6 +48,7 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
 
     options.addArguments(createEdgeArguments(config));
     options.setExperimentalOption("prefs", prefs(browserDownloadsFolder, System.getProperty("edgeoptions.prefs", "")));
+    setMobileEmulation(options);
     return options;
   }
 
@@ -56,5 +58,17 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
 
   protected List<String> createEdgeArguments(Config config) {
     return createChromiumArguments(config, System.getProperty("edgeoptions.args"));
+  }
+
+  private void setMobileEmulation(EdgeOptions options) {
+    Map<String, Object> mobileEmulation = mobileEmulation();
+    if (!mobileEmulation.isEmpty()) {
+      options.setExperimentalOption("mobileEmulation", mobileEmulation);
+    }
+  }
+
+  protected Map<String, Object> mobileEmulation() {
+    String mobileEmulation = System.getProperty("edgeoptions.mobileEmulation", "");
+    return parsePreferencesFromString(mobileEmulation);
   }
 }
