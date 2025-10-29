@@ -2,7 +2,6 @@ package it.selenoid;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.FileDownloadMode;
-import com.google.common.collect.ImmutableMap;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -11,12 +10,13 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.files.FileFilters.withExtension;
+import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,7 +53,7 @@ public class SelenoidSetup implements BeforeEachCallback, AfterEachCallback  {
   static DesiredCapabilities capabilities() {
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setBrowserName("chrome");
-    capabilities.setCapability("selenoid:options", ImmutableMap.of(
+    capabilities.setCapability("selenoid:options", Map.of(
       "enableVNC", true,
       "enableVideo", true
     ));
@@ -63,7 +63,7 @@ public class SelenoidSetup implements BeforeEachCallback, AfterEachCallback  {
   @CanIgnoreReturnValue
   static void checkDownload() throws IOException {
     open("/download.html");
-    File file = $(byText("hello-world.txt")).download(withExtension("txt"));
+    File file = $(byText("hello-world.txt")).download(withNameMatching("hello.*\\.txt"));
     assertThat(file).hasName("hello-world.txt");
     assertThat(readFileToString(file, UTF_8)).isEqualTo("Hello, world!");
   }

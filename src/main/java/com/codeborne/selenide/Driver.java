@@ -6,8 +6,11 @@ import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionId;
+
+import java.util.List;
 
 import static com.codeborne.selenide.impl.JavaScript.asJsExecutor;
 import static com.codeborne.selenide.impl.JavaScript.jsExecutor;
@@ -28,6 +31,12 @@ public interface Driver {
 
   @Nullable
   DownloadsFolder browserDownloadsFolder();
+
+  /**
+   * Get browser logs collected via BiDi protocol
+   * @return empty list if BiDi is not enabled in current webdriver instance
+   */
+  List<LogEntry> getBrowserLogs();
 
   void close();
 

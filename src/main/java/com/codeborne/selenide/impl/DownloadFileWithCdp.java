@@ -13,10 +13,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v139.browser.Browser;
-import org.openqa.selenium.devtools.v139.browser.model.DownloadProgress;
-import org.openqa.selenium.devtools.v139.browser.model.DownloadWillBegin;
-import org.openqa.selenium.devtools.v139.page.Page;
+import org.openqa.selenium.devtools.v142.browser.Browser;
+import org.openqa.selenium.devtools.v142.browser.model.DownloadProgress;
+import org.openqa.selenium.devtools.v142.browser.model.DownloadWillBegin;
+import org.openqa.selenium.devtools.v142.page.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,12 +28,11 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
-import static org.openqa.selenium.devtools.v139.browser.Browser.downloadProgress;
-import static org.openqa.selenium.devtools.v139.browser.Browser.downloadWillBegin;
+import static org.openqa.selenium.devtools.v142.browser.Browser.downloadProgress;
+import static org.openqa.selenium.devtools.v142.browser.Browser.downloadWillBegin;
 
 public class DownloadFileWithCdp {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithCdp.class);
@@ -123,22 +122,25 @@ public class DownloadFileWithCdp {
   private DevTools initDevTools(Driver driver) {
     WebDriver webDriver = driver.getWebDriver();
 
-    Optional<HasDevTools> cdpBrowser = cast(webDriver, HasDevTools.class);
-    if (cdpBrowser.isPresent() && isChromium(webDriver)) {
-      DevTools devTools = cdpBrowser.get().getDevTools();
-      devTools.createSessionIfThereIsNotOne();
-      devTools.send(Page.enable(Optional.empty()));
-      return devTools;
-    } else {
+    if (!(webDriver instanceof HasDevTools cdpBrowser)) {
       throw new IllegalArgumentException(
-        "The browser you selected \"%s\" doesn't have Chrome Devtools protocol functionality.".formatted(driver.browser().name));
+        "The browser you selected \"%s\" doesn't support Chrome Devtools protocol".formatted(driver.browser().name));
     }
+
+    if (!isChromium(webDriver)) {
+      throw new IllegalArgumentException(
+        "The browser you selected \"%s\" is not Chromium browser".formatted(driver.browser().name));
+    }
+
+    DevTools devTools = cdpBrowser.getDevTools();
+    devTools.createSessionIfThereIsNotOne();
+    devTools.send(Page.enable(Optional.empty()));
+    return devTools;
   }
 
   private boolean isChromium(WebDriver webDriver) {
-    Optional<HasCapabilities> hasCapabilities = cast(webDriver, HasCapabilities.class);
-    return hasCapabilities.isPresent() &&
-           new com.codeborne.selenide.Browser(hasCapabilities.get().getCapabilities().getBrowserName(), false).isChromium();
+    return webDriver instanceof HasCapabilities hasCapabilities &&
+           new com.codeborne.selenide.Browser(hasCapabilities.getCapabilities().getBrowserName(), false).isChromium();
   }
 
   private void prepareDownloadWithCdp(Driver driver, DevTools devTools,
@@ -191,10 +193,7 @@ public class DownloadFileWithCdp {
     }
 
     private synchronized CdpDownload download(String guid) {
-      if (!downloads.containsKey(guid)) {
-        downloads.put(guid, new CdpDownload(folder));
-      }
-      return downloads.get(guid);
+      return downloads.computeIfAbsent(guid, __ -> new CdpDownload(folder));
     }
   }
 

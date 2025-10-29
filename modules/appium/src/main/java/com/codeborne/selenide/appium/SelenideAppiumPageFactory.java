@@ -29,6 +29,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ByIdOrName;
@@ -41,9 +42,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static io.appium.java_client.remote.options.SupportsAutomationNameOption.AUTOMATION_NAME_OPTION;
 
 public class SelenideAppiumPageFactory extends SelenidePageFactory {
@@ -70,14 +69,14 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
       throw new WebDriverException("The SelenideAppiumPageFactory requires a webdriver instance to be created before page" +
         " initialization; No webdriver is bound to current thread. You need to call open() first");
     }
-    Optional<HasBrowserCheck> hasBrowserCheck = cast(driver, HasBrowserCheck.class);
-    if (hasBrowserCheck.isPresent() && hasBrowserCheck.get().isBrowser()) {
+
+    WebDriver webDriver = driver.getWebDriver();
+    if (webDriver instanceof HasBrowserCheck hasBrowserCheck && hasBrowserCheck.isBrowser()) {
       return new DefaultElementByBuilder(null, null);
     }
 
-    Optional<HasCapabilities> hasCapabilities = cast(driver, HasCapabilities.class);
-    if (hasCapabilities.isPresent()) {
-      Capabilities d = hasCapabilities.get().getCapabilities();
+    if (webDriver instanceof HasCapabilities hasCapabilities) {
+      Capabilities d = hasCapabilities.getCapabilities();
       String platform = String.valueOf(d.getPlatformName());
       String automationName = String.valueOf(d.getCapability(AUTOMATION_NAME_OPTION));
       return new DefaultElementByBuilder(platform, automationName);

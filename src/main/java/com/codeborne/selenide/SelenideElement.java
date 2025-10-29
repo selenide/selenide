@@ -591,15 +591,24 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * @see com.codeborne.selenide.commands.Highlight
+   * @since 6.19.0
    */
   @CanIgnoreReturnValue
   SelenideElement highlight();
 
   /**
    * @see com.codeborne.selenide.commands.Highlight
+   * @since 6.19.0
    */
   @CanIgnoreReturnValue
   SelenideElement highlight(HighlightOptions options);
+
+  /**
+   * @see com.codeborne.selenide.commands.Unhighlight
+   * @since 7.12.0
+   */
+  @CanIgnoreReturnValue
+  SelenideElement unhighlight();
 
   /**
    * Give this element a human-readable name

@@ -6,7 +6,10 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.events.WebDriverListener;
+
+import java.util.List;
 
 public interface WebDriverContainer {
   void addListener(WebDriverListener listener);
@@ -25,6 +28,8 @@ public interface WebDriverContainer {
 
   @Nullable
   DownloadsFolder getBrowserDownloadsFolder();
+
+  List<LogEntry> getBrowserLogs();
 
   void closeWindow();
   void closeWebDriver();

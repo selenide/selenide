@@ -15,9 +15,14 @@ import com.codeborne.selenide.selector.FocusedElementLocator;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.devtools.v142.emulation.Emulation;
 import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.support.events.WebDriverListener;
 
@@ -27,25 +32,28 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static com.codeborne.selenide.commands.Util.classOf;
 import static com.codeborne.selenide.files.FileFilters.none;
+import static com.codeborne.selenide.impl.BiDiUti.isBiDiEnabled;
 import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
+import static java.util.Optional.empty;
 
 /**
  * "Selenide driver" is a container for WebDriver + proxy server + settings
  */
 public class SelenideDriver {
-  private static final JavaScript zoomJs = new JavaScript("zoom.js");
-  private static final Navigator navigator = new Navigator();
-  private static final ScreenShotLaboratory screenshots = inject();
+  private final JavaScript zoomJs = new JavaScript("zoom.js");
+  private final Navigator navigator = new Navigator();
 
   private final Config config;
   private final Driver driver;
+  private final ScreenShotLaboratory screenshots;
 
   public SelenideDriver(Config config) {
     this(config, emptyList());
@@ -56,8 +64,11 @@ public class SelenideDriver {
   }
 
   public SelenideDriver(Config config, Driver driver) {
-    this.config = config;
-    this.driver = driver;
+    this(config, driver, inject());
+  }
+
+  public SelenideDriver(Config config, List<WebDriverListener> listeners, ScreenShotLaboratory screenshots) {
+    this(config, new LazyDriver(config, null, listeners), screenshots);
   }
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
@@ -66,8 +77,23 @@ public class SelenideDriver {
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
                         DownloadsFolder browserDownloadsFolder) {
+    this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder), inject());
+  }
+
+  public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
+                        ScreenShotLaboratory screenshots) {
+    this(config, webDriver, selenideProxy, new SharedDownloadsFolder(config.downloadsFolder()), screenshots);
+  }
+
+  public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
+                        DownloadsFolder browserDownloadsFolder, ScreenShotLaboratory screenshots) {
+    this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder), screenshots);
+  }
+
+  public SelenideDriver(Config config, Driver driver, ScreenShotLaboratory screenshots) {
     this.config = config;
-    this.driver = new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder);
+    this.driver = driver;
+    this.screenshots = screenshots;
   }
 
   public Config config() {
@@ -452,14 +478,54 @@ public class SelenideDriver {
     return inject(ClipboardService.class).getClipboard(driver());
   }
 
-  private static final PageObjectFactory pageFactory = inject(PageObjectFactory.class);
-  private static final Lazy<DownloadFileWithHttpRequest> downloadFileWithHttpRequest = lazyEvaluated(DownloadFileWithHttpRequest::new);
+  private final PageObjectFactory pageFactory = inject(PageObjectFactory.class);
+  private final Lazy<DownloadFileWithHttpRequest> downloadFileWithHttpRequest = lazyEvaluated(DownloadFileWithHttpRequest::new);
 
-  private static synchronized DownloadFileWithHttpRequest downloadFileWithHttpRequest() {
+  private synchronized DownloadFileWithHttpRequest downloadFileWithHttpRequest() {
     return downloadFileWithHttpRequest.get();
   }
 
   public Conditional<WebDriver> webdriver() {
     return new WebDriverConditional(driver);
+  }
+
+  public void emulateDevice(Device device) {
+    int width = device.width();
+    int height = device.height();
+    double pixelRatio = device.pixelRatio();
+    WebDriver webDriver = driver().getWebDriver();
+    if (webDriver instanceof HasDevTools devToolsBrowser) { // Chromium browsers
+      DevTools devTools = devToolsBrowser.getDevTools();
+      devTools.createSessionIfThereIsNotOne();
+      devTools.send(Emulation.setDeviceMetricsOverride(
+        width, height, pixelRatio, true, empty(),
+        Optional.of(width), Optional.of(height),
+        empty(), empty(), empty(), empty(), empty(), empty(), empty()
+      ));
+    }
+    else if (isBiDiEnabled(webDriver)) { // Firefox
+      BrowsingContext browsingContext = new BrowsingContext(webDriver, webDriver.getWindowHandle());
+      browsingContext.setViewport(width, height, pixelRatio);
+    }
+    else {
+      throw new UnsupportedOperationException("Mobile emulation is not enabled in " + webDriver);
+    }
+  }
+
+  public void resetEmulation() {
+    WebDriver webDriver = driver().getWebDriver();
+    if (webDriver instanceof HasDevTools devToolsBrowser) { // Chromium browsers
+      DevTools devTools = devToolsBrowser.getDevTools();
+      devTools.createSessionIfThereIsNotOne();
+      devTools.send(Emulation.clearDeviceMetricsOverride());
+    }
+    else if (isBiDiEnabled(webDriver)) { // Firefox
+      BrowsingContext browsingContext = new BrowsingContext(webDriver, webDriver.getWindowHandle());
+      Dimension size = webDriver.manage().window().getSize();
+      browsingContext.setViewport(size.getWidth(), size.getHeight());
+    }
+    else {
+      throw new UnsupportedOperationException("Mobile emulation is not enabled in " + webDriver);
+    }
   }
 }

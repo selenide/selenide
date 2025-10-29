@@ -1,18 +1,16 @@
 package com.codeborne.selenide.fullscreenshot;
 
-import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.Photographer;
 import com.codeborne.selenide.impl.WebdriverPhotographer;
-import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chromium.HasCdp;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v139.page.Page;
-import org.openqa.selenium.devtools.v139.page.model.Viewport;
+import org.openqa.selenium.devtools.v142.page.Page;
+import org.openqa.selenium.devtools.v142.page.model.Viewport;
 import org.openqa.selenium.firefox.HasFullPageScreenshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.unwrap;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -41,21 +38,19 @@ public class FullSizePhotographer implements Photographer {
   }
 
   @Override
-  public <T> Optional<T> takeScreenshot(Driver driver, OutputType<T> outputType) {
+  public <T> Optional<T> takeScreenshot(WebDriver webDriver, OutputType<T> outputType) {
     try {
-      Optional<T> result = takeFullSizeScreenshot(driver, outputType);
+      Optional<T> result = takeFullSizeScreenshot(webDriver, outputType);
       return result.isPresent() ? result :
-        defaultImplementation.takeScreenshot(driver, outputType);
+        defaultImplementation.takeScreenshot(webDriver, outputType);
     }
     catch (WebDriverException e) {
       log.error("Failed to take full-size screenshot", e);
-      return defaultImplementation.takeScreenshot(driver, outputType);
+      return defaultImplementation.takeScreenshot(webDriver, outputType);
     }
   }
 
-  private <T> Optional<T> takeFullSizeScreenshot(Driver driver, OutputType<T> outputType) {
-    WebDriver webDriver = unwrap(driver.getWebDriver());
-
+  private <T> Optional<T> takeFullSizeScreenshot(WebDriver webDriver, OutputType<T> outputType) {
     if (webDriver instanceof HasFullPageScreenshot firefoxDriver) {
       return Optional.of(firefoxDriver.getFullPageScreenshotAs(outputType));
     }
@@ -63,12 +58,12 @@ public class FullSizePhotographer implements Photographer {
       return takeScreenshotWithCDP((WebDriver & HasCdp) webDriver, outputType);
     }
     if (webDriver instanceof HasDevTools) {
-      return takeScreenshot((WebDriver & HasDevTools) webDriver, outputType);
+      return takeScreenshotWithDevTools((WebDriver & HasDevTools) webDriver, outputType);
     }
     return Optional.empty();
   }
 
-  private <WD extends WebDriver & HasDevTools, ResultType> Optional<ResultType> takeScreenshot(
+  private <WD extends WebDriver & HasDevTools, ResultType> Optional<ResultType> takeScreenshotWithDevTools(
     WD devtoolsDriver, OutputType<ResultType> outputType
   ) {
     DevTools devTools = devtoolsDriver.getDevTools();
@@ -95,8 +90,8 @@ public class FullSizePhotographer implements Photographer {
     WD cdpDriver, OutputType<ResultType> outputType
   ) {
     Options options = getOptions(cdpDriver);
-    Map<String, Object> captureScreenshotOptions = ImmutableMap.of(
-      "clip", ImmutableMap.of(
+    Map<String, Object> captureScreenshotOptions = Map.of(
+      "clip", Map.of(
         "x", 0,
         "y", 0,
         "width", options.fullWidth(),

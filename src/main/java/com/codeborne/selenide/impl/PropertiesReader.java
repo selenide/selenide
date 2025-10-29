@@ -1,6 +1,5 @@
-package com.codeborne.selenide;
+package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.impl.Lazy;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,7 @@ import java.util.Properties;
 
 import static com.codeborne.selenide.impl.Lazy.lazyEvaluated;
 
-public final class PropertiesReader {
+public class PropertiesReader {
   private static final Logger log = LoggerFactory.getLogger(PropertiesReader.class);
 
   private final String fileName;

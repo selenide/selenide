@@ -44,4 +44,12 @@ final class BrowserTest {
     assertThat(new Browser(IE, false).supportsInsecureCerts()).isFalse();
     assertThat(new Browser(INTERNET_EXPLORER, false).supportsInsecureCerts()).isFalse();
   }
+
+  @Test
+  void stringRepresentationInLogs() {
+    assertThat(new Browser(CHROME, false)).hasToString("Browser{chrome}");
+    assertThat(new Browser(IE, false)).hasToString("Browser{ie}");
+    assertThat(new Browser(IE, true)).hasToString("Browser{ie:headless}");
+    assertThat(new Browser(INTERNET_EXPLORER, true)).hasToString("Browser{internet explorer:headless}");
+  }
 }

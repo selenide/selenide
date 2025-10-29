@@ -41,6 +41,7 @@ import static com.codeborne.selenide.impl.Screenshot.none;
 import static java.io.File.separatorChar;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
 import static java.util.Objects.requireNonNullElseGet;
@@ -56,7 +57,7 @@ public class ScreenShotLaboratory {
   private final Photographer photographer;
   private final PageSourceExtractor extractor;
   private final AttachmentHandler attachmentHandler;
-  private final Clock clock;
+  protected final Clock clock;
   protected final List<Screenshot> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
 
@@ -64,11 +65,12 @@ public class ScreenShotLaboratory {
   protected final ThreadLocal<@Nullable List<Screenshot>> currentContextScreenshots = new ThreadLocal<>();
   protected final ThreadLocal<List<Screenshot>> threadScreenshots = withInitial(ArrayList::new);
 
-  private ScreenShotLaboratory() {
+  protected ScreenShotLaboratory() {
     this(inject(), inject(), inject(), new Clock());
   }
 
-  ScreenShotLaboratory(Photographer photographer, PageSourceExtractor extractor, AttachmentHandler attachmentHandler, Clock clock) {
+  protected ScreenShotLaboratory(Photographer photographer, PageSourceExtractor extractor, AttachmentHandler attachmentHandler,
+                                 Clock clock) {
     this.photographer = photographer;
     this.extractor = extractor;
     this.attachmentHandler = attachmentHandler;
@@ -105,7 +107,7 @@ public class ScreenShotLaboratory {
   @Nullable
   public <T> T takeScreenShot(Driver driver, OutputType<T> outputType) {
     return ifWebDriverStarted(driver, webDriver ->
-      photographer.takeScreenshot(driver, outputType)
+      photographer.takeScreenshot(webDriver, outputType)
         .map(screenshot -> addToHistoryIfFile(driver.config(), screenshot, outputType))
         .orElse(null));
   }
@@ -213,7 +215,7 @@ public class ScreenShotLaboratory {
   public File takeScreenShotAsFile(Driver driver) {
     return ifWebDriverStarted(driver, webDriver -> {
       try {
-        return photographer.takeScreenshot(driver, FILE)
+        return photographer.takeScreenshot(webDriver, FILE)
           .map(imageFile -> addToImageHistory(driver.config(), imageFile))
           .orElse(null);
       }
@@ -237,22 +239,14 @@ public class ScreenShotLaboratory {
 
   @CanIgnoreReturnValue
   private File addToImageHistory(Config config, File imageFile) {
-    Screenshot screenshot = new Screenshot(imageFile, toUrl(config, imageFile), null);
-    List<Screenshot> contextScreenshots = currentContextScreenshots.get();
-    if (contextScreenshots != null) {
-      contextScreenshots.add(screenshot);
-    }
-    synchronized (allScreenshots) {
-      allScreenshots.add(screenshot);
-    }
-    threadScreenshots.get().add(screenshot);
+    addToHistory(new Screenshot(imageFile, toUrl(config, imageFile), null));
     return imageFile;
   }
 
   @Nullable
   protected File savePageImageToFile(Config config, String fileName, Driver driver) {
     try {
-      Optional<byte[]> srcFile = photographer.takeScreenshot(driver, BYTES);
+      Optional<byte[]> srcFile = photographer.takeScreenshot(driver.getWebDriver(), BYTES);
       if (!srcFile.isPresent()) {
         log.info("Webdriver doesn't support screenshots");
         return null;
@@ -305,6 +299,12 @@ public class ScreenShotLaboratory {
         .map(screenshot -> screenshot.getImageFile())
         .filter(image -> image != null)
         .toList();
+    }
+  }
+
+  public List<Screenshot> screenshots() {
+    synchronized (allScreenshots) {
+      return unmodifiableList(allScreenshots);
     }
   }
 

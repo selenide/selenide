@@ -4,6 +4,8 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
@@ -17,7 +19,7 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class RemoteWebDriverTest extends AbstractGridTest {
   @Nullable
-  private RemoteWebDriver driver;
+  private WebDriver driver;
 
   @BeforeEach
   void setUp() {
@@ -27,7 +29,7 @@ public class RemoteWebDriverTest extends AbstractGridTest {
 
   @Test
   void canOpenCustomRemoteWebDriver() {
-    driver = new RemoteWebDriver(gridUrl(), chromeOptions(null));
+    driver = new Augmenter().augment(new RemoteWebDriver(gridUrl(), chromeOptions(null)));
     WebDriverRunner.setWebDriver(driver);
     openFile("page_with_uploads.html");
 

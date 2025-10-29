@@ -4,7 +4,6 @@ import com.codeborne.selenide.files.DownloadedFile;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Collections.emptyMap;
@@ -53,15 +52,11 @@ final class DownloadDetectorTest {
   }
 
   private Map<String, String> withContentDisposition(String contentType) {
-    Map<String, String> map = new HashMap<>();
-    map.put("content-disposition", contentType);
-    return map;
+    return Map.of("content-disposition", contentType);
   }
 
   private Map<String, String> withContentType(String contentType) {
-    Map<String, String> map = new HashMap<>();
-    map.put("content-type", contentType);
-    return map;
+    return Map.of("content-type", contentType);
   }
 
   private File fileCreatedSecondsAgo(String name, int secondsAgo) {

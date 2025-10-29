@@ -35,7 +35,7 @@ final class ImageTest extends ITest {
     assertThatThrownBy(() -> $("#invalid-image img").shouldBe(image))
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("Element should be image {#invalid-image img}")
-      .hasMessageContaining("Element: '<img alt=\"missing-logo\" src=\"/files/selenide-unexisting-logo.png\"></img>'")
+      .hasMessageContaining("Element: '<img alt=\"Imaginary logo\" class=\"imaginary-logo\" src=\"/files/")
       .hasMessageContaining("Actual value: false");
   }
 

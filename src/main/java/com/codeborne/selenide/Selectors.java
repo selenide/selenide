@@ -1,17 +1,25 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.SelenideProperties;
 import com.codeborne.selenide.selector.ByAttribute;
 import com.codeborne.selenide.selector.ByDeepShadowCss;
+import com.codeborne.selenide.selector.ByLabel;
 import com.codeborne.selenide.selector.ByShadowCss;
 import com.codeborne.selenide.selector.ByTagAndText;
 import com.codeborne.selenide.selector.ByText;
-import com.codeborne.selenide.selector.ByTextCaseInsensitive;
+import com.codeborne.selenide.selector.SearchByAttribute;
+import com.codeborne.selenide.selector.SearchByText;
 import com.codeborne.selenide.selector.WithTagAndText;
 import com.codeborne.selenide.selector.WithText;
-import com.codeborne.selenide.selector.WithTextCaseInsensitive;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.TextMatchOptions.fullText;
+import static com.codeborne.selenide.TextMatchOptions.partialText;
+
 public class Selectors {
+  private static final SelenideProperties properties = new SelenideProperties();
+  private static final String DEFAULT_TEST_ID = "data-test-id";
+
   /**
    * Find element CONTAINING given text (as a substring).
    * <p>
@@ -44,7 +52,7 @@ public class Selectors {
    * @since 5.22.0
    */
   public static By withTextCaseInsensitive(String elementText) {
-    return new WithTextCaseInsensitive(elementText);
+    return new SearchByText(elementText, partialText().caseInsensitive());
   }
 
   /**
@@ -81,7 +89,34 @@ public class Selectors {
    * @since 5.22.0
    */
   public static By byTextCaseInsensitive(String elementText) {
-    return new ByTextCaseInsensitive(elementText);
+    return new SearchByText(elementText, fullText().caseInsensitive());
+  }
+
+  public static By byLabel(String elementText) {
+    return byLabel(elementText, fullText());
+  }
+
+  public static By byLabel(String elementText, TextMatchOptions options) {
+    return new ByLabel(elementText, options);
+  }
+
+  /**
+   * Find element by "placeholder" attribute
+   * @param placeholderText the expected placeholder value to find by
+   * @since 7.12.0
+   */
+  public static By byPlaceholder(String placeholderText) {
+    return byPlaceholder(placeholderText, fullText());
+  }
+
+  /**
+   * Find element by "placeholder" attribute
+   * @param placeholderText the expected placeholder value to find by
+   * @param options either case-sensitive or insensitive, either full text or substring etc.
+   * @since 7.12.0
+   */
+  public static By byPlaceholder(String placeholderText, TextMatchOptions options) {
+    return byAttribute("placeholder", placeholderText, options);
   }
 
   /**
@@ -118,15 +153,22 @@ public class Selectors {
   }
 
   /**
-   * @see ByShadowCss#cssSelector(java.lang.String, java.lang.String, java.lang.String...)
-   * @since 5.10
+   * @since 7.12.0
    */
-  public static By shadowCss(String target, String shadowHost, String... innerShadowHosts) {
-    return ByShadowCss.cssSelector(target, shadowHost, innerShadowHosts);
+  public static By byAttribute(String attributeName, String attributeValue, TextMatchOptions options) {
+    return new SearchByAttribute(attributeName, attributeValue, options);
   }
 
   /**
-   * @see ByDeepShadowCss#cssSelector(java.lang.String)
+   * @see ByShadowCss#cssSelector(java.lang.String, java.lang.String...)
+   * @since 5.10
+   */
+  public static By shadowCss(String target, String... shadowHostsChain) {
+    return ByShadowCss.cssSelector(target, shadowHostsChain);
+  }
+
+  /**
+   * @see ByDeepShadowCss#ByDeepShadowCss(java.lang.String)
    * @since v6.8.0
    */
   public static By shadowDeepCss(String target) {
@@ -145,6 +187,46 @@ public class Selectors {
    */
   public static By byTitle(String title) {
     return byAttribute("title", title);
+  }
+
+  /**
+   * Find element with given title ("title" attribute)
+   * @since 7.12.0
+   */
+  public static By byTitle(String title, TextMatchOptions options) {
+    return byAttribute("title", title, options);
+  }
+
+  /**
+   * Find element with given "alt" attribute
+   *
+   * @since 7.12.0
+   */
+  public static By byAltText(String title) {
+    return byAttribute("alt", title);
+  }
+
+  /**
+   * Find element with given "alt" attribute
+   *
+   * @since 7.12.0
+   */
+  public static By byAltText(String title, TextMatchOptions options) {
+    return byAttribute("alt", title, options);
+  }
+
+  /**
+   * Find element with given "data-test-id" attribute
+   *
+   * Name of "data-test-id" attribute can be customized:
+   * <ul>
+   *   <li>via system property: {@code -Dselenide.test-id.attribute=data-testid}, or</li>
+   *   <li>in file "selenide.properties": {@code selenide.test-id.attribute=data-testid}</li>
+   * </ul>
+   * @since 7.12.0
+   */
+  public static By byTestId(String testId) {
+    return byAttribute(properties.getProperty("selenide.test-id.attribute", DEFAULT_TEST_ID), testId);
   }
 
   /**

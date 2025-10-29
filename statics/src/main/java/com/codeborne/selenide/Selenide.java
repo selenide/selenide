@@ -129,6 +129,14 @@ public class Selenide {
     return getSelenideDriver().webdriver();
   }
 
+  public static void emulateDevice(Device device) {
+    getSelenideDriver().emulateDevice(device);
+  }
+
+  public static void resetEmulation() {
+    getSelenideDriver().resetEmulation();
+  }
+
   public static void using(WebDriver webDriver, Runnable lambda) {
     WebDriverRunner.using(webDriver, lambda);
   }
@@ -1012,6 +1020,10 @@ public class Selenide {
    * <br>
    * Be aware that currently "manage().logs()" is in the Beta stage, but it is beta-then-nothing :)
    * <br>
+   *
+   * NB! Every call of this method clears all logs from current "buffer". In other words, the next call will return only the logs
+   * that have been written after the previous call.
+   * @see org.openqa.selenium.logging.Logs#get(String)
    *
    * @param logType  WebDriver supported log types
    * @param logLevel logging level that will be used to control logging output

@@ -5,13 +5,14 @@ import com.codeborne.selenide.testng.BrowserPerTest;
 import com.codeborne.selenide.testng.ScreenShooter;
 import com.codeborne.selenide.testng.SoftAsserts;
 import com.codeborne.selenide.testng.TextReport;
-import com.google.common.collect.ImmutableMap;
 import integration.server.LocalHttpServer;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
+
+import java.util.Map;
 
 import static com.codeborne.selenide.AssertionMode.STRICT;
 
@@ -30,7 +31,7 @@ abstract class BaseTest {
   final void startServer() throws Exception {
     if (server == null) {
       log.info("START {} Test NG tests", Configuration.browser);
-      server = LocalHttpServer.startWithRetry(true, "no-cors-allowed", ImmutableMap.of("scott", "tiger")).start();
+      server = LocalHttpServer.startWithRetry(true, "no-cors-allowed", Map.of("scott", "tiger")).start();
       Configuration.baseUrl = "https://127.0.0.1:" + server.getPort();
       log.info("Server started at {}", Configuration.baseUrl);
     }

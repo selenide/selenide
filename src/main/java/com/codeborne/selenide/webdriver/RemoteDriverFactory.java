@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Config;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.CommandExecutor;
 import org.openqa.selenium.remote.HttpCommandExecutor;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -18,10 +19,15 @@ import static java.util.Objects.requireNonNull;
 public class RemoteDriverFactory {
   public WebDriver create(Config config, MutableCapabilities capabilities) {
     try {
+      Object cdpEnabled = capabilities.getCapability("se:cdpEnabled");
       CommandExecutor commandExecutor = createExecutor(config);
       RemoteWebDriver webDriver = new RemoteWebDriver(commandExecutor, capabilities);
       webDriver.setFileDetector(new LocalFileDetector());
-      return webDriver;
+      if (cdpEnabled != null && webDriver.getCapabilities() instanceof MutableCapabilities webdriverCapabilities) {
+        webdriverCapabilities.setCapability("se:cdpEnabled", cdpEnabled);
+      }
+
+      return new Augmenter().augment(webDriver);
     }
     catch (MalformedURLException e) {
       throw new IllegalArgumentException("Invalid 'remote' parameter: " + config.remote(), e);

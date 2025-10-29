@@ -7,6 +7,7 @@ import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.File;
@@ -42,7 +43,7 @@ final class ScreenShotLaboratoryTest {
 
   @BeforeEach
   void setUp() {
-    when(photographer.takeScreenshot(any(), eq(BYTES))).thenAnswer((Answer<Optional<byte[]>>) invocation -> {
+    when(photographer.takeScreenshot(any(WebDriver.class), eq(BYTES))).thenAnswer((Answer<Optional<byte[]>>) invocation -> {
       return Optional.of("some png source".getBytes(UTF_8));
     });
   }

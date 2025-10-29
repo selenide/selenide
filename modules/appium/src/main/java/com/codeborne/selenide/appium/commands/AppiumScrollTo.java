@@ -8,20 +8,20 @@ import com.codeborne.selenide.appium.ScrollDirection;
 import com.codeborne.selenide.commands.ScrollTo;
 import com.codeborne.selenide.impl.Arguments;
 import com.codeborne.selenide.impl.WebElementSource;
-import io.appium.java_client.AppiumDriver;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Interactive;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 
 import java.util.Arrays;
-import java.util.Optional;
 
+import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.with;
 import static com.codeborne.selenide.appium.ScrollDirection.DOWN;
 import static com.codeborne.selenide.commands.Util.firstOf;
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static java.time.Duration.ofMillis;
 import static java.util.Collections.singletonList;
 
@@ -31,12 +31,11 @@ public class AppiumScrollTo extends FluentCommand {
 
   @Override
   protected void execute(WebElementSource locator, Object @Nullable [] args) {
-    Optional<AppiumDriver> driver = cast(locator.driver(), AppiumDriver.class);
-    if (!driver.isPresent()) {
-      scrollInWebBrowser(locator, args);
+    if (isMobile(locator.driver())) {
+      scrollInMobile(locator.driver().getWebDriver(), locator, args);
     }
     else {
-      scrollInMobile(driver.get(), locator, args);
+      scrollInWebBrowser(locator, args);
     }
   }
 
@@ -57,7 +56,7 @@ public class AppiumScrollTo extends FluentCommand {
     webImplementation.execute(locator, args);
   }
 
-  private void scrollInMobile(AppiumDriver appiumDriver, WebElementSource locator, Object @Nullable [] args) {
+  private void scrollInMobile(WebDriver appiumDriver, WebElementSource locator, Object @Nullable [] args) {
     if (new Arguments(args).ofType(ScrollOptions.class).isPresent()) {
       throw new IllegalArgumentException("Use scroll(AppiumScrollOptions) instead of scroll(ScrollOptions)");
     }
@@ -85,16 +84,16 @@ public class AppiumScrollTo extends FluentCommand {
     }
   }
 
-  private Dimension getMobileDeviceSize(AppiumDriver appiumDriver) {
+  private Dimension getMobileDeviceSize(WebDriver appiumDriver) {
     return appiumDriver.manage().window().getSize();
   }
 
-  private void performScroll(AppiumDriver appiumDriver, ScrollDirection scrollDirection, float top, float bottom) {
+  private void performScroll(WebDriver appiumDriver, ScrollDirection scrollDirection, float top, float bottom) {
     Dimension size = getMobileDeviceSize(appiumDriver);
     AppiumScrollCoordinates scrollCoordinates = getScrollCoordinates(scrollDirection, size, top, bottom);
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
     Sequence sequenceToPerformScroll = getSequenceToPerformScroll(finger, scrollCoordinates);
-    appiumDriver.perform(singletonList(sequenceToPerformScroll));
+    ((Interactive) appiumDriver).perform(singletonList(sequenceToPerformScroll));
   }
 
   private AppiumScrollCoordinates getScrollCoordinates(ScrollDirection scrollDirection, Dimension size, float top, float bottom) {

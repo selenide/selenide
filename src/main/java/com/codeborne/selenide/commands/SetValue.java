@@ -15,8 +15,8 @@ import static com.codeborne.selenide.SetValueMethod.SEND_KEYS;
 import static com.codeborne.selenide.SetValueOptions.withText;
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.impl.Plugins.inject;
-import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNullElse;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class SetValue extends FluentCommand {
@@ -50,7 +50,7 @@ public class SetValue extends FluentCommand {
 
   private void setValueForTextInput(Driver driver, WebElementSource locator, SetValueOptions options) {
     WebElement element = locator.findAndAssertElementIsEditable();
-    CharSequence value = firstNonNull(options.value(), "");
+    CharSequence value = requireNonNullElse(options.value(), "");
 
     if (options.method() == JS) {
       String error = setValueByJs(driver, element, value);

@@ -20,12 +20,19 @@ final class HighlightTest extends IntegrationTest {
   void canHighlightElements() {
     $("#username").highlight(border("3px solid blue")).setValue("john");
     sleep(pause);
+    $("#username").unhighlight();
+    sleep(pause);
     $("#usernameHint").highlight();
+    sleep(pause);
+    $("#usernameHint").unhighlight();
     sleep(pause);
     $("#password").highlight(border("3px solid red")).setValue("admin");
     sleep(pause);
+    $("#password").unhighlight();
+    sleep(pause);
     $("#passwordHint").highlight(border("3px solid green")).should(appear);
     sleep(pause);
+    $("#passwordHint").unhighlight();
+    sleep(pause);
   }
-
 }

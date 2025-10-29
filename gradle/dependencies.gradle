@@ -1,20 +1,20 @@
 ext {
-  seleniumVersionStable = '4.35.0'
+  seleniumVersionStable = '4.38.0'
   seleniumVersion = project.properties['seleniumVersionNightlyBuild'] ?: seleniumVersionStable
-  httpClientVersion = '5.5'
-  junitVersion = '5.13.4'
+  httpClientVersion = '5.5.1'
+  junitVersion = '6.0.0'
   testngVersion = '7.11.0'
   jettyVersion = '11.0.25'
-  nettyVersion = '4.2.4.Final'
-  assertjVersion = '3.27.4'
-  mockitoVersion = '5.19.0'
+  nettyVersion = '4.2.7.Final'
+  assertjVersion = '3.27.6'
+  mockitoVersion = '5.20.0'
   slf4jVersion = '2.0.17'
-  browserupProxyVersion = '3.2.1'
-  littleProxyVersion = '2.4.4'
+  browserupProxyVersion = '3.2.2'
+  littleProxyVersion = '2.4.6'
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.9'
   archunitVersion = '1.4.1'
-  jacksonVersion = '2.19.2'
+  jacksonVersion = '2.20.0'
   systemStubsVersion = '2.1.8'
 }
 
@@ -52,9 +52,8 @@ subprojects {
       exclude group: 'com.google.code.findbugs'
     }
     implementation('org.jspecify:jspecify:1.0.0')
-    implementation('com.google.errorprone:error_prone_annotations:2.41.0')
-    implementation("com.google.guava:guava:33.4.8-jre")
-    implementation("org.apache.commons:commons-lang3:3.18.0")
+    implementation('com.google.errorprone:error_prone_annotations:2.43.0')
+    implementation("org.apache.commons:commons-lang3:3.19.0")
     implementation("commons-io:commons-io:2.20.0")
     testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core") {
       exclude group: 'xyz.rogfam' // "xyz.rogfam:littleproxy" was moved to "io.github.littleproxy:littleproxy"

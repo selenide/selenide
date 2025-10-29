@@ -1,14 +1,9 @@
 package org.selenide.videorecorder.core;
 
 import com.codeborne.selenide.drivercommands.WebdriversRegistry;
+import com.codeborne.selenide.impl.Photographer;
 import com.codeborne.selenide.impl.WebDriverInstance;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.bidi.HasBiDi;
-import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
-import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v139.page.Page;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,37 +12,28 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.Duration;
-import java.util.Optional;
 import java.util.Queue;
-import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.lang.System.nanoTime;
 import static java.lang.Thread.currentThread;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.openqa.selenium.OutputType.BYTES;
 
-class ScreenShooter extends TimerTask {
+class ScreenShooter implements Runnable {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooter.class);
+  private final Photographer photographer = inject();
   private final AtomicLong screenshotCounter = new AtomicLong();
   private final long threadId;
   private final File screenshotsFolder;
   private final Queue<Screenshot> screenshots;
-  private final AtomicBoolean cancelled = new AtomicBoolean(false);
 
   ScreenShooter(long threadId, File screenshotsFolder, Queue<Screenshot> screenshots) {
     this.threadId = threadId;
     this.screenshots = screenshots;
     this.screenshotsFolder = screenshotsFolder;
-  }
-
-  @Override
-  public boolean cancel() {
-    cancelled.set(true);
-    return super.cancel();
   }
 
   @Override
@@ -62,11 +48,6 @@ class ScreenShooter extends TimerTask {
       originalName, threadId, screenshotsFolder.getName(), screenshots.size()));
 
     try {
-      if (cancelled.get()) {
-        log.warn("Screen shooter has been cancelled");
-        return;
-      }
-
       WebdriversRegistry.webdriver(threadId).ifPresentOrElse(driver -> {
         takeScreenshot(driver);
       }, () -> {
@@ -102,44 +83,8 @@ class ScreenShooter extends TimerTask {
   }
 
   private byte[] takeScreenshot(WebDriver webDriver) {
-    if (webDriver instanceof HasDevTools hasDevTools) { // Chromium - HasDevTools is the fastest way
-      return takeScreenshotWithDevtools((WebDriver & HasDevTools) hasDevTools);
-    }
-    else if (webDriver instanceof HasBiDi hasBiDi) { // Firefox - BiDi is the fastest
-      return takeScreenshotWithBidi((WebDriver & HasBiDi) hasBiDi);
-    }
-    else { // other browsers
-      return takeScreenshotWithWebdriver(webDriver);
-    }
-  }
-
-  private <T extends WebDriver & HasDevTools> byte[] takeScreenshotWithDevtools(T driver) {
-    String windowHandle = driver.getWindowHandle();
-    DevTools devTools = driver.getDevTools();
-    devTools.createSessionIfThereIsNotOne(windowHandle);
-
-    String base64 = devTools.send(Page.captureScreenshot(
-        Optional.empty(),
-        Optional.empty(),
-        Optional.empty(),
-        Optional.empty(),
-        Optional.empty(),
-        Optional.of(true)
-      ), Duration.ofSeconds(4)
-    );
-
-    return BYTES.convertFromBase64Png(base64);
-  }
-
-  private static byte[] takeScreenshotWithWebdriver(WebDriver webDriver) {
-    return ((TakesScreenshot) webDriver).getScreenshotAs(BYTES);
-  }
-
-  private <T extends WebDriver & HasBiDi> byte[] takeScreenshotWithBidi(T webDriver) {
-    String windowHandle = webDriver.getWindowHandle();
-    BrowsingContext browsingContext = new BrowsingContext(webDriver, windowHandle);
-    String screenshotBase64 = browsingContext.captureScreenshot();
-    return BYTES.convertFromBase64Png(screenshotBase64);
+    return photographer.takeScreenshot(webDriver, BYTES)
+      .orElseThrow(() -> new RuntimeException("Webdriver does not support taking screenshots"));
   }
 
   private File saveScreenshot(byte[] screenshot) {

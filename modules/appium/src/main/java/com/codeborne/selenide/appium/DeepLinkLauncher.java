@@ -2,18 +2,15 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import com.google.common.collect.ImmutableMap;
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.ios.IOSDriver;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
 import java.util.Map;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.appium.SelenideAppium.$;
-import static com.codeborne.selenide.impl.WebdriverUnwrapper.cast;
 import static io.appium.java_client.AppiumBy.iOSNsPredicateString;
 import static io.appium.java_client.ios.options.wda.SupportsAutoAcceptAlertsOption.AUTO_ACCEPT_ALERTS_OPTION;
 
@@ -23,7 +20,7 @@ public class DeepLinkLauncher {
 
   // adopted from https://bit.ly/3OKVsvq
   // see also https://appiumpro.com/editions/84-reliably-opening-deep-links-across-platforms-and-devices
-  public void openDeepLinkOnIos(IOSDriver driver, String deepLinkUrl) {
+  public void openDeepLinkOnIos(WebDriver driver, String deepLinkUrl) {
     SelenideLogger.run("open ios deeplink", deepLinkUrl, () -> {
       openSafari(driver);
       driver.navigate().to(deepLinkUrl);
@@ -43,27 +40,26 @@ public class DeepLinkLauncher {
   }
 
   // Life is so much easier
-  public void openDeepLinkOnAndroid(AppiumDriver driver, String deepLinkUrl, String appPackage) {
+  public void openDeepLinkOnAndroid(WebDriver driver, String deepLinkUrl, String appPackage) {
     SelenideLogger.run("open android deeplink", deepLinkUrl, () -> {
-      Map<String, String> params = ImmutableMap.of(
+      Map<String, String> params = Map.of(
         "url", deepLinkUrl,
         "package", appPackage
       );
-      driver.executeScript("mobile: deepLink", params);
+      //noinspection UnnecessaryLabelJS,JSUnresolvedReference
+      ((JavascriptExecutor) driver).executeScript("mobile: deepLink", params);
     });
   }
 
-  private void openSafari(AppiumDriver driver) {
-    driver.executeScript(
+  private void openSafari(WebDriver driver) {
+    //noinspection UnnecessaryLabelJS,JSUnresolvedReference
+    ((JavascriptExecutor) driver).executeScript(
       "mobile:launchApp",
-      ImmutableMap.of("bundleId", SAFARI_BUNDLE_ID)
+      Map.of("bundleId", SAFARI_BUNDLE_ID)
     );
   }
 
-  private boolean canAutoAcceptAlerts(AppiumDriver driver) {
-    HasCapabilities hasCapabilities = cast(driver, HasCapabilities.class)
-      .orElseThrow(() -> new IllegalArgumentException("Driver doesn't support HasCapabilities"));
-    Capabilities capabilities = hasCapabilities.getCapabilities();
-    return capabilities.is(AUTO_ACCEPT_ALERTS_OPTION);
+  private boolean canAutoAcceptAlerts(WebDriver driver) {
+    return ((HasCapabilities) driver).getCapabilities().is(AUTO_ACCEPT_ALERTS_OPTION);
   }
 }

@@ -12,7 +12,6 @@ import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.net.HostIdentifier;
 import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
@@ -42,8 +41,7 @@ public class CreateDriverCommand {
                                         @Nullable Proxy userProvidedProxy,
                                         List<WebDriverListener> listeners) {
     return SelenideLogger.get("webdriver", getReadableSubject("create"), () -> {
-      log.debug("Creating webdriver in thread {} (ip: {}, host: {})...",
-        currentThread().getId(), HostIdentifier.getHostAddress(), HostIdentifier.getHostName());
+      log.debug("Creating webdriver in thread {}...", currentThread().getId());
 
       SelenideProxyServer selenideProxyServer = null;
       Proxy browserProxy = userProvidedProxy;

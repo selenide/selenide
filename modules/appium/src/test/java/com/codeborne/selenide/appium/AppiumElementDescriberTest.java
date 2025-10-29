@@ -1,6 +1,7 @@
 package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import org.junit.jupiter.api.Test;
@@ -22,24 +23,11 @@ import static org.mockito.Mockito.when;
 
 public class AppiumElementDescriberTest {
   private final AppiumElementDescriber describer = new AppiumElementDescriber();
-  private final Driver driver = mock(Driver.class);
   private final WebElement element = mock(WebElement.class);
-
-  void givenAndroidDriver() {
-    AndroidDriver webdriver = mock(AndroidDriver.class);
-    when(webdriver.getCapabilities()).thenReturn(new DesiredCapabilities());
-    when(driver.getWebDriver()).thenReturn(webdriver);
-  }
-
-  void givenIosDriver() {
-    IOSDriver webdriver = mock(IOSDriver.class);
-    when(webdriver.getCapabilities()).thenReturn(new DesiredCapabilities());
-    when(driver.getWebDriver()).thenReturn(webdriver);
-  }
 
   @Test
   public void printsTagName_ifPresent() {
-    givenIosDriver();
+    Driver driver = iosDriver();
     when(element.getTagName()).thenReturn("XCUIElementTypeImage");
     when(element.getAttribute("class")).thenThrow(new UnsupportedCommandException("Oops"));
 
@@ -50,7 +38,7 @@ public class AppiumElementDescriberTest {
 
   @Test
   public void printsText_ifPresent() {
-    givenIosDriver();
+    Driver driver = iosDriver();
     when(element.getTagName()).thenReturn("XCUIElementTypeImage");
     when(element.getText()).thenReturn("element text");
 
@@ -60,7 +48,7 @@ public class AppiumElementDescriberTest {
 
   @Test
   public void canExtractTextFromAttributeText() {
-    givenIosDriver();
+    Driver driver = iosDriver();
     when(element.getTagName()).thenReturn("XCUIElementTypeImage");
     when(element.getText()).thenReturn("");
     when(element.getAttribute("text")).thenReturn("element text");
@@ -71,7 +59,7 @@ public class AppiumElementDescriberTest {
 
   @Test
   public void canExtractTextFromAttributeLabel() {
-    givenIosDriver();
+    Driver driver = iosDriver();
     when(element.getTagName()).thenReturn("XCUIElementTypeImage");
     when(element.getAttribute("label")).thenReturn("element text");
 
@@ -81,7 +69,7 @@ public class AppiumElementDescriberTest {
 
   @Test
   public void canExtractTextFromAttributeValue() {
-    givenIosDriver();
+    Driver driver = iosDriver();
     when(element.getTagName()).thenReturn("XCUIElementTypeImage");
     when(element.getAttribute("value")).thenReturn("element text");
 
@@ -91,7 +79,7 @@ public class AppiumElementDescriberTest {
 
   @Test
   public void extractsTagNameFromClassName_inAndroid() {
-    givenAndroidDriver();
+    Driver driver = androidDriver();
     when(element.getTagName()).thenReturn("");
     when(element.getAttribute("class")).thenReturn("android.widget.TextView");
     when(element.getAttribute("className")).thenReturn("android.widget.TextView");
@@ -103,7 +91,7 @@ public class AppiumElementDescriberTest {
 
   @Test
   public void fully() {
-    givenAndroidDriver();
+    Driver driver = androidDriver();
     when(element.getAttribute("class")).thenReturn("android.widget.TextView");
     when(element.getAttribute("className")).thenReturn("android.widget.TextView");
     when(element.getAttribute("text")).thenReturn("Hello, world");
@@ -114,7 +102,7 @@ public class AppiumElementDescriberTest {
 
   @Test
   public void addAllPossibleAttributes() {
-    givenAndroidDriver();
+    Driver driver = androidDriver();
     when(element.getAttribute("class")).thenReturn("android.widget.TextView");
     when(element.getAttribute("className")).thenReturn("android.widget.TextView");
     when(element.getAttribute("text")).thenReturn("Hello, world");
@@ -140,7 +128,7 @@ public class AppiumElementDescriberTest {
 
   @Test
   public void ignoresErrorsWhenGettingAnyOfAttributes_android() {
-    givenAndroidDriver();
+    Driver driver = androidDriver();
     when(element.getAttribute(anyString())).thenThrow(new WebDriverException("Not implemented"));
     doReturn("android.widget.TextView").when(element).getAttribute("class");
     doReturn("android.widget.TextView").when(element).getAttribute("className");
@@ -158,10 +146,7 @@ public class AppiumElementDescriberTest {
 
   @Test
   public void ignoresErrorsWhenGettingAnyOfAttributes_ios() {
-    givenIosDriver();
-    IOSDriver webdriver = mock(IOSDriver.class);
-    when(webdriver.getCapabilities()).thenReturn(new DesiredCapabilities());
-    when(driver.getWebDriver()).thenReturn(webdriver);
+    Driver driver = iosDriver();
     when(element.getTagName()).thenReturn("XCUIElementTypeImage");
     when(element.getAttribute(anyString())).thenThrow(new WebDriverException("Not implemented"));
     doReturn("Hello, world").when(element).getAttribute("label");
@@ -193,5 +178,15 @@ public class AppiumElementDescriberTest {
   void removesPackageFromAndroidClassName() {
     assertThat(removePackage("android.widget.TextView")).isEqualTo("TextView");
     assertThat(removePackage("JustSomeClass")).isEqualTo("JustSomeClass");
+  }
+
+  private static Driver androidDriver() {
+    AndroidDriver webdriver = new FakeAndroidDriver(new DesiredCapabilities());
+    return new DriverStub(webdriver);
+  }
+
+  private static Driver iosDriver() {
+    IOSDriver webdriver = new FakeIOSDriver(new DesiredCapabilities());
+    return new DriverStub(webdriver);
   }
 }

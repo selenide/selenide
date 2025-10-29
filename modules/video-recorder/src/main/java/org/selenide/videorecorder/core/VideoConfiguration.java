@@ -1,6 +1,6 @@
 package org.selenide.videorecorder.core;
 
-import com.codeborne.selenide.PropertiesReader;
+import com.codeborne.selenide.impl.SelenideProperties;
 
 /**
  * Inspired by Video Recorder from Sergey Pirogov
@@ -12,7 +12,7 @@ import com.codeborne.selenide.PropertiesReader;
  * @see <a href="https://github.com/SergeyPirogov/video-recorder-java/blob/master/core/src/main/java/com/automation/remarks/video/recorder/VideoConfiguration.java">VideoConfiguration</a>
  */
 public class VideoConfiguration {
-  private final PropertiesReader properties = new PropertiesReader("selenide.properties");
+  private final SelenideProperties properties = new SelenideProperties();
 
   /**
    * Is video recording enabled.

@@ -67,7 +67,7 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
       checkDownload(PROXY, "hello_world.*\\.txt", "hello_world.txt");
     });
 
-    File downloadedFile = $(byText("Download me")).download(using(PROXY).withExtension("txt"));
+    File downloadedFile = $(byText("Download me")).download(using(PROXY).withNameMatching("hello.*\\.txt"));
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }

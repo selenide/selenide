@@ -12,6 +12,7 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,6 +150,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public DownloadsFolder getBrowserDownloadsFolder() {
     return currentThreadDriver().downloadsFolder();
+  }
+
+  @Override
+  public List<LogEntry> getBrowserLogs() {
+    return currentThreadDriver().browserLogs();
   }
 
   private WebDriverInstance currentThreadDriver() {

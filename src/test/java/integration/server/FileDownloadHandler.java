@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,10 +57,10 @@ class FileDownloadHandler extends BaseHandler {
   }
 
   private Map<String, String> headers(String fileName, boolean exposeFileName) throws UnsupportedEncodingException {
-    Map<String, String> map = new HashMap<>();
-    map.put("content-disposition", exposeFileName ? "attachment; filename=" + encode(fileName, "UTF-8") : "attachment;");
-    map.put("content-type", contentType(fileName));
-    return map;
+    return Map.of(
+      "content-disposition", exposeFileName ? "attachment; filename=" + encode(fileName, "UTF-8") : "attachment;",
+      "content-type", contentType(fileName)
+    );
   }
 
   private InputStream generateLargeFile(final int contentLength) {
