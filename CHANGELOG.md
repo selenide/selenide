@@ -1,5 +1,19 @@
 # Changelog
 
+## 7.12.0 (29.10.2025)
+* add locator `byLabel` (#3148)
+* add locator `byPlaceholder` (#3151)
+* add locator `byTitle` (#3151)
+* add locator `byAltText` (#3151)
+* add locator `byTestId` (#3151)
+* #2712 take screenshots using DevTools or BiDi (#3153)
+* #2094 trigger mobile emulation in opened browser (#3159)
+* #1636 collect browser logs using BiDi protocol (#3156)
+* #3142 allow using shadow host as context in `byShadowCss` by Vivien Tintillier (#3143)
+* #3057 add method `$.unhighlight()` (#3155)
+* bump Selenium from 3.36.0 to 4.37.0, incl. CDP v140 -> v141 (#3147)
+* bump Selenium from 3.37.0 to 4.38.0, incl. CDP v141 -> v142 (#3154)
+
 ## 7.11.1 (04.10.2025)
 * #3138 Workaround for CDP connectivity in Selenium Grid (#3139)
 

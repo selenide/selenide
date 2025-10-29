@@ -19,7 +19,7 @@ Currently, the plugin supports the following features:
 We are going to implement more features like reading logs and videos from Selenoid.
 
 ## Usage
-1. Import `com.codeborne:selenide-selenoid:7.11.0`
+1. Import `com.codeborne:selenide-selenoid:7.12.0`
 2. Use these methods as usually:
    - `$.download(file().withMethod(FOLDER)); // or CDP or HTTPGET or PROXY`
    - `clipboard().setText("Selenoid Shadow");`
