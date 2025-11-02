@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Page for printing</title>
+  <style>
+    @media print {
+      * {
+        visibility: hidden;
+      }
+      .print {
+        visibility: visible;
+      }
+    }
+    @media screen {
+      * {
+        visibility: visible;
+      }
+      .print {
+        visibility: hidden;
+      }
+      h2 {
+        color: #00ee00;
+      }
+      h3 {
+        color: #cd0a0a;
+      }
+    }
+  </style>
+</head>
+<body>
+<h1 class="print">Hello, printer!</h1>
+
+<h2>Colourful text</h2>
+<h3>For screens only</h3>
+
+</body>
+</html>
