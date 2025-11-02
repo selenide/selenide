@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.12.1 (under construction)
+
+* #1391 add sample how to emulate "print" media type (#3162)
+
+See https://github.com/selenide/selenide/milestone/233
+
+
 ## 7.12.0 (29.10.2025)
 * add locator `byLabel` (#3148)
 * add locator `byPlaceholder` (#3151)
@@ -13,6 +20,8 @@
 * #3057 add method `$.unhighlight()` (#3155)
 * bump Selenium from 3.36.0 to 4.37.0, incl. CDP v140 -> v141 (#3147)
 * bump Selenium from 3.37.0 to 4.38.0, incl. CDP v141 -> v142 (#3154)
+
+See https://github.com/selenide/selenide/milestone/229?closed=1
 
 ## 7.11.1 (04.10.2025)
 * #3138 Workaround for CDP connectivity in Selenium Grid (#3139)
