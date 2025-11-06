@@ -1,6 +1,8 @@
 package com.codeborne.selenide.proxy;
 
 import com.browserup.bup.BrowserUpProxyServer;
+import com.browserup.bup.filters.RequestFilter;
+import com.browserup.bup.filters.ResponseFilter;
 import com.codeborne.selenide.Config;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
@@ -8,13 +10,10 @@ import org.openqa.selenium.Proxy;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 final class SelenideProxyServerTest {
   private final BrowserUpProxyServer bmp = mock();
@@ -112,5 +111,60 @@ final class SelenideProxyServerTest {
     proxyServer.start();
 
     verify(bmp).start(666);
+  }
+
+  @Test
+  void canGetRequestFilters() {
+    proxyServer.start();
+
+    RequestFilter dummyRequestFilter = (request, contents, messageInfo) -> null;
+
+    proxyServer.addRequestFilter("dummy-request-filter", dummyRequestFilter);
+
+    Map<String, RequestFilter> requestFilters = proxyServer.requestFilters();
+    assertThat(requestFilters).hasSizeGreaterThan(0);
+
+    assertThat(requestFilters).containsEntry("dummy-request-filter", dummyRequestFilter);
+  }
+
+  @Test
+  void canGetRequestFilterByName() {
+    proxyServer.start();
+
+    RequestFilter dummyRequestFilter = (request, contents, messageInfo) -> null;
+
+    proxyServer.addRequestFilter("dummy-request-filter", dummyRequestFilter);
+
+    RequestFilter requestFilter = proxyServer.requestFilter("dummy-request-filter");
+
+    assertThat(requestFilter).isEqualTo(dummyRequestFilter);
+  }
+
+  @Test
+  void canGetResponseFilters() {
+    proxyServer.start();
+
+    ResponseFilter dummyResponseFilter = (response, contents, messageInfo) -> {
+    };
+
+    proxyServer.addResponseFilter("dummy-response-filter", dummyResponseFilter);
+
+    Map<String, ResponseFilter> responseFilters = proxyServer.responseFilters();
+    assertThat(responseFilters).hasSizeGreaterThan(0);
+
+    assertThat(responseFilters).containsEntry("dummy-response-filter", dummyResponseFilter);
+  }
+
+  @Test
+  void canGetResponseFilterByName() {
+    proxyServer.start();
+
+    ResponseFilter dummyResponseFilter = (response, contents, messageInfo) -> {
+    };
+
+    proxyServer.addResponseFilter("dummy-response-filter", dummyResponseFilter);
+
+    ResponseFilter responseFilter = proxyServer.responseFilter("dummy-response-filter");
+    assertThat(responseFilter).isEqualTo(dummyResponseFilter);
   }
 }

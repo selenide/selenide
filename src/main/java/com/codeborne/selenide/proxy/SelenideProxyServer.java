@@ -242,12 +242,26 @@ public class SelenideProxyServer {
   }
 
   /**
+   * Get all request filters
+   */
+  public Map<String, RequestFilter> requestFilters() {
+    return requestFilters;
+  }
+
+  /**
    * Get request filter by name
    */
   @SuppressWarnings("unchecked")
   @Nullable
   public <T extends RequestFilter> T requestFilter(String name) {
     return (T) requestFilters.get(name);
+  }
+
+  /**
+   * Get all response filters
+   */
+  public Map<String, ResponseFilter> responseFilters() {
+    return responseFilters;
   }
 
   /**
