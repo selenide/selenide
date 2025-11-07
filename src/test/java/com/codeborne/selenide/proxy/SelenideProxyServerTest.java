@@ -119,6 +119,8 @@ final class SelenideProxyServerTest {
 
     proxyServer.requestFilters()
       .keySet()
+      .stream()
+      .toList()
       .forEach(proxyServer::removeRequestFilter);
 
     RequestFilter emptyRequestFilter = (request, contents, messageInfo) -> null;
@@ -143,13 +145,15 @@ final class SelenideProxyServerTest {
     requestFilters.keySet()
       .stream()
       .filter(filterName -> filterName.startsWith("dummy"))
+      .toList()
       .forEach(proxyServer::removeRequestFilter);
 
     Map<String, RequestFilter> updatedRequestFilters = proxyServer.requestFilters();
     assertThat(updatedRequestFilters)
       .hasSize(2)
       .isEqualTo(Map.of(
-        "other-request-filter", emptyRequestFilter
+        "other-request-filter-1", emptyRequestFilter,
+        "other-request-filter-2", emptyRequestFilter
       ));
   }
 
@@ -176,6 +180,8 @@ final class SelenideProxyServerTest {
 
     proxyServer.responseFilters()
       .keySet()
+      .stream()
+      .toList()
       .forEach(proxyServer::removeResponseFilter);
 
     ResponseFilter emptyResponseFilter = (response, contents, messageInfo) -> {
@@ -201,6 +207,7 @@ final class SelenideProxyServerTest {
     responseFilters.keySet()
       .stream()
       .filter(filterName -> filterName.startsWith("dummy"))
+      .toList()
       .forEach(proxyServer::removeResponseFilter);
 
     Map<String, ResponseFilter> updatedResponseFilters = proxyServer.responseFilters();
