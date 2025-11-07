@@ -117,54 +117,115 @@ final class SelenideProxyServerTest {
   void canGetRequestFilters() {
     proxyServer.start();
 
-    RequestFilter dummyRequestFilter = (request, contents, messageInfo) -> null;
+    proxyServer.requestFilters()
+      .keySet()
+      .forEach(proxyServer::removeRequestFilter);
 
-    proxyServer.addRequestFilter("dummy-request-filter", dummyRequestFilter);
+    RequestFilter emptyRequestFilter = (request, contents, messageInfo) -> null;
+
+    proxyServer.addRequestFilter("dummy-request-filter-1", emptyRequestFilter);
+    proxyServer.addRequestFilter("dummy-request-filter-2", emptyRequestFilter);
+    proxyServer.addRequestFilter("dummy-request-filter-3", emptyRequestFilter);
+    proxyServer.addRequestFilter("other-request-filter-1", emptyRequestFilter);
+    proxyServer.addRequestFilter("other-request-filter-2", emptyRequestFilter);
 
     Map<String, RequestFilter> requestFilters = proxyServer.requestFilters();
-    assertThat(requestFilters).hasSizeGreaterThan(0);
+    assertThat(requestFilters)
+      .hasSize(5)
+      .isEqualTo(Map.of(
+        "dummy-request-filter-1", emptyRequestFilter,
+        "dummy-request-filter-2", emptyRequestFilter,
+        "dummy-request-filter-3", emptyRequestFilter,
+        "other-request-filter-1", emptyRequestFilter,
+        "other-request-filter-2", emptyRequestFilter
+      ));
 
-    assertThat(requestFilters).containsEntry("dummy-request-filter", dummyRequestFilter);
+    requestFilters.keySet()
+      .stream()
+      .filter(filterName -> filterName.startsWith("dummy"))
+      .forEach(proxyServer::removeRequestFilter);
+
+    Map<String, RequestFilter> updatedRequestFilters = proxyServer.requestFilters();
+    assertThat(updatedRequestFilters)
+      .hasSize(2)
+      .isEqualTo(Map.of(
+        "other-request-filter", emptyRequestFilter
+      ));
   }
 
   @Test
   void canGetRequestFilterByName() {
     proxyServer.start();
 
-    RequestFilter dummyRequestFilter = (request, contents, messageInfo) -> null;
+    RequestFilter emptyRequestFilter = (request, contents, messageInfo) -> null;
 
-    proxyServer.addRequestFilter("dummy-request-filter", dummyRequestFilter);
+    proxyServer.addRequestFilter("dummy-request-filter-1", emptyRequestFilter);
+    proxyServer.addRequestFilter("dummy-request-filter-2", emptyRequestFilter);
+    proxyServer.addRequestFilter("dummy-request-filter-3", emptyRequestFilter);
+    proxyServer.addRequestFilter("other-request-filter-1", emptyRequestFilter);
+    proxyServer.addRequestFilter("other-request-filter-2", emptyRequestFilter);
 
-    RequestFilter requestFilter = proxyServer.requestFilter("dummy-request-filter");
+    RequestFilter requestFilter = proxyServer.requestFilter("dummy-request-filter-2");
 
-    assertThat(requestFilter).isEqualTo(dummyRequestFilter);
+    assertThat(requestFilter).isEqualTo(emptyRequestFilter);
   }
 
   @Test
   void canGetResponseFilters() {
     proxyServer.start();
 
-    ResponseFilter dummyResponseFilter = (response, contents, messageInfo) -> {
+    proxyServer.responseFilters()
+      .keySet()
+      .forEach(proxyServer::removeResponseFilter);
+
+    ResponseFilter emptyResponseFilter = (response, contents, messageInfo) -> {
     };
 
-    proxyServer.addResponseFilter("dummy-response-filter", dummyResponseFilter);
+    proxyServer.addResponseFilter("dummy-response-filter-1", emptyResponseFilter);
+    proxyServer.addResponseFilter("dummy-response-filter-2", emptyResponseFilter);
+    proxyServer.addResponseFilter("dummy-response-filter-3", emptyResponseFilter);
+    proxyServer.addResponseFilter("other-response-filter-1", emptyResponseFilter);
+    proxyServer.addResponseFilter("other-response-filter-2", emptyResponseFilter);
 
     Map<String, ResponseFilter> responseFilters = proxyServer.responseFilters();
-    assertThat(responseFilters).hasSizeGreaterThan(0);
+    assertThat(responseFilters)
+      .hasSize(5)
+      .isEqualTo(Map.of(
+        "dummy-response-filter-1", emptyResponseFilter,
+        "dummy-response-filter-2", emptyResponseFilter,
+        "dummy-response-filter-3", emptyResponseFilter,
+        "other-response-filter-1", emptyResponseFilter,
+        "other-response-filter-2", emptyResponseFilter
+      ));
 
-    assertThat(responseFilters).containsEntry("dummy-response-filter", dummyResponseFilter);
+    responseFilters.keySet()
+      .stream()
+      .filter(filterName -> filterName.startsWith("dummy"))
+      .forEach(proxyServer::removeResponseFilter);
+
+    Map<String, ResponseFilter> updatedResponseFilters = proxyServer.responseFilters();
+    assertThat(updatedResponseFilters)
+      .hasSize(2)
+      .isEqualTo(Map.of(
+        "other-response-filter-1", emptyResponseFilter,
+        "other-response-filter-2", emptyResponseFilter
+      ));
   }
 
   @Test
   void canGetResponseFilterByName() {
     proxyServer.start();
 
-    ResponseFilter dummyResponseFilter = (response, contents, messageInfo) -> {
+    ResponseFilter emptyResponseFilter = (response, contents, messageInfo) -> {
     };
 
-    proxyServer.addResponseFilter("dummy-response-filter", dummyResponseFilter);
+    proxyServer.addResponseFilter("dummy-response-filter-1", emptyResponseFilter);
+    proxyServer.addResponseFilter("dummy-response-filter-2", emptyResponseFilter);
+    proxyServer.addResponseFilter("dummy-response-filter-3", emptyResponseFilter);
+    proxyServer.addResponseFilter("other-response-filter-1", emptyResponseFilter);
+    proxyServer.addResponseFilter("other-response-filter-2", emptyResponseFilter);
 
-    ResponseFilter responseFilter = proxyServer.responseFilter("dummy-response-filter");
-    assertThat(responseFilter).isEqualTo(dummyResponseFilter);
+    ResponseFilter responseFilter = proxyServer.responseFilter("dummy-response-filter-3");
+    assertThat(responseFilter).isEqualTo(emptyResponseFilter);
   }
 }
