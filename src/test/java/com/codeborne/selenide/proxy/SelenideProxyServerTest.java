@@ -117,44 +117,87 @@ final class SelenideProxyServerTest {
   void canGetRequestFilters() {
     proxyServer.start();
 
-    proxyServer.requestFilters()
-      .keySet()
-      .stream()
-      .toList()
+    proxyServer.requestFilterNames()
       .forEach(proxyServer::removeRequestFilter);
 
     RequestFilter emptyRequestFilter = (request, contents, messageInfo) -> null;
 
-    proxyServer.addRequestFilter("dummy-request-filter-1", emptyRequestFilter);
-    proxyServer.addRequestFilter("dummy-request-filter-2", emptyRequestFilter);
-    proxyServer.addRequestFilter("dummy-request-filter-3", emptyRequestFilter);
-    proxyServer.addRequestFilter("other-request-filter-1", emptyRequestFilter);
-    proxyServer.addRequestFilter("other-request-filter-2", emptyRequestFilter);
+    proxyServer.addRequestFilter("foo-request-filter-1", emptyRequestFilter);
+    proxyServer.addRequestFilter("foo-request-filter-2", emptyRequestFilter);
+    proxyServer.addRequestFilter("foo-request-filter-3", emptyRequestFilter);
+    proxyServer.addRequestFilter("bar-request-filter-1", emptyRequestFilter);
+    proxyServer.addRequestFilter("bar-request-filter-2", emptyRequestFilter);
+    proxyServer.addRequestFilter("baz-request-filter-1", emptyRequestFilter);
 
     Map<String, RequestFilter> requestFilters = proxyServer.requestFilters();
     assertThat(requestFilters)
-      .hasSize(5)
+      .hasSize(6)
       .isEqualTo(Map.of(
-        "dummy-request-filter-1", emptyRequestFilter,
-        "dummy-request-filter-2", emptyRequestFilter,
-        "dummy-request-filter-3", emptyRequestFilter,
-        "other-request-filter-1", emptyRequestFilter,
-        "other-request-filter-2", emptyRequestFilter
+        "foo-request-filter-1", emptyRequestFilter,
+        "foo-request-filter-2", emptyRequestFilter,
+        "foo-request-filter-3", emptyRequestFilter,
+        "bar-request-filter-1", emptyRequestFilter,
+        "bar-request-filter-2", emptyRequestFilter,
+        "baz-request-filter-1", emptyRequestFilter
       ));
 
-    requestFilters.keySet()
+    proxyServer.requestFilterNames()
       .stream()
-      .filter(filterName -> filterName.startsWith("dummy"))
-      .toList()
+      .filter(filterName -> filterName.startsWith("foo"))
       .forEach(proxyServer::removeRequestFilter);
 
     Map<String, RequestFilter> updatedRequestFilters = proxyServer.requestFilters();
     assertThat(updatedRequestFilters)
-      .hasSize(2)
+      .hasSize(3)
       .isEqualTo(Map.of(
-        "other-request-filter-1", emptyRequestFilter,
-        "other-request-filter-2", emptyRequestFilter
+        "bar-request-filter-1", emptyRequestFilter,
+        "bar-request-filter-2", emptyRequestFilter,
+        "baz-request-filter-1", emptyRequestFilter
       ));
+  }
+
+  @Test
+  void canGetRequestFilterNames() {
+    proxyServer.start();
+
+    proxyServer.requestFilterNames()
+      .forEach(proxyServer::removeRequestFilter);
+
+    RequestFilter emptyRequestFilter = (request, contents, messageInfo) -> null;
+
+    proxyServer.addRequestFilter("foo-request-filter-1", emptyRequestFilter);
+    proxyServer.addRequestFilter("foo-request-filter-2", emptyRequestFilter);
+    proxyServer.addRequestFilter("foo-request-filter-3", emptyRequestFilter);
+    proxyServer.addRequestFilter("bar-request-filter-1", emptyRequestFilter);
+    proxyServer.addRequestFilter("bar-request-filter-2", emptyRequestFilter);
+    proxyServer.addRequestFilter("baz-request-filter-1", emptyRequestFilter);
+
+    List<String> requestFilterNames = proxyServer.requestFilterNames();
+    assertThat(requestFilterNames)
+      .hasSize(6)
+      .containsExactlyInAnyOrder(
+        "foo-request-filter-1",
+        "foo-request-filter-2",
+        "foo-request-filter-3",
+        "bar-request-filter-1",
+        "bar-request-filter-2",
+        "baz-request-filter-1"
+      );
+
+    requestFilterNames
+      .stream()
+      .filter(filterName -> filterName.startsWith("bar"))
+      .forEach(proxyServer::removeRequestFilter);
+
+    List<String> updatedRequestFilterNames = proxyServer.requestFilterNames();
+    assertThat(updatedRequestFilterNames)
+      .hasSize(4)
+      .containsExactlyInAnyOrder(
+        "foo-request-filter-1",
+        "foo-request-filter-2",
+        "foo-request-filter-3",
+        "baz-request-filter-1"
+      );
   }
 
   @Test
@@ -163,13 +206,14 @@ final class SelenideProxyServerTest {
 
     RequestFilter emptyRequestFilter = (request, contents, messageInfo) -> null;
 
-    proxyServer.addRequestFilter("dummy-request-filter-1", emptyRequestFilter);
-    proxyServer.addRequestFilter("dummy-request-filter-2", emptyRequestFilter);
-    proxyServer.addRequestFilter("dummy-request-filter-3", emptyRequestFilter);
-    proxyServer.addRequestFilter("other-request-filter-1", emptyRequestFilter);
-    proxyServer.addRequestFilter("other-request-filter-2", emptyRequestFilter);
+    proxyServer.addRequestFilter("foo-request-filter-1", emptyRequestFilter);
+    proxyServer.addRequestFilter("foo-request-filter-2", emptyRequestFilter);
+    proxyServer.addRequestFilter("foo-request-filter-3", emptyRequestFilter);
+    proxyServer.addRequestFilter("bar-request-filter-1", emptyRequestFilter);
+    proxyServer.addRequestFilter("bar-request-filter-2", emptyRequestFilter);
+    proxyServer.addRequestFilter("baz-request-filter-2", emptyRequestFilter);
 
-    RequestFilter requestFilter = proxyServer.requestFilter("dummy-request-filter-2");
+    RequestFilter requestFilter = proxyServer.requestFilter("foo-request-filter-2");
 
     assertThat(requestFilter).isEqualTo(emptyRequestFilter);
   }
@@ -178,45 +222,89 @@ final class SelenideProxyServerTest {
   void canGetResponseFilters() {
     proxyServer.start();
 
-    proxyServer.responseFilters()
-      .keySet()
-      .stream()
-      .toList()
+    proxyServer.responseFilterNames()
       .forEach(proxyServer::removeResponseFilter);
 
     ResponseFilter emptyResponseFilter = (response, contents, messageInfo) -> {
     };
 
-    proxyServer.addResponseFilter("dummy-response-filter-1", emptyResponseFilter);
-    proxyServer.addResponseFilter("dummy-response-filter-2", emptyResponseFilter);
-    proxyServer.addResponseFilter("dummy-response-filter-3", emptyResponseFilter);
-    proxyServer.addResponseFilter("other-response-filter-1", emptyResponseFilter);
-    proxyServer.addResponseFilter("other-response-filter-2", emptyResponseFilter);
+    proxyServer.addResponseFilter("foo-response-filter-1", emptyResponseFilter);
+    proxyServer.addResponseFilter("foo-response-filter-2", emptyResponseFilter);
+    proxyServer.addResponseFilter("foo-response-filter-3", emptyResponseFilter);
+    proxyServer.addResponseFilter("bar-response-filter-1", emptyResponseFilter);
+    proxyServer.addResponseFilter("bar-response-filter-2", emptyResponseFilter);
+    proxyServer.addResponseFilter("baz-response-filter-1", emptyResponseFilter);
 
     Map<String, ResponseFilter> responseFilters = proxyServer.responseFilters();
     assertThat(responseFilters)
-      .hasSize(5)
+      .hasSize(6)
       .isEqualTo(Map.of(
-        "dummy-response-filter-1", emptyResponseFilter,
-        "dummy-response-filter-2", emptyResponseFilter,
-        "dummy-response-filter-3", emptyResponseFilter,
-        "other-response-filter-1", emptyResponseFilter,
-        "other-response-filter-2", emptyResponseFilter
+        "foo-response-filter-1", emptyResponseFilter,
+        "foo-response-filter-2", emptyResponseFilter,
+        "foo-response-filter-3", emptyResponseFilter,
+        "bar-response-filter-1", emptyResponseFilter,
+        "bar-response-filter-2", emptyResponseFilter,
+        "baz-response-filter-1", emptyResponseFilter
       ));
 
-    responseFilters.keySet()
+    proxyServer.responseFilterNames()
       .stream()
-      .filter(filterName -> filterName.startsWith("dummy"))
-      .toList()
+      .filter(filterName -> filterName.startsWith("foo"))
       .forEach(proxyServer::removeResponseFilter);
 
     Map<String, ResponseFilter> updatedResponseFilters = proxyServer.responseFilters();
     assertThat(updatedResponseFilters)
-      .hasSize(2)
+      .hasSize(3)
       .isEqualTo(Map.of(
-        "other-response-filter-1", emptyResponseFilter,
-        "other-response-filter-2", emptyResponseFilter
+        "bar-response-filter-1", emptyResponseFilter,
+        "bar-response-filter-2", emptyResponseFilter,
+        "baz-response-filter-1", emptyResponseFilter
       ));
+  }
+
+  @Test
+  void canGetResponseFilterNames() {
+    proxyServer.start();
+
+    proxyServer.responseFilterNames()
+      .forEach(proxyServer::removeResponseFilter);
+
+    ResponseFilter emptyResponseFilter = (response, contents, messageInfo) -> {
+    };
+
+    proxyServer.addResponseFilter("foo-response-filter-1", emptyResponseFilter);
+    proxyServer.addResponseFilter("foo-response-filter-2", emptyResponseFilter);
+    proxyServer.addResponseFilter("foo-response-filter-3", emptyResponseFilter);
+    proxyServer.addResponseFilter("bar-response-filter-1", emptyResponseFilter);
+    proxyServer.addResponseFilter("bar-response-filter-2", emptyResponseFilter);
+    proxyServer.addResponseFilter("baz-response-filter-1", emptyResponseFilter);
+
+    List<String> responseFilterNames = proxyServer.responseFilterNames();
+    assertThat(responseFilterNames)
+      .hasSize(6)
+      .containsExactlyInAnyOrder(
+        "foo-response-filter-1",
+        "foo-response-filter-2",
+        "foo-response-filter-3",
+        "bar-response-filter-1",
+        "bar-response-filter-2",
+        "baz-response-filter-1"
+      );
+
+    responseFilterNames
+      .stream()
+      .filter(filterName -> filterName.startsWith("bar"))
+      .forEach(proxyServer::removeResponseFilter);
+
+    List<String> updatedResponseFilterNames = proxyServer.responseFilterNames();
+    assertThat(updatedResponseFilterNames)
+      .hasSize(4)
+      .containsExactlyInAnyOrder(
+        "foo-response-filter-1",
+        "foo-response-filter-2",
+        "foo-response-filter-3",
+        "baz-response-filter-1"
+      );
   }
 
   @Test
@@ -226,13 +314,14 @@ final class SelenideProxyServerTest {
     ResponseFilter emptyResponseFilter = (response, contents, messageInfo) -> {
     };
 
-    proxyServer.addResponseFilter("dummy-response-filter-1", emptyResponseFilter);
-    proxyServer.addResponseFilter("dummy-response-filter-2", emptyResponseFilter);
-    proxyServer.addResponseFilter("dummy-response-filter-3", emptyResponseFilter);
-    proxyServer.addResponseFilter("other-response-filter-1", emptyResponseFilter);
-    proxyServer.addResponseFilter("other-response-filter-2", emptyResponseFilter);
+    proxyServer.addResponseFilter("foo-response-filter-1", emptyResponseFilter);
+    proxyServer.addResponseFilter("foo-response-filter-2", emptyResponseFilter);
+    proxyServer.addResponseFilter("foo-response-filter-3", emptyResponseFilter);
+    proxyServer.addResponseFilter("bar-response-filter-1", emptyResponseFilter);
+    proxyServer.addResponseFilter("bar-response-filter-2", emptyResponseFilter);
+    proxyServer.addResponseFilter("baz-response-filter-1", emptyResponseFilter);
 
-    ResponseFilter responseFilter = proxyServer.responseFilter("dummy-response-filter-3");
+    ResponseFilter responseFilter = proxyServer.responseFilter("foo-response-filter-3");
     assertThat(responseFilter).isEqualTo(emptyResponseFilter);
   }
 }

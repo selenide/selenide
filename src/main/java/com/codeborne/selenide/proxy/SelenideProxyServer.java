@@ -15,11 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
@@ -128,6 +124,7 @@ public class SelenideProxyServer {
 
   /**
    * Remove (previously added) request filter by name
+   *
    * @param name Name of the filter used in method {@link #addRequestFilter(String, RequestFilter)}
    * @return the removed filter, or {@code null} if such filter hadn't been added
    * @since 7.5.0
@@ -159,6 +156,7 @@ public class SelenideProxyServer {
 
   /**
    * Remove (previously added) response filter by name
+   *
    * @param name Name of the filter used in method {@link #addResponseFilter(String, ResponseFilter)}
    * @return the removed filter, or {@code null} if such filter hadn't been added
    * @since 7.5.0
@@ -192,8 +190,7 @@ public class SelenideProxyServer {
     String seleniumHostName = getNonLoopbackAddressOfThisMachine();
     if (Objects.equals(browserupHostName, seleniumHostName) || seleniumHostName.isEmpty()) {
       log.info("Using proxy host: '{}'", seleniumHostName);
-    }
-    else {
+    } else {
       log.info("Using proxy host resolved by Selenium: '{}' (fyi BrowserUpProxy resolved : '{}')", seleniumHostName, browserupHostName);
     }
     return seleniumHostName;
@@ -201,6 +198,7 @@ public class SelenideProxyServer {
 
   /**
    * Copied from org.openqa.selenium.net.NetworkUtils, but works without internet
+   *
    * @return empty string if could not find a non-loopback ip4 address for this machine
    */
   private String getNonLoopbackAddressOfThisMachine() {
@@ -221,8 +219,7 @@ public class SelenideProxyServer {
     if (proxy.isStarted()) {
       try {
         proxy.stop();
-      }
-      catch (IllegalStateException ignore) {
+      } catch (IllegalStateException ignore) {
       }
     }
   }
@@ -249,6 +246,16 @@ public class SelenideProxyServer {
   }
 
   /**
+   * Get all request filter names
+   */
+  public List<String> requestFilterNames() {
+    return requestFilters
+      .keySet()
+      .stream()
+      .toList();
+  }
+
+  /**
    * Get request filter by name
    */
   @SuppressWarnings("unchecked")
@@ -262,6 +269,16 @@ public class SelenideProxyServer {
    */
   public Map<String, ResponseFilter> responseFilters() {
     return responseFilters;
+  }
+
+  /**
+   * Get all response filter names
+   */
+  public List<String> responseFilterNames() {
+    return responseFilters
+      .keySet()
+      .stream()
+      .toList();
   }
 
   /**
