@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -44,8 +44,8 @@ public class SelenideProxyServer {
   @Nullable
   private Proxy seleniumProxy;
   private final BrowserUpProxy proxy;
-  private final Map<String, RequestFilter> requestFilters = new HashMap<>();
-  private final Map<String, ResponseFilter> responseFilters = new HashMap<>();
+  private final Map<String, RequestFilter> requestFilters = new LinkedHashMap<>();
+  private final Map<String, ResponseFilter> responseFilters = new LinkedHashMap<>();
   private final AtomicInteger port = new AtomicInteger();
 
   /**
