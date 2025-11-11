@@ -2,6 +2,7 @@ package org.selenide.videorecorder.testng;
 
 import org.selenide.videorecorder.core.NoVideo;
 import org.selenide.videorecorder.core.RecordedVideos;
+import org.selenide.videorecorder.core.SelenideVideoConfiguration;
 import org.selenide.videorecorder.core.Video;
 import org.selenide.videorecorder.core.VideoConfiguration;
 import org.selenide.videorecorder.core.VideoRecorder;
@@ -23,8 +24,16 @@ import static org.selenide.videorecorder.core.VideoSaveMode.ALL;
  */
 public class VideoRecorderListener implements ITestListener {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorderListener.class);
-  private static final VideoConfiguration config = new VideoConfiguration();
   private static final String NAME = "VIDEO_RECORDER";
+  private final VideoConfiguration config;
+
+  public VideoRecorderListener() {
+    this(new SelenideVideoConfiguration());
+  }
+
+  public VideoRecorderListener(VideoConfiguration config) {
+    this.config = config;
+  }
 
   @Override
   public void onTestStart(ITestResult result) {
@@ -32,7 +41,7 @@ public class VideoRecorderListener implements ITestListener {
     RecordedVideos.remove(currentThread().getId());
 
     if (shouldRecordVideo(result)) {
-      VideoRecorder videoRecorder = new VideoRecorder();
+      VideoRecorder videoRecorder = new VideoRecorder(config);
       result.setAttribute(NAME, videoRecorder);
       log.info("Starting video recorder {} for test {} in thread {}", videoRecorder, result.getName(), currentThread().getName());
       videoRecorder.start();
@@ -70,7 +79,7 @@ public class VideoRecorderListener implements ITestListener {
     }
   }
 
-  private static boolean shouldRecordVideo(ITestResult context) {
+  private boolean shouldRecordVideo(ITestResult context) {
     if (!config.videoEnabled()) {
       log.debug("Video recorder disabled");
       return false;
