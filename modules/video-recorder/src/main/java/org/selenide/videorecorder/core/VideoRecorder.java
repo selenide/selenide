@@ -29,11 +29,11 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  */
 public class VideoRecorder {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorder.class);
-  private static final VideoConfiguration config = new VideoConfiguration();
   private static final AtomicLong videoCounter = new AtomicLong(0);
   private final AttachmentHandler attachmentHandler = inject();
 
   private static final ScheduledExecutorService screenshooter = newScheduledThreadPool(100, named("video-recorder:screenshots:"));
+  private final VideoConfiguration config;
   private final String videoId;
   private final int fps;
   private final Queue<Screenshot> screenshots = new ConcurrentLinkedQueue<>();
@@ -43,13 +43,18 @@ public class VideoRecorder {
   private final VideoMerger videoMerger;
 
   public VideoRecorder() {
+    this(new SelenideVideoConfiguration());
+  }
+
+  public VideoRecorder(VideoConfiguration config) {
+    this.config = config;
     fps = config.fps();
     videoId = "%s.%s".formatted(currentTimeMillis(), videoCounter.getAndIncrement());
-    screenshotsFolder = createScreenshotsFolder(videoId);
+    screenshotsFolder = createScreenshotsFolder(config, videoId);
     videoMerger = new VideoMerger(currentThread().getId(), videoId, config, screenshotsFolder, screenshots);
   }
 
-  private static File createScreenshotsFolder(String videoId) {
+  private static File createScreenshotsFolder(VideoConfiguration config, String videoId) {
     File screenshotsFolder = new File(config.videoFolder(), "video.%s.screenshots".formatted(videoId));
     ensureFolderExists(screenshotsFolder);
     if (!config.keepScreenshots()) {

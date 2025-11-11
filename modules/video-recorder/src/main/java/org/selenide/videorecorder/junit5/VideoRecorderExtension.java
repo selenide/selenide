@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.selenide.videorecorder.core.NoVideo;
 import org.selenide.videorecorder.core.RecordedVideos;
+import org.selenide.videorecorder.core.SelenideVideoConfiguration;
 import org.selenide.videorecorder.core.Video;
 import org.selenide.videorecorder.core.VideoConfiguration;
 import org.selenide.videorecorder.core.VideoRecorder;
@@ -25,16 +26,24 @@ import static org.selenide.videorecorder.core.VideoSaveMode.ALL;
  **/
 public class VideoRecorderExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
   private static final Logger log = LoggerFactory.getLogger(VideoRecorderExtension.class);
-  private static final VideoConfiguration config = new VideoConfiguration();
   private static final ExtensionContext.Namespace namespace = create(VideoRecorderExtension.class);
   private static final String NAME = "VIDEO_RECORDER";
+  private final VideoConfiguration config;
+
+  public VideoRecorderExtension() {
+    this(new SelenideVideoConfiguration());
+  }
+
+  public VideoRecorderExtension(VideoConfiguration config) {
+    this.config = config;
+  }
 
   @Override
   public void beforeTestExecution(ExtensionContext context) {
     RecordedVideos.remove(currentThread().getId());
 
     if (shouldRecordVideo(context)) {
-      VideoRecorder videoRecorder = new VideoRecorder();
+      VideoRecorder videoRecorder = new VideoRecorder(config);
       videoRecorder.start();
       context.getStore(namespace).put(NAME, videoRecorder);
     }
@@ -48,7 +57,6 @@ public class VideoRecorderExtension implements BeforeTestExecutionCallback, Afte
 
   protected void afterTestExecution(ExtensionContext context, boolean testFailed) {
     VideoRecorder videoRecorder = context.getStore(namespace).remove(NAME, VideoRecorder.class);
-    //noinspection ConstantValue
     if (videoRecorder != null) {
       if (config.saveMode() == ALL || testFailed) {
         videoRecorder.finish();
