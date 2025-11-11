@@ -178,8 +178,7 @@ final class SelenideProxyServerTest {
 
     List<String> requestFilterNames = proxyServer.requestFilterNames();
     assertThat(requestFilterNames)
-      .hasSize(6)
-      .containsExactlyInAnyOrder(
+      .containsExactly(
         "foo-request-filter-1",
         "foo-request-filter-2",
         "foo-request-filter-3",
@@ -195,8 +194,7 @@ final class SelenideProxyServerTest {
 
     List<String> updatedRequestFilterNames = proxyServer.requestFilterNames();
     assertThat(updatedRequestFilterNames)
-      .hasSize(4)
-      .containsExactlyInAnyOrder(
+      .containsExactly(
         "foo-request-filter-1",
         "foo-request-filter-2",
         "foo-request-filter-3",
@@ -285,8 +283,7 @@ final class SelenideProxyServerTest {
 
     List<String> responseFilterNames = proxyServer.responseFilterNames();
     assertThat(responseFilterNames)
-      .hasSize(6)
-      .containsExactlyInAnyOrder(
+      .containsExactly(
         "foo-response-filter-1",
         "foo-response-filter-2",
         "foo-response-filter-3",
@@ -302,8 +299,7 @@ final class SelenideProxyServerTest {
 
     List<String> updatedResponseFilterNames = proxyServer.responseFilterNames();
     assertThat(updatedResponseFilterNames)
-      .hasSize(4)
-      .containsExactlyInAnyOrder(
+      .containsExactly(
         "foo-response-filter-1",
         "foo-response-filter-2",
         "foo-response-filter-3",
