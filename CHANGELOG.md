@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.12.1 (under construction)
+## 7.12.1 (17.10.2025)
 
-* #1391 add sample how to emulate "print" media type (#3162)
+* #3166 Add method to get all proxy filters - thanks for Aliaksandr Rasolka (#3167)
+* #3166 Keep proxy filters in the same order they were added (#3171)
+* #3168 Extract VideoConfiguration to interface (#3172)
+* #1391 Add sample how to emulate "print" media type (#3162)
+* #1157 Add sample how to toggle on/off "offline mode" (#3165)
 
 See https://github.com/selenide/selenide/milestone/233
 
