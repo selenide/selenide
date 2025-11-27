@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.12.2 (??.11.2025)
+
+* Video recorder: fix video filter to also pad image width to be divisible by 2 - thanks to Jiri Stefek (#3178)
+* #3185 Support running tests on Selenoid that doesn't support BiDi connection (#3186)
+
+See https://github.com/selenide/selenide/milestone/234?closed=1
+
 ## 7.12.1 (17.10.2025)
 
 * #3166 Add method to get all proxy filters - thanks for Aliaksandr Rasolka (#3167)
@@ -8,7 +15,7 @@
 * #1391 Add sample how to emulate "print" media type (#3162)
 * #1157 Add sample how to toggle on/off "offline mode" (#3165)
 
-See https://github.com/selenide/selenide/milestone/233
+See https://github.com/selenide/selenide/milestone/233?closed=1
 
 
 ## 7.12.0 (29.10.2025)

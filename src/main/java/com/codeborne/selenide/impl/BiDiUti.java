@@ -9,6 +9,7 @@ import org.openqa.selenium.bidi.log.Log;
 import org.openqa.selenium.bidi.log.LogLevel;
 import org.openqa.selenium.bidi.log.StackFrame;
 import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.remote.http.ConnectionFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ public class BiDiUti {
     try {
       return webDriver instanceof HasBiDi hasBiDi ? Optional.of(hasBiDi.getBiDi()) : Optional.empty();
     }
-    catch (BiDiException notEnabled) {
+    catch (BiDiException | ConnectionFailedException notEnabled) {
       return Optional.empty();
     }
   }
