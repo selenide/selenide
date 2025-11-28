@@ -52,7 +52,7 @@ subprojects {
       exclude group: 'com.google.code.findbugs'
     }
     implementation('org.jspecify:jspecify:1.0.0')
-    implementation('com.google.errorprone:error_prone_annotations:2.44.0')
+    implementation('com.google.errorprone:error_prone_annotations:2.45.0')
     implementation("org.apache.commons:commons-lang3:3.20.0")
     implementation("commons-io:commons-io:2.21.0")
     testImplementation("com.github.valfirst.browserup-proxy:browserup-proxy-core") {
