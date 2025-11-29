@@ -49,6 +49,7 @@ class VideoMerger {
 
   private void generateVideo() throws IOException {
     FFmpegBuilder builder = new FFmpegBuilder()
+      .addExtraArgs("-framerate", String.valueOf(config.fps()))
       .addInput(screenshotsFolder.getAbsolutePath() + "/screenshot.%d.png")
       .setVideoFilter("pad=iw+mod(iw\\,2):ih+mod(ih\\,2)")
       .addOutput(videoFile.toAbsolutePath().toString())
