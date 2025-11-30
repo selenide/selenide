@@ -10,10 +10,13 @@ import static com.codeborne.selenide.SetValueOptions.withDate;
 import static com.codeborne.selenide.conditions.datetime.DateConditions.date;
 import static com.codeborne.selenide.conditions.datetime.DateConditions.dateBetween;
 import static com.codeborne.selenide.conditions.datetime.DateConditions.dateFormat;
+import static java.time.Month.AUGUST;
+import static java.time.Month.DECEMBER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 public class DateConditionsTest extends ITest {
-  private final LocalDate birthday = LocalDate.of(1993, 12, 30);
+  private final LocalDate birthday = LocalDate.of(1993, DECEMBER, 30);
+  private final LocalDate judgmentDay = LocalDate.of(1997, AUGUST, 29);
 
   @BeforeEach
   void openTestPage() {
@@ -21,14 +24,20 @@ public class DateConditionsTest extends ITest {
   }
 
   @Test
-  public void successCases() {
+  public void canCheckValueAttribute() {
     $("#birthdate").shouldHave(date(birthday, "yyyy-MM-dd"));
     $("#birthdate").shouldHave(date(birthday));
     $("#birthdate").shouldHave(dateBetween(birthday.minusDays(1), birthday, "yyyy-MM-dd"));
     $("#birthdate").shouldHave(dateFormat("yyyy-MM-dd"));
+  }
 
-    dateBetween(birthday.minusDays(1), birthday, "yyyy-MM-dd");
-    dateFormat("yyyy-MM-dd");
+  @Test
+  public void canCheckText() {
+    $("#judgment-day #iso").shouldHave(date(judgmentDay));
+    $("#judgment-day #custom").shouldHave(date(judgmentDay, "MMMM d, yyyy"));
+    $("#judgment-day #iso").shouldHave(dateFormat("yyyy-MM-dd"));
+    $("#judgment-day #iso").shouldHave(date(judgmentDay));
+    $("#judgment-day #iso").shouldHave(dateBetween(judgmentDay.minusDays(2), judgmentDay));
   }
 
   @Test

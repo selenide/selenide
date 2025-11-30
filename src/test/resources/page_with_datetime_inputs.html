@@ -10,19 +10,51 @@
 
 <div>
   <form>
+    <div>
       <label> Birthdate:
         <input id="birthdate" type="datetime-local" value="1983-12-26T23:49:59"/>
       </label>
+    </div>
 
-      <label> Pass issue date:
+    <div>
+      <label> Passport issue date:
         <input id="issueDate" type="text" value="2018/10/28 14:45"/>
       </label>
+    </div>
 
+    <div>
       <label> Working hours :
         <input id="open" type="time" value="08:30"/>
         <input id="close" type="time" value="17:15"/>
       </label>
+    </div>
   </form>
+</div>
+
+<div id="judgment-day">
+  Judgment Day
+  <table>
+    <thead>
+      <tr>
+        <th>Format</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ISO</td>
+        <td id="iso">1997-08-29T02:14:00</td>
+      </tr>
+      <tr>
+        <td>/mm/dd</td>
+        <td id="mm-dd">1997/08/29 02:14</td>
+      </tr>
+      <tr>
+        <td>Custom</td>
+        <td id="custom">August 29, 1997 at 2:14</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 </body>
 </html>
