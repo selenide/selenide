@@ -1,6 +1,7 @@
 package com.codeborne.selenide.conditions.datetime;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Assert that element contains "value" attribute with date value that is satisfied to the provided `options`
@@ -23,12 +24,20 @@ public class DateConditions {
     return new DateEquals(date, new DateFormatCondition(pattern));
   }
 
+  public static TemporalCondition<LocalDate> date(LocalDate date, DateTimeFormatter format) {
+    return new DateEquals(date, new DateFormatCondition(format));
+  }
+
   public static TemporalCondition<LocalDate> dateBetween(LocalDate from, LocalDate until) {
     return dateBetween(from, until, DEFAULT_PATTERN);
   }
 
   public static TemporalCondition<LocalDate> dateBetween(LocalDate from, LocalDate until, String pattern) {
     return new DateBetween(from, until, new DateFormatCondition(pattern));
+  }
+
+  public static TemporalCondition<LocalDate> dateBetween(LocalDate from, LocalDate until, DateTimeFormatter format) {
+    return new DateBetween(from, until, new DateFormatCondition(format));
   }
 
   public static TemporalFormatCondition<LocalDate> dateFormat(String pattern) {
