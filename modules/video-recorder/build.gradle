@@ -3,6 +3,7 @@ ext {
 }
 
 dependencies {
+  api project(":modules:core")
   api project(":statics")
   compileOnly("org.junit.jupiter:junit-jupiter-api")
   compileOnly("org.testng:testng:$testngVersion") { transitive = false }
