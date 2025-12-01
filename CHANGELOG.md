@@ -1,9 +1,12 @@
 # Changelog
 
-## 7.12.2 (??.11.2025)
+## 7.12.2 (01.12.2025)
 
 * Video recorder: fix video filter to also pad image width to be divisible by 2 - thanks to Jiri Stefek (#3178)
+* #3181 Video recorder: save screenshot/video from the right tab/window (#3194)
+* #3191 Video recorder: avoid generating too fast video (#3190)
 * #3185 Support running tests on Selenoid that doesn't support BiDi connection (#3186)
+* #3187 apply date/time conditions for texts too (#3192)
 
 See https://github.com/selenide/selenide/milestone/234?closed=1
 

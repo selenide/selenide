@@ -24,7 +24,7 @@ Currently, the plugin supports the following features:
 * Saving videos from Grid (but `selenide-video-recorder` can record its own videos)
 
 ## Usage
-1. Import `com.codeborne:selenide-grid:7.12.1`
+1. Import `com.codeborne:selenide-grid:7.12.2`
 2. Set `Configuration.fileDownload = FOLDER; // or CDP or HTTPGET or PROXY`
 3. Use method `$.download()` as usually.
 

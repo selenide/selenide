@@ -19,7 +19,7 @@ Currently, the plugin supports the following features:
 We are going to implement more features like reading logs and videos from Moon.
 
 ## Usage
-1. Import `com.codeborne:selenide-moon:7.12.1`
+1. Import `com.codeborne:selenide-moon:7.12.2`
 2. Use these methods as usually:
    - `$.download(file().withMethod(FOLDER)); // or CDP or HTTPGET or PROXY`
    - `clipboard().setText("Moonlight Shadow");`
