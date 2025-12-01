@@ -12,7 +12,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQuery;
 
-import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNullElseGet;
 
 public abstract class TemporalFormatCondition<T extends TemporalAccessor> extends WebElementCondition {
   private static final Logger log = LoggerFactory.getLogger(TemporalFormatCondition.class);
@@ -52,7 +52,7 @@ public abstract class TemporalFormatCondition<T extends TemporalAccessor> extend
 
   private String getActualValue(WebElement element) {
     String value = element.getAttribute("value");
-    return requireNonNull(value, element::getText);
+    return requireNonNullElseGet(value, element::getText);
   }
 
   public String format(T value) {
