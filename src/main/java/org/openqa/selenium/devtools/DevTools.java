@@ -51,8 +51,8 @@ public class DevTools implements Closeable {
   private final Domains protocol;
   private final Duration timeout = Duration.ofSeconds(30);
   private final Connection connection;
-  private String windowHandle = null;
-  private SessionID cdpSession = null;
+  private volatile String windowHandle;
+  private volatile SessionID cdpSession;
 
   public DevTools(Function<DevTools, Domains> protocol, Connection connection) {
     this.connection = Require.nonNull("LOCAL WebSocket connection", connection);
@@ -142,7 +142,7 @@ public class DevTools implements Closeable {
   }
 
   public void createSessionIfThereIsNotOne() {
-    createSessionIfThereIsNotOne(null);
+    createSessionIfThereIsNotOne(windowHandle);
   }
 
   public void createSessionIfThereIsNotOne(@Nullable String windowHandle) {
@@ -155,7 +155,7 @@ public class DevTools implements Closeable {
   }
 
   public void createSession() {
-    createSession(null);
+    createSession(windowHandle);
   }
 
   /**
@@ -226,7 +226,7 @@ public class DevTools implements Closeable {
     return infos.stream()
       .filter(info -> "page".equals(info.getType()))
       .map(TargetInfo::getTargetId)
-      .filter(id -> windowHandle == null || windowHandle.contains(id.toString()))
+      .filter(id -> windowHandle == null || windowHandle.endsWith(id.toString()))
       .findAny()
       .orElseThrow(() -> new DevToolsException("Unable to find target id of a page"));
   }

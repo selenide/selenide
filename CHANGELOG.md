@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.12.3 (02.12.2025)
+* #3181 Video recorder: avoid disconnecting current session
+
 ## 7.12.2 (01.12.2025)
 
 * Video recorder: fix video filter to also pad image width to be divisible by 2 - thanks to Jiri Stefek (#3178)
