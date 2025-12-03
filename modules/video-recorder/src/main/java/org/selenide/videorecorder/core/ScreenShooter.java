@@ -12,7 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Queue;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
@@ -28,9 +28,9 @@ class ScreenShooter implements Runnable {
   private final AtomicLong screenshotCounter = new AtomicLong();
   private final long threadId;
   private final File screenshotsFolder;
-  private final Queue<Screenshot> screenshots;
+  private final List<Screenshot> screenshots;
 
-  ScreenShooter(long threadId, File screenshotsFolder, Queue<Screenshot> screenshots) {
+  ScreenShooter(long threadId, File screenshotsFolder, List<Screenshot> screenshots) {
     this.threadId = threadId;
     this.screenshots = screenshots;
     this.screenshotsFolder = screenshotsFolder;

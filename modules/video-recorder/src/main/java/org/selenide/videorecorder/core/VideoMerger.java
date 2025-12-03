@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Queue;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.System.nanoTime;
@@ -21,12 +21,12 @@ class VideoMerger {
   private static final Logger log = LoggerFactory.getLogger(VideoMerger.class);
   private final long threadId;
   private final VideoConfiguration config;
-  private final Queue<Screenshot> screenshots;
+  private final List<Screenshot> screenshots;
   private final AtomicBoolean cancelled = new AtomicBoolean(false);
   private final Path videoFile;
   private final File screenshotsFolder;
 
-  VideoMerger(long threadId, String videoId, VideoConfiguration config, File screenshotsFolder, Queue<Screenshot> screenshots) {
+  VideoMerger(long threadId, String videoId, VideoConfiguration config, File screenshotsFolder, List<Screenshot> screenshots) {
     this.threadId = threadId;
     this.config = config;
     this.screenshots = screenshots;

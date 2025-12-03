@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicLong;
@@ -36,7 +36,7 @@ public class VideoRecorder {
   private final VideoConfiguration config;
   private final String videoId;
   private final int fps;
-  private final Queue<Screenshot> screenshots = new ConcurrentLinkedQueue<>();
+  private final List<Screenshot> screenshots = new ArrayList<>();
   private final File screenshotsFolder;
   @Nullable
   private ScheduledFuture<?> screenShooter;
