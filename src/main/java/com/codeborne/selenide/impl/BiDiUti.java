@@ -68,7 +68,7 @@ public class BiDiUti {
   }
 
   private static String readBiDiLogMessage(GenericLogEntry log) {
-    if (log.getStackTrace().getCallFrames().isEmpty()) {
+    if (log.getStackTrace() == null || log.getStackTrace().getCallFrames().isEmpty()) {
       return log.getText();
     }
     StackFrame frame = log.getStackTrace().getCallFrames().get(0);
