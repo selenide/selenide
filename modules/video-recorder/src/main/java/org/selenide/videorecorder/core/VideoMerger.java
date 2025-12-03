@@ -49,7 +49,7 @@ class VideoMerger {
 
   private void generateVideo() throws IOException {
     FFmpegBuilder builder = new FFmpegBuilder()
-      .addExtraArgs("-framerate", String.valueOf(config.fps()))
+      .addExtraArgs("-framerate", String.valueOf(frameRate(screenshots)))
       .addInput(screenshotsFolder.getAbsolutePath() + "/screenshot.%d.png")
       .setVideoFilter("pad=iw+mod(iw\\,2):ih+mod(ih\\,2)")
       .addOutput(videoFile.toAbsolutePath().toString())
@@ -64,6 +64,13 @@ class VideoMerger {
     log.debug("Using {} of version {}", ffmpeg.getPath(), ffmpeg.version());
     FFmpegExecutor executor = new FFmpegExecutor(ffmpeg);
     executor.createJob(builder).run();
+  }
+
+  static float frameRate(List<Screenshot> screenshots) {
+    Screenshot first = screenshots.get(0);
+    Screenshot last = screenshots.get(screenshots.size() - 1);
+    long duration = NANOSECONDS.toMillis(last.timestampNano - first.timestampNano);
+    return (screenshots.size() - 1) * 1000.0f / duration;
   }
 
   private static Path prepareVideoFolder(Path videoFile) {
