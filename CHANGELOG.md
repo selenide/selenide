@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.13.0 (10.12.2025)
+* bump Selenium from 3.38.0 to 4.39.0, incl. CDP v142 -> v143
+
 ## 7.12.3 (02.12.2025)
 * #3181 Video recorder: avoid disconnecting current session
 
