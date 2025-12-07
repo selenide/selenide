@@ -6,8 +6,8 @@ import org.openqa.selenium.chromium.ChromiumNetworkConditions;
 import org.openqa.selenium.chromium.HasNetworkConditions;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v142.network.Network;
-import org.openqa.selenium.devtools.v142.network.model.NetworkConditions;
+import org.openqa.selenium.devtools.v143.network.Network;
+import org.openqa.selenium.devtools.v143.network.model.NetworkConditions;
 
 import java.util.List;
 
