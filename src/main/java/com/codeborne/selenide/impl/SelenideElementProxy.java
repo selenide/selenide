@@ -15,6 +15,7 @@ import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -164,6 +165,7 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     JavascriptException.class,
     UnhandledAlertException.class,
     NoSuchSessionException.class,
+    UnreachableBrowserException.class,
     UnsupportedCommandException.class
   );
 

@@ -22,6 +22,7 @@ import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -306,6 +307,12 @@ final class SelenideElementProxyTest {
   @Test
   void shouldNotRetry_onUnhandledAlertException() {
     UnhandledAlertException exception = new UnhandledAlertException("unexpected alert open: {Alert text : Are you sure, Greg?}");
+    assertThat(shouldRetryAfterError(exception)).isFalse();
+  }
+
+  @Test
+  void shouldNotRetry_ifBrowserDied() {
+    UnreachableBrowserException exception = new UnreachableBrowserException("died");
     assertThat(shouldRetryAfterError(exception)).isFalse();
   }
 
