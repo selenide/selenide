@@ -16,6 +16,8 @@ import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -30,6 +32,8 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Arrays.asList;
 
 class SelenideElementProxy<T extends SelenideElement> implements InvocationHandler {
+  private static final Logger log = LoggerFactory.getLogger(SelenideElementProxy.class);
+
   private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
     "as",
     "getAlias",
@@ -142,15 +146,20 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
       }
 
       if (Cleanup.of.isInvalidSelectorError(lastError)) {
+        log.debug("Method {} execution failed. Last error (invalid selector): ", method.getName(), lastError);
         throw Cleanup.of.wrapInvalidSelectorException(lastError);
       }
       else if (!shouldRetryAfterError(lastError)) {
+        log.debug("Method {} execution failed; stop re-trying. Last error: ", method.getName(), lastError);
         throw lastError;
       }
+      log.debug("Method {} execution failed; will re-try after {} ms (timeout: {} ms). Last error: ", method.getName(), pollingIntervalMs, timeoutMs, lastError);
       stopwatch.sleep(pollingIntervalMs);
     }
     while (!stopwatch.isTimeoutReached());
 
+    log.debug("Method {} execution failed after re-trying {} ms. with interval {} ms. Last error: ",
+      method.getName(), timeoutMs, pollingIntervalMs, lastError);
     throw exceptionWrapper.wrap(lastError, webElementSource);
   }
 
