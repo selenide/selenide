@@ -4,6 +4,8 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.DownloadedFile;
+import org.apache.commons.lang3.Strings;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
@@ -33,9 +35,25 @@ public class GridDownloadsFolder implements DownloadsFolder {
 
   @Override
   public List<File> files() {
-    return webDriver.getDownloadableFiles().stream()
+    return getDownloadedFiles().stream()
       .map(name -> new File(name))
       .toList();
+  }
+
+  /**
+   * Temporary hack to work-around bug in Selenium
+   */
+  private List<String> getDownloadedFiles() {
+    for (int i = 0; i < 10; i++) {
+      try {
+        return webDriver.getDownloadableFiles();
+      }
+      catch (WebDriverException e) {
+        if (Strings.CS.contains(e.getMessage(), "Failed to get file attributes")) continue;
+        throw e;
+      }
+    }
+    return webDriver.getDownloadableFiles();
   }
 
   @Override
