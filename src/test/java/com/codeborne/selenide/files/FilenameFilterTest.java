@@ -13,10 +13,10 @@ final class FilenameFilterTest {
 
   @Test
   void matchesFileByName() {
-    assertThat(filter.match(new DownloadedFile(new File("cv.pdf"), emptyMap()))).isTrue();
-    assertThat(filter.match(new DownloadedFile(new File("cv1.pdf"), emptyMap()))).isFalse();
-    assertThat(filter.match(new DownloadedFile(new File(" cv.pdf"), emptyMap()))).isFalse();
-    assertThat(filter.match(new DownloadedFile(new File("cv.pdf "), emptyMap()))).isFalse();
+    assertThat(filter.match(file("cv.pdf"))).isTrue();
+    assertThat(filter.match(file("cv1.pdf"))).isFalse();
+    assertThat(filter.match(file(" cv.pdf"))).isFalse();
+    assertThat(filter.match(file("cv.pdf "))).isFalse();
   }
 
   @Test
@@ -32,5 +32,9 @@ final class FilenameFilterTest {
   @Test
   void isNotEmpty() {
     assertThat(filter.isEmpty()).isFalse();
+  }
+
+  private DownloadedFile file(String name) {
+    return new DownloadedFile(new File(name), 0, 0, emptyMap());
   }
 }

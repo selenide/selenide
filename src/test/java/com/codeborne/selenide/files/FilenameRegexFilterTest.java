@@ -13,10 +13,10 @@ final class FilenameRegexFilterTest {
 
   @Test
   void matchesFileByNameUsingGivenRegularExpression() {
-    assertThat(filter.match(new DownloadedFile(new File("cv-100.pdf"), emptyMap()))).isTrue();
-    assertThat(filter.match(new DownloadedFile(new File("cv100.pdf"), emptyMap()))).isFalse();
-    assertThat(filter.match(new DownloadedFile(new File("cv.pdf"), emptyMap()))).isFalse();
-    assertThat(filter.match(new DownloadedFile(new File("cv-ten.pdf"), emptyMap()))).isFalse();
+    assertThat(filter.match(file("cv-100.pdf"))).isTrue();
+    assertThat(filter.match(file("cv100.pdf"))).isFalse();
+    assertThat(filter.match(file("cv.pdf"))).isFalse();
+    assertThat(filter.match(file("cv-ten.pdf"))).isFalse();
   }
 
   @Test
@@ -32,5 +32,9 @@ final class FilenameRegexFilterTest {
   @Test
   void isNotEmpty() {
     assertThat(filter.isEmpty()).isFalse();
+  }
+
+  private DownloadedFile file(String name) {
+    return new DownloadedFile(new File(name), 0, 0, emptyMap());
   }
 }

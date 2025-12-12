@@ -53,12 +53,12 @@ public class DownloadFileWithCdp {
     return driver.browserDownloadsFolder();
   }
 
-  public File download(WebElementSource anyClickableElement,
+  public File download(WebElementSource link,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
 
-    Driver driver = anyClickableElement.driver();
+    Driver driver = link.driver();
     DevTools devTools = initDevTools(driver);
     DownloadsFolder downloadsFolder = requireNonNull(getDownloadsFolder(driver), "Webdriver downloads folder is not configured");
     CdpDownloads downloads = new CdpDownloads(downloadsFolder, new ConcurrentHashMap<>(1));
@@ -67,21 +67,19 @@ public class DownloadFileWithCdp {
     prepareDownloadWithCdp(driver, devTools, downloads, timeout);
 
     // Perform action an element that begins download process
-    action.perform(anyClickableElement.driver(), clickable);
+    action.perform(driver, clickable);
 
     try {
-      // Wait until download
-      File file = waitUntilDownloadsCompleted(anyClickableElement.driver(), fileFilter, timeout, incrementTimeout, downloads);
+      CdpDownload download = waitUntilDownloadsCompleted(driver, fileFilter, timeout, incrementTimeout, downloads);
 
-      //
-      if (!fileFilter.match(new DownloadedFile(file, emptyMap()))) {
+      if (!fileFilter.match(new DownloadedFile(download.file(), download.lastModifiedAt, download.fileSize, emptyMap()))) {
         String message = String.format("Failed to download file%s in %d ms.%s;%n actually downloaded: %s",
-          fileFilter.description(), timeout, fileFilter.description(), file.getAbsolutePath());
+          fileFilter.description(), timeout, fileFilter.description(), download.file().getAbsolutePath());
         throw new FileNotDownloadedError(message, timeout);
       }
 
       // Move file to unique folder
-      return archiveFile(anyClickableElement.driver(), file);
+      return archiveFile(driver, download.file());
     }
     finally {
       devTools.clearListeners();
@@ -96,7 +94,7 @@ public class DownloadFileWithCdp {
     return archivedFile;
   }
 
-  private File waitUntilDownloadsCompleted(Driver driver, FileFilter fileFilter,
+  private CdpDownload waitUntilDownloadsCompleted(Driver driver, FileFilter fileFilter,
                                            long timeout, long incrementTimeout, CdpDownloads downloads) {
     long pollingInterval = Math.max(driver.config().pollingInterval(), 100);
     long downloadStartedAt = currentTimeMillis();
@@ -105,7 +103,7 @@ public class DownloadFileWithCdp {
       Optional<CdpDownload> downloadedFile = downloads.find(fileFilter);
       if (downloadedFile.isPresent()) {
         log.debug("File {} download is complete after {} ms.", downloadedFile.get().fileName, stopwatch.getElapsedTimeMs());
-        return downloadedFile.get().file();
+        return downloadedFile.get();
       }
       else {
         failFastIfNoChanges(downloads, fileFilter, downloadStartedAt, timeout, incrementTimeout);
@@ -180,16 +178,21 @@ public class DownloadFileWithCdp {
     }
 
     public void inProgress(DownloadProgress e) {
-      download(e.getGuid()).lastModifiedAt = currentTimeMillis();
+      CdpDownload download = download(e.getGuid());
+      download.lastModifiedAt = currentTimeMillis();
+      download.fileSize = e.getReceivedBytes().longValue();
+
       if (e.getReceivedBytes().longValue() >= e.getTotalBytes().longValue()) {
-        if (download(e.getGuid()).file().exists()) {
-          finish(e.getGuid());
+        if (download.file().exists()) {
+          finish(e);
         }
       }
     }
 
-    public void finish(String guid) {
-      download(guid).completed = true;
+    public void finish(DownloadProgress e) {
+      CdpDownload download = download(e.getGuid());
+      download.completed = true;
+      download.lastModifiedAt = currentTimeMillis();
     }
 
     private synchronized CdpDownload download(String guid) {
@@ -201,6 +204,7 @@ public class DownloadFileWithCdp {
     private final DownloadsFolder folder;
     @Nullable
     private String fileName;
+    private long fileSize = -1;
     private long lastModifiedAt = currentTimeMillis();
     private boolean completed;
 
@@ -244,7 +248,7 @@ public class DownloadFileWithCdp {
             e.getState(), e.getReceivedBytes(), e.getTotalBytes(), e.getGuid());
           throw new FileNotDownloadedError(message, timeout);
         }
-        case COMPLETED -> downloads.finish(e.getGuid());
+        case COMPLETED -> downloads.finish(e);
         case INPROGRESS -> downloads.inProgress(e);
       }
     }

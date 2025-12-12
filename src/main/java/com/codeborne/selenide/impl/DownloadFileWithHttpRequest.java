@@ -3,7 +3,6 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
-import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.config.RequestConfig;
@@ -46,9 +45,9 @@ import java.util.Base64;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.codeborne.selenide.files.DownloadedFile.localFile;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNullElse;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.stream.Collectors.joining;
@@ -128,7 +127,7 @@ public class DownloadFileWithHttpRequest {
     File downloadedFile = downloader.prepareTargetFile(driver.config(), fileName);
     saveContentToFile(response, downloadedFile);
 
-    if (!fileFilter.match(new DownloadedFile(downloadedFile, emptyMap()))) {
+    if (!fileFilter.match(localFile(downloadedFile))) {
       String message = String.format("Failed to download file from %s in %d ms.%s;%n actually downloaded: %s",
         url, timeout, fileFilter.description(), downloadedFile.getAbsolutePath());
       throw new FileNotDownloadedError(message, timeout);

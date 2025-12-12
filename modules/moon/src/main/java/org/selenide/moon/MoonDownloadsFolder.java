@@ -4,10 +4,9 @@ import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.DownloadedFile;
 
-import java.io.File;
 import java.util.List;
 
-import static java.util.Collections.emptyMap;
+import static com.codeborne.selenide.files.DownloadedFile.fileWithName;
 import static java.util.stream.Collectors.toList;
 import static org.selenide.moon.MoonClient.clientFor;
 
@@ -28,16 +27,18 @@ public class MoonDownloadsFolder implements DownloadsFolder {
   }
 
   @Override
-  public List<File> files() {
+  public List<DownloadedFile> files() {
     List<String> files = moonClient.downloads();
-    return files.stream().map(name -> new File(name)).collect(toList());
+    return files.stream().map(name -> fileWithName(name)).collect(toList());
   }
 
+  /**
+   * @param modifiedAfterTs ignored
+   * @return all downloaded files because Moon API doesn't provide info about file modification time :(
+   */
   @Override
   public List<DownloadedFile> filesNewerThan(long modifiedAfterTs) {
-    return files().stream()
-      .map(file -> new DownloadedFile(file, emptyMap()))
-      .collect(toList());
+    return files();
   }
 
   @Override
