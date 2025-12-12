@@ -3,7 +3,6 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,10 +11,9 @@ import java.util.Set;
 import static java.util.Locale.ROOT;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
-import static org.apache.commons.io.FilenameUtils.getExtension;
 
 public interface DownloadsFolder {
-  List<File> files();
+  List<DownloadedFile> files();
 
   List<DownloadedFile> filesNewerThan(long modifiedAfterTs);
 
@@ -25,11 +23,11 @@ public interface DownloadsFolder {
 
   default boolean hasFiles(Set<String> extensions, FileFilter excludingFilter) {
     return files().stream()
-      .anyMatch(file -> extensions.contains(getExtension(file.getName()).toLowerCase(ROOT)) && excludingFilter.notMatch(file));
+      .anyMatch(file -> extensions.contains(file.extension().toLowerCase(ROOT)) && excludingFilter.notMatch(file.getFile()));
   }
 
   default Map<String, Long> modificationTimes() {
-    return files().stream().collect(toMap(f -> f.getName(), f -> f.lastModified()));
+    return files().stream().collect(toMap(f -> f.getName(), f -> f.lastModifiedTime()));
   }
 
   default Optional<Long> lastModificationTime() {

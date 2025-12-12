@@ -5,6 +5,7 @@ import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.DownloadedFile;
 import org.apache.commons.lang3.Strings;
+import org.openqa.selenium.HasDownloads;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -34,32 +35,33 @@ public class GridDownloadsFolder implements DownloadsFolder {
   }
 
   @Override
-  public List<File> files() {
+  public List<DownloadedFile> files() {
     return getDownloadedFiles().stream()
-      .map(name -> new File(name))
+      .map(fileOnGrid -> new DownloadedFile(
+        new File(fileOnGrid.getName()), fileOnGrid.getLastModifiedTime(), fileOnGrid.getSize(), emptyMap()))
       .toList();
   }
 
   /**
    * Temporary hack to work-around bug in Selenium
    */
-  private List<String> getDownloadedFiles() {
+  private List<HasDownloads.DownloadedFile> getDownloadedFiles() {
     for (int i = 0; i < 10; i++) {
       try {
-        return webDriver.getDownloadableFiles();
+        return webDriver.getDownloadedFiles();
       }
       catch (WebDriverException e) {
         if (Strings.CS.contains(e.getMessage(), "Failed to get file attributes")) continue;
         throw e;
       }
     }
-    return webDriver.getDownloadableFiles();
+    return webDriver.getDownloadedFiles();
   }
 
   @Override
   public List<DownloadedFile> filesNewerThan(long modifiedAfterTs) {
     return files().stream()
-      .map(file -> new DownloadedFile(file, emptyMap()))
+      .filter(fileInfo -> fileInfo.isFileModifiedLaterThan(modifiedAfterTs))
       .collect(toList());
   }
 

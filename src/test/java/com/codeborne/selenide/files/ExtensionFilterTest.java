@@ -14,14 +14,18 @@ final class ExtensionFilterTest {
 
   @Test
   void matchesFileByExtension() {
-    assertThat(filter.match(new DownloadedFile(new File("cv.pdf"), emptyMap()))).isTrue();
-    assertThat(filter.match(new DownloadedFile(new File("report.pdf"), emptyMap()))).isTrue();
-    assertThat(filter.match(new DownloadedFile(new File("report.PDF"), emptyMap()))).isFalse();
-    assertThat(filter.match(new DownloadedFile(new File("cv.pdff"), emptyMap()))).isFalse();
-    assertThat(filter.match(new DownloadedFile(new File("cv.ppdf"), emptyMap()))).isFalse();
-    assertThat(filter.match(new DownloadedFile(new File("cv.pdf.gz"), emptyMap()))).isFalse();
-    assertThat(filter.match(new DownloadedFile(new File("cv.xpdf"), emptyMap()))).isFalse();
-    assertThat(filter.match(new DownloadedFile(new File("cv.pdfx"), emptyMap()))).isFalse();
+    assertThat(filter.match(file("cv.pdf"))).isTrue();
+    assertThat(filter.match(file("report.pdf"))).isTrue();
+    assertThat(filter.match(file("report.PDF"))).isFalse();
+    assertThat(filter.match(file("cv.pdff"))).isFalse();
+    assertThat(filter.match(file("cv.ppdf"))).isFalse();
+    assertThat(filter.match(file("cv.pdf.gz"))).isFalse();
+    assertThat(filter.match(file("cv.xpdf"))).isFalse();
+    assertThat(filter.match(file("cv.pdfx"))).isFalse();
+  }
+
+  private DownloadedFile file(String name) {
+    return new DownloadedFile(new File(name), 0, 0, emptyMap());
   }
 
   @Test

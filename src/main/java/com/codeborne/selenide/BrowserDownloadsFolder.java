@@ -11,9 +11,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+import static com.codeborne.selenide.files.DownloadedFile.localFile;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.io.FileUtils.cleanDirectory;
 import static org.apache.commons.io.FileUtils.listFiles;
@@ -35,26 +35,20 @@ public class BrowserDownloadsFolder implements DownloadsFolder {
   }
 
   @Override
-  public List<File> files() {
+  public List<DownloadedFile> files() {
     File[] files = folder.listFiles();
-    return files == null ? emptyList() : asList(files);
+    return files == null ? emptyList() : asList(files).stream()
+      .filter(File::isFile)
+      .map(file -> localFile(file))
+      .toList();
   }
 
   @Override
   public List<DownloadedFile> filesNewerThan(long modifiedAfterTs) {
     return files().stream()
-      .filter(File::isFile)
-      .filter(file -> isFileModifiedLaterThan(file, modifiedAfterTs))
-      .map(file -> new DownloadedFile(file, emptyMap()))
+      .filter(file -> file.lastModifiedTime() > 0)
+      .filter(file -> file.isFileModifiedLaterThan(modifiedAfterTs))
       .collect(toList());
-  }
-
-  /**
-   * Depending on OS, file modification time can have seconds precision, not milliseconds.
-   * We have to ignore the difference in milliseconds.
-   */
-  static boolean isFileModifiedLaterThan(File file, long timestamp) {
-    return file.lastModified() - timestamp >= -1000L;
   }
 
   public File file(String fileName) {

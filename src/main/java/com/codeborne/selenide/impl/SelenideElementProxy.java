@@ -153,7 +153,8 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
         log.debug("Method {} execution failed; stop re-trying. Last error: ", method.getName(), lastError);
         throw lastError;
       }
-      log.debug("Method {} execution failed; will re-try after {} ms (timeout: {} ms). Last error: ", method.getName(), pollingIntervalMs, timeoutMs, lastError);
+      log.debug("Method {} execution failed; will re-try after {} ms (timeout: {} ms). Last error: ",
+        method.getName(), pollingIntervalMs, timeoutMs, lastError);
       stopwatch.sleep(pollingIntervalMs);
     }
     while (!stopwatch.isTimeoutReached());

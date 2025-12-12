@@ -99,7 +99,7 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
     File file = downloader.prepareTargetFile(config, fileName);
     try {
       FileUtils.writeByteArrayToFile(file, contents.getBinaryContents());
-      downloads.add(new DownloadedFile(file, r.headers));
+      downloads.add(new DownloadedFile(file, file.lastModified(), file.length(), r.headers));
     }
     catch (IOException e) {
       log.error("Failed to save downloaded file to {} for url {}", file.getAbsolutePath(), messageInfo.getUrl(), e);

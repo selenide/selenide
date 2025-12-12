@@ -99,7 +99,7 @@ final class DownloadFileWithProxyServerTest {
 
   private void emulateServerResponseWithFiles(final File... files) {
     doAnswer(invocation -> {
-      filter.downloads().files().addAll(Stream.of(files).map(file -> new DownloadedFile(file, emptyMap())).toList());
+      filter.downloads().files().addAll(Stream.of(files).map(file -> new DownloadedFile(file, 0, 0, emptyMap())).toList());
       return null;
     }).when(link).click();
   }

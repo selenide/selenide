@@ -17,8 +17,8 @@ final class DownloadDetectorTest {
 
   @Test
   void responseWithContentDispositionHeaderHasHighRank() {
-    DownloadedFile response1 = new DownloadedFile(new File("cv.pdf"), withContentDisposition("attachment; filename=cv.pdf"));
-    DownloadedFile response2 = new DownloadedFile(new File("script.js"), withContentType("application/javascript"));
+    DownloadedFile response1 = new DownloadedFile(new File("cv.pdf"), 0, 0, withContentDisposition("attachment; filename=cv.pdf"));
+    DownloadedFile response2 = new DownloadedFile(new File("script.js"), 0, 0, withContentType("application/javascript"));
 
     assertThat(detector.compare(response1, response2)).isEqualTo(-1);
     assertThat(detector.compare(response2, response1)).isEqualTo(1);
@@ -26,8 +26,8 @@ final class DownloadDetectorTest {
 
   @Test
   void htmlResponseHasLowRank() {
-    DownloadedFile response1 = new DownloadedFile(new File("some-file.txt"), withContentType("application/octet-stream"));
-    DownloadedFile response2 = new DownloadedFile(new File("event.json"), withContentType("application/json"));
+    DownloadedFile response1 = new DownloadedFile(new File("some-file.txt"), 0, 0, withContentType("application/octet-stream"));
+    DownloadedFile response2 = new DownloadedFile(new File("event.json"), 0, 0, withContentType("application/json"));
 
     assertThat(detector.compare(response1, response2)).isEqualTo(-1);
     assertThat(detector.compare(response2, response1)).isEqualTo(1);
@@ -35,8 +35,8 @@ final class DownloadDetectorTest {
 
   @Test
   void latestFileWins() {
-    DownloadedFile response1 = new DownloadedFile(fileCreatedSecondsAgo("earlier-file.txt", 60), emptyMap());
-    DownloadedFile response2 = new DownloadedFile(fileCreatedSecondsAgo("latest-file.txt", 10), emptyMap());
+    DownloadedFile response1 = new DownloadedFile(fileCreatedSecondsAgo("earlier-file.txt", 60), 0, 0, emptyMap());
+    DownloadedFile response2 = new DownloadedFile(fileCreatedSecondsAgo("latest-file.txt", 10), 0, 0, emptyMap());
 
     assertThat(detector.compare(response1, response2)).isEqualTo(-1);
     assertThat(detector.compare(response2, response1)).isEqualTo(1);
@@ -44,8 +44,8 @@ final class DownloadDetectorTest {
 
   @Test
   void finallyJustTakeFirstFileAlphabetically() {
-    DownloadedFile response1 = new DownloadedFile(fileCreatedSecondsAgo("a.txt", 42), emptyMap());
-    DownloadedFile response2 = new DownloadedFile(fileCreatedSecondsAgo("b.txt", 42), emptyMap());
+    DownloadedFile response1 = new DownloadedFile(fileCreatedSecondsAgo("a.txt", 42), 0, 0, emptyMap());
+    DownloadedFile response2 = new DownloadedFile(fileCreatedSecondsAgo("b.txt", 42), 0, 0, emptyMap());
 
     assertThat(detector.compare(response1, response2)).isEqualTo(-1);
     assertThat(detector.compare(response2, response1)).isEqualTo(1);
