@@ -164,7 +164,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
     File downloadedFile = $(byText("Download large file")).download(timeout * 2, withExtension("txt"));
 
     assertThat(downloadedFile).hasName("large_file.txt");
-    assertThat(downloadedFile).hasSize(5 * 1024 * 1024);
+    assertThat(downloadedFile).hasSize(5L * 1024 * 1024);
   }
 
   @ParameterizedTest

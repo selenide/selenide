@@ -59,7 +59,7 @@ public abstract class BaseHandler extends HttpServlet {
       pause(result.pause);
     }
     response.setStatus(result.httpStatus);
-    response.setContentLength(result.contentLength);
+    response.setHeader("Content-Length", String.valueOf(result.contentLength));
     if (result.contentType != null) {
       response.setContentType(result.contentType);
     }

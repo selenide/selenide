@@ -1,12 +1,14 @@
 package integration.server;
 
 import java.io.InputStream;
+import java.util.Random;
 
 class ContentGenerator extends InputStream {
-  private final int contentLength;
-  private int bytesCount;
+  private final long contentLength;
+  private long bytesCount;
+  private final Random random = new Random();
 
-  ContentGenerator(int contentLength) {
+  ContentGenerator(long contentLength) {
     this.contentLength = contentLength;
   }
 
@@ -14,7 +16,7 @@ class ContentGenerator extends InputStream {
   public int read() {
     if (bytesCount < contentLength) {
       bytesCount++;
-      return bytesCount % 26 + 96;
+      return random.nextInt(96, 96 + 26);
     }
     return -1;
   }

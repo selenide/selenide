@@ -37,7 +37,7 @@ class FileDownloadHandler extends BaseHandler {
     String contentType = contentType(fileName);
 
     if ("large_file.txt".equals(fileName)) {
-      int contentLength = 5 * 1024 * 1024; // 5 MB
+      long contentLength = 5 * 1024 * 1024L; // 5 MB
       return new Result(SC_OK, contentType, contentLength, generateLargeFile(contentLength), headers(fileName, exposeFileName),
         longParam(request, "pause"), longParam(request, "duration"));
     }
@@ -63,7 +63,7 @@ class FileDownloadHandler extends BaseHandler {
     );
   }
 
-  private InputStream generateLargeFile(final int contentLength) {
+  private InputStream generateLargeFile(final long contentLength) {
     return new ContentGenerator(contentLength);
   }
 

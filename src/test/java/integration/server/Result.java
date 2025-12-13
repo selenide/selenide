@@ -11,7 +11,7 @@ import static java.util.Collections.emptyMap;
 class Result {
   final int httpStatus;
   @Nullable final String contentType;
-  final int contentLength;
+  final long contentLength;
   @Nullable final InputStream content;
   final Map<String, String> httpHeaders;
   final long pause;
@@ -37,7 +37,7 @@ class Result {
     this(httpStatus, contentType, content.length, new ByteArrayInputStream(content), httpHeaders, pause, duration);
   }
 
-  Result(int httpStatus, @Nullable String contentType, int contentLength, @Nullable InputStream content,
+  Result(int httpStatus, @Nullable String contentType, long contentLength, @Nullable InputStream content,
          Map<String, String> httpHeaders, long pause, long duration) {
     this.httpStatus = httpStatus;
     this.contentType = contentType;
