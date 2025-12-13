@@ -32,10 +32,10 @@ final class SelenideProxyServerTest {
     verify(bmp, never()).setChainedProxy(any(InetSocketAddress.class));
     verify(bmp).start(0);
 
-    FileDownloadFilter filter = proxyServer.responseFilter("download");
+    FileDownloadFilter filter = proxyServer.responseFilter("selenide.proxy.filter.download");
     assertThat(filter.downloads().files()).hasSize(0);
 
-    FileDownloadFilter requestFilter = proxyServer.requestFilter("download");
+    FileDownloadFilter requestFilter = proxyServer.requestFilter("selenide.proxy.filter.download");
     assertThat(requestFilter).isSameAs(filter);
   }
 

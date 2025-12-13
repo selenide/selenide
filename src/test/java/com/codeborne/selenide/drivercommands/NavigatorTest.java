@@ -39,7 +39,7 @@ final class NavigatorTest {
     doReturn(selenideProxy).when(selenideDriver).getProxy();
     doReturn(navigation).when(driver).navigate();
     doReturn(true).when(selenideProxy).isStarted();
-    doReturn(authenticationFilter).when(selenideProxy).requestFilter("authentication");
+    doReturn(authenticationFilter).when(selenideProxy).requestFilter("selenide.proxy.filter.authentication");
   }
 
   @Test

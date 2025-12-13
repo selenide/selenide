@@ -48,7 +48,7 @@ public class Navigator {
   }
 
   private AuthenticationFilter basicAuthRequestFilter(SelenideDriver driver) {
-    return requireNonNull(driver.getProxy().requestFilter("authentication"));
+    return requireNonNull(driver.getProxy().requestFilter("selenide.proxy.filter.authentication"));
   }
 
   String absoluteUrl(Config config, String relativeOrAbsoluteUrl) {

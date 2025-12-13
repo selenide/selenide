@@ -42,7 +42,7 @@ final class DownloadFileWithProxyServerTest {
   void setUp() {
     config.proxyEnabled(true);
     config.fileDownload(PROXY);
-    when(proxy.responseFilter("download")).thenReturn(filter);
+    when(proxy.responseFilter("selenide.proxy.filter.download")).thenReturn(filter);
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, new Browser("opera", false), webdriver, proxy));
     when(linkWithHref.findAndAssertElementIsInteractable()).thenReturn(link);
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");

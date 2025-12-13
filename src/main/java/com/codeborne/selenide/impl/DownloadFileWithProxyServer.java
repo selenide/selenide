@@ -45,7 +45,7 @@ public class DownloadFileWithProxyServer {
 
     SelenideProxyServer proxyServer = driver.getProxy();
 
-    FileDownloadFilter filter = proxyServer.responseFilter("download");
+    FileDownloadFilter filter = proxyServer.responseFilter("selenide.proxy.filter.download");
     if (filter == null) {
       throw new IllegalStateException("Cannot download file: download filter is not activated");
     }
