@@ -26,6 +26,8 @@ import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static com.codeborne.selenide.Browsers.SAFARI;
+import static com.codeborne.selenide.impl.HttpHelper.maskUrlCredentials;
+import static java.lang.Thread.currentThread;
 
 public class WebDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(WebDriverFactory.class);
@@ -46,13 +48,9 @@ public class WebDriverFactory {
   }
 
   public WebDriver createWebDriver(Config config, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
-    log.debug("browser={}", config.browser());
-    log.debug("browser.version={}", config.browserVersion());
-    log.debug("remote={}", config.remote());
-    log.debug("browserSize={}", config.browserSize());
-    if (browserDownloadsFolder != null) {
-      log.debug("downloadsFolder={}", browserDownloadsFolder.getAbsolutePath());
-    }
+    String remote = maskUrlCredentials(config.remote());
+    log.debug("Creating webdriver in thread {}: browser={}, browser.version={}, browser.size={}, remote={}, downloadsFolder: {}",
+      currentThread().getId(), config.browser(), config.browserVersion(), config.browserSize(), remote, browserDownloadsFolder);
 
     Browser browser = new Browser(config.browser(), config.headless());
     WebDriver webdriver = createWebDriverInstance(config, browser, proxy, browserDownloadsFolder);

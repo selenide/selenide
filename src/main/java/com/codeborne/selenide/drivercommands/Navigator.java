@@ -19,6 +19,7 @@ import static com.codeborne.selenide.AuthenticationType.BASIC;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.drivercommands.BasicAuthUtils.appendBasicAuthToURL;
 import static com.codeborne.selenide.drivercommands.BasicAuthUtils.registerBasicAuth;
+import static com.codeborne.selenide.impl.HttpHelper.maskUrlCredentials;
 import static java.util.Objects.requireNonNull;
 import static java.util.regex.Pattern.DOTALL;
 
@@ -69,10 +70,12 @@ public class Navigator {
         webDriver.navigate().to(url);
       }
       catch (WebDriverException e) {
-        e.addInfo("selenide.url", absoluteUrl);
-        e.addInfo("selenide.baseUrl", driver.config().baseUrl());
-        if (driver.config().remote() != null) {
-          e.addInfo("selenide.remote", driver.config().remote());
+        e.addInfo("selenide.url", maskUrlCredentials(absoluteUrl));
+        e.addInfo("selenide.baseUrl", maskUrlCredentials(driver.config().baseUrl()));
+
+        String gridUrl = driver.config().remote();
+        if (gridUrl != null) {
+          e.addInfo("selenide.remote", maskUrlCredentials(gridUrl));
         }
         throw e;
       }

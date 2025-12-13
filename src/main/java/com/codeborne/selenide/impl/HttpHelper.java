@@ -22,8 +22,8 @@ public class HttpHelper {
   private static final Pattern FILENAME_IN_CONTENT_DISPOSITION_HEADER =
     Pattern.compile(".*filename\\*? *= *\"?((.+)'')?([^\";?]*)\"?(;charset=(.*))?.*", CASE_INSENSITIVE);
 
-  private static final Pattern FILENAME_FORBIDDEN_CHARACTERS =
-    Pattern.compile("[#%&{}/\\\\<>*?$!'\":@+`|=]");
+  private static final Pattern FILENAME_FORBIDDEN_CHARACTERS = Pattern.compile("[#%&{}/\\\\<>*?$!'\":@+`|=]");
+  private static final Pattern RE_URL_WITH_CREDENTIALS = Pattern.compile("(.+//).*:.*@(.+)");
 
   public Optional<String> getFileNameFromContentDisposition(Map<String, String> headers) {
     return getFileNameFromContentDisposition(headers.entrySet());
@@ -78,5 +78,10 @@ public class HttpHelper {
 
   public String normalize(String fileName) {
     return FILENAME_FORBIDDEN_CHARACTERS.matcher(fileName).replaceAll("_").replace(' ', '+');
+  }
+
+  @Nullable
+  public static String maskUrlCredentials(@Nullable String url) {
+    return url == null ? null : RE_URL_WITH_CREDENTIALS.matcher(url).replaceFirst("$1***:***@$2");
   }
 }

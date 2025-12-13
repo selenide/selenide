@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static com.codeborne.selenide.impl.HttpHelper.maskUrlCredentials;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class HttpHelperTest {
@@ -147,5 +148,21 @@ final class HttpHelperTest {
   void slashIsAlsoReplacedByUnderscore() {
     assertThat(helper.normalize("имя с /slash.winzip"))
       .isEqualTo("имя+с+_slash.winzip");
+  }
+
+  @Test
+  void maskUrlCredentials_hidesUsernameAndPasswordInUrl() {
+    assertThat(maskUrlCredentials("http://username:password@localhost:49112/wd/hub"))
+      .isEqualTo("http://***:***@localhost:49112/wd/hub");
+    assertThat(maskUrlCredentials("https://victoria:secret@myshop.com/wd/hub"))
+      .isEqualTo("https://***:***@myshop.com/wd/hub");
+  }
+
+  @Test
+  void maskUrlCredentials_urlWithoutCredentials_staysUntouched() {
+    assertThat(maskUrlCredentials("http://localhost:49112/wd/hub")).isEqualTo("http://localhost:49112/wd/hub");
+    assertThat(maskUrlCredentials("https://localhost/wd/hub")).isEqualTo("https://localhost/wd/hub");
+    assertThat(maskUrlCredentials("")).isEqualTo("");
+    assertThat(maskUrlCredentials(null)).isNull();
   }
 }
