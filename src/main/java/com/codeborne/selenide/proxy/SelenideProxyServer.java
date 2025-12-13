@@ -80,7 +80,10 @@ public class SelenideProxyServer {
   /**
    * Start the server
    * <p>
-   * It automatically adds one response filter "download" that can intercept downloaded files.
+   * It automatically adds few response filters:
+   * 1. "selenide.proxy.filter.download" that can intercept downloaded files
+   * 2. "selenide.proxy.filter.mockResponse" for mocking http responses
+   * etc.
    */
   public void start() {
     proxy.setTrustAllServers(true);
@@ -94,12 +97,10 @@ public class SelenideProxyServer {
     }
     FileDownloadFilter downloadFilter = new FileDownloadFilter(config);
 
-    addRequestFilter("mockResponse", new MockResponseFilter());
-    addRequestFilter("authentication", new AuthenticationFilter());
-    addRequestFilter("requestSizeWatchdog", new RequestSizeWatchdog());
-    addResponseFilter("responseSizeWatchdog", new ResponseSizeWatchdog());
-    addRequestFilter("download", downloadFilter);
-    addResponseFilter("download", downloadFilter);
+    addRequestFilter("selenide.proxy.filter.mockResponse", new MockResponseFilter());
+    addRequestFilter("selenide.proxy.filter.authentication", new AuthenticationFilter());
+    addRequestFilter("selenide.proxy.filter.download", downloadFilter);
+    addResponseFilter("selenide.proxy.filter.download", downloadFilter);
 
     proxy.start(config.proxyPort());
     port.set(proxy.getPort());
@@ -287,8 +288,6 @@ public class SelenideProxyServer {
 
   /**
    * Get response filter by name
-   * <p>
-   * By default, the only one filter "download" is available.
    */
   @SuppressWarnings("unchecked")
   @Nullable
@@ -297,6 +296,6 @@ public class SelenideProxyServer {
   }
 
   public MockResponseFilter responseMocker() {
-    return requireNonNull(requestFilter("mockResponse"));
+    return requireNonNull(requestFilter("selenide.proxy.filter.mockResponse"));
   }
 }
