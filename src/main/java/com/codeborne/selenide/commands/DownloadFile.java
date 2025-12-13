@@ -5,6 +5,8 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.StopCommandExecutionException;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.files.FileFilters;
 import com.codeborne.selenide.impl.DownloadFileToFolder;
@@ -48,7 +50,6 @@ public class DownloadFile implements Command<File> {
 
   @Override
   public File execute(SelenideElement selenideElement, WebElementSource linkWithHref, Object @Nullable [] args) {
-    WebElement link = linkWithHref.findAndAssertElementIsInteractable();
     Config config = linkWithHref.driver().config();
     DownloadOptions options = getDownloadOptions(config, args);
     long timeout = ofNullable(options.timeout()).map(Duration::toMillis).orElse(config.timeout());
@@ -58,9 +59,11 @@ public class DownloadFile implements Command<File> {
       throw new IllegalArgumentException(error);
     }
 
-    log.debug("Download file: {}", options);
-
     FileDownloadMode method = requireNonNullElse(options.getMethod(), config.fileDownload());
+    log.debug("Download file ({}) with method {}, timeout {} ms and incTimeout {} ms", options, method, timeout, incrementTimeout);
+
+    WebElement link = waitForLink(linkWithHref, incrementTimeout);
+
     return switch (method) {
       case HTTPGET -> downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, options.getFilter());
       case PROXY -> downloadFileWithProxyServer.download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
@@ -69,6 +72,15 @@ public class DownloadFile implements Command<File> {
       case CDP -> downloadFileWithCdp
         .download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
     };
+  }
+
+  private static WebElement waitForLink(WebElementSource linkWithHref, long incrementTimeout) {
+    try {
+      return linkWithHref.findAndAssertElementIsInteractable();
+    }
+    catch (ElementNotFound elementNotFound) {
+      throw new StopCommandExecutionException(elementNotFound, incrementTimeout);
+    }
   }
 
   private DownloadOptions getDownloadOptions(Config config, Object @Nullable [] args) {

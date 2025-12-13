@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Stopwatch;
 import com.codeborne.selenide.commands.Commands;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
+import com.codeborne.selenide.ex.StopCommandExecutionException;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -148,6 +149,12 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
       if (Cleanup.of.isInvalidSelectorError(lastError)) {
         log.debug("Method {} execution failed. Last error (invalid selector): ", method.getName(), lastError);
         throw Cleanup.of.wrapInvalidSelectorException(lastError);
+      }
+      else if (lastError instanceof StopCommandExecutionException stop) {
+        lastError = stop;
+        if (stopwatch.getElapsedTimeMs() >= stop.timeoutMs()) {
+          throw lastError;
+        }
       }
       else if (!shouldRetryAfterError(lastError)) {
         log.debug("Method {} execution failed; stop re-trying. Last error: ", method.getName(), lastError);

@@ -100,9 +100,19 @@ public class UIAssertionError extends AssertionFailedError {
   }
 
   private static UIAssertionError wrapThrowable(Driver driver, Throwable error, long timeoutMs) {
-    UIAssertionError uiError = error instanceof UIAssertionError uiAssertionError ?
-      uiAssertionError : wrapToUIAssertionError(error);
-    uiError.timeoutMs = timeoutMs;
+    UIAssertionError uiError;
+    if (error instanceof StopCommandExecutionException stop) {
+      uiError = stop.getCause();
+      uiError.timeoutMs = stop.timeoutMs();
+    }
+    else if (error instanceof UIAssertionError uiAssertionError) {
+      uiError = uiAssertionError;
+      uiError.timeoutMs = timeoutMs;
+    }
+    else {
+      uiError = wrapToUIAssertionError(error);
+      uiError.timeoutMs = timeoutMs;
+    }
     if (uiError.screenshot.isPresent()) {
       log.warn("UIAssertionError already has screenshot: {} {} -> {}",
         uiError.getClass().getName(), uiError.getMessage(), uiError.screenshot);
