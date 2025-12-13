@@ -30,7 +30,7 @@ class Delayer {
     }
   }
 
-  static void writeSlowly(OutputStream os, int contentLength, InputStream content, long duration) throws IOException {
+  static void writeSlowly(OutputStream os, long contentLength, InputStream content, long duration) throws IOException {
     Delayer delayer = new Delayer(duration);
     long delay = Math.max(duration / (contentLength + 1), 1);
     delayer.delay(delay);
