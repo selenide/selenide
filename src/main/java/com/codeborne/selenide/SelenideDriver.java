@@ -15,7 +15,6 @@ import com.codeborne.selenide.selector.FocusedElementLocator;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -521,8 +520,7 @@ public class SelenideDriver {
     }
     else if (isBiDiEnabled(webDriver)) { // Firefox
       BrowsingContext browsingContext = new BrowsingContext(webDriver, webDriver.getWindowHandle());
-      Dimension size = webDriver.manage().window().getSize();
-      browsingContext.setViewport(size.getWidth(), size.getHeight());
+      browsingContext.setViewport(null, null);
     }
     else {
       throw new UnsupportedOperationException("Mobile emulation is not enabled in " + webDriver);
