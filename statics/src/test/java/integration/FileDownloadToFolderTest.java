@@ -1,6 +1,8 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.DownloadOptions;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
 import org.apache.commons.lang3.SystemUtils;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.slf4j.Logger;
@@ -16,11 +19,13 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.Duration;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
@@ -33,6 +38,7 @@ import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
+import static java.lang.System.currentTimeMillis;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createTempDirectory;
 import static java.time.Duration.ofMillis;
@@ -101,6 +107,27 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageStartingWith("Failed to download file with extension \"txt\" in 111 ms");
+  }
+
+  @Test
+  void failsFastIfDownloadLinkNotFound() {
+    long start = currentTimeMillis();
+
+    DownloadOptions shortIncrementTimeout = file()
+      .withTimeout(Duration.ofSeconds(20))
+      .withIncrementTimeout(Duration.ofMillis(300));
+
+    assertThatThrownBy(() -> $("#imaginary-button").download(shortIncrementTimeout))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {#imaginary-button}")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 300 ms.")
+      .cause()
+      .isInstanceOf(NoSuchElementException.class);
+
+    long end = currentTimeMillis();
+    assertThat(end - start).isBetween(300L, 5_000L);
   }
 
   @Test
