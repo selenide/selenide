@@ -24,6 +24,10 @@ final class SelenideProxyServerTest {
   private final Config config = mock();
   private final SelenideProxyServer proxyServer = new SelenideProxyServer(config, null, bmp);
 
+  private final RequestFilter emptyRequestFilter = (request, contents, messageInfo) -> null;
+  private final ResponseFilter emptyResponseFilter = (response, contents, messageInfo) -> {
+  };
+
   @Test
   void canInterceptResponses() {
     proxyServer.start();
@@ -45,8 +49,8 @@ final class SelenideProxyServerTest {
     proxy.setHttpProxy("127.0.0.1:3128");
     proxy.setNoProxy("localhost,https://example.com/");
 
-    SelenideProxyServer proxyServer = new SelenideProxyServer(config, proxy, bmp);
-    proxyServer.start();
+    SelenideProxyServer proxyServerWithChainedProxy = new SelenideProxyServer(config, proxy, bmp);
+    proxyServerWithChainedProxy.start();
 
     verify(bmp).setChainedProxy(any(InetSocketAddress.class));
     verify(bmp).setChainedProxyNonProxyHosts(Arrays.asList("localhost", "https://example.com/"));
@@ -59,8 +63,8 @@ final class SelenideProxyServerTest {
     Proxy proxy = new Proxy();
     proxy.setHttpProxy("127.0.0.1:3128");
 
-    SelenideProxyServer proxyServer = new SelenideProxyServer(config, proxy, bmp);
-    proxyServer.start();
+    SelenideProxyServer proxyServerWithChainedProxy = new SelenideProxyServer(config, proxy, bmp);
+    proxyServerWithChainedProxy.start();
 
     verify(bmp).setChainedProxy(any(InetSocketAddress.class));
     verify(bmp, never()).setChainedProxyNonProxyHosts(any(List.class));
@@ -120,18 +124,12 @@ final class SelenideProxyServerTest {
   @Test
   void canGetRequestFilters() {
     proxyServer.start();
+    resetFilters();
 
-    proxyServer.requestFilterNames()
-      .forEach(proxyServer::removeRequestFilter);
-
-    RequestFilter emptyRequestFilter = (request, contents, messageInfo) -> null;
-
-    proxyServer.addRequestFilter("foo-request-filter-1", emptyRequestFilter);
-    proxyServer.addRequestFilter("foo-request-filter-2", emptyRequestFilter);
-    proxyServer.addRequestFilter("foo-request-filter-3", emptyRequestFilter);
-    proxyServer.addRequestFilter("bar-request-filter-1", emptyRequestFilter);
-    proxyServer.addRequestFilter("bar-request-filter-2", emptyRequestFilter);
-    proxyServer.addRequestFilter("baz-request-filter-1", emptyRequestFilter);
+    addRequestFilters(
+      "foo-request-filter-1", "foo-request-filter-2", "foo-request-filter-3",
+      "bar-request-filter-1", "bar-request-filter-2", "baz-request-filter-1"
+    );
 
     Map<String, RequestFilter> requestFilters = proxyServer.requestFilters();
     assertThat(requestFilters)
@@ -145,10 +143,7 @@ final class SelenideProxyServerTest {
         "baz-request-filter-1", emptyRequestFilter
       ));
 
-    proxyServer.requestFilterNames()
-      .stream()
-      .filter(filterName -> filterName.startsWith("foo"))
-      .forEach(proxyServer::removeRequestFilter);
+    removeRequestFilters("foo-request-filter-1", "foo-request-filter-2", "foo-request-filter-3");
 
     Map<String, RequestFilter> updatedRequestFilters = proxyServer.requestFilters();
     assertThat(updatedRequestFilters)
@@ -163,18 +158,12 @@ final class SelenideProxyServerTest {
   @Test
   void canGetRequestFilterNames() {
     proxyServer.start();
+    resetFilters();
 
-    proxyServer.requestFilterNames()
-      .forEach(proxyServer::removeRequestFilter);
-
-    RequestFilter emptyRequestFilter = (request, contents, messageInfo) -> null;
-
-    proxyServer.addRequestFilter("foo-request-filter-1", emptyRequestFilter);
-    proxyServer.addRequestFilter("foo-request-filter-2", emptyRequestFilter);
-    proxyServer.addRequestFilter("foo-request-filter-3", emptyRequestFilter);
-    proxyServer.addRequestFilter("bar-request-filter-1", emptyRequestFilter);
-    proxyServer.addRequestFilter("bar-request-filter-2", emptyRequestFilter);
-    proxyServer.addRequestFilter("baz-request-filter-1", emptyRequestFilter);
+    addRequestFilters(
+      "foo-request-filter-1", "foo-request-filter-2", "foo-request-filter-3",
+      "bar-request-filter-1", "bar-request-filter-2", "baz-request-filter-1"
+    );
 
     List<String> requestFilterNames = proxyServer.requestFilterNames();
     assertThat(requestFilterNames)
@@ -187,10 +176,8 @@ final class SelenideProxyServerTest {
         "baz-request-filter-1"
       );
 
-    requestFilterNames
-      .stream()
-      .filter(filterName -> filterName.startsWith("bar"))
-      .forEach(proxyServer::removeRequestFilter);
+    removeRequestFilters("bar-request-filter-1", "bar-request-filter-2");
+
 
     List<String> updatedRequestFilterNames = proxyServer.requestFilterNames();
     assertThat(updatedRequestFilterNames)
@@ -206,14 +193,10 @@ final class SelenideProxyServerTest {
   void canGetRequestFilterByName() {
     proxyServer.start();
 
-    RequestFilter emptyRequestFilter = (request, contents, messageInfo) -> null;
-
-    proxyServer.addRequestFilter("foo-request-filter-1", emptyRequestFilter);
-    proxyServer.addRequestFilter("foo-request-filter-2", emptyRequestFilter);
-    proxyServer.addRequestFilter("foo-request-filter-3", emptyRequestFilter);
-    proxyServer.addRequestFilter("bar-request-filter-1", emptyRequestFilter);
-    proxyServer.addRequestFilter("bar-request-filter-2", emptyRequestFilter);
-    proxyServer.addRequestFilter("baz-request-filter-2", emptyRequestFilter);
+    addRequestFilters(
+      "foo-request-filter-1", "foo-request-filter-2", "foo-request-filter-3",
+      "bar-request-filter-1", "bar-request-filter-2", "baz-request-filter-1"
+    );
 
     RequestFilter requestFilter = proxyServer.requestFilter("foo-request-filter-2");
 
@@ -223,19 +206,12 @@ final class SelenideProxyServerTest {
   @Test
   void canGetResponseFilters() {
     proxyServer.start();
+    resetFilters();
 
-    proxyServer.responseFilterNames()
-      .forEach(proxyServer::removeResponseFilter);
-
-    ResponseFilter emptyResponseFilter = (response, contents, messageInfo) -> {
-    };
-
-    proxyServer.addResponseFilter("foo-response-filter-1", emptyResponseFilter);
-    proxyServer.addResponseFilter("foo-response-filter-2", emptyResponseFilter);
-    proxyServer.addResponseFilter("foo-response-filter-3", emptyResponseFilter);
-    proxyServer.addResponseFilter("bar-response-filter-1", emptyResponseFilter);
-    proxyServer.addResponseFilter("bar-response-filter-2", emptyResponseFilter);
-    proxyServer.addResponseFilter("baz-response-filter-1", emptyResponseFilter);
+    addResponseFilters(
+      "foo-response-filter-1", "foo-response-filter-2", "foo-response-filter-3",
+      "bar-response-filter-1", "bar-response-filter-2", "baz-response-filter-1"
+    );
 
     Map<String, ResponseFilter> responseFilters = proxyServer.responseFilters();
     assertThat(responseFilters)
@@ -249,10 +225,7 @@ final class SelenideProxyServerTest {
         "baz-response-filter-1", emptyResponseFilter
       ));
 
-    proxyServer.responseFilterNames()
-      .stream()
-      .filter(filterName -> filterName.startsWith("foo"))
-      .forEach(proxyServer::removeResponseFilter);
+    removeResponseFilters("foo-response-filter-1", "foo-response-filter-2", "foo-response-filter-3");
 
     Map<String, ResponseFilter> updatedResponseFilters = proxyServer.responseFilters();
     assertThat(updatedResponseFilters)
@@ -267,19 +240,12 @@ final class SelenideProxyServerTest {
   @Test
   void canGetResponseFilterNames() {
     proxyServer.start();
+    resetFilters();
 
-    proxyServer.responseFilterNames()
-      .forEach(proxyServer::removeResponseFilter);
-
-    ResponseFilter emptyResponseFilter = (response, contents, messageInfo) -> {
-    };
-
-    proxyServer.addResponseFilter("foo-response-filter-1", emptyResponseFilter);
-    proxyServer.addResponseFilter("foo-response-filter-2", emptyResponseFilter);
-    proxyServer.addResponseFilter("foo-response-filter-3", emptyResponseFilter);
-    proxyServer.addResponseFilter("bar-response-filter-1", emptyResponseFilter);
-    proxyServer.addResponseFilter("bar-response-filter-2", emptyResponseFilter);
-    proxyServer.addResponseFilter("baz-response-filter-1", emptyResponseFilter);
+    addResponseFilters(
+      "foo-response-filter-1", "foo-response-filter-2", "foo-response-filter-3",
+      "bar-response-filter-1", "bar-response-filter-2", "baz-response-filter-1"
+    );
 
     List<String> responseFilterNames = proxyServer.responseFilterNames();
     assertThat(responseFilterNames)
@@ -292,10 +258,7 @@ final class SelenideProxyServerTest {
         "baz-response-filter-1"
       );
 
-    responseFilterNames
-      .stream()
-      .filter(filterName -> filterName.startsWith("bar"))
-      .forEach(proxyServer::removeResponseFilter);
+    removeResponseFilters("bar-response-filter-1", "bar-response-filter-2");
 
     List<String> updatedResponseFilterNames = proxyServer.responseFilterNames();
     assertThat(updatedResponseFilterNames)
@@ -311,17 +274,62 @@ final class SelenideProxyServerTest {
   void canGetResponseFilterByName() {
     proxyServer.start();
 
-    ResponseFilter emptyResponseFilter = (response, contents, messageInfo) -> {
-    };
-
-    proxyServer.addResponseFilter("foo-response-filter-1", emptyResponseFilter);
-    proxyServer.addResponseFilter("foo-response-filter-2", emptyResponseFilter);
-    proxyServer.addResponseFilter("foo-response-filter-3", emptyResponseFilter);
-    proxyServer.addResponseFilter("bar-response-filter-1", emptyResponseFilter);
-    proxyServer.addResponseFilter("bar-response-filter-2", emptyResponseFilter);
-    proxyServer.addResponseFilter("baz-response-filter-1", emptyResponseFilter);
+    addResponseFilters(
+      "foo-response-filter-1", "foo-response-filter-2", "foo-response-filter-3",
+      "bar-response-filter-1", "bar-response-filter-2", "baz-response-filter-1"
+    );
 
     ResponseFilter responseFilter = proxyServer.responseFilter("foo-response-filter-3");
     assertThat(responseFilter).isEqualTo(emptyResponseFilter);
+  }
+
+  @Test
+  void canRemoveAllCustomFilters() {
+    proxyServer.start();
+    int initialRequestFilters = proxyServer.requestFilters().size();
+    int initialResponseFilters = proxyServer.responseFilters().size();
+
+    addRequestFilters("request-filter-1", "request-filter-2");
+    addResponseFilters("response-filter-1", "response-filter-2", "response-filter-3");
+
+    assertThat(proxyServer.requestFilters()).hasSize(initialRequestFilters + 2);
+    assertThat(proxyServer.responseFilters()).hasSize(initialResponseFilters + 3);
+
+    proxyServer.cleanupFilters();
+
+    assertThat(proxyServer.requestFilters()).hasSize(initialRequestFilters);
+    assertThat(proxyServer.responseFilters()).hasSize(initialResponseFilters);
+  }
+
+  private void addRequestFilters(String... names) {
+    for (String name : names) {
+      proxyServer.addRequestFilter(name, emptyRequestFilter);
+    }
+  }
+
+  private void removeRequestFilters(String... names) {
+    for (String name : names) {
+      proxyServer.removeRequestFilter(name);
+    }
+  }
+
+  private void addResponseFilters(String... names) {
+    for (String name : names) {
+      proxyServer.addResponseFilter(name, emptyResponseFilter);
+    }
+  }
+
+  private void removeResponseFilters(String... names) {
+    for (String name : names) {
+      proxyServer.removeResponseFilter(name);
+    }
+  }
+
+  private void resetFilters() {
+    proxyServer.requestFilterNames()
+      .forEach(proxyServer::removeRequestFilter);
+
+    proxyServer.responseFilterNames()
+      .forEach(proxyServer::removeResponseFilter);
   }
 }
