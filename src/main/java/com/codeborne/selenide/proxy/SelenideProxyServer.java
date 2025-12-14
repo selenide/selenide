@@ -174,6 +174,20 @@ public class SelenideProxyServer {
     return filter;
   }
 
+  /**
+   * Remove all request and response filters except Selenide own filters.
+   * Useful for Selenide end-users to clean up proxy state after any test.
+   */
+  public void cleanupFilters() {
+    requestFilterNames().stream()
+      .filter(name -> !name.startsWith("selenide.proxy.filter."))
+      .forEach(this::removeRequestFilter);
+    responseFilterNames().stream()
+      .filter(name -> !name.startsWith("selenide.proxy.filter."))
+      .forEach(this::removeResponseFilter);
+
+  }
+
   static InetSocketAddress getProxyAddress(Proxy proxy) {
     String httpProxy = proxy.getHttpProxy();
     String host = REGEX_HOST_NAME.matcher(httpProxy).replaceFirst("$1");
