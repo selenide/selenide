@@ -93,7 +93,7 @@ public abstract class BaseHandler extends HttpServlet {
   String getFilenameFromRequest(HttpServletRequest request) {
     String fileName = request.getPathInfo().replaceFirst("/(.*)", "$1");
 
-    if (fileName.contains("..") || fileName.contains("/") || fileName.contains("\\")) {
+    if (fileName.contains("..")) {
       throw new IllegalArgumentException("Invalid filename: " + fileName);
     }
 
