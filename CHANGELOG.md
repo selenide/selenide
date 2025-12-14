@@ -1,7 +1,18 @@
 # Changelog
 
-## 7.13.0 (10.12.2025)
-* bump Selenium from 3.38.0 to 4.39.0, incl. CDP v142 -> v143
+## 7.13.0 (14.12.2025)
+* bump Selenium from 3.38.0 to 4.39.0, incl. CDP v142 -> v143  (#3202)
+* improve downloading files from Grid (#3207)
+* #3175 fail fast if download link is not found during "increment timeout"   (#3212)
+* #3210 mask credentials in remote URL (#3213)
+* #3211 remove request/response size watchdog (#3215)
+* #3211 add method `proxy.cleanupFilters()` (#3215)
+* #3211 add prefix "selenide.proxy.filter." to all Selenide own proxy filters (#3215)
+* #3189 Fix frame rate for video (#3197)
+* #3196 fix NPE in BiDi log listener (#3198)
+* stop re-trying check if browser has died meanwhile (#3206)
+
+See https://github.com/selenide/selenide/milestone/235?closed=1
 
 ## 7.12.3 (02.12.2025)
 * #3181 Video recorder: avoid disconnecting current session
