@@ -37,6 +37,7 @@ public class SelenideProxyServer {
   private static final Logger log = LoggerFactory.getLogger(SelenideProxyServer.class);
   private static final Pattern REGEX_HOST_NAME = Pattern.compile("(.*):.*");
   private static final Pattern REGEX_PORT = Pattern.compile(".*:(.*)");
+  public static final String SELENIDE_PROXY_FILER_PREFIX = "selenide.proxy.filter.";
 
   private final Config config;
   @Nullable
@@ -97,10 +98,10 @@ public class SelenideProxyServer {
     }
     FileDownloadFilter downloadFilter = new FileDownloadFilter(config);
 
-    addRequestFilter("selenide.proxy.filter.mockResponse", new MockResponseFilter());
-    addRequestFilter("selenide.proxy.filter.authentication", new AuthenticationFilter());
-    addRequestFilter("selenide.proxy.filter.download", downloadFilter);
-    addResponseFilter("selenide.proxy.filter.download", downloadFilter);
+    addRequestFilter(SELENIDE_PROXY_FILER_PREFIX + "mockResponse", new MockResponseFilter());
+    addRequestFilter(SELENIDE_PROXY_FILER_PREFIX + "authentication", new AuthenticationFilter());
+    addRequestFilter(SELENIDE_PROXY_FILER_PREFIX + "download", downloadFilter);
+    addResponseFilter(SELENIDE_PROXY_FILER_PREFIX + "download", downloadFilter);
 
     proxy.start(config.proxyPort());
     port.set(proxy.getPort());
@@ -137,6 +138,9 @@ public class SelenideProxyServer {
   @Nullable
   @CanIgnoreReturnValue
   public RequestFilter removeRequestFilter(String name) {
+    if (name.startsWith(SELENIDE_PROXY_FILER_PREFIX)) {
+      return requestFilters.get(name);
+    }
     RequestFilter filter = requestFilters.remove(name);
     proxy.removeRequestFilter(filter);
     return filter;
@@ -169,6 +173,9 @@ public class SelenideProxyServer {
   @Nullable
   @CanIgnoreReturnValue
   public ResponseFilter removeResponseFilter(String name) {
+    if (name.startsWith(SELENIDE_PROXY_FILER_PREFIX)) {
+      return responseFilters.get(name);
+    }
     ResponseFilter filter = responseFilters.remove(name);
     proxy.removeResponseFilter(filter);
     return filter;
@@ -179,17 +186,24 @@ public class SelenideProxyServer {
    * Useful for Selenide end-users to clean up proxy state after any test.
    */
   public void cleanupFilters() {
-    requestFilterNames().stream()
-      .filter(name -> !name.startsWith("selenide.proxy.filter."))
-      .forEach(this::removeRequestFilter);
-    responseFilterNames().stream()
-      .filter(name -> !name.startsWith("selenide.proxy.filter."))
-      .forEach(this::removeResponseFilter);
+    cleanupRequestFilters();
+    cleanupResponseFilters();
+  }
 
+  public void cleanupRequestFilters() {
+    requestFilterNames().stream()
+      .filter(name -> !name.startsWith(SELENIDE_PROXY_FILER_PREFIX))
+      .forEach(this::removeRequestFilter);
+  }
+
+  public void cleanupResponseFilters() {
+    responseFilterNames().stream()
+      .filter(name -> !name.startsWith(SELENIDE_PROXY_FILER_PREFIX))
+      .forEach(this::removeResponseFilter);
   }
 
   static InetSocketAddress getProxyAddress(Proxy proxy) {
-    String httpProxy = proxy.getHttpProxy();
+    String httpProxy = requireNonNull(proxy.getHttpProxy());
     String host = REGEX_HOST_NAME.matcher(httpProxy).replaceFirst("$1");
     String port = REGEX_PORT.matcher(httpProxy).replaceFirst("$1");
     return new InetSocketAddress(host, parseInt(port));
@@ -310,6 +324,6 @@ public class SelenideProxyServer {
   }
 
   public MockResponseFilter responseMocker() {
-    return requireNonNull(requestFilter("selenide.proxy.filter.mockResponse"));
+    return requireNonNull(requestFilter(SELENIDE_PROXY_FILER_PREFIX + "mockResponse"));
   }
 }

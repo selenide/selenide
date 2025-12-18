@@ -20,6 +20,7 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.drivercommands.BasicAuthUtils.appendBasicAuthToURL;
 import static com.codeborne.selenide.drivercommands.BasicAuthUtils.registerBasicAuth;
 import static com.codeborne.selenide.impl.HttpHelper.maskUrlCredentials;
+import static com.codeborne.selenide.proxy.SelenideProxyServer.SELENIDE_PROXY_FILER_PREFIX;
 import static java.util.Objects.requireNonNull;
 import static java.util.regex.Pattern.DOTALL;
 
@@ -48,7 +49,7 @@ public class Navigator {
   }
 
   private AuthenticationFilter basicAuthRequestFilter(SelenideDriver driver) {
-    return requireNonNull(driver.getProxy().requestFilter("selenide.proxy.filter.authentication"));
+    return requireNonNull(driver.getProxy().requestFilter(SELENIDE_PROXY_FILER_PREFIX + "authentication"));
   }
 
   String absoluteUrl(Config config, String relativeOrAbsoluteUrl) {
