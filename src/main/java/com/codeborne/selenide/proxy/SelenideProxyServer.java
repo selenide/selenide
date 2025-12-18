@@ -190,12 +190,20 @@ public class SelenideProxyServer {
     cleanupResponseFilters();
   }
 
+  /**
+   * Remove all request filters except Selenide own filters.
+   * Useful for Selenide end-users to clean up proxy state after any test.
+   */
   public void cleanupRequestFilters() {
     requestFilterNames().stream()
       .filter(name -> !name.startsWith(SELENIDE_PROXY_FILER_PREFIX))
       .forEach(this::removeRequestFilter);
   }
 
+  /**
+   * Remove all response filters except Selenide own filters.
+   * Useful for Selenide end-users to clean up proxy state after any test.
+   */
   public void cleanupResponseFilters() {
     responseFilterNames().stream()
       .filter(name -> !name.startsWith(SELENIDE_PROXY_FILER_PREFIX))
