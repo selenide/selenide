@@ -37,7 +37,7 @@ public class SelenideProxyServer {
   private static final Logger log = LoggerFactory.getLogger(SelenideProxyServer.class);
   private static final Pattern REGEX_HOST_NAME = Pattern.compile("(.*):.*");
   private static final Pattern REGEX_PORT = Pattern.compile(".*:(.*)");
-  public static final String SELENIDE_PROXY_FILER_PREFIX = "selenide.proxy.filter.";
+  public static final String SELENIDE_PROXY_FILTER_PREFIX = "selenide.proxy.filter.";
 
   private final Config config;
   @Nullable
@@ -98,10 +98,10 @@ public class SelenideProxyServer {
     }
     FileDownloadFilter downloadFilter = new FileDownloadFilter(config);
 
-    addRequestFilter(SELENIDE_PROXY_FILER_PREFIX + "mockResponse", new MockResponseFilter());
-    addRequestFilter(SELENIDE_PROXY_FILER_PREFIX + "authentication", new AuthenticationFilter());
-    addRequestFilter(SELENIDE_PROXY_FILER_PREFIX + "download", downloadFilter);
-    addResponseFilter(SELENIDE_PROXY_FILER_PREFIX + "download", downloadFilter);
+    addRequestFilter(SELENIDE_PROXY_FILTER_PREFIX + "mockResponse", new MockResponseFilter());
+    addRequestFilter(SELENIDE_PROXY_FILTER_PREFIX + "authentication", new AuthenticationFilter());
+    addRequestFilter(SELENIDE_PROXY_FILTER_PREFIX + "download", downloadFilter);
+    addResponseFilter(SELENIDE_PROXY_FILTER_PREFIX + "download", downloadFilter);
 
     proxy.start(config.proxyPort());
     port.set(proxy.getPort());
@@ -138,8 +138,8 @@ public class SelenideProxyServer {
   @Nullable
   @CanIgnoreReturnValue
   public RequestFilter removeRequestFilter(String name) {
-    if (name.startsWith(SELENIDE_PROXY_FILER_PREFIX)) {
-      return requestFilters.get(name);
+    if (name.startsWith(SELENIDE_PROXY_FILTER_PREFIX)) {
+      throw new RuntimeException("The built-in selenide proxy request filter cannot be removed: " + name);
     }
     RequestFilter filter = requestFilters.remove(name);
     proxy.removeRequestFilter(filter);
@@ -173,8 +173,8 @@ public class SelenideProxyServer {
   @Nullable
   @CanIgnoreReturnValue
   public ResponseFilter removeResponseFilter(String name) {
-    if (name.startsWith(SELENIDE_PROXY_FILER_PREFIX)) {
-      return responseFilters.get(name);
+    if (name.startsWith(SELENIDE_PROXY_FILTER_PREFIX)) {
+      throw new RuntimeException("The built-in selenide proxy response filter cannot be removed: " + name);
     }
     ResponseFilter filter = responseFilters.remove(name);
     proxy.removeResponseFilter(filter);
@@ -196,7 +196,7 @@ public class SelenideProxyServer {
    */
   public void cleanupRequestFilters() {
     requestFilterNames().stream()
-      .filter(name -> !name.startsWith(SELENIDE_PROXY_FILER_PREFIX))
+      .filter(name -> !name.startsWith(SELENIDE_PROXY_FILTER_PREFIX))
       .forEach(this::removeRequestFilter);
   }
 
@@ -206,7 +206,7 @@ public class SelenideProxyServer {
    */
   public void cleanupResponseFilters() {
     responseFilterNames().stream()
-      .filter(name -> !name.startsWith(SELENIDE_PROXY_FILER_PREFIX))
+      .filter(name -> !name.startsWith(SELENIDE_PROXY_FILTER_PREFIX))
       .forEach(this::removeResponseFilter);
   }
 
@@ -332,6 +332,6 @@ public class SelenideProxyServer {
   }
 
   public MockResponseFilter responseMocker() {
-    return requireNonNull(requestFilter(SELENIDE_PROXY_FILER_PREFIX + "mockResponse"));
+    return requireNonNull(requestFilter(SELENIDE_PROXY_FILTER_PREFIX + "mockResponse"));
   }
 }

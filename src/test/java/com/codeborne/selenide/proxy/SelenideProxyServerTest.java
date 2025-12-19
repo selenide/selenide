@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -137,7 +138,7 @@ final class SelenideProxyServerTest {
 
     Map<String, RequestFilter> selenideRequestFilters = proxyServer.requestFilters();
 
-    resetFilters();
+    proxyServer.cleanupFilters();
 
     addRequestFilters(
       "foo-request-filter-1", "foo-request-filter-2", "foo-request-filter-3",
@@ -173,7 +174,7 @@ final class SelenideProxyServerTest {
   @Test
   void canGetRequestFilterNames() {
     proxyServer.start();
-    resetFilters();
+    proxyServer.cleanupFilters();
 
     addRequestFilters(
       "foo-request-filter-1", "foo-request-filter-2", "foo-request-filter-3",
@@ -226,7 +227,7 @@ final class SelenideProxyServerTest {
 
     Map<String, ResponseFilter> selenideResponseFilters = proxyServer.responseFilters();
 
-    resetFilters();
+    proxyServer.cleanupFilters();
 
     addResponseFilters(
       "foo-response-filter-1", "foo-response-filter-2", "foo-response-filter-3",
@@ -262,7 +263,8 @@ final class SelenideProxyServerTest {
   @Test
   void canGetResponseFilterNames() {
     proxyServer.start();
-    resetFilters();
+
+    proxyServer.cleanupFilters();
 
     addResponseFilters(
       "foo-response-filter-1", "foo-response-filter-2", "foo-response-filter-3",
@@ -373,7 +375,8 @@ final class SelenideProxyServerTest {
     RequestFilter requestFilter = proxyServer.requestFilter("selenide.proxy.filter.mockResponse");
     assertThat(requestFilter).isNotNull();
 
-    proxyServer.removeRequestFilter("selenide.proxy.filter.mockResponse");
+    assertThatThrownBy(() -> proxyServer.removeRequestFilter("selenide.proxy.filter.mockResponse"))
+      .hasMessage("The built-in selenide proxy request filter cannot be removed: selenide.proxy.filter.mockResponse");
 
     assertThat(proxyServer.requestFilters()).hasSize(initialRequestFilters);
     assertThat(proxyServer.responseFilters()).hasSize(initialResponseFilters);
@@ -391,7 +394,8 @@ final class SelenideProxyServerTest {
     RequestFilter requestFilter = proxyServer.responseFilter("selenide.proxy.filter.download");
     assertThat(requestFilter).isNotNull();
 
-    proxyServer.removeResponseFilter("selenide.proxy.filter.download");
+    assertThatThrownBy(() -> proxyServer.removeResponseFilter("selenide.proxy.filter.download"))
+      .hasMessage("The built-in selenide proxy response filter cannot be removed: selenide.proxy.filter.download");
 
     assertThat(proxyServer.requestFilters()).hasSize(initialRequestFilters);
     assertThat(proxyServer.responseFilters()).hasSize(initialResponseFilters);
@@ -419,13 +423,5 @@ final class SelenideProxyServerTest {
     for (String name : names) {
       proxyServer.removeResponseFilter(name);
     }
-  }
-
-  private void resetFilters() {
-    proxyServer.requestFilterNames()
-      .forEach(proxyServer::removeRequestFilter);
-
-    proxyServer.responseFilterNames()
-      .forEach(proxyServer::removeResponseFilter);
   }
 }

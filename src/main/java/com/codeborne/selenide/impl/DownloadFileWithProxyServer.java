@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.function.Supplier;
 
-import static com.codeborne.selenide.proxy.SelenideProxyServer.SELENIDE_PROXY_FILER_PREFIX;
+import static com.codeborne.selenide.proxy.SelenideProxyServer.SELENIDE_PROXY_FILTER_PREFIX;
 
 public class DownloadFileWithProxyServer {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithProxyServer.class);
@@ -47,7 +47,7 @@ public class DownloadFileWithProxyServer {
 
     SelenideProxyServer proxyServer = driver.getProxy();
 
-    FileDownloadFilter filter = proxyServer.responseFilter(SELENIDE_PROXY_FILER_PREFIX + "download");
+    FileDownloadFilter filter = proxyServer.responseFilter(SELENIDE_PROXY_FILTER_PREFIX + "download");
     if (filter == null) {
       throw new IllegalStateException("Cannot download file: download filter is not activated");
     }
