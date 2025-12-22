@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -26,6 +27,16 @@ final class SelenideProxyServerTest {
 
   private final RequestFilter emptyRequestFilter = (request, contents, messageInfo) -> null;
   private final ResponseFilter emptyResponseFilter = (response, contents, messageInfo) -> {
+  };
+
+  private final String[] selenideRequestFilter = new String[]{
+    "selenide.proxy.filter.mockResponse",
+    "selenide.proxy.filter.authentication",
+    "selenide.proxy.filter.download"
+  };
+
+  private final String[] selenideResponseFilter = new String[]{
+    "selenide.proxy.filter.download"
   };
 
   @Test
@@ -124,7 +135,10 @@ final class SelenideProxyServerTest {
   @Test
   void canGetRequestFilters() {
     proxyServer.start();
-    resetFilters();
+
+    Map<String, RequestFilter> selenideRequestFilters = proxyServer.requestFilters();
+
+    proxyServer.cleanupFilters();
 
     addRequestFilters(
       "foo-request-filter-1", "foo-request-filter-2", "foo-request-filter-3",
@@ -133,8 +147,9 @@ final class SelenideProxyServerTest {
 
     Map<String, RequestFilter> requestFilters = proxyServer.requestFilters();
     assertThat(requestFilters)
-      .hasSize(6)
-      .isEqualTo(Map.of(
+      .hasSize(9)
+      .containsAllEntriesOf(selenideRequestFilters)
+      .containsAllEntriesOf(Map.of(
         "foo-request-filter-1", emptyRequestFilter,
         "foo-request-filter-2", emptyRequestFilter,
         "foo-request-filter-3", emptyRequestFilter,
@@ -147,8 +162,9 @@ final class SelenideProxyServerTest {
 
     Map<String, RequestFilter> updatedRequestFilters = proxyServer.requestFilters();
     assertThat(updatedRequestFilters)
-      .hasSize(3)
-      .isEqualTo(Map.of(
+      .hasSize(6)
+      .containsAllEntriesOf(selenideRequestFilters)
+      .containsAllEntriesOf(Map.of(
         "bar-request-filter-1", emptyRequestFilter,
         "bar-request-filter-2", emptyRequestFilter,
         "baz-request-filter-1", emptyRequestFilter
@@ -158,7 +174,7 @@ final class SelenideProxyServerTest {
   @Test
   void canGetRequestFilterNames() {
     proxyServer.start();
-    resetFilters();
+    proxyServer.cleanupFilters();
 
     addRequestFilters(
       "foo-request-filter-1", "foo-request-filter-2", "foo-request-filter-3",
@@ -167,7 +183,8 @@ final class SelenideProxyServerTest {
 
     List<String> requestFilterNames = proxyServer.requestFilterNames();
     assertThat(requestFilterNames)
-      .containsExactly(
+      .contains(selenideRequestFilter)
+      .contains(
         "foo-request-filter-1",
         "foo-request-filter-2",
         "foo-request-filter-3",
@@ -181,7 +198,8 @@ final class SelenideProxyServerTest {
 
     List<String> updatedRequestFilterNames = proxyServer.requestFilterNames();
     assertThat(updatedRequestFilterNames)
-      .containsExactly(
+      .contains(selenideResponseFilter)
+      .contains(
         "foo-request-filter-1",
         "foo-request-filter-2",
         "foo-request-filter-3",
@@ -206,7 +224,10 @@ final class SelenideProxyServerTest {
   @Test
   void canGetResponseFilters() {
     proxyServer.start();
-    resetFilters();
+
+    Map<String, ResponseFilter> selenideResponseFilters = proxyServer.responseFilters();
+
+    proxyServer.cleanupFilters();
 
     addResponseFilters(
       "foo-response-filter-1", "foo-response-filter-2", "foo-response-filter-3",
@@ -215,8 +236,9 @@ final class SelenideProxyServerTest {
 
     Map<String, ResponseFilter> responseFilters = proxyServer.responseFilters();
     assertThat(responseFilters)
-      .hasSize(6)
-      .isEqualTo(Map.of(
+      .hasSize(7)
+      .containsAllEntriesOf(selenideResponseFilters)
+      .containsAllEntriesOf(Map.of(
         "foo-response-filter-1", emptyResponseFilter,
         "foo-response-filter-2", emptyResponseFilter,
         "foo-response-filter-3", emptyResponseFilter,
@@ -229,8 +251,9 @@ final class SelenideProxyServerTest {
 
     Map<String, ResponseFilter> updatedResponseFilters = proxyServer.responseFilters();
     assertThat(updatedResponseFilters)
-      .hasSize(3)
-      .isEqualTo(Map.of(
+      .hasSize(4)
+      .containsAllEntriesOf(selenideResponseFilters)
+      .containsAllEntriesOf(Map.of(
         "bar-response-filter-1", emptyResponseFilter,
         "bar-response-filter-2", emptyResponseFilter,
         "baz-response-filter-1", emptyResponseFilter
@@ -240,7 +263,8 @@ final class SelenideProxyServerTest {
   @Test
   void canGetResponseFilterNames() {
     proxyServer.start();
-    resetFilters();
+
+    proxyServer.cleanupFilters();
 
     addResponseFilters(
       "foo-response-filter-1", "foo-response-filter-2", "foo-response-filter-3",
@@ -249,7 +273,8 @@ final class SelenideProxyServerTest {
 
     List<String> responseFilterNames = proxyServer.responseFilterNames();
     assertThat(responseFilterNames)
-      .containsExactly(
+      .contains(selenideResponseFilter)
+      .contains(
         "foo-response-filter-1",
         "foo-response-filter-2",
         "foo-response-filter-3",
@@ -262,7 +287,8 @@ final class SelenideProxyServerTest {
 
     List<String> updatedResponseFilterNames = proxyServer.responseFilterNames();
     assertThat(updatedResponseFilterNames)
-      .containsExactly(
+      .contains(selenideResponseFilter)
+      .contains(
         "foo-response-filter-1",
         "foo-response-filter-2",
         "foo-response-filter-3",
@@ -301,6 +327,80 @@ final class SelenideProxyServerTest {
     assertThat(proxyServer.responseFilters()).hasSize(initialResponseFilters);
   }
 
+  @Test
+  void canRemoveAllCustomRequestFilters() {
+    proxyServer.start();
+    int initialRequestFilters = proxyServer.requestFilters().size();
+    int initialResponseFilters = proxyServer.responseFilters().size();
+
+    addRequestFilters("request-filter-1", "request-filter-2");
+    addResponseFilters("response-filter-1", "response-filter-2", "response-filter-3");
+
+    assertThat(proxyServer.requestFilters()).hasSize(initialRequestFilters + 2);
+    assertThat(proxyServer.responseFilters()).hasSize(initialResponseFilters + 3);
+
+    proxyServer.cleanupRequestFilters();
+
+    assertThat(proxyServer.requestFilters()).hasSize(initialRequestFilters);
+    assertThat(proxyServer.responseFilters()).hasSize(initialResponseFilters + 3);
+  }
+
+  @Test
+  void canRemoveAllCustomResponseFilters() {
+    proxyServer.start();
+    int initialRequestFilters = proxyServer.requestFilters().size();
+    int initialResponseFilters = proxyServer.responseFilters().size();
+
+    addRequestFilters("request-filter-1", "request-filter-2");
+    addResponseFilters("response-filter-1", "response-filter-2", "response-filter-3");
+
+    assertThat(proxyServer.requestFilters()).hasSize(initialRequestFilters + 2);
+    assertThat(proxyServer.responseFilters()).hasSize(initialResponseFilters + 3);
+
+    proxyServer.cleanupResponseFilters();
+
+    assertThat(proxyServer.requestFilters()).hasSize(initialRequestFilters + 2);
+    assertThat(proxyServer.responseFilters()).hasSize(initialResponseFilters);
+  }
+
+  @Test
+  void unableRemoveSelenideRequestFilters() {
+    proxyServer.start();
+    int initialRequestFilters = proxyServer.requestFilters().size();
+    int initialResponseFilters = proxyServer.responseFilters().size();
+
+    assertThat(proxyServer.requestFilters()).allSatisfy((name, requestFilter) -> name.startsWith("selenide.proxy.filter."));
+    assertThat(proxyServer.responseFilters()).allSatisfy((name, requestFilter) -> name.startsWith("selenide.proxy.filter."));
+
+    RequestFilter requestFilter = proxyServer.requestFilter("selenide.proxy.filter.mockResponse");
+    assertThat(requestFilter).isNotNull();
+
+    assertThatThrownBy(() -> proxyServer.removeRequestFilter("selenide.proxy.filter.mockResponse"))
+      .hasMessage("The built-in selenide proxy request filter cannot be removed: selenide.proxy.filter.mockResponse");
+
+    assertThat(proxyServer.requestFilters()).hasSize(initialRequestFilters);
+    assertThat(proxyServer.responseFilters()).hasSize(initialResponseFilters);
+  }
+
+  @Test
+  void unableRemoveSelenideResponseFilters() {
+    proxyServer.start();
+    int initialRequestFilters = proxyServer.requestFilters().size();
+    int initialResponseFilters = proxyServer.responseFilters().size();
+
+    assertThat(proxyServer.requestFilters()).allSatisfy((name, requestFilter) -> name.startsWith("selenide.proxy.filter."));
+    assertThat(proxyServer.responseFilters()).allSatisfy((name, requestFilter) -> name.startsWith("selenide.proxy.filter."));
+
+    RequestFilter requestFilter = proxyServer.responseFilter("selenide.proxy.filter.download");
+    assertThat(requestFilter).isNotNull();
+
+    assertThatThrownBy(() -> proxyServer.removeResponseFilter("selenide.proxy.filter.download"))
+      .hasMessage("The built-in selenide proxy response filter cannot be removed: selenide.proxy.filter.download");
+
+    assertThat(proxyServer.requestFilters()).hasSize(initialRequestFilters);
+    assertThat(proxyServer.responseFilters()).hasSize(initialResponseFilters);
+  }
+
   private void addRequestFilters(String... names) {
     for (String name : names) {
       proxyServer.addRequestFilter(name, emptyRequestFilter);
@@ -323,13 +423,5 @@ final class SelenideProxyServerTest {
     for (String name : names) {
       proxyServer.removeResponseFilter(name);
     }
-  }
-
-  private void resetFilters() {
-    proxyServer.requestFilterNames()
-      .forEach(proxyServer::removeRequestFilter);
-
-    proxyServer.responseFilterNames()
-      .forEach(proxyServer::removeResponseFilter);
   }
 }
