@@ -16,7 +16,7 @@
 Selenide is a framework for writing easy-to-read and easy-to-maintain automated tests in Java.
 It defines concise fluent API, natural language assertions and does some magic for ajax-based applications to let you focus entirely on the business logic of your tests.
 
-Selenide is based on and is compatible to Selenium WebDriver 4.0+
+Selenide is based on and is compatible with Selenium WebDriver 4.0+
 
 ```java
 @Test
