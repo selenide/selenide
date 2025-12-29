@@ -32,7 +32,7 @@ public class AppiumDragAndDrop extends DragAndDrop {
     }
 
     DragAndDropOptions options = dragAndDropOptions(args, ACTIONS);
-    if (options.getMethod() == JS) {
+    if (options.method() == JS) {
       log.debug("Drag'n'Drop with JavaScript is not supported in mobile apps");
     }
     SelenideElement target = options.getTarget(locator.driver());

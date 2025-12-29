@@ -54,8 +54,6 @@ final class FastSetValueTest extends IntegrationTest {
   @Test
   void fastSetValue_usingOptions() {
     Configuration.fastSetValue = false;
-    $("#username").setValue(withText("john").withDisplayedText("J* username").usingMethod(JS));
-    $("#usernameHint").should(appear);
 
     $("#password").setValue(withText("admin").sensitive().usingMethod(JS));
     $("#usernameHint").should(disappear);

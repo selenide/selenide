@@ -1,38 +1,25 @@
 package com.codeborne.selenide;
 
 import java.util.Base64;
-import java.util.regex.Pattern;
 
+import static com.codeborne.selenide.ValueMasker.mask;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class BasicAuthCredentials implements Credentials {
-  private static final Pattern REGEX_ANY_CHAR = Pattern.compile(".");
-
-  public final String domain;
-  public final String login;
-  public final String password;
-
+public record BasicAuthCredentials(
+  String domain,
+  String login,
+  String password
+) implements Credentials {
   /**
    * Security warning:
    * If you are using Selenide proxy, use another constructor (with domain parameter).
    * This constructor is dangerous: without domain specified, Selenide proxy will send your credentials to ALL
    * domains, including 3rd party services that your AUT or browser might call.
-   *
+   * <p>
    * If proxy is disabled, it's totally ok to use this constructor.
    */
   public BasicAuthCredentials(String login, String password) {
     this("", login, password);
-  }
-
-  public BasicAuthCredentials(String domain, String login, String password) {
-    this.domain = domain;
-    this.login = login;
-    this.password = password;
-  }
-
-  @Override
-  public String domain() {
-    return domain;
   }
 
   /**
@@ -52,6 +39,6 @@ public class BasicAuthCredentials implements Credentials {
 
   @Override
   public String toString() {
-    return String.format("%s:%s:%s", domain, login, REGEX_ANY_CHAR.matcher(password).replaceAll("*"));
+    return String.format("%s:%s:%s", domain, login, mask(password));
   }
 }

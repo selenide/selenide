@@ -57,7 +57,7 @@ public class Type extends FluentCommand {
     for (int i = 0; i < textLength; i++) {
       CharSequence character = typeOptions.textToType().subSequence(i, i + 1);
       element.sendKeys(character);
-      sleepAtLeast(typeOptions.timeDelay().toMillis());
+      sleepAtLeast(typeOptions.timeDelayWhileTyping().toMillis());
     }
   }
 }
