@@ -55,6 +55,14 @@ public record SetValueOptions(
     return new SetValueOptions(method, value, displayedText);
   }
 
+  /**
+   * How this value will be displayed in reports.
+   * Useful to mask sensitive values like passwords etc.
+   */
+  public SetValueOptions withDisplayedText(CharSequence displayedText) {
+    return new SetValueOptions(method, value, displayedText);
+  }
+
   public SetValueOptions sensitive() {
     return new SetValueOptions(method, value, mask(value));
   }
