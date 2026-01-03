@@ -35,7 +35,7 @@ public class AppiumType extends Type {
       } else {
         element.sendKeys(character);
       }
-      sleepAtLeast(typeOptions.timeDelay().toMillis());
+      sleepAtLeast(typeOptions.timeDelayWhileTyping().toMillis());
     }
   }
 

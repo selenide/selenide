@@ -1,22 +1,11 @@
 package com.codeborne.selenide;
 
-import java.util.regex.Pattern;
+import static com.codeborne.selenide.ValueMasker.mask;
 
-public class BearerTokenCredentials implements Credentials {
-  private static final Pattern REGEX_ANY_CHAR = Pattern.compile(".");
-  public final String domain;
-  public final String token;
-
-  public BearerTokenCredentials(String domain, String token) {
-    this.domain = domain;
-    this.token = token;
-  }
-
-  @Override
-  public String domain() {
-    return domain;
-  }
-
+public record BearerTokenCredentials(
+  String domain,
+  String token
+) implements Credentials {
   @Override
   public String encode() {
     return token;
@@ -24,6 +13,6 @@ public class BearerTokenCredentials implements Credentials {
 
   @Override
   public String toString() {
-    return String.format("%s:%s", domain, REGEX_ANY_CHAR.matcher(token).replaceAll("*"));
+    return String.format("%s:%s", domain, mask(token));
   }
 }

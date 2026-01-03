@@ -8,15 +8,10 @@ import org.openqa.selenium.WebElement;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.ACTIONS;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.JS;
 
-public class DragAndDropOptions {
-  private final DragAndDropTarget target;
-  private final DragAndDropMethod method;
-
-  public DragAndDropOptions(DragAndDropTarget target, DragAndDropMethod method) {
-    this.target = target;
-    this.method = method;
-  }
-
+public record DragAndDropOptions(
+  DragAndDropTarget target,
+  DragAndDropMethod method
+) {
   public static DragAndDropOptions to(String cssSelector) {
     return new DragAndDropOptions(new DragAndDropTarget.CssSelector(cssSelector), JS);
   }
@@ -31,10 +26,6 @@ public class DragAndDropOptions {
 
   public DragAndDropOptions usingSeleniumActions() {
     return new DragAndDropOptions(target, ACTIONS);
-  }
-
-  public DragAndDropMethod getMethod() {
-    return method;
   }
 
   public SelenideElement getTarget(Driver driver) {

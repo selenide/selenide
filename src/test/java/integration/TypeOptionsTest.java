@@ -36,7 +36,7 @@ class TypeOptionsTest extends ITest {
   @Test
   void typeWithOptions() {
     $("#username_input").setValue("test");
-    $("#username_input").type(text("abc").withDelay(ofMillis(100)).clearFirst(false));
+    $("#username_input").type(text("abc").sensitive().withDelay(ofMillis(100)).clearFirst(false));
     $("#username_input").shouldHave(attribute("value", "testabc"));
   }
 }

@@ -22,8 +22,8 @@ public class BasicAuthUtils {
       return url;
     }
 
-    String login = credentials.login.isEmpty() ? "" : encode(credentials.login) + ':';
-    String password = credentials.password.isEmpty() ? "" : encode(credentials.password) + "@";
+    String login = credentials.login().isEmpty() ? "" : encode(credentials.login()) + ':';
+    String password = credentials.password().isEmpty() ? "" : encode(credentials.password()) + "@";
 
     int index = url.indexOf("://");
     return index < 0 ?
@@ -40,7 +40,7 @@ public class BasicAuthUtils {
     if (webDriver instanceof HasAuthentication hasAuthentication && credentials instanceof BasicAuthCredentials basicAuth) {
       hasAuthentication.register(
         uri -> uriMatchesDomain(uri, basicAuth.domain()),
-        UsernameAndPassword.of(basicAuth.login, basicAuth.password)
+        UsernameAndPassword.of(basicAuth.login(), basicAuth.password())
       );
       return true;
     }

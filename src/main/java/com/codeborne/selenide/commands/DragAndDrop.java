@@ -23,7 +23,7 @@ public class DragAndDrop extends FluentCommand {
   protected void execute(WebElementSource locator, Object @Nullable [] args) {
     DragAndDropOptions options = dragAndDropOptions(args, JS);
 
-    DragAndDropMethod method = options.getMethod();
+    DragAndDropMethod method = options.method();
     SelenideElement target = options.getTarget(locator.driver());
     target.shouldBe(visible);
 
@@ -41,7 +41,7 @@ public class DragAndDrop extends FluentCommand {
     //handle deprecated methods calls
     DragAndDropMethod method = defaultMethod;
     if (args.length > 1 && args[1] instanceof DragAndDropOptions dragAndDropOptions)
-      method = dragAndDropOptions.getMethod();
+      method = dragAndDropOptions.method();
 
     return new DragAndDropOptions(findTarget(args), method);
   }
