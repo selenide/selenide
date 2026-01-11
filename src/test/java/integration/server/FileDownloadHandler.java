@@ -58,7 +58,7 @@ class FileDownloadHandler extends BaseHandler {
 
   private Map<String, String> headers(String fileName, boolean exposeFileName) throws UnsupportedEncodingException {
     return Map.of(
-      "content-disposition", exposeFileName ? "attachment; filename=" + encode(fileName, "UTF-8") : "attachment;",
+      "content-disposition", exposeFileName ? "attachment; filename=" + encode(fileName, "UTF-8").replace("+", "%20") : "attachment;",
       "content-type", contentType(fileName)
     );
   }

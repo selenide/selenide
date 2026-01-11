@@ -86,9 +86,9 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     File downloadedFile = $(byText("Download file with \"forbidden\" characters in name"))
       .download(withNameMatching("имя.*\\.txt"));
 
-    assertThat(downloadedFile).hasName("имя+с+_pound,_percent,_ampersand,_left,_right,_backslash," +
-      "_left,_right,_asterisk,_question,_dollar,_exclamation,_quote,_quotes," +
-      "_colon,_at,_plus,_backtick,_pipe,_equal.txt");
+    assertThat(downloadedFile).hasName("имя с _pound,_percent,&ampersand,_left,_right,_backslash," +
+      "_left,_right,_asterisk,_question,_dollar,_exclamation,'quote,_quotes," +
+      "_colon,_at,_plus,`backtick,_pipe,_equal.txt");
 
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед \"короед\"! Амперсанды &everywhere&&;$#`");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());

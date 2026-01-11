@@ -129,7 +129,7 @@ final class HttpHelperTest {
     assertThat(helper.getFileName("/blah.jpg?foo")).isEqualTo("blah.jpg");
     assertThat(helper.getFileName("https://blah.org/blah.jpg")).isEqualTo("blah.jpg");
     assertThat(helper.getFileName("https://blah.org/with spaces`and'forbidden\"characters+&.jpg"))
-      .isEqualTo("with+spaces_and_forbidden_characters__.jpg");
+      .isEqualTo("with spaces`and'forbidden_characters_&.jpg");
 
     assertThat(helper.getFileName("https://some.com/foo/bar/")).isEqualTo("");
   }
@@ -139,15 +139,15 @@ final class HttpHelperTest {
     assertThat(helper.normalize("имя с #pound,%percent,&ampersand,{left,}right,/slash,\\backslash," +
       "<left,>right,*asterisk,?question,$dollar,!exclamation,'quote,\"quotes," +
       ":colon,@at,+plus,`backtick,|pipe,=equal.winrar"))
-      .isEqualTo("имя+с+_pound,_percent,_ampersand,_left,_right,_slash,_backslash," +
-        "_left,_right,_asterisk,_question,_dollar,_exclamation,_quote,_quotes," +
-        "_colon,_at,_plus,_backtick,_pipe,_equal.winrar");
+      .isEqualTo("имя с _pound,_percent,&ampersand,_left,_right,_slash,_backslash," +
+        "_left,_right,_asterisk,_question,_dollar,_exclamation,'quote,_quotes," +
+        "_colon,_at,_plus,`backtick,_pipe,_equal.winrar");
   }
 
   @Test
   void slashIsAlsoReplacedByUnderscore() {
     assertThat(helper.normalize("имя с /slash.winzip"))
-      .isEqualTo("имя+с+_slash.winzip");
+      .isEqualTo("имя с _slash.winzip");
   }
 
   @Test
