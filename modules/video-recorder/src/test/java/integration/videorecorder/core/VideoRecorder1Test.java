@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import static com.codeborne.selenide.Configuration.config;
 import static com.codeborne.selenide.Selenide.$;
@@ -52,10 +53,12 @@ public class VideoRecorder1Test {
   @AfterEach
   public void checkVideo() {
     log.info("finishing first test");
-    videoRecorder.finish();
+    Optional<Path> result = videoRecorder.finish();
     log.info("finished first test");
+
     Path videoFile = getRecordedVideo(currentThread().getId())
       .orElseThrow(() -> new AssertionError("video file not found in thread " + currentThread()));
+    assertThat(result).contains(videoFile);
     assertThat(videoFile).as(() -> "video file not found in thread " + currentThread()).exists();
     assertThat(videoFile).hasExtension("mp4");
     assertThat(videoFile.toFile().length())

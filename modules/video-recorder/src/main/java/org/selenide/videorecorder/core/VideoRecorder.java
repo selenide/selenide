@@ -1,16 +1,23 @@
 package org.selenide.videorecorder.core;
 
+import com.codeborne.selenide.drivercommands.WebdriversRegistry;
 import com.codeborne.selenide.impl.AttachmentHandler;
+import com.codeborne.selenide.impl.WebDriverInstance;
 import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 
 import static com.codeborne.selenide.impl.FileHelper.deleteFolder;
 import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
@@ -72,14 +79,21 @@ public class VideoRecorder {
   }
 
   public void start() {
-    log.info("Starting screenshooter every {} nanoseconds to achieve fps {}", delayBetweenFramesNanos(), fps);
-    startScreenShooter();
+    long threadId = currentThread().getId();
+    start(() -> staticWebdriver(threadId));
   }
 
-  private void startScreenShooter() {
+  public void start(Supplier<Optional<WebDriver>> webDriverSupplier) {
+    log.info("Starting screenshooter every {} nanoseconds to achieve fps {}", delayBetweenFramesNanos(), fps);
     log.debug("Start screen shooter x {} {}", delayBetweenFramesNanos(), NANOSECONDS);
-    ScreenShooter task = new ScreenShooter(currentThread().getId(), screenshotsFolder, screenshots);
+    ScreenShooter task = new ScreenShooter(currentThread().getId(), screenshotsFolder, screenshots, webDriverSupplier);
     screenShooter = screenshooter.scheduleAtFixedRate(task, 0, delayBetweenFramesNanos(), NANOSECONDS);
+  }
+
+  private Optional<WebDriver> staticWebdriver(long threadId) {
+    return WebdriversRegistry
+      .webdriver(threadId)
+      .map(WebDriverInstance::webDriver);
   }
 
   /**
@@ -92,7 +106,7 @@ public class VideoRecorder {
   /**
    * Complete video processing and save the video file
    */
-  public void finish() {
+  public Optional<Path> finish() {
     log.debug("Stopping video recorder...");
 
     if (screenShooter != null) {
@@ -106,6 +120,7 @@ public class VideoRecorder {
     if (!config.keepScreenshots()) {
       deleteFolder(screenshotsFolder);
     }
+    return Files.exists(videoMerger.videoFile()) ? Optional.of(videoMerger.videoFile()) : Optional.empty();
   }
 
   /**
