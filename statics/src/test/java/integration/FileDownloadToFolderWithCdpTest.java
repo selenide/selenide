@@ -94,6 +94,15 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   }
 
   @Test
+  void downloadsFileWithSpaceInName() {
+    File downloadedFile = $(byText("Download file with space in name")).download(withExtension("txt"));
+
+    assertThat(downloadedFile.getName()).isEqualTo("file 0 & _ ' `backticks`.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("File with space in name");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
   void downloadMissingFile() {
     timeout = 111;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("png")))
