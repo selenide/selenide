@@ -3,12 +3,17 @@ package org.selenide.selenoid;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.FileFilter;
+import com.codeborne.selenide.impl.DownloadFileToFolder;
 import com.codeborne.selenide.impl.Downloader;
 import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class DownloadFileFromSelenoidToFolder extends com.codeborne.selenide.impl.DownloadFileToFolder {
+public class DownloadFileFromSelenoidToFolder extends DownloadFileToFolder {
+  private static final Logger log = LoggerFactory.getLogger(DownloadFileFromSelenoidToFolder.class);
+
   private final Downloader downloader;
 
   public DownloadFileFromSelenoidToFolder() {
@@ -32,7 +37,7 @@ public class DownloadFileFromSelenoidToFolder extends com.codeborne.selenide.imp
     if (driver.isLocalBrowser()) {
       super.waitWhileFilesAreBeingModified(driver, folder, timeout, pollingInterval);
     }
-    // In Selenoid, we don't know files' modification time :(
+    log.warn("Unable to fail fast if no changes in Selenoid, we don't know files' modification time");
   }
 
   @Override
@@ -41,7 +46,7 @@ public class DownloadFileFromSelenoidToFolder extends com.codeborne.selenide.imp
     if (driver.isLocalBrowser()) {
       super.failFastIfNoChanges(driver, folder, filter, start, timeout, incrementTimeout);
     }
-    // In Selenoid, we don't know files' modification time :(
+    log.warn("Unable to fail fast if no changes in Selenoid, we don't know files' modification time");
   }
 
   @Override

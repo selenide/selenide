@@ -6,10 +6,14 @@ import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.DownloadFileToFolder;
 import com.codeborne.selenide.impl.Downloader;
 import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 public class DownloadFileFromMoonToFolder extends DownloadFileToFolder {
+  private static final Logger log = LoggerFactory.getLogger(DownloadFileFromMoonToFolder.class);
+
   private final Downloader downloader;
 
   public DownloadFileFromMoonToFolder() {
@@ -33,7 +37,7 @@ public class DownloadFileFromMoonToFolder extends DownloadFileToFolder {
     if (driver.isLocalBrowser()) {
       super.waitWhileFilesAreBeingModified(driver, folder, timeout, pollingInterval);
     }
-    // In Moon, we don't know files' modification time :(
+    log.warn("Unable to fail fast if no changes in Moon, we don't know files' modification time");
   }
 
   @Override
@@ -42,7 +46,7 @@ public class DownloadFileFromMoonToFolder extends DownloadFileToFolder {
     if (driver.isLocalBrowser()) {
       super.failFastIfNoChanges(driver, folder, filter, start, timeout, incrementTimeout);
     }
-    // In Moon, we don't know files' modification time :(
+    log.warn("Unable to fail fast if no changes in Moon, we don't know files' modification time");
   }
 
   @Override
