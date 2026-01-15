@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.Duration;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
@@ -26,6 +28,7 @@ import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
+import static java.lang.System.currentTimeMillis;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
@@ -81,6 +84,24 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
     assertThat(downloadedFile.getName()).isEqualTo("file 0 & _ ' `backticks`.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("File with space in name\n");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
+  void failFastOnNotMatchingFile() {
+    long start = currentTimeMillis();
+
+    DownloadOptions downloadOptions = DownloadOptions.using(FOLDER)
+      .withIncrementTimeout(Duration.ofSeconds(5L))
+      .withFilter(withName("foo.bar"))
+      .withTimeout(Duration.ofMinutes(2L));
+
+    assertThatThrownBy(() -> $(byText("Download me")).download(downloadOptions))
+      .isInstanceOf(FileNotDownloadedError.class)
+      .hasMessageStartingWith("Failed to download file with name \"foo.bar\" in 120000 ms")
+      .hasMessageFindingMatch("haven't been modified for 50\\d{2}");
+
+    long end = currentTimeMillis();
+    assertThat(end - start).isLessThan(120_000L);
   }
 
   @Test
