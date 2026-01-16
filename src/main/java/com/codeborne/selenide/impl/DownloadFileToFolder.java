@@ -26,6 +26,7 @@ public class DownloadFileToFolder {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolder.class);
   private static final Set<String> CHROMIUM_TEMPORARY_FILES = Set.of("crdownload", "tmp");
   private static final Set<String> FIREFOX_TEMPORARY_FILES = Set.of("part");
+  private static final DurationFormat df = new DurationFormat();
 
   private final Downloader downloader;
 
@@ -109,7 +110,7 @@ public class DownloadFileToFolder {
 
     if (folder.hasFiles(extension, filter)) {
       String message = String.format("Folder %s still contains files %s after %s ms. " +
-                                     "Apparently, the downloading hasn't completed in time.", folder, extension, timeout);
+                                     "Apparently, the downloading hasn't completed in time.", folder, extension, df.format(timeout));
       throw new FileNotDownloadedError(message, timeout);
     }
   }
@@ -156,7 +157,7 @@ public class DownloadFileToFolder {
     }
 
     log.debug("Matching files still not found -> stop waiting for new files after {} ms. (timeout: {} ms.)",
-      currentTimeMillis() - start, timeout);
+      currentTimeMillis() - start, df.format(timeout));
   }
 
   protected void failFastIfNoChanges(Driver driver, DownloadsFolder folder, FileFilter filter,
@@ -166,11 +167,11 @@ public class DownloadFileToFolder {
     long filesHasNotBeenUpdatedForMs = filesHasNotBeenUpdatedForMs(start, now, lastFileUpdate);
     if (filesHasNotBeenUpdatedForMs > incrementTimeout) {
       String message = String.format(
-        "Failed to download file%s in %d ms: files in %s haven't been modified for %s ms. " +
+        "Failed to download file%s in %s: files in %s haven't been modified for %s " +
         "(started at: %s, lastFileUpdate: %s, now: %s, incrementTimeout: %s)" +
         "%nModification times: %s",
-        filter.description(), timeout, folder, filesHasNotBeenUpdatedForMs,
-        start, lastFileUpdate, now, incrementTimeout,
+        filter.description(), df.format(timeout), folder, df.format(filesHasNotBeenUpdatedForMs),
+        start, lastFileUpdate, now, df.format(incrementTimeout),
         folder.modificationTimes());
       throw new FileNotDownloadedError(message, timeout);
     }

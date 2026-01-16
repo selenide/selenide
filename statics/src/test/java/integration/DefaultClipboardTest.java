@@ -47,7 +47,7 @@ public class DefaultClipboardTest extends IntegrationTest {
       .isInstanceOf(ConditionNotMetError.class)
       .hasMessageStartingWith("clipboard should have content 'Goodbye World'")
       .hasMessageContaining("Actual value: Hello World")
-      .hasMessageContaining("Timeout: 22 ms.");
+      .hasMessageContaining("Timeout: 22ms");
   }
 
   @Test
@@ -59,7 +59,7 @@ public class DefaultClipboardTest extends IntegrationTest {
       .isInstanceOf(ConditionMetError.class)
       .hasMessageStartingWith("clipboard should not have content 'Hello World'")
       .hasMessageContaining("Actual value: Hello World")
-      .hasMessageContaining("Timeout: 300 ms.");
+      .hasMessageContaining("Timeout: 300ms");
   }
 
   @Test

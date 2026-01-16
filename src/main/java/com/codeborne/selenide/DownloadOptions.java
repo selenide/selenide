@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.files.FileFilters;
+import com.codeborne.selenide.impl.DurationFormat;
 import com.codeborne.selenide.impl.HasTimeout;
 import org.jspecify.annotations.Nullable;
 
@@ -14,6 +15,8 @@ import static com.codeborne.selenide.files.FileFilters.none;
 import static java.util.stream.Collectors.joining;
 
 public class DownloadOptions implements HasTimeout {
+  private static final DurationFormat df = new DurationFormat();
+
   @Nullable
   private final FileDownloadMode method;
   @Nullable
@@ -119,8 +122,8 @@ public class DownloadOptions implements HasTimeout {
   public String toString() {
     return Stream.of(
         method == null ? null : "method: %s".formatted(method.name()),
-        timeout == null ? null : "timeout: %s ms".formatted(timeout.toMillis()),
-        incrementTimeout == null ? null : "incrementTimeout: %s ms".formatted(incrementTimeout.toMillis()),
+        timeout == null ? null : "timeout: %s".formatted(df.format(timeout)),
+        incrementTimeout == null ? null : "incrementTimeout: %s".formatted(df.format(incrementTimeout)),
         filter.isEmpty() ? null : filter.toString()
       ).filter(p -> p != null)
       .collect(joining(", "));

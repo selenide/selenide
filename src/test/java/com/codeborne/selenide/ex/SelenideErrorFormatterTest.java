@@ -29,18 +29,18 @@ final class SelenideErrorFormatterTest {
   @Test
   void formatsTimeoutToReadable() {
     assertThat(errorFormatter.timeout(0))
-      .isEqualToIgnoringNewLines("Timeout: 0 ms.");
+      .isEqualToIgnoringNewLines("Timeout: 0ms");
     assertThat(errorFormatter.timeout(1))
-      .isEqualToIgnoringNewLines("Timeout: 1 ms.");
+      .isEqualToIgnoringNewLines("Timeout: 1ms");
     assertThat(errorFormatter.timeout(999))
-      .isEqualToIgnoringNewLines("Timeout: 999 ms.");
+      .isEqualToIgnoringNewLines("Timeout: 999ms");
     assertThat(errorFormatter.timeout(1000))
-      .isEqualToIgnoringNewLines("Timeout: 1 s.");
+      .isEqualToIgnoringNewLines("Timeout: 1s");
     assertThat(errorFormatter.timeout(1001))
-      .isEqualToIgnoringNewLines("Timeout: 1.001 s.");
+      .isEqualToIgnoringNewLines("Timeout: 1.001s");
     assertThat(errorFormatter.timeout(1500))
-      .isEqualToIgnoringNewLines("Timeout: 1.500 s.");
+      .isEqualToIgnoringNewLines("Timeout: 1.5s");
     assertThat(errorFormatter.timeout(4000))
-      .isEqualToIgnoringNewLines("Timeout: 4 s.");
+      .isEqualToIgnoringNewLines("Timeout: 4s");
   }
 }

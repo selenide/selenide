@@ -80,7 +80,7 @@ final class ClickRelativeTest extends IntegrationTest {
       .hasMessageContaining("out of bounds")
       .hasMessageContaining("Screenshot:")
       .hasMessageContaining("Page source:")
-      .hasMessageContaining("Timeout: 123 ms.")
+      .hasMessageContaining("Timeout: 123ms")
       .hasCauseInstanceOf(MoveTargetOutOfBoundsException.class);
   }
 

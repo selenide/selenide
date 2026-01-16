@@ -52,7 +52,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
       .hasMessageStartingWith("webdriver should have url page_with_frames.html")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 10 ms.");
+      .hasMessageContaining("Timeout: 10ms");
   }
 
   @Test
@@ -64,7 +64,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
       .hasMessageStartingWith("webdriver should have url page_with_frames.html (because wrong url)")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 10 ms.");
+      .hasMessageContaining("Timeout: 10ms");
   }
 
   @Test
@@ -76,7 +76,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
       .hasMessageStartingWith("webdriver should not have url " + baseUrl + "/page_with_frames_with_delays.html (because wrong url)")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 10 ms.");
+      .hasMessageContaining("Timeout: 10ms");
   }
 
   @Test
@@ -92,7 +92,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
       .hasMessageContaining("Actual value: " + url)
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 11 ms.");
+      .hasMessageContaining("Timeout: 11ms");
   }
 
   @Test
@@ -115,7 +115,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
       .hasMessageContaining("Actual value: " + baseUrl + "/page_with_frames_with_delays.html")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 10 ms.");
+      .hasMessageContaining("Timeout: 10ms");
   }
 
   @Test
@@ -133,7 +133,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
       .hasMessageContaining("Actual value: " + baseUrl + "/page_with_frames_with_delays.html")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 20 ms.");
+      .hasMessageContaining("Timeout: 20ms");
   }
 
   @Test
@@ -156,7 +156,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
       .hasMessageContaining("Actual value: " + baseUrl + "/page_with_frames_with_delays.html")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 5 ms.");
+      .hasMessageContaining("Timeout: 5ms");
   }
 
   @Test
@@ -276,7 +276,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
       .hasMessageContaining("Actual value: Available cookies: [TEST_COOKIE=AF33892F98ABC39A")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test

@@ -99,7 +99,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     timeout = 11;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("png")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"png\" in 11 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"png\" in 11ms");
   }
 
   @Test

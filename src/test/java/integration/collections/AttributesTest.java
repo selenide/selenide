@@ -55,7 +55,7 @@ public class AttributesTest extends ITest {
       .hasMessageContaining("Actual (3): [1 uno, 2 duo, 3 trio]")
       .hasMessageContaining("Expected (3): [1  uno, 2  duo, 3  trio]")
       .hasMessageContaining("Collection: .element")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
@@ -66,7 +66,7 @@ public class AttributesTest extends ITest {
       .hasMessageContaining("Expected: Attribute: 'data-value' values [1 uno, 2 duo, 3 trio]")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test

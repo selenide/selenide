@@ -73,7 +73,7 @@ final class SessionStorageTest extends IntegrationTest {
       .hasMessageStartingWith("sessionStorage should have item 'foo'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 10 ms.");
+      .hasMessageContaining("Timeout: 10ms");
   }
 
   @Test
@@ -87,7 +87,7 @@ final class SessionStorageTest extends IntegrationTest {
       .hasMessageStartingWith("sessionStorage should have item 'it' with value 'wrong'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
@@ -121,7 +121,7 @@ final class SessionStorageTest extends IntegrationTest {
       .hasMessageStartingWith("sessionStorage should not have item 'cat'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
@@ -135,6 +135,6 @@ final class SessionStorageTest extends IntegrationTest {
       .hasMessageStartingWith("sessionStorage should not have item 'cat' with value 'Tom'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 }

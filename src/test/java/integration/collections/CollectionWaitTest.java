@@ -46,7 +46,7 @@ final class CollectionWaitTest extends ITest {
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("expected: = -1, actual: ")
       .hasMessageContaining("collection: #collection li")
-      .hasMessageContaining("Timeout: 3 ms.");
+      .hasMessageContaining("Timeout: 3ms");
     assertTestTookLessThan(500, MILLISECONDS);
   }
 
@@ -74,7 +74,7 @@ final class CollectionWaitTest extends ITest {
                       "Actual (2): [Element #0, Element #1]%n" +
                       "Expected (2): [Element, #wrong]%n" +
                       "Collection: #collection li:first(2)"))
-      .hasMessageContaining("Timeout: 1 s.");
+      .hasMessageContaining("Timeout: 1s");
     assertTestTookMoreThan(1, SECONDS);
   }
 
@@ -96,7 +96,7 @@ final class CollectionWaitTest extends ITest {
       .hasMessageContaining(String.format("Actual (2): [Element #18, Element #19]%n" +
         "Expected (2): [Element, #wrong]%n" +
         "Collection: #collection li:last(2)"))
-        .hasMessageContaining("Timeout: 1 s.");
+        .hasMessageContaining("Timeout: 1s");
     assertTestTookMoreThan(1, SECONDS);
   }
 
@@ -117,7 +117,7 @@ final class CollectionWaitTest extends ITest {
       .hasMessageContaining("Text #0 mismatch (expected: \"Element #88888\", actual: \"Element #18\")")
       .hasMessageContaining("Actual (2): [Element #18, Element #19]")
       .hasMessageContaining("Expected (2): [Element #88888, Element #99999]")
-      .hasMessageContaining("Timeout: 999 ms.");
+      .hasMessageContaining("Timeout: 999ms");
     assertTestTookMoreThan(999, MILLISECONDS);
   }
 

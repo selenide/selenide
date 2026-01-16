@@ -27,11 +27,11 @@ class ArgumentsPrinterTest {
 
   @Test
   void printsDurationAmongArguments() {
-    assertThat(readableArguments(Duration.ofMillis(900))).isEqualTo("900 ms.");
-    assertThat(readableArguments(visible, Duration.ofSeconds(42))).isEqualTo("[visible, 42 s.]");
-    assertThat(readableArguments(visible, Duration.ofMillis(8500))).isEqualTo("[visible, 8.500 s.]");
-    assertThat(readableArguments(visible, Duration.ofMillis(900))).isEqualTo("[visible, 900 ms.]");
-    assertThat(readableArguments(visible, Duration.ofNanos(0))).isEqualTo("[visible, 0 ms.]");
+    assertThat(readableArguments(Duration.ofMillis(900))).isEqualTo("900ms");
+    assertThat(readableArguments(visible, Duration.ofSeconds(42))).isEqualTo("[visible, 42s]");
+    assertThat(readableArguments(visible, Duration.ofMillis(8500))).isEqualTo("[visible, 8.5s]");
+    assertThat(readableArguments(visible, Duration.ofMillis(900))).isEqualTo("[visible, 900ms]");
+    assertThat(readableArguments(visible, Duration.ofNanos(0))).isEqualTo("[visible, 0ms]");
   }
 
   @Test

@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.DurationFormat;
 import com.codeborne.selenide.impl.HasTimeout;
 import org.jspecify.annotations.Nullable;
 
@@ -9,6 +10,7 @@ public record ModalOptions(
   @Nullable String expectedText,
   @Nullable Duration timeout
 ) implements HasTimeout {
+  private static final DurationFormat df = new DurationFormat();
 
   public static ModalOptions none() {
     return new ModalOptions(null, null);
@@ -31,10 +33,10 @@ public record ModalOptions(
     if (expectedText == null && timeout == null)
       return "";
     else if (expectedText == null)
-      return String.format("timeout: %s", timeout);
+      return String.format("timeout: %s", df.format(timeout));
     else if (timeout == null)
       return String.format("expected text: \"%s\"", expectedText);
     else
-      return String.format("expected text: \"%s\", timeout: %s ms", expectedText, timeout.toMillis());
+      return String.format("expected text: \"%s\", timeout: %s", expectedText, df.format(timeout));
   }
 }

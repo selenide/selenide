@@ -107,7 +107,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     timeout = 111;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("png")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"png\" in 111 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"png\" in 111ms");
   }
 
   @Test
@@ -115,7 +115,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     timeout = 111;
     assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 111 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"pdf\" in 111ms");
   }
 
   @Test
@@ -242,9 +242,9 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
       .download(shortIncrementTimeout))
       .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageStartingWith("""
-        Failed to download file with name "hello_world.txt" in 10000 ms""")
+        Failed to download file with name "hello_world.txt" in 10s""")
       .hasMessageMatching(Pattern.compile("""
-        (?s).+: files in .+ haven't been modified for \\d+ ms\\. +\\(lastUpdate: -?\\d+, now: \\d+, incrementTimeout: 201\\).*
+        (?s).+: files in .+ haven't been modified for \\d+ms +\\(lastUpdate: -?\\d+, now: \\d+, incrementTimeout: 201ms\\).*
         """.trim(), DOTALL));
 
     closeWebDriver();

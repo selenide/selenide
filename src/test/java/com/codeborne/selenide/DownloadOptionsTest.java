@@ -56,10 +56,10 @@ final class DownloadOptionsTest {
       .hasToString("method: PROXY");
 
     assertThat(using(PROXY).withTimeout(9999))
-      .hasToString("method: PROXY, timeout: 9999 ms");
+      .hasToString("method: PROXY, timeout: 9.999s");
 
     assertThat(using(HTTPGET).withTimeout(9999).withExtension("ppt"))
-      .hasToString("method: HTTPGET, timeout: 9999 ms, with extension \"ppt\"");
+      .hasToString("method: HTTPGET, timeout: 9.999s, with extension \"ppt\"");
 
     assertThat(using(FOLDER).withFilter(withExtension("exe")))
       .hasToString("method: FOLDER, with extension \"exe\"");

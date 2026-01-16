@@ -83,7 +83,7 @@ final class LogicalOperationsWithConditions extends ITest {
       .hasMessageStartingWith("Element should be text \"Add me\" OR text \"Update me\" {#remove}")
       .hasMessageContaining("Actual value: text=\"Remove me\"")
       .hasMessageContaining("Screenshot: ")
-      .hasMessageContaining("Timeout: 3 ms.");
+      .hasMessageContaining("Timeout: 3ms");
   }
 
   @Test

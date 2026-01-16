@@ -52,7 +52,7 @@ final class ExecuteMethodTest extends ITest {
     long startMs = System.currentTimeMillis();
     assertThatCode(() -> $("#non-existing-element").execute(new TripleClick(), Duration.ofMillis(timeout)))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Timeout: 1.100 s.");
+      .hasMessageContaining("Timeout: 1.1s");
     long elapsedTimeMs = System.currentTimeMillis() - startMs;
     assertThat(elapsedTimeMs).isBetween(timeout, timeout * 5);
   }

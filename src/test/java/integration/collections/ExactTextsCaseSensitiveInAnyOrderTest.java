@@ -73,7 +73,7 @@ class ExactTextsCaseSensitiveInAnyOrderTest extends ITest {
       .hasMessageContaining("Expected: Exact texts case sensitive in any order [content1, content2]")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
