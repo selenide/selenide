@@ -115,7 +115,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     timeout = 111;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 111 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 111ms");
   }
 
   @Test
@@ -131,7 +131,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       .hasMessageStartingWith("Element not found {#imaginary-button}")
       .hasMessageContaining("Screenshot:")
       .hasMessageContaining("Page source:")
-      .hasMessageContaining("Timeout: 300 ms.")
+      .hasMessageContaining("Timeout: 300ms")
       .cause()
       .isInstanceOf(NoSuchElementException.class);
 
@@ -255,9 +255,9 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThatThrownBy(() -> $("h1")
       .download(shortIncrementTimeout))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(Pattern.compile("(?s).+files in .+ haven't been modified for \\d+ ms\\. +" +
-        "\\(started at: \\d+, lastFileUpdate: -?\\d+, now: \\d+, incrementTimeout: 1001\\)\\s*" +
+      .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10s")
+      .hasMessageMatching(Pattern.compile("(?s).+files in .+ haven't been modified for [\\d.]+s +" +
+        "\\(started at: \\d+, lastFileUpdate: -?\\d+, now: \\d+, incrementTimeout: 1\\.001s\\)\\s*" +
         "Modification times: \\{.*}.*", DOTALL));
 
     closeWebDriver();
@@ -285,13 +285,15 @@ final class FileDownloadToFolderTest extends IntegrationTest {
       assertThat(file).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     })
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10000 ms")
-      .hasMessageMatching(Pattern.compile("(?s).+files in .+ haven't been modified for \\d+ ms\\..*", DOTALL));
+      .hasMessageStartingWith("Failed to download file with name \"hello_world.txt\" in 10s")
+      .hasMessageContaining("incrementTimeout: 1s")
+      .hasMessageMatching(Pattern.compile("(?s).+files in .+ haven't been modified for [\\d.]+s.*", DOTALL));
 
     closeWebDriver();
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   public void download_slowly() {
     File downloadedFile = $(byText("Download me slowly"))
       .download(4000, withName("hello_world.txt"));

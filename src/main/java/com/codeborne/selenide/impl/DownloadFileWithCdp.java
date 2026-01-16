@@ -36,6 +36,7 @@ import static org.openqa.selenium.devtools.v143.browser.Browser.downloadWillBegi
 
 public class DownloadFileWithCdp {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithCdp.class);
+  private static final DurationFormat df = new DurationFormat();
   private static final AtomicLong SEQUENCE = new AtomicLong();
 
   protected final Downloader downloader;
@@ -73,8 +74,8 @@ public class DownloadFileWithCdp {
       CdpDownload download = waitUntilDownloadsCompleted(driver, fileFilter, timeout, incrementTimeout, downloads);
 
       if (!fileFilter.match(new DownloadedFile(download.file(), download.lastModifiedAt, download.fileSize, emptyMap()))) {
-        String message = String.format("Failed to download file%s in %d ms.%s;%n actually downloaded: %s",
-          fileFilter.description(), timeout, fileFilter.description(), download.file().getAbsolutePath());
+        String message = String.format("Failed to download file%s in %s%s;%n actually downloaded: %s",
+          fileFilter.description(), df.format(timeout), fileFilter.description(), download.file().getAbsolutePath());
         throw new FileNotDownloadedError(message, timeout);
       }
 
@@ -112,8 +113,8 @@ public class DownloadFileWithCdp {
     }
     while (!stopwatch.isTimeoutReached());
 
-    String message = "Failed to download file%s in %d ms., found files: %s".formatted(
-      fileFilter.description(), timeout, downloads.folder().files());
+    String message = "Failed to download file%s in %s, found files: %s".formatted(
+      fileFilter.description(), df.format(timeout), downloads.folder().files());
     throw new FileNotDownloadedError(message, timeout);
   }
 
@@ -266,10 +267,10 @@ public class DownloadFileWithCdp {
     long filesHasNotBeenUpdatedForMs = now - lastModifiedAt;
     if (filesHasNotBeenUpdatedForMs > incrementTimeout) {
       String message = String.format(
-        "Failed to download file%s in %d ms: files in %s haven't been modified for %s ms. " +
+        "Failed to download file%s in %s: files in %s haven't been modified for %s " +
         "(lastUpdate: %s, now: %s, incrementTimeout: %s)",
-        filter.description(), timeout, downloads.folder, filesHasNotBeenUpdatedForMs,
-        lastModifiedAt, now, incrementTimeout);
+        filter.description(), df.format(timeout), downloads.folder, df.format(filesHasNotBeenUpdatedForMs),
+        lastModifiedAt, now, df.format(incrementTimeout));
       throw new FileNotDownloadedError(message, timeout);
     }
   }

@@ -21,7 +21,7 @@ final class TextsSizeMismatchTest {
       "List size mismatch",
       "expected: = 3, actual: 3",
       "Collection: .characters",
-      "Timeout: 9 s."
+      "Timeout: 9s"
     );
   }
 
@@ -35,7 +35,7 @@ final class TextsSizeMismatchTest {
       "expected: = 3, actual: 3",
       "Because: we expect favorite characters",
       "Collection: .characters",
-      "Timeout: 9 s."
+      "Timeout: 9s"
     );
   }
 }

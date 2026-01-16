@@ -91,17 +91,20 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
     long start = currentTimeMillis();
 
     DownloadOptions downloadOptions = DownloadOptions.using(FOLDER)
-      .withIncrementTimeout(Duration.ofSeconds(5L))
+      .withIncrementTimeout(Duration.ofMillis(1002L))
       .withFilter(withName("foo.bar"))
-      .withTimeout(Duration.ofMinutes(2L));
+      .withTimeout(Duration.ofSeconds(20));
 
     assertThatThrownBy(() -> $(byText("Download me")).download(downloadOptions))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with name \"foo.bar\" in 120000 ms")
-      .hasMessageFindingMatch("haven't been modified for 50\\d{2}");
+      .hasMessageStartingWith("Failed to download file with name \"foo.bar\" in 20s")
+      .hasMessageFindingMatch("haven't been modified for 1(\\.\\d{1,3})?s")
+      .hasMessageContaining("incrementTimeout: 1.002s");
 
     long end = currentTimeMillis();
-    assertThat(end - start).isLessThan(120_000L);
+    assertThat(end - start)
+      .as("Less than timeout (but greater than increment timeout)")
+      .isBetween(1002L, 10_000L);
   }
 
   @Test
@@ -109,7 +112,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
     timeout = 11;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 11 ms");
+      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 11ms");
   }
 
   @Test

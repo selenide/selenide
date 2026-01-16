@@ -20,7 +20,7 @@ public class CustomErrorMessageTest extends IntegrationTest {
       .hasMessageContaining("Actual value: text=\"\"")
       .hasMessageContaining("Screenshot: file:/")
       .hasMessageContaining("Page source: file:/")
-      .hasMessageContaining("Timeout: 2 ms.")
+      .hasMessageContaining("Timeout: 2ms")
       .hasMessageContaining("Page url: about:blank");
   }
 }

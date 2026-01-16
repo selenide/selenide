@@ -40,20 +40,20 @@ final class TimeoutTest extends ITest {
   void timeoutShouldBeInMilliseconds() {
     assertThatThrownBy(() -> $(xpath("//h16")).shouldBe(visible, ofMillis(15)))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("15 ms");
+      .hasMessageContaining("15ms");
   }
 
   @Test
   void timeoutShouldBeFormattedInErrorMessage() {
     assertThatThrownBy(() -> $(xpath("//h19")).shouldBe(visible, ofMillis(1500)))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("1.500 s");
+      .hasMessageContaining("1.5s");
   }
 
   @Test
   void timeoutLessThanSecond() {
     assertThatThrownBy(() -> $(xpath("//h18")).shouldBe(visible, ofMillis(800)))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("800 ms");
+      .hasMessageContaining("800ms");
   }
 }

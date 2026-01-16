@@ -116,7 +116,7 @@ final class ConfirmTest extends IntegrationTest {
       .hasMessageContaining("Actual: Get out of this page, %s?".formatted(USER_NAME))
       .hasMessageContaining("Expected: Get out of this page, Maria?")
       .hasMessageMatching("(?s).*Page source: file:.+\\.html.*")
-      .hasMessageMatching("(?s).*Timeout: .+ m?s\\..*");
+      .hasMessageMatching("(?s).*Timeout: .+m?s.*");
   }
 
   @Test

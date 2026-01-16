@@ -276,7 +276,7 @@ final class SelenideMethodsTest extends IntegrationTest {
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("Element should have text \"wrong-text\" {#username-blur-counter}")
       .hasMessageContaining("Actual value: text=\"___\"")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
@@ -341,7 +341,7 @@ final class SelenideMethodsTest extends IntegrationTest {
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageContaining("Element should not have css class \"firstname\" {by text: Bob}")
       .hasMessageContaining("Actual value: class=\"firstname\"")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
@@ -462,7 +462,7 @@ final class SelenideMethodsTest extends IntegrationTest {
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("Element should have text \"Some wrong test\" (because it's wrong text) {h1}")
       .hasMessageContaining("Actual value: text=\"Page with selects\"")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
@@ -471,7 +471,7 @@ final class SelenideMethodsTest extends IntegrationTest {
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("Element should have text \"Some wrong test\" (because it's wrong text) {h1}")
       .hasMessageContaining("Actual value: text=\"Page with selects\"")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
@@ -480,7 +480,7 @@ final class SelenideMethodsTest extends IntegrationTest {
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("Element should have text \"Some wrong test\" (because it's wrong text) {h1}")
       .hasMessageContaining("Actual value: text=\"Page with selects\"")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
@@ -489,7 +489,7 @@ final class SelenideMethodsTest extends IntegrationTest {
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageStartingWith("Element should not have text \"Page with selects\" (because it's wrong text) {h1}")
       .hasMessageContaining("Actual value: text=\"Page with selects\"")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
@@ -500,7 +500,7 @@ final class SelenideMethodsTest extends IntegrationTest {
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageStartingWith("Element should not be visible (because we expect it do disappear) {h1}")
       .hasMessageContaining("Actual value: visible")
-      .hasMessageContaining("Timeout: 200 ms.");
+      .hasMessageContaining("Timeout: 200ms");
   }
 
   @Test
@@ -511,7 +511,7 @@ final class SelenideMethodsTest extends IntegrationTest {
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("Element should be hidden (because it's sensitive information) {h1}")
       .hasMessageContaining("Actual value: visible")
-      .hasMessageContaining("Timeout: 100 ms.");
+      .hasMessageContaining("Timeout: 100ms");
   }
 
   @Test

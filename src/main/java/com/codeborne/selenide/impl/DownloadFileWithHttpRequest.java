@@ -57,6 +57,7 @@ import static org.apache.hc.client5.http.protocol.HttpClientContext.COOKIE_STORE
 
 public class DownloadFileWithHttpRequest {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithHttpRequest.class);
+  private static final DurationFormat df = new DurationFormat();
   private final ElementDescriber describe = inject(ElementDescriber.class);
 
   protected boolean ignoreSelfSignedCerts = true;
@@ -128,8 +129,8 @@ public class DownloadFileWithHttpRequest {
     saveContentToFile(response, downloadedFile);
 
     if (!fileFilter.match(localFile(downloadedFile))) {
-      String message = String.format("Failed to download file from %s in %d ms.%s;%n actually downloaded: %s",
-        url, timeout, fileFilter.description(), downloadedFile.getAbsolutePath());
+      String message = String.format("Failed to download file from %s in %s%s;%n actually downloaded: %s",
+        url, df.format(timeout), fileFilter.description(), downloadedFile.getAbsolutePath());
       throw new FileNotDownloadedError(message, timeout);
     }
     return downloadedFile;

@@ -34,6 +34,7 @@ import static java.util.Arrays.asList;
 
 class SelenideElementProxy<T extends SelenideElement> implements InvocationHandler {
   private static final Logger log = LoggerFactory.getLogger(SelenideElementProxy.class);
+  private static final DurationFormat df = new DurationFormat();
 
   private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
     "as",
@@ -160,14 +161,14 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
         log.debug("Method {} execution failed; stop re-trying. Last error: ", method.getName(), lastError);
         throw lastError;
       }
-      log.debug("Method {} execution failed; will re-try after {} ms (timeout: {} ms). Last error: ",
-        method.getName(), pollingIntervalMs, timeoutMs, lastError);
+      log.debug("Method {} execution failed; will re-try after {} (timeout: {}). Last error: ",
+        method.getName(), df.format(pollingIntervalMs), df.format(timeoutMs), lastError);
       stopwatch.sleep(pollingIntervalMs);
     }
     while (!stopwatch.isTimeoutReached());
 
-    log.debug("Method {} execution failed after re-trying {} ms. with interval {} ms. Last error: ",
-      method.getName(), timeoutMs, pollingIntervalMs, lastError);
+    log.debug("Method {} execution failed after re-trying {} with interval {}. Last error: ",
+      method.getName(), df.format(timeoutMs), df.format(pollingIntervalMs), lastError);
     throw exceptionWrapper.wrap(lastError, webElementSource);
   }
 

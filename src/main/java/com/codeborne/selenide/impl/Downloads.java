@@ -13,6 +13,7 @@ import static java.lang.System.currentTimeMillis;
 import static java.util.stream.Collectors.toList;
 
 public class Downloads {
+  private static final DurationFormat df = new DurationFormat();
   private final List<DownloadedFile> files = new CopyOnWriteArrayList<>();
 
   public Downloads() {
@@ -66,7 +67,7 @@ public class Downloads {
   public File firstDownloadedFile(long timeout, FileFilter fileFilter) {
     return firstMatchingFile(fileFilter)
       .orElseThrow(() -> {
-        String message = String.format("Failed to download file%s in %d ms.", fileFilter.description(), timeout);
+        String message = String.format("Failed to download file%s in %s", fileFilter.description(), df.format(timeout));
           return new FileNotDownloadedError(message.trim(), timeout);
         }
       ).getFile();

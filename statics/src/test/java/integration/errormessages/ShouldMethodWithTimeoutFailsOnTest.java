@@ -37,7 +37,7 @@ final class ShouldMethodWithTimeoutFailsOnTest extends IntegrationTest {
     assertThatThrownBy(() -> element.shouldHave(text("Müller"), Duration.ofMillis(43)))
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("Element should have text \"Müller\" {.detective}")
-      .hasMessageContaining("Timeout: 43 ms.");
+      .hasMessageContaining("Timeout: 43ms");
   }
 
   @Test
@@ -48,7 +48,7 @@ final class ShouldMethodWithTimeoutFailsOnTest extends IntegrationTest {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {ul .nonexistent[1]}")
       .hasMessageContaining("Expected: visible")
-      .hasMessageContaining("Timeout: 1 ms.");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
@@ -59,7 +59,7 @@ final class ShouldMethodWithTimeoutFailsOnTest extends IntegrationTest {
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageStartingWith("Element should not be visible {.detective}")
       .hasMessageContaining("Actual value: visible")
-      .hasMessageContaining("Timeout: 46 ms.");
+      .hasMessageContaining("Timeout: 46ms");
   }
 
   @Test
@@ -69,6 +69,6 @@ final class ShouldMethodWithTimeoutFailsOnTest extends IntegrationTest {
     assertThatThrownBy(() -> element.shouldNotHave(text("Miller detective"), Duration.ofNanos(20001000)))
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageStartingWith("Element should not have text \"Miller detective\" {.detective}")
-      .hasMessageContaining("Timeout: 20 ms.");
+      .hasMessageContaining("Timeout: 20ms");
   }
 }

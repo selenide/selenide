@@ -29,6 +29,6 @@ final class MethodCalledOnElementWithInvalidOperationFailsOnTest extends Integra
       $("[name=username]").sendKeys("\uD83D\uDE06"))
       .isInstanceOf(UIAssertionError.class)
       .hasMessageContaining("WebDriverException: unknown error: ChromeDriver only supports characters in the BMP")
-      .hasMessageContaining("Timeout: 300 ms.");
+      .hasMessageContaining("Timeout: 300ms");
   }
 }

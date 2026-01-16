@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.DurationFormat;
 import com.codeborne.selenide.impl.HasTimeout;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Keys;
@@ -13,6 +14,8 @@ import static com.codeborne.selenide.commands.Util.merge;
 import static java.util.Collections.emptyList;
 
 public class ClickOptions implements HasTimeout {
+  private static final DurationFormat df = new DurationFormat();
+
   private final int offsetX;
   private final int offsetY;
   private final ClickMethod clickMethod;
@@ -124,7 +127,7 @@ public class ClickOptions implements HasTimeout {
         clickMethod, offsetX, offsetY, force, keysToString());
     else
       return String.format("method: %s, offsetX: %s, offsetY: %s, timeout: %s, force: %s, keys: %s",
-        clickMethod, offsetX, offsetY, timeout, force, keysToString());
+        clickMethod, offsetX, offsetY, df.format(timeout), force, keysToString());
   }
 
   private boolean hasDefaultParameters() {

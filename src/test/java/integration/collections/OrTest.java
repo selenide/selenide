@@ -29,6 +29,6 @@ public class OrTest extends ITest {
       .hasMessageContaining("Expected: texts [A, B, C] OR texts [1, 2, 3]")
       .hasMessageContaining("Collection: .element")
       .hasMessageContaining("Screenshot:")
-      .hasMessageContaining("Timeout: 2 ms.");
+      .hasMessageContaining("Timeout: 2ms");
   }
 }

@@ -68,7 +68,7 @@ final class MissingElementTest extends IntegrationTest {
         "Expected: text \"expected text\"%n" +
         "Screenshot: %s%s%n" +
         "Page source: %s%s%n" +
-        "Timeout: 15 ms.%n" +
+        "Timeout: 15ms%n" +
         "Caused by: NoSuchElementException:.*", path, png(), path, html()))
       .has(screenshot(path("elementNotFound")))
       .cause()
@@ -91,7 +91,7 @@ final class MissingElementTest extends IntegrationTest {
         "Actual value: text=\"Dropdown list\"%n" +
         "Screenshot: %s%s%n" +
         "Page source: %s%s%n" +
-        "Timeout: 15 ms.", path, png(), path, html()));
+        "Timeout: 15ms", path, png(), path, html()));
     assertThat(e.getActual().getStringRepresentation()).isEqualTo("text=\"Dropdown list\"");
     assertThat(e.getExpected().getStringRepresentation()).isEqualTo("text \"expected text\"");
   }
@@ -109,7 +109,7 @@ final class MissingElementTest extends IntegrationTest {
         "Actual value: name=\"\"%n" +
         "Screenshot: %s%s%n" +
         "Page source: %s%s%n" +
-        "Timeout: 15 ms.", path, png(), path, html()));
+        "Timeout: 15ms", path, png(), path, html()));
     assertThat(e.getActual().getStringRepresentation()).isEqualTo("name=\"\"");
     assertThat(e.getExpected().getStringRepresentation()).isEqualTo("attribute name=\"header\"");
   }
@@ -127,7 +127,7 @@ final class MissingElementTest extends IntegrationTest {
         "Actual value: text=\"Dropdown list\"%n" +
         "Screenshot: %s%s%n" +
         "Page source: %s%s%n" +
-        "Timeout: 15 ms.", path, png(), path, html()));
+        "Timeout: 15ms", path, png(), path, html()));
     assertThat(e.getActual().getStringRepresentation()).isEqualTo("text=\"Dropdown list\"");
     assertThat(e.getExpected().getStringRepresentation()).isEqualTo("text \"expected text\"");
   }
@@ -146,7 +146,7 @@ final class MissingElementTest extends IntegrationTest {
           "Actual value: hidden, opacity=1%n" +
           "Screenshot: %s%s%n" +
           "Page source: %s%s%n" +
-          "Timeout: 15 ms.", path, png(), path, html()));
+          "Timeout: 15ms", path, png(), path, html()));
     assertThat(e.getActual().getStringRepresentation()).isEqualTo("hidden, opacity=1");
     assertThat(e.getExpected().getStringRepresentation()).isEqualTo("clickable: interactable and enabled");
   }
@@ -164,7 +164,7 @@ final class MissingElementTest extends IntegrationTest {
         "Actual value: text=\"Dropdown list\"%n" +
         "Screenshot: %s%s%n" +
         "Page source: %s%s%n" +
-        "Timeout: 15 ms.", path, png(), path, html()));
+        "Timeout: 15ms", path, png(), path, html()));
     assertThat(e.getActual().getStringRepresentation()).isEqualTo("text=\"Dropdown list\"");
     assertThat(e.getExpected().getStringRepresentation()).isEqualTo("text \"expected text\"");
   }
@@ -182,7 +182,7 @@ final class MissingElementTest extends IntegrationTest {
         "Actual value: text=\"Dropdown list\"%n" +
         "Screenshot: %s%s%n" +
         "Page source: %s%s%n" +
-        "Timeout: 15 ms.", path, png(), path, html()));
+        "Timeout: 15ms", path, png(), path, html()));
     assertThat(e.getActual().getStringRepresentation()).isEqualTo("text=\"Dropdown list\"");
     assertThat(e.getExpected().getStringRepresentation()).isEqualTo("text \"expected text\"");
   }
@@ -211,7 +211,7 @@ final class MissingElementTest extends IntegrationTest {
         "Expected: clickable: interactable and enabled%n" +
         "Screenshot: %s%s%n" +
         "Page source: %s%s%n" +
-        "Timeout: 15 ms.%n" +
+        "Timeout: 15ms%n" +
         "Caused by: NoSuchElementException:.*", path, png(), path, html()));
     assertThat(e.getActual()).isNull();
     assertThat(e.getExpected()).isNull();
@@ -230,7 +230,7 @@ final class MissingElementTest extends IntegrationTest {
         "Actual value: exists%n" +
         "Screenshot: %s%s%n" +
         "Page source: %s%s%n" +
-        "Timeout: 15 ms.", path, png(), path, html()));
+        "Timeout: 15ms", path, png(), path, html()));
     assertThat(e.getActual().getStringRepresentation()).isEqualTo("exists");
     assertThat(e.getExpected().getStringRepresentation()).isEqualTo("not exist");
   }
@@ -247,7 +247,7 @@ final class MissingElementTest extends IntegrationTest {
         "Expected: not hidden%n" +
         "Screenshot: %s%s%n" +
         "Page source: %s%s%n" +
-        "Timeout: 15 ms.%n" +
+        "Timeout: 15ms%n" +
         "Caused by: NoSuchElementException:.*", path, png(), path, html()));
 
     assertThat(e.getActual()).isNull();
