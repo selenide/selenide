@@ -4,6 +4,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.jspecify.annotations.Nullable;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.Base64;
 import java.util.Collection;
@@ -23,7 +25,6 @@ public class HttpHelper {
     Pattern.compile(".*filename\\*? *= *\"?((.+)'')?([^\";?]*)\"?(;charset=(.*))?.*", CASE_INSENSITIVE);
 
   private static final Pattern FILENAME_FORBIDDEN_CHARACTERS = Pattern.compile("[#%{}/\\\\<>*?$!\":@+|=]");
-  private static final Pattern RE_URL_WITH_CREDENTIALS = Pattern.compile("(.+//).*:.*@(.+)");
 
   public Optional<String> getFileNameFromContentDisposition(Map<String, String> headers) {
     return getFileNameFromContentDisposition(headers.entrySet());
@@ -82,6 +83,17 @@ public class HttpHelper {
 
   @Nullable
   public static String maskUrlCredentials(@Nullable String url) {
-    return url == null ? null : RE_URL_WITH_CREDENTIALS.matcher(url).replaceFirst("$1***:***@$2");
+    if (url == null) return null;
+
+    try {
+      URI u = new URI(url);
+
+      return u.getUserInfo() == null ?
+        url :
+        new URI(u.getScheme(), "***", u.getHost(), u.getPort(), u.getPath(), u.getQuery(), u.getFragment()).toString();
+
+    } catch (URISyntaxException invalidUri) {
+      return url;
+    }
   }
 }
