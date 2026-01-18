@@ -153,15 +153,31 @@ final class HttpHelperTest {
   @Test
   void maskUrlCredentials_hidesUsernameAndPasswordInUrl() {
     assertThat(maskUrlCredentials("http://username:password@localhost:49112/wd/hub"))
-      .isEqualTo("http://***:***@localhost:49112/wd/hub");
-    assertThat(maskUrlCredentials("https://victoria:secret@myshop.com/wd/hub"))
-      .isEqualTo("https://***:***@myshop.com/wd/hub");
+      .isEqualTo("http://***@localhost:49112/wd/hub");
+    assertThat(maskUrlCredentials("http://username:@localhost:49112/wd/hub"))
+      .isEqualTo("http://***@localhost:49112/wd/hub");
+    assertThat(maskUrlCredentials("http://username@localhost:49112/wd/hub"))
+      .isEqualTo("http://***@localhost:49112/wd/hub");
+    assertThat(maskUrlCredentials("http://username:password:ss@localhost:49112/wd/hub"))
+      .isEqualTo("http://***@localhost:49112/wd/hub");
+    assertThat(maskUrlCredentials("http://username@localhost:49112/wd/hub"))
+      .isEqualTo("http://***@localhost:49112/wd/hub");
+    assertThat(maskUrlCredentials("http://user%3Aname:password@localhost:49112/wd/hub"))
+      .isEqualTo("http://***@localhost:49112/wd/hub");
+    assertThat(maskUrlCredentials("https://victoria:secret@myshop.com/wd/hub?email=foo@bar.ee"))
+      .isEqualTo("https://***@myshop.com/wd/hub?email=foo@bar.ee");
+    assertThat(maskUrlCredentials("http://user:pass@[::1]:8080"))
+      .isEqualTo("http://***@[::1]:8080");
   }
 
   @Test
   void maskUrlCredentials_urlWithoutCredentials_staysUntouched() {
-    assertThat(maskUrlCredentials("http://localhost:49112/wd/hub")).isEqualTo("http://localhost:49112/wd/hub");
-    assertThat(maskUrlCredentials("https://localhost/wd/hub")).isEqualTo("https://localhost/wd/hub");
+    assertThat(maskUrlCredentials("http://localhost:49112/wd/hub"))
+      .isEqualTo("http://localhost:49112/wd/hub");
+    assertThat(maskUrlCredentials("https://localhost/wd/hub"))
+      .isEqualTo("https://localhost/wd/hub");
+    assertThat(maskUrlCredentials("https://localhost:4444/wd/hub?email=foo@bar.ee"))
+      .isEqualTo("https://localhost:4444/wd/hub?email=foo@bar.ee");
     assertThat(maskUrlCredentials("")).isEqualTo("");
     assertThat(maskUrlCredentials(null)).isNull();
   }
