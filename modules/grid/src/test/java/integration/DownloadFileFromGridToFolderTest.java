@@ -5,7 +5,6 @@ import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -77,7 +76,6 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   }
 
   @Test
-  @Disabled("Broken in Selenium 4.39.0; will be fixed in 4.40.0")
   void downloadsFileWithSpaceInName() {
     File downloadedFile = $(byText("Download file with space in name")).download(withExtension("txt"));
 

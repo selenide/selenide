@@ -7,7 +7,7 @@ import org.openqa.selenium.bidi.HasBiDi;
 import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v143.page.Page;
+import org.openqa.selenium.devtools.v144.page.Page;
 
 import java.time.Duration;
 import java.util.Optional;
