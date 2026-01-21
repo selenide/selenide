@@ -1,5 +1,19 @@
 # Changelog
 
+## 7.14.0 (21.01.2026)
+* fix downloading files that have space in name (#3231)
+* #3227 fix downloading file from Grid which is few seconds behind the central time (#3240)
+* #3233 enable fail fast mechanism in download method for selenium grid  --  thanks to Aliaksandr Rasolka (#3234)
+* forbid removing Selenide own proxy filters  --  thanks to Aliaksandr Rasolka (#3221)
+* add method to remove all request or response filters separately  --  thanks to Aliaksandr Rasolka (#3221)
+* unify value masking  --  thanks to Aliaksandr Rasolka (#3226)
+* add method to mark value as sensitive in type options  --  thanks to Aliaksandr Rasolka (#3226)
+* export Video Recorder (#3230)
+* shorten format of timeouts shown in error messages, e.g. "100 ms." -> "100ms" (#3235)
+* update Selenium from 4.39.0 to 4.40.0, incl. CDP v143 -> v144  (#3237)
+
+See https://github.com/selenide/selenide/milestone/236?closed=1
+
 ## 7.13.0 (14.12.2025)
 * bump Selenium from 3.38.0 to 4.39.0, incl. CDP v142 -> v143  (#3202)
 * improve downloading files from Grid (#3207)
