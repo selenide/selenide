@@ -1,5 +1,6 @@
 package com.codeborne.selenide.files;
 
+import com.codeborne.selenide.impl.DurationFormat;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.Instant;
 import java.util.Map;
 
 import static java.lang.System.currentTimeMillis;
@@ -16,6 +18,8 @@ import static org.apache.commons.io.FilenameUtils.getExtension;
 
 public class DownloadedFile {
   private static final Logger log = LoggerFactory.getLogger(DownloadedFile.class);
+  private static final DurationFormat df = new DurationFormat();
+  private static final long BEGINNING_OF_TIME = Instant.parse("1997-08-29T02:14:00-07:00").toEpochMilli();
 
   private final File file;
   private final long lastModifiedTime;
@@ -70,10 +74,19 @@ public class DownloadedFile {
     return lastModifiedTime - timestamp >= -1000L;
   }
 
+  /**
+   * May be inaccurate for file on remote webdriver
+   * (and it's system time differs from the system time on test machine).
+   */
   @Override
   public String toString() {
-    return String.format("%s (modified %s ms ago)", file.getName(),
-      file.exists() ? currentTimeMillis() - file.lastModified() : "?");
+    return isModificationTimeKnown() ?
+      String.format("%s (modified %s ago)", file.getName(), df.format(currentTimeMillis() - lastModifiedTime)) :
+      file.getName();
+  }
+
+  private boolean isModificationTimeKnown() {
+    return lastModifiedTime > BEGINNING_OF_TIME;
   }
 
   public static DownloadedFile fileWithName(String fileName) {

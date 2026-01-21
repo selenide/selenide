@@ -43,14 +43,6 @@ public class BrowserDownloadsFolder implements DownloadsFolder {
       .toList();
   }
 
-  @Override
-  public List<DownloadedFile> filesNewerThan(long modifiedAfterTs) {
-    return files().stream()
-      .filter(file -> file.lastModifiedTime() > 0)
-      .filter(file -> file.isFileModifiedLaterThan(modifiedAfterTs))
-      .collect(toList());
-  }
-
   public File file(String fileName) {
     return new File(folder, fileName).getAbsoluteFile();
   }

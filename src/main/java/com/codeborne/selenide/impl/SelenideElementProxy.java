@@ -152,7 +152,6 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
         throw Cleanup.of.wrapInvalidSelectorException(lastError);
       }
       else if (lastError instanceof StopCommandExecutionException stop) {
-        lastError = stop;
         if (stopwatch.getElapsedTimeMs() >= stop.timeoutMs()) {
           throw lastError;
         }

@@ -36,7 +36,7 @@ public class DownloadDetector implements Comparator<DownloadedFile>, Serializabl
       if (result == 0) {
         result = Long.compare(file1.getFile().lastModified(), file2.getFile().lastModified());
         if (result == 0) {
-          result = file1.getFile().getName().compareTo(file2.getFile().getName());
+          result = file1.getName().compareTo(file2.getName());
         }
       }
     }

@@ -11,7 +11,6 @@ import java.util.List;
 
 import static com.codeborne.selenide.impl.WebdriverUnwrapper.unwrapRemoteWebDriver;
 import static java.util.Collections.emptyMap;
-import static java.util.stream.Collectors.toList;
 
 public class GridDownloadsFolder implements DownloadsFolder {
   private final RemoteWebDriver webDriver;
@@ -37,13 +36,6 @@ public class GridDownloadsFolder implements DownloadsFolder {
       .map(fileOnGrid -> new DownloadedFile(
         new File(fileOnGrid.getName()), fileOnGrid.getLastModifiedTime(), fileOnGrid.getSize(), emptyMap()))
       .toList();
-  }
-
-  @Override
-  public List<DownloadedFile> filesNewerThan(long modifiedAfterTs) {
-    return files().stream()
-      .filter(fileInfo -> fileInfo.isFileModifiedLaterThan(modifiedAfterTs))
-      .collect(toList());
   }
 
   @Override

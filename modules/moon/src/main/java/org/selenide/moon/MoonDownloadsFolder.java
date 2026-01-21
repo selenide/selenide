@@ -32,15 +32,6 @@ public class MoonDownloadsFolder implements DownloadsFolder {
     return files.stream().map(name -> fileWithName(name)).collect(toList());
   }
 
-  /**
-   * @param modifiedAfterTs ignored
-   * @return all downloaded files because Moon API doesn't provide info about file modification time :(
-   */
-  @Override
-  public List<DownloadedFile> filesNewerThan(long modifiedAfterTs) {
-    return files();
-  }
-
   @Override
   public String toString() {
     return moonClient.toString();

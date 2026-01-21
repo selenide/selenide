@@ -58,6 +58,9 @@ abstract class AbstractGridTest extends IntegrationTest {
 
   @BeforeAll
   static synchronized void setUpGrid() throws MalformedURLException {
+//    gridUrl = new URL("http://192.168.105.1:4444/wd/hub");
+//    gridUrl = new URL("http://192.168.0.41:4444/wd/hub"); // home old mac
+//    gridUrl = new URL("http://10.10.10.151:4444/wd/hub"); // office old mac
     if (gridUrl == null) {
       for (int tries = 0; tries < 3; tries++) {
         int port = findFreePort();
