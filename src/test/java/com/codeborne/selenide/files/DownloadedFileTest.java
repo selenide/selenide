@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyMap;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,12 +49,23 @@ final class DownloadedFileTest {
     assertThat(file(1111111114998L).isFileModifiedLaterThan(1111111115002L)).isTrue();
   }
 
-  private DownloadedFile file(long modifiedAt) throws IOException {
-//    File file = createTempFile("selenide-tests", "new-file");
-//    FileUtils.touch(file);
-//    if (!file.setLastModified(modifiedAt)) {
-//      throw new IllegalStateException("Failed to set last modified time to file " + file.getAbsolutePath());
-//    }
+  @Test
+  void toString_showsFileName() {
+    assertThat(file("hello.txt", 0L)).hasToString("hello.txt");
+    assertThat(file("hello.pdf", 1000L)).hasToString("hello.pdf");
+  }
+
+  @Test
+  void toString_showsModificationTime_whenKnown() {
+    assertThat(file("hello.png", currentTimeMillis() - 100).toString()).matches("hello.png \\(modified 10\\dms ago\\)");
+    assertThat(file("hello.jpg", currentTimeMillis() - 99991).toString()).matches("hello.jpg \\(modified 99.99\\ds ago\\)");
+  }
+
+  private DownloadedFile file(String name, long modifiedAt) {
+    return new DownloadedFile(new File(name), modifiedAt, 0, emptyMap());
+  }
+
+  private DownloadedFile file(long modifiedAt) {
     return new DownloadedFile(new File(randomUUID().toString()), modifiedAt, 0, emptyMap());
   }
 

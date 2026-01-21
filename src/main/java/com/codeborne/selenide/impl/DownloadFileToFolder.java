@@ -61,14 +61,14 @@ public class DownloadFileToFolder {
     }
 
     folder.cleanupBeforeDownload();
-    long downloadStartedAt = currentTimeMillis();
+    List<DownloadedFile> previousFiles = folder.files(); // some `DownloadsFolder` implementations cannot remove files
 
     action.perform(driver, clickable);
 
-    waitForNewFiles(driver, fileFilter, folder, downloadStartedAt, timeout, incrementTimeout, pollingInterval);
+    waitForNewFiles(driver, fileFilter, folder, previousFiles, timeout, incrementTimeout, pollingInterval);
     waitUntilDownloadsCompleted(driver, folder, fileFilter, timeout, incrementTimeout, pollingInterval);
 
-    Downloads newDownloads = new Downloads(folder.filesNewerThan(downloadStartedAt));
+    Downloads newDownloads = new Downloads(folder.filesExcept(previousFiles));
     if (log.isInfoEnabled()) {
       log.info("Downloaded files in {}: {}", folder, newDownloads.filesAsString());
     }
@@ -136,7 +136,8 @@ public class DownloadFileToFolder {
     log.warn("Files are still being modified during last {} ms.", currentTimeMillis() - lastModifiedAt);
   }
 
-  void waitForNewFiles(Driver driver, FileFilter fileFilter, DownloadsFolder folder, long clickMoment,
+  void waitForNewFiles(Driver driver, FileFilter fileFilter, DownloadsFolder folder,
+                       List<DownloadedFile> previousFiles,
                        long timeout, long incrementTimeout, long pollingInterval) {
     if (log.isDebugEnabled()) {
       log.debug("Waiting for files in {}...", folder);
@@ -144,7 +145,7 @@ public class DownloadFileToFolder {
 
     long start = currentTimeMillis();
     for (; currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
-      Downloads downloads = new Downloads(folder.filesNewerThan(clickMoment));
+      Downloads downloads = new Downloads(folder.filesExcept(previousFiles));
       List<DownloadedFile> matchingFiles = downloads.files(fileFilter);
       if (!matchingFiles.isEmpty()) {
         log.debug("Matching files found: {}, all new files: {}, all files: {}",

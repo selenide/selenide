@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,11 +12,18 @@ import java.util.Set;
 import static java.util.Locale.ROOT;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 
 public interface DownloadsFolder {
   List<DownloadedFile> files();
 
-  List<DownloadedFile> filesNewerThan(long modifiedAfterTs);
+  default List<DownloadedFile> filesExcept(List<DownloadedFile> previousFiles) {
+    Collection<String> previousFilenames = previousFiles.stream().map(DownloadedFile::getName).collect(toSet());
+    List<DownloadedFile> files = files();
+    return files.stream()
+      .filter(file -> !previousFilenames.contains(file.getName()))
+      .toList();
+  }
 
   void cleanupBeforeDownload();
 
