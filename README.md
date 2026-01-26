@@ -87,7 +87,7 @@ Many thanks to these incredible tools that help us create open-source software:
 
 [![Intellij IDEA](https://selenide.org/images/jetbrains.svg)](https://jb.gg/OpenSource)
 [![BrowserStack](https://www.browserstack.com/images/mail/browserstack-logo-footer.png)](https://www.browserstack.com)
-[![LambdaTest](https://www.lambdatest.com/support/img/logo.svg)](https://www.lambdatest.com/)
+[![TestMu AI](https://www.testmu.ai/support/img/logo.svg)](https://www.testmu.ai)
 
 ## License
 
