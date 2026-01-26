@@ -85,9 +85,19 @@ Selenide was originally designed and developed by [Andrei Solntsev](http://asoln
 
 Many thanks to these incredible tools that help us create open-source software:
 
-[![Intellij IDEA](https://selenide.org/images/jetbrains.svg)](https://jb.gg/OpenSource)
-[![BrowserStack](https://www.browserstack.com/images/mail/browserstack-logo-footer.png)](https://www.browserstack.com)
-[![TestMu AI](https://www.testmu.ai/support/img/logo.svg)](https://www.testmu.ai)
+<div style="width: 100%; display: flex; flex-flow: row wrap; justify-content: space-evenly;">
+  <a href="https://jb.gg/OpenSource">
+    <img src="https://selenide.org/images/jetbrains.svg" width="200" alt="Intellij IDEA"/>
+  </a>
+  
+  <a href="https://www.browserstack.com">
+    <img src="https://www.browserstack.com/images/mail/browserstack-logo-footer.png" width="300" alt="BrowserStack"/>
+  </a>
+  
+  <a href="https://www.testmu.ai">
+    <img src="https://www.testmu.ai/support/img/logo.svg" width="200" alt="TestMu AI"/>
+  </a>
+</div>
 
 ## License
 
