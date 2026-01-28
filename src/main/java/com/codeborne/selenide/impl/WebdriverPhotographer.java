@@ -8,6 +8,9 @@ import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v144.page.Page;
+import org.openqa.selenium.remote.http.ConnectionFailedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -15,10 +18,12 @@ import java.util.Optional;
 import static com.codeborne.selenide.impl.BiDiUti.isBiDiEnabled;
 
 public class WebdriverPhotographer implements Photographer {
+  private static final Logger log = LoggerFactory.getLogger(WebdriverPhotographer.class);
+
   @Override
   public <T> Optional<T> takeScreenshot(WebDriver webDriver, OutputType<T> outputType) {
-    if (webDriver instanceof HasDevTools hasDevTools) { // Chromium - HasDevTools is the fastest way
-      return Optional.of(outputType.convertFromBase64Png(takeScreenshotWithDevtools((WebDriver & HasDevTools) hasDevTools)));
+    if (isDevToolsEnabled(webDriver)) { // Chromium - HasDevTools is the fastest way
+      return Optional.of(outputType.convertFromBase64Png(takeScreenshotWithDevtools((WebDriver & HasDevTools) webDriver)));
     }
     else if (isBiDiEnabled(webDriver)) { // Firefox - BiDi is the fastest
       return Optional.of(outputType.convertFromBase64Png(takeScreenshotWithBidi((WebDriver & HasBiDi) webDriver)));
@@ -28,6 +33,20 @@ public class WebdriverPhotographer implements Photographer {
       return Optional.of(screenshot);
     }
     return Optional.empty();
+  }
+
+  private static boolean isDevToolsEnabled(WebDriver webDriver) {
+    if (!(webDriver instanceof HasDevTools hasDevTools)) {
+      return false;
+    }
+    try {
+      hasDevTools.getDevTools();
+      return true;
+    }
+    catch (ConnectionFailedException notEnabled) {
+      log.warn("Failed to establish DevTools connection: {}", notEnabled.toString());
+      return false;
+    }
   }
 
   private <T extends WebDriver & HasDevTools> String takeScreenshotWithDevtools(T driver) {
