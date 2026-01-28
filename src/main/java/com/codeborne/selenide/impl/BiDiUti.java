@@ -25,10 +25,16 @@ public class BiDiUti {
   private static final Logger log = LoggerFactory.getLogger(BiDiUti.class);
 
   public static boolean isBiDiEnabled(WebDriver webDriver) {
+    if (!(webDriver instanceof HasBiDi hasBiDi)) {
+      return false;
+    }
+
     try {
-      return webDriver instanceof HasBiDi hasBiDi && hasBiDi.getBiDi() != null;
+      hasBiDi.getBiDi();
+      return true;
     }
     catch (BiDiException notEnabled) {
+      log.warn("Failed to establish BiDi connection: {}", notEnabled.toString());
       return false;
     }
   }
