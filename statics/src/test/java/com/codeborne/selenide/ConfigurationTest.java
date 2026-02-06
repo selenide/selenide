@@ -45,8 +45,7 @@ final class ConfigurationTest {
   private Object getSetting(SelenideConfig config, String name) {
     try {
       return SelenideConfig.class.getMethod(name).invoke(config);
-    }
-    catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new RuntimeException(e);
     }
   }
@@ -84,14 +83,20 @@ final class ConfigurationTest {
     if (type.isEnum()) {
       return type.getEnumConstants()[random.nextInt(0, type.getEnumConstants().length)];
     }
+    if (type == RequestFilters.class) {
+      return RequestFilters.from(random.nextDouble() + ".request", (request, contents, messageInfo) -> null);
+    }
+    if (type == ResponseFilters.class) {
+      return ResponseFilters.from(random.nextDouble() + ".response", (response, contents, messageInfo) -> {
+      });
+    }
     return "Tere#" + random.nextDouble();
   }
 
   private static Value getStaticFieldValue(Field field) {
     try {
       return new Value(field.get(null));
-    }
-    catch (IllegalAccessException e) {
+    } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
   }
@@ -99,8 +104,7 @@ final class ConfigurationTest {
   private void setStaticFieldValue(Field field, Value value) {
     try {
       field.set(null, value.value);
-    }
-    catch (IllegalAccessException e) {
+    } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
   }

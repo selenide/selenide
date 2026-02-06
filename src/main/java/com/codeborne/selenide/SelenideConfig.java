@@ -60,6 +60,8 @@ public class SelenideConfig implements Config {
   private int proxyPort = Integer.parseInt(getProperty("selenide.proxyPort", "0"));
   private long remoteReadTimeout = Long.parseLong(getProperty("selenide.remoteReadTimeout", "90000"));
   private long remoteConnectionTimeout = Long.parseLong(getProperty("selenide.remoteConnectionTimeout", "10000"));
+  private RequestFilters requestFilters = new RequestFilters();
+  private ResponseFilters responseFilters = new ResponseFilters();
 
   @Override
   public String baseUrl() {
@@ -434,5 +436,27 @@ public class SelenideConfig implements Config {
   @Override
   public String toString() {
     return getClass().getSimpleName();
+  }
+
+  @Override
+  public RequestFilters requestFilters() {
+    return requestFilters;
+  }
+
+  @CanIgnoreReturnValue
+  public SelenideConfig requestFilters(RequestFilters requestFilters) {
+    this.requestFilters = requestFilters;
+    return this;
+  }
+
+  @Override
+  public ResponseFilters responseFilters() {
+    return responseFilters;
+  }
+
+  @CanIgnoreReturnValue
+  public SelenideConfig responseFilters(ResponseFilters responseFilters) {
+    this.responseFilters = responseFilters;
+    return this;
   }
 }

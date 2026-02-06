@@ -48,4 +48,7 @@ public interface Config {
 
   long remoteReadTimeout();
   long remoteConnectionTimeout();
+
+  RequestFilters requestFilters();
+  ResponseFilters responseFilters();
 }

@@ -5,6 +5,8 @@ import com.browserup.bup.client.ClientUtil;
 import com.browserup.bup.filters.RequestFilter;
 import com.browserup.bup.filters.ResponseFilter;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.RequestFilters;
+import com.codeborne.selenide.ResponseFilters;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Proxy;
@@ -16,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,6 +39,7 @@ public class SelenideProxyServer {
   private static final Pattern REGEX_HOST_NAME = Pattern.compile("(.*):.*");
   private static final Pattern REGEX_PORT = Pattern.compile(".*:(.*)");
   public static final String SELENIDE_PROXY_FILTER_PREFIX = "selenide.proxy.filter.";
+  public static final String CONFIG_PROXY_FILTER_PREFIX = "config.proxy.filter.";
 
   private final Config config;
   @Nullable
@@ -45,8 +47,8 @@ public class SelenideProxyServer {
   @Nullable
   private Proxy seleniumProxy;
   private final BrowserUpProxy proxy;
-  private final Map<String, RequestFilter> requestFilters = new LinkedHashMap<>();
-  private final Map<String, ResponseFilter> responseFilters = new LinkedHashMap<>();
+  private final RequestFilters requestFilters = new RequestFilters();
+  private final ResponseFilters responseFilters = new ResponseFilters();
   private final AtomicInteger port = new AtomicInteger();
 
   /**
@@ -97,6 +99,19 @@ public class SelenideProxyServer {
       }
     }
     FileDownloadFilter downloadFilter = new FileDownloadFilter(config);
+
+    if (config.requestFilters() != null) {
+      config.requestFilters()
+        .forEach((name, requestFilter) ->
+          addRequestFilter(CONFIG_PROXY_FILTER_PREFIX + name, requestFilter)
+        );
+    }
+    if (config.responseFilters() != null) {
+      config.responseFilters()
+        .forEach((name, responseFilter) ->
+          addResponseFilter(CONFIG_PROXY_FILTER_PREFIX + name, responseFilter)
+        );
+    }
 
     addRequestFilter(SELENIDE_PROXY_FILTER_PREFIX + "mockResponse", new MockResponseFilter());
     addRequestFilter(SELENIDE_PROXY_FILTER_PREFIX + "authentication", new AuthenticationFilter());

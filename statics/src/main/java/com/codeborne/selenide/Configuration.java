@@ -357,6 +357,22 @@ public class Configuration {
   public static long remoteReadTimeout = defaults.remoteReadTimeout();
 
   /**
+   * Proxy request filters.
+   * Warning: this request filters will added only once on proxy start (first open() method call)
+   * <br>
+   * Default value: new RequestFilters()
+   */
+  public static RequestFilters requestFilters = defaults.requestFilters();
+
+  /**
+   * Proxy response filters.
+   * Warning: this response filters will added only once on proxy start (first open() method call)
+   * <br>
+   * Default value: new ResponseFilters()
+   */
+  public static ResponseFilters responseFilters = defaults.responseFilters();
+
+  /**
    * Sets connection timeout in milliseconds for remote browser connections.
    * Applies only when remote is specified.
    * Can be configured either programmatically, via selenide.properties file
@@ -404,6 +420,8 @@ public class Configuration {
       .headless(headless)
       .browserBinary(browserBinary)
       .remoteReadTimeout(remoteReadTimeout)
-      .remoteConnectionTimeout(remoteConnectionTimeout);
+      .remoteConnectionTimeout(remoteConnectionTimeout)
+      .requestFilters(requestFilters)
+      .responseFilters(responseFilters);
   }
 }
