@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.15.0 (24.02.2026)
+* update Selenium from 4.40.0 to 4.41.0, incl. CDP v144 -> v145
+
 ## 7.14.0 (21.01.2026)
 * fix downloading files that have space in name (#3231)
 * #3227 fix downloading file from Grid which is few seconds behind the central time (#3240)
