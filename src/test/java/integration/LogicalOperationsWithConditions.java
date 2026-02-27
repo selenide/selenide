@@ -10,6 +10,7 @@ import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.and;
 import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.or;
@@ -67,6 +68,13 @@ final class LogicalOperationsWithConditions extends ITest {
     $("#remove").shouldBe(visible.or(exist));
     $("#remove").shouldBe(text("Remove me").or(text("Delete me")));
     $("#remove").shouldBe(text("Delete me").or(text("Remove me")));
+  }
+
+  @Test
+  void or_newerSyntax_missingElement() {
+    $("#missing").should(disappear);
+    $("#missing").should(disappear.or(text("I don't exist")));
+    $("#missing").shouldHave(text("I don't exist").or(text("Not today")).or(disappear));
   }
 
   @Test

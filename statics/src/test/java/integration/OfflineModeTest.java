@@ -1,7 +1,9 @@
 package integration;
 
+import com.codeborne.selenide.WebElementCondition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.chromium.ChromiumNetworkConditions;
 import org.openqa.selenium.chromium.HasNetworkConditions;
 import org.openqa.selenium.devtools.DevTools;
@@ -23,8 +25,17 @@ final class OfflineModeTest extends ITest {
   private static final List<NetworkConditions> ALL_REQUESTS =
     List.of(new NetworkConditions("", 0, 0, 0, empty(), empty(), empty(), empty()));
 
+  private static final WebElementCondition NO_INTERNET =
+    text("no internet")
+      .or(text("not connected"))
+      .or(text("Press space to play"))
+      .or(disappear);
+
+  private final By header = By.cssSelector("h1");
+
   @BeforeEach
   void openTestPage() {
+    setTimeout(1_000);
     openFile("file_upload_form.html");
   }
 
@@ -36,16 +47,16 @@ final class OfflineModeTest extends ITest {
     networkConditions.setOffline(true);
     HasNetworkConditions networkConditionsDriver = (HasNetworkConditions) driver().getWebDriver();
 
-    $("h1").shouldHave(text("File upload form"));
+    $(header).shouldHave(text("File upload form"));
 
     networkConditionsDriver.setNetworkConditions(networkConditions);
     driver().refresh();
 
-    $("h1").shouldHave(text("no internet").or(text("not connected")).or(disappear));
+    $(header).shouldHave(NO_INTERNET);
 
     networkConditionsDriver.setNetworkConditions(new ChromiumNetworkConditions());
     driver().refresh();
-    $("h1").shouldHave(text("File upload form"));
+    $(header).shouldHave(text("File upload form"));
   }
 
   @Test
@@ -59,18 +70,18 @@ final class OfflineModeTest extends ITest {
     // Enable network emulation
     devTools.send(Network.enable(empty(), empty(), empty(), empty(), empty()));
 
-    $("h1").shouldHave(text("File upload form"));
+    $(header).shouldHave(text("File upload form"));
 
     // Go offline
     devTools.send(Network.emulateNetworkConditionsByRule(true, ALL_REQUESTS));
 
     driver().refresh();
 
-    $("h1").shouldHave(text("no internet").or(text("not connected")).or(disappear));
+    $(header).shouldHave(NO_INTERNET);
 
     // Bring back online
     devTools.send(Network.emulateNetworkConditionsByRule(false, ALL_REQUESTS));
     driver().refresh();
-    $("h1").shouldHave(text("File upload form"));
+    $(header).shouldHave(text("File upload form"));
   }
 }
