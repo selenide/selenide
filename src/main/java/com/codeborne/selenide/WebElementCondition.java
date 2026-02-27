@@ -61,7 +61,11 @@ public abstract class WebElementCondition {
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   public WebElementCondition or(WebElementCondition alternative) {
-    return new WebElementCondition("%s OR %s".formatted(WebElementCondition.this.toString(), alternative.toString())) {
+    String conditionName = "%s OR %s".formatted(WebElementCondition.this.toString(), alternative.toString());
+    boolean acceptsMissingElements =
+      WebElementCondition.this.missingElementSatisfiesCondition() || alternative.missingElementSatisfiesCondition();
+
+    return new WebElementCondition(conditionName, acceptsMissingElements) {
       @Override
       public CheckResult check(Driver driver, WebElement element) {
         CheckResult r1 = WebElementCondition.this.check(driver, element);
