@@ -90,7 +90,7 @@ class ScreenShooter implements Runnable {
   }
 
   private File saveScreenshot(InputStream screenshot) {
-    File file = new File(screenshotsFolder, "screenshot.%s.png".formatted(screenshotCounter.incrementAndGet()));
+    File file = new File(screenshotsFolder, "screenshot.%d.png".formatted(screenshotCounter.incrementAndGet()));
     try {
       copyInputStreamToFile(screenshot, file);
       return file;

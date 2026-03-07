@@ -7,6 +7,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.WebDriver;
 import org.selenide.videorecorder.core.VideoRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.TypeOptions.text;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 import static java.time.Duration.ofMillis;
 import static java.util.Objects.requireNonNull;
@@ -43,8 +46,13 @@ public class VideoRecorder1Test {
   @Test
   public void firstTest() {
     open(config);
+    WebDriver webDriver = getWebDriver();
+    Dimension size = webDriver.manage().window().getSize();
+
     for (int i = 0; i < 3; i++) {
       open(requireNonNull(getClass().getClassLoader().getResource("search.html")));
+      webDriver.manage().window().setSize(new Dimension(size.width + i * 140, size.height + i * 60));
+
       $("[name=q]").type(text("#1 JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit JUnit #111")
         .withDelay(ofMillis(5)));
     }
