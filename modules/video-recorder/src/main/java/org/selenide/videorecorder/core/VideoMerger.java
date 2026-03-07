@@ -3,6 +3,7 @@ package org.selenide.videorecorder.core;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import org.openqa.selenium.Dimension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,10 +49,11 @@ class VideoMerger {
   }
 
   private void generateVideo() throws IOException {
+    Dimension size = videoSize();
     FFmpegBuilder builder = new FFmpegBuilder()
       .addExtraArgs("-framerate", String.valueOf(frameRate(screenshots)))
       .addInput(screenshotsFolder.getAbsolutePath() + "/screenshot.%d.png")
-      .setVideoFilter("pad=iw+mod(iw\\,2):ih+mod(ih\\,2)")
+      .setVideoFilter("pad=%d:%d:0:0:color=black".formatted(even(size.getWidth()), even(size.getHeight())))
       .addOutput(videoFile.toAbsolutePath().toString())
       .setVideoFrameRate(config.fps(), 1)
       .setVideoCodec("h264")
@@ -66,11 +68,23 @@ class VideoMerger {
     executor.createJob(builder).run();
   }
 
+  static int even(int n) {
+    return n + n % 2;
+  }
+
   static float frameRate(List<Screenshot> screenshots) {
     Screenshot first = screenshots.get(0);
     Screenshot last = screenshots.get(screenshots.size() - 1);
     long duration = NANOSECONDS.toMillis(last.timestampNano - first.timestampNano);
     return (screenshots.size() - 1) * 1000.0f / duration;
+  }
+
+  private Dimension videoSize() {
+    long start = nanoTime();
+    Dimension result = Images.findMaxSize(screenshotsFolder.toPath(), "screenshot", ".png");
+    long duration = NANOSECONDS.toMillis(nanoTime() - start);
+    log.debug("Read max width and height {} from {} screenshots in {} ms.", result, screenshots.size(), duration);
+    return result;
   }
 
   private static Path prepareVideoFolder(Path videoFile) {

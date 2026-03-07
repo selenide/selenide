@@ -1,6 +1,8 @@
 package org.selenide.videorecorder.core;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 import java.util.List;
@@ -20,5 +22,17 @@ class VideoMergerTest {
     assertThat(VideoMerger.frameRate(List.of(s1, s2, s3))).isEqualTo(2 / 1.0f);
     assertThat(VideoMerger.frameRate(List.of(s1, s3))).isEqualTo(1 / 1.0f);
     assertThat(VideoMerger.frameRate(List.of(s2, s4))).isEqualTo(1 / 1.5f);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints =  {0, 2, 4, 6, 8, 10, 600, 800, 1024, 2048, 4096})
+  void even_keepsEvenNumberUntouched(int height) {
+    assertThat(VideoMerger.even(height)).isEqualTo(height);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints =  {1, 3, 5, 7, 9, 11, 67, 111, 777, 1037})
+  void even_ceilOddNumberToMakeEvenResult(int height) {
+    assertThat(VideoMerger.even(height)).isEqualTo(height + 1);
   }
 }
