@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.codeborne.selenide.AssertionMode.SOFT;
+import static com.codeborne.selenide.impl.CommandGuard.executeWithTimeout;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Arrays.asList;
@@ -135,7 +136,8 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
     do {
       try {
         if (isSelenideElementMethod(method)) {
-          return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
+          return executeWithTimeout(timeoutMs + 5000, // just in case, give +5 seconds to avoid concurrent corner cases
+            () -> Commands.getInstance().execute(proxy, webElementSource, method.getName(), args));
         }
 
         return method.invoke(webElementSource.getWebElement(), args);
