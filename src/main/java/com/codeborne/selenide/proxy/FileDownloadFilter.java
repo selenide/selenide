@@ -5,6 +5,7 @@ import com.browserup.bup.filters.ResponseFilter;
 import com.browserup.bup.util.HttpMessageContents;
 import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.Downloads;
@@ -25,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.KEEP_CONTENT;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class FileDownloadFilter implements RequestFilter, ResponseFilter {
@@ -35,6 +37,7 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
 
   private final HttpHelper httpHelper = new HttpHelper();
   private boolean active;
+  private ContentStrategy contentStrategy = KEEP_CONTENT;
   private final Downloads downloads = new Downloads();
   private final List<Response> responses = new CopyOnWriteArrayList<>();
 
@@ -51,9 +54,10 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
    * Activate this filter.
    * Starting from this moment, it will record all responses that seem to be a "file download".
    */
-  public void activate() {
+  public void activate(ContentStrategy contentStrategy) {
     reset();
     active = true;
+    this.contentStrategy = contentStrategy;
   }
 
   public void reset() {
@@ -67,6 +71,7 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
    */
   public void deactivate() {
     active = false;
+    contentStrategy = KEEP_CONTENT;
   }
 
   @Nullable
@@ -97,13 +102,20 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
     String fileName = getFileName(r);
 
     File file = downloader.prepareTargetFile(config, fileName);
-    try {
-      FileUtils.writeByteArrayToFile(file, contents.getBinaryContents());
-      downloads.add(new DownloadedFile(file, file.lastModified(), file.length(), r.headers));
+
+    switch (contentStrategy) {
+      case KEEP_CONTENT -> {
+        try {
+          FileUtils.writeByteArrayToFile(file, contents.getBinaryContents());
+        }
+        catch (IOException e) {
+          log.error("Failed to save downloaded file to {} for url {}", file.getAbsolutePath(), messageInfo.getUrl(), e);
+        }
+      }
+      case MOCK_CONTENT -> downloader.mockFileContent(file);
     }
-    catch (IOException e) {
-      log.error("Failed to save downloaded file to {} for url {}", file.getAbsolutePath(), messageInfo.getUrl(), e);
-    }
+
+    downloads.add(new DownloadedFile(file, file.lastModified(), file.length(), r.headers));
   }
 
   private Map<String, String> toMap(HttpHeaders headers) {

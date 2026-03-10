@@ -65,12 +65,10 @@ public class DownloadFile implements Command<File> {
     WebElement link = waitForLink(linkWithHref, incrementTimeout);
 
     return switch (method) {
-      case HTTPGET -> downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, options.getFilter());
-      case PROXY -> downloadFileWithProxyServer.download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
-      case FOLDER ->
-        downloadFileToFolder.download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
-      case CDP -> downloadFileWithCdp
-        .download(linkWithHref, link, timeout, incrementTimeout, options.getFilter(), options.getAction());
+      case HTTPGET -> downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, options);
+      case PROXY -> downloadFileWithProxyServer.download(linkWithHref, link, timeout, options);
+      case FOLDER -> downloadFileToFolder.download(linkWithHref, link, timeout, incrementTimeout, options);
+      case CDP -> downloadFileWithCdp.download(linkWithHref, link, timeout, incrementTimeout, options);
     };
   }
 

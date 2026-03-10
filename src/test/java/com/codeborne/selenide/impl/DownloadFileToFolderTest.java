@@ -6,7 +6,6 @@ import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SharedDownloadsFolder;
-import com.codeborne.selenide.files.FileFilters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
@@ -16,7 +15,8 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.IOException;
 
-import static com.codeborne.selenide.files.DownloadActions.click;
+import static com.codeborne.selenide.DownloadOptions.file;
+import static com.codeborne.selenide.FileDownloadMode.FOLDER;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.UUID.randomUUID;
 import static org.apache.commons.io.FileUtils.readFileToString;
@@ -51,7 +51,7 @@ final class DownloadFileToFolderTest {
       return null;
     }).when(link).click();
 
-    File downloadedFile = command.download(linkWithHref, link, 3000, 300, FileFilters.none(), click());
+    File downloadedFile = command.download(linkWithHref, link, 3000, 300, file().withMethod(FOLDER));
 
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);
     assertThat(downloadedFile.getParentFile()).isNotEqualTo(downloadsFolder.getFolder());

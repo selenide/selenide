@@ -1,5 +1,7 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.DownloadOptions;
+import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Stopwatch;
@@ -27,6 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.KEEP_CONTENT;
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyMap;
@@ -54,10 +57,24 @@ public class DownloadFileWithCdp {
     return driver.browserDownloadsFolder();
   }
 
+  @Deprecated
   public File download(WebElementSource link,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
+    return download(link, clickable, timeout, incrementTimeout, fileFilter, action, KEEP_CONTENT);
+  }
+
+  public File download(WebElementSource link,
+                       WebElement clickable, long timeout, long incrementTimeout, DownloadOptions options) {
+    return download(link, clickable, timeout, incrementTimeout, options.getFilter(), options.getAction(), options.contentStrategy());
+  }
+
+  private File download(WebElementSource link,
+                       WebElement clickable, long timeout, long incrementTimeout,
+                       FileFilter fileFilter,
+                       DownloadAction action,
+                       ContentStrategy contentStrategy) {
 
     Driver driver = link.driver();
     DevTools devTools = initDevTools(driver);
@@ -79,8 +96,10 @@ public class DownloadFileWithCdp {
         throw new FileNotDownloadedError(message, timeout);
       }
 
-      // Move file to unique folder
-      return archiveFile(driver, download.file());
+      return switch (contentStrategy) {
+        case KEEP_CONTENT -> archiveFile(driver, download.file());
+        case MOCK_CONTENT -> downloader.mockFileContent(driver.config(), requireNonNull(download.fileName));
+      };
     }
     finally {
       devTools.clearListeners();

@@ -1,6 +1,8 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadOptions;
+import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.FileFilter;
@@ -45,6 +47,7 @@ import java.util.Base64;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.KEEP_CONTENT;
 import static com.codeborne.selenide.files.DownloadedFile.localFile;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -73,7 +76,16 @@ public class DownloadFileWithHttpRequest {
     this.downloader = downloader;
   }
 
+  public File download(Driver driver, WebElement element, long timeout, DownloadOptions options) {
+    return download(driver, element, timeout, options.getFilter(), options.contentStrategy());
+  }
+
+  @Deprecated
   public File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter) {
+    return download(driver, element, timeout, fileFilter, KEEP_CONTENT);
+  }
+
+  private File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter, ContentStrategy contentStrategy) {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
       String link = "https://selenide.org/javadoc/current/com/codeborne/selenide/FileDownloadMode.html";
@@ -84,14 +96,14 @@ public class DownloadFileWithHttpRequest {
       ).formatted(describe.fully(driver, element), link).trim());
     }
 
-    return download(driver, fileToDownloadLocation, timeout, fileFilter);
+    return download(driver, fileToDownloadLocation, timeout, fileFilter, contentStrategy);
   }
 
   public File download(Driver driver, URI url, long timeout, FileFilter fileFilter) {
-    return download(driver, url.toASCIIString(), timeout, fileFilter);
+    return download(driver, url.toASCIIString(), timeout, fileFilter, KEEP_CONTENT);
   }
 
-  public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout, FileFilter fileFilter) {
+  public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout, FileFilter fileFilter, ContentStrategy strategy) {
     String url = makeAbsoluteUrl(driver.config(), relativeOrAbsoluteUrl);
 
     MemorizingRedirectStrategy redirectStrategy = new MemorizingRedirectStrategy();
@@ -102,7 +114,7 @@ public class DownloadFileWithHttpRequest {
       addHttpHeaders(driver, httpGet, resource.credentials());
       return httpClient.execute(httpGet, createHttpContext(driver), response -> {
           String responseUrl = requireNonNullElse(redirectStrategy.lastRedirectUrl, url);
-          return handleResponse(driver, timeout, fileFilter, responseUrl, response);
+          return handleResponse(driver, timeout, fileFilter, responseUrl, response, strategy);
         }
       );
     }
@@ -116,7 +128,7 @@ public class DownloadFileWithHttpRequest {
   }
 
   private File handleResponse(Driver driver, long timeout, FileFilter fileFilter, String url,
-                              ClassicHttpResponse response) throws IOException {
+                              ClassicHttpResponse response, ContentStrategy contentStrategy) throws IOException {
     if (response.getCode() >= 500) {
       throw new RuntimeException("Failed to download file " + url + ": " + response);
     }
@@ -126,7 +138,7 @@ public class DownloadFileWithHttpRequest {
 
     String fileName = getFileName(url, response);
     File downloadedFile = downloader.prepareTargetFile(driver.config(), fileName);
-    saveContentToFile(response, downloadedFile);
+    saveContentToFile(response, downloadedFile, contentStrategy);
 
     if (!fileFilter.match(localFile(downloadedFile))) {
       String message = String.format("Failed to download file from %s in %s%s;%n actually downloaded: %s",
@@ -259,7 +271,10 @@ public class DownloadFileWithHttpRequest {
     return Stream.of(response.getHeaders()).map(h -> h.getName() + "=" + h.getValue()).collect(joining(", "));
   }
 
-  protected void saveContentToFile(HttpEntityContainer response, File downloadedFile) throws IOException {
-    copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
+  protected void saveContentToFile(HttpEntityContainer response, File downloadedFile, ContentStrategy strategy) throws IOException {
+    switch (strategy) {
+      case KEEP_CONTENT -> copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
+      case MOCK_CONTENT -> downloader.mockFileContent(downloadedFile);
+    }
   }
 }

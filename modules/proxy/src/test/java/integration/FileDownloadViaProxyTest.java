@@ -229,6 +229,15 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
+  @Test
+  void downloadFileWithoutContent() {
+    File downloadedFile = $(byText("Download me")).download(file().withNameMatching("hello.*\\.txt").withoutContent());
+
+    assertThat(downloadedFile).hasName("hello_world.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Mocked file content");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+  }
+
   private void useAnotherBrowser() {
     withProxy(proxy -> {
       WebDriver anotherBrowser = isFirefox() ? openFirefox(proxy) : openChrome(proxy);

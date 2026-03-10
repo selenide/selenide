@@ -219,6 +219,15 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     }
   }
 
+  @Test
+  void downloadFileWithoutContent() {
+    File downloadedFile = $(byText("Download me")).download(file().withExtension("txt").withoutContent());
+
+    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Mocked file content");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+  }
+
   private static class CustomWebDriverProvider extends ChromeDriverFactory {
     @Override
     public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy,
