@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.codeborne.selenide.DownloadOptions.ContentStrategy.KEEP_CONTENT;
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class FileDownloadFilter implements RequestFilter, ResponseFilter {
@@ -37,7 +37,7 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
 
   private final HttpHelper httpHelper = new HttpHelper();
   private boolean active;
-  private ContentStrategy contentStrategy = KEEP_CONTENT;
+  private ContentStrategy contentStrategy = FULL_CONTENT;
   private final Downloads downloads = new Downloads();
   private final List<Response> responses = new CopyOnWriteArrayList<>();
 
@@ -71,7 +71,7 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
    */
   public void deactivate() {
     active = false;
-    contentStrategy = KEEP_CONTENT;
+    contentStrategy = FULL_CONTENT;
   }
 
   @Nullable
@@ -104,7 +104,7 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
     File file = downloader.prepareTargetFile(config, fileName);
 
     switch (contentStrategy) {
-      case KEEP_CONTENT -> {
+      case FULL_CONTENT -> {
         try {
           FileUtils.writeByteArrayToFile(file, contents.getBinaryContents());
         }
@@ -112,7 +112,7 @@ public class FileDownloadFilter implements RequestFilter, ResponseFilter {
           log.error("Failed to save downloaded file to {} for url {}", file.getAbsolutePath(), messageInfo.getUrl(), e);
         }
       }
-      case MOCK_CONTENT -> downloader.mockFileContent(file);
+      case EMPTY_CONTENT -> downloader.mockFileContent(file);
     }
 
     downloads.add(new DownloadedFile(file, file.lastModified(), file.length(), r.headers));

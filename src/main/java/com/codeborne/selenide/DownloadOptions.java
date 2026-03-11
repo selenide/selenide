@@ -17,9 +17,19 @@ import static java.util.stream.Collectors.joining;
 public class DownloadOptions implements HasTimeout {
   private static final DurationFormat df = new DurationFormat();
 
+  /**
+   * Either to download the whole file content, or just create file without fetching its content
+   */
   public enum ContentStrategy {
-    KEEP_CONTENT,
-    MOCK_CONTENT
+    /**
+     * Fully download the file with its content
+     */
+    FULL_CONTENT,
+    /**
+     * Create a "downloaded" file, but with empty / mocked content.
+     * Might be useful to avoid wasting time and disk spaces on large files.
+     */
+    EMPTY_CONTENT
   }
 
   @Nullable
@@ -117,7 +127,7 @@ public class DownloadOptions implements HasTimeout {
   }
 
   public DownloadOptions withoutContent() {
-    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, ContentStrategy.MOCK_CONTENT);
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, ContentStrategy.EMPTY_CONTENT);
   }
 
   /**
@@ -145,7 +155,7 @@ public class DownloadOptions implements HasTimeout {
   }
 
   public static DownloadOptions file() {
-    return new DownloadOptions(null, null, null, none(), click(), ContentStrategy.KEEP_CONTENT);
+    return new DownloadOptions(null, null, null, none(), click(), ContentStrategy.FULL_CONTENT);
   }
 
   public static DownloadOptions using(FileDownloadMode method) {

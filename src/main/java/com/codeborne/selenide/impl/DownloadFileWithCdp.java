@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.DownloadOptions.ContentStrategy.KEEP_CONTENT;
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyMap;
@@ -62,7 +62,7 @@ public class DownloadFileWithCdp {
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
-    return download(link, clickable, timeout, incrementTimeout, fileFilter, action, KEEP_CONTENT);
+    return download(link, clickable, timeout, incrementTimeout, fileFilter, action, FULL_CONTENT);
   }
 
   public File download(WebElementSource link,
@@ -97,8 +97,8 @@ public class DownloadFileWithCdp {
       }
 
       return switch (contentStrategy) {
-        case KEEP_CONTENT -> archiveFile(driver, download.file());
-        case MOCK_CONTENT -> downloader.mockFileContent(driver.config(), requireNonNull(download.fileName));
+        case FULL_CONTENT -> archiveFile(driver, download.file());
+        case EMPTY_CONTENT -> downloader.mockFileContent(driver.config(), requireNonNull(download.fileName));
       };
     }
     finally {

@@ -16,7 +16,7 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.util.stream.Stream;
 
-import static com.codeborne.selenide.DownloadOptions.ContentStrategy.KEEP_CONTENT;
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
 import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static java.util.Collections.emptyMap;
@@ -55,7 +55,7 @@ final class DownloadFileWithProxyServerTest {
     File file = command.download(linkWithHref, link, 3000, file());
 
     assertThat(file.getName()).isEqualTo("report.pdf");
-    verify(filter).activate(KEEP_CONTENT);
+    verify(filter).activate(FULL_CONTENT);
     verify(link).click();
     verify(filter).deactivate();
   }

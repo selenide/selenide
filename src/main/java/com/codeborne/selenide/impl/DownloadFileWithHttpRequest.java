@@ -47,7 +47,7 @@ import java.util.Base64;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.codeborne.selenide.DownloadOptions.ContentStrategy.KEEP_CONTENT;
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
 import static com.codeborne.selenide.files.DownloadedFile.localFile;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -82,7 +82,7 @@ public class DownloadFileWithHttpRequest {
 
   @Deprecated
   public File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter) {
-    return download(driver, element, timeout, fileFilter, KEEP_CONTENT);
+    return download(driver, element, timeout, fileFilter, FULL_CONTENT);
   }
 
   private File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter, ContentStrategy contentStrategy) {
@@ -100,7 +100,7 @@ public class DownloadFileWithHttpRequest {
   }
 
   public File download(Driver driver, URI url, long timeout, FileFilter fileFilter) {
-    return download(driver, url.toASCIIString(), timeout, fileFilter, KEEP_CONTENT);
+    return download(driver, url.toASCIIString(), timeout, fileFilter, FULL_CONTENT);
   }
 
   public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout, FileFilter fileFilter, ContentStrategy strategy) {
@@ -273,8 +273,8 @@ public class DownloadFileWithHttpRequest {
 
   protected void saveContentToFile(HttpEntityContainer response, File downloadedFile, ContentStrategy strategy) throws IOException {
     switch (strategy) {
-      case KEEP_CONTENT -> copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
-      case MOCK_CONTENT -> downloader.mockFileContent(downloadedFile);
+      case FULL_CONTENT -> copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
+      case EMPTY_CONTENT -> downloader.mockFileContent(downloadedFile);
     }
   }
 }

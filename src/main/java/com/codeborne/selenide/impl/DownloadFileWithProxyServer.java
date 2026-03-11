@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.function.Supplier;
 
-import static com.codeborne.selenide.DownloadOptions.ContentStrategy.KEEP_CONTENT;
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
 import static com.codeborne.selenide.proxy.SelenideProxyServer.SELENIDE_PROXY_FILTER_PREFIX;
 
 public class DownloadFileWithProxyServer {
@@ -36,7 +36,7 @@ public class DownloadFileWithProxyServer {
                        WebElement clickable, long timeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
-    return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, timeout, fileFilter, action, KEEP_CONTENT);
+    return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, timeout, fileFilter, action, FULL_CONTENT);
   }
 
   public File download(WebElementSource link, WebElement clickable, long timeout, DownloadOptions options) {
