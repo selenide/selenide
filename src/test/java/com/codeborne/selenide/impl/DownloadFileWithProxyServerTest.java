@@ -16,9 +16,9 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.util.stream.Stream;
 
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
+import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
-import static com.codeborne.selenide.files.DownloadActions.click;
-import static com.codeborne.selenide.files.FileFilters.none;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -52,10 +52,10 @@ final class DownloadFileWithProxyServerTest {
   void canInterceptFileViaProxyServer() {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.download(linkWithHref, link, 3000, none(), click());
+    File file = command.download(linkWithHref, link, 3000, file());
 
     assertThat(file.getName()).isEqualTo("report.pdf");
-    verify(filter).activate();
+    verify(filter).activate(FULL_CONTENT);
     verify(link).click();
     verify(filter).deactivate();
   }
@@ -64,7 +64,7 @@ final class DownloadFileWithProxyServerTest {
   void closesNewWindowIfFileWasOpenedInSeparateWindow() {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.download(linkWithHref, link, 3000, none(), click());
+    File file = command.download(linkWithHref, link, 3000, file());
 
     assertThat(file.getName()).isEqualTo("report.pdf");
   }
@@ -73,7 +73,7 @@ final class DownloadFileWithProxyServerTest {
   void throws_FileNotDownloaded_ifNoFilesHaveBeenDownloadedAfterClick() {
     emulateServerResponseWithFiles();
 
-    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), click()))
+    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, file()))
       .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageStartingWith("Failed to download file in 3s");
   }
@@ -83,7 +83,7 @@ final class DownloadFileWithProxyServerTest {
     config.proxyEnabled(false);
     config.fileDownload(PROXY);
 
-    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), click()))
+    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, file()))
       .isInstanceOf(IllegalStateException.class)
       .hasMessageContaining("Cannot download file: proxy server is not enabled");
   }
@@ -92,7 +92,7 @@ final class DownloadFileWithProxyServerTest {
   void proxyServerShouldBeStarted() {
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, mock(), new DummyWebDriver(), null));
 
-    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), click()))
+    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, file()))
       .isInstanceOf(IllegalStateException.class)
       .hasMessageContaining("config.proxyEnabled == true but proxy server is not created.");
   }

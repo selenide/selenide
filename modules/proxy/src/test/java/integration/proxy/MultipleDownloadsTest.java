@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.File;
 
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.$;
@@ -24,5 +25,17 @@ public class MultipleDownloadsTest extends ProxyIntegrationTest {
 
     assertThat(text.getName()).isEqualTo(fileName);
     assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"empty.html", "hello_world.txt", "download.html"})
+  void downloadMultipleFilesWithoutContent(String fileName) {
+    timeout = 1;
+    openFile("downloadMultipleFiles.html");
+
+    File text = $("#multiple-downloads").download(file().withMethod(PROXY).withTimeout(4000).withName(fileName).withoutContent());
+
+    assertThat(text.getName()).isEqualTo(fileName);
+    assertThat(text).content().isEqualTo("Mocked file content");
   }
 }

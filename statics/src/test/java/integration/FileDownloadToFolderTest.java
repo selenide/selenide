@@ -335,4 +335,13 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
+
+  @Test
+  void downloadFileWithoutContent() {
+    File downloadedFile = $(byText("Download me")).download(file().withExtension("txt").withoutContent());
+
+    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
+    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Mocked file content");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+  }
 }

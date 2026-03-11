@@ -1,6 +1,8 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadOptions;
+import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.FileFilter;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.function.Supplier;
 
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
 import static com.codeborne.selenide.proxy.SelenideProxyServer.SELENIDE_PROXY_FILTER_PREFIX;
 
 public class DownloadFileWithProxyServer {
@@ -28,18 +31,23 @@ public class DownloadFileWithProxyServer {
     this(new Waiter());
   }
 
+  @Deprecated
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
-
-    return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, timeout, fileFilter, action);
+    return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, timeout, fileFilter, action, FULL_CONTENT);
   }
 
-  private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
+  public File download(WebElementSource link, WebElement clickable, long timeout, DownloadOptions options) {
+    return clickAndInterceptFileByProxyServer(link, clickable, timeout,
+      options.getFilter(), options.getAction(), options.contentStrategy());
+  }
+
+  private File clickAndInterceptFileByProxyServer(WebElementSource link, WebElement clickable,
                                                   long timeout, FileFilter fileFilter,
-                                                  DownloadAction action) {
-    Driver driver = anyClickableElement.driver();
+                                                  DownloadAction action, ContentStrategy contentStrategy) {
+    Driver driver = link.driver();
     Config config = driver.config();
     if (!config.proxyEnabled()) {
       throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
@@ -52,7 +60,7 @@ public class DownloadFileWithProxyServer {
       throw new IllegalStateException("Cannot download file: download filter is not activated");
     }
 
-    filter.activate();
+    filter.activate(contentStrategy);
     try {
       long pollingInterval = Math.max(config.pollingInterval(), 50);
       waitForPreviousDownloadsCompletion(filter, timeout, pollingInterval);

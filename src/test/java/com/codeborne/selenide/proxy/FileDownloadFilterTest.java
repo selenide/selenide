@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.apache.commons.io.FileUtils.readFileToByteArray;
@@ -60,7 +61,7 @@ final class FileDownloadFilterTest {
   @Test
   void requestFilter_addsRequestHeader_toDisableContentEncoding() {
     mockHeaders(request).add("Accept-encoding", "br, gzip");;
-    filter.activate();
+    filter.activate(FULL_CONTENT);
 
     filter.filterRequest(request, contents, messageInfo);
 
@@ -79,7 +80,7 @@ final class FileDownloadFilterTest {
 
   @Test
   void doesNotInterceptResponsesWithCodeBelow200() {
-    filter.activate();
+    filter.activate(FULL_CONTENT);
     mockStatusCode(199, "below 200");
     filter.filterResponse(response, contents, messageInfo);
 
@@ -97,7 +98,7 @@ final class FileDownloadFilterTest {
 
   @Test
   void doesNotInterceptResponsesWithCodeAbove300() {
-    filter.activate();
+    filter.activate(FULL_CONTENT);
     mockStatusCode(300, "300 or above");
     filter.filterResponse(response, contents, messageInfo);
 
@@ -107,7 +108,7 @@ final class FileDownloadFilterTest {
 
   @Test
   void interceptsHttpResponse() throws IOException {
-    filter.activate();
+    filter.activate(FULL_CONTENT);
     mockStatusCode(200, "200=success");
     mockHeaders(response).add("content-disposition", "attachement; filename=report.pdf");
     when(contents.getBinaryContents()).thenReturn(new byte[]{1, 2, 3, 4, 5});
@@ -124,7 +125,7 @@ final class FileDownloadFilterTest {
 
   @Test
   void usesNameFromURL_ifResponseHasNoContentDispositionHeader() throws IOException {
-    filter.activate();
+    filter.activate(FULL_CONTENT);
     mockStatusCode(200, "200=success");
     mockHeaders(response);
     mockUrl("/foo/bar/cv.pdf?42");

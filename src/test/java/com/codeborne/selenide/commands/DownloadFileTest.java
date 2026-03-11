@@ -1,5 +1,6 @@
 package com.codeborne.selenide.commands;
 
+import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
@@ -14,17 +15,19 @@ import com.codeborne.selenide.impl.WebElementSource;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
 
+import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
-import static com.codeborne.selenide.files.DownloadActions.click;
 import static com.codeborne.selenide.files.FileFilters.none;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -54,12 +57,12 @@ final class DownloadFileTest {
   void canDownloadFile_withHttpGetRequest() {
     config.fileDownload(HTTPGET);
 
-    when(httpGet.download(any(), any(WebElement.class), anyLong(), any())).thenReturn(file);
+    when(httpGet.download(any(), any(WebElement.class), anyLong(), any(DownloadOptions.class))).thenReturn(file);
 
     File f = command.execute(seLink, linkWithHref, new Object[]{8000L});
 
     assertThat(f).isSameAs(file);
-    verify(httpGet).download(driver, link, 8000L, none());
+    verify(httpGet).download(eq(driver), eq(link), eq(8000L), refEq(file().withMethod(HTTPGET).withTimeout(8000)));
     verifyNoMoreInteractions(proxy);
   }
 
@@ -68,12 +71,12 @@ final class DownloadFileTest {
     config.proxyEnabled(true).fileDownload(PROXY);
     SelenideProxyServer selenideProxy = mock();
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, selenideProxy));
-    when(proxy.download(any(), any(), anyLong(), any(), any())).thenReturn(file);
+    when(proxy.download(any(), any(), anyLong(), any())).thenReturn(file);
 
     File f = command.execute(seLink, linkWithHref, new Object[]{9000L});
 
     assertThat(f).isSameAs(file);
-    verify(proxy).download(linkWithHref, link, 9000L, none(), click());
+    verify(proxy).download(eq(linkWithHref), eq(link), eq(9000L), refEq(file().withMethod(PROXY).withTimeout(9000)));
     verifyNoMoreInteractions(httpGet);
   }
 
@@ -100,5 +103,10 @@ final class DownloadFileTest {
     assertThat(command.getFileFilter(new Object[]{4000L})).isSameAs(none());
     assertThat(command.getFileFilter(new Object[]{4000L, expected})).isSameAs(expected);
     assertThat(command.getFileFilter(new Object[]{expected})).isSameAs(expected);
+  }
+
+  @SuppressWarnings("DataFlowIssue")
+  private static <T> T refEq(T value) {
+    return ArgumentMatchers.refEq(value);
   }
 }

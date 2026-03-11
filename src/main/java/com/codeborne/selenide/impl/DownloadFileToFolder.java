@@ -2,6 +2,8 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadOptions;
+import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
@@ -39,18 +42,26 @@ public class DownloadFileToFolder {
   }
 
   public File download(WebElementSource link,
+                       WebElement clickable, long timeout, long requestedIncrementTimeout, DownloadOptions options) {
+    return download(link, clickable, timeout, requestedIncrementTimeout,
+      options.getFilter(), options.getAction(), options.contentStrategy());
+  }
+
+  @Deprecated
+  public File download(WebElementSource link,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
-
-    long minimalIncrementTimeout = Math.max(incrementTimeout, 1000);
-    return clickAndWaitForNewFilesInDownloadsFolder(link, clickable, timeout, minimalIncrementTimeout, fileFilter, action);
+    return download(link, clickable, timeout, incrementTimeout, fileFilter, action, FULL_CONTENT);
   }
 
-  File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource link, WebElement clickable,
-                                                long timeout, long incrementTimeout,
-                                                FileFilter fileFilter,
-                                                DownloadAction action) {
+  File download(WebElementSource link,
+                WebElement clickable, long timeout, long requestedIncrementTimeout,
+                FileFilter fileFilter,
+                DownloadAction action,
+                ContentStrategy contentStrategy
+  ) {
+    long incrementTimeout = Math.max(requestedIncrementTimeout, 1000);
     Driver driver = link.driver();
     Config config = driver.config();
     long pollingInterval = Math.max(config.pollingInterval(), 50);
@@ -77,7 +88,11 @@ public class DownloadFileToFolder {
     }
 
     File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
-    return archiveFile(driver, downloadedFile);
+
+    return switch (contentStrategy) {
+      case FULL_CONTENT -> archiveFile(driver, downloadedFile);
+      case EMPTY_CONTENT -> downloader.mockFileContent(driver.config(), downloadedFile.getName());
+    };
   }
 
   @Nullable
