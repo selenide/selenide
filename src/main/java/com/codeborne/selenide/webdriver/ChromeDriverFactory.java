@@ -46,11 +46,18 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
       options.setBinary(config.browserBinary());
     }
     options.addArguments(createChromeArguments(config, browser));
-    options.setExperimentalOption("excludeSwitches", excludeSwitches(commonCapabilities));
+    if (!isRemoteDebuggingSession(commonCapabilities)) {
+      options.setExperimentalOption("excludeSwitches", excludeSwitches(commonCapabilities));
+    }
     options.setExperimentalOption("prefs", prefs(browserDownloadsFolder, System.getProperty("chromeoptions.prefs", "")));
     setMobileEmulation(options);
 
     return merge(options, commonCapabilities);
+  }
+
+  protected boolean isRemoteDebuggingSession(ChromeOptions capabilities) {
+    Object chromeOptions = capabilities.getCapability("goog:chromeOptions");
+    return chromeOptions instanceof Map<?, ?> map && map.containsKey("debuggerAddress");
   }
 
   protected void addHeadless(ChromeOptions options) {

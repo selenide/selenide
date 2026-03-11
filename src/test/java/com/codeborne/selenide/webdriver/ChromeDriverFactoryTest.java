@@ -76,6 +76,18 @@ final class ChromeDriverFactoryTest {
   }
 
   @Test
+  void doesNotAddExcludeSwitches_whenConnectingToRunningChrome_withRemoteDebugging() {
+    SelenideConfig debuggerConfig = config.browserCapabilities(
+      new ChromeOptions().setExperimentalOption("debuggerAddress", "127.0.0.1:9222")
+    );
+
+    Capabilities chromeOptions = factory.createCapabilities(debuggerConfig, browser, proxy, browserDownloadsFolder);
+
+    List<String> excludeSwitches = getBrowserLaunchExcludeSwitches(CAPABILITY, chromeOptions);
+    assertThat(excludeSwitches).isNull();
+  }
+
+  @Test
   void shouldNotExcludeExtensionsSwitch_ifChromeIsOpenedWithExtensions() {
     ChromeOptions options = new ChromeOptions();
     options.addExtensions(toFile("firebug-1.11.4.xpi"), toFile("firepath-0.9.7-fx.xpi"));

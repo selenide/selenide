@@ -1,5 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Capabilities;
 
 import java.util.List;
@@ -32,6 +33,7 @@ class SeleniumCapabilitiesHelper {
     return (Map<String, Object>) arguments.get("prefs");
   }
 
+  @Nullable
   @SuppressWarnings("unchecked")
   static List<String> getBrowserLaunchExcludeSwitches(String capability, Capabilities capabilities) {
     // it depends on internal Selenium capabilities structure
@@ -40,6 +42,7 @@ class SeleniumCapabilitiesHelper {
     if (arguments == null) {
       return emptyList();
     }
-    return asList((String[]) arguments.get("excludeSwitches"));
+    Object excludeSwitches = arguments.get("excludeSwitches");
+    return excludeSwitches == null ? null : asList((String[]) excludeSwitches);
   }
 }
