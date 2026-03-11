@@ -1,7 +1,15 @@
 # Changelog
 
-## 7.15.0 (24.02.2026)
-* update Selenium from 4.40.0 to 4.41.0, incl. CDP v144 -> v145
+## 7.15.0 (11.03.2026)
+* add option to skip downloading the full file content (#3264)
+* #3265 support running ChromeDriver in "remote debugger" mode (#3266)
+* #3243 Take screenshot in remote Chrome even if CDP port not available (#3245)
+* #3251 limit execution time of all Selenide commands (#3263)
+* fix video size in situation when browser size has been changing (#3262)
+* #3255 fix "OR" condition for missing elements (#3256)
+* update Selenium from 4.40.0 to 4.41.0, incl. CDP v144 -> v145 (#3252)
+
+See https://github.com/selenide/selenide/milestone/237?closed=1
 
 ## 7.14.0 (21.01.2026)
 * fix downloading files that have space in name (#3231)
