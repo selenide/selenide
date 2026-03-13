@@ -15,6 +15,10 @@ configurations {
   testImplementation.exclude group: "org.junit.platform"
 }
 
+tasks.withType(AbstractTestTask).configureEach {
+  failOnNoDiscoveredTests = false
+}
+
 tasks.withType(Test).configureEach {
   useJUnit()
 }

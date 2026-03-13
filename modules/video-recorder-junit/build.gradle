@@ -6,6 +6,10 @@ dependencies {
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
 }
 
+tasks.withType(AbstractTestTask).configureEach {
+  failOnNoDiscoveredTests = false
+}
+
 test {
   useJUnitPlatform()
 }

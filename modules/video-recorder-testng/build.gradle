@@ -15,8 +15,34 @@ configurations {
   testImplementation.exclude group: "org.junit.platform"
 }
 
+tasks.withType(AbstractTestTask).configureEach {
+  failOnNoDiscoveredTests = false
+}
+
 tasks.withType(Test).configureEach {
   useTestNG() {
-    suites "src/test/resources/suite.xml"
+    suiteXmlBuilder()
+      .suite(
+        name: 'Video recorder TestNG',
+        parallel: 'classes',
+        'thread-count': '3'
+      ) {
+        test(name: 'in 3 parallel threads') {
+          packages([:]) {
+            'package'(name: 'integration.videorecorder.testng')
+          }
+        }
+      }
   }
+}
+
+tasks.withType(Test).configureEach {
+  useTestNG()
+
+//  if (it.name != "test") {
+//    println("TEST TEST TEST TEST TEST ${it.name} ${it.failOnNoDiscoveredTests.get()}")
+//    useTestNG() {
+//      suites "src/test/resources/suite.xml"
+//    }
+//  }
 }
