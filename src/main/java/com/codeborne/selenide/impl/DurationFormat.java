@@ -14,10 +14,6 @@ public class DurationFormat {
   }
 
   public String format(long milliseconds) {
-    return formatMs(milliseconds);
-  }
-
-  public static String formatMs(long milliseconds) {
     if (milliseconds < 1000) {
       return String.format("%dms", milliseconds);
     }
