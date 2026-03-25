@@ -130,11 +130,11 @@ public class MoonClient {
   }
 
   URL clipboardAccessUrl() {
-    return url(baseUrl, "session", sessionId.toString(), "aerokube", "clipboard");
+    return url("clipboard");
   }
 
   URL downloadedFilesAccessUrl() {
-    return url(baseUrl, "session", sessionId.toString(), "aerokube", "download");
+    return url("download");
   }
 
   public void setClipboardText(String text) {
@@ -162,17 +162,18 @@ public class MoonClient {
     if (!fileName.equals(normalize(getName(fileName)))) {
       throw new IllegalArgumentException("Invalid file name: " + fileName);
     }
-    return url(baseUrl, "session", sessionId.toString(), "aerokube", "download", fileName);
+    return url("download", fileName);
   }
 
-  private URL url(String base, String... pathSegments) {
+  private URL url(String... pathSegments) {
     try {
-      return new URIBuilder(base)
+      return new URIBuilder(baseUrl)
+        .appendPathSegments("session", sessionId.toString(), "aerokube")
         .appendPathSegments(pathSegments)
         .build().toURL();
     }
     catch (URISyntaxException | MalformedURLException e) {
-      throw new RuntimeException("Failed to build valid URL from " + base + '+' + Arrays.toString(pathSegments), e);
+      throw new RuntimeException("Failed to build valid URL from " + baseUrl + '+' + Arrays.toString(pathSegments), e);
     }
   }
 
