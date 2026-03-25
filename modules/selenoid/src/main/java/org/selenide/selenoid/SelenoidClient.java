@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.hc.core5.net.URIBuilder;
+import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,16 +32,21 @@ public class SelenoidClient {
   private static final Logger log = LoggerFactory.getLogger(SelenoidClient.class);
   private static final ObjectMapper json = new ObjectMapper();
   final String baseUrl;
-  private final String sessionId;
+  private final SessionId sessionId;
 
   public static SelenoidClient clientFor(Driver driver) {
     String hubUrl = requireNonNull(driver.config().remote(), "Remote browser URL is not configured");
-    return new SelenoidClient(hubUrl, driver.getSessionId().toString());
+    return new SelenoidClient(hubUrl, driver.getSessionId());
   }
 
-  public SelenoidClient(String hubUrl, String sessionId) {
+  public SelenoidClient(String hubUrl, SessionId sessionId) {
     this.baseUrl = hubUrl.replace("/wd/hub", "");
     this.sessionId = sessionId;
+  }
+
+  @Deprecated
+  public SelenoidClient(String hubUrl, String sessionId) {
+    this(hubUrl, new SessionId(sessionId));
   }
 
   public List<String> downloads() {
@@ -102,7 +108,7 @@ public class SelenoidClient {
 
   public String getClipboardText() {
     try {
-      HttpURLConnection connection = connectionFromUrl(url(baseUrl, "clipboard", sessionId));
+      HttpURLConnection connection = connectionFromUrl(url(baseUrl, "clipboard", sessionId.toString()));
       int code = connection.getResponseCode();
       if (code != 200)
         throw new RuntimeException("Something went wrong while getting clipboard! Response code: " + code);
@@ -118,7 +124,7 @@ public class SelenoidClient {
 
   public void setClipboardText(String text) {
     try {
-      HttpURLConnection connection = connectionFromUrl(url(baseUrl, "clipboard", sessionId));
+      HttpURLConnection connection = connectionFromUrl(url(baseUrl, "clipboard", sessionId.toString()));
       connection.setRequestMethod("POST");
       connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
       connection.setConnectTimeout(10000);
@@ -140,7 +146,7 @@ public class SelenoidClient {
     if (!fileName.equals(normalize(getName(fileName)))) {
       throw new IllegalArgumentException("Invalid file name: " + fileName);
     }
-    return url(baseUrl, "download", sessionId, fileName);
+    return url(baseUrl, "download", sessionId.toString(), fileName);
   }
 
   private URL url(String url) {

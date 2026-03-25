@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,16 +33,22 @@ public class MoonClient {
   private static final Logger log = LoggerFactory.getLogger(MoonClient.class);
   private static final ObjectMapper json = new ObjectMapper();
   private final String baseUrl;
-  private final String sessionId;
+  private final SessionId sessionId;
 
   public static MoonClient clientFor(Driver driver) {
     String hubUrl = requireNonNull(driver.config().remote(), "Remote browser URL is not configured");
-    return new MoonClient(hubUrl, driver.getSessionId().toString());
+    return new MoonClient(hubUrl, driver.getSessionId());
   }
 
-  public MoonClient(String hubUrl, String sessionId) {
+  public MoonClient(String hubUrl, SessionId sessionId) {
     this.baseUrl = hubUrl;
     this.sessionId = sessionId;
+  }
+
+  @Deprecated
+  public MoonClient(String hubUrl, String sessionId) {
+    this.baseUrl = hubUrl;
+    this.sessionId = new SessionId(sessionId);
   }
 
   public List<String> downloads() {
@@ -123,11 +130,11 @@ public class MoonClient {
   }
 
   URL clipboardAccessUrl() {
-    return url(baseUrl, "session", sessionId, "aerokube", "clipboard");
+    return url(baseUrl, "session", sessionId.toString(), "aerokube", "clipboard");
   }
 
   URL downloadedFilesAccessUrl() {
-    return url(baseUrl, "session", sessionId, "aerokube", "download");
+    return url(baseUrl, "session", sessionId.toString(), "aerokube", "download");
   }
 
   public void setClipboardText(String text) {
@@ -155,7 +162,7 @@ public class MoonClient {
     if (!fileName.equals(normalize(getName(fileName)))) {
       throw new IllegalArgumentException("Invalid file name: " + fileName);
     }
-    return url(baseUrl, "session", sessionId, "aerokube", "download", fileName);
+    return url(baseUrl, "session", sessionId.toString(), "aerokube", "download", fileName);
   }
 
   private URL url(String base, String... pathSegments) {

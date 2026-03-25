@@ -1,6 +1,7 @@
 package org.selenide.selenoid;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.remote.SessionId;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -11,13 +12,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class SelenoidClientTest {
   @Test
   void extractsSelenoidBaseUrlFromHubUrl() {
-    SelenoidClient client = new SelenoidClient("http://localhost:4444/wd/hub", "sid-01");
+    SelenoidClient client = new SelenoidClient("http://localhost:4444/wd/hub", new SessionId("sid-01"));
     assertThat(client.baseUrl).isEqualTo("http://localhost:4444");
   }
 
   @Test
   void encodesFileNameInUrl() throws MalformedURLException {
-    SelenoidClient client = new SelenoidClient("http://localhost:4444/wd/hub", "sid-01");
+    SelenoidClient client = new SelenoidClient("http://localhost:4444/wd/hub", new SessionId("sid-01"));
     assertThat(client.urlOfDownloadedFile("some-file.txt")).isEqualTo(
       new URL("http://localhost:4444/download/sid-01/some-file.txt")
     );
@@ -28,7 +29,7 @@ class SelenoidClientTest {
 
   @Test
   void validatesFileName() {
-    SelenoidClient client = new SelenoidClient("", "");
+    SelenoidClient client = new SelenoidClient("", new SessionId(""));
     assertThatThrownBy(() -> client.urlOfDownloadedFile("../../etc/hosts"))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Invalid file name: ../../etc/hosts");
@@ -43,7 +44,7 @@ class SelenoidClientTest {
   @Test
   void readsFileNamesFromJson() {
     String selenoidDownloadsResponse = "[\"test.txt\", \"report.pdf\"]";
-    SelenoidClient client = new SelenoidClient("http://localhost:4444/wd/hub", "sid-01");
+    SelenoidClient client = new SelenoidClient("http://localhost:4444/wd/hub", new SessionId("sid-01"));
     assertThat(client.parseJson(selenoidDownloadsResponse)).containsExactly(
       "test.txt", "report.pdf"
     );
