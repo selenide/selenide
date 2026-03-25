@@ -1,15 +1,18 @@
 package org.selenide.selenoid;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.DownloadFileToFolder;
 import com.codeborne.selenide.impl.Downloader;
 import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 
 public class DownloadFileFromSelenoidToFolder extends DownloadFileToFolder {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileFromSelenoidToFolder.class);
@@ -50,10 +53,10 @@ public class DownloadFileFromSelenoidToFolder extends DownloadFileToFolder {
   }
 
   @Override
-  protected File archiveFile(Driver driver, File downloadedFile) {
-    if (driver.isLocalBrowser()) {
-      return super.archiveFile(driver, downloadedFile);
+  protected File archiveFile(Config config, WebDriver driver, File downloadedFile) throws IOException {
+    if (isLocalBrowser(config)) {
+      return super.archiveFile(config, driver, downloadedFile);
     }
-    return SelenoidDownloader.archiveFile(downloader, driver, downloadedFile);
+    return SelenoidDownloader.archiveFile(downloader, config, driver, downloadedFile);
   }
 }
