@@ -187,4 +187,14 @@ final class ThreadLocalSelenideConfig implements Config {
   public long remoteConnectionTimeout() {
     return config.get().remoteConnectionTimeout();
   }
+
+  @Override
+  public RequestFilters requestFilters() {
+    return config.get().requestFilters();
+  }
+
+  @Override
+  public ResponseFilters responseFilters() {
+    return config.get().responseFilters();
+  }
 }

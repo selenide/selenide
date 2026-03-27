@@ -181,6 +181,16 @@ final class StaticConfig implements Config {
   }
 
   @Override
+  public RequestFilters requestFilters() {
+    return Configuration.requestFilters;
+  }
+
+  @Override
+  public ResponseFilters responseFilters() {
+    return Configuration.responseFilters;
+  }
+
+  @Override
   public String toString() {
     return getClass().getSimpleName();
   }
