@@ -39,14 +39,45 @@ class VideoRecorderFinishTest {
 
   private static VideoConfiguration testConfig(Path folder) {
     return new VideoConfiguration() {
-      @Override public boolean videoEnabled() { return true; }
-      @Override public String videoFolder() { return folder.toString(); }
-      @Override public RecordingMode mode() { return RecordingMode.ALL; }
-      @Override public VideoSaveMode saveMode() { return VideoSaveMode.ALL; }
-      @Override public int fps() { return 24; }
-      @Override public int crf() { return 0; }
-      @Override public long videoProcessingTimeout() { return 90; }
-      @Override public boolean keepScreenshots() { return false; }
+      @Override
+      public boolean videoEnabled() {
+        return true;
+      }
+
+      @Override
+      public String videoFolder() {
+        return folder.toString();
+      }
+
+      @Override
+      public RecordingMode mode() {
+        return RecordingMode.ALL;
+      }
+
+      @Override
+      public VideoSaveMode saveMode() {
+        return VideoSaveMode.ALL;
+      }
+
+      @Override
+      public int fps() {
+        return 24;
+      }
+
+      @Override
+      public int crf() {
+        return 0;
+      }
+
+      @Override
+      public long videoProcessingTimeout() {
+        return 90;
+      }
+
+      @Override
+      public boolean keepScreenshots() {
+        return false;
+      }
     };
   }
 }
