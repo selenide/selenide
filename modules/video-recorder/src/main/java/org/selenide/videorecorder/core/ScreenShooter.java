@@ -2,6 +2,7 @@ package org.selenide.videorecorder.core;
 
 import com.codeborne.selenide.impl.Photographer;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
@@ -26,6 +28,7 @@ class ScreenShooter implements Runnable {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooter.class);
   private final Photographer photographer = inject();
   private final AtomicLong screenshotCounter = new AtomicLong();
+  private final AtomicBoolean useStandardScreenshot = new AtomicBoolean(false);
   private final long threadId;
   private final File screenshotsFolder;
   private final List<Screenshot> screenshots;
@@ -76,13 +79,43 @@ class ScreenShooter implements Runnable {
     long start = nanoTime();
     log.debug("Taking a screenshot for webdriver in thread {} at {} ...", threadId, start);
 
-    byte[] screenshotBytes = photographer.takeScreenshot(webDriver, OutputType.BYTES)
-      .orElseThrow(() -> new RuntimeException("Webdriver does not support taking screenshots"));
+    byte[] screenshotBytes = takeScreenshotBytes(webDriver);
     File screenshot = saveScreenshot(screenshotBytes);
     long timestamp = nanoTime();
     screenshots.add(new Screenshot(start, new ImageSource(screenshot)));
     long duration = NANOSECONDS.toMillis(timestamp - start);
     log.debug("Taken a screenshot in thread {} at {} in {} ms: {}", threadId, timestamp, duration, screenshot);
+  }
+
+  /**
+   * Take a screenshot using the preferred method. Falls back to standard WebDriver screenshot
+   * if the default photographer (which uses CDP/BiDi) fails — this happens when ScreenShooter
+   * runs on a background thread where CDP sessions are not available.
+   * After the first fallback, all subsequent screenshots use the standard method directly
+   * to avoid repeated CDP exceptions on every frame.
+   */
+  private byte[] takeScreenshotBytes(WebDriver webDriver) {
+    if (useStandardScreenshot.get()) {
+      return takeStandardScreenshot(webDriver);
+    }
+
+    try {
+      return photographer.takeScreenshot(webDriver, OutputType.BYTES)
+        .orElseThrow(() -> new RuntimeException("Webdriver does not support taking screenshots"));
+    }
+    catch (Exception e) {
+      if (webDriver instanceof TakesScreenshot) {
+        log.warn("Screenshot via CDP/BiDi failed (cross-thread?), falling back to standard WebDriver screenshot: {}",
+          e.getMessage());
+        useStandardScreenshot.set(true);
+        return takeStandardScreenshot(webDriver);
+      }
+      throw e;
+    }
+  }
+
+  private byte[] takeStandardScreenshot(WebDriver webDriver) {
+    return ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
   }
 
   private File saveScreenshot(byte[] screenshot) {
