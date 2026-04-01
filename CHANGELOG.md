@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.15.1 (01.04.2026)
+* #3274 Revert "limit execution time of all Selenide commands" (#3276)
+* #3251 stop downloading a file from remote browser after given timeout (#3276)
+* bump Appium from 10.0.0 to 10.1.0
+
+See https://github.com/selenide/selenide/milestone/238?closed=1
+
 ## 7.15.0 (11.03.2026)
 * add option to skip downloading the full file content (#3264)
 * #3265 support running ChromeDriver in "remote debugger" mode (#3266)
