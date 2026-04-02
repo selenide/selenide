@@ -8,7 +8,7 @@
 
   function findElementsByLabel(label) {
     const id = label.getAttribute('for');
-    if (id)
+    if (!!id && label.tagName.toLowerCase() === 'label')
       return Array.from(root.querySelectorAll(`[id="${id}"]`));
     else
       return Array.from(label.querySelectorAll(`input,select,textarea`));
