@@ -70,7 +70,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   protected static void resetSettings() {
-    timeout = 1;
+    timeout = 100;
     Configuration.pollingInterval = 0;
     Configuration.clickViaJs = false;
     Configuration.downloadsFolder = "build/downloads";
