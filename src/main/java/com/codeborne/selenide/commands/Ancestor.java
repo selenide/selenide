@@ -17,7 +17,7 @@ public class Ancestor implements Command<SelenideElement> {
       1;
 
     AncestorRuleEngine ruleEngine = new AncestorRuleEngine();
-    String xpath = ruleEngine.process(selector, indexPredicate).getValue();
+    String xpath = ruleEngine.process(selector, indexPredicate).xpath();
     return locator.find(proxy, By.xpath(xpath), 0);
   }
 }
