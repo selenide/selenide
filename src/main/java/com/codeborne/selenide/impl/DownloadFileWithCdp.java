@@ -163,7 +163,7 @@ public class DownloadFileWithCdp {
     }
 
     DevTools devTools = cdpBrowser.getDevTools();
-    devTools.createSessionIfThereIsNotOne();
+    devTools.createSessionIfThereIsNotOne(webDriver.getWindowHandle());
     devTools.send(Page.enable(Optional.empty()));
     return devTools;
   }
