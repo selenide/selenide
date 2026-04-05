@@ -37,7 +37,7 @@ final class AncestorCommandTest {
       .isEqualTo(mockedElement);
 
     verify(locator).find(proxy,
-      By.xpath("ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' active-btn ')][1]"),
+      By.xpath("ancestor::*[ contains(concat(' ', normalize-space(@class), ' '), ' active-btn ') ][1]"),
       0);
   }
 

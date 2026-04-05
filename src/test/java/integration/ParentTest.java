@@ -80,6 +80,20 @@ final class ParentTest extends ITest {
   }
 
   @Test
+  void canGetAncestorByMultipleClassNames() {
+    SelenideElement element = $(By.name("domain"));
+
+    assertThat(element.ancestor(".container.dropdown"))
+      .isEqualTo($("#dropdown-list-container"));
+    assertThat(element.ancestor(".container.dropdown", 0))
+      .isEqualTo($("#dropdown-list-container"));
+    assertThat(element.ancestor(".dropdown.container", 1))
+      .isEqualTo($("#domain-container"));
+    assertThat(element.ancestor(".container.dropdown", 10).exists())
+      .isFalse();
+  }
+
+  @Test
   void canGetClosestMatchingAncestorByAttribute() {
     SelenideElement expectedElement = $("#ancestor");
     assertThat($("#second-div").closest("[test-attribute]"))
