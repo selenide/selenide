@@ -58,7 +58,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   @BeforeEach
   final void openBlankPage() {
     if (hasWebDriverStarted()) {
-      retry(() -> open("about:blank"), 5);
+      open("about:blank");
     }
   }
 
@@ -93,11 +93,11 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   protected void openFile(String fileName) {
-    retry(() -> open("/" + fileName), 5);
+    open("/" + fileName);
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
-    retry(() -> open("/" + fileName), 5);
+    open("/" + fileName);
     return page(pageObjectClass);
   }
 
