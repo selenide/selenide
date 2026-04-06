@@ -8,6 +8,7 @@ tasks.register('javadocForSite', Javadoc) {
   classpath += project(":modules:full-screenshot").sourceSets.main.compileClasspath
   classpath += project(":modules:grid").sourceSets.main.compileClasspath
   classpath += project(":modules:junit4").sourceSets.main.compileClasspath
+  classpath += project(":modules:mcp").sourceSets.main.compileClasspath
   classpath += project(":modules:proxy").sourceSets.main.compileClasspath
   classpath += project(":modules:selenoid").sourceSets.main.compileClasspath
   classpath += project(":modules:testng").sourceSets.main.compileClasspath

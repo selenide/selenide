@@ -1,0 +1,30 @@
+plugins {
+  id 'com.gradleup.shadow' version '9.0.0-beta12'
+}
+
+ext {
+  artifactId = 'selenide-mcp'
+  mcpSdkVersion = '1.1.1'
+}
+
+dependencies {
+  implementation project(':modules:core')
+  implementation "io.modelcontextprotocol.sdk:mcp:$mcpSdkVersion"
+
+  testImplementation("org.junit.jupiter:junit-jupiter")
+  testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
+}
+
+shadowJar {
+  archiveBaseName.set('selenide-mcp')
+  archiveClassifier.set('')
+  manifest {
+    attributes 'Main-Class': 'com.codeborne.selenide.mcp.SelenideMcpServer'
+  }
+  mergeServiceFiles()
+}
+
+tasks.named('build') {
+  dependsOn shadowJar
+}
