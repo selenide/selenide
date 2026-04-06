@@ -3,8 +3,8 @@ package com.codeborne.selenide.mcp;
 import com.codeborne.selenide.Selectors;
 import org.openqa.selenium.By;
 
-class ElementResolver {
-  By resolve(String selector) {
+public class ElementResolver {
+  public By resolve(String selector) {
     if (selector.startsWith("//") || selector.startsWith("./")) {
       return By.xpath(selector);
     }
