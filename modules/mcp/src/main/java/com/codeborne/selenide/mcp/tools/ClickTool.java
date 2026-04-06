@@ -1,16 +1,28 @@
 package com.codeborne.selenide.mcp.tools;
 
 import com.codeborne.selenide.mcp.BrowserSession;
-import com.codeborne.selenide.mcp.ElementResolver;
-import com.codeborne.selenide.mcp.ToolErrorHandler;
-import io.modelcontextprotocol.json.McpJsonDefaults;
-import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
 
-import java.util.List;
+import java.util.Map;
 
-class ClickTool {
-  private static final String INPUT_SCHEMA = """
+class ClickTool extends McpTool {
+  ClickTool(BrowserSession session) {
+    super(session);
+  }
+
+  @Override
+  String name() {
+    return "browser_click";
+  }
+
+  @Override
+  String description() {
+    return "Click an element on the page";
+  }
+
+  @Override
+  String inputSchema() {
+    return """
       {
         "type": "object",
         "properties": {
@@ -30,51 +42,21 @@ class ClickTool {
         "required": ["selector"]
       }
       """;
-
-  private final BrowserSession session;
-  private final ElementResolver resolver = new ElementResolver();
-  private final ToolErrorHandler errorHandler = new ToolErrorHandler();
-
-  ClickTool(BrowserSession session) {
-    this.session = session;
   }
 
-  McpServerFeatures.SyncToolSpecification spec() {
-    McpSchema.Tool tool = McpSchema.Tool.builder()
-      .name("browser_click")
-      .description("Click an element on the page")
-      .inputSchema(McpJsonDefaults.getMapper(), INPUT_SCHEMA)
-      .build();
-
-    return McpServerFeatures.SyncToolSpecification.builder()
-      .tool(tool)
-      .callHandler((exchange, request) -> {
-        String selector = (String) request.arguments().get("selector");
-        Boolean doubleClick = (Boolean) request.arguments().get("doubleClick");
-        Boolean contextClick = (Boolean) request.arguments().get("contextClick");
-        try {
-          var by = resolver.resolve(selector);
-          if (Boolean.TRUE.equals(doubleClick)) {
-            session.getDriver().$(by).doubleClick();
-          }
-          else if (Boolean.TRUE.equals(contextClick)) {
-            session.getDriver().$(by).contextClick();
-          }
-          else {
-            session.getDriver().$(by).click();
-          }
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent("Clicked: " + selector)))
-            .isError(false)
-            .build();
-        }
-        catch (Exception e) {
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(errorHandler.formatError(e, selector))))
-            .isError(true)
-            .build();
-        }
-      })
-      .build();
+  @Override
+  McpSchema.CallToolResult execute(Map<String, Object> args) {
+    String selector = (String) args.get("selector");
+    var by = resolve(selector);
+    if (Boolean.TRUE.equals(args.get("doubleClick"))) {
+      session.getDriver().$(by).doubleClick();
+    }
+    else if (Boolean.TRUE.equals(args.get("contextClick"))) {
+      session.getDriver().$(by).contextClick();
+    }
+    else {
+      session.getDriver().$(by).click();
+    }
+    return success("Clicked: " + selector);
   }
 }

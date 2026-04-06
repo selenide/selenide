@@ -1,16 +1,28 @@
 package com.codeborne.selenide.mcp.tools;
 
 import com.codeborne.selenide.mcp.BrowserSession;
-import com.codeborne.selenide.mcp.ElementResolver;
-import com.codeborne.selenide.mcp.ToolErrorHandler;
-import io.modelcontextprotocol.json.McpJsonDefaults;
-import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
 
-import java.util.List;
+import java.util.Map;
 
-class GetTextTool {
-  private static final String INPUT_SCHEMA = """
+class GetTextTool extends McpTool {
+  GetTextTool(BrowserSession session) {
+    super(session);
+  }
+
+  @Override
+  String name() {
+    return "browser_get_text";
+  }
+
+  @Override
+  String description() {
+    return "Get the visible text content of an element";
+  }
+
+  @Override
+  String inputSchema() {
+    return """
       {
         "type": "object",
         "properties": {
@@ -22,41 +34,11 @@ class GetTextTool {
         "required": ["selector"]
       }
       """;
-
-  private final BrowserSession session;
-  private final ElementResolver resolver = new ElementResolver();
-  private final ToolErrorHandler errorHandler = new ToolErrorHandler();
-
-  GetTextTool(BrowserSession session) {
-    this.session = session;
   }
 
-  McpServerFeatures.SyncToolSpecification spec() {
-    McpSchema.Tool tool = McpSchema.Tool.builder()
-      .name("browser_get_text")
-      .description("Get the visible text content of an element")
-      .inputSchema(McpJsonDefaults.getMapper(), INPUT_SCHEMA)
-      .build();
-
-    return McpServerFeatures.SyncToolSpecification.builder()
-      .tool(tool)
-      .callHandler((exchange, request) -> {
-        String selector = (String) request.arguments().get("selector");
-        try {
-          var by = resolver.resolve(selector);
-          String text = session.getDriver().$(by).getText();
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(text)))
-            .isError(false)
-            .build();
-        }
-        catch (Exception e) {
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(errorHandler.formatError(e, selector))))
-            .isError(true)
-            .build();
-        }
-      })
-      .build();
+  @Override
+  McpSchema.CallToolResult execute(Map<String, Object> args) {
+    String selector = (String) args.get("selector");
+    return success(session.getDriver().$(resolve(selector)).getText());
   }
 }

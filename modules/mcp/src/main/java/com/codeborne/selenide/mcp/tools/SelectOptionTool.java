@@ -1,22 +1,34 @@
 package com.codeborne.selenide.mcp.tools;
 
 import com.codeborne.selenide.mcp.BrowserSession;
-import com.codeborne.selenide.mcp.ElementResolver;
-import com.codeborne.selenide.mcp.ToolErrorHandler;
-import io.modelcontextprotocol.json.McpJsonDefaults;
-import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
 
-import java.util.List;
+import java.util.Map;
 
-class SelectOptionTool {
-  private static final String INPUT_SCHEMA = """
+class SelectOptionTool extends McpTool {
+  SelectOptionTool(BrowserSession session) {
+    super(session);
+  }
+
+  @Override
+  String name() {
+    return "browser_select_option";
+  }
+
+  @Override
+  String description() {
+    return "Select an option in a <select> element by text, value, or index";
+  }
+
+  @Override
+  String inputSchema() {
+    return """
       {
         "type": "object",
         "properties": {
           "selector": {
             "type": "string",
-            "description": "CSS selector, XPath, or text= selector for the select element"
+            "description": "Selector for the select element"
           },
           "text": {
             "type": "string",
@@ -34,54 +46,31 @@ class SelectOptionTool {
         "required": ["selector"]
       }
       """;
-
-  private final BrowserSession session;
-  private final ElementResolver resolver = new ElementResolver();
-  private final ToolErrorHandler errorHandler = new ToolErrorHandler();
-
-  SelectOptionTool(BrowserSession session) {
-    this.session = session;
   }
 
-  McpServerFeatures.SyncToolSpecification spec() {
-    McpSchema.Tool tool = McpSchema.Tool.builder()
-      .name("browser_select_option")
-      .description("Select an option in a <select> element by text, value, or index")
-      .inputSchema(McpJsonDefaults.getMapper(), INPUT_SCHEMA)
-      .build();
+  @Override
+  McpSchema.CallToolResult execute(Map<String, Object> args) {
+    String selector = (String) args.get("selector");
+    String text = (String) args.get("text");
+    String value = (String) args.get("value");
+    Number index = (Number) args.get("index");
 
-    return McpServerFeatures.SyncToolSpecification.builder()
-      .tool(tool)
-      .callHandler((exchange, request) -> {
-        String selector = (String) request.arguments().get("selector");
-        String text = (String) request.arguments().get("text");
-        String value = (String) request.arguments().get("value");
-        Number index = (Number) request.arguments().get("index");
-        try {
-          var by = resolver.resolve(selector);
-          var element = session.getDriver().$(by);
-          if (text != null) {
-            element.selectOption(text);
-          }
-          else if (value != null) {
-            element.selectOptionByValue(value);
-          }
-          else if (index != null) {
-            element.selectOption(index.intValue());
-          }
-          String selectedText = element.getSelectedOptionText();
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent("Selected '" + selectedText + "' in " + selector)))
-            .isError(false)
-            .build();
-        }
-        catch (Exception e) {
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(errorHandler.formatError(e, selector))))
-            .isError(true)
-            .build();
-        }
-      })
-      .build();
+    if (text == null && value == null && index == null) {
+      throw new IllegalArgumentException(
+        "One of 'text', 'value', or 'index' is required");
+    }
+
+    var element = session.getDriver().$(resolve(selector));
+    if (text != null) {
+      element.selectOption(text);
+    }
+    else if (value != null) {
+      element.selectOptionByValue(value);
+    }
+    else {
+      element.selectOption(index.intValue());
+    }
+    String selectedText = element.getSelectedOptionText();
+    return success("Selected '" + selectedText + "' in " + selector);
   }
 }

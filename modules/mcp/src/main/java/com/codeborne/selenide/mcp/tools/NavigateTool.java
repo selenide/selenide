@@ -1,51 +1,50 @@
 package com.codeborne.selenide.mcp.tools;
 
 import com.codeborne.selenide.mcp.BrowserSession;
-import com.codeborne.selenide.mcp.ToolErrorHandler;
-import io.modelcontextprotocol.json.McpJsonDefaults;
-import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
 
-import java.util.List;
+import java.util.Map;
 
-class NavigateTool {
-  private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"url":{"type":"string","description":"The URL to navigate to"}},"required":["url"]}
-      """;
-
-  private final BrowserSession session;
-  private final ToolErrorHandler errorHandler = new ToolErrorHandler();
-
+class NavigateTool extends McpTool {
   NavigateTool(BrowserSession session) {
-    this.session = session;
+    super(session);
   }
 
-  McpServerFeatures.SyncToolSpecification spec() {
-    McpSchema.Tool tool = McpSchema.Tool.builder()
-      .name("browser_navigate")
-      .description("Navigate the browser to a URL")
-      .inputSchema(McpJsonDefaults.getMapper(), INPUT_SCHEMA)
-      .build();
+  @Override
+  String name() {
+    return "browser_navigate";
+  }
 
-    return McpServerFeatures.SyncToolSpecification.builder()
-      .tool(tool)
-      .callHandler((exchange, request) -> {
-        String url = (String) request.arguments().get("url");
-        try {
-          session.getDriver().open(url);
-          String currentUrl = session.getDriver().url();
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent("Navigated to: " + currentUrl)))
-            .isError(false)
-            .build();
-        }
-        catch (Exception e) {
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(errorHandler.formatError(e, url))))
-            .isError(true)
-            .build();
-        }
-      })
-      .build();
+  @Override
+  String description() {
+    return "Navigate the browser to a URL";
+  }
+
+  @Override
+  String inputSchema() {
+    return """
+      {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The URL to navigate to"
+          }
+        },
+        "required": ["url"]
+      }
+      """;
+  }
+
+  @Override
+  McpSchema.CallToolResult execute(Map<String, Object> args) {
+    String url = (String) args.get("url");
+    session.getDriver().open(url);
+    return success("Navigated to: " + session.getDriver().url());
+  }
+
+  @Override
+  protected String errorContext(Map<String, Object> args) {
+    return (String) args.get("url");
   }
 }

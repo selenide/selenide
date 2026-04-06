@@ -14,35 +14,45 @@ public class LocatorGenerator {
     String testId = (String) element.get("testId");
     if (testId != null) {
       locators.add(new RankedLocator(
-        "$(byAttribute(\"data-testid\", \"" + testId + "\"))", "test-id", "stable"));
+        "$(byAttribute(\"data-testid\", \"" + escape(testId) + "\"))",
+        "test-id", "stable"));
     }
     String id = (String) element.get("id");
     if (id != null) {
-      locators.add(new RankedLocator("$(\"#" + id + "\")", "id", "stable"));
+      locators.add(new RankedLocator(
+        "$(\"#" + escape(id) + "\")", "id", "stable"));
     }
     String name = (String) element.get("name");
     if (name != null) {
       locators.add(new RankedLocator(
-        "$(\"" + tag + "[name='" + name + "']\")", "name", "stable"));
+        "$(\"" + tag + "[name='" + escape(name) + "']\")",
+        "name", "stable"));
     }
     @SuppressWarnings("unchecked")
     List<String> classes = (List<String>) element.get("classes");
     if (classes != null && !classes.isEmpty()) {
       locators.add(new RankedLocator(
-        "$(\"" + tag + "." + String.join(".", classes) + "\")", "css", "medium"));
+        "$(\"" + tag + "." + String.join(".", classes) + "\")",
+        "css", "medium"));
     }
     String text = (String) element.get("text");
     if (text != null && !text.isEmpty() && text.length() < 50) {
       locators.add(new RankedLocator(
-        "$(byText(\"" + text + "\"))", "text", "fragile if i18n"));
+        "$(byText(\"" + escape(text) + "\"))",
+        "text", "fragile if i18n"));
     }
     if (locators.isEmpty()) {
-      locators.add(new RankedLocator("$(\"" + tag + "\")", "tag", "fragile"));
+      locators.add(new RankedLocator(
+        "$(\"" + tag + "\")", "tag", "fragile"));
     }
     return locators;
   }
 
   public String recommended(List<RankedLocator> locators) {
     return locators.isEmpty() ? null : locators.get(0).code();
+  }
+
+  private static String escape(String value) {
+    return value.replace("\\", "\\\\").replace("\"", "\\\"");
   }
 }
