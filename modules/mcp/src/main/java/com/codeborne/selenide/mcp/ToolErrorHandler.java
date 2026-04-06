@@ -5,8 +5,8 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.UIAssertionError;
 
-class ToolErrorHandler {
-  String formatError(Throwable error, String selector) {
+public class ToolErrorHandler {
+  public String formatError(Throwable error, String selector) {
     StringBuilder sb = new StringBuilder();
     sb.append("Error: ").append(error.getMessage()).append("\n");
     sb.append("Selector: ").append(selector).append("\n");

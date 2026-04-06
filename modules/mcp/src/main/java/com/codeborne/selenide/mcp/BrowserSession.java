@@ -4,27 +4,27 @@ import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import org.jspecify.annotations.Nullable;
 
-class BrowserSession {
+public class BrowserSession {
   private final SelenideConfig config;
   @Nullable
   private SelenideDriver driver;
 
-  BrowserSession(SelenideConfig config) {
+  public BrowserSession(SelenideConfig config) {
     this.config = config;
   }
 
-  SelenideDriver getDriver() {
+  public SelenideDriver getDriver() {
     if (driver == null || !driver.hasWebDriverStarted()) {
       driver = new SelenideDriver(config);
     }
     return driver;
   }
 
-  boolean isStarted() {
+  public boolean isStarted() {
     return driver != null && driver.hasWebDriverStarted();
   }
 
-  void close() {
+  public void close() {
     if (driver != null) {
       driver.close();
       driver = null;
