@@ -11,7 +11,16 @@ import java.util.List;
 
 class GetTextTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"selector":{"type":"string","description":"CSS selector, XPath, or text= selector"}},"required":["selector"]}
+      {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector, XPath, or text= selector"
+          }
+        },
+        "required": ["selector"]
+      }
       """;
 
   private final BrowserSession session;

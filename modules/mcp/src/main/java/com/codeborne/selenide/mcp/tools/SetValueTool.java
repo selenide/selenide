@@ -11,7 +11,20 @@ import java.util.List;
 
 class SetValueTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"selector":{"type":"string","description":"CSS selector, XPath, or text= selector"},"value":{"type":"string","description":"Value to set on the element"}},"required":["selector","value"]}
+      {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector, XPath, or text= selector"
+          },
+          "value": {
+            "type": "string",
+            "description": "Value to set on the element"
+          }
+        },
+        "required": ["selector", "value"]
+      }
       """;
 
   private final BrowserSession session;

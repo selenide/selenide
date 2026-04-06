@@ -11,7 +11,28 @@ import java.util.List;
 
 class SelectOptionTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"selector":{"type":"string","description":"CSS selector, XPath, or text= selector for the select element"},"text":{"type":"string","description":"Option text to select"},"value":{"type":"string","description":"Option value to select"},"index":{"type":"integer","description":"Option index to select"}},"required":["selector"]}
+      {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector, XPath, or text= selector for the select element"
+          },
+          "text": {
+            "type": "string",
+            "description": "Option text to select"
+          },
+          "value": {
+            "type": "string",
+            "description": "Option value to select"
+          },
+          "index": {
+            "type": "integer",
+            "description": "Option index to select"
+          }
+        },
+        "required": ["selector"]
+      }
       """;
 
   private final BrowserSession session;

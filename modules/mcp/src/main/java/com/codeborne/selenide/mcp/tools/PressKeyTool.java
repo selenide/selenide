@@ -12,7 +12,20 @@ import java.util.List;
 
 class PressKeyTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"key":{"type":"string","description":"Key to press: enter, escape, tab, or any Keys enum name"},"selector":{"type":"string","description":"CSS selector, XPath, or text= selector (optional; uses focused element if omitted)"}},"required":["key"]}
+      {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Key to press: enter, escape, tab, or any Keys enum name"
+          },
+          "selector": {
+            "type": "string",
+            "description": "CSS selector, XPath, or text= selector (optional; uses focused element if omitted)"
+          }
+        },
+        "required": ["key"]
+      }
       """;
 
   private final BrowserSession session;
