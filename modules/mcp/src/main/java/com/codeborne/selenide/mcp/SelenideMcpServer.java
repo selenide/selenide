@@ -3,6 +3,7 @@ package com.codeborne.selenide.mcp;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.mcp.tools.AdvancedInteractionTools;
 import com.codeborne.selenide.mcp.tools.ElementInteractionTools;
+import com.codeborne.selenide.mcp.tools.InspectTools;
 import com.codeborne.selenide.mcp.tools.NavigationTools;
 import io.modelcontextprotocol.json.McpJsonDefaults;
 import io.modelcontextprotocol.server.McpServer;
@@ -26,6 +27,7 @@ public class SelenideMcpServer {
       .tools(NavigationTools.specs(session))
       .tools(ElementInteractionTools.specs(session))
       .tools(AdvancedInteractionTools.specs(session))
+      .tools(InspectTools.specs(session))
       .build();
 
     CountDownLatch latch = new CountDownLatch(1);
