@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { execSync, spawn } = require('child_process');
-const { existsSync, mkdirSync, createWriteStream } = require('fs');
+const { existsSync, mkdirSync, createWriteStream, renameSync, unlinkSync } = require('fs');
 const { join } = require('path');
 const { get } = require('https');
 const { homedir } = require('os');
@@ -10,6 +10,7 @@ const VERSION = require('./package.json').version;
 const CACHE_DIR = join(homedir(), '.selenide-mcp');
 const JAR_NAME = `selenide-mcp-${VERSION}.jar`;
 const JAR_PATH = join(CACHE_DIR, JAR_NAME);
+const TMP_PATH = JAR_PATH + '.downloading';
 const MAVEN_BASE = 'https://repo1.maven.org/maven2/com/codeborne/selenide-mcp';
 const JAR_URL = `${MAVEN_BASE}/${VERSION}/${JAR_NAME}`;
 
@@ -33,22 +34,35 @@ function downloadJar() {
     mkdirSync(CACHE_DIR, { recursive: true });
     process.stderr.write(`Downloading selenide-mcp ${VERSION}...\n`);
 
+    function cleanup() {
+      try { unlinkSync(TMP_PATH); } catch { /* ignore */ }
+    }
+
     function download(url) {
       get(url, (res) => {
         if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
           return download(res.headers.location);
         }
         if (res.statusCode !== 200) {
+          cleanup();
           return reject(new Error(`Download failed: HTTP ${res.statusCode} from ${url}`));
         }
-        const file = createWriteStream(JAR_PATH);
+        const file = createWriteStream(TMP_PATH);
         res.pipe(file);
         file.on('finish', () => {
           file.close();
+          renameSync(TMP_PATH, JAR_PATH);
           process.stderr.write('Download complete.\n');
           resolve();
         });
-      }).on('error', reject);
+        file.on('error', (err) => {
+          cleanup();
+          reject(err);
+        });
+      }).on('error', (err) => {
+        cleanup();
+        reject(err);
+      });
     }
     download(JAR_URL);
   });

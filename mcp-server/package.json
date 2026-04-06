@@ -1,6 +1,6 @@
 {
   "name": "selenide-mcp",
-  "version": "1.0.0",
+  "version": "7.15.1",
   "description": "Selenide MCP server — browser automation with smart waits for AI agents",
   "bin": {
     "selenide-mcp": "index.js"
@@ -12,6 +12,6 @@
     "url": "https://github.com/selenide/selenide.git"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.0.0"
   }
 }
