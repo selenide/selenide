@@ -2,6 +2,7 @@ package com.codeborne.selenide.mcp;
 
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.mcp.tools.AdvancedInteractionTools;
+import com.codeborne.selenide.mcp.tools.CodegenTools;
 import com.codeborne.selenide.mcp.tools.ElementInteractionTools;
 import com.codeborne.selenide.mcp.tools.InspectTools;
 import com.codeborne.selenide.mcp.tools.NavigationTools;
@@ -19,16 +20,22 @@ public class SelenideMcpServer {
     this.session = new BrowserSession(config);
   }
 
-  public void start() {
+  @SuppressWarnings("unchecked")
+  public void start(String[] args) {
     StdioServerTransportProvider transport = new StdioServerTransportProvider(McpJsonDefaults.getMapper());
 
-    McpSyncServer server = McpServer.sync(transport)
+    McpServer.SyncSpecification builder = McpServer.sync(transport)
       .serverInfo("selenide-mcp", "1.0.0")
       .tools(NavigationTools.specs(session))
       .tools(ElementInteractionTools.specs(session))
       .tools(AdvancedInteractionTools.specs(session))
-      .tools(InspectTools.specs(session))
-      .build();
+      .tools(InspectTools.specs(session));
+
+    if (hasCapability(args, "codegen")) {
+      builder = builder.tools(CodegenTools.specs(session));
+    }
+
+    McpSyncServer server = builder.build();
 
     CountDownLatch latch = new CountDownLatch(1);
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -48,7 +55,16 @@ public class SelenideMcpServer {
   public static void main(String[] args) {
     SelenideConfig config = parseConfig(args);
     SelenideMcpServer server = new SelenideMcpServer(config);
-    server.start();
+    server.start(args);
+  }
+
+  static boolean hasCapability(String[] args, String capability) {
+    for (String arg : args) {
+      if (arg.startsWith("--caps=") && arg.substring("--caps=".length()).contains(capability)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   static SelenideConfig parseConfig(String[] args) {
