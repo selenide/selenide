@@ -72,6 +72,18 @@ class SelenideMcpServerTest {
   }
 
   @Test
+  void hasCapabilityDoesNotSubstringMatch() {
+    assertThat(SelenideMcpServer.hasCapability(
+      new String[]{"--caps=nocodegen"}, "codegen")).isFalse();
+  }
+
+  @Test
+  void hasCapabilityMultipleCaps() {
+    assertThat(SelenideMcpServer.hasCapability(
+      new String[]{"--caps=inspect,codegen"}, "codegen")).isTrue();
+  }
+
+  @Test
   void hasCapabilityNoFlag() {
     assertThat(SelenideMcpServer.hasCapability(
       new String[]{"--browser=chrome"}, "codegen")).isFalse();
