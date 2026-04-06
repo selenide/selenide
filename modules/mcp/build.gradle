@@ -20,7 +20,8 @@ shadowJar {
   archiveBaseName.set('selenide-mcp')
   archiveClassifier.set('')
   manifest {
-    attributes 'Main-Class': 'com.codeborne.selenide.mcp.SelenideMcpServer'
+    attributes 'Main-Class': 'com.codeborne.selenide.mcp.SelenideMcpServer',
+      'Implementation-Version': project.version
   }
   mergeServiceFiles()
 }
