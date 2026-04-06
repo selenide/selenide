@@ -12,7 +12,20 @@ import java.util.List;
 
 class DragAndDropTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"source":{"type":"string","description":"CSS selector, XPath, or text= selector for the source element"},"target":{"type":"string","description":"CSS selector, XPath, or text= selector for the target element"}},"required":["source","target"]}
+      {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "CSS selector, XPath, or text= selector for the source element"
+          },
+          "target": {
+            "type": "string",
+            "description": "CSS selector, XPath, or text= selector for the target element"
+          }
+        },
+        "required": ["source", "target"]
+      }
       """;
 
   private final BrowserSession session;

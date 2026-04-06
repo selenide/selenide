@@ -10,7 +10,16 @@ import java.util.List;
 
 class HandleDialogTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"accept":{"type":"boolean","description":"True to accept/confirm the dialog, false to dismiss/cancel it"}},"required":["accept"]}
+      {
+        "type": "object",
+        "properties": {
+          "accept": {
+            "type": "boolean",
+            "description": "True to accept/confirm the dialog, false to dismiss/cancel it"
+          }
+        },
+        "required": ["accept"]
+      }
       """;
 
   private final BrowserSession session;

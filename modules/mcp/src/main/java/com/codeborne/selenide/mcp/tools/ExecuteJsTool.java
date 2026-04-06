@@ -10,7 +10,16 @@ import java.util.List;
 
 class ExecuteJsTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"code":{"type":"string","description":"JavaScript code to execute in the browser"}},"required":["code"]}
+      {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "JavaScript code to execute in the browser"
+          }
+        },
+        "required": ["code"]
+      }
       """;
 
   private final BrowserSession session;

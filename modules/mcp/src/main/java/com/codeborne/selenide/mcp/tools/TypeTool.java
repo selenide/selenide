@@ -11,7 +11,24 @@ import java.util.List;
 
 class TypeTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"selector":{"type":"string","description":"CSS selector, XPath, or text= selector"},"text":{"type":"string","description":"Text to type into the element"},"submit":{"type":"boolean","description":"Press Enter after typing"}},"required":["selector","text"]}
+      {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector, XPath, or text= selector"
+          },
+          "text": {
+            "type": "string",
+            "description": "Text to type into the element"
+          },
+          "submit": {
+            "type": "boolean",
+            "description": "Press Enter after typing"
+          }
+        },
+        "required": ["selector", "text"]
+      }
       """;
 
   private final BrowserSession session;

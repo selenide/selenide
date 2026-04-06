@@ -14,7 +14,15 @@ import java.util.List;
 
 class ScreenshotTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"selector":{"type":"string","description":"CSS selector, XPath, or text= selector for a specific element (optional; captures full page if omitted)"}}}
+      {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector, XPath, or text= selector for a specific element (optional; captures full page if omitted)"
+          }
+        }
+      }
       """;
 
   private final BrowserSession session;

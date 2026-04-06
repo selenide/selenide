@@ -13,7 +13,16 @@ import java.util.logging.Level;
 
 class ConsoleLogsTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"level":{"type":"string","enum":["ALL","SEVERE","WARNING","INFO"],"description":"Minimum log level to return (default ALL)"}}}
+      {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "string",
+            "enum": ["ALL", "SEVERE", "WARNING", "INFO"],
+            "description": "Minimum log level to return (default ALL)"
+          }
+        }
+      }
       """;
 
   private final BrowserSession session;

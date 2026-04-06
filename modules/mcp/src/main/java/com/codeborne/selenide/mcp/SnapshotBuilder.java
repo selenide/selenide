@@ -17,10 +17,10 @@ public class SnapshotBuilder {
   }
 
   private static String loadSnapshotJs() {
-    try (var is = SnapshotBuilder.class.getResourceAsStream("snapshot.js")) {
-      if (is == null) throw new IllegalStateException("snapshot.js not found");
-      return new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
-        .lines().collect(Collectors.joining("\n"));
+    var is = SnapshotBuilder.class.getResourceAsStream("snapshot.js");
+    if (is == null) throw new IllegalStateException("snapshot.js not found");
+    try (is; var reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+      return reader.lines().collect(Collectors.joining("\n"));
     }
     catch (Exception e) {
       throw new IllegalStateException("Failed to load snapshot.js", e);

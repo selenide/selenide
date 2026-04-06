@@ -12,7 +12,21 @@ import java.util.List;
 
 class UploadFileTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"selector":{"type":"string","description":"CSS selector, XPath, or text= selector for the file input element"},"paths":{"type":"array","items":{"type":"string"},"description":"List of absolute file paths to upload"}},"required":["selector","paths"]}
+      {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector, XPath, or text= selector for the file input element"
+          },
+          "paths": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "List of absolute file paths to upload"
+          }
+        },
+        "required": ["selector", "paths"]
+      }
       """;
 
   private final BrowserSession session;

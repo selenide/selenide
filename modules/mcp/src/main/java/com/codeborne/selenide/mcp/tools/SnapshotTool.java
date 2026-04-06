@@ -11,7 +11,28 @@ import java.util.List;
 
 class SnapshotTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"mode":{"type":"string","enum":["action","assert","full"],"description":"Snapshot mode: action=interactive elements only, assert=interactive+text, full=all elements"},"selector":{"type":"string","description":"CSS selector to use as root (optional; defaults to document.body)"},"visibleOnly":{"type":"boolean","description":"Include only visible elements (default true)"},"maxDepth":{"type":"integer","description":"Maximum DOM depth to traverse (optional)"}}}
+      {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": ["action", "assert", "full"],
+            "description": "Snapshot mode: action=interactive elements only, assert=interactive+text, full=all elements"
+          },
+          "selector": {
+            "type": "string",
+            "description": "CSS selector to use as root (optional; defaults to document.body)"
+          },
+          "visibleOnly": {
+            "type": "boolean",
+            "description": "Include only visible elements (default true)"
+          },
+          "maxDepth": {
+            "type": "integer",
+            "description": "Maximum DOM depth to traverse (optional)"
+          }
+        }
+      }
       """;
 
   private final BrowserSession session;

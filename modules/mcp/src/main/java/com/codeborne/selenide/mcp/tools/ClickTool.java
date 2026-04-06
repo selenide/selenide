@@ -11,7 +11,24 @@ import java.util.List;
 
 class ClickTool {
   private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{"selector":{"type":"string","description":"CSS selector, XPath, or text= selector"},"doubleClick":{"type":"boolean","description":"Perform a double click"},"contextClick":{"type":"boolean","description":"Perform a right-click (context click)"}},"required":["selector"]}
+      {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector, XPath, or text= selector"
+          },
+          "doubleClick": {
+            "type": "boolean",
+            "description": "Perform a double click"
+          },
+          "contextClick": {
+            "type": "boolean",
+            "description": "Perform a right-click (context click)"
+          }
+        },
+        "required": ["selector"]
+      }
       """;
 
   private final BrowserSession session;
