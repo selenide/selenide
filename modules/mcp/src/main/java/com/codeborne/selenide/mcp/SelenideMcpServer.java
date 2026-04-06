@@ -1,6 +1,7 @@
 package com.codeborne.selenide.mcp;
 
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.mcp.tools.ElementInteractionTools;
 import com.codeborne.selenide.mcp.tools.NavigationTools;
 import io.modelcontextprotocol.json.McpJsonDefaults;
 import io.modelcontextprotocol.server.McpServer;
@@ -22,6 +23,7 @@ public class SelenideMcpServer {
     McpSyncServer server = McpServer.sync(transport)
       .serverInfo("selenide-mcp", "1.0.0")
       .tools(NavigationTools.specs(session))
+      .tools(ElementInteractionTools.specs(session))
       .build();
 
     CountDownLatch latch = new CountDownLatch(1);
