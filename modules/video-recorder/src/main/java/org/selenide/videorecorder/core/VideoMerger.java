@@ -52,8 +52,9 @@ class VideoMerger {
     Dimension size = videoSize();
     FFmpegBuilder builder = new FFmpegBuilder()
       .addExtraArgs("-framerate", String.valueOf(frameRate(screenshots)))
-      .addInput(screenshotsFolder.getAbsolutePath() + "/screenshot.%d.png")
       .setVideoFilter("pad=%d:%d:0:0:color=black".formatted(even(size.getWidth()), even(size.getHeight())))
+      .addInput(screenshotsFolder.getAbsolutePath() + "/screenshot.%d.png")
+      .done()
       .addOutput(videoFile.toAbsolutePath().toString())
       .setVideoFrameRate(config.fps(), 1)
       .setVideoCodec("h264")
