@@ -15,6 +15,8 @@ chromedriver.log
 integration/ScreenshotTest/canTakeScreenshotOfElement/
 classes
 
+.mcp.json
+
 # Ignore all binary files
 modules/*/bin
 statics/bin
