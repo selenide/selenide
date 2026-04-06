@@ -1,50 +1,33 @@
 package com.codeborne.selenide.mcp.tools;
 
 import com.codeborne.selenide.mcp.BrowserSession;
-import com.codeborne.selenide.mcp.ToolErrorHandler;
-import io.modelcontextprotocol.json.McpJsonDefaults;
-import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
 
-import java.util.List;
+import java.util.Map;
 
-class ForwardTool {
-  private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{}}
-      """;
-
-  private final BrowserSession session;
-  private final ToolErrorHandler errorHandler = new ToolErrorHandler();
-
+class ForwardTool extends McpTool {
   ForwardTool(BrowserSession session) {
-    this.session = session;
+    super(session);
   }
 
-  McpServerFeatures.SyncToolSpecification spec() {
-    McpSchema.Tool tool = McpSchema.Tool.builder()
-      .name("browser_forward")
-      .description("Navigate the browser forward in history")
-      .inputSchema(McpJsonDefaults.getMapper(), INPUT_SCHEMA)
-      .build();
+  @Override
+  String name() {
+    return "browser_forward";
+  }
 
-    return McpServerFeatures.SyncToolSpecification.builder()
-      .tool(tool)
-      .callHandler((exchange, request) -> {
-        try {
-          session.getDriver().forward();
-          String currentUrl = session.getDriver().url();
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent("Navigated forward to: " + currentUrl)))
-            .isError(false)
-            .build();
-        }
-        catch (Exception e) {
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(errorHandler.formatError(e, "forward"))))
-            .isError(true)
-            .build();
-        }
-      })
-      .build();
+  @Override
+  String description() {
+    return "Navigate the browser forward in history";
+  }
+
+  @Override
+  String inputSchema() {
+    return EMPTY_SCHEMA;
+  }
+
+  @Override
+  McpSchema.CallToolResult execute(Map<String, Object> args) {
+    session.getDriver().forward();
+    return success("Navigated forward to: " + session.getDriver().url());
   }
 }

@@ -3,6 +3,22 @@ package com.codeborne.selenide.mcp;
 import com.codeborne.selenide.Selectors;
 import org.openqa.selenium.By;
 
+/**
+ * Parses selector strings into Selenium {@link By} locators.
+ * <p>
+ * Supported selector formats:
+ * <ul>
+ *   <li>CSS selectors: {@code #id}, {@code .class}, {@code tag.class}, {@code input[type=email]}</li>
+ *   <li>XPath: strings starting with {@code //} or {@code ./}</li>
+ *   <li>Text: {@code text=Sign In} (exact text match)</li>
+ *   <li>Attribute shorthand: {@code data-testid=submit}, {@code name=email}</li>
+ * </ul>
+ * <p>
+ * Limitation: attribute shorthand detection uses a heuristic — the part before {@code =}
+ * must match {@code [a-zA-Z][a-zA-Z0-9-]*} and the selector must not contain {@code [}.
+ * Complex CSS selectors with {@code =} (e.g. {@code div>input[type=text]}) are handled
+ * correctly because they contain {@code [}, but unusual edge cases may be misidentified.
+ */
 public class ElementResolver {
   public By resolve(String selector) {
     if (selector.startsWith("//") || selector.startsWith("./")) {

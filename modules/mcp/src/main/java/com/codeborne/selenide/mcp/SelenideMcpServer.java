@@ -20,7 +20,6 @@ public class SelenideMcpServer {
     this.session = new BrowserSession(config);
   }
 
-  @SuppressWarnings("unchecked")
   public void start(String[] args) {
     StdioServerTransportProvider transport = new StdioServerTransportProvider(McpJsonDefaults.getMapper());
 

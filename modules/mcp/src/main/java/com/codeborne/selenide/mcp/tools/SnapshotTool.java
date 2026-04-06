@@ -2,26 +2,41 @@ package com.codeborne.selenide.mcp.tools;
 
 import com.codeborne.selenide.mcp.BrowserSession;
 import com.codeborne.selenide.mcp.SnapshotBuilder;
-import com.codeborne.selenide.mcp.ToolErrorHandler;
-import io.modelcontextprotocol.json.McpJsonDefaults;
-import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
 
-import java.util.List;
+import java.util.Map;
 
-class SnapshotTool {
-  private static final String INPUT_SCHEMA = """
+class SnapshotTool extends McpTool {
+  private static final SnapshotBuilder SNAPSHOT_BUILDER = new SnapshotBuilder();
+
+  SnapshotTool(BrowserSession session) {
+    super(session);
+  }
+
+  @Override
+  String name() {
+    return "browser_snapshot";
+  }
+
+  @Override
+  String description() {
+    return "Get a structured snapshot of the page DOM for inspection and automation";
+  }
+
+  @Override
+  String inputSchema() {
+    return """
       {
         "type": "object",
         "properties": {
           "mode": {
             "type": "string",
             "enum": ["action", "assert", "full"],
-            "description": "Snapshot mode: action=interactive elements only, assert=interactive+text, full=all elements"
+            "description": "action=interactive only, assert=interactive+text, full=all"
           },
           "selector": {
             "type": "string",
-            "description": "CSS selector to use as root (optional; defaults to document.body)"
+            "description": "CSS selector as root (optional; defaults to body)"
           },
           "visibleOnly": {
             "type": "boolean",
@@ -34,44 +49,25 @@ class SnapshotTool {
         }
       }
       """;
-
-  private final BrowserSession session;
-  private final SnapshotBuilder snapshotBuilder = new SnapshotBuilder();
-  private final ToolErrorHandler errorHandler = new ToolErrorHandler();
-
-  SnapshotTool(BrowserSession session) {
-    this.session = session;
   }
 
-  McpServerFeatures.SyncToolSpecification spec() {
-    McpSchema.Tool tool = McpSchema.Tool.builder()
-      .name("browser_snapshot")
-      .description("Get a structured snapshot of the page DOM for inspection and automation")
-      .inputSchema(McpJsonDefaults.getMapper(), INPUT_SCHEMA)
-      .build();
+  @Override
+  McpSchema.CallToolResult execute(Map<String, Object> args) {
+    String mode = (String) args.getOrDefault("mode", "assert");
+    String selector = (String) args.get("selector");
+    Object visibleOnlyRaw = args.get("visibleOnly");
+    boolean visibleOnly = visibleOnlyRaw == null
+      || Boolean.TRUE.equals(visibleOnlyRaw);
+    Number maxDepthRaw = (Number) args.get("maxDepth");
+    Integer maxDepth = maxDepthRaw != null ? maxDepthRaw.intValue() : null;
+    String result = SNAPSHOT_BUILDER.buildSnapshot(
+      session.getDriver(), selector, mode, visibleOnly, maxDepth);
+    return success(result);
+  }
 
-    return McpServerFeatures.SyncToolSpecification.builder()
-      .tool(tool)
-      .callHandler((exchange, request) -> {
-        String mode = (String) request.arguments().getOrDefault("mode", "assert");
-        String selector = (String) request.arguments().get("selector");
-        Object visibleOnlyRaw = request.arguments().get("visibleOnly");
-        boolean visibleOnly = visibleOnlyRaw == null || Boolean.TRUE.equals(visibleOnlyRaw);
-        Integer maxDepth = (Integer) request.arguments().get("maxDepth");
-        try {
-          String result = snapshotBuilder.buildSnapshot(session.getDriver(), selector, mode, visibleOnly, maxDepth);
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(result)))
-            .isError(false)
-            .build();
-        }
-        catch (Exception e) {
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(errorHandler.formatError(e, selector != null ? selector : "(page)"))))
-            .isError(true)
-            .build();
-        }
-      })
-      .build();
+  @Override
+  protected String errorContext(Map<String, Object> args) {
+    String selector = (String) args.get("selector");
+    return selector != null ? selector : "(page)";
   }
 }

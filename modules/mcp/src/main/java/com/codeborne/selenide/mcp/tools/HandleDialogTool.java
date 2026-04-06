@@ -1,68 +1,68 @@
 package com.codeborne.selenide.mcp.tools;
 
 import com.codeborne.selenide.mcp.BrowserSession;
-import com.codeborne.selenide.mcp.ToolErrorHandler;
-import io.modelcontextprotocol.json.McpJsonDefaults;
-import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
 
-import java.util.List;
+import java.util.Map;
 
-class HandleDialogTool {
-  private static final String INPUT_SCHEMA = """
+class HandleDialogTool extends McpTool {
+  HandleDialogTool(BrowserSession session) {
+    super(session);
+  }
+
+  @Override
+  String name() {
+    return "browser_handle_dialog";
+  }
+
+  @Override
+  String description() {
+    return "Accept or dismiss a browser dialog (alert, confirm, prompt)";
+  }
+
+  @Override
+  String inputSchema() {
+    return """
       {
         "type": "object",
         "properties": {
           "accept": {
             "type": "boolean",
-            "description": "True to accept/confirm the dialog, false to dismiss/cancel it"
+            "description": "True to accept, false to dismiss"
+          },
+          "promptText": {
+            "type": "string",
+            "description": "Text to enter into a prompt dialog before accepting"
           }
         },
         "required": ["accept"]
       }
       """;
-
-  private final BrowserSession session;
-  private final ToolErrorHandler errorHandler = new ToolErrorHandler();
-
-  HandleDialogTool(BrowserSession session) {
-    this.session = session;
   }
 
-  McpServerFeatures.SyncToolSpecification spec() {
-    McpSchema.Tool tool = McpSchema.Tool.builder()
-      .name("browser_handle_dialog")
-      .description("Accept or dismiss a browser dialog (alert, confirm, prompt)")
-      .inputSchema(McpJsonDefaults.getMapper(), INPUT_SCHEMA)
-      .build();
+  @Override
+  McpSchema.CallToolResult execute(Map<String, Object> args) {
+    Boolean accept = (Boolean) args.get("accept");
+    String promptText = (String) args.get("promptText");
+    String dialogText;
 
-    return McpServerFeatures.SyncToolSpecification.builder()
-      .tool(tool)
-      .callHandler((exchange, request) -> {
-        Boolean accept = (Boolean) request.arguments().get("accept");
-        try {
-          if (Boolean.TRUE.equals(accept)) {
-            session.getDriver().modal().confirm();
-            return McpSchema.CallToolResult.builder()
-              .content(List.of(new McpSchema.TextContent("Dialog accepted")))
-              .isError(false)
-              .build();
-          }
-          else {
-            session.getDriver().modal().dismiss();
-            return McpSchema.CallToolResult.builder()
-              .content(List.of(new McpSchema.TextContent("Dialog dismissed")))
-              .isError(false)
-              .build();
-          }
-        }
-        catch (Exception e) {
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(errorHandler.formatError(e, "(dialog)"))))
-            .isError(true)
-            .build();
-        }
-      })
-      .build();
+    if (Boolean.TRUE.equals(accept)) {
+      if (promptText != null) {
+        dialogText = session.getDriver().modal().prompt(promptText);
+      }
+      else {
+        dialogText = session.getDriver().modal().confirm();
+      }
+      return success("Dialog accepted. Text: " + dialogText);
+    }
+    else {
+      dialogText = session.getDriver().modal().dismiss();
+      return success("Dialog dismissed. Text: " + dialogText);
+    }
+  }
+
+  @Override
+  protected String errorContext(Map<String, Object> args) {
+    return "(dialog)";
   }
 }

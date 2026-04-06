@@ -1,82 +1,72 @@
 package com.codeborne.selenide.mcp.tools;
 
 import com.codeborne.selenide.mcp.BrowserSession;
-import com.codeborne.selenide.mcp.ElementResolver;
-import com.codeborne.selenide.mcp.ToolErrorHandler;
-import io.modelcontextprotocol.json.McpJsonDefaults;
-import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
 import org.openqa.selenium.Keys;
 
-import java.util.List;
+import java.util.Map;
 
-class PressKeyTool {
-  private static final String INPUT_SCHEMA = """
+class PressKeyTool extends McpTool {
+  PressKeyTool(BrowserSession session) {
+    super(session);
+  }
+
+  @Override
+  String name() {
+    return "browser_press_key";
+  }
+
+  @Override
+  String description() {
+    return "Press a keyboard key on an element or the focused element";
+  }
+
+  @Override
+  String inputSchema() {
+    return """
       {
         "type": "object",
         "properties": {
           "key": {
             "type": "string",
-            "description": "Key to press: enter, escape, tab, or any Keys enum name"
+            "description": "Key to press: enter, escape, tab, or Keys enum name"
           },
           "selector": {
             "type": "string",
-            "description": "CSS selector, XPath, or text= selector (optional; uses focused element if omitted)"
+            "description": "Selector (optional; uses focused element if omitted)"
           }
         },
         "required": ["key"]
       }
       """;
-
-  private final BrowserSession session;
-  private final ElementResolver resolver = new ElementResolver();
-  private final ToolErrorHandler errorHandler = new ToolErrorHandler();
-
-  PressKeyTool(BrowserSession session) {
-    this.session = session;
   }
 
-  McpServerFeatures.SyncToolSpecification spec() {
-    McpSchema.Tool tool = McpSchema.Tool.builder()
-      .name("browser_press_key")
-      .description("Press a keyboard key on an element or the currently focused element")
-      .inputSchema(McpJsonDefaults.getMapper(), INPUT_SCHEMA)
-      .build();
-
-    return McpServerFeatures.SyncToolSpecification.builder()
-      .tool(tool)
-      .callHandler((exchange, request) -> {
-        String key = (String) request.arguments().get("key");
-        String selector = (String) request.arguments().get("selector");
+  @Override
+  McpSchema.CallToolResult execute(Map<String, Object> args) {
+    String key = (String) args.get("key");
+    String selector = (String) args.get("selector");
+    var element = selector != null
+      ? session.getDriver().$(resolve(selector))
+      : session.getDriver().getFocusedElement();
+    switch (key.toLowerCase()) {
+      case "enter" -> element.pressEnter();
+      case "escape" -> element.pressEscape();
+      case "tab" -> element.pressTab();
+      default -> {
         try {
-          var element = selector != null
-            ? session.getDriver().$(resolver.resolve(selector))
-            : session.getDriver().getFocusedElement();
-          switch (key.toLowerCase()) {
-            case "enter" -> element.pressEnter();
-            case "escape" -> element.pressEscape();
-            case "tab" -> element.pressTab();
-            default -> {
-              try {
-                element.sendKeys(Keys.valueOf(key.toUpperCase()));
-              }
-              catch (IllegalArgumentException ignored) {
-                element.sendKeys(key);
-              }
-            }
-          }
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent("Pressed key: " + key)))
-            .isError(false)
-            .build();
+          element.sendKeys(Keys.valueOf(key.toUpperCase()));
         }
-        catch (Exception e) {
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(errorHandler.formatError(e, selector != null ? selector : "(focused element)"))))
-            .isError(true)
-            .build();
+        catch (IllegalArgumentException ignored) {
+          element.sendKeys(key);
         }
-      })
-      .build();
+      }
+    }
+    return success("Pressed key: " + key);
+  }
+
+  @Override
+  protected String errorContext(Map<String, Object> args) {
+    String selector = (String) args.get("selector");
+    return selector != null ? selector : "(focused element)";
   }
 }

@@ -1,49 +1,32 @@
 package com.codeborne.selenide.mcp.tools;
 
 import com.codeborne.selenide.mcp.BrowserSession;
-import com.codeborne.selenide.mcp.ToolErrorHandler;
-import io.modelcontextprotocol.json.McpJsonDefaults;
-import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
 
-import java.util.List;
+import java.util.Map;
 
-class GetUrlTool {
-  private static final String INPUT_SCHEMA = """
-      {"type":"object","properties":{}}
-      """;
-
-  private final BrowserSession session;
-  private final ToolErrorHandler errorHandler = new ToolErrorHandler();
-
+class GetUrlTool extends McpTool {
   GetUrlTool(BrowserSession session) {
-    this.session = session;
+    super(session);
   }
 
-  McpServerFeatures.SyncToolSpecification spec() {
-    McpSchema.Tool tool = McpSchema.Tool.builder()
-      .name("browser_get_url")
-      .description("Get the current URL of the browser")
-      .inputSchema(McpJsonDefaults.getMapper(), INPUT_SCHEMA)
-      .build();
+  @Override
+  String name() {
+    return "browser_get_url";
+  }
 
-    return McpServerFeatures.SyncToolSpecification.builder()
-      .tool(tool)
-      .callHandler((exchange, request) -> {
-        try {
-          String currentUrl = session.getDriver().getWebDriver().getCurrentUrl();
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(currentUrl)))
-            .isError(false)
-            .build();
-        }
-        catch (Exception e) {
-          return McpSchema.CallToolResult.builder()
-            .content(List.of(new McpSchema.TextContent(errorHandler.formatError(e, "get_url"))))
-            .isError(true)
-            .build();
-        }
-      })
-      .build();
+  @Override
+  String description() {
+    return "Get the current URL of the browser";
+  }
+
+  @Override
+  String inputSchema() {
+    return EMPTY_SCHEMA;
+  }
+
+  @Override
+  McpSchema.CallToolResult execute(Map<String, Object> args) {
+    return success(session.getDriver().url());
   }
 }
