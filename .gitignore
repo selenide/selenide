@@ -12,10 +12,11 @@ out
 .classpath
 chromedriver.log
 .settings
-integration/ScreenshotTest/canTakeScreenshotOfElement/
 classes
 
-.mcp.json
+# Ignore AI stuff
+/.mcp.json
+/.claude/settings.local.json
 
 # Ignore all binary files
 modules/*/bin
