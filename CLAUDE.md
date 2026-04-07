@@ -27,6 +27,8 @@ Selenide is a Java framework providing a concise fluent API for Selenium WebDriv
 ./gradlew allTests   # clean + check + firefox_headless + chrome_headless
 ```
 
+Before submitting a PR or pushing a branch, check that command `./gradlew javadocForSite` is not broken. 
+
 ## Architecture
 
 ### Module Structure
@@ -73,6 +75,11 @@ All plugin modules depend on `statics` (which transitively provides `core`).
 - **Max cyclomatic complexity: 11**.
 - LF line endings, newline at end of file.
 - Checkstyle (`maxWarnings = 0`) and SpotBugs (effort MAX) run as part of `check`. Zero warnings policy.
+- Prefer using static imports to make code readable. E.g. use `UTF_8`, not `StandardCharsets.UTF_8`.
+- Extract code blocks from long methods to shorter methods with clear names expressing their intention.
+- Prefer immutable objects. Prefer private final non-nullable fields.
+- Write tests for new code. Prefer integration tests for any actions related to browser, and 
+  unit-tests for algorithmic code (regular expressions, string manipulation etc.) 
 
 ## Branching
 
