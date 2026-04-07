@@ -12,7 +12,8 @@ public class CodegenTools {
   public static List<McpServerFeatures.SyncToolSpecification> specs(BrowserSession session) {
     return List.of(
       new GenerateLocatorTool(session).spec(),
-      new GeneratePageObjectTool(session).spec()
+      new GeneratePageObjectTool(session).spec(),
+      new DocsTool(session).spec()
     );
   }
 }
