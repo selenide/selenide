@@ -22,9 +22,20 @@ class LocatorGeneratorTest {
   }
 
   @Test
-  void ranksTestIdHighest() {
+  void ranksTestIdHighest_defaultAttribute() {
     Map<String, Object> element = Map.of(
       "tag", "button", "text", "Submit", "testId", "submit"
+    );
+    List<LocatorGenerator.RankedLocator> locators = generator.rank(element);
+    assertThat(locators.get(0).code()).contains("data-test-id");
+    assertThat(locators.get(0).confidence()).isEqualTo("stable");
+  }
+
+  @Test
+  void ranksTestIdHighest_dataTestid() {
+    Map<String, Object> element = Map.of(
+      "tag", "button", "text", "Submit",
+      "testId", "submit", "testIdAttr", "data-testid"
     );
     List<LocatorGenerator.RankedLocator> locators = generator.rank(element);
     assertThat(locators.get(0).code()).contains("data-testid");

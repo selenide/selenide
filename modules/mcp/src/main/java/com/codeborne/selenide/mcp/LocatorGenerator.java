@@ -13,8 +13,9 @@ public class LocatorGenerator {
 
     String testId = (String) element.get("testId");
     if (testId != null) {
+      String attr = (String) element.getOrDefault("testIdAttr", "data-test-id");
       locators.add(new RankedLocator(
-        "$(byAttribute(\"data-testid\", \"" + escape(testId) + "\"))",
+        "$(byAttribute(\"" + attr + "\", \"" + escape(testId) + "\"))",
         "test-id", "stable"));
     }
     String id = (String) element.get("id");

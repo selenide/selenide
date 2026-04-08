@@ -64,7 +64,16 @@ class GenerateLocatorTool extends McpTool {
     info.put("tag", el.getTagName());
     putIfNotBlank(info, "id", el.getAttribute("id"));
     putIfNotBlank(info, "name", el.getAttribute("name"));
-    putIfNotBlank(info, "testId", el.getAttribute("data-testid"));
+    String testId = el.getAttribute("data-test-id");
+    String testIdAttr = "data-test-id";
+    if (testId == null || testId.isBlank()) {
+      testId = el.getAttribute("data-testid");
+      testIdAttr = "data-testid";
+    }
+    if (testId != null && !testId.isBlank()) {
+      info.put("testId", testId);
+      info.put("testIdAttr", testIdAttr);
+    }
     putIfNotBlank(info, "text", el.getText());
     if (!classes.isEmpty()) info.put("classes", classes);
     return info;
