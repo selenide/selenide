@@ -89,10 +89,10 @@ class ScreenShooter implements Runnable {
 
   /**
    * Take a screenshot using the preferred method. Falls back to standard WebDriver screenshot
-   * if the default photographer (which uses CDP/BiDi) fails — this happens when ScreenShooter
-   * runs on a background thread where CDP sessions are not available.
+   * if the default photographer (which uses CDP/BiDi) fails — e.g., when the CDP protocol
+   * version doesn't match the browser version (no-op DevTools implementation).
    * After the first fallback, all subsequent screenshots use the standard method directly
-   * to avoid repeated CDP exceptions on every frame.
+   * to avoid repeated exceptions on every frame.
    */
   private byte[] takeScreenshotBytes(WebDriver webDriver) {
     if (useStandardScreenshot.get()) {
@@ -105,7 +105,7 @@ class ScreenShooter implements Runnable {
     }
     catch (Exception e) {
       if (webDriver instanceof TakesScreenshot) {
-        log.warn("Screenshot via CDP/BiDi failed (cross-thread?), falling back to standard WebDriver screenshot: {}",
+        log.warn("Screenshot via CDP/BiDi failed, falling back to standard WebDriver screenshot: {}",
           e.getMessage());
         useStandardScreenshot.set(true);
         return takeStandardScreenshot(webDriver);
