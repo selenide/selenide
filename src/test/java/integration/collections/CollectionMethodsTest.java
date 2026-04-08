@@ -166,6 +166,7 @@ final class CollectionMethodsTest extends ITest {
     ElementsCollection filteredRows = $$("#multirowTable tr")
       .filterBy(and("condition name", partialText("Chack"), partialText("Baskerville")));
 
+    setTimeout(1);
     assertThatThrownBy(() -> filteredRows.shouldHave(size(0)))
       .isInstanceOf(ListSizeMismatch.class)
       .hasMessageStartingWith("List size mismatch")
@@ -174,11 +175,12 @@ final class CollectionMethodsTest extends ITest {
         collection: #multirowTable tr.filter(condition name: partial text "Chack" and partial text "Baskerville")""")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
-      .hasMessageContaining("Timeout: ");
+      .hasMessageContaining("Timeout: 1ms");
   }
 
   @Test
   void errorMessageShouldShow_whichElementInChainWasNotFound() {
+    setTimeout(1);
     assertThatThrownBy(() -> $$("#multirowTable").findBy(text("INVALID-TEXT"))
       .findAll("valid-selector")
       .shouldHave(texts("foo bar")))
@@ -280,6 +282,8 @@ final class CollectionMethodsTest extends ITest {
 
     collection.get(0).shouldHave(text("@two.eu"));
     collection.get(1).shouldHave(text("@four.ee"));
+
+    setTimeout(1);
     assertThatThrownBy(() -> collection.get(2).getText())
       .isInstanceOf(IndexOutOfBoundsException.class)
       .hasMessage("Index: 2, size: 2");
@@ -312,6 +316,7 @@ final class CollectionMethodsTest extends ITest {
     collection.get(0).shouldHave(text("@two.eu"));
     collection.get(1).shouldHave(text("@four.ee"));
 
+    setTimeout(1);
     assertThatThrownBy(() -> collection.get(2).getText())
       .isInstanceOf(IndexOutOfBoundsException.class)
       .hasMessage("Index: 2");
@@ -331,6 +336,7 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void errorWhenFindInLastElementOfEmptyCollection() {
+    setTimeout(1);
     assertThatThrownBy(() -> $$("#not_exist").last().$("#multirowTable").should(exist))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {#not_exist:last}")

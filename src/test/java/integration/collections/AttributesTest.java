@@ -49,6 +49,7 @@ public class AttributesTest extends ITest {
 
   @Test
   void errorMessage() {
+    setTimeout(1);
     assertThatThrownBy(() -> $$(".element").shouldHave(attributes("data-value", "1  uno", "2  duo", "3  trio")))
       .isInstanceOf(AttributesMismatch.class)
       .hasMessageStartingWith("Attribute \"data-value\" values mismatch (#0 expected: \"1  uno\", actual: \"1 uno\")")
@@ -60,6 +61,7 @@ public class AttributesTest extends ITest {
 
   @Test
   void attributesCheckThrowsElementNotFound() {
+    setTimeout(1);
     assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(attributes("data-value", "1 uno", "2 duo", "3 trio")))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {.non-existing-elements}")
@@ -71,6 +73,7 @@ public class AttributesTest extends ITest {
 
   @Test
   void attributesCheckThrowsAttributesMismatchIfAttributeNotExist() {
+    setTimeout(1);
     assertThatThrownBy(() -> $$(".element").shouldHave(attributes("not-existing-attribute", "1 uno", "2 duo", "3 trio")))
       .isInstanceOf(AttributesMismatch.class)
       .hasMessageStartingWith("Attribute \"not-existing-attribute\" values mismatch")
