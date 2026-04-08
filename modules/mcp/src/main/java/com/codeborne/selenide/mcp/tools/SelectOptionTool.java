@@ -7,17 +7,8 @@ import java.util.Map;
 
 class SelectOptionTool extends McpTool {
   SelectOptionTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_select_option";
-  }
-
-  @Override
-  String description() {
-    return "Select an option in a <select> element by text, value, or index";
+    super(session, "browser_select_option",
+      "Select an option in a <select> element by text, value, or index");
   }
 
   @Override

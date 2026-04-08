@@ -7,17 +7,7 @@ import java.util.Map;
 
 class TypeTool extends McpTool {
   TypeTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_type";
-  }
-
-  @Override
-  String description() {
-    return "Type text into an element";
+    super(session, "browser_type", "Type text into an element");
   }
 
   @Override

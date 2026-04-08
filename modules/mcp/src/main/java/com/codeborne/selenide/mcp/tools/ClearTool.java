@@ -7,17 +7,7 @@ import java.util.Map;
 
 class ClearTool extends McpTool {
   ClearTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_clear";
-  }
-
-  @Override
-  String description() {
-    return "Clear the value of an input element";
+    super(session, "browser_clear", "Clear the value of an input element");
   }
 
   @Override

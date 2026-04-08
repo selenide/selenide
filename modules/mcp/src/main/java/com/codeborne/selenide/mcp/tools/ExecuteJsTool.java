@@ -7,17 +7,8 @@ import java.util.Map;
 
 class ExecuteJsTool extends McpTool {
   ExecuteJsTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_execute_js";
-  }
-
-  @Override
-  String description() {
-    return "Execute JavaScript code in the browser and return the result";
+    super(session, "browser_execute_js",
+      "Execute JavaScript code in the browser and return the result");
   }
 
   @Override

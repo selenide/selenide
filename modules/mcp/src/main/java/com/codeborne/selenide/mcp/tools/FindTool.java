@@ -8,17 +8,8 @@ import java.util.Map;
 
 class FindTool extends McpTool {
   FindTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_find";
-  }
-
-  @Override
-  String description() {
-    return "Find a single element and return its properties";
+    super(session, "browser_find",
+      "Find a single element and return its properties");
   }
 
   @Override

@@ -11,17 +11,8 @@ import java.util.logging.Level;
 
 class ConsoleLogsTool extends McpTool {
   ConsoleLogsTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_console_logs";
-  }
-
-  @Override
-  String description() {
-    return "Retrieve browser console log entries (Chromium-based browsers only)";
+    super(session, "browser_console_logs",
+      "Retrieve browser console log entries (Chromium-based browsers only)");
   }
 
   @Override

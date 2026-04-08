@@ -7,17 +7,7 @@ import java.util.Map;
 
 class CloseTool extends McpTool {
   CloseTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_close";
-  }
-
-  @Override
-  String description() {
-    return "Close the browser";
+    super(session, "browser_close", "Close the browser");
   }
 
   @Override

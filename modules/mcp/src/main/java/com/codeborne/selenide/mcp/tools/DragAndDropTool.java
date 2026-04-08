@@ -8,17 +8,8 @@ import java.util.Map;
 
 class DragAndDropTool extends McpTool {
   DragAndDropTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_drag_and_drop";
-  }
-
-  @Override
-  String description() {
-    return "Drag an element and drop it onto another element";
+    super(session, "browser_drag_and_drop",
+      "Drag an element and drop it onto another element");
   }
 
   @Override

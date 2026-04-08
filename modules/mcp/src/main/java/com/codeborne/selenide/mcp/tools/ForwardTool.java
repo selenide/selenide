@@ -7,17 +7,8 @@ import java.util.Map;
 
 class ForwardTool extends McpTool {
   ForwardTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_forward";
-  }
-
-  @Override
-  String description() {
-    return "Navigate the browser forward in history";
+    super(session, "browser_forward",
+      "Navigate the browser forward in history");
   }
 
   @Override
