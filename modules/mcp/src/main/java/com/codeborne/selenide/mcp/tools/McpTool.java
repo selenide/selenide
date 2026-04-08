@@ -14,6 +14,18 @@ import java.util.Map;
 abstract class McpTool {
   protected static final String EMPTY_SCHEMA =
     "{\"type\":\"object\",\"properties\":{}}";
+  protected static final String SELECTOR_SCHEMA = """
+    {
+      "type": "object",
+      "properties": {
+        "selector": {
+          "type": "string",
+          "description": "CSS selector, XPath, or text= selector"
+        }
+      },
+      "required": ["selector"]
+    }
+    """;
 
   private static final ElementResolver RESOLVER = new ElementResolver();
   private static final ToolErrorHandler ERROR_HANDLER = new ToolErrorHandler();
@@ -28,7 +40,9 @@ abstract class McpTool {
 
   abstract String description();
 
-  abstract String inputSchema();
+  String inputSchema() {
+    return SELECTOR_SCHEMA;
+  }
 
   abstract McpSchema.CallToolResult execute(Map<String, Object> args);
 
