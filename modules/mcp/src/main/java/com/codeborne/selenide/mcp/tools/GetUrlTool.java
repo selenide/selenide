@@ -7,17 +7,7 @@ import java.util.Map;
 
 class GetUrlTool extends McpTool {
   GetUrlTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_get_url";
-  }
-
-  @Override
-  String description() {
-    return "Get the current URL of the browser";
+    super(session, "browser_get_url", "Get the current URL of the browser");
   }
 
   @Override

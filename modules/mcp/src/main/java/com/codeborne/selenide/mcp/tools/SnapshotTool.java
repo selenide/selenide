@@ -10,17 +10,8 @@ class SnapshotTool extends McpTool {
   private static final SnapshotBuilder SNAPSHOT_BUILDER = new SnapshotBuilder();
 
   SnapshotTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_snapshot";
-  }
-
-  @Override
-  String description() {
-    return "Get a structured snapshot of the page DOM for inspection and automation";
+    super(session, "browser_snapshot",
+      "Get a structured snapshot of the page DOM for inspection and automation");
   }
 
   @Override

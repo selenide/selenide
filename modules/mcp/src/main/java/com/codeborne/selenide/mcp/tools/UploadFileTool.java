@@ -9,17 +9,8 @@ import java.util.Map;
 
 class UploadFileTool extends McpTool {
   UploadFileTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_upload_file";
-  }
-
-  @Override
-  String description() {
-    return "Upload one or more files using a file input element";
+    super(session, "browser_upload_file",
+      "Upload one or more files using a file input element");
   }
 
   @Override

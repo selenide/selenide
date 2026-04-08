@@ -7,17 +7,8 @@ import java.util.Map;
 
 class HandleDialogTool extends McpTool {
   HandleDialogTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_handle_dialog";
-  }
-
-  @Override
-  String description() {
-    return "Accept or dismiss a browser dialog (alert, confirm, prompt)";
+    super(session, "browser_handle_dialog",
+      "Accept or dismiss a browser dialog (alert, confirm, prompt)");
   }
 
   @Override

@@ -9,17 +9,8 @@ import java.util.Map;
 
 class FindAllTool extends McpTool {
   FindAllTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_find_all";
-  }
-
-  @Override
-  String description() {
-    return "Find all elements matching a selector and return their properties";
+    super(session, "browser_find_all",
+      "Find all elements matching a selector and return their properties");
   }
 
   @Override

@@ -10,17 +10,8 @@ import java.util.Map;
 
 class ScreenshotTool extends McpTool {
   ScreenshotTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_screenshot";
-  }
-
-  @Override
-  String description() {
-    return "Take a screenshot of the entire page or a specific element";
+    super(session, "browser_screenshot",
+      "Take a screenshot of the entire page or a specific element");
   }
 
   @Override

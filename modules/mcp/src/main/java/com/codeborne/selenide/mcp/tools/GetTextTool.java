@@ -7,17 +7,8 @@ import java.util.Map;
 
 class GetTextTool extends McpTool {
   GetTextTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_get_text";
-  }
-
-  @Override
-  String description() {
-    return "Get the visible text content of an element";
+    super(session, "browser_get_text",
+      "Get the visible text content of an element");
   }
 
   @Override

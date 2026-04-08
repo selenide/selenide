@@ -7,17 +7,7 @@ import java.util.Map;
 
 class HoverTool extends McpTool {
   HoverTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_hover";
-  }
-
-  @Override
-  String description() {
-    return "Hover over an element";
+    super(session, "browser_hover", "Hover over an element");
   }
 
   @Override

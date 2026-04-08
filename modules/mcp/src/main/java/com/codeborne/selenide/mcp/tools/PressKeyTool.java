@@ -8,17 +8,8 @@ import java.util.Map;
 
 class PressKeyTool extends McpTool {
   PressKeyTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_press_key";
-  }
-
-  @Override
-  String description() {
-    return "Press a keyboard key on an element or the focused element";
+    super(session, "browser_press_key",
+      "Press a keyboard key on an element or the focused element");
   }
 
   @Override

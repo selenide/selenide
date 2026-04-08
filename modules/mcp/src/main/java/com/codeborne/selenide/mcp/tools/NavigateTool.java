@@ -7,17 +7,7 @@ import java.util.Map;
 
 class NavigateTool extends McpTool {
   NavigateTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_navigate";
-  }
-
-  @Override
-  String description() {
-    return "Navigate the browser to a URL";
+    super(session, "browser_navigate", "Navigate the browser to a URL");
   }
 
   @Override

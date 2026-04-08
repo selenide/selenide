@@ -7,17 +7,7 @@ import java.util.Map;
 
 class BackTool extends McpTool {
   BackTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_back";
-  }
-
-  @Override
-  String description() {
-    return "Navigate the browser back in history";
+    super(session, "browser_back", "Navigate the browser back in history");
   }
 
   @Override

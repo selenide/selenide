@@ -7,17 +7,7 @@ import java.util.Map;
 
 class ClickTool extends McpTool {
   ClickTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_click";
-  }
-
-  @Override
-  String description() {
-    return "Click an element on the page";
+    super(session, "browser_click", "Click an element on the page");
   }
 
   @Override

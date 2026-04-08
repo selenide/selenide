@@ -10,17 +10,8 @@ class GeneratePageObjectTool extends McpTool {
   private static final SnapshotBuilder SNAPSHOT_BUILDER = new SnapshotBuilder();
 
   GeneratePageObjectTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_generate_page_object";
-  }
-
-  @Override
-  String description() {
-    return "Generate a Selenide page object skeleton for the current page";
+    super(session, "browser_generate_page_object",
+      "Generate a Selenide page object skeleton for the current page");
   }
 
   @Override

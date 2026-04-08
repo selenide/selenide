@@ -14,17 +14,8 @@ class GenerateLocatorTool extends McpTool {
   private static final LocatorGenerator LOCATOR_GENERATOR = new LocatorGenerator();
 
   GenerateLocatorTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_generate_locator";
-  }
-
-  @Override
-  String description() {
-    return "Generate ranked Selenide locators for an element";
+    super(session, "browser_generate_locator",
+      "Generate ranked Selenide locators for an element");
   }
 
   @Override

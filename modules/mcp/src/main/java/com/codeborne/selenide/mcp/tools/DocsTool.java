@@ -18,18 +18,9 @@ class DocsTool extends McpTool {
   );
 
   DocsTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "selenide_docs";
-  }
-
-  @Override
-  String description() {
-    return "Get Selenide API documentation and code examples. "
-      + "Available topics: " + String.join(", ", TOPICS);
+    super(session, "selenide_docs",
+      "Get Selenide API documentation and code examples. "
+        + "Available topics: " + String.join(", ", TOPICS));
   }
 
   @Override

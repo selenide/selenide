@@ -7,17 +7,7 @@ import java.util.Map;
 
 class SetValueTool extends McpTool {
   SetValueTool(BrowserSession session) {
-    super(session);
-  }
-
-  @Override
-  String name() {
-    return "browser_set_value";
-  }
-
-  @Override
-  String description() {
-    return "Set the value of an input element";
+    super(session, "browser_set_value", "Set the value of an input element");
   }
 
   @Override

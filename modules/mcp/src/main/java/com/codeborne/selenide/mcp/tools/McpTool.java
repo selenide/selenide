@@ -30,15 +30,23 @@ abstract class McpTool {
   private static final ElementResolver RESOLVER = new ElementResolver();
   private static final ToolErrorHandler ERROR_HANDLER = new ToolErrorHandler();
 
+  private final String name;
+  private final String description;
   protected final BrowserSession session;
 
-  McpTool(BrowserSession session) {
+  McpTool(BrowserSession session, String name, String description) {
     this.session = session;
+    this.name = name;
+    this.description = description;
   }
 
-  abstract String name();
+  String name() {
+    return name;
+  }
 
-  abstract String description();
+  String description() {
+    return description;
+  }
 
   String inputSchema() {
     return SELECTOR_SCHEMA;
