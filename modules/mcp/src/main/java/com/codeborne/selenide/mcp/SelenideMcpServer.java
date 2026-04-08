@@ -25,7 +25,7 @@ public class SelenideMcpServer {
   public void start(String[] args) {
     StdioServerTransportProvider transport = new StdioServerTransportProvider(McpJsonDefaults.getMapper());
 
-    McpServer.SyncSpecification builder = McpServer.sync(transport)
+    var builder = McpServer.sync(transport)
       .serverInfo("selenide-mcp", getVersion())
       .tools(NavigationTools.specs(session))
       .tools(ElementInteractionTools.specs(session))

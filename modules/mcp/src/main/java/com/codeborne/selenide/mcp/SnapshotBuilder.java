@@ -12,7 +12,7 @@ public class SnapshotBuilder {
 
   public String buildSnapshot(SelenideDriver driver, String selector,
                               String mode, boolean visibleOnly, Integer maxDepth) {
-    String js = "return " + SNAPSHOT_JS + "(arguments[0], arguments[1], arguments[2], arguments[3])";
+    String js = SNAPSHOT_JS + "\nreturn snapshot(arguments[0], arguments[1], arguments[2], arguments[3]);";
     return driver.executeJavaScript(js, selector, mode, visibleOnly, maxDepth);
   }
 

@@ -21,22 +21,6 @@ class GetTextTool extends McpTool {
   }
 
   @Override
-  String inputSchema() {
-    return """
-      {
-        "type": "object",
-        "properties": {
-          "selector": {
-            "type": "string",
-            "description": "CSS selector, XPath, or text= selector"
-          }
-        },
-        "required": ["selector"]
-      }
-      """;
-  }
-
-  @Override
   McpSchema.CallToolResult execute(Map<String, Object> args) {
     String selector = (String) args.get("selector");
     return success(session.getDriver().$(resolve(selector)).getText());

@@ -1,6 +1,6 @@
-(function(rootSelector, mode, visibleOnly, maxDepth) {
-  const INTERACTIVE = ['input','button','a','select','textarea','details','summary'];
-  const TEXT = ['h1','h2','h3','h4','h5','h6','p','span','label','td','th','li','dt','dd'];
+function snapshot(rootSelector, mode, visibleOnly, maxDepth) {
+  const INTERACTIVE = new Set(['input','button','a','select','textarea','details','summary']);
+  const TEXT = new Set(['h1','h2','h3','h4','h5','h6','p','span','label','td','th','li','dt','dd']);
   let counter = 0;
 
   function isVisible(el) {
@@ -13,10 +13,10 @@
 
   function shouldInclude(el, tag) {
     if (mode === 'full') return true;
-    if (mode === 'action') return INTERACTIVE.includes(tag);
+    if (mode === 'action') return INTERACTIVE.has(tag);
     // assert mode
-    if (INTERACTIVE.includes(tag)) return true;
-    if (TEXT.includes(tag) && el.textContent.trim().length > 0) return true;
+    if (INTERACTIVE.has(tag)) return true;
+    if (TEXT.has(tag) && el.textContent.trim().length > 0) return true;
     if (el.getAttribute('role')) return true;
     return false;
   }
@@ -80,4 +80,4 @@
     elementCount: elements.length,
     elements: elements
   });
-})
+}

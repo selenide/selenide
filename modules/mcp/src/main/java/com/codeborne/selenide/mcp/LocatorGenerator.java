@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 public class LocatorGenerator {
+  private static final String STABLE = "stable";
+
   public record RankedLocator(String code, String strategy, String confidence) { }
 
   public List<RankedLocator> rank(Map<String, Object> element) {
@@ -16,18 +18,18 @@ public class LocatorGenerator {
       String attr = (String) element.getOrDefault("testIdAttr", "data-test-id");
       locators.add(new RankedLocator(
         "$(byAttribute(\"" + attr + "\", \"" + escape(testId) + "\"))",
-        "test-id", "stable"));
+        "test-id", STABLE));
     }
     String id = (String) element.get("id");
     if (id != null) {
       locators.add(new RankedLocator(
-        "$(\"#" + escape(id) + "\")", "id", "stable"));
+        "$(\"#" + escape(id) + "\")", "id", STABLE));
     }
     String name = (String) element.get("name");
     if (name != null) {
       locators.add(new RankedLocator(
         "$(\"" + tag + "[name='" + escape(name) + "']\")",
-        "name", "stable"));
+        "name", STABLE));
     }
     @SuppressWarnings("unchecked")
     List<String> classes = (List<String>) element.get("classes");
