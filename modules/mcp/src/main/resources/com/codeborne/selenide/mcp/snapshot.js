@@ -24,8 +24,11 @@
   function selectors(el) {
     const result = [];
     if (el.id) result.push('#' + el.id);
-    const tid = el.dataset.testid || el.dataset.testId;
-    if (tid) result.push('[data-testid="' + tid + '"]');
+    const tid = el.dataset.testId || el.dataset.testid;
+    if (tid) {
+      const attr = el.dataset.testId ? 'data-test-id' : 'data-testid';
+      result.push('[' + attr + '="' + tid + '"]');
+    }
     if (el.name) result.push(el.tagName.toLowerCase() + '[name="' + el.name + '"]');
     const text = el.textContent.trim();
     if (text.length > 0 && text.length < 50) result.push('text=' + text);

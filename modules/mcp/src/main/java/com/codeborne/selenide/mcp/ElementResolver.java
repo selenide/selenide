@@ -11,7 +11,7 @@ import org.openqa.selenium.By;
  *   <li>CSS selectors: {@code #id}, {@code .class}, {@code tag.class}, {@code input[type=email]}</li>
  *   <li>XPath: strings starting with {@code //} or {@code ./}</li>
  *   <li>Text: {@code text=Sign In} (exact text match)</li>
- *   <li>Attribute shorthand: {@code data-testid=submit}, {@code name=email}</li>
+ *   <li>Attribute shorthand: {@code data-test-id=submit}, {@code data-testid=submit}, {@code name=email}</li>
  * </ul>
  * <p>
  * Limitation: attribute shorthand detection uses a heuristic — the part before {@code =}
