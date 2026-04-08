@@ -67,6 +67,7 @@ class ExactTextsCaseSensitiveInAnyOrderTest extends ITest {
 
   @Test
   void throwsElementNotFound() {
+    setTimeout(1);
     assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(exactTextsCaseSensitiveInAnyOrder("content1", "content2")))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {.non-existing-elements}")
