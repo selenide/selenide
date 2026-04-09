@@ -22,15 +22,24 @@ public class WebdriverPhotographer implements Photographer {
 
   @Override
   public <T> Optional<T> takeScreenshot(WebDriver webDriver, OutputType<T> outputType) {
-    if (isDevToolsEnabled(webDriver)) { // Chromium - HasDevTools is the fastest way
-      return Optional.of(outputType.convertFromBase64Png(takeScreenshotWithDevtools((WebDriver & HasDevTools) webDriver)));
+    if (isDevToolsEnabled(webDriver)) {
+      try {
+        return Optional.of(outputType.convertFromBase64Png(takeScreenshotWithDevtools((WebDriver & HasDevTools) webDriver)));
+      }
+      catch (Exception e) {
+        log.warn("Screenshot via DevTools failed, will try other methods: {}", e.getMessage());
+      }
     }
-    else if (isBiDiEnabled(webDriver)) { // Firefox - BiDi is the fastest
-      return Optional.of(outputType.convertFromBase64Png(takeScreenshotWithBidi((WebDriver & HasBiDi) webDriver)));
+    if (isBiDiEnabled(webDriver)) {
+      try {
+        return Optional.of(outputType.convertFromBase64Png(takeScreenshotWithBidi((WebDriver & HasBiDi) webDriver)));
+      }
+      catch (Exception e) {
+        log.warn("Screenshot via BiDi failed, will try other methods: {}", e.getMessage());
+      }
     }
-    else if (webDriver instanceof TakesScreenshot takesScreenshot) { // other browsers
-      T screenshot = takesScreenshot.getScreenshotAs(outputType);
-      return Optional.of(screenshot);
+    if (webDriver instanceof TakesScreenshot takesScreenshot) {
+      return Optional.of(takesScreenshot.getScreenshotAs(outputType));
     }
     return Optional.empty();
   }

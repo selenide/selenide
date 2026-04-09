@@ -2,6 +2,7 @@
 
 ## 7.15.1 (unreleased)
 * #3278 register WebDriver in WebdriversRegistry when set via WebDriverRunner.setWebDriver()
+* #3278 move screenshot fallback from ScreenShooter to WebdriverPhotographer
 * #3278 Video recorder: don't log "Video recorded" when no video file was created
 
 ## 7.15.0 (11.03.2026)
