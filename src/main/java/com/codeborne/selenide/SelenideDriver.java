@@ -21,7 +21,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v145.emulation.Emulation;
+import org.openqa.selenium.devtools.v146.emulation.Emulation;
 import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.support.events.WebDriverListener;
 
