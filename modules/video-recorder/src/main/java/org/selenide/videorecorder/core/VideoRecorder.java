@@ -96,6 +96,7 @@ public class VideoRecorder {
       .map(WebDriverInstance::webDriver);
   }
 
+
   /**
    * FPS times per second
    */
@@ -114,13 +115,18 @@ public class VideoRecorder {
     }
     videoMerger.finish();
 
-    log.info("Video recorded: {}", videoUrl());
-    attachmentHandler.attach(videoMerger.videoFile().toFile());
-
     if (!config.keepScreenshots()) {
       deleteFolder(screenshotsFolder);
     }
-    return Files.exists(videoMerger.videoFile()) ? Optional.of(videoMerger.videoFile()) : Optional.empty();
+
+    Path videoFile = videoMerger.videoFile();
+    if (Files.exists(videoFile)) {
+      log.info("Video recorded: {}", videoUrl());
+      attachmentHandler.attach(videoFile.toFile());
+      return Optional.of(videoFile);
+    }
+    log.debug("No video file created (no screenshots captured?)");
+    return Optional.empty();
   }
 
   /**
