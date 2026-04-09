@@ -4,6 +4,7 @@
 * #3278 register WebDriver in WebdriversRegistry when set via WebDriverRunner.setWebDriver()
 * #3278 fallback taking screenshot to WebDriver method if CDP or BiDi doesn't work
 * #3278 Video recorder: don't log "Video recorded" when no video file was created
+* update Selenium from 4.41.0 to 4.42.0, incl. CDP v145 -> v146
 
 
 ## 7.15.1 (01.04.2026)

@@ -80,7 +80,7 @@ All work on feature branches from `main`, merged back to `main`. Commit messages
 
 ## Key Dependencies
 
-- Selenium WebDriver 4.41.0
+- Selenium WebDriver 4.42.0
 - JUnit 6.0.3 (Jupiter)
-- BrowserUp Proxy 3.2.2
+- BrowserUp Proxy 3.3.0
 - Gradle 8.14.4
