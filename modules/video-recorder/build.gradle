@@ -12,7 +12,7 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
 
-  implementation("net.bramp.ffmpeg:ffmpeg:0.8.0")
+  implementation("net.bramp.ffmpeg:ffmpeg:0.9.2")
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')

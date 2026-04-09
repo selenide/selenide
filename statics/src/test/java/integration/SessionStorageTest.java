@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sessionStorage;
 import static com.codeborne.selenide.SessionStorageConditions.item;
@@ -78,6 +79,7 @@ final class SessionStorageTest extends IntegrationTest {
 
   @Test
   void errorMessageWhenItemHasWrongValue() {
+    timeout = 1;
     $("#button-put").click();
 
     assertThatThrownBy(() ->
@@ -112,6 +114,7 @@ final class SessionStorageTest extends IntegrationTest {
 
   @Test
   void errorMessageWhenItemShouldNotExist() {
+    timeout = 1;
     sessionStorage().setItem("cat", "Tom");
 
     assertThatThrownBy(() ->
@@ -126,6 +129,7 @@ final class SessionStorageTest extends IntegrationTest {
 
   @Test
   void errorMessageWhenItemShouldNotHaveGivenValue() {
+    timeout = 1;
     sessionStorage().setItem("cat", "Tom");
 
     assertThatThrownBy(() ->

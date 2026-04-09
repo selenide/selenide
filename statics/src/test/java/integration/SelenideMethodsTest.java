@@ -108,6 +108,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canGiveElementsHumanReadableNames() {
+    timeout = 1;
     assertThatThrownBy(() -> {
       $(By.xpath("/long/ugly/xpath[1][2][3]")).as("Login button").should(exist);
     })
@@ -169,6 +170,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void innerText_errorMessage() {
+    timeout = 1;
     assertThatThrownBy(() -> $("#theHiddenElement").shouldHave(innerText("Видишь суслика?")))
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("Element should have inner text \"Видишь суслика?\" {#theHiddenElement}")
@@ -177,6 +179,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void innerHtml_cannotBeNull() {
+    timeout = 1;
     assertThat($("br").innerHtml()).isEqualTo("");
     assertThatThrownBy(() -> $("#missing").innerHtml())
       .isInstanceOf(ElementNotFound.class);
@@ -184,6 +187,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void innerText_cannotBeNull() {
+    timeout = 1;
     assertThat($("br").innerText()).isEqualTo("");
     assertThatThrownBy(() -> $("#missing").innerText())
       .isInstanceOf(ElementNotFound.class);
@@ -272,6 +276,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canUseHaveWrapper_errorMessage() {
+    timeout = 1;
     assertThatThrownBy(() -> $("#username-blur-counter").should(have(text("wrong-text"))))
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("Element should have text \"wrong-text\" {#username-blur-counter}")
@@ -286,6 +291,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canUseBeWrapper_errorMessage() {
+    timeout = 1;
     assertThatThrownBy(() -> $("#username-blur-counter").should(be(disabled)))
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("Element should be disabled {#username-blur-counter}");
@@ -305,6 +311,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanCacheWebElement() {
+    timeout = 1;
     SelenideElement cachedElement = $(By.xpath("//select[@name='domain']")).cached();
     assertThat(cachedElement.getTagName()).isEqualTo("select");
 
@@ -330,6 +337,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void shouldNotThrowsElementNotFound() {
+    timeout = 1;
     assertThatThrownBy(() -> $(byText("Unexisting text")).shouldNotBe(hidden))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining("Element not found {by text: Unexisting text}");
@@ -337,6 +345,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void shouldNotThrowsElementMatches() {
+    timeout = 1;
     assertThatThrownBy(() -> $(byText("Bob")).shouldNotHave(cssClass("firstname")))
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageContaining("Element should not have css class \"firstname\" {by text: Bob}")
@@ -432,7 +441,6 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanRightClickOnElement() {
-    timeout = 100;
     $(By.name("password")).contextClick();
 
     $("#login").contextClick().shouldBe(visible);
@@ -458,6 +466,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_1() {
+    timeout = 1;
     assertThatThrownBy(() -> $("h1").shouldHave(text("Some wrong test").because("it's wrong text")))
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("Element should have text \"Some wrong test\" (because it's wrong text) {h1}")
@@ -467,6 +476,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_2() {
+    timeout = 1;
     assertThatThrownBy(() -> $("h1").shouldHave(text("Some wrong test").because("it's wrong text")))
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("Element should have text \"Some wrong test\" (because it's wrong text) {h1}")
@@ -476,6 +486,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_3() {
+    timeout = 1;
     assertThatThrownBy(() -> $("h1").shouldHave(text("Some wrong test").because("it's wrong text")))
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("Element should have text \"Some wrong test\" (because it's wrong text) {h1}")
@@ -485,6 +496,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void shouldNotMethodsMayContainOptionalMessageThatIsPartOfErrorMessage() {
+    timeout = 1;
     assertThatThrownBy(() -> $("h1").shouldNotHave(text("Page with selects").because("it's wrong text")))
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageStartingWith("Element should not have text \"Page with selects\" (because it's wrong text) {h1}")
@@ -495,12 +507,12 @@ final class SelenideMethodsTest extends IntegrationTest {
   @Test
   void waitWhileMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
     assertThatThrownBy(() -> {
-      $("h1").shouldNotBe(visible.because("we expect it do disappear"), ofMillis(200));
+      $("h1").shouldNotBe(visible.because("we expect it do disappear"), ofMillis(50));
     })
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageStartingWith("Element should not be visible (because we expect it do disappear) {h1}")
       .hasMessageContaining("Actual value: visible")
-      .hasMessageContaining("Timeout: 200ms");
+      .hasMessageContaining("Timeout: 50ms");
   }
 
   @Test

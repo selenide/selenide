@@ -11,11 +11,13 @@ import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,9 +65,11 @@ public class DownloadFileToFolder {
   ) {
     long incrementTimeout = Math.max(requestedIncrementTimeout, 1000);
     Driver driver = link.driver();
+    WebDriver webDriver = driver.getWebDriver();
     Config config = driver.config();
     long pollingInterval = Math.max(config.pollingInterval(), 50);
     DownloadsFolder folder = getDownloadsFolder(driver);
+    long start = currentTimeMillis();
 
     if (folder == null) {
       throw new IllegalStateException("Downloads folder is not configured");
@@ -90,8 +94,11 @@ public class DownloadFileToFolder {
     File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
 
     return switch (contentStrategy) {
-      case FULL_CONTENT -> archiveFile(driver, downloadedFile);
-      case EMPTY_CONTENT -> downloader.mockFileContent(driver.config(), downloadedFile.getName());
+      case FULL_CONTENT -> downloader.copyFileWithTimeout(downloadedFile.getName(),
+        () -> archiveFile(config, webDriver, downloadedFile),
+        timeout - (currentTimeMillis() - start)
+      );
+      case EMPTY_CONTENT -> downloader.mockFileContent(config, downloadedFile.getName());
     };
   }
 
@@ -206,8 +213,12 @@ public class DownloadFileToFolder {
     }
   }
 
-  protected File archiveFile(Driver driver, File downloadedFile) {
-    File uniqueFolder = downloader.prepareTargetFolder(driver.config());
+  protected boolean isLocalBrowser(Config config) {
+    return config.remote() == null;
+  }
+
+  protected File archiveFile(Config config, WebDriver driver, File downloadedFile) throws IOException {
+    File uniqueFolder = downloader.prepareTargetFolder(config);
     File archivedFile = new File(uniqueFolder, downloadedFile.getName());
     moveFile(downloadedFile, archivedFile);
     log.debug("Moved the downloaded file {} to {}", downloadedFile, archivedFile);

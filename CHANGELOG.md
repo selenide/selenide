@@ -1,9 +1,18 @@
 # Changelog
 
-## 7.15.1 (unreleased)
+## 7.16.0 (unreleased)
 * #3278 register WebDriver in WebdriversRegistry when set via WebDriverRunner.setWebDriver()
-* #3278 move screenshot fallback from ScreenShooter to WebdriverPhotographer
+* #3278 fallback taking screenshot to WebDriver method if CDP or BiDi doesn't work
 * #3278 Video recorder: don't log "Video recorded" when no video file was created
+
+
+## 7.15.1 (01.04.2026)
+* #3274 Revert "limit execution time of all Selenide commands" (#3276)
+* #3251 stop downloading a file from remote browser after given timeout (#3276)
+* bump Appium from 10.0.0 to 10.1.0
+
+See https://github.com/selenide/selenide/milestone/238?closed=1
+
 
 ## 7.15.0 (11.03.2026)
 * add option to skip downloading the full file content (#3264)

@@ -7,6 +7,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.SelenideTargetLocator;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v145.log.Log;
 import org.slf4j.Logger;
@@ -104,23 +105,22 @@ public abstract class ITest extends BaseIntegrationTest {
   }
 
   protected final void openFile(String fileName) {
-    retry(() -> {
-      if (driver().hasWebDriverStarted()) {
-        driver().open("about:blank");
+    if (driver().hasWebDriverStarted()) {
+      driver().open("about:blank");
+    }
+    else {
+      driver().open();
+      WebDriver webDriver = driver().getWebDriver();
+      if (webDriver instanceof HasDevTools webdriver) {
+        var devTools = webdriver.getDevTools();
+        devTools.createSessionIfThereIsNotOne(webDriver.getWindowHandle());
+        devTools.send(Log.enable());
+        devTools.addListener(Log.entryAdded(), log ->
+          browserLogs.info("[{}] {} source:{} url:{}", log.getLevel(), log.getText(), log.getSource(), log.getUrl().orElse("-"))
+        );
       }
-      else {
-        driver().open();
-        if (driver().getWebDriver() instanceof HasDevTools webdriver) {
-          var devTools = webdriver.getDevTools();
-          devTools.createSessionIfThereIsNotOne();
-          devTools.send(Log.enable());
-          devTools.addListener(Log.entryAdded(), log ->
-            browserLogs.info("[{}] {} source:{} url:{}", log.getLevel(), log.getText(), log.getSource(), log.getUrl().orElse("-"))
-          );
-        }
-      }
-      driver().open("/" + fileName + "?browser=" + browser +
-                    "&timeout=" + driver().config().timeout());
-    }, 5);
+    }
+    driver().open("/" + fileName + "?browser=" + browser +
+      "&timeout=" + driver().config().timeout());
   }
 }

@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 import static com.codeborne.selenide.CheckResult.accepted;
 import static com.codeborne.selenide.CheckResult.rejected;
 import static com.codeborne.selenide.Configuration.baseUrl;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.clearBrowserCookies;
@@ -267,6 +268,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
   @Test
   void assertPresenceOfCookieWithGivenName_errorMessage() {
+    timeout = 1;
     openPageWithCookies();
 
     $("#button-put").click();

@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
 import org.apache.commons.lang3.SystemUtils;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,7 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
@@ -38,6 +41,7 @@ import static java.util.regex.Pattern.DOTALL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
+import static org.openqa.selenium.WindowType.TAB;
 
 /**
  * Tests for CDP download method.
@@ -300,5 +304,29 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Mocked file content");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {1, 2, 3, 4, 5})
+  void downloadFile_whileMultipleTabsOpened(int tabsCount) {
+    openNewTabs(tabsCount);
+
+    try {
+      File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
+      assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
+      assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    }
+    finally {
+      closeWebDriver();
+    }
+  }
+
+  private static void openNewTabs(int tabsCount) {
+    WebDriver webDriver = WebDriverRunner.getWebDriver();
+    String windowHandle = webDriver.getWindowHandle();
+    for (int i = 0; i < tabsCount; i++) {
+      switchTo().newWindow(TAB);
+    }
+    switchTo().window(windowHandle);
   }
 }

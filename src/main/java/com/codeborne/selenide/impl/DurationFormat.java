@@ -10,14 +10,17 @@ public class DurationFormat {
   private static final DecimalFormat SECONDS = new DecimalFormat("0.###", DecimalFormatSymbols.getInstance(ROOT));
 
   public String format(Duration duration) {
-    return format(duration.toMillis());
+    return formatDuration(duration);
   }
 
   public String format(long milliseconds) {
-    return formatMs(milliseconds);
+    return formatDuration(milliseconds);
   }
 
-  public static String formatMs(long milliseconds) {
+  public static String formatDuration(Duration duration) {
+    return formatDuration(duration.toMillis());
+  }
+  public static String formatDuration(long milliseconds) {
     if (milliseconds < 1000) {
       return String.format("%dms", milliseconds);
     }

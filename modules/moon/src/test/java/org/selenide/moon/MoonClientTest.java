@@ -1,6 +1,7 @@
 package org.selenide.moon;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.remote.SessionId;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -11,21 +12,21 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MoonClientTest {
   @Test
   void urlForAccessingClipboard() {
-    MoonClient client = new MoonClient("http://moon.aerokube.local/wd/hub", "chrome-124-0-d6e");
+    MoonClient client = new MoonClient("http://moon.aerokube.local/wd/hub", new SessionId("chrome-124-0-d6e"));
     assertThat(client.clipboardAccessUrl().toExternalForm())
       .isEqualTo("http://moon.aerokube.local/wd/hub/session/chrome-124-0-d6e/aerokube/clipboard");
   }
 
   @Test
   void urlForAccessingDownloadedFiles() {
-    MoonClient client = new MoonClient("http://moon.aerokube.local/wd/hub", "chrome-124-0-d6e");
+    MoonClient client = new MoonClient("http://moon.aerokube.local/wd/hub", new SessionId("chrome-124-0-d6e"));
     assertThat(client.downloadedFilesAccessUrl().toExternalForm())
       .isEqualTo("http://moon.aerokube.local/wd/hub/session/chrome-124-0-d6e/aerokube/download");
   }
 
   @Test
   void encodesFileNameInUrl() throws MalformedURLException {
-    MoonClient client = new MoonClient("http://localhost:4444/wd/hub", "sid-01");
+    MoonClient client = new MoonClient("http://localhost:4444/wd/hub", new SessionId("sid-01"));
     assertThat(client.urlOfDownloadedFile("some-file.txt")).isEqualTo(
         new URL("http://localhost:4444/wd/hub/session/sid-01/aerokube/download/some-file.txt")
     );
@@ -36,7 +37,7 @@ class MoonClientTest {
 
   @Test
   void validatesFileName() {
-    MoonClient client = new MoonClient("", "");
+    MoonClient client = new MoonClient("", new SessionId(""));
     assertThatThrownBy(() -> client.urlOfDownloadedFile("../../etc/hosts"))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Invalid file name: ../../etc/hosts");

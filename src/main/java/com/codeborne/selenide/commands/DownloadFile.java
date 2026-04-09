@@ -23,6 +23,7 @@ import java.io.File;
 import java.time.Duration;
 
 import static com.codeborne.selenide.DownloadOptions.using;
+import static com.codeborne.selenide.impl.DurationFormat.formatDuration;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Objects.requireNonNullElse;
 import static java.util.Optional.ofNullable;
@@ -60,7 +61,8 @@ public class DownloadFile implements Command<File> {
     }
 
     FileDownloadMode method = requireNonNullElse(options.getMethod(), config.fileDownload());
-    log.debug("Download file ({}) with method {}, timeout {} ms and incTimeout {} ms", options, method, timeout, incrementTimeout);
+    log.debug("Download file ({}) with method {}, timeout {} and incTimeout {}", options, method,
+      formatDuration(timeout), formatDuration(incrementTimeout));
 
     WebElement link = waitForLink(linkWithHref, incrementTimeout);
 

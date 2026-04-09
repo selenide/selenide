@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static com.codeborne.selenide.CheckResult.accepted;
 import static com.codeborne.selenide.CheckResult.rejected;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.LocalStorageConditions.item;
 import static com.codeborne.selenide.LocalStorageConditions.itemWithValue;
 import static com.codeborne.selenide.Selenide.$;
@@ -96,6 +97,7 @@ final class LocalStorageTest extends IntegrationTest {
 
   @Test
   void errorMessageWhenItemHasWrongValue() {
+    timeout = 1;
     $("#button-put").click();
 
     assertThatThrownBy(() ->
@@ -129,6 +131,7 @@ final class LocalStorageTest extends IntegrationTest {
 
   @Test
   void errorMessageWhenItemShouldNotExist() {
+    timeout = 1;
     localStorage().setItem("cat", "Tom");
 
     assertThatThrownBy(() ->
@@ -143,6 +146,7 @@ final class LocalStorageTest extends IntegrationTest {
 
   @Test
   void errorMessageWhenItemShouldNotHaveGivenValue() {
+    timeout = 1;
     localStorage().setItem("cat", "Tom");
 
     assertThatThrownBy(() ->

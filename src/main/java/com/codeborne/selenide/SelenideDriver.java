@@ -495,7 +495,7 @@ public class SelenideDriver {
     WebDriver webDriver = driver().getWebDriver();
     if (webDriver instanceof HasDevTools devToolsBrowser) { // Chromium browsers
       DevTools devTools = devToolsBrowser.getDevTools();
-      devTools.createSessionIfThereIsNotOne();
+      devTools.createSessionIfThereIsNotOne(webDriver.getWindowHandle());
       devTools.send(Emulation.setDeviceMetricsOverride(
         width, height, pixelRatio, true, empty(),
         Optional.of(width), Optional.of(height),
@@ -515,7 +515,7 @@ public class SelenideDriver {
     WebDriver webDriver = driver().getWebDriver();
     if (webDriver instanceof HasDevTools devToolsBrowser) { // Chromium browsers
       DevTools devTools = devToolsBrowser.getDevTools();
-      devTools.createSessionIfThereIsNotOne();
+      devTools.createSessionIfThereIsNotOne(webDriver.getWindowHandle());
       devTools.send(Emulation.clearDeviceMetricsOverride());
     }
     else if (isBiDiEnabled(webDriver)) { // Firefox

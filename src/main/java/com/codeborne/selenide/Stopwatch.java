@@ -55,7 +55,8 @@ public class Stopwatch {
   public static void sleepAtLeast(long milliseconds) {
     Stopwatch stopwatch = new Stopwatch(milliseconds);
     do {
-      stopwatch.sleep(milliseconds - stopwatch.getElapsedTimeMs());
+      long toSleep = Math.max(milliseconds - stopwatch.getElapsedTimeMs(), 0);
+      stopwatch.sleep(toSleep);
     }
     while (!stopwatch.isTimeoutReached());
   }

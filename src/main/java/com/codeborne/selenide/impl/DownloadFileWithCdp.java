@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.DownloadsFolder;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -76,7 +78,10 @@ public class DownloadFileWithCdp {
                        DownloadAction action,
                        ContentStrategy contentStrategy) {
 
+    long start = currentTimeMillis();
     Driver driver = link.driver();
+    Config config = driver.config();
+    WebDriver webDriver = driver.getWebDriver();
     DevTools devTools = initDevTools(driver);
     DownloadsFolder downloadsFolder = requireNonNull(getDownloadsFolder(driver), "Webdriver downloads folder is not configured");
     CdpDownloads downloads = new CdpDownloads(downloadsFolder, new ConcurrentHashMap<>(1));
@@ -97,8 +102,11 @@ public class DownloadFileWithCdp {
       }
 
       return switch (contentStrategy) {
-        case FULL_CONTENT -> archiveFile(driver, download.file());
-        case EMPTY_CONTENT -> downloader.mockFileContent(driver.config(), requireNonNull(download.fileName));
+        case FULL_CONTENT -> downloader.copyFileWithTimeout(download.file().getName(),
+          () -> archiveFile(config, webDriver, download.file()),
+          timeout - (currentTimeMillis() - start)
+        );
+        case EMPTY_CONTENT -> downloader.mockFileContent(config, requireNonNull(download.fileName));
       };
     }
     finally {
@@ -106,8 +114,12 @@ public class DownloadFileWithCdp {
     }
   }
 
-  protected File archiveFile(Driver driver, File downloadedFile) {
-    File uniqueFolder = downloader.prepareTargetFolder(driver.config());
+  protected boolean isLocalBrowser(Config config) {
+    return config.remote() == null;
+  }
+
+  protected File archiveFile(Config config, WebDriver driver, File downloadedFile) throws IOException {
+    File uniqueFolder = downloader.prepareTargetFolder(config);
     File archivedFile = new File(uniqueFolder, downloadedFile.getName());
     moveFile(downloadedFile, archivedFile);
     log.debug("Moved the downloaded file {} to {}", downloadedFile, archivedFile);
@@ -151,7 +163,7 @@ public class DownloadFileWithCdp {
     }
 
     DevTools devTools = cdpBrowser.getDevTools();
-    devTools.createSessionIfThereIsNotOne();
+    devTools.createSessionIfThereIsNotOne(webDriver.getWindowHandle());
     devTools.send(Page.enable(Optional.empty()));
     return devTools;
   }

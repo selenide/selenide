@@ -92,6 +92,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("network.proxy.no_proxies_on", "");
     firefoxOptions.addPreference("network.proxy.allow_hijacking_localhost", true);
     firefoxOptions.addPreference("general.smoothScroll", false);
+    firefoxOptions.addPreference("dom.confirm_repost.testing.always_accept", true);
   }
 
   protected void setupDownloadsFolder(FirefoxOptions firefoxOptions, @Nullable File browserDownloadsFolder) {
