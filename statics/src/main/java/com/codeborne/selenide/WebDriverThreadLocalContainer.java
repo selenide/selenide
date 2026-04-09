@@ -88,7 +88,9 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder) {
     resetWebDriver();
-    setWebDriver(new WebDriverInstance(config, webDriver, selenideProxy, browserDownloadsFolder));
+    WebDriverInstance webDriverInstance = new WebDriverInstance(config, webDriver, selenideProxy, browserDownloadsFolder);
+    setWebDriver(webDriverInstance);
+    WebdriversRegistry.register(webDriverInstance);
   }
 
   @CanIgnoreReturnValue

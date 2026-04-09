@@ -1,8 +1,7 @@
 # Changelog
 
 ## 7.15.1 (unreleased)
-* #3278 Video recorder: support WebDriverRunner.setWebDriver() for video recording
-* #3278 Video recorder: fallback to TakesScreenshot when CDP/BiDi screenshot fails
+* #3278 register WebDriver in WebdriversRegistry when set via WebDriverRunner.setWebDriver()
 * #3278 Video recorder: don't log "Video recorded" when no video file was created
 
 ## 7.15.0 (11.03.2026)

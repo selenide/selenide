@@ -1,6 +1,5 @@
 package org.selenide.videorecorder.core;
 
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.drivercommands.WebdriversRegistry;
 import com.codeborne.selenide.impl.AttachmentHandler;
 import com.codeborne.selenide.impl.WebDriverInstance;
@@ -81,28 +80,7 @@ public class VideoRecorder {
 
   public void start() {
     long threadId = currentThread().getId();
-    // Eagerly resolve WebDriver from WebDriverRunner on the test thread.
-    // This MUST be eager (not lazy inside or()) because:
-    // - WebDriverRunner is backed by ThreadLocal
-    // - ScreenShooter runs on a ScheduledExecutorService pool thread
-    // - Lazy evaluation would call WebDriverRunner.getWebDriver() on the pool thread,
-    //   where the ThreadLocal is empty, returning Optional.empty()
-    // This fallback handles frameworks that use WebDriverRunner.setWebDriver()
-    // without registering in WebdriversRegistry (e.g., custom TestTemplateInvocationContextProvider).
-    Optional<WebDriver> fallbackDriver = webDriverFromRunner();
-    start(() -> staticWebdriver(threadId).or(() -> fallbackDriver));
-  }
-
-  private static Optional<WebDriver> webDriverFromRunner() {
-    try {
-      if (WebDriverRunner.hasWebDriverStarted()) {
-        return Optional.of(WebDriverRunner.getWebDriver());
-      }
-    }
-    catch (Exception e) {
-      log.warn("Could not get WebDriver from WebDriverRunner: {}", e.getMessage());
-    }
-    return Optional.empty();
+    start(() -> staticWebdriver(threadId));
   }
 
   public void start(Supplier<Optional<WebDriver>> webDriverSupplier) {
