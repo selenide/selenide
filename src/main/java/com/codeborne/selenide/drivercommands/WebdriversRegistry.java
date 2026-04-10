@@ -5,17 +5,17 @@ import com.codeborne.selenide.impl.WebDriverInstance;
 import java.util.Optional;
 
 public class WebdriversRegistry {
-  private static final DisposablesRegistry<WebDriverInstance> registry = new DisposablesRegistry<>();
+  private static final DisposablesRegistry<Long, WebDriverInstance> registry = new DisposablesRegistry<>();
 
   public static void register(WebDriverInstance driver) {
-    registry.register(driver);
+    registry.register(driver.threadId(), driver);
   }
 
   public static void unregister(WebDriverInstance driver) {
-    registry.unregister(driver);
+    registry.unregister(driver.threadId());
   }
 
   public static Optional<WebDriverInstance> webdriver(long threadId) {
-    return registry.find(driver -> driver.threadId() == threadId);
+    return registry.get(threadId);
   }
 }
