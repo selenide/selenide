@@ -7,7 +7,7 @@ import org.openqa.selenium.bidi.HasBiDi;
 import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v146.page.Page;
+import org.openqa.selenium.devtools.v147.page.Page;
 import org.openqa.selenium.remote.http.ConnectionFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
