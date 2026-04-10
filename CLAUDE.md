@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Selenide is a Java framework providing a concise fluent API for Selenium WebDriver. It simplifies writing browser-based automated tests. Current version: 7.15.1, requires Java 17+.
+Selenide is a Java framework providing a concise fluent API for Selenium WebDriver. It simplifies writing browser-based automated tests. Current version: 7.16.0, requires Java 17+.
 
 ## Build Commands
 
