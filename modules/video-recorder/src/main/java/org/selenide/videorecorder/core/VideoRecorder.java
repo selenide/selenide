@@ -26,7 +26,7 @@ import static com.codeborne.selenide.impl.ThreadNamer.named;
 import static java.lang.Integer.toHexString;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.currentThread;
-import static java.util.concurrent.Executors.newScheduledThreadPool;
+import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -39,7 +39,7 @@ public class VideoRecorder {
   private static final AtomicLong videoCounter = new AtomicLong(0);
   private final AttachmentHandler attachmentHandler = inject();
 
-  private static final ScheduledExecutorService screenshooter = newScheduledThreadPool(100, named("video-recorder:screenshots:"));
+  private final ScheduledExecutorService screenshooter = newSingleThreadScheduledExecutor(named("video-recorder:screenshots:"));
   private final VideoConfiguration config;
   private final String videoId;
   private final int fps;
@@ -111,7 +111,16 @@ public class VideoRecorder {
     log.debug("Stopping video recorder...");
 
     if (screenShooter != null) {
-      screenShooter.cancel(true);
+      screenShooter.cancel(false);
+      screenshooter.shutdown();
+      try {
+        boolean result = screenshooter.awaitTermination(5, SECONDS);
+        log.info("Video recorder finished with result {}", result);
+      }
+      catch (InterruptedException e) {
+        log.error("Failed to shut down screen shooter", e);
+        Thread.currentThread().interrupt();
+      }
     }
     videoMerger.finish();
 
