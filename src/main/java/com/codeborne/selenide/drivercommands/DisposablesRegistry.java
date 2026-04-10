@@ -5,10 +5,9 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Predicate;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.Thread.currentThread;
 
@@ -16,16 +15,16 @@ import static java.lang.Thread.currentThread;
  * Singleton.
  * Holds all opened webdrivers in order to close them in the end.
  */
-class DisposablesRegistry<T extends Disposable> {
+class DisposablesRegistry<K, T extends Disposable> {
   private static final Logger log = LoggerFactory.getLogger(DisposablesRegistry.class);
 
   @Nullable
   private SelenideCleanupShutdownHook shutdownHook;
-  private final List<T> disposables = new CopyOnWriteArrayList<>();
+  private final Map<K, T> disposables = new ConcurrentHashMap<>();
 
-  public synchronized void register(T disposable) {
-    disposables.add(disposable);
-    log.debug("Register {} in {} [size={}]", disposable, currentThread().getId(), disposables.size());
+  public synchronized void register(K key, T disposable) {
+    disposables.put(key, disposable);
+    log.debug("Register {}:{} [size={}]", key, disposable, disposables.size());
     if (shutdownHook == null) {
       log.debug("Add shutdown hook in {} [size={}]", currentThread().getId(), disposables.size());
       shutdownHook = new SelenideCleanupShutdownHook();
@@ -33,9 +32,9 @@ class DisposablesRegistry<T extends Disposable> {
     }
   }
 
-  public synchronized void unregister(T webdriver) {
-    disposables.remove(webdriver);
-    log.debug("Unregister {} in {} [size={}]", webdriver, currentThread().getId(), disposables.size());
+  public synchronized void unregister(K key) {
+    T removed = disposables.remove(key);
+    log.debug("Unregister {}:{} [size={}]", key, removed, disposables.size());
   }
 
   synchronized void cancel() {
@@ -55,11 +54,11 @@ class DisposablesRegistry<T extends Disposable> {
   }
 
   void disposeAllItems() {
-    disposables.forEach(Disposable::dispose);
+    disposables.values().forEach(Disposable::dispose);
   }
 
-  public Optional<T> find(Predicate<T> filter) {
-    return disposables.stream().filter(filter).findFirst();
+  public Optional<T> get(K key) {
+    return Optional.ofNullable(disposables.get(key));
   }
 
   private class SelenideCleanupShutdownHook extends Thread {

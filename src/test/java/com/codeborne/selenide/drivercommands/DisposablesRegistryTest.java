@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DisposablesRegistryTest {
-  private final DisposablesRegistry<CovidTest> registry = new DisposablesRegistry<>();
+  private final DisposablesRegistry<Integer, CovidTest> registry = new DisposablesRegistry<>();
   private final AtomicInteger created = new AtomicInteger(0);
   private final AtomicInteger disposed = new AtomicInteger(0);
 
@@ -21,7 +21,8 @@ class DisposablesRegistryTest {
   @Test
   void firstRegister_startsShutdownHook() {
     assertThat(registry.isShutdownHookRegistered()).isFalse();
-    registry.register(new CovidTest());
+    CovidTest covidTest = new CovidTest();
+    registry.register(covidTest.id, covidTest);
     assertThat(registry.isShutdownHookRegistered()).isTrue();
     assertThat(registry.size()).isEqualTo(1);
   }
@@ -30,16 +31,16 @@ class DisposablesRegistryTest {
   void canUnregisteringItems_ifDisposedEarlier() {
     CovidTest test1 = new CovidTest();
     CovidTest test2 = new CovidTest();
-    registry.register(test1);
-    registry.register(test2);
+    registry.register(test1.id, test1);
+    registry.register(test2.id, test2);
     assertThat(registry.isShutdownHookRegistered()).isTrue();
     assertThat(registry.size()).isEqualTo(2);
-    registry.unregister(test1);
+    registry.unregister(test1.id);
 
     assertThat(registry.isShutdownHookRegistered()).isTrue();
     assertThat(registry.size()).isEqualTo(1);
 
-    registry.unregister(test2);
+    registry.unregister(test2.id);
     assertThat(registry.isShutdownHookRegistered()).isTrue();
     assertThat(registry.size()).isEqualTo(0);
   }
@@ -48,8 +49,8 @@ class DisposablesRegistryTest {
   void shutdownHookDisposesAllLeftItems() {
     CovidTest test1 = new CovidTest();
     CovidTest test2 = new CovidTest();
-    registry.register(test1);
-    registry.register(test2);
+    registry.register(test1.id, test1);
+    registry.register(test2.id, test2);
     assertThat(created.get()).isEqualTo(2);
     assertThat(disposed.get()).isEqualTo(0);
 
@@ -59,8 +60,10 @@ class DisposablesRegistryTest {
   }
 
   private class CovidTest implements Disposable {
+    private final int id;
+
     CovidTest() {
-      created.incrementAndGet();
+      id = created.incrementAndGet();
     }
 
     @Override
