@@ -29,3 +29,5 @@ shadowJar {
 tasks.named('build') {
   dependsOn shadowJar
 }
+
+apply from: rootProject.file('gradle/publish-module.gradle')

@@ -39,3 +39,6 @@ git add "_site/javadoc/current"
 git commit -m "publish javadoc for Selenide ${version}"
 git push
 cd - || exit 3
+
+cd mcp-server
+npm publish -i
