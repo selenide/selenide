@@ -70,7 +70,7 @@ public class WebdriverPhotographer implements Photographer {
         Optional.empty(),
         Optional.empty(),
         Optional.of(true)
-      ), Duration.ofSeconds(4)
+      ), Duration.ofMillis(300)
     );
   }
 
