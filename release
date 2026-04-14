@@ -29,13 +29,10 @@ echo "Releasing version: ${version}"
 git tag -a "v${version}" -m "released selenide ${version}"
 git push origin --tags
 
-mkdir "../selenide-web/_site/javadoc/${version}"
-cp -r build/javadoc-for-site/. "../selenide-web/_site/javadoc/${version}/"
-rm -fr "../selenide-web/_site/javadoc/current/*"
-cp -r build/javadoc-for-site/. ../selenide-web/_site/javadoc/current/
+rm -fr "../selenide-web/static/javadoc/current/*"
+cp -r build/javadoc-for-site/. ../selenide-web/static/javadoc/current/
 cd ../selenide-web || exit 2
-git add "_site/javadoc/${version}"
-git add "_site/javadoc/current"
+git add "static/javadoc/current"
 git commit -m "publish javadoc for Selenide ${version}"
 git push
 cd - || exit 3
