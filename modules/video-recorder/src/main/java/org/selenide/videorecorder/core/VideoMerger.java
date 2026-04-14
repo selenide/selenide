@@ -74,9 +74,13 @@ class VideoMerger {
   }
 
   static float frameRate(List<Screenshot> screenshots) {
+    if (screenshots.size() == 1)
+      return 1f;
+
     Screenshot first = screenshots.get(0);
     Screenshot last = screenshots.get(screenshots.size() - 1);
     long duration = NANOSECONDS.toMillis(last.timestampNano - first.timestampNano);
+
     return (screenshots.size() - 1) * 1000.0f / duration;
   }
 

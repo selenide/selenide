@@ -22,6 +22,7 @@ class VideoMergerTest {
     assertThat(VideoMerger.frameRate(List.of(s1, s2, s3))).isEqualTo(2 / 1.0f);
     assertThat(VideoMerger.frameRate(List.of(s1, s3))).isEqualTo(1 / 1.0f);
     assertThat(VideoMerger.frameRate(List.of(s2, s4))).isEqualTo(1 / 1.5f);
+    assertThat(VideoMerger.frameRate(List.of(s1))).isEqualTo(1);
   }
 
   @ParameterizedTest
