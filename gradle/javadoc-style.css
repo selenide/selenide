@@ -1,0 +1,234 @@
+/*
+ * Additive stylesheet for Selenide Javadoc.
+ * Loaded via javadoc --add-stylesheet, on top of the JDK default stylesheet.
+ * Matches the visual style of selenide.org (the Ingmar Hugo theme).
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+
+  --sel-accent:      #46A3D1;  /* selenide.org link color */
+  --sel-text:        #777;     /* selenide.org body color */
+  --sel-text-soft:   #999;
+  --sel-text-code:   #333;     /* selenide.org pre color */
+  --sel-h1:          #222;     /* selenide.org h1 */
+  --sel-h2:          #393939;  /* selenide.org h2 */
+  --sel-h3:          #494949;  /* selenide.org h3-h6 */
+  --sel-border:      #e5e5e5;  /* selenide.org pre/table border */
+  --sel-code-bg:     #F5FAFC;  /* selenide.org highlight bg */
+  --sel-nav-bg:      #B74EB5;  /* selenide.org .short.quotes banner */
+  --sel-nav-fg:      #ffffff;  /* selenide.org .short color */
+  --sel-bg:          #ffffff;
+  --sel-bg-soft:     #fafbfc;
+}
+
+body,
+.content-container,
+.block,
+div.block,
+.summary-table,
+.details-table {
+  font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--sel-text);
+  background-color: var(--sel-bg);
+}
+
+h1, h2, h3, h4, h5, h6,
+.title, .sub-title {
+  font-family: inherit;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+h1, h1.title { color: var(--sel-h1); font-size: 28px; line-height: 1.1; }
+h2            { color: var(--sel-h2); font-size: 22px; line-height: 1.2; margin-top: 1.4em; }
+h3, h4, h5, h6 { color: var(--sel-h3); }
+h3            { font-size: 17px; }
+
+a, a:link, a:visited {
+  color: var(--sel-accent);
+  font-weight: 400;
+  text-decoration: none;
+}
+a:hover {
+  color: var(--sel-accent);
+  text-decoration: underline;
+}
+
+/* Top / bottom navigation bars — selenide.org .short.quotes banner */
+.top-nav,
+.bottom-nav,
+div.top-nav,
+div.bottom-nav {
+  background-color: var(--sel-nav-bg);
+  color: var(--sel-nav-fg);
+  border: none;
+  padding: 12px 16px;
+}
+.top-nav a:link,
+.top-nav a:visited,
+.bottom-nav a:link,
+.bottom-nav a:visited {
+  color: var(--sel-nav-fg);
+  font-weight: 400;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.top-nav a:hover,
+.bottom-nav a:hover {
+  color: var(--sel-nav-fg);
+  text-decoration: underline;
+}
+.nav-list li.nav-bar-cell1-rev {
+  color: var(--sel-nav-fg);
+  background-color: transparent;
+  font-weight: 600;
+  border-bottom: 2px solid var(--sel-nav-fg);
+}
+
+/* Sub-title / package labels */
+.header .sub-title,
+.sub-title,
+.inheritance {
+  color: var(--sel-text-soft);
+  font-weight: 300;
+}
+
+/* Code — matches selenide.org pre blocks */
+code, tt, pre,
+pre code,
+.source-container pre {
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
+  font-size: 13px;
+  color: var(--sel-text-code);
+}
+code, tt {
+  background-color: var(--sel-code-bg);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+pre {
+  background: var(--sel-code-bg);
+  border: 1px solid var(--sel-border);
+  border-radius: 5px;
+  padding: 10px 14px;
+  overflow-x: auto;
+}
+
+/* Summary / member tables — biggest visual fix over default */
+.summary-table,
+.details-table {
+  border-collapse: collapse;
+  border: 1px solid var(--sel-border);
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 10px 0 20px;
+}
+.summary-table > div,
+.details-table  > div {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--sel-border);
+  background-color: transparent;
+}
+.summary-table > div.table-header,
+.details-table  > div.table-header {
+  background-color: var(--sel-bg-soft);
+  color: var(--sel-text-soft);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: .05em;
+}
+.row-color,
+.alt-color {
+  background-color: var(--sel-bg) !important;
+}
+.row-color:hover,
+.alt-color:hover {
+  background-color: var(--sel-bg-soft) !important;
+}
+
+/* Member signatures — monospace, accent for the element name */
+.member-signature,
+.member-signature .return-type,
+.member-signature .element-name,
+.member-signature .parameters {
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
+  font-size: 13px;
+  color: var(--sel-text-code);
+}
+.member-signature .element-name {
+  font-weight: 500;
+  color: var(--sel-accent);
+}
+
+/* Deprecated / notes / preview callouts — selenide-blue left rail */
+.deprecation-block,
+.notes,
+.preview-block {
+  border-left: 4px solid var(--sel-accent);
+  background-color: var(--sel-code-bg);
+  padding: 10px 14px;
+  border-radius: 0 5px 5px 0;
+}
+
+/* Search box */
+.nav-list-search input,
+#search-input {
+  border: 1px solid var(--sel-border);
+  border-radius: 3px;
+  padding: 4px 8px;
+  background-color: #ffffff;
+  color: var(--sel-text);
+  font-family: inherit;
+}
+
+/* Search autocomplete dropdown — matches selenide.org theme */
+ul.ui-autocomplete {
+  border: 1px solid var(--sel-border);
+  border-radius: 5px;
+  background-color: var(--sel-bg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 4px 0;
+}
+.ui-autocomplete-category {
+  background-color: var(--sel-nav-bg);
+  color: var(--sel-nav-fg);
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 6px 12px;
+  border: none;
+}
+.ui-autocomplete .result-item {
+  padding: 0;
+}
+.ui-autocomplete .ui-menu-item-wrapper {
+  padding: 4px 12px;
+  color: var(--sel-text);
+  border: 1px solid transparent;
+  background: transparent;
+}
+.ui-autocomplete .ui-menu-item-wrapper.ui-state-active,
+.ui-autocomplete .ui-state-focus,
+.ui-autocomplete .ui-state-hover {
+  background-color: var(--sel-accent);
+  border: 1px solid var(--sel-accent);
+  color: var(--sel-nav-fg);
+  margin: 0;
+}
+.ui-autocomplete .result-highlight {
+  font-weight: 600;
+  color: var(--sel-accent);
+}
+.ui-autocomplete .ui-state-active .result-highlight,
+.ui-autocomplete .ui-state-focus .result-highlight,
+.ui-autocomplete .ui-state-hover .result-highlight {
+  color: var(--sel-nav-fg);
+}

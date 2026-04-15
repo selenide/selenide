@@ -13,4 +13,8 @@ tasks.register('javadocForSite', Javadoc) {
   classpath += project(":modules:selenoid").sourceSets.main.compileClasspath
   classpath += project(":modules:testng").sourceSets.main.compileClasspath
   classpath += project(":modules:video-recorder").sourceSets.main.compileClasspath
+
+  def javadocStylesheet = file('gradle/javadoc-style.css')
+  inputs.file(javadocStylesheet).withPropertyName('javadocStylesheet')
+  options.addStringOption('-add-stylesheet', javadocStylesheet.absolutePath)
 }
