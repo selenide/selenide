@@ -7,6 +7,7 @@ import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 
 final class ElementHiddenTest extends ITest {
@@ -14,7 +15,9 @@ final class ElementHiddenTest extends ITest {
   void clickRemovesElement() {
     setTimeout(4000);
     openFile("elements_disappear_on_click.html");
-    $("#hide").click();
+    $("#hide")
+      .shouldBe(visible, text("Hide me"))
+      .click();
   }
 
   @Test
