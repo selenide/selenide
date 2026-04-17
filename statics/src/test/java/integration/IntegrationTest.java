@@ -3,12 +3,12 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -16,7 +16,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.opentest4j.TestAbortedException;
 
-import org.jspecify.annotations.Nullable;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -87,7 +86,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.fileDownload = HTTPGET;
     Configuration.reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "false"));
     Configuration.textCheck = FULL_TEXT;
-    Configuration.browserCapabilities = new MutableCapabilities();
+    Configuration.browserCapabilities = defaultBrowserCapabilities();
     Configuration.remoteConnectionTimeout = Duration.ofSeconds(10).toMillis();
     Configuration.remoteReadTimeout = Duration.ofSeconds(90).toMillis();
   }
