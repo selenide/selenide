@@ -3,9 +3,11 @@ package integration;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
 import com.codeborne.selenide.webdriver.ChromeDriverFactory;
+import com.codeborne.selenide.webdriver.EdgeDriverFactory;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -206,7 +208,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
   void downloadFileWithCustomBrowser() {
     closeWebDriver();
     try {
-      Configuration.browser = CustomWebDriverProvider.class.getName();
+      Configuration.browser = WebDriverRunner.isEdge() ? CustomEdgeProvider.class.getName() : CustomChromeProvider.class.getName();
       openFile("page_with_uploads.html");
       File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
 
@@ -228,7 +230,15 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
-  private static class CustomWebDriverProvider extends ChromeDriverFactory {
+  private static class CustomChromeProvider extends ChromeDriverFactory {
+    @Override
+    public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy,
+                            @Nullable File browserDownloadsFolder) {
+      return super.create(config, browser, proxy, browserDownloadsFolder);
+    }
+  }
+
+  private static class CustomEdgeProvider extends EdgeDriverFactory {
     @Override
     public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy,
                             @Nullable File browserDownloadsFolder) {

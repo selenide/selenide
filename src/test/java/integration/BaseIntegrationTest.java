@@ -7,6 +7,9 @@ import integration.server.LocalHttpServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.codeborne.selenide.Browsers.CHROME;
+import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.SAFARI;
 import static integration.server.LocalHttpServer.startWithRetry;
 import static java.lang.Boolean.parseBoolean;
@@ -87,5 +91,13 @@ public abstract class BaseIntegrationTest {
 
   protected static Browser browser() {
     return new Browser(browser, headless);
+  }
+
+  protected static MutableCapabilities defaultBrowserCapabilities() {
+    return switch (browser) {
+      case CHROME -> new ChromeOptions().addArguments("--no-sandbox", "--disable-gpu");
+      case EDGE ->  new EdgeOptions().addArguments("--no-sandbox", "--disable-gpu");
+      default -> new MutableCapabilities();
+    };
   }
 }

@@ -57,7 +57,7 @@ final class ChromeProfileByFactoryTest extends IntegrationTest {
     assertThat(log).contains("\"profile.password_manager_enabled\": false");
     assertThat(log).contains("\"download.default_directory\": \"" + downloadsFolder.getAbsolutePath().replaceAll("\\\\", "\\\\\\\\"));
 
-    String args = "\"--proxy-bypass-list=\\u003C-loopback>\", \"--no-sandbox\", \"--disable-3d-apis\"";
+    String args = "\"--proxy-bypass-list=\\u003C-loopback>\", \"--no-sandbox\", \"--disable-3d-apis\", \"--disable-gpu\"";
     if (Configuration.headless) {
       assertThat(log).contains("\"args\": [ \"--headless=new\", " + args + " ]");
     }
