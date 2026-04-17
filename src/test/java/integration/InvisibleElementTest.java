@@ -15,7 +15,9 @@ final class InvisibleElementTest extends ITest {
   @BeforeEach
   void clickHidesElement() {
     openFile("elements_disappear_on_click.html");
-    $("#hide").click();
+    $("#hide")
+      .shouldBe(visible, text("Hide me"))
+      .click();
     $("#hide").shouldBe(hidden, Duration.ofMillis(2000));
   }
 
