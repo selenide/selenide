@@ -57,8 +57,9 @@ Run in this order, fixing problems before moving on:
 2. `./gradlew chrome_headless --dry-run` — confirm the task resolves integration test classes (output lists integration tests, not empty).
 3. `./gradlew chrome_headless` — full integration run.
 4. `./gradlew javadocForSite` — per `CLAUDE.md` gate.
-5. `./gradlew allTests` — final belt-and-braces (clean + check + firefox_headless + chrome_headless).
-6. Re-run with `--warning-mode all` once and address any remaining deprecations inline.
+5. `./gradlew :modules:testng:test` — verify TestNG-based tests in `modules/testng` still run. This module overrides the JUnit Platform runner with `useTestNG()` in its `build.gradle`, so it exercises a different code path than the rest of the suite and must be checked explicitly.
+6. `./gradlew allTests` — final belt-and-braces (clean + check + firefox_headless + chrome_headless).
+7. Re-run with `--warning-mode all` once and address any remaining deprecations inline.
 
 ## Out of scope
 
