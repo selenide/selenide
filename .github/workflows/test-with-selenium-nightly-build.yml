@@ -20,6 +20,11 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
           java-version: '17'
+      - name: Setup Chrome
+        if: ${{ matrix.gradle-task == 'chrome_headless_smoke' }}
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
       - uses: gradle/actions/setup-gradle@v6
       - name: Build with Gradle
         run: ./gradlew ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.44.0-SNAPSHOT --no-parallel --no-daemon --console=plain
