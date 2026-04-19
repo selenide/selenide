@@ -112,6 +112,8 @@ subprojects {
   }
 
   tasks.withType(Test).configureEach {
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
     useJUnitPlatform()
     systemProperties['selenide.reportsFolder'] = layout.buildDirectory.dir("reports/tests/${name}").get().asFile
     systemProperties['selenide.downloadsFolder'] = layout.buildDirectory.dir("tests/downloads").get().asFile
