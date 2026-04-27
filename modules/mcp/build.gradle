@@ -4,7 +4,7 @@ plugins {
 
 ext {
   artifactId = 'selenide-mcp'
-  mcpSdkVersion = '1.1.1'
+  mcpSdkVersion = '1.1.2'
 }
 
 dependencies {
