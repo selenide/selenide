@@ -12,7 +12,7 @@ plugins {
   id 'jacoco'
   id 'checkstyle'
   id 'com.github.spotbugs' version '6.5.1'
-  id 'org.sonarqube' version '7.2.3.7755'
+  id 'org.sonarqube' version '7.3.0.8198'
 }
 
 allprojects {
