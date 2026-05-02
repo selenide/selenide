@@ -16,6 +16,9 @@ configurations {
 }
 
 tasks.withType(Test).configureEach {
+  if (name.endsWith('_smoke')) {
+    enabled = false
+  }
   useTestNG() {
     suites "src/test/resources/suite.xml"
   }

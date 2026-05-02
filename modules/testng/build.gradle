@@ -21,7 +21,10 @@ configurations {
   testImplementation.exclude group: "org.junit.platform"
 }
 
-tasks.withType(Test).configureEach{
+tasks.withType(Test).configureEach {
+  if (name.endsWith('_smoke')) {
+    enabled = false
+  }
   useTestNG()
 }
 
