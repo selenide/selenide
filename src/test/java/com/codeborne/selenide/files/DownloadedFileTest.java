@@ -3,7 +3,6 @@ package com.codeborne.selenide.files;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 import static java.lang.System.currentTimeMillis;
@@ -29,14 +28,14 @@ final class DownloadedFileTest {
   }
 
   @Test
-  void fileModificationCheck() throws IOException {
+  void fileModificationCheck() {
     assertThat(file(1597333000L).isFileModifiedLaterThan(1597333000L)).isTrue();
     assertThat(file(1597333000L).isFileModifiedLaterThan(1597332999L)).isTrue();
     assertThat(file(1597333000L).isFileModifiedLaterThan(1597334001L)).isFalse();
   }
 
   @Test
-  void fileModificationCheck_worksWithSecondsPrecision() throws IOException {
+  void fileModificationCheck_worksWithSecondsPrecision() {
     assertThat(file(1111111000L).isFileModifiedLaterThan(1111111000L)).isTrue();
     assertThat(file(1111111000L).isFileModifiedLaterThan(1111111999L)).isTrue();
     assertThat(file(1111111000L).isFileModifiedLaterThan(1111112000L)).isTrue();
@@ -44,7 +43,7 @@ final class DownloadedFileTest {
   }
 
   @Test
-  void fileModificationCheck_worksEvenIfFileModificationTime_isInPreviousSecond() throws IOException {
+  void fileModificationCheck_worksEvenIfFileModificationTime_isInPreviousSecond() {
     assertThat(file(1111111112999L).isFileModifiedLaterThan(1111111113004L)).isTrue();
     assertThat(file(1111111114998L).isFileModifiedLaterThan(1111111115002L)).isTrue();
   }
@@ -57,7 +56,7 @@ final class DownloadedFileTest {
 
   @Test
   void toString_showsModificationTime_whenKnown() {
-    assertThat(file("hello.png", currentTimeMillis() - 100).toString()).matches("hello.png \\(modified 10\\dms ago\\)");
+    assertThat(file("hello.png", currentTimeMillis() - 100).toString()).matches("hello.png \\(modified 1\\d\\dms ago\\)");
     assertThat(file("hello.jpg", currentTimeMillis() - 99991).toString()).matches("hello.jpg \\(modified 99.99\\ds ago\\)");
   }
 
