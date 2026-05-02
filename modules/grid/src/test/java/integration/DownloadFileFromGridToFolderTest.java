@@ -5,6 +5,7 @@ import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -45,6 +46,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   }
 
   @Test
+  @Tag("smoke")
   void downloadFile() {
     File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
 

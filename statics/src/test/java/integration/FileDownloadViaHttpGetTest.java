@@ -8,6 +8,7 @@ import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -50,6 +51,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
+  @Tag("smoke")
   void downloadsFiles() {
     File downloadedFile = $(byText("Download me")).download();
 

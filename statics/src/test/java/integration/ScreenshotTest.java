@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import static integration.ImageTestHelper.assertBody;
 import static integration.ImageTestHelper.assertBorder;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Tag("smoke")
 final class ScreenshotTest extends IntegrationTest {
   private static final Logger log = LoggerFactory.getLogger(ScreenshotTest.class);
 

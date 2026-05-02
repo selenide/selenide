@@ -1,6 +1,7 @@
 package integration;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,6 +11,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Tag("smoke")
 final class SelenideElementTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {

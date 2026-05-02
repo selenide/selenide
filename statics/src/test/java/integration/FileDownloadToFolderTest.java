@@ -7,6 +7,7 @@ import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -70,6 +71,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
+  @Tag("smoke")
   void downloadsFiles() {
     File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
