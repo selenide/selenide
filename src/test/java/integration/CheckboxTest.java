@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.InvalidStateError;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
@@ -18,6 +19,7 @@ final class CheckboxTest extends ITest {
   }
 
   @Test
+  @Tag("smoke")
   void userCanSelectCheckbox() {
     $(By.name("rememberMe")).shouldNotBe(selected);
     $(By.name("rememberMe")).shouldNotBe(checked);

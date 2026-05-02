@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
@@ -10,6 +11,7 @@ import static com.codeborne.selenide.SetValueMethod.SEND_KEYS;
 import static com.codeborne.selenide.SetValueOptions.withText;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Tag("smoke")
 final class InputFieldTest extends ITest {
   @BeforeEach
   void setup() {

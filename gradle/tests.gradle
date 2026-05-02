@@ -35,9 +35,12 @@ subprojects {
   tasks.register("edge_headless_smoke", Test) {
     systemProperties['selenide.browser'] = 'edge'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*Download*'
+    include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
     exclude 'org/selenide/**/*'
+    useJUnitPlatform {
+      includeTags 'smoke'
+    }
     outputs.upToDateWhen {false}
   }
 
@@ -61,9 +64,12 @@ subprojects {
   tasks.register("chrome_headless_smoke", Test) {
     systemProperties['selenide.browser'] = 'chrome'
     systemProperties['selenide.headless'] = 'true'
-    include 'integration/**/*Download*'
+    include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
     exclude 'org/selenide/**/*'
+    useJUnitPlatform {
+      includeTags 'smoke'
+    }
     outputs.upToDateWhen {false}
   }
 

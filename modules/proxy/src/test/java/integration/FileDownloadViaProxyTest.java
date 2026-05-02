@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
@@ -41,6 +42,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
   }
 
   @Test
+  @Tag("smoke")
   void downloadsFiles() {
     File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
 

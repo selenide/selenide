@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -22,6 +23,7 @@ final class DirectFileDownloadTest extends IntegrationTest {
   }
 
   @Test
+  @Tag("smoke")
   void downloadFileByDirectLink() throws IOException, URISyntaxException {
     File file = download("/files/hello_world.txt");
     assertThat(file.getName()).isEqualTo("hello_world.txt");
