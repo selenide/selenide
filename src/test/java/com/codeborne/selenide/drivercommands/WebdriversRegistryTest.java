@@ -17,8 +17,8 @@ class WebdriversRegistryTest {
   void register_unregister() {
     RemoteWebDriver wd1 = mock();
     RemoteWebDriver wd2 = mock();
-    WebDriverInstance driver1 = new WebDriverInstance(-1L, new SelenideConfig(), wd1, null, from(new File("/tmp/t1")), emptyList());
-    WebDriverInstance driver2 = new WebDriverInstance(-2L, new SelenideConfig(), wd2, null, from(new File("/tmp/t2")), emptyList());
+    WebDriverInstance driver1 = new WebDriverInstance(-1L, new SelenideConfig(), wd1, null, from(new File("/tmp/1")), emptyList(), "1");
+    WebDriverInstance driver2 = new WebDriverInstance(-2L, new SelenideConfig(), wd2, null, from(new File("/tmp/2")), emptyList(), "2");
     WebdriversRegistry.register(driver1);
     WebdriversRegistry.register(driver2);
 

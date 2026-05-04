@@ -11,6 +11,7 @@ import org.openqa.selenium.logging.LogEntry;
 import java.util.List;
 
 import static com.codeborne.selenide.impl.BiDiUti.collectBrowserLogs;
+import static java.lang.Thread.currentThread;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -22,7 +23,8 @@ public record WebDriverInstance(
   WebDriver webDriver,
   @Nullable SelenideProxyServer proxy,
   @Nullable DownloadsFolder downloadsFolder,
-  List<LogEntry> browserLogs
+  List<LogEntry> browserLogs,
+  String source
 ) implements Disposable {
 
   private static final String NOTICE = "Be sure to enable proxy BEFORE you open the browser.";
@@ -34,7 +36,7 @@ public record WebDriverInstance(
     @Nullable SelenideProxyServer proxy,
     @Nullable DownloadsFolder downloadsFolder
   ) {
-    this(Thread.currentThread().getId(), config, webDriver, proxy, downloadsFolder, collectBrowserLogs(webDriver));
+    this(currentThread().getId(), config, webDriver, proxy, downloadsFolder, collectBrowserLogs(webDriver), currentThread().getName());
   }
 
   public WebDriverInstance {

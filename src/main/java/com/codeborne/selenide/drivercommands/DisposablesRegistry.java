@@ -5,6 +5,8 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,10 +22,16 @@ class DisposablesRegistry<K, T extends Disposable> {
 
   @Nullable
   private SelenideCleanupShutdownHook shutdownHook;
-  private final Map<K, T> disposables = new ConcurrentHashMap<>();
+  private final Map<K, T> index = new ConcurrentHashMap<>();
+  private final List<T> disposables = new ArrayList<>();
 
   public synchronized void register(K key, T disposable) {
-    disposables.put(key, disposable);
+    T previous = index.get(key);
+    if (previous != null) {
+      log.warn("Unclosed webdriver detected {}:{} [size={}]", key, previous, disposables.size());
+    }
+    index.put(key, disposable);
+    disposables.add(disposable);
     log.debug("Register {}:{} [size={}]", key, disposable, disposables.size());
     if (shutdownHook == null) {
       log.debug("Add shutdown hook in {} [size={}]", currentThread().getId(), disposables.size());
@@ -33,7 +41,8 @@ class DisposablesRegistry<K, T extends Disposable> {
   }
 
   public synchronized void unregister(K key) {
-    T removed = disposables.remove(key);
+    T removed = index.remove(key);
+    disposables.remove(removed);
     log.debug("Unregister {}:{} [size={}]", key, removed, disposables.size());
   }
 
@@ -53,12 +62,19 @@ class DisposablesRegistry<K, T extends Disposable> {
     return shutdownHook != null;
   }
 
-  void disposeAllItems() {
-    disposables.values().forEach(Disposable::dispose);
+  synchronized void disposeAllItems() {
+    for (T item : disposables) {
+      try {
+        item.dispose();
+      }
+      catch (RuntimeException e) {
+        log.warn("Failed to dispose {}", item, e);
+      }
+    }
   }
 
   public Optional<T> get(K key) {
-    return Optional.ofNullable(disposables.get(key));
+    return Optional.ofNullable(index.get(key));
   }
 
   private class SelenideCleanupShutdownHook extends Thread {

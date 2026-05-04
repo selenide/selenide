@@ -59,16 +59,89 @@ class DisposablesRegistryTest {
     assertThat(disposed.get()).isEqualTo(2);
   }
 
+  @Test
+  void overwritingKey_keepsOrphanForShutdownDisposal() {
+    CovidTest test1 = new CovidTest();
+    CovidTest test2 = new CovidTest();
+    registry.register(99, test1);
+    registry.register(99, test2);
+
+    assertThat(registry.size()).isEqualTo(2);
+
+    registry.disposeAllItems();
+
+    assertThat(test1.disposed).isTrue();
+    assertThat(test2.disposed).isTrue();
+    assertThat(disposed.get()).isEqualTo(2);
+  }
+
+  @Test
+  void unregister_removesItemFromShutdownDisposalSet() {
+    CovidTest test = new CovidTest();
+    registry.register(test.id, test);
+    registry.unregister(test.id);
+
+    assertThat(registry.size()).isEqualTo(0);
+
+    registry.disposeAllItems();
+
+    assertThat(test.disposed).isFalse();
+    assertThat(disposed.get()).isEqualTo(0);
+  }
+
+  @Test
+  void unregisterAfterOverwrite_disposesOnlyTheOrphan() {
+    CovidTest orphan = new CovidTest();
+    CovidTest current = new CovidTest();
+    registry.register(99, orphan);
+    registry.register(99, current);
+    registry.unregister(99);
+
+    assertThat(registry.size()).isEqualTo(1);
+
+    registry.disposeAllItems();
+
+    assertThat(orphan.disposed).isTrue();
+    assertThat(current.disposed).isFalse();
+    assertThat(disposed.get()).isEqualTo(1);
+  }
+
+  @Test
+  void disposeAllItems_swallowsExceptions_andDisposesRemaining() {
+    CovidTest before = new CovidTest();
+    CovidTest broken = new CovidTest().failOnDispose();
+    CovidTest after = new CovidTest();
+    registry.register(before.id, before);
+    registry.register(broken.id, broken);
+    registry.register(after.id, after);
+
+    registry.disposeAllItems();
+
+    assertThat(before.disposed).isTrue();
+    assertThat(after.disposed).isTrue();
+  }
+
   private class CovidTest implements Disposable {
     private final int id;
+    private boolean disposed;
+    private boolean failOnDispose;
 
     CovidTest() {
       id = created.incrementAndGet();
     }
 
+    CovidTest failOnDispose() {
+      failOnDispose = true;
+      return this;
+    }
+
     @Override
     public void dispose() {
-      disposed.incrementAndGet();
+      if (failOnDispose) {
+        throw new IllegalStateException("boom");
+      }
+      disposed = true;
+      DisposablesRegistryTest.this.disposed.incrementAndGet();
     }
   }
 }
