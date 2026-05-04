@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.ex.ElementNotFound;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,6 +34,13 @@ final class ReportForChainedElementsTest extends BaseIntegrationTest {
 
     driver.open("/page_with_absence.html?browser=" + browser);
     previousScreenshots = screenshots();
+  }
+
+  @AfterEach
+  void tearDown() {
+    if (driver != null) {
+      driver.close();
+    }
   }
 
   @Test
