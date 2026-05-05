@@ -38,4 +38,7 @@ git push
 cd - || exit 3
 
 cd mcp-server
+npm login
 npm publish -i
+npm logout
+cd -
