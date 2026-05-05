@@ -1,5 +1,15 @@
 # Changelog
 
+## 7.16.1 (05.05.2026)
+* #3300 fix downloading files in Selenoid and Moon (#3301)
+* fix VideoMerger edge case when only one screenshot (#3299)
+* Fix disposables registry leak bug (#3314)
+* Bump io.appium:java-client from 10.1.0 to 10.1.1 (#3306)
+* Bump jacksonVersion from 2.21.2 to 2.21.3 (#3311)
+
+See https://github.com/selenide/selenide/milestone/240?closed=1
+
+
 ## 7.16.0 (10.04.2026)
 * #3091 Add Selenide MCP server (#3291)
 * Add WebSockets support in Selenide proxy [see BUP changelog](https://github.com/valfirst/browserup-proxy/blob/main/CHANGELOG.md#330) (#3293) (#3290)
