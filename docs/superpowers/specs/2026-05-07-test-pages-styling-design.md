@@ -125,9 +125,11 @@ Special handling for the latter group:
   Frameset pages cannot host the banner. We add the `<link>` to `<head>`
   for consistency (it has no visible effect) and skip the banner. This is
   acknowledged as cosmetic-only inclusion.
-- `page_for_printing.html` already sets `h2`/`h3` colors via its own
-  `@media screen` block; that page-local CSS wins over the global stylesheet
-  via specificity ordering, so its assertions are preserved.
+- `page_for_printing.html` keeps its `@media print { * { visibility: hidden } }`
+  rule untouched (we don't override `visibility`), so the printing assertions
+  still hold. Its page-local `@media screen` `h2`/`h3` colors are silently
+  overridden by the global stylesheet because the global `<link>` is loaded
+  after the local `<style>`; no test asserts on those colors.
 - `page_with_pseudo_elements.html`'s own `<style>` rules (`h1::first-letter`,
   `abbr::before`) are unique selectors not touched by the global stylesheet.
 
