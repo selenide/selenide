@@ -1,0 +1,121 @@
+/* Shared cosmetic styling for Selenide test fixture HTML pages.
+   Applied via <link rel="stylesheet" href="/selenide-test.css">. */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+  margin: 0;
+  padding: 16px 24px;
+  background: #F5FAFC;
+  color: #393939;
+  font: 14px/1.5 'Inter', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.selenide-test-banner {
+  background: #303030;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 10px 24px;
+  margin: -16px -24px 20px -24px;
+  letter-spacing: 0.02em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+h1 { font-size: 28px; color: #222; }
+h2 { font-size: 22px; color: #393939; }
+h3 { font-size: 18px; color: #494949; }
+
+p, ul, ol, dl {
+  margin: 0 0 16px;
+}
+
+a {
+  color: #46A3D1;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+input[type=text], input[type=email], input[type=password], input[type=search],
+input[type=number], input[type=tel], input[type=url],
+input[type=date], input[type=datetime-local], input[type=time], input[type=month], input[type=week],
+input:not([type]),
+select, textarea {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font: inherit;
+  color: #393939;
+  background: #fff;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #46A3D1;
+  box-shadow: 0 0 0 3px rgba(70, 163, 209, 0.15);
+}
+
+button, input[type=button], input[type=submit], input[type=reset] {
+  background: #46A3D1;
+  color: #fff;
+  border: 1px solid #46A3D1;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+button:hover, input[type=button]:hover,
+input[type=submit]:hover, input[type=reset]:hover {
+  background: #3a8ab2;
+  border-color: #3a8ab2;
+}
+
+button:disabled, input[type=button]:disabled,
+input[type=submit]:disabled, input[type=reset]:disabled {
+  background: #cccccc;
+  border-color: #cccccc;
+  color: #777;
+  cursor: not-allowed;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0 0 16px;
+}
+th, td {
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 1px solid #e5e5e5;
+}
+th { color: #222; font-weight: 600; }
+
+fieldset {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 0 0 16px;
+}
+legend {
+  color: #494949;
+  padding: 0 6px;
+}
+
+code {
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
+  font-size: 12px;
+  color: #333;
+}
+pre {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  padding: 8px 12px;
+  overflow-x: auto;
+}
