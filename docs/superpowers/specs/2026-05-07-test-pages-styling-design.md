@@ -101,6 +101,9 @@ restructuring can preserve are excluded:
   measurements.
 - `empty.html` — explicit `background-color: lightgrey` on `<body>` is part of
   the test.
+- `download.html` — bare two-line snippet with no `<html>`, `<head>`, or
+  `<body>`; nowhere to attach the `<link>` or banner without altering its
+  malformed-page semantics.
 
 All other HTML pages in `src/test/resources/` are styled, **including**:
 
@@ -113,9 +116,10 @@ All other HTML pages in `src/test/resources/` are styled, **including**:
 
 Special handling for the latter group:
 
-- `page_with_iframe.html` currently has an `<iframe>` directly between
-  `</head>` and `</html>` with no `<body>`. We wrap the iframe in a proper
-  `<body>` and add link + banner.
+- `page_with_iframe.html` and `page_with_shadow_dom_inside_iframe.html`
+  currently have content (`<iframe>` + script) directly between `</head>`
+  and `</html>` with no `<body>`. We wrap them in a proper `<body>` and add
+  link + banner.
 - `page_with_frames.html`, `page_with_parent_frame.html`,
   `page_with_child_frame.html` use `<frameset>` and have no `<body>`.
   Frameset pages cannot host the banner. We add the `<link>` to `<head>`
