@@ -5,11 +5,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="/selenide-test.css">
-</head>
-  <iframe height="500" width="300" id="iframe_page" style="border:1px"></iframe>
-  <script>
-    setTimeout(() => {
-      document.querySelector('#iframe_page').src = 'page_with_shadow_dom.html'
-    }, 20)
-  </script>
+  </head>
+  <body>
+    <div class="selenide-test-banner">Selenide</div>
+    <iframe height="500" width="300" id="iframe_page" style="border:1px"></iframe>
+    <script>
+      setTimeout(() => {
+        document.querySelector('#iframe_page').src = 'page_with_shadow_dom.html'
+      }, 20)
+    </script>
+  </body>
 </html>
