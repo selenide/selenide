@@ -104,6 +104,10 @@ restructuring can preserve are excluded:
 - `download.html` — bare two-line snippet with no `<html>`, `<head>`, or
   `<body>`; nowhere to attach the `<link>` or banner without altering its
   malformed-page semantics.
+- `page_with_divs.html` — `ElementsContainerPageFactoryTest` uses
+  `tagName("div")` and XPath `//div` to fetch "the first div" and asserts
+  its text equals "Big papa". Adding a leading banner div breaks this
+  assumption.
 
 All other HTML pages in `src/test/resources/` are styled, **including**:
 
