@@ -187,7 +187,7 @@ Order of work for the implementation plan:
 
 ## Acceptance criteria
 
-- All HTML test pages outside the skip list show: Selenide blue banner,
+- All HTML test pages outside the skip list show: dark "Selenide" banner,
   Inter font, blue buttons, padded background.
 - The skip-listed pages render byte-identically to before this change.
 - `./gradlew check` passes.
