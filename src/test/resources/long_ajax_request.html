@@ -15,8 +15,10 @@
         setTimeout(function() {$("#loading").remove();}, commandDuration*10);
       }
   </script>
+  <link rel="stylesheet" href="/selenide-test.css">
 </head>
 <body>
+<div class="selenide-test-banner">Selenide</div>
 <h1>The long ajax request test</h1>
 <button onclick="runLongAjaxRequest()">Run long request</button>
 <div id="results">
