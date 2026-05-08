@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Apply a single shared, on-brand stylesheet plus a "Selenide" header banner to ~70 HTML test fixtures in `src/test/resources/`, leaving 7 pages whose look/geometry is itself under test untouched (the 5 originally identified plus `download.html` and `page_with_divs.html` added during triage).
+**Goal:** Apply a single shared, on-brand stylesheet plus a "Selenide" header banner (`<header class="selenide-test-banner">`) to ~75 HTML test fixtures in `src/test/resources/`, leaving 5 pages whose look/geometry is itself under test untouched.
 
 **Architecture:** One new file `src/test/resources/selenide-test.css` is referenced from each styled page via `<link rel="stylesheet" href="/selenide-test.css">` in `<head>`, plus a `<div class="selenide-test-banner">Selenide</div>` injected as the first child of `<body>`. Bulk edits are performed by a one-shot Python script driven from a hard-coded skip list. Verification is by re-running the existing unit and chrome-headless integration test suites.
 

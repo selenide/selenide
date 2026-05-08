@@ -327,11 +327,11 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void canChainFilterAndFirst() {
-    $$("div").filterBy(visible).get(1)
+    $$("div").filterBy(visible).first()
       .shouldBe(visible)
       .shouldHave(text("non-clickable element"));
 
-    $$("div").filterBy(visible).get(3).click();
+    $$("div").filterBy(visible).get(2).click();
   }
 
   @Test
