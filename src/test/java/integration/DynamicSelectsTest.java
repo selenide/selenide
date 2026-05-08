@@ -42,8 +42,8 @@ final class DynamicSelectsTest extends ITest {
 
   @Test
   void selectByXPath() {
-    $(By.xpath("html/body/div[2]/form[1]/label[1]/select[1]")).selectOption("l'a \"English\"");
-    assertThat($(By.xpath("html/body/div[2]/form[1]/label[1]/select[1]")).getSelectedOptionText())
+    $(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).selectOption("l'a \"English\"");
+    assertThat($(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).getSelectedOptionText())
       .isEqualTo("l'a \"English\"");
   }
 

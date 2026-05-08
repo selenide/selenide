@@ -101,13 +101,12 @@ restructuring can preserve are excluded:
   measurements.
 - `empty.html` — explicit `background-color: lightgrey` on `<body>` is part of
   the test.
-- `download.html` — bare two-line snippet with no `<html>`, `<head>`, or
-  `<body>`; nowhere to attach the `<link>` or banner without altering its
-  malformed-page semantics.
-- `page_with_divs.html` — `ElementsContainerPageFactoryTest` uses
-  `tagName("div")` and XPath `//div` to fetch "the first div" and asserts
-  its text equals "Big papa". Adding a leading banner div breaks this
-  assumption.
+
+The banner element is a `<header class="selenide-test-banner">` rather than
+a `<div>` so that it doesn't intrude on tests using `tagName("div")`,
+XPath `//div`, or `$$("div")`. This let us style `page_with_divs.html` and
+`download.html` (a previously bare two-line fragment) without breaking the
+collection/page-factory tests that look up "the first div" generically.
 
 All other HTML pages in `src/test/resources/` are styled, **including**:
 
