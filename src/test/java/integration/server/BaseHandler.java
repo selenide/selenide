@@ -83,6 +83,8 @@ public abstract class BaseHandler extends HttpServlet {
       case "json" -> "application/json";
       case "txt" -> CONTENT_TYPE_PLAIN_TEXT;
       case "html" -> CONTENT_TYPE_HTML_TEXT;
+      case "css" -> "text/css";
+      case "js" -> "text/javascript";
       case "pdf" -> "application/pdf";
       case "png" -> "image/png";
       case "ico" -> "image/x-icon";
