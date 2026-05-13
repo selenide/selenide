@@ -206,25 +206,30 @@ public class DownloadFileWithCdp {
     }
 
     private void setName(String guid, String fileName) {
-      download(guid).fileName = fileName;
+      CdpDownload download = download(guid);
+      download.fileName = fileName;
+      finishIfFileCompleted(download);
     }
 
     public void inProgress(DownloadProgress e) {
       CdpDownload download = download(e.getGuid());
       download.lastModifiedAt = currentTimeMillis();
       download.fileSize = e.getReceivedBytes().longValue();
+      download.expectedFileSize = e.getTotalBytes().longValue();
 
-      if (e.getReceivedBytes().longValue() >= e.getTotalBytes().longValue()) {
-        if (download.file().exists()) {
-          finish(e);
+      finishIfFileCompleted(download);
+    }
+
+    private void finishIfFileCompleted(CdpDownload download) {
+      if (download.expectedFileSize >= 0 && download.fileSize >= download.expectedFileSize) {
+        if (download.fileName != null && download.file().exists()) {
+          download.finish();
         }
       }
     }
 
     public void finish(DownloadProgress e) {
-      CdpDownload download = download(e.getGuid());
-      download.completed = true;
-      download.lastModifiedAt = currentTimeMillis();
+      download(e.getGuid()).finish();
     }
 
     private synchronized CdpDownload download(String guid) {
@@ -237,6 +242,7 @@ public class DownloadFileWithCdp {
     @Nullable
     private String fileName;
     private long fileSize = -1;
+    private long expectedFileSize = -1;
     private long lastModifiedAt = currentTimeMillis();
     private boolean completed;
 
@@ -246,6 +252,11 @@ public class DownloadFileWithCdp {
 
     private File file() {
       return new File(folder.getPath(), requireNonNull(fileName));
+    }
+
+    private void finish() {
+      this.completed = true;
+      this.lastModifiedAt = currentTimeMillis();
     }
   }
 
