@@ -27,7 +27,7 @@ jobs:
           chrome-version: stable
       - uses: gradle/actions/setup-gradle@v6
       - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.44.0-SNAPSHOT --no-parallel --no-daemon --console=plain
+        run: ./gradlew ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.45.0-SNAPSHOT --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v7
         if: always()
         with:
