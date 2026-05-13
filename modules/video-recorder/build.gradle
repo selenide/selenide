@@ -8,7 +8,7 @@ dependencies {
   compileOnly("org.junit.jupiter:junit-jupiter-api")
   compileOnly("org.testng:testng:$testngVersion") { transitive = false }
 
-  testImplementation project(':modules:core').sourceSets.test.output
+  testImplementation rootProject.project(':modules:core').sourceSets.test.output
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
 

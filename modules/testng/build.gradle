@@ -4,8 +4,8 @@ ext {
 
 dependencies {
   api project(':statics')
-  testImplementation project(':statics').sourceSets.test.output
-  testImplementation project(':modules:core').sourceSets.test.output
+  testImplementation rootProject.project(':statics').sourceSets.test.output
+  testImplementation rootProject.project(':modules:core').sourceSets.test.output
 
   api("org.testng:testng:$testngVersion") { transitive = false }
   testRuntimeOnly("org.testng:testng:$testngVersion") {

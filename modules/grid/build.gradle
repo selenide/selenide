@@ -5,10 +5,10 @@ ext {
 dependencies {
   api project(":statics")
 
-  testImplementation project(':statics').sourceSets.test.output
-  testImplementation project(':modules:core').sourceSets.test.output
+  testImplementation rootProject.project(':statics').sourceSets.test.output
+  testImplementation rootProject.project(':modules:core').sourceSets.test.output
   testImplementation project(':modules:full-screenshot')
-  testImplementation project(':modules:full-screenshot').sourceSets.test.output
+  testImplementation rootProject.project(':modules:full-screenshot').sourceSets.test.output
 
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.junit.jupiter:junit-jupiter-params")
