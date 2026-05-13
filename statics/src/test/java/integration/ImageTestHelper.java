@@ -25,6 +25,11 @@ class ImageTestHelper {
   static final Set<Color> GRAY = Sets.set(new Color(136, 136, 136));
   static final Set<Color> PINK = Sets.set(new Color(136, 136, 136), new Color(255, 192, 203));
 
+  private static final int CORNER_INSET = 1;
+  // Element screenshots can be shifted down by ~1 CSS pixel (= 2 physical px at 2x DPR),
+  // leaving the top row(s) of the captured image as whitespace instead of the red border.
+  private static final int TOP_INSET = 2;
+
   static void assertBorder(BufferedImage img, Set<Color> color) {
     assertBorder(img, color, img.getWidth());
   }
@@ -37,26 +42,26 @@ class ImageTestHelper {
   }
 
   static void assertTopBorder(BufferedImage img, Set<Color> color, int width) {
-    for (int x = 1; x < width; x++) {
-      assertColor(img, "top border @" + x, x, 1, color);
+    for (int x = CORNER_INSET; x < width - CORNER_INSET; x++) {
+      assertColor(img, "top border @" + x, x, TOP_INSET, color);
     }
   }
 
   static void assertBottomBorder(BufferedImage img, Set<Color> color, int width) {
-    for (int x = 1; x < width; x++) {
-      assertColor(img, "bottom border @" + x, x, img.getHeight() - 1, color);
+    for (int x = CORNER_INSET; x < width - CORNER_INSET; x++) {
+      assertColor(img, "bottom border @" + x, x, img.getHeight() - 1 - CORNER_INSET, color);
     }
   }
 
   static void assertLeftBorder(BufferedImage img, Set<Color> color) {
-    for (int y = 1; y < img.getHeight(); y++) {
-      assertColor(img, "left border @" + y, 1, y, color);
+    for (int y = TOP_INSET; y < img.getHeight() - CORNER_INSET; y++) {
+      assertColor(img, "left border @" + y, CORNER_INSET, y, color);
     }
   }
 
   static void assertRightBorder(BufferedImage img, Set<Color> color) {
-    for (int y = 1; y < img.getHeight(); y++) {
-      assertColor(img, "right border @" + y, img.getWidth() - 1, y, color);
+    for (int y = TOP_INSET; y < img.getHeight() - CORNER_INSET; y++) {
+      assertColor(img, "right border @" + y, img.getWidth() - 1 - CORNER_INSET, y, color);
     }
   }
 
