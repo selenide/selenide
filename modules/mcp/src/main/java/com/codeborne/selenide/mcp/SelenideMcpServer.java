@@ -18,13 +18,28 @@ import io.modelcontextprotocol.server.transport.StdioServerTransportProvider;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * MCP (Model Context Protocol) server that exposes Selenide browser automation
+ * as tools consumable by AI assistants such as Claude.
+ *
+ * <p>Start via {@link #main(String[])} passing CLI arguments to configure the browser session.
+ * See the module README for the full list of supported parameters.
+ */
 public class SelenideMcpServer {
   private final BrowserSession session;
 
+  /**
+   * Creates a server backed by a browser session configured with the given {@code config}.
+   */
   public SelenideMcpServer(SelenideConfig config) {
     this.session = new BrowserSession(config);
   }
 
+  /**
+   * Starts the MCP server over stdio and blocks until the JVM shuts down.
+   *
+   * @param args command-line arguments; {@code --caps=codegen} enables the codegen toolset
+   */
   @SuppressWarnings("unchecked") // MCP SDK's tools() uses generic varargs
   public void start(String[] args) {
     StdioServerTransportProvider transport = new StdioServerTransportProvider(McpJsonDefaults.getMapper());
