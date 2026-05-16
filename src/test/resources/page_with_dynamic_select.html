@@ -4,32 +4,46 @@
   <title>Test::dynamic select</title>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript">
     const commandDuration = 100;
 
+    function addOption(select, value, text) {
+      var option = document.createElement('option');
+      option.value = value;
+      option.textContent = text;
+      select.appendChild(option);
+    }
+
     function drawOptions() {
-      var select = $("#language");
-      $("<option/>").val("'eng'").text("l'a " + '"English"').appendTo(select);
-      $("<option/>").val("rus").text("l'a " + '"Русский"').appendTo(select);
-      $("<option/>").val('"est"').text("l'a " + '"Eesti"').appendTo(select);
+      var select = document.getElementById('language');
+      addOption(select, "'eng'", "l'a " + '"English"');
+      addOption(select, "rus", "l'a " + '"Русский"');
+      addOption(select, '"est"', "l'a " + '"Eesti"');
     }
 
     function rebuildBooks() {
-      $('#books').remove();
-      if ($('#language').val() === 'rus') {
+      var books = document.getElementById('books');
+      if (books) books.remove();
+      if (document.getElementById('language').value === 'rus') {
         setTimeout(buildBooks, commandDuration*1.5);
       }
     }
 
     function buildBooks() {
-      $('form').append('<select id="books"></select>');
-      $('form select').append('<option value="1">книжко</option>');
+      var form = document.querySelector('form');
+      var select = document.createElement('select');
+      select.id = 'books';
+      var option = document.createElement('option');
+      option.value = '1';
+      option.textContent = 'книжко';
+      select.appendChild(option);
+      form.appendChild(select);
     }
 
-    $(function () {
-      $('#language').on('change', function() {
-        $('h2').text($('#language').val());
+    document.addEventListener('DOMContentLoaded', function () {
+      var language = document.getElementById('language');
+      language.addEventListener('change', function() {
+        document.querySelector('h2').textContent = language.value;
         setTimeout(rebuildBooks, commandDuration*1.5); // a little bit longer than average Selenium command like "isDisplayed()".
       });
 

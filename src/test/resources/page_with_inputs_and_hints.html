@@ -4,24 +4,23 @@
   <title>Test::inputs with hints</title>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript">
 
     // hints appear on typing and disappear on blur
     function displayUsernameHint() {
-      $("#usernameHint").show();
+      document.getElementById('usernameHint').style.display = '';
     }
 
     function hideUsernameHint() {
-      $("#usernameHint").hide();
+      document.getElementById('usernameHint').style.display = 'none';
     }
 
     function displayPasswordHint() {
-      $("#passwordHint").show();
+      document.getElementById('passwordHint').style.display = '';
     }
 
     function hidePasswordHint() {
-      $("#passwordHint").hide();
+      document.getElementById('passwordHint').style.display = 'none';
     }
 
   </script>
