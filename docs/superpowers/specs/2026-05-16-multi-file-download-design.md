@@ -31,34 +31,49 @@ expectation — no quiet-period heuristics that flake under load.
 One new method on `SelenideElement`:
 
 ```java
-List<File> downloadFiles(DownloadOptions options) throws FileNotDownloadedError;
+List<File> downloadFiles(DownloadFilesOptions options) throws FileNotDownloadedError;
 ```
 
-One new builder on `DownloadOptions`:
+New class `com.codeborne.selenide.DownloadFilesOptions` — a sibling of
+`DownloadOptions`, **not** a subclass and not a builder on it. The expected
+file count is a constructor-level requirement, expressed via a factory:
 
 ```java
-public DownloadOptions withExpectedFileCount(int expectedFileCount);
-public int expectedFileCount(); // accessor; 0 = not set
+public static DownloadFilesOptions files(int expectedFileCount);
 ```
+
+The class exposes the same builder shape as `DownloadOptions` for everything
+the two share — `withMethod`, `withTimeout`, `withIncrementTimeout`,
+`withFilter`, `withExtension`, `withName`, `withNameMatching`, `withoutContent`,
+`withAction`. It does **not** expose anything that would let the count drift
+(no `withExpectedFileCount` builder — the count is fixed by `files(N)`).
+
+`DownloadOptions` is **unchanged**. The two classes share no inheritance; both
+implement `HasTimeout` (which `DownloadOptions` already does).
 
 Usage:
 
 ```java
-List<File> files = $("#exportAll").downloadFiles(
-    file()
-        .withExpectedFileCount(3)
-        .withExtension("pdf")
-        .withTimeout(ofSeconds(30))
+import static com.codeborne.selenide.DownloadOptions.file;
+import static com.codeborne.selenide.DownloadFilesOptions.files;
+
+File pdf = $("#export").download(
+    file().withExtension("pdf").withTimeout(ofSeconds(30))
+);
+
+List<File> pdfs = $("#exportAll").downloadFiles(
+    files(3).withExtension("pdf").withTimeout(ofSeconds(30))
 );
 ```
 
 ### Calling rules
 
-- `expectedFileCount` **must be set** (`>= 1`) before passing to `downloadFiles`.
-  - Not set → `IllegalArgumentException("expectedFileCount must be set, call DownloadOptions.withExpectedFileCount(N)")`.
-  - `< 1` → `IllegalArgumentException("expectedFileCount must be >= 1, got: <N>")`.
-- Passing `expectedFileCount > 1` to the single-file `download(DownloadOptions)`
-  throws `IllegalArgumentException("download() expects a single file, use downloadFiles() for N > 1")`.
+- `files(int n)` validates `n >= 1` at construction; otherwise throws
+  `IllegalArgumentException("expectedFileCount must be >= 1, got: <n>")`.
+- The misuse cases that required runtime checks under the old design — "count
+  not set," "count > 1 passed to single-file `download()`" — are now ruled out
+  by the type system. `download(DownloadOptions)` cannot accept multi-file
+  options; `downloadFiles(DownloadFilesOptions)` cannot be called with N < 1.
 - The returned `List<File>` is sorted **in completion order, oldest first**.
   Implementation: for FOLDER/CDP modes this is file modification time; for
   PROXY mode this is the HTTP response capture timestamp. Ties broken by
@@ -131,18 +146,33 @@ Minimal, focused. No unrelated cleanup.
 - Add `matchingFiles(filter)` returning all filtered files sorted by mtime asc
   with filename as tiebreaker.
 
+### `DownloadFilesOptions` (new)
+
+- New class `com.codeborne.selenide.DownloadFilesOptions`, parallel to
+  `DownloadOptions`. Private constructor; `public static DownloadFilesOptions files(int)`
+  is the only entry point.
+- Fields: `int expectedFileCount` (final, validated `>= 1` in factory), plus the
+  same fields as `DownloadOptions` (`method`, `timeout`, `incrementTimeout`,
+  `filter`, `action`, `contentStrategy`).
+- Builders: `withMethod`, `withTimeout(long)`, `withTimeout(Duration)`,
+  `withIncrementTimeout`, `withFilter`, `withExtension`, `withName`,
+  `withNameMatching`, `withoutContent`, `withAction`. Same shape as
+  `DownloadOptions`. **No** `withExpectedFileCount` — the count is fixed at
+  construction.
+- Accessors: `expectedFileCount()`, plus the same accessors as `DownloadOptions`.
+- Implements `HasTimeout`.
+- `toString()` includes `expectedFileCount` plus the same fields as
+  `DownloadOptions.toString()`.
+
 ### `DownloadOptions`
 
-- Add private final `int expectedFileCount` field, default `0` (= "not set").
-- Add `withExpectedFileCount(int)` builder method.
-- Add `expectedFileCount()` accessor.
-- Include in `toString()` when set.
+- **Unchanged.** Existing single-file behavior is untouched.
 
 ### `SelenideElement`
 
-- Add `List<File> downloadFiles(DownloadOptions options)` with javadoc mirroring
-  the existing `download(DownloadOptions)` style. Include a usage example and an
-  explicit note about the `withExpectedFileCount` requirement.
+- Add `List<File> downloadFiles(DownloadFilesOptions options)` with javadoc
+  mirroring the existing `download(DownloadOptions)` style. Include a usage
+  example and link to `DownloadFilesOptions.files(int)`.
 
 ### Commands
 
@@ -150,8 +180,7 @@ Minimal, focused. No unrelated cleanup.
   Dispatches by `FileDownloadMode` to the appropriate implementation
   (`DownloadFileToFolder.downloadFiles`, `DownloadFileWithCdp.downloadFiles`,
   `DownloadFileWithProxyServer.downloadFiles`, `DownloadFileWithHttpRequest`).
-- Existing `commands/DownloadFile` gains the "reject `expectedFileCount > 1`"
-  validation.
+- Existing `commands/DownloadFile` is unchanged.
 
 ### Mode-specific implementations
 
@@ -162,20 +191,24 @@ Minimal, focused. No unrelated cleanup.
 - `DownloadFileWithHttpRequest` — accept `expectedFileCount == 1`, throw
   `UnsupportedOperationException` for `> 1`.
 
-No new packages. New public surface is exactly: one method on `SelenideElement`,
-one builder + one accessor on `DownloadOptions`.
+No new packages. New public surface is exactly: one method on `SelenideElement`
+(`downloadFiles`) and one new class (`DownloadFilesOptions`) with its static
+factory `files(int)`. `DownloadOptions` is untouched.
 
 ## Errors
 
 | Situation | Exception | Message |
 |---|---|---|
-| `expectedFileCount` not set on `downloadFiles` | `IllegalArgumentException` | `expectedFileCount must be set, call DownloadOptions.withExpectedFileCount(N)` |
-| `expectedFileCount < 1` | `IllegalArgumentException` | `expectedFileCount must be >= 1, got: <N>` |
-| `expectedFileCount > 1` passed to single-file `download(DownloadOptions)` | `IllegalArgumentException` | `download() expects a single file, use downloadFiles() for N > 1` |
+| `files(n)` with `n < 1` | `IllegalArgumentException` | `expectedFileCount must be >= 1, got: <n>` |
 | HTTPGET mode with `expectedFileCount > 1` | `UnsupportedOperationException` | `HTTPGET mode downloads a single href; use FileDownloadMode.FOLDER, CDP, or PROXY for multi-file downloads` |
 | Timed out, fewer files than expected | `FileNotDownloadedError` | `Failed to download N files in <timeout>: only M files matched <filter>. Files found: [...]` |
 | More files than expected | `FileNotDownloadedError` | `Expected N files, but found M new files matching <filter>: [...]` |
 | Stalled (incrementTimeout, no folder changes) | `FileNotDownloadedError` | Existing message, unchanged |
+
+The "count not set" and "count > 1 passed to single-file download()" failure
+modes are eliminated by the type system: `download` takes `DownloadOptions`,
+`downloadFiles` takes `DownloadFilesOptions`, and `expectedFileCount` is a
+constructor argument on the latter.
 
 ## Testing
 
@@ -201,11 +234,15 @@ for algorithmic code. Selenide test conventions: integration tests under
 
 ### New unit tests
 
-- `DownloadOptionsTest`:
-  - `withExpectedFileCount` builder returns a new instance with the value set.
-  - Accessor returns the set value (or `0` by default).
-  - `toString()` includes `expectedFileCount` when set; omits when unset.
-  - Validation: `< 1` throws `IllegalArgumentException`.
+- `DownloadFilesOptionsTest`:
+  - `files(int)` factory: valid `>= 1` constructs an instance with that count.
+  - `files(0)` and `files(-1)` throw `IllegalArgumentException`.
+  - Each builder method (`withMethod`, `withTimeout`, `withFilter`,
+    `withExtension`, `withName`, `withNameMatching`, `withoutContent`,
+    `withAction`, `withIncrementTimeout`) returns a new instance with the
+    expected field set and `expectedFileCount` preserved.
+  - `toString()` includes `expectedFileCount` and the same fields as
+    `DownloadOptions.toString()`.
 - `DownloadsTest`:
   - `matchingFiles(filter)` returns the full filtered list.
   - Sort order is mtime ascending; filename breaks ties.
