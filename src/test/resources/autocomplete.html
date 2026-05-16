@@ -1,52 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Test::jquery autocomplete</title>
+  <title>Test::autocomplete</title>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <link rel="stylesheet" href="jquery-ui.min.css">
-  <script type="text/javascript" src="jquery.min.js"></script>
-  <script type="text/javascript" src="jquery-ui.min.js"></script>
   <script type="text/javascript">
       function log(e) {
         if (typeof console !== "undefined") console.log(e);
-        $('#log').append('<li>' + e.type + ': ' + e.keyCode + ', ' + e.charCode + ', ' + e.which + '</li>');
+        var li = document.createElement('li');
+        li.textContent = e.type + ': ' + e.keyCode + ', ' + e.charCode + ', ' + e.which;
+        document.getElementById('log').appendChild(li);
       }
 
-      $(function() {
-        var availableTags = [
-          "ActionScript",
-          "AppleScript",
-          "Asp",
-          "BASIC",
-          "C",
-          "C++",
-          "Clojure",
-          "COBOL",
-          "ColdFusion",
-          "Erlang",
-          "Fortran",
-          "Groovy",
-          "Haskell",
-          "Java",
-          "JavaScript",
-          "Lisp",
-          "Perl",
-          "PHP",
-          "Python",
-          "Ruby",
-          "Scala",
-          "Scheme"
-        ];
-        $('#tags')
-            .on('change keyup keydown keypress input paste', log)
-            .autocomplete({
-              autoFocus: true,
-              source: availableTags,
-              change: function(event) {
-                $('h4').text("This is " + $(event.currentTarget).val() + "!");
-              }
-            });
+      document.addEventListener('DOMContentLoaded', function() {
+        var tags = document.getElementById('tags');
+        ['change', 'keyup', 'keydown', 'keypress', 'input', 'paste'].forEach(function(type) {
+          tags.addEventListener(type, log);
+        });
+        tags.addEventListener('change', function(event) {
+          document.querySelector('h4').textContent = "This is " + event.currentTarget.value + "!";
+        });
       });
 
   </script>
@@ -61,15 +34,39 @@
 </head>
 <body>
 <header class="selenide-test-banner">Selenide</header>
-<h1>Page with JQuery autocomplete</h1>
+<h1>Page with autocomplete</h1>
 
 <ul id="log">
 </ul>
 
 <br/>
 <label for="tags">Tags:
-  <input id="tags"/>
+  <input id="tags" list="available-tags" autocomplete="off"/>
 </label>
+<datalist id="available-tags">
+  <option value="ActionScript"></option>
+  <option value="AppleScript"></option>
+  <option value="Asp"></option>
+  <option value="BASIC"></option>
+  <option value="C"></option>
+  <option value="C++"></option>
+  <option value="Clojure"></option>
+  <option value="COBOL"></option>
+  <option value="ColdFusion"></option>
+  <option value="Erlang"></option>
+  <option value="Fortran"></option>
+  <option value="Groovy"></option>
+  <option value="Haskell"></option>
+  <option value="Java"></option>
+  <option value="JavaScript"></option>
+  <option value="Lisp"></option>
+  <option value="Perl"></option>
+  <option value="PHP"></option>
+  <option value="Python"></option>
+  <option value="Ruby"></option>
+  <option value="Scala"></option>
+  <option value="Scheme"></option>
+</datalist>
 
 <h4></h4>
 

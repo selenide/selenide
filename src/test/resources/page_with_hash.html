@@ -4,14 +4,10 @@
   <title>Test::hash</title>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript">
-      $(function() {
-        $(window).on("hashchange", function() {
-          $("#hash-value").text(window.location.hash);
-        });
+      window.addEventListener('hashchange', function() {
+        document.getElementById('hash-value').textContent = window.location.hash;
       });
-
   </script>
   <link rel="stylesheet" href="/selenide-test.css">
 </head>

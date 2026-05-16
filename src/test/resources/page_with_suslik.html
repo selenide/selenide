@@ -4,14 +4,13 @@
   <title>Test page :: with suslik</title>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script src="jquery.min.js"></script>
   <link rel="stylesheet" href="/selenide-test.css">
 </head>
 <body>
 <header class="selenide-test-banner">Selenide</header>
 <script>
   function showSuslik() {
-    $('body').append('<div id=\"the-suslik\">Suslik</div>');
+    document.body.insertAdjacentHTML('beforeend', '<div id="the-suslik">Suslik</div>');
   }
 
   setTimeout(showSuslik, 1000);
