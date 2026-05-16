@@ -3,8 +3,6 @@
    The page banner is a <header class="selenide-test-banner"> so it does not
    collide with tests using tagName("div") / $$("div") selectors. */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 body {
   margin: 0;
   padding: 16px 24px;
