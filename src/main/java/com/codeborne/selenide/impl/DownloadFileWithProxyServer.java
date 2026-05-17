@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -24,15 +25,22 @@ import static com.codeborne.selenide.proxy.SelenideProxyServer.SELENIDE_PROXY_FI
 
 public class DownloadFileWithProxyServer {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithProxyServer.class);
+  private static final DurationFormat df = new DurationFormat();
 
   private final Waiter waiter;
+  private final Downloader downloader;
+
+  DownloadFileWithProxyServer(Waiter waiter, Downloader downloader) {
+    this.waiter = waiter;
+    this.downloader = downloader;
+  }
 
   DownloadFileWithProxyServer(Waiter waiter) {
-    this.waiter = waiter;
+    this(waiter, new Downloader());
   }
 
   public DownloadFileWithProxyServer() {
-    this(new Waiter());
+    this(new Waiter(), new Downloader());
   }
 
   @Deprecated
@@ -88,15 +96,29 @@ public class DownloadFileWithProxyServer {
       }
       if (matching.size() < options.expectedFileCount()) {
         throw new FileNotDownloadedError(
-          "Failed to download %d files: only %d matched %s".formatted(
-            options.expectedFileCount(), matching.size(), options.getFilter().description()),
+          "Failed to download %d files in %s: only %d files matched %s. Files found: %s".formatted(
+            options.expectedFileCount(), df.format(timeout), matching.size(),
+            options.getFilter().description(), filter.downloads().filesAsString()),
           timeout);
       }
-      return matching.stream().map(DownloadedFile::getFile).toList();
+
+      File uniqueFolder = downloader.prepareTargetFolder(config);
+      List<File> archived = new ArrayList<>(matching.size());
+      for (DownloadedFile d : matching) {
+        File destination = new File(uniqueFolder, d.getName());
+        archived.add(archiveProxyFile(d.getFile(), destination));
+      }
+      return archived;
     }
     finally {
       filter.deactivate();
     }
+  }
+
+  private File archiveProxyFile(File source, File destination) {
+    FileHelper.moveFile(source, destination);
+    log.debug("Moved the downloaded proxy file {} to {}", source, destination);
+    return destination;
   }
 
   private void waitForExpectedDownloads(FileDownloadFilter filter, FileFilter fileFilter,

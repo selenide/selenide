@@ -26,6 +26,9 @@ public class MultiFileDownloadViaProxyTest extends ProxyIntegrationTest {
 
     assertThat(downloaded).extracting(File::getName)
       .containsExactlyInAnyOrder("download.html", "empty.html", "hello_world.txt");
+    assertThat(downloaded.stream().map(File::getParentFile).distinct().toList())
+      .as("all files archived into one folder")
+      .hasSize(1);
   }
 
   @Test

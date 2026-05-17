@@ -146,7 +146,8 @@ public class DownloadFileToFolder {
     return matching;
   }
 
-  private List<File> archiveAll(Config config, List<DownloadedFile> downloads, long deadline) {
+  // TODO #3261: override in DownloadFileFromMoon/Selenoid/Grid to fetch files from remote containers
+  protected List<File> archiveAll(Config config, List<DownloadedFile> downloads, long deadline) {
     File uniqueFolder = downloader.prepareTargetFolder(config);
     List<File> archived = new ArrayList<>(downloads.size());
     for (DownloadedFile d : downloads) {

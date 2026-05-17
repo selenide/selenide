@@ -103,7 +103,8 @@ public class DownloadFileWithCdp {
     }
   }
 
-  private List<File> archiveAllCdp(Config config, List<CdpDownload> cdpDownloads, long deadline) {
+  // TODO #3261: override in DownloadFileFromMoon/Selenoid/Grid CDP subclasses to fetch from remote containers
+  protected List<File> archiveAllCdp(Config config, List<CdpDownload> cdpDownloads, long deadline) {
     File uniqueFolder = downloader.prepareTargetFolder(config);
     List<File> archived = new ArrayList<>(cdpDownloads.size());
     for (CdpDownload d : cdpDownloads) {
@@ -140,15 +141,16 @@ public class DownloadFileWithCdp {
     long pollingInterval = Math.max(driver.config().pollingInterval(), 100);
     long downloadStartedAt = currentTimeMillis();
     Stopwatch stopwatch = new Stopwatch(timeout);
+    List<CdpDownload> latest = List.of();
     do {
-      List<CdpDownload> completed = downloads.findAll(fileFilter);
-      if (completed.size() > expectedCount) {
+      latest = downloads.findAll(fileFilter);
+      if (latest.size() > expectedCount) {
         String message = String.format("Expected %d files, but found %d new files matching %s",
-          expectedCount, completed.size(), fileFilter.description());
+          expectedCount, latest.size(), fileFilter.description());
         throw new FileNotDownloadedError(message, timeout);
       }
-      if (completed.size() == expectedCount) {
-        return completed;
+      if (latest.size() == expectedCount) {
+        return latest;
       }
       failFastIfNoChanges(downloads, fileFilter, downloadStartedAt, timeout, incrementTimeout);
       stopwatch.sleep(pollingInterval);
@@ -156,8 +158,9 @@ public class DownloadFileWithCdp {
     while (!stopwatch.isTimeoutReached());
 
     throw new FileNotDownloadedError(
-      "Failed to download %d files in %s, found files: %s".formatted(
-        expectedCount, df.format(timeout), downloads.folder().files()),
+      "Failed to download %d files in %s: only %d files matched %s. Files found: %s".formatted(
+        expectedCount, df.format(timeout), latest.size(), fileFilter.description(),
+        downloads.folder().files()),
       timeout);
   }
 
