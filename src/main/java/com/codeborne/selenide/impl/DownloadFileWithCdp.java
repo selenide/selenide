@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -76,7 +78,87 @@ public class DownloadFileWithCdp {
 
   public List<File> downloadFiles(WebElementSource link, WebElement clickable,
                                   long timeout, long incrementTimeout, DownloadFilesOptions options) {
-    throw new UnsupportedOperationException("CDP multi-file download not yet implemented");
+    long start = currentTimeMillis();
+    Driver driver = link.driver();
+    Config config = driver.config();
+    DevTools devTools = initDevTools(driver);
+    DownloadsFolder downloadsFolder = requireNonNull(getDownloadsFolder(driver), "Webdriver downloads folder is not configured");
+    CdpDownloads downloads = new CdpDownloads(downloadsFolder, new ConcurrentHashMap<>(1));
+
+    prepareDownloadWithCdp(driver, devTools, downloads, timeout);
+    options.getAction().perform(driver, clickable);
+
+    try {
+      List<CdpDownload> matched = waitUntilExpectedDownloadsCompleted(driver,
+        options.getFilter(), options.expectedFileCount(), timeout, incrementTimeout, downloads);
+
+      long deadline = start + timeout;
+      return switch (options.contentStrategy()) {
+        case FULL_CONTENT -> archiveAllCdp(config, matched, deadline);
+        case EMPTY_CONTENT -> mockAllCdp(config, matched);
+      };
+    }
+    finally {
+      devTools.clearListeners();
+    }
+  }
+
+  private List<File> archiveAllCdp(Config config, List<CdpDownload> cdpDownloads, long deadline) {
+    File uniqueFolder = downloader.prepareTargetFolder(config);
+    List<File> archived = new ArrayList<>(cdpDownloads.size());
+    for (CdpDownload d : cdpDownloads) {
+      File destination = new File(uniqueFolder, d.file().getName());
+      long remaining = Math.max(1, deadline - currentTimeMillis());
+      File copied = downloader.copyFileWithTimeout(d.file().getName(),
+        () -> moveCdpFile(d.file(), destination), remaining);
+      archived.add(copied);
+    }
+    archived.sort(Comparator.comparingLong(File::lastModified).thenComparing(File::getName));
+    return archived;
+  }
+
+  private List<File> mockAllCdp(Config config, List<CdpDownload> cdpDownloads) {
+    File uniqueFolder = downloader.prepareTargetFolder(config);
+    List<File> mocks = new ArrayList<>(cdpDownloads.size());
+    for (CdpDownload d : cdpDownloads) {
+      File destination = new File(uniqueFolder, requireNonNull(d.fileName));
+      mocks.add(downloader.mockFileContent(destination));
+    }
+    return mocks;
+  }
+
+  private File moveCdpFile(File source, File destination) throws IOException {
+    moveFile(source, destination);
+    log.debug("Moved the downloaded CDP file {} to {}", source, destination);
+    return destination;
+  }
+
+  private List<CdpDownload> waitUntilExpectedDownloadsCompleted(Driver driver, FileFilter fileFilter,
+                                                                int expectedCount,
+                                                                long timeout, long incrementTimeout,
+                                                                CdpDownloads downloads) {
+    long pollingInterval = Math.max(driver.config().pollingInterval(), 100);
+    long downloadStartedAt = currentTimeMillis();
+    Stopwatch stopwatch = new Stopwatch(timeout);
+    do {
+      List<CdpDownload> completed = downloads.findAll(fileFilter);
+      if (completed.size() > expectedCount) {
+        String message = String.format("Expected %d files, but found %d new files matching %s",
+          expectedCount, completed.size(), fileFilter.description());
+        throw new FileNotDownloadedError(message, timeout);
+      }
+      if (completed.size() == expectedCount) {
+        return completed;
+      }
+      failFastIfNoChanges(downloads, fileFilter, downloadStartedAt, timeout, incrementTimeout);
+      stopwatch.sleep(pollingInterval);
+    }
+    while (!stopwatch.isTimeoutReached());
+
+    throw new FileNotDownloadedError(
+      "Failed to download %d files in %s, found files: %s".formatted(
+        expectedCount, df.format(timeout), downloads.folder().files()),
+      timeout);
   }
 
   private File download(WebElementSource link,
@@ -206,6 +288,13 @@ public class DownloadFileWithCdp {
         .filter(download -> download.completed)
         .filter(download -> fileFilter.match(download.file()))
         .findAny();
+    }
+
+    private List<CdpDownload> findAll(FileFilter fileFilter) {
+      return downloads.values().stream()
+        .filter(download -> download.completed)
+        .filter(download -> fileFilter.match(download.file()))
+        .toList();
     }
 
     private Optional<Long> lastModificationTime() {
