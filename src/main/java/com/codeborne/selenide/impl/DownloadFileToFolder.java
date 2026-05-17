@@ -82,6 +82,7 @@ public class DownloadFileToFolder {
                            ContentStrategy contentStrategy) {
     long start = currentTimeMillis();
     Driver driver = link.driver();
+    WebDriver webDriver = driver.getWebDriver();
     Config config = driver.config();
     long deadline = start + timeout;
 
@@ -90,7 +91,7 @@ public class DownloadFileToFolder {
 
     return switch (contentStrategy) {
       case FULL_CONTENT -> downloader.copyFileWithTimeout(downloadedFile.getName(),
-        () -> archiveFile(config, driver.getWebDriver(), downloadedFile.getFile()),
+        () -> archiveFile(config, webDriver, downloadedFile.getFile()),
         Math.max(1, deadline - currentTimeMillis()));
       case EMPTY_CONTENT -> downloader.mockFileContent(config, downloadedFile.getName());
     };

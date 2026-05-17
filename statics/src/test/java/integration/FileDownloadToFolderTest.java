@@ -117,7 +117,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     timeout = 111;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 111ms");
+      .hasMessageStartingWith("Failed to download 1 files in 111ms: only 0 files matched");
   }
 
   @Test
