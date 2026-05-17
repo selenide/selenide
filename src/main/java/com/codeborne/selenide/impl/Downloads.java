@@ -5,6 +5,7 @@ import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 
 import java.io.File;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -37,6 +38,15 @@ public class Downloads {
 
   public List<DownloadedFile> files(FileFilter fileFilter) {
     return files.stream().filter(fileFilter::match).collect(toList());
+  }
+
+  public List<DownloadedFile> matchingFiles(FileFilter fileFilter) {
+    return files.stream()
+      .filter(fileFilter::match)
+      .sorted(Comparator
+        .comparingLong(DownloadedFile::lastModifiedTime)
+        .thenComparing(DownloadedFile::getName))
+      .collect(toList());
   }
 
   public Optional<DownloadedFile> firstMatchingFile(FileFilter fileFilter) {
