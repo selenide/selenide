@@ -53,14 +53,14 @@ final class MultiFileDownloadToFolderTest extends IntegrationTest {
       )
     )
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageContaining("Expected 2 files");
+      .hasMessageContaining("Expected 2 files, but found 3");
   }
 
   @Test
   void failsWhenFewerFilesThanExpected() {
     assertThatThrownBy(() ->
       $("#multiple-downloads").downloadFiles(
-        files(5).withMethod(FOLDER).withTimeout(ofSeconds(2))
+        files(5).withMethod(FOLDER).withTimeout(ofSeconds(4))
       )
     )
       .isInstanceOf(FileNotDownloadedError.class)
