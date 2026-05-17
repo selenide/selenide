@@ -78,8 +78,13 @@ List<File> pdfs = $("#exportAll").downloadFiles(
   Implementation: for FOLDER/CDP modes this is file modification time; for
   PROXY mode this is the HTTP response capture timestamp. Ties broken by
   filename, ascending.
-- Files are archived (moved to per-test folder) using the existing
-  `DownloadFileToFolder.archiveFile(...)` logic — same layout, one file per archived path.
+- Files are archived (moved to a per-call folder) under the same parent
+  (`config.downloadsFolder()`) used by the existing single-file path. Unlike
+  the single-file path — which creates a fresh unique folder per `archiveFile`
+  call — `downloadFiles` creates **one** unique folder per call and moves all
+  N files into it, so the returned `List<File>` shares a parent directory.
+  This makes the natural grouping ("the files from this one user action")
+  visible on disk.
 
 ## Stop condition & timing (FOLDER / CDP modes)
 
