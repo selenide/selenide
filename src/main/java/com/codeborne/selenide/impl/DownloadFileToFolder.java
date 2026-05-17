@@ -47,8 +47,8 @@ public class DownloadFileToFolder {
 
   public File download(WebElementSource link,
                        WebElement clickable, long timeout, long requestedIncrementTimeout, DownloadOptions options) {
-    return collect(link, clickable, timeout, requestedIncrementTimeout,
-      1, options.getFilter(), options.getAction(), options.contentStrategy()).get(0);
+    return downloadOne(link, clickable, timeout, requestedIncrementTimeout,
+      options.getFilter(), options.getAction(), options.contentStrategy());
   }
 
   @Deprecated
@@ -56,29 +56,56 @@ public class DownloadFileToFolder {
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
-    return collect(link, clickable, timeout, incrementTimeout, 1, fileFilter, action, FULL_CONTENT).get(0);
+    return downloadOne(link, clickable, timeout, incrementTimeout, fileFilter, action, FULL_CONTENT);
   }
 
   public List<File> downloadFiles(WebElementSource link,
                                   WebElement clickable, long timeout, long requestedIncrementTimeout,
                                   DownloadFilesOptions options) {
-    return collect(link, clickable, timeout, requestedIncrementTimeout,
-      options.expectedFileCount(), options.getFilter(), options.getAction(), options.contentStrategy());
+    long start = currentTimeMillis();
+    Driver driver = link.driver();
+    Config config = driver.config();
+    long deadline = start + timeout;
+
+    List<DownloadedFile> matching = collect(link, clickable, timeout, requestedIncrementTimeout,
+      options.expectedFileCount(), options.getFilter(), options.getAction());
+
+    return switch (options.contentStrategy()) {
+      case FULL_CONTENT -> archiveAll(config, matching, deadline);
+      case EMPTY_CONTENT -> mockAll(config, matching);
+    };
   }
 
-  private List<File> collect(WebElementSource link,
-                             WebElement clickable, long timeout, long requestedIncrementTimeout,
-                             int expectedCount,
-                             FileFilter fileFilter,
-                             DownloadAction action,
-                             ContentStrategy contentStrategy) {
+  private File downloadOne(WebElementSource link,
+                           WebElement clickable, long timeout, long requestedIncrementTimeout,
+                           FileFilter fileFilter, DownloadAction action,
+                           ContentStrategy contentStrategy) {
+    long start = currentTimeMillis();
+    Driver driver = link.driver();
+    Config config = driver.config();
+    long deadline = start + timeout;
+
+    DownloadedFile downloadedFile = collect(link, clickable, timeout, requestedIncrementTimeout,
+      1, fileFilter, action).get(0);
+
+    return switch (contentStrategy) {
+      case FULL_CONTENT -> downloader.copyFileWithTimeout(downloadedFile.getName(),
+        () -> archiveFile(config, driver.getWebDriver(), downloadedFile.getFile()),
+        Math.max(1, deadline - currentTimeMillis()));
+      case EMPTY_CONTENT -> downloader.mockFileContent(config, downloadedFile.getName());
+    };
+  }
+
+  private List<DownloadedFile> collect(WebElementSource link,
+                                       WebElement clickable, long timeout, long requestedIncrementTimeout,
+                                       int expectedCount,
+                                       FileFilter fileFilter,
+                                       DownloadAction action) {
     long incrementTimeout = Math.max(requestedIncrementTimeout, 1000);
     Driver driver = link.driver();
-    WebDriver webDriver = driver.getWebDriver();
     Config config = driver.config();
     long pollingInterval = Math.max(config.pollingInterval(), 50);
     DownloadsFolder folder = getDownloadsFolder(driver);
-    long start = currentTimeMillis();
 
     if (folder == null) {
       throw new IllegalStateException("Downloads folder is not configured");
@@ -103,30 +130,22 @@ public class DownloadFileToFolder {
 
     List<DownloadedFile> matching = newDownloads.matchingFiles(fileFilter);
     if (matching.size() < expectedCount) {
-      String message = String.format(
-        "Failed to download %d files in %s: only %d files matched %s. Files found: %s",
-        expectedCount, df.format(timeout), matching.size(), fileFilter.description(),
-        newDownloads.filesAsString());
-      throw new FileNotDownloadedError(message, timeout);
+      throw new FileNotDownloadedError(
+        String.format("Failed to download %d files in %s: only %d files matched %s. Files found: %s",
+          expectedCount, df.format(timeout), matching.size(), fileFilter.description(),
+          newDownloads.filesAsString()),
+        timeout);
     }
     if (matching.size() > expectedCount) {
-      String message = String.format(
-        "Expected %d files, but found %d new files matching %s: %s",
-        expectedCount, matching.size(), fileFilter.description(), newDownloads.filesAsString());
-      throw new FileNotDownloadedError(message, timeout);
+      throw new FileNotDownloadedError(
+        String.format("Expected %d files, but found %d new files matching %s: %s",
+          expectedCount, matching.size(), fileFilter.description(), newDownloads.filesAsString()),
+        timeout);
     }
-
-    long deadline = start + timeout;
-    return switch (contentStrategy) {
-      case FULL_CONTENT -> archiveAll(config, webDriver, matching, deadline);
-      case EMPTY_CONTENT -> matching.stream()
-        .map(f -> downloader.mockFileContent(config, f.getName()))
-        .toList();
-    };
+    return matching;
   }
 
-  private List<File> archiveAll(Config config, WebDriver webDriver,
-                                List<DownloadedFile> downloads, long deadline) {
+  private List<File> archiveAll(Config config, List<DownloadedFile> downloads, long deadline) {
     File uniqueFolder = downloader.prepareTargetFolder(config);
     List<File> archived = new ArrayList<>(downloads.size());
     for (DownloadedFile d : downloads) {
@@ -137,6 +156,13 @@ public class DownloadFileToFolder {
       archived.add(copied);
     }
     return archived;
+  }
+
+  private List<File> mockAll(Config config, List<DownloadedFile> downloads) {
+    File uniqueFolder = downloader.prepareTargetFolder(config);
+    return downloads.stream()
+      .map(d -> downloader.mockFileContent(new File(uniqueFolder, d.getName())))
+      .toList();
   }
 
   private File moveInto(File source, File destination) throws IOException {
