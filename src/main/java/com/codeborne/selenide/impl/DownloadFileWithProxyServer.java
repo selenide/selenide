@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadFilesOptions;
 import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.Driver;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
@@ -42,6 +44,11 @@ public class DownloadFileWithProxyServer {
   public File download(WebElementSource link, WebElement clickable, long timeout, DownloadOptions options) {
     return clickAndInterceptFileByProxyServer(link, clickable, timeout,
       options.getFilter(), options.getAction(), options.contentStrategy());
+  }
+
+  public List<File> downloadFiles(WebElementSource link, WebElement clickable,
+                                  long timeout, DownloadFilesOptions options) {
+    throw new UnsupportedOperationException("PROXY multi-file download not yet implemented");
   }
 
   private File clickAndInterceptFileByProxyServer(WebElementSource link, WebElement clickable,

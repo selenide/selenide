@@ -22,6 +22,7 @@ import org.openqa.selenium.interactions.Locatable;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.Duration;
+import java.util.List;
 
 /**
  * Wrapper around {@link WebElement} with additional methods like
@@ -1239,6 +1240,30 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.DownloadFile
    */
   File download(DownloadOptions options) throws FileNotDownloadedError;
+
+  /**
+   * Download multiple files triggered by a single user action on this element.
+   *
+   * <p>Use this method when a click causes the browser to download more than one file
+   * (e.g., an "Export all" button). The number of files to wait for is declared via
+   * {@link DownloadFilesOptions#files(int)}.</p>
+   *
+   * <p>Example:</p>
+   * <pre>{@code
+   * List<File> reports = $("#exportAll").downloadFiles(
+   *     files(3).withExtension("pdf").withTimeout(ofSeconds(30))
+   * );
+   * }</pre>
+   *
+   * <p>Files are returned in completion order, oldest first.
+   * For HTTPGET mode, {@code expectedFileCount > 1} throws
+   * {@link UnsupportedOperationException}.</p>
+   *
+   * @throws FileNotDownloadedError if fewer or more matching files were observed within the timeout
+   * @see DownloadFilesOptions#files(int)
+   * @see com.codeborne.selenide.commands.DownloadFiles
+   */
+  List<File> downloadFiles(DownloadFilesOptions options) throws FileNotDownloadedError;
 
   /**
    * Return criteria by which this element is located

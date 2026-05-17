@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadFilesOptions;
 import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.DownloadsFolder;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -70,6 +72,11 @@ public class DownloadFileWithCdp {
   public File download(WebElementSource link,
                        WebElement clickable, long timeout, long incrementTimeout, DownloadOptions options) {
     return download(link, clickable, timeout, incrementTimeout, options.getFilter(), options.getAction(), options.contentStrategy());
+  }
+
+  public List<File> downloadFiles(WebElementSource link, WebElement clickable,
+                                  long timeout, long incrementTimeout, DownloadFilesOptions options) {
+    throw new UnsupportedOperationException("CDP multi-file download not yet implemented");
   }
 
   private File download(WebElementSource link,
