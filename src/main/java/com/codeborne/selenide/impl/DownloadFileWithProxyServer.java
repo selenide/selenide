@@ -5,7 +5,9 @@ import com.codeborne.selenide.DownloadFilesOptions;
 import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadAction;
+import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
@@ -48,7 +50,67 @@ public class DownloadFileWithProxyServer {
 
   public List<File> downloadFiles(WebElementSource link, WebElement clickable,
                                   long timeout, DownloadFilesOptions options) {
-    throw new UnsupportedOperationException("PROXY multi-file download not yet implemented");
+    Driver driver = link.driver();
+    Config config = driver.config();
+    if (!config.proxyEnabled()) {
+      throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
+    }
+
+    SelenideProxyServer proxyServer = driver.getProxy();
+    FileDownloadFilter filter = proxyServer.responseFilter(SELENIDE_PROXY_FILTER_PREFIX + "download");
+    if (filter == null) {
+      throw new IllegalStateException("Cannot download file: download filter is not activated");
+    }
+
+    filter.activate(options.contentStrategy());
+    try {
+      long pollingInterval = Math.max(config.pollingInterval(), 50);
+      waitForPreviousDownloadsCompletion(filter, timeout, pollingInterval);
+
+      filter.reset();
+      options.getAction().perform(driver, clickable);
+
+      waitForExpectedDownloads(filter, options.getFilter(), options.expectedFileCount(),
+        timeout, pollingInterval);
+
+      if (log.isInfoEnabled()) {
+        log.info("Downloaded {}", filter.downloads().filesAsString());
+        log.info("Just in case, intercepted {}", filter.responsesAsString());
+      }
+
+      List<DownloadedFile> matching = filter.downloads().matchingFiles(options.getFilter());
+      if (matching.size() > options.expectedFileCount()) {
+        throw new FileNotDownloadedError(
+          "Expected %d files, but found %d new files matching %s: %s".formatted(
+            options.expectedFileCount(), matching.size(),
+            options.getFilter().description(), filter.downloads().filesAsString()),
+          timeout);
+      }
+      if (matching.size() < options.expectedFileCount()) {
+        throw new FileNotDownloadedError(
+          "Failed to download %d files: only %d matched %s".formatted(
+            options.expectedFileCount(), matching.size(), options.getFilter().description()),
+          timeout);
+      }
+      return matching.stream().map(DownloadedFile::getFile).toList();
+    }
+    finally {
+      filter.deactivate();
+    }
+  }
+
+  private void waitForExpectedDownloads(FileDownloadFilter filter, FileFilter fileFilter,
+                                        int expectedCount, long timeout, long pollingInterval) {
+    waiter.wait(timeout, pollingInterval, () -> {
+      int count = filter.downloads().matchingFiles(fileFilter).size();
+      if (count > expectedCount) {
+        throw new FileNotDownloadedError(
+          "Expected %d files, but found %d new files matching %s".formatted(
+            expectedCount, count, fileFilter.description()),
+          timeout);
+      }
+      return count == expectedCount;
+    });
   }
 
   private File clickAndInterceptFileByProxyServer(WebElementSource link, WebElement clickable,
