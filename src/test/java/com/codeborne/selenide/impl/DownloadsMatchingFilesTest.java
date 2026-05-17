@@ -53,4 +53,16 @@ final class DownloadsMatchingFilesTest {
 
     assertThat(downloads.matchingFiles(none())).isEmpty();
   }
+
+  @Test
+  void matchingFilesAppliesFilterAndSortTogether() {
+    DownloadedFile pdfNewer = new DownloadedFile(new File("b.pdf"), 200L, 0, emptyMap());
+    DownloadedFile txt = new DownloadedFile(new File("c.txt"), 150L, 0, emptyMap());
+    DownloadedFile pdfOlder = new DownloadedFile(new File("a.pdf"), 100L, 0, emptyMap());
+    Downloads downloads = new Downloads(List.of(pdfNewer, txt, pdfOlder));
+
+    List<DownloadedFile> result = downloads.matchingFiles(withExtension("pdf"));
+
+    assertThat(result).extracting(DownloadedFile::getName).containsExactly("a.pdf", "b.pdf");
+  }
 }

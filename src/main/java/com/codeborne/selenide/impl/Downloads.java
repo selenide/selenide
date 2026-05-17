@@ -36,10 +36,19 @@ public class Downloads {
     return files;
   }
 
+  /**
+   * Returns all files matching the filter, in insertion order.
+   * For sorted-by-completion-time results, use {@link #matchingFiles(FileFilter)}.
+   */
   public List<DownloadedFile> files(FileFilter fileFilter) {
     return files.stream().filter(fileFilter::match).collect(toList());
   }
 
+  /**
+   * Returns all files matching the filter, sorted in completion order
+   * ({@link DownloadedFile#lastModifiedTime() lastModifiedTime} ascending,
+   * with {@link DownloadedFile#getName() name} as the tiebreaker).
+   */
   public List<DownloadedFile> matchingFiles(FileFilter fileFilter) {
     return files.stream()
       .filter(fileFilter::match)
