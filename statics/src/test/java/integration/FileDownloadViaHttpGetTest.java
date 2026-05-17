@@ -14,8 +14,10 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.codeborne.selenide.DownloadFilesOptions.files;
 import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -28,6 +30,7 @@ import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.nio.file.Files.createTempDirectory;
+import static java.time.Duration.ofSeconds;
 import static java.util.regex.Pattern.DOTALL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -270,5 +273,29 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     File downloadedFile = $(byText("Download with redirect")).download();
     assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+  }
+
+  @Test
+  void downloadFilesWithExpectedCountOneWorks() {
+    List<File> downloaded = $(byText("Download me")).downloadFiles(
+      files(1).withMethod(HTTPGET).withTimeout(ofSeconds(10))
+    );
+
+    assertThat(downloaded).hasSize(1);
+    assertThat(downloaded.get(0).getName()).isEqualTo("hello_world.txt");
+  }
+
+  @Test
+  void downloadFilesRejectsMultiFileForHttpget() {
+    assertThatThrownBy(() ->
+      $(byText("Download me")).downloadFiles(
+        files(2).withMethod(HTTPGET).withTimeout(ofSeconds(10))
+      )
+    )
+      .isInstanceOf(UnsupportedOperationException.class)
+      .hasMessageContaining("HTTPGET")
+      .hasMessageContaining("FOLDER")
+      .hasMessageContaining("CDP")
+      .hasMessageContaining("PROXY");
   }
 }
