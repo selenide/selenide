@@ -1,10 +1,13 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadFilesOptions;
 import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.files.DownloadAction;
+import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
@@ -13,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
@@ -20,15 +25,22 @@ import static com.codeborne.selenide.proxy.SelenideProxyServer.SELENIDE_PROXY_FI
 
 public class DownloadFileWithProxyServer {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithProxyServer.class);
+  private static final DurationFormat df = new DurationFormat();
 
   private final Waiter waiter;
+  private final Downloader downloader;
+
+  DownloadFileWithProxyServer(Waiter waiter, Downloader downloader) {
+    this.waiter = waiter;
+    this.downloader = downloader;
+  }
 
   DownloadFileWithProxyServer(Waiter waiter) {
-    this.waiter = waiter;
+    this(waiter, new Downloader());
   }
 
   public DownloadFileWithProxyServer() {
-    this(new Waiter());
+    this(new Waiter(), new Downloader());
   }
 
   @Deprecated
@@ -42,6 +54,85 @@ public class DownloadFileWithProxyServer {
   public File download(WebElementSource link, WebElement clickable, long timeout, DownloadOptions options) {
     return clickAndInterceptFileByProxyServer(link, clickable, timeout,
       options.getFilter(), options.getAction(), options.contentStrategy());
+  }
+
+  public List<File> downloadFiles(WebElementSource link, WebElement clickable,
+                                  long timeout, DownloadFilesOptions options) {
+    Driver driver = link.driver();
+    Config config = driver.config();
+    if (!config.proxyEnabled()) {
+      throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
+    }
+
+    SelenideProxyServer proxyServer = driver.getProxy();
+    FileDownloadFilter filter = proxyServer.responseFilter(SELENIDE_PROXY_FILTER_PREFIX + "download");
+    if (filter == null) {
+      throw new IllegalStateException("Cannot download file: download filter is not activated");
+    }
+
+    filter.activate(options.contentStrategy());
+    try {
+      long pollingInterval = Math.max(config.pollingInterval(), 50);
+      waitForPreviousDownloadsCompletion(filter, timeout, pollingInterval);
+
+      filter.reset();
+      options.getAction().perform(driver, clickable);
+
+      waitForExpectedDownloads(filter, options.getFilter(), options.expectedFileCount(),
+        timeout, pollingInterval);
+
+      if (log.isInfoEnabled()) {
+        log.info("Downloaded {}", filter.downloads().filesAsString());
+        log.info("Just in case, intercepted {}", filter.responsesAsString());
+      }
+
+      List<DownloadedFile> matching = filter.downloads().matchingFiles(options.getFilter());
+      if (matching.size() > options.expectedFileCount()) {
+        throw new FileNotDownloadedError(
+          "Expected %d files, but found %d new files matching %s: %s".formatted(
+            options.expectedFileCount(), matching.size(),
+            options.getFilter().description(), filter.downloads().filesAsString()),
+          timeout);
+      }
+      if (matching.size() < options.expectedFileCount()) {
+        throw new FileNotDownloadedError(
+          "Failed to download %d files in %s: only %d files matched %s. Files found: %s".formatted(
+            options.expectedFileCount(), df.format(timeout), matching.size(),
+            options.getFilter().description(), filter.downloads().filesAsString()),
+          timeout);
+      }
+
+      File uniqueFolder = downloader.prepareTargetFolder(config);
+      List<File> archived = new ArrayList<>(matching.size());
+      for (DownloadedFile d : matching) {
+        File destination = new File(uniqueFolder, d.getName());
+        archived.add(archiveProxyFile(d.getFile(), destination));
+      }
+      return archived;
+    }
+    finally {
+      filter.deactivate();
+    }
+  }
+
+  private File archiveProxyFile(File source, File destination) {
+    FileHelper.moveFile(source, destination);
+    log.debug("Moved the downloaded proxy file {} to {}", source, destination);
+    return destination;
+  }
+
+  private void waitForExpectedDownloads(FileDownloadFilter filter, FileFilter fileFilter,
+                                        int expectedCount, long timeout, long pollingInterval) {
+    waiter.wait(timeout, pollingInterval, () -> {
+      int count = filter.downloads().matchingFiles(fileFilter).size();
+      if (count > expectedCount) {
+        throw new FileNotDownloadedError(
+          "Expected %d files, but found %d new files matching %s".formatted(
+            expectedCount, count, fileFilter.description()),
+          timeout);
+      }
+      return count == expectedCount;
+    });
   }
 
   private File clickAndInterceptFileByProxyServer(WebElementSource link, WebElement clickable,

@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadFilesOptions;
 import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.Driver;
@@ -44,6 +45,7 @@ import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -85,7 +87,15 @@ public class DownloadFileWithHttpRequest {
     return download(driver, element, timeout, fileFilter, FULL_CONTENT);
   }
 
-  private File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter, ContentStrategy contentStrategy) {
+  public List<File> downloadFiles(Driver driver, WebElement element, long timeout, DownloadFilesOptions options) {
+    if (options.expectedFileCount() > 1) {
+      throw new UnsupportedOperationException(
+        "HTTPGET mode downloads a single href; use FileDownloadMode.FOLDER, CDP, or PROXY for multi-file downloads");
+    }
+    return List.of(download(driver, element, timeout, options.getFilter(), options.contentStrategy()));
+  }
+
+  File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter, ContentStrategy contentStrategy) {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
       String link = "https://selenide.org/javadoc/current/com/codeborne/selenide/FileDownloadMode.html";

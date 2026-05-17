@@ -112,7 +112,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
     timeout = 11;
     assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download file with extension \"txt\" in 11ms");
+      .hasMessageStartingWith("Failed to download 1 files in 11ms: only 0 files matched");
   }
 
   @Test

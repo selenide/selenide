@@ -5,6 +5,7 @@ import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 
 import java.io.File;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -35,8 +36,26 @@ public class Downloads {
     return files;
   }
 
+  /**
+   * Returns all files matching the filter, in insertion order.
+   * For sorted-by-completion-time results, use {@link #matchingFiles(FileFilter)}.
+   */
   public List<DownloadedFile> files(FileFilter fileFilter) {
     return files.stream().filter(fileFilter::match).collect(toList());
+  }
+
+  /**
+   * Returns all files matching the filter, sorted in completion order
+   * ({@link DownloadedFile#lastModifiedTime() lastModifiedTime} ascending,
+   * with {@link DownloadedFile#getName() name} as the tiebreaker).
+   */
+  public List<DownloadedFile> matchingFiles(FileFilter fileFilter) {
+    return files.stream()
+      .filter(fileFilter::match)
+      .sorted(Comparator
+        .comparingLong(DownloadedFile::lastModifiedTime)
+        .thenComparing(DownloadedFile::getName))
+      .collect(toList());
   }
 
   public Optional<DownloadedFile> firstMatchingFile(FileFilter fileFilter) {

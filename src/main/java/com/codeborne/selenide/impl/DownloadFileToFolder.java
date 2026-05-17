@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadFilesOptions;
 import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.DownloadOptions.ContentStrategy;
 import com.codeborne.selenide.DownloadsFolder;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +47,7 @@ public class DownloadFileToFolder {
 
   public File download(WebElementSource link,
                        WebElement clickable, long timeout, long requestedIncrementTimeout, DownloadOptions options) {
-    return download(link, clickable, timeout, requestedIncrementTimeout,
+    return downloadOne(link, clickable, timeout, requestedIncrementTimeout,
       options.getFilter(), options.getAction(), options.contentStrategy());
   }
 
@@ -54,33 +56,69 @@ public class DownloadFileToFolder {
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
-    return download(link, clickable, timeout, incrementTimeout, fileFilter, action, FULL_CONTENT);
+    return downloadOne(link, clickable, timeout, incrementTimeout, fileFilter, action, FULL_CONTENT);
   }
 
-  File download(WebElementSource link,
-                WebElement clickable, long timeout, long requestedIncrementTimeout,
-                FileFilter fileFilter,
-                DownloadAction action,
-                ContentStrategy contentStrategy
-  ) {
-    long incrementTimeout = Math.max(requestedIncrementTimeout, 1000);
+  public List<File> downloadFiles(WebElementSource link,
+                                  WebElement clickable, long timeout, long requestedIncrementTimeout,
+                                  DownloadFilesOptions options) {
+    long start = currentTimeMillis();
+    Driver driver = link.driver();
+    Config config = driver.config();
+    long deadline = start + timeout;
+
+    List<DownloadedFile> matching = collect(link, clickable, timeout, requestedIncrementTimeout,
+      options.expectedFileCount(), options.getFilter(), options.getAction());
+
+    return switch (options.contentStrategy()) {
+      case FULL_CONTENT -> archiveAll(config, matching, deadline);
+      case EMPTY_CONTENT -> mockAll(config, matching);
+    };
+  }
+
+  private File downloadOne(WebElementSource link,
+                           WebElement clickable, long timeout, long requestedIncrementTimeout,
+                           FileFilter fileFilter, DownloadAction action,
+                           ContentStrategy contentStrategy) {
+    long start = currentTimeMillis();
     Driver driver = link.driver();
     WebDriver webDriver = driver.getWebDriver();
     Config config = driver.config();
+    long deadline = start + timeout;
+
+    DownloadedFile downloadedFile = collect(link, clickable, timeout, requestedIncrementTimeout,
+      1, fileFilter, action).get(0);
+
+    return switch (contentStrategy) {
+      case FULL_CONTENT -> downloader.copyFileWithTimeout(downloadedFile.getName(),
+        () -> archiveFile(config, webDriver, downloadedFile.getFile()),
+        Math.max(1, deadline - currentTimeMillis()));
+      case EMPTY_CONTENT -> downloader.mockFileContent(config, downloadedFile.getName());
+    };
+  }
+
+  private List<DownloadedFile> collect(WebElementSource link,
+                                       WebElement clickable, long timeout, long requestedIncrementTimeout,
+                                       int expectedCount,
+                                       FileFilter fileFilter,
+                                       DownloadAction action) {
+    long incrementTimeout = Math.max(requestedIncrementTimeout, 1000);
+    Driver driver = link.driver();
+    Config config = driver.config();
     long pollingInterval = Math.max(config.pollingInterval(), 50);
     DownloadsFolder folder = getDownloadsFolder(driver);
-    long start = currentTimeMillis();
 
     if (folder == null) {
       throw new IllegalStateException("Downloads folder is not configured");
     }
 
     folder.cleanupBeforeDownload();
-    List<DownloadedFile> previousFiles = folder.files(); // some `DownloadsFolder` implementations cannot remove files
+    List<DownloadedFile> previousFiles = folder.files();
 
     action.perform(driver, clickable);
 
-    waitForNewFiles(driver, fileFilter, folder, previousFiles, timeout, incrementTimeout, pollingInterval);
+    waitForExpectedFiles(driver, fileFilter, folder, previousFiles, expectedCount,
+      timeout, incrementTimeout, pollingInterval);
     waitUntilDownloadsCompleted(driver, folder, fileFilter, timeout, incrementTimeout, pollingInterval);
 
     Downloads newDownloads = new Downloads(folder.filesExcept(previousFiles));
@@ -91,15 +129,48 @@ public class DownloadFileToFolder {
       log.debug("All downloaded files: {}", folder.filesAsString());
     }
 
-    File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
+    List<DownloadedFile> matching = newDownloads.matchingFiles(fileFilter);
+    if (matching.size() < expectedCount) {
+      throw new FileNotDownloadedError(
+        String.format("Failed to download %d files in %s: only %d files matched %s. Files found: %s",
+          expectedCount, df.format(timeout), matching.size(), fileFilter.description(),
+          newDownloads.filesAsString()),
+        timeout);
+    }
+    if (matching.size() > expectedCount) {
+      throw new FileNotDownloadedError(
+        String.format("Expected %d files, but found %d new files matching %s: %s",
+          expectedCount, matching.size(), fileFilter.description(), newDownloads.filesAsString()),
+        timeout);
+    }
+    return matching;
+  }
 
-    return switch (contentStrategy) {
-      case FULL_CONTENT -> downloader.copyFileWithTimeout(downloadedFile.getName(),
-        () -> archiveFile(config, webDriver, downloadedFile),
-        timeout - (currentTimeMillis() - start)
-      );
-      case EMPTY_CONTENT -> downloader.mockFileContent(config, downloadedFile.getName());
-    };
+  // TODO #3261: override in DownloadFileFromMoon/Selenoid/Grid to fetch files from remote containers
+  protected List<File> archiveAll(Config config, List<DownloadedFile> downloads, long deadline) {
+    File uniqueFolder = downloader.prepareTargetFolder(config);
+    List<File> archived = new ArrayList<>(downloads.size());
+    for (DownloadedFile d : downloads) {
+      File destination = new File(uniqueFolder, d.getName());
+      long remaining = Math.max(1, deadline - currentTimeMillis());
+      File copied = downloader.copyFileWithTimeout(d.getName(),
+        () -> moveInto(d.getFile(), destination), remaining);
+      archived.add(copied);
+    }
+    return archived;
+  }
+
+  private List<File> mockAll(Config config, List<DownloadedFile> downloads) {
+    File uniqueFolder = downloader.prepareTargetFolder(config);
+    return downloads.stream()
+      .map(d -> downloader.mockFileContent(new File(uniqueFolder, d.getName())))
+      .toList();
+  }
+
+  private File moveInto(File source, File destination) throws IOException {
+    moveFile(source, destination);
+    log.debug("Moved the downloaded file {} to {}", source, destination);
+    return destination;
   }
 
   @Nullable
@@ -158,29 +229,34 @@ public class DownloadFileToFolder {
     log.warn("Files are still being modified during last {} ms.", currentTimeMillis() - lastModifiedAt);
   }
 
-  void waitForNewFiles(Driver driver, FileFilter fileFilter, DownloadsFolder folder,
-                       List<DownloadedFile> previousFiles,
-                       long timeout, long incrementTimeout, long pollingInterval) {
+  void waitForExpectedFiles(Driver driver, FileFilter fileFilter, DownloadsFolder folder,
+                            List<DownloadedFile> previousFiles, int expectedCount,
+                            long timeout, long incrementTimeout, long pollingInterval) {
     if (log.isDebugEnabled()) {
-      log.debug("Waiting for files in {}...", folder);
+      log.debug("Waiting for {} matching files in {}...", expectedCount, folder);
     }
 
     long start = currentTimeMillis();
     for (; currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       Downloads downloads = new Downloads(folder.filesExcept(previousFiles));
       List<DownloadedFile> matchingFiles = downloads.files(fileFilter);
-      if (!matchingFiles.isEmpty()) {
-        log.debug("Matching files found: {}, all new files: {}, all files: {}",
-          matchingFiles, downloads.filesAsString(), folder.filesAsString());
+      if (matchingFiles.size() > expectedCount) {
+        String message = String.format(
+          "Expected %d files, but found %d new files matching %s: %s",
+          expectedCount, matchingFiles.size(), fileFilter.description(), downloads.filesAsString());
+        throw new FileNotDownloadedError(message, timeout);
+      }
+      if (matchingFiles.size() == expectedCount) {
+        log.debug("Found {} matching files: {}", expectedCount, matchingFiles);
         return;
       }
-      log.debug("Matching files not found: {}, all new files: {}, all files: {}",
-        matchingFiles, downloads.filesAsString(), folder.filesAsString());
+      log.debug("Matching files not yet at expected count {}: have {}, all new: {}",
+        expectedCount, matchingFiles.size(), downloads.filesAsString());
       failFastIfNoChanges(driver, folder, fileFilter, start, timeout, incrementTimeout);
     }
 
-    log.debug("Matching files still not found -> stop waiting for new files after {} ms. (timeout: {} ms.)",
-      currentTimeMillis() - start, df.format(timeout));
+    log.debug("Stop waiting for {} files after {} ms.",
+      expectedCount, currentTimeMillis() - start);
   }
 
   protected void failFastIfNoChanges(Driver driver, DownloadsFolder folder, FileFilter filter,
