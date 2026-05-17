@@ -89,4 +89,29 @@ final class DownloadFilesOptionsTest {
     assertThat(files(2).withExtension("pdf"))
       .hasToString("expectedFileCount: 2, with extension \"pdf\"");
   }
+
+  @Test
+  void withIncrementTimeoutPreservesCount() {
+    DownloadFilesOptions options = files(3).withIncrementTimeout(Duration.ofSeconds(1));
+
+    assertThat(options.expectedFileCount()).isEqualTo(3);
+    assertThat(options.incrementTimeout()).isEqualTo(Duration.ofSeconds(1));
+  }
+
+  @Test
+  void withoutContentFlipsContentStrategy() {
+    DownloadFilesOptions options = files(2).withoutContent();
+
+    assertThat(options.expectedFileCount()).isEqualTo(2);
+    assertThat(options.contentStrategy()).isEqualTo(DownloadOptions.ContentStrategy.EMPTY_CONTENT);
+  }
+
+  @Test
+  void withActionReplacesAction() {
+    com.codeborne.selenide.files.DownloadAction custom = (driver, element) -> element.click();
+    DownloadFilesOptions options = files(2).withAction(custom);
+
+    assertThat(options.expectedFileCount()).isEqualTo(2);
+    assertThat(options.getAction()).isSameAs(custom);
+  }
 }
