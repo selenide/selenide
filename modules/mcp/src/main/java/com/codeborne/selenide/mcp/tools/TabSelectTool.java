@@ -21,7 +21,8 @@ class TabSelectTool extends McpTool {
         "properties": {
           "index":  {"type": "integer", "description": "0-based tab index"},
           "handle": {"type": "string",  "description": "Window handle string"}
-        }
+        },
+        "minProperties": 1
       }
       """;
   }
