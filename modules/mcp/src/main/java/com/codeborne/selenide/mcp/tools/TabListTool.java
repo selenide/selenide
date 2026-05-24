@@ -23,17 +23,20 @@ class TabListTool extends McpTool {
     String activeHandle = driver.getWindowHandle();
     StringBuilder out = new StringBuilder();
     int i = 0;
-    for (String handle : driver.getWindowHandles()) {
-      driver.switchTo().window(handle);
-      out.append('[').append(i++).append("] handle=\"").append(handle).append('"')
-        .append(" title=\"").append(driver.getTitle()).append('"')
-        .append(" url=\"").append(driver.getCurrentUrl()).append('"');
-      if (handle.equals(activeHandle)) {
-        out.append(" (active)");
+    try {
+      for (String handle : driver.getWindowHandles()) {
+        driver.switchTo().window(handle);
+        out.append('[').append(i++).append("] handle=\"").append(handle).append('"')
+          .append(" title=\"").append(driver.getTitle()).append('"')
+          .append(" url=\"").append(driver.getCurrentUrl()).append('"');
+        if (handle.equals(activeHandle)) {
+          out.append(" (active)");
+        }
+        out.append('\n');
       }
-      out.append('\n');
+    } finally {
+      driver.switchTo().window(activeHandle);
     }
-    driver.switchTo().window(activeHandle);
     return success(out.toString().trim());
   }
 }
