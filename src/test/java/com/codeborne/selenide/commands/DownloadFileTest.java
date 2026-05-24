@@ -70,13 +70,14 @@ final class DownloadFileTest {
   void canDownloadFile_withProxyServer() {
     config.proxyEnabled(true).fileDownload(PROXY);
     SelenideProxyServer selenideProxy = mock();
-    when(linkWithHref.driver()).thenReturn(new DriverStub(config, selenideProxy));
+    DriverStub driverWithProxy = new DriverStub(config, selenideProxy);
+    when(linkWithHref.driver()).thenReturn(driverWithProxy);
     when(proxy.download(any(), any(), anyLong(), any())).thenReturn(file);
 
     File f = command.execute(seLink, linkWithHref, new Object[]{9000L});
 
     assertThat(f).isSameAs(file);
-    verify(proxy).download(eq(linkWithHref), eq(link), eq(9000L), refEq(file().withMethod(PROXY).withTimeout(9000)));
+    verify(proxy).download(eq(driverWithProxy), eq(link), eq(9000L), refEq(file().withMethod(PROXY).withTimeout(9000)));
     verifyNoMoreInteractions(httpGet);
   }
 

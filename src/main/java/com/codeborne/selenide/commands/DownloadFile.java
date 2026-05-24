@@ -3,6 +3,7 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadOptions;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
@@ -51,7 +52,8 @@ public class DownloadFile implements Command<File> {
 
   @Override
   public File execute(SelenideElement selenideElement, WebElementSource linkWithHref, Object @Nullable [] args) {
-    Config config = linkWithHref.driver().config();
+    Driver driver = linkWithHref.driver();
+    Config config = driver.config();
     DownloadOptions options = getDownloadOptions(config, args);
     long timeout = ofNullable(options.timeout()).map(Duration::toMillis).orElse(config.timeout());
     long incrementTimeout = ofNullable(options.incrementTimeout()).map(Duration::toMillis).orElse(timeout);
@@ -67,10 +69,10 @@ public class DownloadFile implements Command<File> {
     WebElement link = waitForLink(linkWithHref, incrementTimeout);
 
     return switch (method) {
-      case HTTPGET -> downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, options);
-      case PROXY -> downloadFileWithProxyServer.download(linkWithHref, link, timeout, options);
-      case FOLDER -> downloadFileToFolder.download(linkWithHref, link, timeout, incrementTimeout, options);
-      case CDP -> downloadFileWithCdp.download(linkWithHref, link, timeout, incrementTimeout, options);
+      case HTTPGET -> downloadFileWithHttpRequest.download(driver, link, timeout, options);
+      case PROXY -> downloadFileWithProxyServer.download(driver, link, timeout, options);
+      case FOLDER -> downloadFileToFolder.download(driver, link, timeout, incrementTimeout, options);
+      case CDP -> downloadFileWithCdp.download(driver, link, timeout, incrementTimeout, options);
     };
   }
 
