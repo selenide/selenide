@@ -90,6 +90,11 @@ final class ByRoleTest extends ITest {
   }
 
   @Test
+  void findsElementByImplicitRowRole() {
+    $(byRole("row")).shouldHave(attribute("id", "implicit-row"));
+  }
+
+  @Test
   void findsElementByImplicitColumnheaderRole() {
     $(byRole("columnheader")).shouldHave(attribute("id", "implicit-columnheader"));
   }

@@ -20,7 +20,7 @@
     { role: 'combobox',     match: el => el.tagName === 'SELECT' },
     { role: 'option',       match: el => el.tagName === 'OPTION' },
     { role: 'heading',      match: el => /^H[1-6]$/.test(el.tagName) },
-    { role: 'img',          match: el => el.tagName === 'IMG' && el.hasAttribute('alt') },
+    { role: 'img',          match: el => el.tagName === 'IMG' && !!el.getAttribute('alt') },
     { role: 'list',         match: el => el.tagName === 'UL' || el.tagName === 'OL' },
     { role: 'listitem',     match: el => el.tagName === 'LI' },
     { role: 'table',        match: el => el.tagName === 'TABLE' },
@@ -65,10 +65,10 @@
     const tag = el.tagName;
     if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
       const wrapping = el.closest('label');
-      if (wrapping && wrapping.textContent.trim()) return wrapping.textContent;
+      if (wrapping && wrapping.textContent.trim()) return wrapping.textContent.trim();
       if (el.id) {
         const labelled = document.querySelector('label[for="' + CSS.escape(el.id) + '"]');
-        if (labelled && labelled.textContent.trim()) return labelled.textContent;
+        if (labelled && labelled.textContent.trim()) return labelled.textContent.trim();
       }
     }
     if (tag === 'IMG') {
