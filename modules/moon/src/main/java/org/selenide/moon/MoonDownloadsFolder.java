@@ -3,6 +3,8 @@ package org.selenide.moon;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.DownloadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -11,6 +13,7 @@ import static java.util.stream.Collectors.toList;
 import static org.selenide.moon.MoonClient.clientFor;
 
 public class MoonDownloadsFolder implements DownloadsFolder {
+  private static final Logger log = LoggerFactory.getLogger(MoonDownloadsFolder.class);
   private final MoonClient moonClient;
 
   public MoonDownloadsFolder(Driver driver) {
@@ -19,7 +22,15 @@ public class MoonDownloadsFolder implements DownloadsFolder {
 
   @Override
   public void cleanupBeforeDownload() {
+    if (log.isDebugEnabled()) {
+      log.debug("Going to clean Moon folder {} - found files: {}", moonClient.getSessionId(), moonClient.downloads());
+    }
+
     moonClient.deleteDownloadedFiles();
+
+    if (log.isDebugEnabled()) {
+      log.debug("After clean folder {}: {}", moonClient.getSessionId(), moonClient.downloads());
+    }
   }
 
   @Override
