@@ -5,8 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byRole;
+import static com.codeborne.selenide.TextMatchOptions.fullText;
+import static com.codeborne.selenide.TextMatchOptions.partialText;
 
 final class ByRoleTest extends ITest {
   @BeforeEach
@@ -118,5 +121,71 @@ final class ByRoleTest extends ITest {
   void explicitRoleOverridesImplicit() {
     $$(byRole("link")).shouldHave(size(2));
     $(byRole("link")).shouldHave(attribute("id", "implicit-link"));
+  }
+
+  @Test
+  void matchesAccessibleNameFromTextContent() {
+    $(byRole("button", "Save")).shouldHave(attribute("id", "name-text"));
+  }
+
+  @Test
+  void matchesAccessibleNameFromAriaLabel() {
+    $(byRole("button", "Close dialog")).shouldHave(attribute("id", "name-aria-label"));
+  }
+
+  @Test
+  void matchesAccessibleNameFromAriaLabelledby() {
+    $(byRole("button", "Profile")).shouldHave(attribute("id", "name-aria-labelledby"));
+  }
+
+  @Test
+  void matchesAccessibleNameFromWrappingLabel() {
+    $(byRole("textbox", "Username")).shouldHave(attribute("id", "name-wrapping-label"));
+  }
+
+  @Test
+  void matchesAccessibleNameFromLabelFor() {
+    $(byRole("textbox", "Email address")).shouldHave(attribute("id", "email-field"));
+  }
+
+  @Test
+  void matchesAccessibleNameFromImgAlt() {
+    $(byRole("img", "A friendly cat")).shouldHave(attribute("id", "implicit-img"));
+  }
+
+  @Test
+  void matchesAccessibleNameFromTitleFallback() {
+    $(byRole("button", "Help")).shouldHave(attribute("id", "name-title-fallback"));
+  }
+
+  @Test
+  void noNameMatch_doesNotFindElement() {
+    $(byRole("button", "Nonexistent")).shouldNot(exist);
+  }
+
+  @Test
+  void matchesAccessibleNameWithPartialOption() {
+    $(byRole("button", "ave", partialText())).shouldHave(attribute("id", "name-text"));
+  }
+
+  @Test
+  void matchesAccessibleNameCaseInsensitively() {
+    $(byRole("button", "SUBMIT", fullText().caseInsensitive()))
+      .shouldHave(attribute("id", "implicit-button"));
+  }
+
+  @Test
+  void matchesAccessibleNamePartialAndCaseInsensitively() {
+    // Only "Confirm" contains "con" (case-insensitive) among button accessible names in the fixture.
+    $$(byRole("button", "con", partialText().caseInsensitive()))
+      .shouldHave(size(1));
+  }
+
+  @Test
+  void multipleButtonsByRoleOnly() {
+    // implicit-button, name-text, name-aria-label, name-aria-labelledby, name-title-fallback,
+    // cancel-btn, confirm-btn (all <button>), plus div role="button" id="explicit-button".
+    // The <button role="link"> is excluded (its effective role is "link").
+    $$(byRole("button")).shouldHave(size(8));
   }
 }
