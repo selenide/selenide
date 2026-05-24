@@ -4,6 +4,7 @@ import com.codeborne.selenide.impl.SelenideProperties;
 import com.codeborne.selenide.selector.ByAttribute;
 import com.codeborne.selenide.selector.ByDeepShadowCss;
 import com.codeborne.selenide.selector.ByLabel;
+import com.codeborne.selenide.selector.ByRole;
 import com.codeborne.selenide.selector.ByShadowCss;
 import com.codeborne.selenide.selector.ByTagAndText;
 import com.codeborne.selenide.selector.ByText;
@@ -227,6 +228,42 @@ public class Selectors {
    */
   public static By byTestId(String testId) {
     return byAttribute(properties.getProperty("selenide.test-id.attribute", DEFAULT_TEST_ID), testId);
+  }
+
+  /**
+   * Find element by its <a href="https://www.w3.org/TR/wai-aria-1.2/#roles">ARIA role</a>.
+   * Matches both explicit {@code role="..."} attributes and common implicit roles
+   * (e.g. {@code <button>} ⇒ role {@code button}, {@code <h1>..<h6>} ⇒ role {@code heading}).
+   *
+   * @param role ARIA role name (e.g. "button", "link", "heading", "checkbox")
+   * @since 7.17.0
+   */
+  public static By byRole(String role) {
+    return new ByRole(role);
+  }
+
+  /**
+   * Find element by ARIA role with the given accessible name.
+   * The accessible name is computed pragmatically:
+   * {@code aria-labelledby} → {@code aria-label} → associated {@code <label>} →
+   * {@code alt} (for {@code <img>}) → {@code textContent} → {@code title}.
+   *
+   * @param role ARIA role name
+   * @param accessibleName expected <a href="https://w3c.github.io/accname/#dfn-accessible-name">accessible name</a>
+   * @since 7.17.0
+   */
+  public static By byRole(String role, String accessibleName) {
+    return new ByRole(role, accessibleName);
+  }
+
+  /**
+   * Find element by ARIA role with the given accessible name, using the provided
+   * text-match options (case sensitivity, whitespace handling, full or partial match).
+   *
+   * @since 7.17.0
+   */
+  public static By byRole(String role, String accessibleName, TextMatchOptions options) {
+    return new ByRole(role, accessibleName, options);
   }
 
   /**
