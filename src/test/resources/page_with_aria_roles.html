@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test page :: ARIA roles</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+<h1>ARIA roles test page</h1>
+
+<!-- Implicit roles -->
+<button id="implicit-button">Submit</button>
+<a href="#x" id="implicit-link">Documentation</a>
+<input type="checkbox" id="implicit-checkbox">
+<input type="radio" id="implicit-radio">
+<input type="text" id="implicit-textbox" name="username">
+<input type="search" id="implicit-searchbox">
+<textarea id="implicit-textarea"></textarea>
+<select id="implicit-combobox"><option>One</option></select>
+<select id="implicit-listbox" multiple><option>A</option><option>B</option></select>
+
+<h2 id="implicit-heading-2">Section heading</h2>
+<h3 id="implicit-heading-3">Sub heading</h3>
+
+<img src="data:," alt="A friendly cat" id="implicit-img">
+
+<ul id="implicit-list">
+  <li id="implicit-listitem-1">First</li>
+  <li>Second</li>
+</ul>
+
+<nav id="implicit-nav">Site links</nav>
+<main id="implicit-main">Main content</main>
+
+<table id="implicit-table">
+  <tr id="implicit-row">
+    <th scope="col" id="implicit-columnheader">Name</th>
+    <th scope="row" id="implicit-rowheader">Age</th>
+  </tr>
+  <tr>
+    <td id="implicit-cell">Alice</td>
+    <td>30</td>
+  </tr>
+</table>
+
+<!-- Explicit roles -->
+<div role="button" id="explicit-button">Custom button</div>
+<div role="alert" id="explicit-alert">Heads up!</div>
+
+<!-- Accessible name variations -->
+<button id="name-text">Save</button>
+<button aria-label="Close dialog" id="name-aria-label">&times;</button>
+<span id="lbl-profile">Profile</span>
+<button aria-labelledby="lbl-profile" id="name-aria-labelledby">&#9881;</button>
+
+<label>Username
+  <input type="text" id="name-wrapping-label">
+</label>
+
+<label for="email-field">Email address</label>
+<input type="text" id="email-field">
+
+<button title="Help" id="name-title-fallback"></button>
+
+<!-- Explicit role overrides implicit -->
+<button role="link" id="explicit-overrides-implicit">Looks like a button but role=link</button>
+
+<!-- Multiple buttons for partial / case-insensitive checks -->
+<button id="cancel-btn">Cancel</button>
+<button id="confirm-btn">Confirm</button>
+</body>
+</html>
