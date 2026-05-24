@@ -20,7 +20,8 @@ public class NavigationTools {
       new TabListTool(session).spec(),
       new TabSelectTool(session).spec(),
       new TabNewTool(session).spec(),
-      new TabCloseTool(session).spec()
+      new TabCloseTool(session).spec(),
+      new ResizeTool(session).spec()
     );
   }
 }
