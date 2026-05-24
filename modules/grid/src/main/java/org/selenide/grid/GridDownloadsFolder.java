@@ -45,6 +45,6 @@ public class GridDownloadsFolder implements DownloadsFolder {
 
   @Override
   public String toString() {
-    return "GridDownloadsFolder{" + getPath() + "}";
+    return "%s{%s}".formatted(getClass().getSimpleName(), webDriver.getSessionId());
   }
 }

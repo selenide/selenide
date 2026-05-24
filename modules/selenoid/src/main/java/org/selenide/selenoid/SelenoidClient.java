@@ -187,6 +187,10 @@ public class SelenoidClient {
     return connection;
   }
 
+  SessionId getSessionId() {
+    return sessionId;
+  }
+
   @Override
   public String toString() {
     return "SelenoidClient{" + sessionId + "}";

@@ -18,6 +18,7 @@ dependencies {
     exclude group: 'com.google.code.findbugs'
   }
   testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive = false}
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')

@@ -34,7 +34,7 @@ public class SelenoidDownloadsFolder implements DownloadsFolder {
 
   @Override
   public String toString() {
-    return selenoidClient.toString();
+    return "%s{%s}".formatted(getClass().getSimpleName(), selenoidClient.getSessionId());
   }
 
   @Override

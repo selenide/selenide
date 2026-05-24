@@ -195,6 +195,10 @@ public class MoonClient {
     return connection;
   }
 
+  SessionId getSessionId() {
+    return sessionId;
+  }
+
   @Override
   public String toString() {
     return "MoonClient{" + sessionId + "}";
