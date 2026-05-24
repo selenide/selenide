@@ -15,7 +15,7 @@ dependencies {
     exclude group: 'org.seleniumhq.selenium'
     exclude group: 'xyz.rogfam'
   }
-  compileOnly 'de.sstoehr:har-reader:2.5.0'
+  implementation 'de.sstoehr:har-reader:2.5.0'
 
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }

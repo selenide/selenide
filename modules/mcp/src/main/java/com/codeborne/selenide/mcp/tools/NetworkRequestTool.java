@@ -43,7 +43,8 @@ class NetworkRequestTool extends McpTool {
     List<HarEntry> entries = NetworkRequestsTool.harEntries(proxy.getProxy());
     HarEntry match = null;
     for (int i = entries.size() - 1; i >= 0; i--) {
-      if (entries.get(i).getRequest().getUrl().contains(pattern)) {
+      String url = entries.get(i).getRequest().getUrl();
+      if (url != null && url.contains(pattern)) {
         match = entries.get(i);
         break;
       }
@@ -60,7 +61,7 @@ class NetworkRequestTool extends McpTool {
       .append(e.getRequest().getUrl()).append('\n');
     out.append("Status: ").append(e.getResponse().getStatus()).append(' ')
       .append(e.getResponse().getStatusText()).append('\n');
-    out.append("Duration: ").append((long) e.getTime()).append("ms\n");
+    out.append("Duration: ").append(e.getTime() != null ? (long) e.getTime() : 0L).append("ms\n");
     out.append("Request headers:\n");
     appendHeaders(out, e.getRequest().getHeaders());
     out.append("Response headers:\n");

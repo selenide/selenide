@@ -47,11 +47,12 @@ class NetworkRequestsTool extends McpTool {
     for (int i = start; i < entries.size(); i++) {
       HarEntry e = entries.get(i);
       String url = e.getRequest().getUrl();
+      if (url == null) continue;
       if (pattern != null && !url.contains(pattern)) continue;
       out.append(e.getRequest().getMethod()).append(' ').append(url)
         .append(" -> ").append(e.getResponse().getStatus()).append(' ')
         .append(nullToDash(e.getResponse().getContent().getMimeType())).append(' ')
-        .append((long) e.getTime()).append("ms\n");
+        .append(e.getTime() != null ? (long) e.getTime() : 0L).append("ms\n");
       shown++;
     }
     if (shown == 0) {
