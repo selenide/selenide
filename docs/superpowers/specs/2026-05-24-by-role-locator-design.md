@@ -94,9 +94,9 @@ Implicit role table (the "common interactive set"):
 | `th[scope="col"]` | `columnheader` |
 | `th[scope="row"]`, `th` (default) | `rowheader` |
 | `nav` | `navigation` |
-| `header` (not inside `article`/`section`) | `banner` |
+| `header` (not inside `article`/`section`/`aside`/`nav`) | `banner` |
 | `main` | `main` |
-| `footer` (not inside `article`/`section`) | `contentinfo` |
+| `footer` (not inside `article`/`section`/`aside`/`nav`) | `contentinfo` |
 | `form` with accessible name (label / `aria-label` / `aria-labelledby`) | `form` |
 | `dialog` | `dialog` |
 
