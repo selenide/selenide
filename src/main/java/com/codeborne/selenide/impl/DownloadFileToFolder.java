@@ -43,28 +43,27 @@ public class DownloadFileToFolder {
     this(new Downloader());
   }
 
-  public File download(WebElementSource link,
+  public File download(Driver driver,
                        WebElement clickable, long timeout, long requestedIncrementTimeout, DownloadOptions options) {
-    return download(link, clickable, timeout, requestedIncrementTimeout,
+    return download(driver, clickable, timeout, requestedIncrementTimeout,
       options.getFilter(), options.getAction(), options.contentStrategy());
   }
 
   @Deprecated
-  public File download(WebElementSource link,
+  public File download(Driver driver,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
-    return download(link, clickable, timeout, incrementTimeout, fileFilter, action, FULL_CONTENT);
+    return download(driver, clickable, timeout, incrementTimeout, fileFilter, action, FULL_CONTENT);
   }
 
-  File download(WebElementSource link,
+  File download(Driver driver,
                 WebElement clickable, long timeout, long requestedIncrementTimeout,
                 FileFilter fileFilter,
                 DownloadAction action,
                 ContentStrategy contentStrategy
   ) {
     long incrementTimeout = Math.max(requestedIncrementTimeout, 1000);
-    Driver driver = link.driver();
     WebDriver webDriver = driver.getWebDriver();
     Config config = driver.config();
     long pollingInterval = Math.max(config.pollingInterval(), 50);

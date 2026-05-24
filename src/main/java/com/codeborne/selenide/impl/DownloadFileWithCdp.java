@@ -60,26 +60,25 @@ public class DownloadFileWithCdp {
   }
 
   @Deprecated
-  public File download(WebElementSource link,
+  public File download(Driver driver,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action) {
-    return download(link, clickable, timeout, incrementTimeout, fileFilter, action, FULL_CONTENT);
+    return download(driver, clickable, timeout, incrementTimeout, fileFilter, action, FULL_CONTENT);
   }
 
-  public File download(WebElementSource link,
+  public File download(Driver driver,
                        WebElement clickable, long timeout, long incrementTimeout, DownloadOptions options) {
-    return download(link, clickable, timeout, incrementTimeout, options.getFilter(), options.getAction(), options.contentStrategy());
+    return download(driver, clickable, timeout, incrementTimeout, options.getFilter(), options.getAction(), options.contentStrategy());
   }
 
-  private File download(WebElementSource link,
+  private File download(Driver driver,
                        WebElement clickable, long timeout, long incrementTimeout,
                        FileFilter fileFilter,
                        DownloadAction action,
                        ContentStrategy contentStrategy) {
 
     long start = currentTimeMillis();
-    Driver driver = link.driver();
     Config config = driver.config();
     WebDriver webDriver = driver.getWebDriver();
     DevTools devTools = initDevTools(driver);

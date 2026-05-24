@@ -51,7 +51,7 @@ final class DownloadFileToFolderTest {
       return null;
     }).when(link).click();
 
-    File downloadedFile = command.download(linkWithHref, link, 3000, 300, file().withMethod(FOLDER));
+    File downloadedFile = command.download(driver, link, 3000, 300, file().withMethod(FOLDER));
 
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);
     assertThat(downloadedFile.getParentFile()).isNotEqualTo(downloadsFolder.getFolder());
