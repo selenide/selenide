@@ -16,7 +16,11 @@ public class NavigationTools {
       new ForwardTool(session).spec(),
       new RefreshTool(session).spec(),
       new CloseTool(session).spec(),
-      new GetUrlTool(session).spec()
+      new GetUrlTool(session).spec(),
+      new TabListTool(session).spec(),
+      new TabSelectTool(session).spec(),
+      new TabNewTool(session).spec(),
+      new TabCloseTool(session).spec()
     );
   }
 }
