@@ -49,6 +49,14 @@ class WaitForToolTest {
   }
 
   @Test
+  void parsesSelectorConditionExplicitVisible() {
+    WaitForTool.Condition c = WaitForTool.parseCondition(
+      Map.of("selector", "#foo", "state", "visible"));
+    assertThat(c.kind()).isEqualTo(WaitForTool.Kind.SELECTOR_VISIBLE);
+    assertThat(c.value()).isEqualTo("#foo");
+  }
+
+  @Test
   void parsesSelectorConditionHidden() {
     WaitForTool.Condition c = WaitForTool.parseCondition(
       Map.of("selector", "#foo", "state", "hidden"));
