@@ -10,6 +10,7 @@ import com.codeborne.selenide.mcp.tools.CodegenTools;
 import com.codeborne.selenide.mcp.tools.ElementInteractionTools;
 import com.codeborne.selenide.mcp.tools.InspectTools;
 import com.codeborne.selenide.mcp.tools.NavigationTools;
+import com.codeborne.selenide.mcp.tools.NetworkTools;
 import io.modelcontextprotocol.json.McpJsonDefaults;
 import io.modelcontextprotocol.server.McpServer;
 import io.modelcontextprotocol.server.McpSyncServer;
@@ -49,7 +50,8 @@ public class SelenideMcpServer {
       .tools(NavigationTools.specs(session))
       .tools(ElementInteractionTools.specs(session))
       .tools(AdvancedInteractionTools.specs(session))
-      .tools(InspectTools.specs(session));
+      .tools(InspectTools.specs(session))
+      .tools(NetworkTools.specs(session));
 
     if (hasCapability(args, "codegen")) {
       builder = builder.tools(CodegenTools.specs(session));
