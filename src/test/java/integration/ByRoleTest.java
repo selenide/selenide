@@ -88,6 +88,16 @@ final class ByRoleTest extends ITest {
   }
 
   @Test
+  void findsElementByImplicitBannerRole() {
+    $(byRole("banner")).shouldHave(attribute("id", "implicit-banner"));
+  }
+
+  @Test
+  void findsElementByImplicitContentinfoRole() {
+    $(byRole("contentinfo")).shouldHave(attribute("id", "implicit-contentinfo"));
+  }
+
+  @Test
   void findsElementByImplicitTableRole() {
     $(byRole("table")).shouldHave(attribute("id", "implicit-table"));
   }
