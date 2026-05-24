@@ -49,7 +49,7 @@ class NetworkRequestsTool extends McpTool {
       String url = e.getRequest().getUrl();
       if (url == null) continue;
       if (pattern != null && !url.contains(pattern)) continue;
-      out.append(e.getRequest().getMethod()).append(' ').append(url)
+      out.append(nullToDash(e.getRequest().getMethod())).append(' ').append(url)
         .append(" -> ").append(e.getResponse().getStatus()).append(' ')
         .append(nullToDash(e.getResponse().getContent().getMimeType())).append(' ')
         .append(e.getTime() != null ? (long) e.getTime() : 0L).append("ms\n");
@@ -70,7 +70,9 @@ class NetworkRequestsTool extends McpTool {
     return har.getLog().getEntries();
   }
 
-  private static String nullToDash(@Nullable String s) {
-    return s == null || s.isEmpty() ? "-" : s;
+  static String nullToDash(@Nullable Object o) {
+    if (o == null) return "-";
+    String s = o.toString();
+    return s.isEmpty() ? "-" : s;
   }
 }

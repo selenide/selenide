@@ -57,10 +57,10 @@ class NetworkRequestTool extends McpTool {
 
   private static String format(HarEntry e) {
     StringBuilder out = new StringBuilder();
-    out.append(e.getRequest().getMethod()).append(' ')
+    out.append(NetworkRequestsTool.nullToDash(e.getRequest().getMethod())).append(' ')
       .append(e.getRequest().getUrl()).append('\n');
     out.append("Status: ").append(e.getResponse().getStatus()).append(' ')
-      .append(e.getResponse().getStatusText()).append('\n');
+      .append(NetworkRequestsTool.nullToDash(e.getResponse().getStatusText())).append('\n');
     out.append("Duration: ").append(e.getTime() != null ? (long) e.getTime() : 0L).append("ms\n");
     out.append("Request headers:\n");
     appendHeaders(out, e.getRequest().getHeaders());
