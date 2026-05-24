@@ -34,7 +34,7 @@ public class MoonDownloadsFolder implements DownloadsFolder {
 
   @Override
   public String toString() {
-    return moonClient.toString();
+    return "%s{%s}".formatted(getClass().getSimpleName(), moonClient.getSessionId());
   }
 
   @Override

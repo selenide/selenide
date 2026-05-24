@@ -126,13 +126,15 @@ public class DownloadFileToFolder {
         log.debug("No {} files found, conclude download is completed (filter: {})", extension, filter);
         return;
       }
-      log.debug("Found {} files, waiting for {} ms (filter: {})...", extension, pollingInterval, filter);
+      log.debug("Found {} files, waiting for {} ms (filter: {}, found files: {})...",
+        extension, pollingInterval, filter, folder.filesAsString());
       failFastIfNoChanges(driver, folder, filter, start, timeout, incrementTimeout);
     }
 
     if (folder.hasFiles(extension, filter)) {
       String message = String.format("Folder %s still contains files %s after %s ms. " +
-                                     "Apparently, the downloading hasn't completed in time.", folder, extension, df.format(timeout));
+          "Apparently, the downloading hasn't completed in time. Found files: %s",
+        folder, extension, df.format(timeout), folder.filesAsString());
       throw new FileNotDownloadedError(message, timeout);
     }
   }
