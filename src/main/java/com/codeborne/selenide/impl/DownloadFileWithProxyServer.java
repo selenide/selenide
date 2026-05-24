@@ -31,13 +31,9 @@ public class DownloadFileWithProxyServer {
   }
 
   public File download(Driver driver, WebElement clickable, long timeout, DownloadOptions options) {
-    return clickAndInterceptFileByProxyServer(driver, clickable, timeout,
-      options.getFilter(), options.getAction(), options.contentStrategy());
-  }
-
-  private File clickAndInterceptFileByProxyServer(Driver driver, WebElement clickable,
-                                                  long timeout, FileFilter fileFilter,
-                                                  DownloadAction action, ContentStrategy contentStrategy) {
+    FileFilter fileFilter = options.getFilter();
+    DownloadAction action = options.getAction();
+    ContentStrategy contentStrategy = options.contentStrategy();
     Config config = driver.config();
     if (!config.proxyEnabled()) {
       throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup proxyEnabled");

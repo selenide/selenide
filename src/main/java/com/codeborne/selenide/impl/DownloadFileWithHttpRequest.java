@@ -80,11 +80,6 @@ public class DownloadFileWithHttpRequest {
     return download(driver, element, timeout, options.getFilter(), options.contentStrategy());
   }
 
-  @Deprecated
-  public File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter) {
-    return download(driver, element, timeout, fileFilter, FULL_CONTENT);
-  }
-
   private File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter, ContentStrategy contentStrategy) {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {

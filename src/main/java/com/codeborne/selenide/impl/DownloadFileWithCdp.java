@@ -31,7 +31,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTENT;
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyMap;
@@ -59,24 +58,11 @@ public class DownloadFileWithCdp {
     return driver.browserDownloadsFolder();
   }
 
-  @Deprecated
-  public File download(Driver driver,
-                       WebElement clickable, long timeout, long incrementTimeout,
-                       FileFilter fileFilter,
-                       DownloadAction action) {
-    return download(driver, clickable, timeout, incrementTimeout, fileFilter, action, FULL_CONTENT);
-  }
-
   public File download(Driver driver,
                        WebElement clickable, long timeout, long incrementTimeout, DownloadOptions options) {
-    return download(driver, clickable, timeout, incrementTimeout, options.getFilter(), options.getAction(), options.contentStrategy());
-  }
-
-  private File download(Driver driver,
-                       WebElement clickable, long timeout, long incrementTimeout,
-                       FileFilter fileFilter,
-                       DownloadAction action,
-                       ContentStrategy contentStrategy) {
+    FileFilter fileFilter = options.getFilter();
+    DownloadAction action = options.getAction();
+    ContentStrategy contentStrategy = options.contentStrategy();
 
     long start = currentTimeMillis();
     Config config = driver.config();
