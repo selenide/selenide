@@ -34,7 +34,7 @@ public class DownloadDetector implements Comparator<DownloadedFile>, Serializabl
       result = Boolean.compare(isHtmlOrCss1, isHtmlOrCss2);
 
       if (result == 0) {
-        result = Long.compare(file1.getFile().lastModified(), file2.getFile().lastModified());
+        result = Long.compare(file2.lastModifiedTime(), file1.lastModifiedTime());
         if (result == 0) {
           result = file1.getName().compareTo(file2.getName());
         }
