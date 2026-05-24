@@ -27,7 +27,7 @@ public class CiReportUrl {
       log.debug("Using Teamcity artifacts url: {}", teamCityUrl);
       return teamCityUrl;
     }
-    log.debug("Variable selenide.reportsUrl not found");
+    log.trace("Variable selenide.reportsUrl not found");
     return reportsUrl;
   }
 
