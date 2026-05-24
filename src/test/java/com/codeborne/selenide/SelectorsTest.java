@@ -1,7 +1,7 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.selector.ByShadowCss;
 import com.codeborne.selenide.selector.ByRole;
+import com.codeborne.selenide.selector.ByShadowCss;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 

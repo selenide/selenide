@@ -260,6 +260,9 @@ public class Selectors {
    * Find element by ARIA role with the given accessible name, using the provided
    * text-match options (case sensitivity, whitespace handling, full or partial match).
    *
+   * @param role ARIA role name
+   * @param accessibleName expected accessible name
+   * @param options text-match options for matching the accessible name
    * @since 7.17.0
    */
   public static By byRole(String role, String accessibleName, TextMatchOptions options) {
