@@ -98,6 +98,21 @@ final class ByRoleTest extends ITest {
   }
 
   @Test
+  void findsElementByImplicitFormRole() {
+    $(byRole("form")).shouldHave(attribute("id", "implicit-form"));
+  }
+
+  @Test
+  void findsElementByImplicitDialogRole() {
+    $(byRole("dialog")).shouldHave(attribute("id", "implicit-dialog"));
+  }
+
+  @Test
+  void findsElementByImplicitOptionRole() {
+    $$(byRole("option")).shouldHave(size(3));
+  }
+
+  @Test
   void findsElementByImplicitTableRole() {
     $(byRole("table")).shouldHave(attribute("id", "implicit-table"));
   }
