@@ -15,7 +15,7 @@
 
 ---
 
-### Task 1: Tab management tools (browser_tab_list, browser_tab_select, browser_tab_new, browser_tab_close)
+## Task 1: Tab management tools (browser_tab_list, browser_tab_select, browser_tab_new, browser_tab_close)
 
 **Files:**
 - Create: `modules/mcp/src/main/java/com/codeborne/selenide/mcp/tools/TabListTool.java`
@@ -289,7 +289,7 @@ git commit -m "mcp: add tab management tools (list/select/new/close)"
 
 ---
 
-### Task 2: browser_resize tool
+## Task 2: browser_resize tool
 
 **Files:**
 - Create: `modules/mcp/src/main/java/com/codeborne/selenide/mcp/tools/ResizeTool.java`
@@ -374,7 +374,7 @@ git commit -m "mcp: add browser_resize tool"
 
 ---
 
-### Task 3: browser_fill_form tool
+## Task 3: browser_fill_form tool
 
 **Files:**
 - Create: `modules/mcp/src/main/java/com/codeborne/selenide/mcp/tools/FillFormTool.java`
@@ -486,7 +486,7 @@ git commit -m "mcp: add browser_fill_form tool"
 
 ---
 
-### Task 4: browser_wait_for tool (with unit test for argument validation)
+## Task 4: browser_wait_for tool (with unit test for argument validation)
 
 **Files:**
 - Create: `modules/mcp/src/main/java/com/codeborne/selenide/mcp/tools/WaitForTool.java`
@@ -733,7 +733,7 @@ git commit -m "mcp: add browser_wait_for tool"
 
 ---
 
-### Task 5: Network inspection tools (browser_network_requests, browser_network_request) + NetworkTools group
+## Task 5: Network inspection tools (browser_network_requests, browser_network_request) + NetworkTools group
 
 **Files:**
 - Create: `modules/mcp/src/main/java/com/codeborne/selenide/mcp/tools/NetworkRequestsTool.java`
@@ -969,7 +969,7 @@ git commit -m "mcp: add network inspection tools (browser_network_requests, brow
 
 ---
 
-### Task 6: Final verification
+## Task 6: Final verification
 
 - [ ] **Step 1: Confirm Javadoc-for-site still builds**
 
