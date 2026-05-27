@@ -1,5 +1,16 @@
 # Changelog
 
+## 7.16.2 (27.05.2026)
+* Selenide MCP: added more configuration parameters  --  thanks to Mike Sidelnikov (#3323)
+* update Selenium from 4.43.0 to 4.44.0 (incl. CDP from 147 -> 148) (#3321)
+* prefer the latest file when browser occasionally downloaded multiple files (#3333)
+* support case when "downloadWillBegin" arrives AFTER "downloadProgress" event (286b7619d4d231)
+* #3328 improve logs when downloading a file (#3332)
+* don't spam logs with useless message "Variable selenide.reportsUrl not found"  (827ac7ae17be8b)
+
+See https://github.com/selenide/selenide/milestone/241?closed=1
+
+
 ## 7.16.1 (05.05.2026)
 * #3300 fix downloading files in Selenoid and Moon (#3301)
 * fix VideoMerger edge case when only one screenshot (#3299)
