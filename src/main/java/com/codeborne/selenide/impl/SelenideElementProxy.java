@@ -148,7 +148,7 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
       }
 
       if (Cleanup.of.isInvalidSelectorError(lastError)) {
-        log.debug("Method {} execution failed. Last error (invalid selector): ", method.getName(), lastError);
+        log.trace("Method {} execution failed. Last error (invalid selector): ", method.getName(), lastError);
         throw Cleanup.of.wrapInvalidSelectorException(lastError);
       }
       else if (lastError instanceof StopCommandExecutionException stop) {
@@ -157,16 +157,16 @@ class SelenideElementProxy<T extends SelenideElement> implements InvocationHandl
         }
       }
       else if (!shouldRetryAfterError(lastError)) {
-        log.debug("Method {} execution failed; stop re-trying. Last error: ", method.getName(), lastError);
+        log.trace("Method {} execution failed; stop re-trying. Last error: ", method.getName(), lastError);
         throw lastError;
       }
-      log.debug("Method {} execution failed; will re-try after {} (timeout: {}). Last error: ",
+      log.trace("Method {} execution failed; will re-try after {} (timeout: {}). Last error: ",
         method.getName(), df.format(pollingIntervalMs), df.format(timeoutMs), lastError);
       stopwatch.sleep(pollingIntervalMs);
     }
     while (!stopwatch.isTimeoutReached());
 
-    log.debug("Method {} execution failed after re-trying {} with interval {}. Last error: ",
+    log.trace("Method {} execution failed after re-trying {} with interval {}. Last error: ",
       method.getName(), df.format(timeoutMs), df.format(pollingIntervalMs), lastError);
     throw exceptionWrapper.wrap(lastError, webElementSource);
   }
