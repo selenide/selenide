@@ -22,6 +22,7 @@ import org.openqa.selenium.interactions.Locatable;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.Duration;
+import java.util.List;
 
 /**
  * Wrapper around {@link WebElement} with additional methods like
@@ -1239,6 +1240,17 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.DownloadFile
    */
   File download(DownloadOptions options) throws FileNotDownloadedError;
+
+  /**
+   * Download multiple files matching given criterias
+   *
+   * Sample:
+   * <pre>
+   *  {@code $("#distributive").downloadFiles(DownloadOptions.files().withExtension("zip"))}
+   * </pre>
+   * @since 7.17.0
+   */
+  List<File> downloadFiles(DownloadOptions options) throws FileNotDownloadedError;
 
   /**
    * Return criteria by which this element is located

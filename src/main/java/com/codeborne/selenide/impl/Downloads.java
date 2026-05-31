@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Stream;
 
 import static java.lang.System.currentTimeMillis;
 import static java.util.stream.Collectors.toList;
@@ -39,8 +40,20 @@ public class Downloads {
     return files.stream().filter(fileFilter::match).collect(toList());
   }
 
+  @Deprecated
+  public List<DownloadedFile> matchingFiles(FileFilter fileFilter) {
+    return findMatchingFiles(fileFilter).toList();
+  }
+
+  @Deprecated
   public Optional<DownloadedFile> firstMatchingFile(FileFilter fileFilter) {
-    return files.stream().filter(fileFilter::match).sorted(new DownloadDetector()).findFirst();
+    return findMatchingFiles(fileFilter).findFirst();
+  }
+
+  private Stream<DownloadedFile> findMatchingFiles(FileFilter fileFilter) {
+    return files.stream()
+      .filter(fileFilter::match)
+      .sorted(new DownloadDetector());
   }
 
   public String filesAsString() {
@@ -64,12 +77,23 @@ public class Downloads {
     return files.size();
   }
 
-  public File firstDownloadedFile(long timeout, FileFilter fileFilter) {
-    return firstMatchingFile(fileFilter)
-      .orElseThrow(() -> {
-        String message = String.format("Failed to download file%s in %s", fileFilter.description(), df.format(timeout));
-          return new FileNotDownloadedError(message.trim(), timeout);
-        }
-      ).getFile();
+  public List<File> getMatchingDownloadedFiles(long timeout, FileFilter fileFilter, int minimumFileCount) {
+    List<DownloadedFile> matchingFiles = findMatchingFiles(fileFilter).toList();
+    if (matchingFiles.size() >= minimumFileCount) {
+      return matchingFiles.stream().map(DownloadedFile::getFile).toList();
+    }
+
+    switch (minimumFileCount) {
+      case 1 -> {
+        String message = String.format("Failed to download file%s in %s (found %s files: %s)",
+          fileFilter.description(), df.format(timeout), files.size(), files);
+        throw new FileNotDownloadedError(message.trim(), timeout);
+      }
+      default -> {
+        String message = String.format("Failed to download at least %s files%s in %s (found %s files: %s)",
+          minimumFileCount, fileFilter.description(), df.format(timeout), files.size(), files);
+        throw new FileNotDownloadedError(message.trim(), timeout);
+      }
+    }
   }
 }

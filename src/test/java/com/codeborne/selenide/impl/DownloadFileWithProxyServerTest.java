@@ -53,7 +53,7 @@ final class DownloadFileWithProxyServerTest {
   void canInterceptFileViaProxyServer() {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.download(driver, link, 3000, file());
+    File file = command.download(driver, link, 3000, file()).get(0);
 
     assertThat(file.getName()).isEqualTo("report.pdf");
     verify(filter).activate(FULL_CONTENT);
@@ -65,7 +65,7 @@ final class DownloadFileWithProxyServerTest {
   void closesNewWindowIfFileWasOpenedInSeparateWindow() {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.download(driver, link, 3000, file());
+    File file = command.download(driver, link, 3000, file()).get(0);
 
     assertThat(file.getName()).isEqualTo("report.pdf");
   }

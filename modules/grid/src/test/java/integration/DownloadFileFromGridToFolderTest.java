@@ -16,10 +16,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.Duration;
+import java.util.Collection;
+import java.util.Map;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.DownloadOptions.file;
+import static com.codeborne.selenide.DownloadOptions.files;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -29,6 +32,8 @@ import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static java.lang.System.currentTimeMillis;
+import static java.time.Duration.ofSeconds;
+import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
@@ -93,7 +98,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
     DownloadOptions downloadOptions = DownloadOptions.using(FOLDER)
       .withIncrementTimeout(Duration.ofMillis(1002L))
       .withFilter(withName("foo.bar"))
-      .withTimeout(Duration.ofSeconds(20));
+      .withTimeout(ofSeconds(20));
 
     assertThatThrownBy(() -> $(byText("Download me")).download(downloadOptions))
       .isInstanceOf(FileNotDownloadedError.class)
@@ -140,7 +145,8 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
 
   @Test
   void downloadsPotentiallyHarmfulMacFiles() throws IOException {
-    File downloadedFile = $(byText("Download DMG file")).download(withExtension("dmg"));
+    File downloadedFile = $(byText("Download DMG file")).download(
+      file().withExtension("dmg").withTimeout(ofSeconds(8)));
 
     assertThat(downloadedFile.getName()).isEqualTo("tiny.dmg");
     assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
@@ -211,6 +217,34 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
 
     assertThat(text.getName()).isEqualTo(fileName);
     assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
+  }
+
+  @Test
+  void downloadMultipleFilesAtOnce() {
+    openFile("downloadMultipleFiles.html");
+
+    Collection<File> result = $("#multiple-downloads").downloadFiles(files(3));
+
+    Map<String, File> files = result.stream().collect(toMap(File::getName, file -> file));
+    assertThat(files).hasSizeGreaterThanOrEqualTo(3);
+    assertThat(files.keySet()).containsExactlyInAnyOrder("empty.html", "hello_world.txt", "download.html");
+
+    assertThat(files.get("empty.html")).content().isEqualToIgnoringNewLines(new FileContent("empty.html").content());
+    assertThat(files.get("hello_world.txt")).content().isEqualToIgnoringNewLines(new FileContent("hello_world.txt").content());
+    assertThat(files.get("download.html")).content().isEqualToIgnoringNewLines(new FileContent("download.html").content());
+  }
+
+  @Test
+  void downloadMultipleFiles_errorMessage() {
+    openFile("downloadMultipleFiles.html");
+
+    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(22).withTimeout(200)))
+      .isInstanceOf(FileNotDownloadedError.class)
+      .hasMessageStartingWith("Failed to download at least 22 files in 200ms (found 3 files: [")
+      .hasMessageContaining("hello_world.txt")
+      .hasMessageContaining("empty.html")
+      .hasMessageContaining("download.html")
+      .hasMessageContaining("Timeout: 200ms");
   }
 
   @Test

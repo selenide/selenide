@@ -17,11 +17,14 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Collection;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.DownloadOptions.file;
+import static com.codeborne.selenide.DownloadOptions.files;
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.CDP;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
@@ -39,6 +42,7 @@ import static java.nio.file.Files.createTempDirectory;
 import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
 import static java.util.regex.Pattern.DOTALL;
+import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
@@ -291,6 +295,34 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
     assertThat(text.getName()).isEqualTo(fileName);
     assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
+  }
+
+  @Test
+  void downloadMultipleFilesAtOnce() {
+    openFile("downloadMultipleFiles.html");
+
+    Collection<File> result = $("#multiple-downloads").downloadFiles(files(3));
+
+    Map<String, File> files = result.stream().collect(toMap(File::getName, file -> file));
+    assertThat(files).hasSizeGreaterThanOrEqualTo(3);
+    assertThat(files.keySet()).containsExactlyInAnyOrder("empty.html", "hello_world.txt", "download.html");
+
+    assertThat(files.get("empty.html")).content().isEqualToIgnoringNewLines(new FileContent("empty.html").content());
+    assertThat(files.get("hello_world.txt")).content().isEqualToIgnoringNewLines(new FileContent("hello_world.txt").content());
+    assertThat(files.get("download.html")).content().isEqualToIgnoringNewLines(new FileContent("download.html").content());
+  }
+
+  @Test
+  void downloadMultipleFiles_errorMessage() {
+    openFile("downloadMultipleFiles.html");
+
+    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(33).withTimeout(100)))
+      .isInstanceOf(FileNotDownloadedError.class)
+      .hasMessageStartingWith("Failed to download at least 33 files in 100ms (found 3 files: [")
+      .hasMessageContaining("hello_world.txt")
+      .hasMessageContaining("empty.html")
+      .hasMessageContaining("download.html")
+      .hasMessageContaining("Timeout: 100ms");
   }
 
   @Test

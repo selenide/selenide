@@ -19,6 +19,7 @@ import org.mockito.ArgumentMatchers;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
+import java.util.List;
 
 import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -33,14 +34,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-final class DownloadFileTest {
+final class DownloadSingleFileTest {
   private final SelenideConfig config = new SelenideConfig();
   private final Driver driver = mock();
   private final DownloadFileWithHttpRequest httpGet = mock();
   private final DownloadFileWithProxyServer proxy = mock();
   private final DownloadFileToFolder folder = mock();
   private final DownloadFileWithCdp cdp = mock();
-  private final DownloadFile command = new DownloadFile(httpGet, proxy, folder, cdp);
+  private final DownloadSingleFile command = new DownloadSingleFile(httpGet, proxy, folder, cdp);
   private final SelenideElement seLink = mock();
   private final WebElementSource linkWithHref = mock();
   private final WebElement link = mock();
@@ -57,7 +58,7 @@ final class DownloadFileTest {
   void canDownloadFile_withHttpGetRequest() {
     config.fileDownload(HTTPGET);
 
-    when(httpGet.download(any(), any(WebElement.class), anyLong(), any(DownloadOptions.class))).thenReturn(file);
+    when(httpGet.download(any(), any(WebElement.class), anyLong(), any(DownloadOptions.class))).thenReturn(List.of(file));
 
     File f = command.execute(seLink, linkWithHref, new Object[]{8000L});
 
@@ -72,7 +73,7 @@ final class DownloadFileTest {
     SelenideProxyServer selenideProxy = mock();
     DriverStub driverWithProxy = new DriverStub(config, selenideProxy);
     when(linkWithHref.driver()).thenReturn(driverWithProxy);
-    when(proxy.download(any(), any(), anyLong(), any())).thenReturn(file);
+    when(proxy.download(any(), any(), anyLong(), any())).thenReturn(List.of(file));
 
     File f = command.execute(seLink, linkWithHref, new Object[]{9000L});
 

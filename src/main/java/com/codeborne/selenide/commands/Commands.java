@@ -133,7 +133,8 @@ public class Commands {
   }
 
   private void addFileCommands() {
-    add("download", new DownloadFile());
+    add("download", new DownloadSingleFile());
+    add("downloadFiles", new DownloadMultipleFiles());
     add("uploadFile", new UploadFile());
     add("uploadFromClasspath", new UploadFileFromClasspath());
   }
