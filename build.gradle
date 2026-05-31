@@ -26,6 +26,11 @@ subprojects {
   apply plugin: 'checkstyle'
   apply plugin: 'com.github.spotbugs'
   apply plugin: "org.sonarqube"
+
+  // Run the fast Checkstyle checks before the slower unit tests, so style violations fail the build quickly
+  tasks.withType(Test).configureEach {
+    shouldRunAfter tasks.withType(Checkstyle)
+  }
 }
 
 apply from: 'gradle/compilation.gradle'
