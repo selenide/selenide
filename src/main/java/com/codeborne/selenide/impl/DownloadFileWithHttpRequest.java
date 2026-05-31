@@ -44,6 +44,7 @@ import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -76,8 +77,11 @@ public class DownloadFileWithHttpRequest {
     this.downloader = downloader;
   }
 
-  public File download(Driver driver, WebElement element, long timeout, DownloadOptions options) {
-    return download(driver, element, timeout, options.getFilter(), options.contentStrategy());
+  public List<File> download(Driver driver, WebElement element, long timeout, DownloadOptions options) {
+    return switch (options.minimumFileCount()) {
+      case 1 -> List.of(download(driver, element, timeout, options.getFilter(), options.contentStrategy()));
+      default -> throw new IllegalArgumentException("HTTPGET download mode does not support downloading multiple files");
+    };
   }
 
   private File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter, ContentStrategy contentStrategy) {

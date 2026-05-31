@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static com.codeborne.selenide.proxy.SelenideProxyServer.SELENIDE_PROXY_FILTER_PREFIX;
@@ -30,7 +31,7 @@ public class DownloadFileWithProxyServer {
     this(new Waiter());
   }
 
-  public File download(Driver driver, WebElement clickable, long timeout, DownloadOptions options) {
+  public List<File> download(Driver driver, WebElement clickable, long timeout, DownloadOptions options) {
     FileFilter fileFilter = options.getFilter();
     DownloadAction action = options.getAction();
     ContentStrategy contentStrategy = options.contentStrategy();
@@ -60,7 +61,7 @@ public class DownloadFileWithProxyServer {
         log.info("Downloaded {}", filter.downloads().filesAsString());
         log.info("Just in case, intercepted {}", filter.responsesAsString());
       }
-      return filter.downloads().firstDownloadedFile(timeout, fileFilter);
+      return filter.downloads().getMatchingDownloadedFiles(timeout, fileFilter, options.minimumFileCount());
     }
     finally {
       filter.deactivate();

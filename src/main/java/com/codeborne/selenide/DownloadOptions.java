@@ -41,15 +41,17 @@ public class DownloadOptions implements HasTimeout {
   private final FileFilter filter;
   private final DownloadAction action;
   private final ContentStrategy contentStrategy;
+  private final int minimumFileCount;
 
   private DownloadOptions(@Nullable FileDownloadMode method, @Nullable Duration timeout, @Nullable Duration incrementTimeout,
-                          FileFilter filter, DownloadAction action, ContentStrategy contentStrategy) {
+                          FileFilter filter, DownloadAction action, ContentStrategy contentStrategy, int minimumFileCount) {
     this.method = method;
     this.timeout = timeout;
     this.incrementTimeout = incrementTimeout;
     this.filter = filter;
     this.action = action;
     this.contentStrategy = contentStrategy;
+    this.minimumFileCount = minimumFileCount;
   }
 
   @Nullable
@@ -80,16 +82,21 @@ public class DownloadOptions implements HasTimeout {
     return contentStrategy;
   }
 
+  public int minimumFileCount() {
+    return minimumFileCount;
+  }
+
   public DownloadOptions withMethod(FileDownloadMode method) {
-    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, contentStrategy);
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, contentStrategy, minimumFileCount);
   }
 
   public DownloadOptions withTimeout(long timeoutMs) {
-    return new DownloadOptions(method, Duration.ofMillis(timeoutMs), incrementTimeout, filter, action, contentStrategy);
+    return new DownloadOptions(method, Duration.ofMillis(timeoutMs),
+      incrementTimeout, filter, action, contentStrategy, minimumFileCount);
   }
 
   public DownloadOptions withTimeout(Duration timeout) {
-    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, contentStrategy);
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, contentStrategy, minimumFileCount);
   }
 
   /**
@@ -107,27 +114,30 @@ public class DownloadOptions implements HasTimeout {
    * @param incrementTimeout should be lesser than download timeout
    */
   public DownloadOptions withIncrementTimeout(Duration incrementTimeout) {
-    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, contentStrategy);
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, contentStrategy, minimumFileCount);
   }
 
   public DownloadOptions withFilter(FileFilter filter) {
-    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, contentStrategy);
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, contentStrategy, minimumFileCount);
   }
 
   public DownloadOptions withExtension(String extension) {
-    return new DownloadOptions(method, timeout, incrementTimeout, FileFilters.withExtension(extension), action, contentStrategy);
+    return new DownloadOptions(method, timeout, incrementTimeout,
+      FileFilters.withExtension(extension), action, contentStrategy, minimumFileCount);
   }
 
   public DownloadOptions withName(String fileName) {
-    return new DownloadOptions(method, timeout, incrementTimeout, FileFilters.withName(fileName), action, contentStrategy);
+    return new DownloadOptions(method, timeout, incrementTimeout,
+      FileFilters.withName(fileName), action, contentStrategy, minimumFileCount);
   }
 
   public DownloadOptions withNameMatching(String fileNameRegex) {
-    return new DownloadOptions(method, timeout, incrementTimeout, FileFilters.withNameMatching(fileNameRegex), action, contentStrategy);
+    return new DownloadOptions(method, timeout, incrementTimeout,
+      FileFilters.withNameMatching(fileNameRegex), action, contentStrategy, minimumFileCount);
   }
 
   public DownloadOptions withoutContent() {
-    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, ContentStrategy.EMPTY_CONTENT);
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, ContentStrategy.EMPTY_CONTENT, minimumFileCount);
   }
 
   /**
@@ -140,7 +150,7 @@ public class DownloadOptions implements HasTimeout {
    * @return DownloadOptions
    */
   public DownloadOptions withAction(DownloadAction action) {
-    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, contentStrategy);
+    return new DownloadOptions(method, timeout, incrementTimeout, filter, action, contentStrategy, minimumFileCount);
   }
 
   @Override
@@ -149,13 +159,22 @@ public class DownloadOptions implements HasTimeout {
         method == null ? null : "method: %s".formatted(method.name()),
         timeout == null ? null : "timeout: %s".formatted(df.format(timeout)),
         incrementTimeout == null ? null : "incrementTimeout: %s".formatted(df.format(incrementTimeout)),
+        minimumFileCount == 1 ? null : "minimumFileCount: %s".formatted(minimumFileCount),
         filter.isEmpty() ? null : filter.toString()
       ).filter(p -> p != null)
       .collect(joining(", "));
   }
 
   public static DownloadOptions file() {
-    return new DownloadOptions(null, null, null, none(), click(), ContentStrategy.FULL_CONTENT);
+    return new DownloadOptions(null, null, null, none(), click(), ContentStrategy.FULL_CONTENT, 1);
+  }
+
+  public static DownloadOptions files() {
+    return files(2);
+  }
+
+  public static DownloadOptions files(int minimumFileCount) {
+    return new DownloadOptions(null, null, null, none(), click(), ContentStrategy.FULL_CONTENT, minimumFileCount);
   }
 
   public static DownloadOptions using(FileDownloadMode method) {

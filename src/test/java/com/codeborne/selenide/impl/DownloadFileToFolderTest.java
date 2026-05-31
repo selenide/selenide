@@ -14,6 +14,7 @@ import org.openqa.selenium.WebElement;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
@@ -51,11 +52,12 @@ final class DownloadFileToFolderTest {
       return null;
     }).when(link).click();
 
-    File downloadedFile = command.download(driver, link, 3000, 300, file().withMethod(FOLDER));
+    List<File> downloadedFiles = command.download(driver, link, 3000, 300, file().withMethod(FOLDER));
 
-    assertThat(downloadedFile.getName()).isEqualTo(newFileName);
-    assertThat(downloadedFile.getParentFile()).isNotEqualTo(downloadsFolder.getFolder());
-    assertThat(readFileToString(downloadedFile, UTF_8)).isEqualTo("Hello Bingo-Bongo");
+    assertThat(downloadedFiles).hasSize(1);
+    assertThat(downloadedFiles.get(0).getName()).isEqualTo(newFileName);
+    assertThat(downloadedFiles.get(0).getParentFile()).isNotEqualTo(downloadsFolder.getFolder());
+    assertThat(readFileToString(downloadedFiles.get(0), UTF_8)).isEqualTo("Hello Bingo-Bongo");
   }
 
   @Test

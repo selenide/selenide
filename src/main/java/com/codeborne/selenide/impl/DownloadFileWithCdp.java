@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -33,7 +34,6 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
-import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 import static org.openqa.selenium.devtools.v148.browser.Browser.downloadProgress;
 import static org.openqa.selenium.devtools.v148.browser.Browser.downloadWillBegin;
@@ -58,8 +58,8 @@ public class DownloadFileWithCdp {
     return driver.browserDownloadsFolder();
   }
 
-  public File download(Driver driver,
-                       WebElement clickable, long timeout, long incrementTimeout, DownloadOptions options) {
+  public List<File> download(Driver driver,
+                             WebElement clickable, long timeout, long incrementTimeout, DownloadOptions options) {
     FileFilter fileFilter = options.getFilter();
     DownloadAction action = options.getAction();
     ContentStrategy contentStrategy = options.contentStrategy();
@@ -78,25 +78,26 @@ public class DownloadFileWithCdp {
     action.perform(driver, clickable);
 
     try {
-      CdpDownload download = waitUntilDownloadsCompleted(driver, fileFilter, timeout, incrementTimeout, downloads);
+      MatchedCdpDownloads matchedDownloads = waitUntilDownloadsCompleted(driver, fileFilter,
+        timeout, incrementTimeout, downloads, options.minimumFileCount());
 
-      if (!fileFilter.match(new DownloadedFile(download.file(), download.lastModifiedAt, download.fileSize, emptyMap()))) {
-        String message = String.format("Failed to download file%s in %s%s;%n actually downloaded: %s",
-          fileFilter.description(), df.format(timeout), fileFilter.description(), download.file().getAbsolutePath());
-        throw new FileNotDownloadedError(message, timeout);
-      }
-
-      return switch (contentStrategy) {
-        case FULL_CONTENT -> downloader.copyFileWithTimeout(download.file().getName(),
-          () -> archiveFile(config, webDriver, download.file()),
-          timeout - (currentTimeMillis() - start)
-        );
-        case EMPTY_CONTENT -> downloader.mockFileContent(config, requireNonNull(download.fileName));
-      };
+      return matchedDownloads.files.stream()
+        .map(f -> archive(timeout - (currentTimeMillis() - start), contentStrategy, f, config, webDriver))
+        .toList();
     }
     finally {
       devTools.clearListeners();
     }
+  }
+
+  private File archive(long timeout, ContentStrategy contentStrategy, CdpDownload download, Config config, WebDriver webDriver) {
+    return switch (contentStrategy) {
+      case FULL_CONTENT -> downloader.copyFileWithTimeout(download.file().getName(),
+        () -> archiveFile(config, webDriver, download.file()),
+        timeout
+      );
+      case EMPTY_CONTENT -> downloader.mockFileContent(config, requireNonNull(download.fileName));
+    };
   }
 
   protected boolean isLocalBrowser(Config config) {
@@ -111,16 +112,17 @@ public class DownloadFileWithCdp {
     return archivedFile;
   }
 
-  private CdpDownload waitUntilDownloadsCompleted(Driver driver, FileFilter fileFilter,
-                                           long timeout, long incrementTimeout, CdpDownloads downloads) {
+  private MatchedCdpDownloads waitUntilDownloadsCompleted(
+    Driver driver, FileFilter fileFilter, long timeout, long incrementTimeout, CdpDownloads downloads, int minimumFileCount) {
+
     long pollingInterval = Math.max(driver.config().pollingInterval(), 100);
     long downloadStartedAt = currentTimeMillis();
     Stopwatch stopwatch = new Stopwatch(timeout);
     do {
-      Optional<CdpDownload> downloadedFile = downloads.find(fileFilter);
-      if (downloadedFile.isPresent()) {
-        log.debug("File {} download is complete after {} ms.", downloadedFile.get().fileName, stopwatch.getElapsedTimeMs());
-        return downloadedFile.get();
+      MatchedCdpDownloads downloadedFiles = downloads.find(fileFilter);
+      if (downloadedFiles.hasAtLeast(minimumFileCount)) {
+        log.debug("File download completed after {} ms: {}", stopwatch.getElapsedTimeMs(), downloadedFiles);
+        return downloadedFiles;
       }
       else {
         failFastIfNoChanges(downloads, fileFilter, downloadStartedAt, timeout, incrementTimeout);
@@ -129,8 +131,13 @@ public class DownloadFileWithCdp {
     }
     while (!stopwatch.isTimeoutReached());
 
-    String message = "Failed to download file%s in %s, found files: %s".formatted(
-      fileFilter.description(), df.format(timeout), downloads.folder().files());
+    List<DownloadedFile> files = downloads.folder().files();
+    String message = switch (minimumFileCount) {
+      case 1 -> "Failed to download file%s in %s (found %s files: %s)".formatted(
+        fileFilter.description(), df.format(timeout), files.size(), files);
+      default -> "Failed to download at least %s files%s in %s (found %s files: %s)".formatted(
+        minimumFileCount, fileFilter.description(), df.format(timeout), files.size(), files);
+    };
     throw new FileNotDownloadedError(message, timeout);
   }
 
@@ -155,7 +162,7 @@ public class DownloadFileWithCdp {
 
   private boolean isChromium(WebDriver webDriver) {
     return webDriver instanceof HasCapabilities hasCapabilities &&
-           new com.codeborne.selenide.Browser(hasCapabilities.getCapabilities().getBrowserName(), false).isChromium();
+      new com.codeborne.selenide.Browser(hasCapabilities.getCapabilities().getBrowserName(), false).isChromium();
   }
 
   private void prepareDownloadWithCdp(Driver driver, DevTools devTools,
@@ -179,11 +186,12 @@ public class DownloadFileWithCdp {
     DownloadsFolder folder,
     ConcurrentMap<String, CdpDownload> downloads
   ) {
-    private Optional<CdpDownload> find(FileFilter fileFilter) {
-      return downloads.values().stream()
+    private MatchedCdpDownloads find(FileFilter fileFilter) {
+      return new MatchedCdpDownloads(downloads.values().stream()
         .filter(download -> download.completed)
         .filter(download -> fileFilter.match(download.file()))
-        .findAny();
+        .toList()
+      );
     }
 
     private Optional<Long> lastModificationTime() {
@@ -219,6 +227,17 @@ public class DownloadFileWithCdp {
 
     private synchronized CdpDownload download(String guid) {
       return downloads.computeIfAbsent(guid, __ -> new CdpDownload(folder));
+    }
+  }
+
+  private record MatchedCdpDownloads(List<CdpDownload> files) {
+    public boolean hasAtLeast(int minimumFileCount) {
+      return files.size() >= minimumFileCount;
+    }
+
+    @Override
+    public String toString() {
+      return files.stream().map(f -> f.fileName).toList().toString();
     }
   }
 
@@ -293,9 +312,8 @@ public class DownloadFileWithCdp {
     long lastModifiedAt = downloads.lastModificationTime().orElse(downloadStartedAt);
     long filesHasNotBeenUpdatedForMs = now - lastModifiedAt;
     if (filesHasNotBeenUpdatedForMs > incrementTimeout) {
-      String message = String.format(
-        "Failed to download file%s in %s: files in %s haven't been modified for %s " +
-        "(lastUpdate: %s, now: %s, incrementTimeout: %s)",
+      String message = String.format("Failed to download file%s in %s: files in %s haven't been modified for %s " +
+          "(lastUpdate: %s, now: %s, incrementTimeout: %s)",
         filter.description(), df.format(timeout), downloads.folder, df.format(filesHasNotBeenUpdatedForMs),
         lastModifiedAt, now, df.format(incrementTimeout));
       throw new FileNotDownloadedError(message, timeout);

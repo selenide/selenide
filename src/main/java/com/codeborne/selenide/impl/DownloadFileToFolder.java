@@ -42,8 +42,8 @@ public class DownloadFileToFolder {
     this(new Downloader());
   }
 
-  public File download(Driver driver,
-                       WebElement clickable, long timeout, long requestedIncrementTimeout, DownloadOptions options) {
+  public List<File> download(Driver driver,
+                             WebElement clickable, long timeout, long requestedIncrementTimeout, DownloadOptions options) {
     FileFilter fileFilter = options.getFilter();
     DownloadAction action = options.getAction();
     ContentStrategy contentStrategy = options.contentStrategy();
@@ -63,7 +63,7 @@ public class DownloadFileToFolder {
 
     action.perform(driver, clickable);
 
-    waitForNewFiles(driver, fileFilter, folder, previousFiles, timeout, incrementTimeout, pollingInterval);
+    waitForNewFiles(driver, fileFilter, folder, previousFiles, timeout, incrementTimeout, pollingInterval, options.minimumFileCount());
     waitUntilDownloadsCompleted(driver, folder, fileFilter, timeout, incrementTimeout, pollingInterval);
 
     Downloads newDownloads = new Downloads(folder.filesExcept(previousFiles));
@@ -74,12 +74,17 @@ public class DownloadFileToFolder {
       log.debug("All downloaded files: {}", folder.filesAsString());
     }
 
-    File downloadedFile = newDownloads.firstDownloadedFile(timeout, fileFilter);
+    List<File> downloadedFiles = newDownloads.getMatchingDownloadedFiles(timeout, fileFilter, options.minimumFileCount());
 
+    return downloadedFiles.stream().map(downloadedFile -> archive(downloadedFile,
+      timeout - (currentTimeMillis() - start), contentStrategy, config, webDriver)).toList();
+  }
+
+  private File archive(File downloadedFile, long timeout, ContentStrategy contentStrategy, Config config, WebDriver webDriver) {
     return switch (contentStrategy) {
       case FULL_CONTENT -> downloader.copyFileWithTimeout(downloadedFile.getName(),
         () -> archiveFile(config, webDriver, downloadedFile),
-        timeout - (currentTimeMillis() - start)
+        timeout
       );
       case EMPTY_CONTENT -> downloader.mockFileContent(config, downloadedFile.getName());
     };
@@ -145,7 +150,7 @@ public class DownloadFileToFolder {
 
   void waitForNewFiles(Driver driver, FileFilter fileFilter, DownloadsFolder folder,
                        List<DownloadedFile> previousFiles,
-                       long timeout, long incrementTimeout, long pollingInterval) {
+                       long timeout, long incrementTimeout, long pollingInterval, int minimumFileCount) {
     if (log.isDebugEnabled()) {
       log.debug("Waiting for files in {}...", folder);
     }
@@ -154,13 +159,13 @@ public class DownloadFileToFolder {
     for (; currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
       Downloads downloads = new Downloads(folder.filesExcept(previousFiles));
       List<DownloadedFile> matchingFiles = downloads.files(fileFilter);
-      if (!matchingFiles.isEmpty()) {
-        log.debug("Matching files found: {}, all new files: {}, all files: {}",
-          matchingFiles, downloads.filesAsString(), folder.filesAsString());
+      log.debug("{} matching files found: {}, all new files: {}, all files: {}",
+        matchingFiles.size(), matchingFiles, downloads.filesAsString(), folder.filesAsString());
+
+      if (matchingFiles.size() >= minimumFileCount) {
         return;
       }
-      log.debug("Matching files not found: {}, all new files: {}, all files: {}",
-        matchingFiles, downloads.filesAsString(), folder.filesAsString());
+
       failFastIfNoChanges(driver, folder, fileFilter, start, timeout, incrementTimeout);
     }
 

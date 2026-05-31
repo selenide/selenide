@@ -1,6 +1,5 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.Driver;
@@ -22,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.List;
 
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.impl.DurationFormat.formatDuration;
@@ -29,7 +29,7 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Objects.requireNonNullElse;
 import static java.util.Optional.ofNullable;
 
-public class DownloadFile implements Command<File> {
+abstract class DownloadFile {
   private static final Logger log = LoggerFactory.getLogger(DownloadFile.class);
 
   private final DownloadFileWithHttpRequest downloadFileWithHttpRequest;
@@ -37,21 +37,20 @@ public class DownloadFile implements Command<File> {
   private final DownloadFileToFolder downloadFileToFolder;
   private final DownloadFileWithCdp downloadFileWithCdp;
 
-  public DownloadFile() {
+  DownloadFile() {
     this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer(),
       inject(DownloadFileToFolder.class), inject(DownloadFileWithCdp.class));
   }
 
-  DownloadFile(DownloadFileWithHttpRequest httpGet, DownloadFileWithProxyServer proxy,
-               DownloadFileToFolder folder, DownloadFileWithCdp cdp) {
+  protected DownloadFile(DownloadFileWithHttpRequest httpGet, DownloadFileWithProxyServer proxy,
+                         DownloadFileToFolder folder, DownloadFileWithCdp cdp) {
     downloadFileWithHttpRequest = httpGet;
     downloadFileWithProxyServer = proxy;
     downloadFileToFolder = folder;
     downloadFileWithCdp = cdp;
   }
 
-  @Override
-  public File execute(SelenideElement selenideElement, WebElementSource linkWithHref, Object @Nullable [] args) {
+  protected List<File> downloadFiles(SelenideElement selenideElement, WebElementSource linkWithHref, Object @Nullable [] args) {
     Driver driver = linkWithHref.driver();
     Config config = driver.config();
     DownloadOptions options = getDownloadOptions(config, args);
