@@ -13,10 +13,13 @@ out
 chromedriver.log
 .settings
 classes
+/.run/selenide-ru.run.xml
+/.run/selenide-web.run.xml
 
 # Ignore AI stuff
 /.mcp.json
 /.claude/settings.local.json
+/.claude/worktrees/
 
 # Ignore all binary files
 modules/*/bin

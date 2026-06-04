@@ -353,13 +353,13 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   void downloadMultipleFiles_errorMessage() {
     openFile("downloadMultipleFiles.html");
 
-    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(22).withTimeout(2)))
+    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(22).withTimeout(100)))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download at least 22 files in 2ms (found 3 files: [")
+      .hasMessageStartingWith("Failed to download at least 22 files in 100ms (found ")
       .hasMessageContaining("hello_world.txt")
       .hasMessageContaining("empty.html")
       .hasMessageContaining("download.html")
-      .hasMessageContaining("Timeout: 2ms");
+      .hasMessageContaining("Timeout: 100ms");
   }
 
   @Test

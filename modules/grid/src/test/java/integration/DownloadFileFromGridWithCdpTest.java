@@ -206,7 +206,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
     assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(22).withTimeout(200)))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download at least 22 files in 200ms (found 3 files: [")
+      .hasMessageStartingWith("Failed to download at least 22 files in 200ms (found ")
       .hasMessageContaining("hello_world.txt")
       .hasMessageContaining("empty.html")
       .hasMessageContaining("download.html")

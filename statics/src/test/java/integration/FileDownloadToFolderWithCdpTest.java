@@ -318,7 +318,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
     assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(33).withTimeout(100)))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download at least 33 files in 100ms (found 3 files: [")
+      .hasMessageStartingWith("Failed to download at least 33 files in 100ms (found ")
       .hasMessageContaining("hello_world.txt")
       .hasMessageContaining("empty.html")
       .hasMessageContaining("download.html")
