@@ -8,10 +8,11 @@ import org.openqa.selenium.chromium.ChromiumNetworkConditions;
 import org.openqa.selenium.chromium.HasNetworkConditions;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v148.network.Network;
-import org.openqa.selenium.devtools.v148.network.model.NetworkConditions;
+import org.openqa.selenium.devtools.latest.network.Network;
+import org.openqa.selenium.devtools.latest.network.model.NetworkConditions;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.text;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 final class OfflineModeTest extends ITest {
 
   private static final List<NetworkConditions> ALL_REQUESTS =
-    List.of(new NetworkConditions("", 0, 0, 0, empty(), empty(), empty(), empty()));
+    List.of(new NetworkConditions("", 0, 0, 0, empty(), empty(), empty(), empty(), empty()));
 
   private static final WebElementCondition NO_INTERNET =
     text("no internet")
@@ -36,6 +37,7 @@ final class OfflineModeTest extends ITest {
   @BeforeEach
   void openTestPage() {
     setTimeout(1_000);
+    driver().close();
     openFile("file_upload_form.html");
   }
 
@@ -73,14 +75,14 @@ final class OfflineModeTest extends ITest {
     $(header).shouldHave(text("File upload form"));
 
     // Go offline
-    devTools.send(Network.emulateNetworkConditionsByRule(true, ALL_REQUESTS));
+    devTools.send(Network.emulateNetworkConditionsByRule(Optional.of(true), Optional.of(true), ALL_REQUESTS));
 
     driver().refresh();
 
     $(header).shouldHave(NO_INTERNET);
 
     // Bring back online
-    devTools.send(Network.emulateNetworkConditionsByRule(false, ALL_REQUESTS));
+    devTools.send(Network.emulateNetworkConditionsByRule(empty(), empty(), ALL_REQUESTS));
     driver().refresh();
     $(header).shouldHave(text("File upload form"));
   }

@@ -16,10 +16,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v148.browser.Browser;
-import org.openqa.selenium.devtools.v148.browser.model.DownloadProgress;
-import org.openqa.selenium.devtools.v148.browser.model.DownloadWillBegin;
-import org.openqa.selenium.devtools.v148.page.Page;
+import org.openqa.selenium.devtools.latest.browser.Browser;
+import org.openqa.selenium.devtools.latest.browser.model.DownloadProgress;
+import org.openqa.selenium.devtools.latest.browser.model.DownloadWillBegin;
+import org.openqa.selenium.devtools.latest.page.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +35,8 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Objects.requireNonNull;
-import static org.openqa.selenium.devtools.v148.browser.Browser.downloadProgress;
-import static org.openqa.selenium.devtools.v148.browser.Browser.downloadWillBegin;
+import static org.openqa.selenium.devtools.latest.browser.Browser.downloadProgress;
+import static org.openqa.selenium.devtools.latest.browser.Browser.downloadWillBegin;
 
 public class DownloadFileWithCdp {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithCdp.class);
