@@ -18,6 +18,12 @@ plugins {
 allprojects {
   group = 'com.codeborne'
   version = '7.17.0-SNAPSHOT'
+
+  idea {
+    module {
+      excludeDirs += file('.claude/worktrees')
+    }
+  }
 }
 
 subprojects {
