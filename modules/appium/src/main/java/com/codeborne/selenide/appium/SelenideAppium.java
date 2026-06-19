@@ -150,4 +150,29 @@ public class SelenideAppium {
   public static SelenideAppiumCollection $$(Collection<? extends WebElement> elements) {
     return new SelenideAppiumCollection(driver(), elements);
   }
+
+  /** Alias for {@code $(By)}, usable without backticks in Kotlin page objects. */
+  public static SelenideAppiumElement element(By seleniumSelector) {
+    return $(seleniumSelector);
+  }
+
+  /** Alias for {@code $(By, int)}, usable without backticks in Kotlin page objects. */
+  public static SelenideAppiumElement element(By seleniumSelector, int index) {
+    return $(seleniumSelector, index);
+  }
+
+  /** Alias for {@code $(WebElement)}, usable without backticks in Kotlin page objects. */
+  public static SelenideAppiumElement element(WebElement webElement) {
+    return $(webElement);
+  }
+
+  /** Alias for {@code $$(By)}, usable without backticks in Kotlin page objects. */
+  public static SelenideAppiumCollection elements(By selector) {
+    return $$(selector);
+  }
+
+  /** Alias for {@code $$(Collection)}, usable without backticks in Kotlin page objects. */
+  public static SelenideAppiumCollection elements(Collection<? extends WebElement> elements) {
+    return $$(elements);
+  }
 }
