@@ -201,7 +201,7 @@ jobs:
           helm repo add aerokube https://charts.aerokube.com/
           helm repo update
           kubectl create namespace moon
-          helm upgrade --install -n moon moon aerokube/moon2
+          helm upgrade --install -f modules/moon/moon-values.yaml -n moon moon aerokube/moon2
           kubectl patch svc moon -n moon --patch "{\"spec\":{\"externalIPs\":[\"$(minikube ip)\"]}}"
           kubectl wait pod --all --for=condition=Ready --namespace=moon
           kubectl describe service moon -n moon
