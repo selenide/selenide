@@ -10,8 +10,7 @@ dependencies {
 
   testImplementation rootProject.project(':statics').sourceSets.test.output
   testImplementation rootProject.project(':modules:core').sourceSets.test.output
-  testRuntimeOnly("org.seleniumhq.selenium:selenium-devtools-v124:4.+") {transitive = false}
-  testRuntimeOnly("org.seleniumhq.selenium:selenium-devtools-v129:4.+") {transitive = false}
+
   testRuntimeOnly project(':modules:proxy')
   testImplementation("org.junit.jupiter:junit-jupiter")
 
