@@ -10,6 +10,12 @@ ext {
 dependencies {
   implementation project(':modules:core')
   implementation "io.modelcontextprotocol.sdk:mcp:$mcpSdkVersion"
+  compileOnly("com.github.valfirst.browserup-proxy:browserup-proxy-core:${browserupProxyVersion}") {
+    exclude group: 'io.netty'
+    exclude group: 'org.seleniumhq.selenium'
+    exclude group: 'xyz.rogfam'
+  }
+  implementation 'de.sstoehr:har-reader:2.5.0'
 
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
