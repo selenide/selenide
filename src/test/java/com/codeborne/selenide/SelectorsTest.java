@@ -1,9 +1,11 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.selector.ByRole;
 import com.codeborne.selenide.selector.ByShadowCss;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.TextMatchOptions.partialText;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class SelectorsTest {
@@ -130,5 +132,26 @@ final class SelectorsTest {
     By tagNameSelector = Selectors.byTagName("div");
     assertThat(tagNameSelector).isInstanceOf(By.ByTagName.class);
     assertThat(tagNameSelector).hasToString("By.tagName: div");
+  }
+
+  @Test
+  void byRole_withoutName_describesItself() {
+    By selector = Selectors.byRole("button");
+    assertThat(selector).isInstanceOf(ByRole.class);
+    assertThat(selector).hasToString("by role \"button\"");
+  }
+
+  @Test
+  void byRole_withName_describesItself() {
+    By selector = Selectors.byRole("button", "Submit");
+    assertThat(selector).isInstanceOf(ByRole.class);
+    assertThat(selector).hasToString("by role \"button\" with name \"Submit\" (full text, case sensitive)");
+  }
+
+  @Test
+  void byRole_withNameAndOptions_describesItself() {
+    By selector = Selectors.byRole("button", "submit", partialText().caseInsensitive());
+    assertThat(selector).isInstanceOf(ByRole.class);
+    assertThat(selector).hasToString("by role \"button\" with name \"submit\" (partial text, case insensitive)");
   }
 }
