@@ -60,7 +60,7 @@ subprojects {
     }
 
     // For testing PDF content
-    testImplementation 'com.codeborne:pdf-test:2.1.0'
+    testImplementation 'com.codeborne:pdf-test:2.1.1'
 
     testImplementation "org.junit.platform:junit-platform-engine"
     testImplementation "org.junit.platform:junit-platform-launcher"
