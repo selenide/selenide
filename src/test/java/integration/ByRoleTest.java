@@ -209,8 +209,31 @@ final class ByRoleTest extends ITest {
   @Test
   void multipleButtonsByRoleOnly() {
     // implicit-button, name-text, name-aria-label, name-aria-labelledby, name-title-fallback,
-    // cancel-btn, confirm-btn (all <button>), plus div role="button" id="explicit-button".
+    // cancel-btn, confirm-btn (all <button>), plus div role="button" id="explicit-button",
+    // plus input-submit-button, input-type-button, input-reset-button.
     // The <button role="link"> is excluded (its effective role is "link").
-    $$(byRole("button")).shouldHave(size(8));
+    $$(byRole("button")).shouldHave(size(11));
+  }
+
+  @Test
+  void findsInputButtonsByImplicitButtonRole() {
+    $("#input-buttons").$$(byRole("button")).shouldHave(size(3));
+  }
+
+  @Test
+  void thWithoutScopeDefaultsToColumnheaderRole() {
+    $("#table-with-headerless-th").$(byRole("columnheader")).shouldHave(attribute("id", "th-without-scope"));
+    $("#table-with-headerless-th").$(byRole("rowheader")).shouldNot(exist);
+  }
+
+  @Test
+  void imgWithoutAltAttributeStillHasImgRole() {
+    $$(byRole("img")).shouldHave(size(2));
+  }
+
+  @Test
+  void headerAndFooterInsideMainAreNotBannerOrContentinfo() {
+    $$(byRole("banner")).shouldHave(size(1));
+    $$(byRole("contentinfo")).shouldHave(size(1));
   }
 }
