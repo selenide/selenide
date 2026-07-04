@@ -22,6 +22,7 @@
 <h3 id="implicit-heading-3">Sub heading</h3>
 
 <img src="data:," alt="A friendly cat" id="implicit-img">
+<img src="data:," id="img-without-alt">
 
 <ul id="implicit-list">
   <li id="implicit-listitem-1">First</li>
@@ -44,6 +45,17 @@
 
 <header id="implicit-banner">Top banner</header>
 <footer id="implicit-contentinfo">Site footer</footer>
+
+<main id="main-with-nested-landmarks">
+  <header id="header-inside-main">Nested header</header>
+  <footer id="footer-inside-main">Nested footer</footer>
+</main>
+
+<table id="table-with-headerless-th">
+  <tr>
+    <th id="th-without-scope">Name</th>
+  </tr>
+</table>
 
 <form id="implicit-form" name="login"></form>
 <dialog id="implicit-dialog" open>Dialog content</dialog>
@@ -73,5 +85,12 @@
 <!-- Multiple buttons for partial / case-insensitive checks -->
 <button id="cancel-btn">Cancel</button>
 <button id="confirm-btn">Confirm</button>
+
+<!-- <input type="submit|button|reset"> are also implicit buttons -->
+<div id="input-buttons">
+  <input type="submit" value="Send" id="input-submit-button">
+  <input type="button" value="Go" id="input-type-button">
+  <input type="reset" value="Reset" id="input-reset-button">
+</div>
 </body>
 </html>

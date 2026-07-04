@@ -8,7 +8,8 @@
   const limit = arguments[4];
 
   const IMPLICIT_ROLES = [
-    { role: 'button',       match: el => el.tagName === 'BUTTON' },
+    { role: 'button',       match: el => el.tagName === 'BUTTON' ||
+                                          (el.tagName === 'INPUT' && ['button', 'submit', 'reset'].includes(el.type)) },
     { role: 'link',         match: el => (el.tagName === 'A' || el.tagName === 'AREA') && el.hasAttribute('href') },
     { role: 'checkbox',     match: el => el.tagName === 'INPUT' && el.type === 'checkbox' },
     { role: 'radio',        match: el => el.tagName === 'INPUT' && el.type === 'radio' },
@@ -20,19 +21,18 @@
     { role: 'combobox',     match: el => el.tagName === 'SELECT' },
     { role: 'option',       match: el => el.tagName === 'OPTION' },
     { role: 'heading',      match: el => /^H[1-6]$/.test(el.tagName) },
-    { role: 'img',          match: el => el.tagName === 'IMG' && !!el.getAttribute('alt') },
+    { role: 'img',          match: el => el.tagName === 'IMG' && el.getAttribute('alt') !== '' },
     { role: 'list',         match: el => el.tagName === 'UL' || el.tagName === 'OL' },
     { role: 'listitem',     match: el => el.tagName === 'LI' },
     { role: 'table',        match: el => el.tagName === 'TABLE' },
     { role: 'row',          match: el => el.tagName === 'TR' },
-    { role: 'columnheader', match: el => el.tagName === 'TH' && el.getAttribute('scope') === 'col' },
-    { role: 'rowheader',    match: el => el.tagName === 'TH' &&
-                                          (el.getAttribute('scope') === 'row' || !el.hasAttribute('scope')) },
+    { role: 'columnheader', match: el => el.tagName === 'TH' && el.getAttribute('scope') !== 'row' },
+    { role: 'rowheader',    match: el => el.tagName === 'TH' && el.getAttribute('scope') === 'row' },
     { role: 'cell',         match: el => el.tagName === 'TD' },
     { role: 'navigation',   match: el => el.tagName === 'NAV' },
     { role: 'main',         match: el => el.tagName === 'MAIN' },
-    { role: 'banner',       match: el => el.tagName === 'HEADER' && !el.closest('article, section, aside, nav') },
-    { role: 'contentinfo',  match: el => el.tagName === 'FOOTER' && !el.closest('article, section, aside, nav') },
+    { role: 'banner',       match: el => el.tagName === 'HEADER' && !el.closest('article, section, aside, nav, main') },
+    { role: 'contentinfo',  match: el => el.tagName === 'FOOTER' && !el.closest('article, section, aside, nav, main') },
     { role: 'dialog',       match: el => el.tagName === 'DIALOG' },
     { role: 'form',         match: el => el.tagName === 'FORM' &&
                                           (el.hasAttribute('aria-label') ||
