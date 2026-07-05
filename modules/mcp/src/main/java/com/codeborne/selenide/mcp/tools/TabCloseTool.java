@@ -49,13 +49,16 @@ class TabCloseTool extends McpTool {
       target = handle;
     }
     String active = driver.getWindowHandle();
+    // Closing the last open window typically ends the WebDriver session, so getWindowHandles()
+    // afterwards would throw; decide upfront instead of probing the driver after close().
+    boolean closingLastTab = driver.getWindowHandles().size() == 1;
     driver.switchTo().window(target);
     driver.close();
-    Set<String> remaining = driver.getWindowHandles();
-    if (remaining.isEmpty()) {
+    if (closingLastTab) {
       return success("Closed last tab; no remaining tabs");
     }
-    String next = target.equals(active) ? remaining.iterator().next() : active;
+    Set<String> remaining = driver.getWindowHandles();
+    String next = remaining.contains(active) ? active : remaining.iterator().next();
     driver.switchTo().window(next);
     return success("Closed tab: " + target);
   }
