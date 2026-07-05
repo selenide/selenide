@@ -70,7 +70,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Setup FFmpeg
-        run: sudo apt-get install -y ffmpeg
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: ffmpeg
+          version: 1.0
       - run: ffmpeg -version
       - name: Set up JDK
         uses: actions/setup-java@v5
