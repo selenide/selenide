@@ -70,6 +70,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Setup FFmpeg
+        if: ${{ matrix.gradle-task == 'firefox_headless' || matrix.gradle-task == 'chrome_headless' }}
         uses: awalsh128/cache-apt-pkgs-action@v1
         with:
           packages: ffmpeg
