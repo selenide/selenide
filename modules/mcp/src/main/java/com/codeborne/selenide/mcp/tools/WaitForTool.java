@@ -1,5 +1,6 @@
 package com.codeborne.selenide.mcp.tools;
 
+import com.codeborne.selenide.Stopwatch;
 import com.codeborne.selenide.mcp.BrowserSession;
 import io.modelcontextprotocol.spec.McpSchema;
 import org.jspecify.annotations.Nullable;
@@ -56,7 +57,7 @@ class WaitForTool extends McpTool {
       case TEXT_GONE -> session.getDriver().$(byTagName("body")).shouldNotHave(text(c.value()));
       case SELECTOR_VISIBLE -> session.getDriver().$(resolve(c.value())).should(appear);
       case SELECTOR_HIDDEN -> session.getDriver().$(resolve(c.value())).should(disappear);
-      case TIME -> sleep((long) (c.numericValue() * 1000));
+      case TIME -> Stopwatch.sleepAtLeast((long) (c.numericValue() * 1000));
     }
     return success("Wait condition satisfied: " + c.kind());
   }
@@ -89,15 +90,5 @@ class WaitForTool extends McpTool {
       }
       default -> throw new IllegalStateException("unreachable");
     };
-  }
-
-  private static void sleep(long ms) {
-    try {
-      Thread.sleep(ms);
-    }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new RuntimeException("Sleep interrupted", e);
-    }
   }
 }
