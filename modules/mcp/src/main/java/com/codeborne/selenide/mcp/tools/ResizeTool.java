@@ -28,8 +28,13 @@ class ResizeTool extends McpTool {
 
   @Override
   McpSchema.CallToolResult execute(Map<String, Object> args) {
-    int width = ((Number) args.get("width")).intValue();
-    int height = ((Number) args.get("height")).intValue();
+    Number widthRaw = (Number) args.get("width");
+    Number heightRaw = (Number) args.get("height");
+    if (widthRaw == null || heightRaw == null) {
+      throw new IllegalArgumentException("Both 'width' and 'height' are required");
+    }
+    int width = widthRaw.intValue();
+    int height = heightRaw.intValue();
     session.getDriver().getWebDriver().manage().window()
       .setSize(new Dimension(width, height));
     return success("Resized to " + width + "x" + height);
