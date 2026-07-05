@@ -69,8 +69,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Setup FFmpeg
-        uses: FedericoCarboni/setup-ffmpeg@v3
       - run: ffmpeg -version
       - name: Set up JDK
         uses: actions/setup-java@v5
