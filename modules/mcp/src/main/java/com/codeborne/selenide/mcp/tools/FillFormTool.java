@@ -44,8 +44,8 @@ class FillFormTool extends McpTool {
       throw new IllegalArgumentException("'fields' must be a non-empty array");
     }
     for (Map<String, Object> field : fields) {
-      String selector = (String) field.get("selector");
-      String value = (String) field.get("value");
+      String selector = field == null ? null : (String) field.get("selector");
+      String value = field == null ? null : (String) field.get("value");
       if (selector == null || value == null) {
         throw new IllegalArgumentException(
           "Each field requires both 'selector' and 'value'");
