@@ -6,7 +6,9 @@ import com.codeborne.selenide.mcp.ToolErrorHandler;
 import io.modelcontextprotocol.json.McpJsonDefaults;
 import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 import java.util.Map;
@@ -80,6 +82,25 @@ abstract class McpTool {
 
   protected static By resolve(String selector) {
     return RESOLVER.resolve(selector);
+  }
+
+  /**
+   * Resolves a browser tab's window handle from either a 0-based {@code index} or an explicit
+   * {@code handle}, given exactly one of them is non-null (mutual exclusivity is validated here).
+   */
+  protected static String resolveWindowHandle(WebDriver driver, @Nullable Number index, @Nullable String handle) {
+    if (index != null && handle != null) {
+      throw new IllegalArgumentException("Provide only one of 'index' or 'handle'");
+    }
+    if (index == null) {
+      return handle;
+    }
+    List<String> handles = List.copyOf(driver.getWindowHandles());
+    int i = index.intValue();
+    if (i < 0 || i >= handles.size()) {
+      throw new IllegalArgumentException("Tab index " + i + " out of range (0.." + (handles.size() - 1) + ")");
+    }
+    return handles.get(i);
   }
 
   protected McpSchema.CallToolResult success(String text) {

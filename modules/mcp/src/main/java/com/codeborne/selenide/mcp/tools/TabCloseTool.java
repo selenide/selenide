@@ -4,7 +4,6 @@ import com.codeborne.selenide.mcp.BrowserSession;
 import io.modelcontextprotocol.spec.McpSchema;
 import org.openqa.selenium.WebDriver;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,22 +31,9 @@ class TabCloseTool extends McpTool {
     WebDriver driver = session.getDriver().getWebDriver();
     Number indexRaw = (Number) args.get("index");
     String handle = (String) args.get("handle");
-    String target;
-    if (indexRaw == null && handle == null) {
-      target = driver.getWindowHandle();
-    } else if (indexRaw != null && handle != null) {
-      throw new IllegalArgumentException("Provide only one of 'index' or 'handle'");
-    } else if (indexRaw != null) {
-      List<String> handles = List.copyOf(driver.getWindowHandles());
-      int index = indexRaw.intValue();
-      if (index < 0 || index >= handles.size()) {
-        throw new IllegalArgumentException(
-          "Tab index " + index + " out of range (0.." + (handles.size() - 1) + ")");
-      }
-      target = handles.get(index);
-    } else {
-      target = handle;
-    }
+    String target = indexRaw == null && handle == null
+      ? driver.getWindowHandle()
+      : resolveWindowHandle(driver, indexRaw, handle);
     String active = driver.getWindowHandle();
     // Closing the last open window typically ends the WebDriver session, so getWindowHandles()
     // afterwards would throw; decide upfront instead of probing the driver after close().

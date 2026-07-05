@@ -4,7 +4,6 @@ import com.codeborne.selenide.mcp.BrowserSession;
 import io.modelcontextprotocol.spec.McpSchema;
 import org.openqa.selenium.WebDriver;
 
-import java.util.List;
 import java.util.Map;
 
 class TabSelectTool extends McpTool {
@@ -34,22 +33,8 @@ class TabSelectTool extends McpTool {
     if (indexRaw == null && handle == null) {
       throw new IllegalArgumentException("Provide either 'index' or 'handle'");
     }
-    if (indexRaw != null && handle != null) {
-      throw new IllegalArgumentException("Provide only one of 'index' or 'handle'");
-    }
     WebDriver driver = session.getDriver().getWebDriver();
-    String target;
-    if (indexRaw != null) {
-      List<String> handles = List.copyOf(driver.getWindowHandles());
-      int index = indexRaw.intValue();
-      if (index < 0 || index >= handles.size()) {
-        throw new IllegalArgumentException(
-          "Tab index " + index + " out of range (0.." + (handles.size() - 1) + ")");
-      }
-      target = handles.get(index);
-    } else {
-      target = handle;
-    }
+    String target = resolveWindowHandle(driver, indexRaw, handle);
     driver.switchTo().window(target);
     return success("Switched to tab: " + target);
   }
