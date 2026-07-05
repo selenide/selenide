@@ -31,11 +31,7 @@ class NetworkRequestTool extends McpTool {
 
   @Override
   McpSchema.CallToolResult execute(Map<String, Object> args) {
-    SelenideProxyServer proxy = session.getDriver().getProxy();
-    if (proxy == null) {
-      throw new IllegalStateException(
-        "Network capture requires --proxy-enabled at server startup");
-    }
+    SelenideProxyServer proxy = NetworkTools.requireProxy(session);
     String pattern = (String) args.get("urlPattern");
     if (pattern == null || pattern.isEmpty()) {
       throw new IllegalArgumentException("'urlPattern' is required");
