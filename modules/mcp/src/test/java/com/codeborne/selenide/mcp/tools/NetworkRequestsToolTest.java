@@ -10,6 +10,7 @@ import de.sstoehr.harreader.model.HarLog;
 import io.modelcontextprotocol.spec.McpSchema;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,22 @@ class NetworkRequestsToolTest {
     assertThat(text(result))
       .contains("GET https://a.test/1 -> 200")
       .contains("GET https://b.test/2 -> 404");
+  }
+
+  @Test
+  void filtersByUrlPatternAcrossTheFullHistoryBeforeCappingTo100() {
+    // The one matching entry is far older than the most recent 100 entries; a fix that
+    // truncates to the last 100 raw entries *before* filtering would lose it.
+    List<HarEntry> entries = new ArrayList<>();
+    entries.add(entry("https://match.test/keep", 200));
+    for (int i = 0; i < 149; i++) {
+      entries.add(entry("https://noise.test/" + i, 200));
+    }
+    withHar(entries.toArray(new HarEntry[0]));
+
+    McpSchema.CallToolResult result = tool.execute(Map.of("urlPattern", "match.test"));
+
+    assertThat(text(result)).contains("https://match.test/keep");
   }
 
   @Test
