@@ -131,9 +131,15 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
       super.createCollection(collection, klass);
   }
 
-  private static class SelenideAppiumList extends SelenideAppiumCollection implements NoOpsList<SelenideAppiumElement> {
+  private static class SelenideAppiumList extends BaseElementsCollection<SelenideAppiumElement, SelenideAppiumList>
+    implements NoOpsList<SelenideAppiumElement> {
     SelenideAppiumList(CollectionSource collection) {
       super(collection);
+    }
+
+    @Override
+    protected SelenideAppiumList create(CollectionSource source) {
+      return new SelenideAppiumList(source);
     }
   }
 

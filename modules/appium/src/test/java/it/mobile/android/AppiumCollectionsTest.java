@@ -13,6 +13,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.down;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.up;
 import static com.codeborne.selenide.appium.SelenideAppium.$$;
+import static com.codeborne.selenide.appium.SelenideAppium.$;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AppiumCollectionsTest extends BaseSwagLabsAndroidTest {
@@ -44,5 +45,12 @@ public class AppiumCollectionsTest extends BaseSwagLabsAndroidTest {
 
     SelenideAppiumElement field = inputFields.find(attribute("password", "true")).shouldBe(visible);
     assertThat(field).isInstanceOf(SelenideAppiumElement.class);
+  }
+
+  @Test
+  void appiumCollectionFromParentElement() {
+    SelenideAppiumElement loginForm = $(By.xpath("//android.view.ViewGroup[@content-desc='Login button']/.."));
+    SelenideAppiumCollection inputFields = loginForm.$$(By.xpath(".//android.widget.EditText")).shouldHave(size(2));
+    assertThat(inputFields.first()).isInstanceOf(SelenideAppiumElement.class);
   }
 }

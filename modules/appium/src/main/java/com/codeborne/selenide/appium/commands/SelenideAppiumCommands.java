@@ -4,6 +4,9 @@ import com.codeborne.selenide.commands.Commands;
 
 public class SelenideAppiumCommands extends Commands {
   public SelenideAppiumCommands() {
+    add("findAll", new AppiumFindAll());
+    add("$$", new AppiumFindAll());
+    add("$$x", new AppiumFindAllByXpath());
     add("dragAndDrop", new AppiumDragAndDrop());
     add("click", new AppiumClick());
     add("doubleClick", new AppiumDoubleClick());

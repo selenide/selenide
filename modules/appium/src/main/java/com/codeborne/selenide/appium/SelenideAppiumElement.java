@@ -5,6 +5,7 @@ import java.time.Duration;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebElementCondition;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.openqa.selenium.By;
 
 public interface SelenideAppiumElement extends SelenideElement {
   @CanIgnoreReturnValue
@@ -107,4 +108,29 @@ public interface SelenideAppiumElement extends SelenideElement {
   @Override
   @CanIgnoreReturnValue
   SelenideAppiumElement should(WebElementCondition... condition);
+
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumFindAll
+   */
+  SelenideAppiumCollection findAll(String cssSelector);
+
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumFindAll
+   */
+  SelenideAppiumCollection findAll(By selector);
+
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumFindAll
+   */
+  SelenideAppiumCollection $$(String cssSelector);
+
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumFindAll
+   */
+  SelenideAppiumCollection $$(By selector);
+
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumFindAllByXpath
+   */
+  SelenideAppiumCollection $$x(String xpath);
 }
