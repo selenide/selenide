@@ -89,7 +89,8 @@ public class ScreenShotLaboratory {
   /**
    * Takes screenshot of current browser window.
    * Stores 2 files:
-   * 1. html of the page (if "savePageSource" parameter is true), and
+   * 1. page source of the page (if "savePageSource" parameter is true):
+   *    MHTML in Chromium browsers, plain HTML in other browsers, and
    * 2. screenshot of the page in PNG format (if "saveScreenshot" parameter is true)
    * <p>
    * Either file may be null if webdriver has failed to save it.

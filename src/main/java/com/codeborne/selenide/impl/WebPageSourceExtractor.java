@@ -1,17 +1,22 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.chromium.HasCdp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -30,17 +35,8 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
 
   @CanIgnoreReturnValue
   private File extract(Config config, WebDriver driver, String fileName, boolean retryIfAlert) {
-    File pageSource = createFile(config, driver, fileName);
     try {
-      String source = driver.getPageSource();
-      if (source == null) {
-        log.error("Failed to save page source to {}: page source is <null>", fileName);
-        writeToFile("<null>", pageSource);
-      }
-      else {
-        writeToFile(source, pageSource);
-        attachmentHandler.attach(pageSource);
-      }
+      return doExtract(config, driver, fileName);
     }
     catch (UnhandledAlertException e) {
       if (retryIfAlert) {
@@ -52,18 +48,71 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     }
     catch (WebDriverException e) {
       log.warn("Failed to save page source to {}", fileName, e);
+      File pageSource = createFile(config, driver, fileName);
       writeToFile(e.toString(), pageSource);
       return pageSource;
     }
     catch (RuntimeException e) {
       log.error("Failed to save page source to {}", fileName, e);
+      File pageSource = createFile(config, driver, fileName);
       writeToFile(e.toString(), pageSource);
+      return pageSource;
+    }
+    return createFile(config, driver, fileName);
+  }
+
+  private File doExtract(Config config, WebDriver driver, String fileName) {
+    @Nullable String mhtml = extractMhtml(driver);
+    if (mhtml != null) {
+      File pageSource = createFileWithExtension(config, fileName, "mhtml");
+      writeToFile(mhtml, pageSource);
+      attachmentHandler.attach(pageSource);
+      return pageSource;
+    }
+
+    File pageSource = createFile(config, driver, fileName);
+    String source = driver.getPageSource();
+    if (source == null) {
+      log.error("Failed to save page source to {}: page source is <null>", fileName);
+      writeToFile("<null>", pageSource);
+    }
+    else {
+      writeToFile(source, pageSource);
+      attachmentHandler.attach(pageSource);
     }
     return pageSource;
   }
 
+  @Nullable
+  private String extractMhtml(WebDriver driver) {
+    if (!(driver instanceof HasCdp hasCdp) || !isChromium(driver)) {
+      return null;
+    }
+    try {
+      Map<String, Object> result = hasCdp.executeCdpCommand("Page.captureSnapshot", Map.of());
+      Object data = result.get("data");
+      if (data instanceof String mhtml && !mhtml.isBlank()) {
+        return mhtml;
+      }
+      log.warn("Page.captureSnapshot returned empty data, will fallback to plain HTML");
+    }
+    catch (RuntimeException e) {
+      log.warn("Failed to save page as MHTML, will fallback to plain HTML: {}", e.toString());
+    }
+    return null;
+  }
+
+  private boolean isChromium(WebDriver driver) {
+    return driver instanceof HasCapabilities hasCapabilities &&
+      new Browser(hasCapabilities.getCapabilities().getBrowserName(), false).isChromium();
+  }
+
   protected File createFile(Config config, WebDriver driver, String fileName) {
-    return new File(config.reportsFolder(), fileName + ".html").getAbsoluteFile();
+    return createFileWithExtension(config, fileName, "html");
+  }
+
+  protected File createFileWithExtension(Config config, String fileName, String extension) {
+    return new File(config.reportsFolder(), fileName + "." + extension).getAbsoluteFile();
   }
 
   protected void writeToFile(String content, File targetFile) {

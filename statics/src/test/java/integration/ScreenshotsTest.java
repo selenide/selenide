@@ -19,7 +19,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.util.Base64;
+
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isEdge;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Objects.requireNonNull;
@@ -69,7 +73,7 @@ final class ScreenshotsTest extends IntegrationTest {
   }
 
   @Test
-  void canTakeScreenshotAtEveryMoment() throws URISyntaxException {
+  void canTakeScreenshotAtEveryMoment() throws URISyntaxException, IOException {
     String fileName = "screenshot-" + randomUUID();
     String screenshot = Selenide.screenshot(fileName);
 
@@ -77,8 +81,15 @@ final class ScreenshotsTest extends IntegrationTest {
     assertThat(screenshot).endsWith(".png");
     assertThatFileExistsAndAttachmentIsLogged(screenshot);
 
-    String pageSource = screenshot.replace(".png", ".html");
+    String pageSource = screenshot.replace(".png", pageSourceExtension());
     assertThatFileExistsAndAttachmentIsLogged(pageSource);
+    if (isChrome() || isEdge()) {
+      assertThat(Files.readString(new File(new URI(pageSource)).toPath())).contains("multipart/related");
+    }
+  }
+
+  private static String pageSourceExtension() {
+    return isChrome() || isEdge() ? ".mhtml" : ".html";
   }
 
   private void assertThatFileExistsAndAttachmentIsLogged(String url) throws URISyntaxException {

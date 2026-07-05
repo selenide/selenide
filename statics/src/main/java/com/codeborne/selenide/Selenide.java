@@ -285,12 +285,13 @@ public class Selenide {
   }
 
   /**
-   * Take the screenshot of current page and save to file "fileName.png" (and optionally, "fileName.html")
+   * Take the screenshot of current page and save to file "fileName.png" (and optionally, "fileName.mhtml" or "fileName.html")
    * <ul>
    *   <li>File "fileName.png" is created always, even if {@code Configuration.screenshots == false}</li>
-   *   <li>File "fileName.html" is created only if {@code Configuration.savePageSource == true}</li>
+   *   <li>File "fileName.mhtml" (Chromium) or "fileName.html" (other browsers) is created
+   *       only if {@code Configuration.savePageSource == true}</li>
    * </ul>
-   * @param fileName Name of file (without extension) to save PNG (and HTML) to
+   * @param fileName Name of file (without extension) to save PNG (and page source) to
    * @return URL of screenshot file
    */
   @Nullable
