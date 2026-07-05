@@ -20,8 +20,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class FillFormToolTest {
-  private final SelenideDriver driver = mock(SelenideDriver.class);
-  private final SelenideElement element = mock(SelenideElement.class);
+  private final SelenideDriver driver = mock();
+  private final SelenideElement element = mock();
   private final FillFormTool tool = new FillFormTool(session(driver));
 
   @Test
@@ -74,7 +74,7 @@ class FillFormToolTest {
   }
 
   static BrowserSession session(SelenideDriver driver) {
-    BrowserSession session = mock(BrowserSession.class);
+    BrowserSession session = mock();
     when(session.getDriver()).thenReturn(driver);
     return session;
   }

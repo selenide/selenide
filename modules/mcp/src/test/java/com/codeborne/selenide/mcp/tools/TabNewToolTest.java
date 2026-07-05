@@ -17,10 +17,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 class TabNewToolTest {
-  private final WebDriver webDriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
-  private final SelenideDriver driver = mock(SelenideDriver.class);
+  private final WebDriver webDriver = mock(withSettings().defaultAnswer(RETURNS_DEEP_STUBS));
+  private final SelenideDriver driver = mock();
   private final TabNewTool tool = new TabNewTool(session(driver, webDriver));
 
   @Test
@@ -42,7 +43,7 @@ class TabNewToolTest {
   }
 
   static BrowserSession session(SelenideDriver driver, WebDriver webDriver) {
-    BrowserSession session = mock(BrowserSession.class);
+    BrowserSession session = mock();
     when(session.getDriver()).thenReturn(driver);
     when(driver.getWebDriver()).thenReturn(webDriver);
     return session;

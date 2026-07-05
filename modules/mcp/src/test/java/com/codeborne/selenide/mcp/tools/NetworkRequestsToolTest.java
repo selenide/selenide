@@ -22,8 +22,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class NetworkRequestsToolTest {
-  private final BrowserUpProxy browserUpProxy = mock(BrowserUpProxy.class);
-  private final SelenideDriver driver = mock(SelenideDriver.class);
+  private final BrowserUpProxy browserUpProxy = mock();
+  private final SelenideDriver driver = mock();
   private final NetworkRequestsTool tool = new NetworkRequestsTool(session(driver));
 
   @Test
@@ -72,7 +72,7 @@ class NetworkRequestsToolTest {
   }
 
   private void withHar(HarEntry... entries) {
-    SelenideProxyServer proxy = mock(SelenideProxyServer.class);
+    SelenideProxyServer proxy = mock();
     when(driver.getProxy()).thenReturn(proxy);
     when(proxy.getProxy()).thenReturn(browserUpProxy);
     Har har = new Har();
@@ -83,7 +83,7 @@ class NetworkRequestsToolTest {
   }
 
   static BrowserSession session(SelenideDriver driver) {
-    BrowserSession session = mock(BrowserSession.class);
+    BrowserSession session = mock();
     when(session.getDriver()).thenReturn(driver);
     return session;
   }
