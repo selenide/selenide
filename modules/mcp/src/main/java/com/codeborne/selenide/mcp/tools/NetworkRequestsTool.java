@@ -8,6 +8,7 @@ import de.sstoehr.harreader.model.HarEntry;
 import io.modelcontextprotocol.spec.McpSchema;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,25 +37,31 @@ class NetworkRequestsTool extends McpTool {
   McpSchema.CallToolResult execute(Map<String, Object> args) {
     SelenideProxyServer proxy = NetworkTools.requireProxy(session);
     String pattern = (String) args.get("urlPattern");
-    List<HarEntry> entries = harEntries(proxy.getProxy());
+    List<HarEntry> matching = matchingEntries(harEntries(proxy.getProxy()), pattern);
+    if (matching.isEmpty()) {
+      return success("No matching network requests");
+    }
     StringBuilder out = new StringBuilder();
-    int start = Math.max(0, entries.size() - MAX_ENTRIES);
-    int shown = 0;
-    for (int i = start; i < entries.size(); i++) {
-      HarEntry e = entries.get(i);
-      String url = e.getRequest().getUrl();
-      if (url == null) continue;
-      if (pattern != null && !url.contains(pattern)) continue;
-      out.append(nullToDash(e.getRequest().getMethod())).append(' ').append(url)
+    int start = Math.max(0, matching.size() - MAX_ENTRIES);
+    for (int i = start; i < matching.size(); i++) {
+      HarEntry e = matching.get(i);
+      out.append(nullToDash(e.getRequest().getMethod())).append(' ').append(e.getRequest().getUrl())
         .append(" -> ").append(e.getResponse().getStatus()).append(' ')
         .append(nullToDash(e.getResponse().getContent().getMimeType())).append(' ')
         .append(e.getTime() != null ? (long) e.getTime() : 0L).append("ms\n");
-      shown++;
-    }
-    if (shown == 0) {
-      return success("No matching network requests");
     }
     return success(out.toString().trim());
+  }
+
+  private static List<HarEntry> matchingEntries(List<HarEntry> entries, @Nullable String pattern) {
+    List<HarEntry> matching = new ArrayList<>();
+    for (HarEntry e : entries) {
+      String url = e.getRequest().getUrl();
+      if (url == null) continue;
+      if (pattern != null && !url.contains(pattern)) continue;
+      matching.add(e);
+    }
+    return matching;
   }
 
   static List<HarEntry> harEntries(BrowserUpProxy proxy) {
