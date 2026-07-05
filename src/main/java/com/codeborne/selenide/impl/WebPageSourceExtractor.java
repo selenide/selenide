@@ -112,7 +112,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
   }
 
   protected File createFileWithExtension(Config config, String fileName, String extension) {
-    return new File(config.reportsFolder(), fileName + "." + extension).getAbsoluteFile();
+    return FileHelper.fileInFolder(new File(config.reportsFolder()), fileName, extension);
   }
 
   protected void writeToFile(String content, File targetFile) {
