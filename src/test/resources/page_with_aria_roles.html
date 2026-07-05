@@ -3,8 +3,12 @@
 <head>
   <title>Test page :: ARIA roles</title>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" href="/selenide-test.css">
 </head>
 <body>
+<!-- Using a <div>, not <header>, so this banner doesn't count towards the "banner" ARIA role -->
+<div class="selenide-test-banner">Selenide</div>
 <h1>ARIA roles test page</h1>
 
 <!-- Implicit roles -->
