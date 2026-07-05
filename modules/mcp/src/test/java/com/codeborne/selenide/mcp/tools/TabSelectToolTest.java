@@ -17,9 +17,10 @@ import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 class TabSelectToolTest {
-  private final WebDriver driver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
+  private final WebDriver driver = mock(withSettings().defaultAnswer(RETURNS_DEEP_STUBS));
   private final TabSelectTool tool = new TabSelectTool(session(driver));
 
   @Test
@@ -64,8 +65,8 @@ class TabSelectToolTest {
   }
 
   static BrowserSession session(WebDriver webDriver) {
-    BrowserSession session = mock(BrowserSession.class);
-    SelenideDriver driver = mock(SelenideDriver.class);
+    BrowserSession session = mock();
+    SelenideDriver driver = mock();
     when(session.getDriver()).thenReturn(driver);
     when(driver.getWebDriver()).thenReturn(webDriver);
     return session;

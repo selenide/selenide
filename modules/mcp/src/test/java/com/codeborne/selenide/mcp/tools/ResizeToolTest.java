@@ -16,9 +16,10 @@ import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 class ResizeToolTest {
-  private final WebDriver webDriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
+  private final WebDriver webDriver = mock(withSettings().defaultAnswer(RETURNS_DEEP_STUBS));
   private final ResizeTool tool = new ResizeTool(session(webDriver));
 
   @Test
@@ -44,8 +45,8 @@ class ResizeToolTest {
   }
 
   static BrowserSession session(WebDriver webDriver) {
-    BrowserSession session = mock(BrowserSession.class);
-    SelenideDriver driver = mock(SelenideDriver.class);
+    BrowserSession session = mock();
+    SelenideDriver driver = mock();
     when(session.getDriver()).thenReturn(driver);
     when(driver.getWebDriver()).thenReturn(webDriver);
     return session;

@@ -15,9 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 class TabListToolTest {
-  private final WebDriver driver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
+  private final WebDriver driver = mock(withSettings().defaultAnswer(RETURNS_DEEP_STUBS));
   private final TabListTool tool = new TabListTool(session(driver));
 
   @Test
@@ -36,8 +37,8 @@ class TabListToolTest {
   }
 
   static BrowserSession session(WebDriver webDriver) {
-    BrowserSession session = mock(BrowserSession.class);
-    SelenideDriver driver = mock(SelenideDriver.class);
+    BrowserSession session = mock();
+    SelenideDriver driver = mock();
     when(session.getDriver()).thenReturn(driver);
     when(driver.getWebDriver()).thenReturn(webDriver);
     return session;
