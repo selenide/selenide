@@ -1,6 +1,7 @@
 # Changelog
 
 ## 7.17.0 (TBD)
+* #1741 added `visibleText()` condition for overflow-truncated elements
 * update Selenium from 4.44.0 to 4.45.0 (incl. CDP from 148 -> 149)
 
 ## 7.16.2 (27.05.2026)
