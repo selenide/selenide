@@ -86,9 +86,12 @@ abstract class McpTool {
 
   /**
    * Resolves a browser tab's window handle from either a 0-based {@code index} or an explicit
-   * {@code handle}, given exactly one of them is non-null (mutual exclusivity is validated here).
+   * {@code handle}. Exactly one of them must be non-null; both are validated here.
    */
   protected static String resolveWindowHandle(WebDriver driver, @Nullable Number index, @Nullable String handle) {
+    if (index == null && handle == null) {
+      throw new IllegalArgumentException("Provide either 'index' or 'handle'");
+    }
     if (index != null && handle != null) {
       throw new IllegalArgumentException("Provide only one of 'index' or 'handle'");
     }
