@@ -1039,7 +1039,10 @@ public class Selenide {
    * Clear browser cookies.
    * <p>
    * It can be useful e.g. if you are trying to avoid restarting browser between tests
+   *
+   * @deprecated Use {@link SelenideDriver#clearCookies()} instead
    */
+  @Deprecated
   public static void clearBrowserCookies() {
     getSelenideDriver().clearCookies();
   }
@@ -1048,7 +1051,10 @@ public class Selenide {
    * Clear browser local storage.
    * <p>
    * In case if you need to be sure that browser's localStorage is empty
+   *
+   * @deprecated Use {@link #localStorage()} and {@link LocalStorage#clear()} instead
    */
+  @Deprecated
   public static void clearBrowserLocalStorage() {
     getSelenideDriver().clearBrowserLocalStorage();
   }

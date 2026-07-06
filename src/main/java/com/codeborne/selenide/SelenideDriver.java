@@ -395,6 +395,10 @@ public class SelenideDriver {
     return new WebDriverLogs(driver());
   }
 
+  /**
+   * @deprecated Use {@link Selenide#localStorage()} and {@link LocalStorage#clear()} instead
+   */
+  @Deprecated
   public void clearBrowserLocalStorage() {
     executeJavaScript("localStorage.clear();");
   }

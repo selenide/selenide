@@ -3,7 +3,7 @@ package integration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Selenide.clearBrowserLocalStorage;
+import static com.codeborne.selenide.Selenide.localStorage;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +20,7 @@ final class ClearLocalStorageTest extends IntegrationTest {
   void clearLocalStorageTest() {
     assertThat(getLocalStorageLength()).isEqualTo(2L);
 
-    clearBrowserLocalStorage();
+    localStorage().clear();
 
     assertThat(getLocalStorageLength()).isEqualTo(0L);
   }

@@ -8,7 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
 
-import static com.codeborne.selenide.Selenide.clearBrowserCookies;
+import static com.codeborne.selenide.WebDriverRunner.driver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,7 +27,7 @@ final class ClearCookiesTest extends IntegrationTest {
 
   @Test
   void clearCookieTest() {
-    clearBrowserCookies();
+    driver().clearCookies();
     Set<Cookie> cookieSet = getWebDriver().manage().getCookies();
     assertThat(cookieSet).isEmpty();
   }
