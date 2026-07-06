@@ -8,19 +8,19 @@ import static com.codeborne.selenide.commands.GetVisibleText.getVisibleText;
 
 public class VisibleText extends CaseInsensitiveTextCondition {
 
-  private final GetSelectedOptionText getSelectedOptionsTexts;
+  private final GetSelectedOptionText getSelectedOptionText;
 
   public VisibleText(String expectedText) {
     this(expectedText, new GetSelectedOptionText());
   }
 
-  VisibleText(String expectedText, GetSelectedOptionText getSelectedOptionsTexts) {
+  VisibleText(String expectedText, GetSelectedOptionText getSelectedOptionText) {
     super("visible text", expectedText);
-    this.getSelectedOptionsTexts = getSelectedOptionsTexts;
+    this.getSelectedOptionText = getSelectedOptionText;
   }
 
   @Override
   protected String getText(Driver driver, WebElement element) {
-    return getVisibleText(driver, element, getSelectedOptionsTexts);
+    return getVisibleText(driver, element, getSelectedOptionText);
   }
 }

@@ -14,54 +14,28 @@
   clone.style.maxWidth = 'none';
   clone.style.width = 'auto';
   clone.style.height = 'auto';
+  clone.style.whiteSpace = 'nowrap';
   document.body.appendChild(clone);
 
   const availableWidth = element.getBoundingClientRect().width;
-  const fullWidth = clone.getBoundingClientRect().width;
 
-  if (fullWidth <= availableWidth + 0.5) {
-    document.body.removeChild(clone);
+  function measureTextWidth(text) {
+    clone.textContent = text;
+    return clone.getBoundingClientRect().width;
+  }
+
+  if (measureTextWidth(fullText) <= availableWidth + 0.5) {
+    clone.remove();
     return fullText;
   }
 
-  const sourceTextNodes = [];
-  const cloneTextNodes = [];
-  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null);
-  const cloneWalker = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT, null);
-  while (walker.nextNode()) {
-    sourceTextNodes.push(walker.currentNode);
-    cloneWalker.nextNode();
-    cloneTextNodes.push(cloneWalker.currentNode);
-  }
-
-  const originalText = sourceTextNodes.map(node => node.textContent).join('');
-
-  function setCloneTextLength(length) {
-    let remaining = length;
-    for (let index = 0; index < cloneTextNodes.length; index++) {
-      const nodeText = sourceTextNodes[index].textContent;
-      if (remaining >= nodeText.length) {
-        cloneTextNodes[index].textContent = nodeText;
-        remaining -= nodeText.length;
-      } else {
-        cloneTextNodes[index].textContent = nodeText.substring(0, remaining);
-        for (let clearIndex = index + 1; clearIndex < cloneTextNodes.length; clearIndex++) {
-          cloneTextNodes[clearIndex].textContent = '';
-        }
-        return;
-      }
-    }
-  }
-
   let low = 0;
-  let high = originalText.length;
+  let high = fullText.length;
   let visibleLength = 0;
 
   while (low <= high) {
     const mid = Math.floor((low + high) / 2);
-    setCloneTextLength(mid);
-    const width = clone.getBoundingClientRect().width;
-    if (width <= availableWidth + 0.5) {
+    if (measureTextWidth(fullText.substring(0, mid)) <= availableWidth + 0.5) {
       visibleLength = mid;
       low = mid + 1;
     } else {
@@ -69,6 +43,6 @@
     }
   }
 
-  document.body.removeChild(clone);
-  return originalText.substring(0, visibleLength).trim();
+  clone.remove();
+  return fullText.substring(0, visibleLength);
 })(arguments[0]);
