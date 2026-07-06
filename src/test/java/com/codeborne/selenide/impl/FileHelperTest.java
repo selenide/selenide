@@ -26,4 +26,12 @@ final class FileHelperTest {
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Invalid file name: ../../outside");
   }
+
+  @Test
+  void fileInFolder_rejectsSiblingFolderWithSamePrefix() {
+    assertThatThrownBy(() -> FileHelper.fileInFolder(reportsFolder,
+      "../" + reportsFolder.getName() + "-other/escaped", "html"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Invalid file name: ../" + reportsFolder.getName() + "-other/escaped");
+  }
 }

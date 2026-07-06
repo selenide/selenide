@@ -81,6 +81,20 @@ final class WebPageSourceExtractorTest {
   }
 
   @Test
+  void fallsBackToHtmlWhenCdpReturnsEmptyData() throws Exception {
+    config.savePageSourceWithResources(true);
+    ChromiumDriver driver = mock(ChromiumDriver.class);
+    when(driver.getCapabilities()).thenReturn(chromeCapabilities());
+    doReturn(Map.of("data", "")).when(driver).executeCdpCommand(eq("Page.captureSnapshot"), any());
+    when(driver.getPageSource()).thenReturn("<html>plain</html>");
+
+    File file = extractor.extract(config, driver, "page-2b");
+
+    assertThat(file).hasName("page-2b.html");
+    assertThat(Files.readString(file.toPath())).isEqualTo("<html>plain</html>");
+  }
+
+  @Test
   void savesHtmlForNonChromiumBrowser() throws Exception {
     WebDriver driver = mock(WebDriver.class);
     when(driver.getPageSource()).thenReturn("<html>firefox</html>");

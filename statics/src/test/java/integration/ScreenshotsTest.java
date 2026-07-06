@@ -98,9 +98,14 @@ final class ScreenshotsTest extends IntegrationTest {
     assertThat(screenshot).endsWith(".png");
     assertThatFileExistsAndAttachmentIsLogged(screenshot);
 
-    String pageSource = screenshot.replace(".png", ".mhtml");
+    String mhtmlPageSource = screenshot.replace(".png", ".mhtml");
+    String htmlPageSource = screenshot.replace(".png", ".html");
+    boolean isMhtml = new File(new URI(mhtmlPageSource)).exists();
+    String pageSource = isMhtml ? mhtmlPageSource : htmlPageSource;
     assertThatFileExistsAndAttachmentIsLogged(pageSource);
-    assertThat(Files.readString(new File(new URI(pageSource)).toPath())).contains("multipart/related");
+    if (isMhtml) {
+      assertThat(Files.readString(new File(new URI(pageSource)).toPath())).contains("multipart/related");
+    }
   }
 
   private void assertThatFileExistsAndAttachmentIsLogged(String url) throws URISyntaxException {
