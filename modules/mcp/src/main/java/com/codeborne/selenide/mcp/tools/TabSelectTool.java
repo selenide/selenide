@@ -30,9 +30,6 @@ class TabSelectTool extends McpTool {
   McpSchema.CallToolResult execute(Map<String, Object> args) {
     Number indexRaw = (Number) args.get("index");
     String handle = (String) args.get("handle");
-    if (indexRaw == null && handle == null) {
-      throw new IllegalArgumentException("Provide either 'index' or 'handle'");
-    }
     WebDriver driver = session.getDriver().getWebDriver();
     String target = resolveWindowHandle(driver, indexRaw, handle);
     driver.switchTo().window(target);
