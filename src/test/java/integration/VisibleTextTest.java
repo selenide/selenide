@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exactVisibleText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visibleText;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -47,5 +48,27 @@ final class VisibleTextTest extends ITest {
   @Test
   void visibleTextMatchesFullyVisibleElement() {
     withLongTimeout(() -> $("#fully-visible").shouldHave(visibleText("Hello World")));
+  }
+
+  @Test
+  void exactVisibleTextFailsWhenExpectedTextIsNotFullyVisible() {
+    assertThatThrownBy(() -> withLongTimeout(() -> $("#partial").shouldHave(exactVisibleText(FULL_TEXT))))
+      .isInstanceOf(ElementShould.class);
+  }
+
+  @Test
+  void exactVisibleTextMatchesVisiblePortionExactly() {
+    withLongTimeout(() -> $("#partial").shouldHave(exactVisibleText(VISIBLE_PREFIX)));
+  }
+
+  @Test
+  void exactVisibleTextRejectsPartialMatchOnFullyVisibleElement() {
+    assertThatThrownBy(() -> withLongTimeout(() -> $("#fully-visible").shouldHave(exactVisibleText("Hello"))))
+      .isInstanceOf(ElementShould.class);
+  }
+
+  @Test
+  void exactVisibleTextMatchesFullyVisibleElement() {
+    withLongTimeout(() -> $("#fully-visible").shouldHave(exactVisibleText("Hello World")));
   }
 }
