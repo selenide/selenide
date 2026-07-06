@@ -39,7 +39,8 @@ final class WebPageSourceExtractorTest {
   }
 
   @Test
-  void savesMhtmlForChromiumBrowserWhenCdpWorks() throws Exception {
+  void savesMhtmlForChromiumBrowserWhenResourcesEnabledAndCdpWorks() throws Exception {
+    config.savePageSourceWithResources(true);
     ChromiumDriver driver = mock(ChromiumDriver.class);
     when(driver.getCapabilities()).thenReturn(chromeCapabilities());
     doReturn(Map.of("data", "From: <Saved by Blink>\r\nContent-Type: multipart/related\r\n\r\npage")).when(driver)
@@ -53,7 +54,21 @@ final class WebPageSourceExtractorTest {
   }
 
   @Test
+  void savesHtmlForChromiumBrowserWhenResourcesNotEnabled() throws Exception {
+    ChromiumDriver driver = mock(ChromiumDriver.class);
+    when(driver.getCapabilities()).thenReturn(chromeCapabilities());
+    when(driver.getPageSource()).thenReturn("<html>plain</html>");
+
+    File file = extractor.extract(config, driver, "page-1b");
+
+    assertThat(file).hasName("page-1b.html");
+    assertThat(Files.readString(file.toPath())).isEqualTo("<html>plain</html>");
+    verify(driver, never()).executeCdpCommand(eq("Page.captureSnapshot"), any());
+  }
+
+  @Test
   void fallsBackToHtmlWhenCdpFails() throws Exception {
+    config.savePageSourceWithResources(true);
     ChromiumDriver driver = mock(ChromiumDriver.class);
     when(driver.getCapabilities()).thenReturn(chromeCapabilities());
     doThrow(new WebDriverException("CDP failed")).when(driver).executeCdpCommand(eq("Page.captureSnapshot"), any());

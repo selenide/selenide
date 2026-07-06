@@ -40,7 +40,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     }
     catch (UnhandledAlertException e) {
       if (retryIfAlert) {
-        retryingExtractionOnAlert(config, driver, fileName, e);
+        return retryingExtractionOnAlert(config, driver, fileName, e);
       }
       else {
         printOnce("savePageSourceToFile", e);
@@ -62,12 +62,14 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
   }
 
   private File doExtract(Config config, WebDriver driver, String fileName) {
-    @Nullable String mhtml = extractMhtml(driver);
-    if (mhtml != null) {
-      File pageSource = createFileWithExtension(config, fileName, "mhtml");
-      writeToFile(mhtml, pageSource);
-      attachmentHandler.attach(pageSource);
-      return pageSource;
+    if (config.savePageSourceWithResources()) {
+      @Nullable String mhtml = extractMhtml(driver);
+      if (mhtml != null) {
+        File pageSource = createFileWithExtension(config, fileName, "mhtml");
+        writeToFile(mhtml, pageSource);
+        attachmentHandler.attach(pageSource);
+        return pageSource;
+      }
     }
 
     File pageSource = createFile(config, driver, fileName);
@@ -134,15 +136,16 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     }
   }
 
-  private void retryingExtractionOnAlert(Config config, WebDriver driver, String fileName, Exception e) {
+  private File retryingExtractionOnAlert(Config config, WebDriver driver, String fileName, Exception e) {
     try {
       Alert alert = driver.switchTo().alert();
       log.error("{}: {}", e, alert.getText());
       alert.accept();
-      extract(config, driver, fileName, false);
+      return extract(config, driver, fileName, false);
     }
     catch (Exception unableToCloseAlert) {
       log.error("Failed to close alert", unableToCloseAlert);
+      return createFile(config, driver, fileName);
     }
   }
 }

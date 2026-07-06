@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
@@ -22,13 +23,13 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.Base64;
 
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isEdge;
-
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Objects.requireNonNull;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static uk.org.webcompere.systemstubs.stream.output.OutputFactories.tapAndOutput;
 
 @ExtendWith(SystemStubsExtension.class)
@@ -81,15 +82,25 @@ final class ScreenshotsTest extends IntegrationTest {
     assertThat(screenshot).endsWith(".png");
     assertThatFileExistsAndAttachmentIsLogged(screenshot);
 
-    String pageSource = screenshot.replace(".png", pageSourceExtension());
+    String pageSource = screenshot.replace(".png", ".html");
     assertThatFileExistsAndAttachmentIsLogged(pageSource);
-    if (isChrome() || isEdge()) {
-      assertThat(Files.readString(new File(new URI(pageSource)).toPath())).contains("multipart/related");
-    }
   }
 
-  private static String pageSourceExtension() {
-    return isChrome() || isEdge() ? ".mhtml" : ".html";
+  @Test
+  void canTakeScreenshotWithEmbeddedResourcesAsMhtml() throws URISyntaxException, IOException {
+    assumeThat(isChrome() || isEdge()).isTrue();
+    Configuration.savePageSourceWithResources = true;
+
+    String fileName = "screenshot-" + randomUUID();
+    String screenshot = Selenide.screenshot(fileName);
+
+    assertThat(screenshot).startsWith("file:/");
+    assertThat(screenshot).endsWith(".png");
+    assertThatFileExistsAndAttachmentIsLogged(screenshot);
+
+    String pageSource = screenshot.replace(".png", ".mhtml");
+    assertThatFileExistsAndAttachmentIsLogged(pageSource);
+    assertThat(Files.readString(new File(new URI(pageSource)).toPath())).contains("multipart/related");
   }
 
   private void assertThatFileExistsAndAttachmentIsLogged(String url) throws URISyntaxException {
