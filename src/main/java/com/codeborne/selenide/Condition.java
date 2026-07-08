@@ -25,6 +25,8 @@ import com.codeborne.selenide.conditions.Focused;
 import com.codeborne.selenide.conditions.Hidden;
 import com.codeborne.selenide.conditions.Href;
 import com.codeborne.selenide.conditions.InnerText;
+import com.codeborne.selenide.conditions.VisibleText;
+import com.codeborne.selenide.conditions.ExactVisibleText;
 import com.codeborne.selenide.conditions.Interactable;
 import com.codeborne.selenide.conditions.IsImageLoaded;
 import com.codeborne.selenide.conditions.MatchAttributeWithValue;
@@ -446,6 +448,34 @@ public final class Condition {
    */
   public static WebElementCondition innerText(String text) {
     return new InnerText(text);
+  }
+
+  /**
+   * Assert that element contains given <b>visibly rendered</b> text.
+   * <p>Sample: {@code $("h1").shouldHave(visibleText("Hello"))}</p>
+   * <p>
+   * Unlike {@link #text(String)}, takes into account CSS that hides overflowing text
+   * (e.g. {@code overflow: hidden} with {@code text-overflow: ellipsis}).
+   *
+   * <p>Case insensitive</p>
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   */
+  public static WebElementCondition visibleText(String text) {
+    return new VisibleText(text);
+  }
+
+  /**
+   * Assert that element has exactly (case-insensitive) given <b>visibly rendered</b> text.
+   * <p>Sample: {@code $("h1").shouldHave(exactVisibleText("Hello"))}</p>
+   * <p>
+   * Unlike {@link #exactText(String)}, takes into account CSS that hides overflowing text
+   * (e.g. {@code overflow: hidden} with {@code text-overflow: ellipsis}).
+   *
+   * <p>Case insensitive</p>
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   */
+  public static WebElementCondition exactVisibleText(String text) {
+    return new ExactVisibleText(text);
   }
 
   /**
