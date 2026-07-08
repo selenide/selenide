@@ -25,11 +25,14 @@ import java.util.Set;
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
+import static java.util.Locale.ROOT;
+import static java.util.stream.Collectors.toMap;
 
 public class DownloadFileToFolder {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolder.class);
   private static final Set<String> CHROMIUM_TEMPORARY_FILES = Set.of("crdownload", "tmp");
   private static final Set<String> FIREFOX_TEMPORARY_FILES = Set.of("part");
+  private static final Set<String> TEMPORARY_FILES = Set.of("crdownload", "tmp", "part");
   private static final DurationFormat df = new DurationFormat();
 
   private final Downloader downloader;
@@ -58,15 +61,15 @@ public class DownloadFileToFolder {
       throw new IllegalStateException("Downloads folder is not configured");
     }
 
-    folder.cleanupBeforeDownload();
-    List<DownloadedFile> previousFiles = folder.files(); // some `DownloadsFolder` implementations cannot remove files
+    List<DownloadedFile> existingFiles = cleanupAndListExistingFiles(config, folder);
 
     action.perform(driver, clickable);
 
-    waitForNewFiles(driver, fileFilter, folder, previousFiles, timeout, incrementTimeout, pollingInterval, options.minimumFileCount());
-    waitUntilDownloadsCompleted(driver, folder, fileFilter, timeout, incrementTimeout, pollingInterval);
+    waitForNewFiles(driver, fileFilter, folder, existingFiles, timeout, incrementTimeout, pollingInterval,
+      options.minimumFileCount());
+    waitUntilDownloadsCompleted(driver, folder, fileFilter, existingFiles, timeout, incrementTimeout, pollingInterval);
 
-    Downloads newDownloads = new Downloads(folder.filesExcept(previousFiles));
+    Downloads newDownloads = new Downloads(currentAttemptFiles(folder, existingFiles, fileFilter));
     if (log.isInfoEnabled()) {
       log.info("Downloaded files in {}: {}", folder, newDownloads.filesAsString());
     }
@@ -78,6 +81,105 @@ public class DownloadFileToFolder {
 
     return downloadedFiles.stream().map(downloadedFile -> archive(downloadedFile,
       timeout - (currentTimeMillis() - start), contentStrategy, config, webDriver)).toList();
+  }
+
+  private List<DownloadedFile> cleanupAndListExistingFiles(Config config, DownloadsFolder folder) {
+    try {
+      folder.cleanupBeforeDownload();
+    }
+    catch (IllegalStateException cleanupFailure) {
+      if (!canContinueAfterCleanupFailure(config, cleanupFailure)) {
+        throw cleanupFailure;
+      }
+      return filesAfterFailedCleanup(folder, cleanupFailure);
+    }
+    return folder.files();
+  }
+
+  private List<DownloadedFile> filesAfterFailedCleanup(DownloadsFolder folder, IllegalStateException cleanupFailure) {
+    log.warn("Failed to clean local downloads folder {} before download; existing files will be used as the baseline " +
+        "for detecting files from this download",
+      folder, cleanupFailure);
+
+    try {
+      List<DownloadedFile> survivingFiles = folder.files();
+      if (log.isDebugEnabled()) {
+        log.debug("Files after failed cleanup in {}: {}", folder, new Downloads(survivingFiles).filesAsString());
+      }
+      return survivingFiles;
+    }
+    catch (RuntimeException listingFailure) {
+      cleanupFailure.addSuppressed(listingFailure);
+      throw cleanupFailure;
+    }
+  }
+
+  private boolean canContinueAfterCleanupFailure(Config config, IllegalStateException cleanupFailure) {
+    return isLocalBrowser(config) && cleanupFailure.getCause() instanceof IOException;
+  }
+
+  private List<DownloadedFile> currentAttemptFiles(DownloadsFolder folder, List<DownloadedFile> existingFiles,
+                                                   FileFilter fileFilter) {
+    Map<String, DownloadedFile> existingFilesByName = existingFiles.stream()
+      .collect(toMap(DownloadedFile::getName, file -> file, (first, second) -> first));
+    return folder.files().stream()
+      .filter(file -> isCurrentAttemptFile(file, existingFilesByName.get(file.getName()), fileFilter))
+      .toList();
+  }
+
+  private DownloadsFolder currentAttemptFolder(DownloadsFolder folder, List<DownloadedFile> existingFiles,
+                                               FileFilter fileFilter) {
+    return new DownloadsFolder() {
+      @Override
+      public List<DownloadedFile> files() {
+        return currentAttemptFiles(folder, existingFiles, fileFilter);
+      }
+
+      @Override
+      public void cleanupBeforeDownload() {
+        folder.cleanupBeforeDownload();
+      }
+
+      @Override
+      public void deleteIfEmpty() {
+        folder.deleteIfEmpty();
+      }
+
+      @Override
+      public String getPath() {
+        return folder.getPath();
+      }
+
+      @Override
+      public String toString() {
+        return folder.toString();
+      }
+    };
+  }
+
+  private boolean isCurrentAttemptFile(DownloadedFile file, @Nullable DownloadedFile existingFile, FileFilter fileFilter) {
+    if (existingFile == null) {
+      return true;
+    }
+    if (!fileHasChanged(file, existingFile)) {
+      return false;
+    }
+    if (isTemporaryFile(existingFile)) {
+      return isExpectedTemporaryFile(file, fileFilter);
+    }
+    return true;
+  }
+
+  private boolean isExpectedTemporaryFile(DownloadedFile file, FileFilter fileFilter) {
+    return !fileFilter.isEmpty() && fileFilter.match(file.getFile());
+  }
+
+  private boolean fileHasChanged(DownloadedFile file, DownloadedFile existingFile) {
+    return file.lastModifiedTime() != existingFile.lastModifiedTime() || file.size() != existingFile.size();
+  }
+
+  private boolean isTemporaryFile(DownloadedFile file) {
+    return TEMPORARY_FILES.contains(file.extension().toLowerCase(ROOT));
   }
 
   private File archive(File downloadedFile, long timeout, ContentStrategy contentStrategy, Config config, WebDriver webDriver) {
@@ -95,36 +197,50 @@ public class DownloadFileToFolder {
     return driver.browserDownloadsFolder();
   }
 
-  void waitUntilDownloadsCompleted(Driver driver, DownloadsFolder folder, FileFilter filter,
+  void waitUntilDownloadsCompleted(Driver driver, DownloadsFolder folder, FileFilter filter, List<DownloadedFile> existingFiles,
                                    long timeout, long incrementTimeout, long pollingInterval) {
     Browser browser = driver.browser();
     if (browser.isChrome() || browser.isEdge()) {
-      waitUntilFileDisappears(driver, folder, CHROMIUM_TEMPORARY_FILES, filter, timeout, incrementTimeout, pollingInterval);
+      waitUntilFileDisappears(driver, folder, CHROMIUM_TEMPORARY_FILES, filter, existingFiles, timeout, incrementTimeout,
+        pollingInterval);
     } else if (browser.isFirefox()) {
-      waitUntilFileDisappears(driver, folder, FIREFOX_TEMPORARY_FILES, filter, timeout, incrementTimeout, pollingInterval);
+      waitUntilFileDisappears(driver, folder, FIREFOX_TEMPORARY_FILES, filter, existingFiles, timeout, incrementTimeout,
+        pollingInterval);
     } else {
       waitWhileFilesAreBeingModified(driver, folder, timeout, pollingInterval);
     }
   }
 
   private void waitUntilFileDisappears(Driver driver, DownloadsFolder folder, Set<String> extension, FileFilter filter,
+                                       List<DownloadedFile> existingFiles,
                                        long timeout, long incrementTimeout, long pollingInterval) {
+    DownloadsFolder currentAttemptFolder = currentAttemptFolder(folder, existingFiles, filter);
     for (long start = currentTimeMillis(); currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
-      if (!folder.hasFiles(extension, filter)) {
+      List<DownloadedFile> temporaryFiles = currentAttemptTemporaryFiles(currentAttemptFolder, extension, filter);
+      if (temporaryFiles.isEmpty()) {
         log.debug("No {} files found, conclude download is completed (filter: {})", extension, filter);
         return;
       }
       log.debug("Found {} files, waiting for {} ms (filter: {}, found files: {})...",
-        extension, pollingInterval, filter, folder.filesAsString());
-      failFastIfNoChanges(driver, folder, filter, start, timeout, incrementTimeout);
+        extension, pollingInterval, filter, new Downloads(temporaryFiles).filesAsString());
+      failFastIfNoChanges(driver, currentAttemptFolder, filter, start, timeout, incrementTimeout);
     }
 
-    if (folder.hasFiles(extension, filter)) {
+    List<DownloadedFile> temporaryFiles = currentAttemptTemporaryFiles(currentAttemptFolder, extension, filter);
+    if (!temporaryFiles.isEmpty()) {
       String message = String.format("Folder %s still contains files %s after %s ms. " +
           "Apparently, the downloading hasn't completed in time. Found files: %s",
-        folder, extension, df.format(timeout), folder.filesAsString());
+        folder, extension, df.format(timeout), new Downloads(temporaryFiles).filesAsString());
       throw new FileNotDownloadedError(message, timeout);
     }
+  }
+
+  private List<DownloadedFile> currentAttemptTemporaryFiles(DownloadsFolder currentAttemptFolder, Set<String> extensions,
+                                                            FileFilter filter) {
+    return currentAttemptFolder.files().stream()
+      .filter(file -> extensions.contains(file.extension().toLowerCase(ROOT)))
+      .filter(file -> filter.notMatch(file.getFile()))
+      .toList();
   }
 
   protected void waitWhileFilesAreBeingModified(Driver driver, DownloadsFolder folder, long timeout, long pollingInterval) {
@@ -156,8 +272,9 @@ public class DownloadFileToFolder {
     }
 
     long start = currentTimeMillis();
+    DownloadsFolder currentAttemptFolder = currentAttemptFolder(folder, previousFiles, fileFilter);
     for (; currentTimeMillis() - start <= timeout; pause(pollingInterval)) {
-      Downloads downloads = new Downloads(folder.filesExcept(previousFiles));
+      Downloads downloads = new Downloads(currentAttemptFolder.files());
       List<DownloadedFile> matchingFiles = downloads.files(fileFilter);
       log.debug("{} matching files found: {}, all new files: {}, all files: {}",
         matchingFiles.size(), matchingFiles, downloads.filesAsString(), folder.filesAsString());
@@ -166,7 +283,7 @@ public class DownloadFileToFolder {
         return;
       }
 
-      failFastIfNoChanges(driver, folder, fileFilter, start, timeout, incrementTimeout);
+      failFastIfNoChanges(driver, currentAttemptFolder, fileFilter, start, timeout, incrementTimeout);
     }
 
     log.debug("Matching files still not found -> stop waiting for new files after {} ms. (timeout: {} ms.)",
