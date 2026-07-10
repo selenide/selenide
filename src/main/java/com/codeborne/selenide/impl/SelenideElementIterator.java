@@ -6,10 +6,10 @@ import java.util.Iterator;
 
 public class SelenideElementIterator<T extends SelenideElement> implements Iterator<T> {
   protected final CollectionSource collection;
-  private final Class<T> clazz;
+  private final Class<? extends T> clazz;
   protected int index;
 
-  public SelenideElementIterator(CollectionSource collection, Class<T> clazz) {
+  public SelenideElementIterator(CollectionSource collection, Class<? extends T> clazz) {
     this.collection = collection;
     this.clazz = clazz;
   }

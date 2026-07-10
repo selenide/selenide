@@ -126,14 +126,24 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   protected BaseElementsCollection<? extends SelenideElement, ? extends BaseElementsCollection<?, ?>> createCollection(
     CollectionSource collection, Class<?> klass
   ) {
-    return klass.isAssignableFrom(SelenideAppiumList.class) ?
-      new SelenideAppiumList(collection) :
-      super.createCollection(collection, klass);
+    if (klass.isAssignableFrom(SelenideAppiumList.class)) {
+      return new SelenideAppiumList(collection);
+    }
+    if (klass.isAssignableFrom(SelenideAppiumCollection.class)) {
+      return new SelenideAppiumCollection(collection);
+    }
+    return super.createCollection(collection, klass);
   }
 
-  private static class SelenideAppiumList extends SelenideAppiumCollection implements NoOpsList<SelenideAppiumElement> {
+  private static class SelenideAppiumList extends BaseElementsCollection<SelenideAppiumElement, SelenideAppiumList>
+    implements NoOpsList<SelenideAppiumElement> {
     SelenideAppiumList(CollectionSource collection) {
       super(collection);
+    }
+
+    @Override
+    protected SelenideAppiumList create(CollectionSource source) {
+      return new SelenideAppiumList(source);
     }
   }
 
