@@ -5,6 +5,7 @@ import java.time.Duration;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebElementCondition;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.openqa.selenium.By;
 
 public interface SelenideAppiumElement extends SelenideElement {
   @CanIgnoreReturnValue
@@ -107,4 +108,61 @@ public interface SelenideAppiumElement extends SelenideElement {
   @Override
   @CanIgnoreReturnValue
   SelenideAppiumElement should(WebElementCondition... condition);
+
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumFind
+   */
+  @Override
+  SelenideAppiumElement find(String cssSelector);
+
+  @Override
+  SelenideAppiumElement find(String cssSelector, int index);
+
+  @Override
+  SelenideAppiumElement find(By selector);
+
+  @Override
+  SelenideAppiumElement find(By selector, int index);
+
+  @Override
+  SelenideAppiumElement $(String cssSelector);
+
+  @Override
+  SelenideAppiumElement $(String cssSelector, int index);
+
+  @Override
+  SelenideAppiumElement $(By selector);
+
+  @Override
+  SelenideAppiumElement $(By selector, int index);
+
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumFindByXpath
+   */
+  @Override
+  SelenideAppiumElement $x(String xpath);
+
+  @Override
+  SelenideAppiumElement $x(String xpath, int index);
+
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumFindAll
+   */
+  @Override
+  SelenideAppiumCollection findAll(String cssSelector);
+
+  @Override
+  SelenideAppiumCollection findAll(By selector);
+
+  @Override
+  SelenideAppiumCollection $$(String cssSelector);
+
+  @Override
+  SelenideAppiumCollection $$(By selector);
+
+  /**
+   * @see com.codeborne.selenide.appium.commands.AppiumFindAllByXpath
+   */
+  @Override
+  SelenideAppiumCollection $$x(String xpath);
 }

@@ -29,6 +29,13 @@ Selenide is a Java framework providing a concise fluent API for Selenium WebDriv
 
 Before submitting a PR or pushing a branch, check that command `./gradlew javadocForSite` is not broken. 
 
+### Appium/Android integration tests
+
+The `modules/appium` integration tests (`modules/appium/src/test/java/it/mobile/android`) require a running Android
+emulator/device — they are not part of `./gradlew check` and can't run headlessly. To run them locally, start the
+emulator first: `emulator -avd Pixel_4_API_28_1` (aliased as `em` on Andrei's machine), then run the appium module's
+test task against it.
+
 ## Architecture
 
 ### Module Structure
