@@ -396,7 +396,7 @@ public class SelenideDriver {
   }
 
   /**
-   * @deprecated Use {@link Selenide#localStorage()} and {@link LocalStorage#clear()} instead
+   * @deprecated Use {@code getLocalStorage().clear()} instead
    */
   @Deprecated
   public void clearBrowserLocalStorage() {
@@ -475,6 +475,10 @@ public class SelenideDriver {
 
   public SessionStorage getSessionStorage() {
     return new SessionStorage(driver());
+  }
+
+  public CookieStore getCookieStore() {
+    return new CookieStore(driver());
   }
 
   public Clipboard getClipboard() {

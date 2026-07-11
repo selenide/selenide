@@ -1040,9 +1040,11 @@ public class Selenide {
    * <p>
    * It can be useful e.g. if you are trying to avoid restarting browser between tests
    *
-   * @deprecated Use {@link SelenideDriver#clearCookies()} instead
+   * @deprecated Use {@code cookies().clear()}
+   * @see #cookies()
+   * @see CookieStore#clear()
    */
-  @Deprecated
+  @Deprecated(since = "7.17.0")
   public static void clearBrowserCookies() {
     getSelenideDriver().clearCookies();
   }
@@ -1052,9 +1054,11 @@ public class Selenide {
    * <p>
    * In case if you need to be sure that browser's localStorage is empty
    *
-   * @deprecated Use {@link #localStorage()} and {@link LocalStorage#clear()} instead
+   * @deprecated Use {@code localStorage().clear()} instead
+   * @see #localStorage()
+   * @see LocalStorage#clear()
    */
-  @Deprecated
+  @Deprecated(since = "7.17.0")
   public static void clearBrowserLocalStorage() {
     getSelenideDriver().clearBrowserLocalStorage();
   }
@@ -1125,7 +1129,7 @@ public class Selenide {
    * Access browser's local storage.
    * Allows setting, getting, removing items as well as getting the size and clear the storage.
    *
-   * @return LocalStorage
+   * @return instance of {@link LocalStorage} for current browser
    */
   public static LocalStorage localStorage() {
     return getSelenideDriver().getLocalStorage();
@@ -1135,10 +1139,20 @@ public class Selenide {
    * Access browser's session storage.
    * Allows setting, getting, removing items as well as getting the size, check for contains item and clear the storage.
    *
-   * @return sessionStorage
+   * @return instance of {@link SessionStorage} for current browser
    */
   public static SessionStorage sessionStorage() {
     return getSelenideDriver().getSessionStorage();
+  }
+
+  /**
+   * Access browser's cookies
+   * Allows setting, getting, removing cookies
+   *
+   * @return instance of {@link CookieStore} for current browser
+   */
+  public static CookieStore cookies() {
+    return getSelenideDriver().getCookieStore();
   }
 
   /**
