@@ -120,7 +120,7 @@ public class DownloadFileToFolder {
     }
 
     if (folder.hasFiles(extension, filter)) {
-      String message = String.format("Folder %s still contains files %s after %s ms. " +
+      String message = String.format("Folder %s still contains files %s after %s. " +
           "Apparently, the downloading hasn't completed in time. Found files: %s",
         folder, extension, df.format(timeout), folder.filesAsString());
       throw new FileNotDownloadedError(message, timeout);
@@ -169,8 +169,8 @@ public class DownloadFileToFolder {
       failFastIfNoChanges(driver, folder, fileFilter, start, timeout, incrementTimeout);
     }
 
-    log.debug("Matching files still not found -> stop waiting for new files after {} ms. (timeout: {} ms.)",
-      currentTimeMillis() - start, df.format(timeout));
+    log.debug("Matching files still not found -> stop waiting for new files after {} (timeout: {})",
+      df.format(currentTimeMillis() - start), df.format(timeout));
   }
 
   protected void failFastIfNoChanges(Driver driver, DownloadsFolder folder, FileFilter filter,
