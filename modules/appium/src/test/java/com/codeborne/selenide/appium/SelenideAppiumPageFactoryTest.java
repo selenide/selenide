@@ -39,7 +39,7 @@ class SelenideAppiumPageFactoryTest {
   void mobile_platform_element_successfully_init_with_created_webdriver() {
     AndroidDriver androidDriver = mock();
     when(androidDriver.getCapabilities()).thenReturn(new DesiredCapabilities());
-    when(androidDriver.getBiDi()).thenThrow(BiDiException.class);
+    when(androidDriver.getBiDi()).thenThrow(new BiDiException("Not working in Android"));
     WebDriverRunner.setWebDriver(androidDriver);
 
     var page = Selenide.page(PageWithPlatformSelectors.class);
@@ -51,7 +51,7 @@ class SelenideAppiumPageFactoryTest {
   void mobile_element_with_custom_type_successfully_init() {
     AndroidDriver androidDriver = mock();
     when(androidDriver.getCapabilities()).thenReturn(new DesiredCapabilities());
-    when(androidDriver.getBiDi()).thenThrow(BiDiException.class);
+    when(androidDriver.getBiDi()).thenThrow(new BiDiException("Not working in Android"));
     WebDriverRunner.setWebDriver(androidDriver);
 
     var page = Selenide.page(PageWithCustomElementType.class);

@@ -2,6 +2,7 @@
 
 ## 7.17.0 (TBD)
 * update Selenium from 4.44.0 to 4.45.0 (incl. CDP from 148 -> 149)
+* update Selenium from 4.45.0 to 4.46.0 (incl. CDP from 149 -> 150)
 
 ## 7.16.2 (27.05.2026)
 * Selenide MCP: added more configuration parameters  --  thanks to Mike Sidelnikov (#3323)

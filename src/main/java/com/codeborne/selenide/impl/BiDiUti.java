@@ -5,9 +5,9 @@ import org.openqa.selenium.bidi.BiDi;
 import org.openqa.selenium.bidi.BiDiException;
 import org.openqa.selenium.bidi.HasBiDi;
 import org.openqa.selenium.bidi.log.GenericLogEntry;
-import org.openqa.selenium.bidi.log.Log;
 import org.openqa.selenium.bidi.log.LogLevel;
 import org.openqa.selenium.bidi.log.StackFrame;
+import org.openqa.selenium.bidi.module.LogInspector;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.remote.http.ConnectionFailedException;
 import org.slf4j.Logger;
@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
@@ -25,20 +26,21 @@ public class BiDiUti {
   private static final Logger log = LoggerFactory.getLogger(BiDiUti.class);
 
   public static boolean isBiDiEnabled(WebDriver webDriver) {
-    if (!(webDriver instanceof HasBiDi hasBiDi)) {
+    if (!(webDriver instanceof HasBiDi)) {
       return false;
     }
 
-    try {
-      hasBiDi.getBiDi();
+    try (LogInspector ignore = new LogInspector(webDriver)) {
       return true;
     }
-    catch (BiDiException notEnabled) {
+    catch (BiDiException | ConnectionFailedException notEnabled) {
       log.warn("Failed to establish BiDi connection: {}", notEnabled.toString());
       return false;
     }
   }
 
+  @Deprecated(since = "7.17.0", forRemoval = true)
+  @SuppressWarnings("removal")
   public static Optional<BiDi> getBiDiIfEnabled(WebDriver webDriver) {
     try {
       return webDriver instanceof HasBiDi hasBiDi ? Optional.of(hasBiDi.getBiDi()) : Optional.empty();
@@ -48,14 +50,31 @@ public class BiDiUti {
     }
   }
 
+  private static <T> Optional<T> ifBiDiEnabled(String action, WebDriver webDriver, Supplier<T> bidiUsage) {
+    if (!(webDriver instanceof HasBiDi)) {
+      return Optional.empty();
+    }
+
+    try {
+      return Optional.of(bidiUsage.get());
+    }
+    catch (BiDiException | ConnectionFailedException bidiNotWorking) {
+      log.warn("Failed to use BiDi to {}: {}", action, bidiNotWorking.toString());
+      return Optional.empty();
+    }
+  }
+
+  @SuppressWarnings("resource")
   public static List<LogEntry> collectBrowserLogs(WebDriver webDriver) {
-    return getBiDiIfEnabled(webDriver).map((BiDi biDi) -> {
+    return ifBiDiEnabled("collect browser logs", webDriver, () -> {
+
       List<LogEntry> logs = new CopyOnWriteArrayList<>();
-      biDi.addListener(Log.entryAdded(), (org.openqa.selenium.bidi.log.LogEntry logEntry) -> {
+      new LogInspector(webDriver).onLog((org.openqa.selenium.bidi.log.LogEntry logEntry) -> {
         log.trace("Received browser log {}", logEntry);
         logs.addAll(readBiDiLogEntry(logEntry));
       });
       return logs;
+
     }).orElse(emptyList());
   }
 

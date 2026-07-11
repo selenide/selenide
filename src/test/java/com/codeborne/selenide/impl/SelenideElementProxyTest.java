@@ -21,6 +21,7 @@ import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.bidi.BiDiException;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.slf4j.Logger;
@@ -52,16 +53,23 @@ import static org.mockito.Mockito.when;
 final class SelenideElementProxyTest {
   private static final Logger log = LoggerFactory.getLogger(SelenideElementProxyTest.class);
 
-  private final RemoteWebDriver webdriver = mock();
+  private final RemoteWebDriver webdriver = mockWebDriver();
   private final WebElement element = mock();
   private final SelenideConfig config = new SelenideConfig().screenshots(false).timeout(1);
   private final SelenideDriver driver = new SelenideDriver(config, webdriver, null, new SharedDownloadsFolder("build/downloads/123"));
 
-  @BeforeEach
-  void mockWebDriver() {
-    when(webdriver.executeScript(anyString(), same(element))).thenReturn(Map.of("id", "id1", "class", "class1"));
+  @SuppressWarnings("removal")
+  private static RemoteWebDriver mockWebDriver() {
+    RemoteWebDriver webdriver = mock();
+    when(webdriver.getBiDi()).thenThrow(new BiDiException("Not enabled"));
     when(webdriver.getPageSource()).thenReturn("<html>mock</html>");
     when(webdriver.executeScript("return navigator.platform")).thenReturn("Win32");
+    return webdriver;
+  }
+
+  @BeforeEach
+  void setUp() {
+    when(webdriver.executeScript(anyString(), same(element))).thenReturn(Map.of("id", "id1", "class", "class1"));
     when(element.getTagName()).thenReturn("h1");
     when(element.getText()).thenReturn("Hello world");
     when(element.isDisplayed()).thenReturn(true);
