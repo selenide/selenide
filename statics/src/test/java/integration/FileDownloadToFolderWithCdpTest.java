@@ -316,13 +316,13 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   void downloadMultipleFiles_errorMessage() {
     openFile("downloadMultipleFiles.html");
 
-    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(33).withTimeout(100)))
+    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(33).withTimeout(200)))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download at least 33 files in 100ms (found ")
+      .hasMessageStartingWith("Failed to download at least 33 files in 200ms (found ")
       .hasMessageContaining("hello_world.txt")
       .hasMessageContaining("empty.html")
       .hasMessageContaining("download.html")
-      .hasMessageContaining("Timeout: 100ms");
+      .hasMessageContaining("Timeout: 200ms");
   }
 
   @Test

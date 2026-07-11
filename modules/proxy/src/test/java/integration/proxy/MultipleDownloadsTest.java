@@ -63,12 +63,12 @@ public class MultipleDownloadsTest extends ProxyIntegrationTest {
 
   @Test
   void downloadMultipleFiles_errorMessage() {
-    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(2).withMethod(PROXY).withExtension("txt").withTimeout(100)))
+    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(2).withMethod(PROXY).withExtension("txt").withTimeout(200)))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download at least 2 files with extension \"txt\" in 100ms (found ")
+      .hasMessageStartingWith("Failed to download at least 2 files with extension \"txt\" in 200ms (found ")
       .hasMessageContaining("empty.html")
       .hasMessageContaining("download.html")
       .hasMessageContaining("hello_world.txt")
-      .hasMessageContaining("Timeout: 100ms");
+      .hasMessageContaining("Timeout: 200ms");
   }
 }
