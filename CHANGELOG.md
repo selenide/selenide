@@ -1,6 +1,7 @@
 # Changelog
 
 ## 7.17.0 (TBD)
+* #3357 deprecated `clearBrowserLocalStorage()` and `clearBrowserCookies()` in favor of `localStorage().clear()` and `SelenideDriver.clearCookies()`
 * update Selenium from 4.44.0 to 4.45.0 (incl. CDP from 148 -> 149)
 * update Selenium from 4.45.0 to 4.46.0 (incl. CDP from 149 -> 150)
 

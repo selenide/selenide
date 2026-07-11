@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.clearBrowserCookies;
+import static com.codeborne.selenide.WebDriverRunner.driver;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.Selenide.webdriver;
 import static com.codeborne.selenide.WebDriverConditions.cookie;
@@ -340,7 +340,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
   private void openPageWithCookies() {
     openFile("cookies.html");
-    clearBrowserCookies();
+    driver().clearCookies();
   }
 
   private void addCustomCookie() {
