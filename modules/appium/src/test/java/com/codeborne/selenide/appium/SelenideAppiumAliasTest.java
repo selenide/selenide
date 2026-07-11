@@ -23,7 +23,7 @@ class SelenideAppiumAliasTest {
   void setUp() {
     AndroidDriver androidDriver = mock();
     when(androidDriver.getCapabilities()).thenReturn(new DesiredCapabilities());
-    when(androidDriver.getBiDi()).thenThrow(BiDiException.class);
+    when(androidDriver.getBiDi()).thenThrow(new BiDiException("Not working in Android"));
     WebDriverRunner.setWebDriver(androidDriver);
   }
 
