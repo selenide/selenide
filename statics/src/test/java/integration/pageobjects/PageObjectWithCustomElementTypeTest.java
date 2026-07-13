@@ -1,7 +1,5 @@
 package integration.pageobjects;
 
-import java.time.Duration;
-
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
@@ -13,8 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selenide.page;
+import static java.util.Objects.requireNonNull;
 
 public class PageObjectWithCustomElementTypeTest extends IntegrationTest {
 
@@ -44,9 +45,9 @@ public class PageObjectWithCustomElementTypeTest extends IntegrationTest {
   private static class CustomCommand implements Command<CustomElement> {
 
     @Override
-    public @Nullable CustomElement execute(SelenideElement proxy, WebElementSource locator, Object @Nullable [] args) {
-      String oldText = (String) args[0];
-      String newText = (String) args[1];
+    public @Nullable CustomElement execute(SelenideElement proxy, WebElementSource locator, Object... args) {
+      String oldText = (String) requireNonNull(args[0], "Old text should not be null");
+      String newText = (String) requireNonNull(args[1], "New text should not be null");
       String text = proxy.shouldNotBe(Condition.empty, Duration.ofSeconds(3)).text();
       proxy.setValue(text.replace(oldText, newText));
       return (CustomElement) proxy;
