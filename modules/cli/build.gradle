@@ -1,0 +1,45 @@
+plugins {
+  id 'com.gradleup.shadow' version '9.5.1'
+}
+
+ext {
+  artifactId = 'selenide-cli'
+}
+
+dependencies {
+  implementation project(':modules:core')
+  runtimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
+
+  testImplementation("org.junit.jupiter:junit-jupiter")
+  testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
+}
+
+shadowJar {
+  archiveBaseName.set('selenide-cli')
+  archiveClassifier.set('')
+  manifest {
+    attributes 'Main-Class': 'com.codeborne.selenide.cli.SelenideCli',
+      'Implementation-Version': project.version
+  }
+  mergeServiceFiles()
+}
+
+tasks.named('build') {
+  dependsOn shadowJar
+}
+
+// Convenience task for running one CLI command from a dev classpath (no fat-jar rebuild).
+// The first `open` spawns a daemon that reuses this same classpath; later commands reuse it. E.g.:
+//   ./gradlew :modules:cli:runCli -PcliArgs="open --headless https://selenide.org"
+//   ./gradlew :modules:cli:runCli -PcliArgs="click #submit"
+//   ./gradlew :modules:cli:runCli -PcliArgs="code"
+tasks.register('runCli', JavaExec) {
+  group = 'application'
+  description = 'Run one Selenide CLI command'
+  classpath = sourceSets.main.runtimeClasspath
+  mainClass = 'com.codeborne.selenide.cli.SelenideCli'
+  args = ((project.findProperty('cliArgs') ?: 'list') as String).split('\\s+')
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')
