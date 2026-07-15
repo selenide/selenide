@@ -9,8 +9,14 @@ ext {
 
 dependencies {
   implementation project(':modules:core')
-  implementation "io.modelcontextprotocol.sdk:mcp:$mcpSdkVersion"
   implementation project(':modules:proxy')
+
+  implementation "io.modelcontextprotocol.sdk:mcp:$mcpSdkVersion"
+  constraints {
+    implementation("tools.jackson.core:jackson-databind:[3.2.1,)") {
+      because("version 3.0.3 has vulnerability")
+    }
+  }
 
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
