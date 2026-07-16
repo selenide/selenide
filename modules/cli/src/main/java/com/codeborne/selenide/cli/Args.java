@@ -47,6 +47,14 @@ final class Args {
   }
 
   /**
+   * The whole selector for commands that take no trailing value: everything after the command,
+   * joined by single spaces. Lets an unquoted multi-word selector like {@code text=Sign In} work.
+   */
+  String selectorRest() {
+    return rest(1);
+  }
+
+  /**
    * Everything after the selector (token #1), joined by single spaces.
    */
   String value() {

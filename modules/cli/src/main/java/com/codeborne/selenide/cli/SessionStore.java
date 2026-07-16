@@ -5,6 +5,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
 
@@ -67,7 +68,9 @@ final class SessionStore {
     }
     try (Stream<Path> files = Files.list(dir())) {
       return files
-        .map(path -> path.getFileName().toString())
+        .map(Path::getFileName)
+        .filter(Objects::nonNull)
+        .map(Path::toString)
         .filter(name -> name.endsWith(PORT_SUFFIX))
         .map(name -> name.substring(0, name.length() - PORT_SUFFIX.length()))
         .sorted()

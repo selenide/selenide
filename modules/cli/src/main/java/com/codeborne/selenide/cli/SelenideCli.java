@@ -50,7 +50,7 @@ public final class SelenideCli {
     System.exit(run(new ArrayList<>(Arrays.asList(args)), System.out, System.err));
   }
 
-  static int run(List<String> args, PrintStream out, PrintStream err) {
+  public static int run(List<String> args, PrintStream out, PrintStream err) {
     String session = extractSession(args);
     if (args.isEmpty() || isHelp(args.get(0))) {
       USAGE.forEach(out::println);

@@ -92,7 +92,7 @@ class CommandInterpreter {
   }
 
   private PendingCommand element(Args args, String suffix, Consumer<SelenideElement> action) {
-    Locator locator = Locator.parse(args.selector());
+    Locator locator = Locator.parse(args.selectorRest());
     RecordedStatement statement = new RecordedStatement(locator.code() + suffix + ";", locator.imports());
     return new PendingCommand(statement, () -> action.accept(driver.$(locator.by())));
   }
