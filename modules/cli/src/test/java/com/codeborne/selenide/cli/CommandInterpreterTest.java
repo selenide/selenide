@@ -101,6 +101,11 @@ class CommandInterpreterTest {
   }
 
   @Test
+  void commandNamesMatchRegisteredHandlers() {
+    assertThat(CommandInterpreter.commandNames()).isEqualTo(interpreter.registeredCommands());
+  }
+
+  @Test
   void unknownCommandThrows() {
     assertThatThrownBy(() -> interpreter.interpret("frobnicate #x"))
       .isInstanceOf(CommandException.class)

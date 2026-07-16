@@ -44,6 +44,26 @@ class CommandInterpreter {
     handlers.put("screenshot", this::screenshot);
   }
 
+  /**
+   * The set of command names this CLI understands. Exposed (via {@link SelenideCli#commandNames()})
+   * so the MCP/CLI parity test can assert both front-ends cover the shared action catalog without
+   * needing a live driver. Kept in sync with the registered handlers by a unit test.
+   */
+  private static final Set<String> COMMAND_NAMES = Set.of(
+    "click", "doubleclick", "contextclick", "hover", "clear", "scrollto",
+    "pressenter", "presstab", "pressescape",
+    "setvalue", "type", "append", "selectoption", "selectradio",
+    "setselected", "check", "uncheck",
+    "open", "back", "forward", "refresh", "should", "screenshot");
+
+  static Set<String> commandNames() {
+    return COMMAND_NAMES;
+  }
+
+  Set<String> registeredCommands() {
+    return Set.copyOf(handlers.keySet());
+  }
+
   PendingCommand interpret(String line) {
     return interpret(Args.ofLine(line));
   }

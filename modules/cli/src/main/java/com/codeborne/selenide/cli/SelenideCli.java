@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Command-line entry point for Selenide — a stateless, per-invocation CLI over a background daemon.
@@ -105,6 +106,14 @@ public final class SelenideCli {
 
   private static boolean isHelp(String arg) {
     return arg.equals("--help") || arg.equals("-h") || arg.equals("help");
+  }
+
+  /**
+   * The set of commands this CLI understands (lower-case). Exposed for the MCP/CLI parity test so it
+   * can verify both front-ends cover the shared browser-action catalog.
+   */
+  public static Set<String> commandNames() {
+    return CommandInterpreter.commandNames();
   }
 
   static String version() {
