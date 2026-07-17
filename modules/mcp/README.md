@@ -12,13 +12,13 @@ An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that l
 ### Using `claude mcp add`
 
 ```bash
-claude mcp add selenide-mcp 
+claude mcp add selenide-mcp -- npx @selenide/mcp
 ```
 
 With options:
 
 ```bash
-claude mcp add selenide-mcp  \
+claude mcp add selenide-mcp -- npx @selenide/mcp \
   --browser=chrome --base-url=https://app.example.com --remote=http://selenium-hub:4444/wd/hub
 ```
 
@@ -32,11 +32,14 @@ Add to `.claude/settings.json` (project) or `~/.claude/settings.json` (global):
   "mcpServers": {
     "selenide-mcp": {
       "command": "npx",
-      "args": ["selenide-mcp", "--browser=chrome", "--remote=http://selenium-hub:4444/wd/hub"]
+      "args": ["@selenide/mcp", "--browser=chrome", "--remote=http://selenium-hub:4444/wd/hub"]
     }
   }
 }
 ```
+
+> Note: the package was previously published as `selenide-mcp` on npm. That name still works
+> as a deprecated shim, but new configs should use `@selenide/mcp`.
 
 ## Configuration Parameters
 
