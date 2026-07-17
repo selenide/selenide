@@ -1,7 +1,7 @@
 {
-  "name": "@selenide/mcp",
+  "name": "selenide-mcp",
   "version": "7.17.0",
-  "description": "Selenide MCP server — browser automation with smart waits for AI agents",
+  "description": "DEPRECATED — moved to @selenide/mcp. This package forwards to the new scoped package.",
   "bin": {
     "selenide-mcp": "index.js"
   },
@@ -11,7 +11,8 @@
     "browser",
     "testing",
     "automation",
-    "selenium"
+    "selenium",
+    "deprecated"
   ],
   "license": "MIT",
   "repository": {
@@ -21,7 +22,7 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "publishConfig": {
-    "access": "public"
+  "dependencies": {
+    "@selenide/mcp": "^7.17.0"
   }
 }
