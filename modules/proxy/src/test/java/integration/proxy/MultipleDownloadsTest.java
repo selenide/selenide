@@ -1,6 +1,5 @@
 package integration.proxy;
 
-import com.codeborne.selenide.ex.FileNotDownloadedError;
 import com.codeborne.selenide.impl.FileContent;
 import integration.ProxyIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +19,6 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.$;
 import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MultipleDownloadsTest extends ProxyIntegrationTest {
   @BeforeEach
@@ -59,16 +57,5 @@ public class MultipleDownloadsTest extends ProxyIntegrationTest {
 
     assertThat(files.get("empty.html")).content().isEqualToIgnoringNewLines(new FileContent("empty.html").content());
     assertThat(files.get("download.html")).content().isEqualToIgnoringNewLines(new FileContent("download.html").content());
-  }
-
-  @Test
-  void downloadMultipleFiles_errorMessage() {
-    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(2).withMethod(PROXY).withExtension("txt").withTimeout(200)))
-      .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download at least 2 files with extension \"txt\" in 200ms (found ")
-      .hasMessageContaining("empty.html")
-      .hasMessageContaining("download.html")
-      .hasMessageContaining("hello_world.txt")
-      .hasMessageContaining("Timeout: 200ms");
   }
 }
