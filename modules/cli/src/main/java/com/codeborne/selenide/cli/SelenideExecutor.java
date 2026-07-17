@@ -69,14 +69,36 @@ final class SelenideExecutor implements CommandExecutor {
     if (args.count() < 2) {
       return Result.error("usage: save <file>");
     }
-    Path file = Path.of(args.nth(1));
+    Path file;
+    try {
+      file = resolveWithin(Path.of("").toAbsolutePath().normalize(), args.nth(1));
+    }
+    catch (CommandException e) {
+      return Result.error(e.getMessage());
+    }
     try {
       Files.writeString(file, codeGenerator.snippet(recorder.statements()), UTF_8);
-      return Result.ok("saved to " + file.toAbsolutePath());
+      return Result.ok("saved to " + file);
     }
     catch (IOException e) {
       return Result.error("could not save: " + e.getMessage());
     }
+  }
+
+  /**
+   * Resolves a user-supplied save target against {@code base} (the daemon's working directory) and
+   * confines it there. The daemon serves commands over an unauthenticated loopback socket, so any
+   * local process can drive {@code save}; without this guard a caller could write generated code to
+   * an arbitrary path (e.g. {@code ../../.ssh/authorized_keys}). Absolute paths and {@code ..}
+   * traversal that escape {@code base} are rejected — matching the documented "relative to the
+   * daemon's cwd" behaviour.
+   */
+  static Path resolveWithin(Path base, String userPath) {
+    Path resolved = base.resolve(userPath).normalize();
+    if (!resolved.startsWith(base)) {
+      throw new CommandException("refusing to save outside the working directory: " + userPath);
+    }
+    return resolved;
   }
 
   private Result undo() {
