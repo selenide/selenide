@@ -17,11 +17,6 @@ tasks.withType(Jar).configureEach {
 }
 
 mavenPublishing {
-  if (project.hasProperty("signing.keyId")) {
-    publishToMavenCentral(true)
-    signAllPublications()
-  }
-
   coordinates(project.groupId, project.artifactId, project.version)
   pom {
     name = base.archivesName
@@ -61,5 +56,15 @@ mavenPublishing {
       developerConnection = 'scm:git@github.com:selenide/selenide.git'
       url = 'https://github.com/selenide/selenide'
     }
+  }
+}
+
+if (project.hasProperty("signing.gnupg.keyName")) {
+  mavenPublishing {
+    publishToMavenCentral(true)
+    signAllPublications()
+  }
+  signing {
+    useGpgCmd()
   }
 }
