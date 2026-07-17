@@ -4,8 +4,12 @@ on:
     branches:
       - main
     paths-ignore:
+      - '.claude/**'
       - '.idea/**'
       - '.run/**'
+      - 'docs/**'
+      - 'mcp-server/**'
+      - 'mcp-server-legacy/**'
       - '**/*.iml'
       - '**/*.md'
       - '**/.editorconfig'
@@ -15,8 +19,12 @@ on:
       - 'release'
   pull_request:
     paths-ignore:
+      - '.claude/**'
       - '.idea/**'
       - '.run/**'
+      - 'docs/**'
+      - 'mcp-server/**'
+      - 'mcp-server-legacy/**'
       - '**/*.iml'
       - '**/*.md'
       - '**/.editorconfig'
