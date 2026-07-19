@@ -1,3 +1,12 @@
+import org.gradle.api.services.BuildService
+import org.gradle.api.services.BuildServiceParameters
+
+abstract class BrowserTestLock implements BuildService<BuildServiceParameters.None> {}
+
+def browserTestLock = gradle.sharedServices.registerIfAbsent("browserTestLock", BrowserTestLock) {
+  maxParallelUsages = 1
+}
+
 subprojects {
   tasks.withType(Test).configureEach {
     include 'com/codeborne/selenide/**/*'
@@ -5,6 +14,7 @@ subprojects {
   }
 
   tasks.register("ie", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'ie'
     systemProperties['selenide.timeout'] = '8000'
     include 'integration/**/*'
@@ -16,6 +26,7 @@ subprojects {
   }
 
   tasks.register("edge", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'edge'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
@@ -24,6 +35,7 @@ subprojects {
   }
 
   tasks.register("edge_headless", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'edge'
     systemProperties['selenide.headless'] = 'true'
     include 'integration/**/*'
@@ -33,6 +45,7 @@ subprojects {
   }
 
   tasks.register("edge_headless_smoke", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'edge'
     systemProperties['selenide.headless'] = 'true'
     include 'integration/**/*'
@@ -45,6 +58,7 @@ subprojects {
   }
 
   tasks.register("chrome", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'chrome'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
@@ -53,6 +67,7 @@ subprojects {
   }
 
   tasks.register("chrome_headless", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'chrome'
     systemProperties['selenide.headless'] = 'true'
     include 'integration/**/*'
@@ -62,6 +77,7 @@ subprojects {
   }
 
   tasks.register("chrome_headless_smoke", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'chrome'
     systemProperties['selenide.headless'] = 'true'
     include 'integration/**/*'
@@ -74,6 +90,7 @@ subprojects {
   }
 
   tasks.register("chrome_remote", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
     systemProperties['selenide.browser'] = 'chrome'
     include 'integration/**/*'
@@ -83,6 +100,7 @@ subprojects {
   }
 
   tasks.register("firefox", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'firefox'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
@@ -91,6 +109,7 @@ subprojects {
   }
 
   tasks.register("firefox_headless", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'firefox'
     systemProperties['selenide.headless'] = 'true'
     include 'integration/**/*'
@@ -100,15 +119,16 @@ subprojects {
   }
 
   tasks.register("safari", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'safari'
     include 'integration/**/*'
     exclude 'com/codeborne/selenide/**/*'
     exclude 'org/selenide/**/*'
-    maxParallelForks = 1
     outputs.upToDateWhen {false}
   }
 
   tasks.register("firefox_remote", Test) {
+    usesService(browserTestLock)
     systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
     systemProperties['selenide.browser'] = 'firefox'
     include 'integration/**/*'
