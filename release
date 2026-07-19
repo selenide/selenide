@@ -1,6 +1,15 @@
 #!/bin/sh
 set -e
 
+# Prerequisites for signing artifacts (publishToMavenCentral below):
+#   - gpg, gpg-agent and a pinentry program installed (e.g. `brew install gnupg pinentry` on macOS,
+#     `apt install gnupg pinentry-curses` on Linux)
+#   - the signing private key imported into your local GPG keyring
+#   - ~/.gradle/gradle.properties containing: signing.gnupg.keyName=<your key id>
+#   - GPG_TTY exported in your shell (e.g. `export GPG_TTY=$(tty)`), so gpg-agent can prompt
+#     for the key passphrase in this terminal
+# See gradle/publish-module.gradle for how signing is wired up (uses signing.useGpgCmd()).
+
 version=$1
 
 if [ -z "$version" ] ; then
