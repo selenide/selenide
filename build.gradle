@@ -17,7 +17,7 @@ plugins {
 
 allprojects {
   group = 'com.codeborne'
-  version = '7.17.0'
+  version = '7.17.1-SNAPSHOT'
 
   idea {
     module {

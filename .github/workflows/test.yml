@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'check', 'edge_headless_smoke' ]
+        gradle-task: [ 'test', 'edge_headless_smoke' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
