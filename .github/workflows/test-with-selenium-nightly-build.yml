@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'check', 'chrome_headless_smoke' ]
+        gradle-task: [ 'test', 'chrome_headless_smoke' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
