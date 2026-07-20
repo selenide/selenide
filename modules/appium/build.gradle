@@ -26,7 +26,9 @@ tasks.register('android', Test) {
   include 'it/mobile/android/**/*'
   exclude 'com/codeborne/selenide/**/*'
   outputs.upToDateWhen { false }
-  maxParallelForks = 1
+  // BrowserStack plan allows 5 parallel App Automate sessions, shared account-wide (not per CI run).
+  // Leave headroom below that for the concurrent "ios" task and other CI runs that may overlap.
+  maxParallelForks = 3
 }
 
 tasks.register('ios', Test) {
