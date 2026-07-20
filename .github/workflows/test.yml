@@ -110,15 +110,18 @@ jobs:
               ':modules:video-recorder-junit',
               ':modules:video-recorder-testng'
             ]
+          - name: 'grid-and-proxy'
+            projects: [
+              ':modules:grid',
+              ':modules:proxy'
+            ]
           - name: 'others'
             projects: [
               ':modules:junit4',
               ':modules:clear-with-shortcut',
               ':modules:appium',
-              ':modules:grid',
               ':modules:error-message-customizer',
               ':modules:full-screenshot',
-              ':modules:proxy',
               ':modules:testng'
             ]
         browser: [ 'firefox_headless', 'chrome_headless' ]
