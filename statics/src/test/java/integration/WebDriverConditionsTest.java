@@ -71,10 +71,12 @@ final class WebDriverConditionsTest extends IntegrationTest {
   @Test
   void errorMessageShouldNotHaveForWrongUrlWithBecause() {
     String url = baseUrl + "/page_with_frames_with_delays.html" + testName();
+    webdriver().shouldHave(url(url), ofMillis(1000));
+
     assertThatThrownBy(() ->
       webdriver().shouldNotHave(url(url).because("wrong url"), ofMillis(10))
     )
-      .hasMessageStartingWith("webdriver should not have url " + baseUrl + "/page_with_frames_with_delays.html")
+      .hasMessageStartingWith("webdriver should not have url " + url)
       .hasMessageContaining("(because wrong url)")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
