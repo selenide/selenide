@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -42,6 +43,7 @@ final class SizzleSelectorsTest extends BaseIntegrationTest {
   }
 
   @Test
+  @Disabled("Depends on external website. Can be executed manually if needed.")
   void canUseSizzleSelectors_onTodoList_dojo() {
     driver.open("https://todomvc.com/examples/dojo/");
     driver.$$(":header").shouldHave(size(6));
@@ -65,18 +67,21 @@ final class SizzleSelectorsTest extends BaseIntegrationTest {
   }
 
   @Test
+  @Disabled("Depends on external website. Can be executed manually if needed.")
   void canUseSizzleSelectors_onTodoList_jquery() {
     driver.open("https://todomvc.com/examples/jquery/#/all/");
     driver.$$(":header").shouldHave(sizeGreaterThanOrEqual(1));
   }
 
   @Test
+  @Disabled("Depends on external website. Can be executed manually if needed.")
   void canUseSizzleSelectors_onTodoList_angular() {
     driver.open("https://todomvc.com/examples/angularjs/#/");
     driver.$$(":header").shouldHave(sizeGreaterThanOrEqual(1));
   }
 
   @Test
+  @Disabled("Depends on external website. Can be executed manually if needed.")
   void canUseSizzleSelectors_onTodoList_knockback() {
     driver.open("https://todomvc.com/examples/knockback/");
     driver.$$(":header").shouldHave(sizeGreaterThanOrEqual(1));
