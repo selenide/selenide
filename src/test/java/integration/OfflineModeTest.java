@@ -16,8 +16,6 @@ import java.util.Optional;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static java.util.Optional.empty;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
@@ -43,7 +41,7 @@ final class OfflineModeTest extends ITest {
 
   @Test
   void canToggleOfflineMode_chromium() {
-    assumeThat(isChrome() || isEdge()).isTrue();
+    assumeThat(driver().browser().isChrome() || driver().browser().isEdge()).isTrue();
 
     ChromiumNetworkConditions networkConditions = new ChromiumNetworkConditions();
     networkConditions.setOffline(true);
@@ -63,7 +61,7 @@ final class OfflineModeTest extends ITest {
 
   @Test
   void canToggleOfflineMode_devTools() {
-    assumeThat(isChrome() || isEdge()).isTrue();
+    assumeThat(driver().browser().isChrome() || driver().browser().isEdge()).isTrue();
 
     String windowHandle = driver().getWebDriver().getWindowHandle();
     DevTools devTools = ((HasDevTools) driver().getWebDriver()).getDevTools();
