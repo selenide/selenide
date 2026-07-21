@@ -57,7 +57,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   @BeforeEach
   final void openBlankPage() {
     if (hasWebDriverStarted()) {
-      open("about:blank");
+      open("about:blank" + testName());
     }
   }
 
@@ -92,11 +92,11 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   protected void openFile(String fileName) {
-    open("/" + fileName);
+    open("/" + fileName + testName());
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
-    open("/" + fileName);
+    openFile(fileName);
     return page(pageObjectClass);
   }
 
@@ -127,12 +127,14 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     );
   }
 
-  protected static ChromeDriver openChrome() {
+  protected ChromeDriver openChrome() {
     return openChrome(null);
   }
 
-  protected static ChromeDriver openChrome(@Nullable SelenideProxyServer proxy) {
-    return new ChromeDriver(chromeOptions(proxy == null ? null : proxy.getSeleniumProxy()));
+  protected ChromeDriver openChrome(@Nullable SelenideProxyServer proxy) {
+    ChromeDriver chrome = new ChromeDriver(chromeOptions(proxy == null ? null : proxy.getSeleniumProxy()));
+    chrome.navigate().to("about:blank" + testName());
+    return chrome;
   }
 
   protected static ChromeOptions chromeOptions(@Nullable Proxy proxy) {
@@ -150,12 +152,14 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     return options;
   }
 
-  protected static FirefoxDriver openFirefox() {
+  protected FirefoxDriver openFirefox() {
     return openFirefox(null);
   }
 
-  protected static FirefoxDriver openFirefox(@Nullable SelenideProxyServer proxy) {
-    return new FirefoxDriver(firefoxOptions(proxy));
+  protected FirefoxDriver openFirefox(@Nullable SelenideProxyServer proxy) {
+    FirefoxDriver firefox = new FirefoxDriver(firefoxOptions(proxy));
+    firefox.navigate().to("about:blank" + testName());
+    return firefox;
   }
 
   protected static FirefoxOptions firefoxOptions(@Nullable SelenideProxyServer proxy) {
