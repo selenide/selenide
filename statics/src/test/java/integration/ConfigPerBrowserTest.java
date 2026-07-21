@@ -33,12 +33,12 @@ public class ConfigPerBrowserTest extends IntegrationTest {
 
   @Test
   void canOpenBrowserWithSpecificSettings() {
-    open("/page_with_images.html");
+    open("/page_with_images.html" + testName());
     h1.shouldHave(text("Images"));
     assertSizeGreaterThan(500, 400);
     WebDriver webDriver = getWebDriver();
 
-    open("/page_with_uploads.html", config().browserSize("500x400"));
+    open("/page_with_uploads.html" + testName(), config().browserSize("500x400"));
     h1.shouldHave(text("File uploads"));
     assertSize(500, 400);
 
@@ -50,7 +50,7 @@ public class ConfigPerBrowserTest extends IntegrationTest {
   @Test
   public void inNewBrowser_withCustomConfig() {
     SelenideConfig originalConfig = new SelenideConfig().baseUrl(getBaseUrl());
-    open("/page_with_images.html", originalConfig);
+    open("/page_with_images.html" + testName(), originalConfig);
     h1.shouldHave(text("Images"));
     assertSizeGreaterThan(500, 400);
 
@@ -59,14 +59,14 @@ public class ConfigPerBrowserTest extends IntegrationTest {
 
     SelenideConfig anotherConfig = new SelenideConfig().baseUrl(getBaseUrl()).browserSize("500x400");
     inNewBrowser(anotherConfig, () -> {
-      open("/page_with_uploads.html");
+      open("/page_with_uploads.html" + testName());
       h1.shouldHave(text("File uploads"));
       assertSize(500, 400);
       webdriver().shouldNotHave(cookie("bober", "kurwa"));
     });
 
     h1.shouldHave(text("Images"));
-    open("/page_with_images.html", originalConfig);
+    open("/page_with_images.html" + testName(), originalConfig);
     webdriver().shouldHave(cookie("bober", "kurwa"));
     assertSizeGreaterThan(500, 400);
   }
@@ -74,17 +74,17 @@ public class ConfigPerBrowserTest extends IntegrationTest {
   @Test
   public void inNewBrowser_withCustomConfigInside() {
     SelenideConfig originalConfig = new SelenideConfig().baseUrl(getBaseUrl());
-    open("/page_with_images.html", originalConfig);
+    open("/page_with_images.html" + testName(), originalConfig);
     h1.shouldHave(text("Images"));
 
     inNewBrowser(() -> {
       SelenideConfig anotherConfig = new SelenideConfig().baseUrl(getBaseUrl());
-      open("/page_with_uploads.html", anotherConfig);
+      open("/page_with_uploads.html" + testName(), anotherConfig);
       h1.shouldHave(text("File uploads"));
     });
 
     h1.shouldHave(text("Images"));
-    open("/page_with_images.html", originalConfig);
+    open("/page_with_images.html" + testName(), originalConfig);
     h1.shouldHave(text("Images"));
   }
 
