@@ -38,6 +38,7 @@ concurrency:
 
 jobs:
   run-tests-on-windows:
+    name: win:${{ matrix.gradle-task }}
     runs-on: windows-latest
     strategy:
       fail-fast: false
@@ -69,6 +70,7 @@ jobs:
             **/build/test-results
 
   run-unit-tests-on-linux:
+    name: linux:unit-tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -95,6 +97,7 @@ jobs:
             **/build/test-results
 
   run-browser-tests-on-linux:
+    name: linux:${{ matrix.browser }}:${{ matrix.module.name }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -187,6 +190,7 @@ jobs:
           exit $missing
 
   run-android-tests:
+    name: android:tests
     runs-on: ubuntu-latest
     env:
       BS_KEY: ${{ secrets.BS_KEY }}
@@ -214,6 +218,7 @@ jobs:
             **/build/test-results
 
   run-ios-tests:
+    name: ios:tests
     runs-on: ubuntu-latest
     env:
       BS_KEY: ${{ secrets.BS_KEY }}
@@ -240,6 +245,7 @@ jobs:
             **/build/test-results
 
   run-selenoid-tests:
+    name: selenoid:tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -265,6 +271,7 @@ jobs:
             **/build/test-results
 
   run-moon-tests:
+    name: moon:tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
