@@ -100,10 +100,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     return threadId;
   }
 
-  /**
-   * Remove links to webdriver/proxy, but DON'T CLOSE the webdriver/proxy itself.
-   */
-  private void resetWebDriver() {
+  @Override
+  public void resetWebDriver() {
     threadWebDriver.remove(currentThread().getId());
   }
 
