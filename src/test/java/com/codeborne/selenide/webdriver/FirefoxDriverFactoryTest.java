@@ -5,7 +5,6 @@ import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Isolated;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -99,8 +98,8 @@ final class FirefoxDriverFactoryTest {
   @Test
   void browserBinaryCanBeSet() {
     config.browserBinary("c:/browser.exe");
-    Capabilities caps = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-    Map options = (Map) caps.asMap().get(FirefoxOptions.FIREFOX_OPTIONS);
+    FirefoxOptions caps = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    Map<String, Object> options = firefoxOptions(caps);
     assertThat(options.get("binary")).isEqualTo("c:/browser.exe");
   }
 
@@ -119,7 +118,37 @@ final class FirefoxDriverFactoryTest {
     Map<String, Object> prefs = prefs(options);
     assertThat(prefs.get("network.proxy.no_proxies_on")).isEqualTo("");
     assertThat(prefs.get("network.proxy.allow_hijacking_localhost")).isEqualTo(true);
-    assertThat(options.asMap().get("firefox_profile")).isNull();
+    assertThat(options.asMap()).doesNotContainKey("firefox_profile");
+  }
+
+  @Test
+  void setsBrowserSizeWithFirefoxArgument() {
+    config.browserSize("1096x812");
+
+    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+
+    List<String> args = args(options);
+    assertThat(args).containsExactly("-width", "1096", "-height", "812");
+  }
+
+  @Test
+  void setsBrowserSizeWithFirefoxArgument_null() {
+    config.browserSize(null);
+
+    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+
+    List<String> args = args(options);
+    assertThat(args).isNull();
+  }
+
+  @Test
+  void setsBrowserSizeWithFirefoxArgument_invalidDimension() {
+    config.browserSize("600,500");
+
+    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+
+    List<String> args = args(options);
+    assertThat(args).isNull();
   }
 
   @Test
@@ -168,10 +197,9 @@ final class FirefoxDriverFactoryTest {
     firefoxOptions.addPreference("int pref", 10);
     config.browserCapabilities(firefoxOptions);
 
-    Map<String, Object> options = driverFactory.createCapabilities(config, browser, proxy, null).asMap();
-    assertThat(options.get("moz:firefoxOptions")).isNotNull();
+    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy, null);
 
-    Map<String, Object> prefs = (Map<String, Object>) ((Map<String, Object>) options.get("moz:firefoxOptions")).get("prefs");
+    Map<String, Object> prefs = prefs(options);
     assertThat(prefs.get("general.useragent.override")).isEqualTo("my agent");
     assertThat(prefs.get("boolean pref")).isEqualTo(true);
     assertThat(prefs.get("int pref")).isEqualTo(10);
@@ -188,6 +216,12 @@ final class FirefoxDriverFactoryTest {
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(FirefoxOptions.FIREFOX_OPTIONS, firefoxOptionsMerged);
 
     assertThat(prefsMap).containsEntry("pdfjs.disabled", false);
+  }
+
+  @SuppressWarnings("unchecked")
+  private List<String> args(FirefoxOptions options) {
+    Map<String, Object> firefoxOptions = firefoxOptions(options);
+    return (List<String>) firefoxOptions.get("args");
   }
 
   @SuppressWarnings("unchecked")

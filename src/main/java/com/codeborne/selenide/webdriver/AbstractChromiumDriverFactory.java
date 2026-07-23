@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Config;
 import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chromium.ChromiumOptions;
 import org.slf4j.Logger;
@@ -41,8 +42,9 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
 
     String browserSize = config.browserSize();
     if (browserSize != null && BrowserResizer.isValidDimension(browserSize)) {
-      arguments.add(convertBrowserSizeToChromeFormat(browserSize));
+      arguments.add("--window-size=" + convertToChromiumFormat(browserSize));
     }
+
     return arguments;
   }
 
@@ -125,8 +127,9 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     return arguments;
   }
 
-  private String convertBrowserSizeToChromeFormat(String browserSize) {
-    return "--window-size=" + browserSize.replace("x", ",");
+  String convertToChromiumFormat(String wxh) {
+    Dimension size = BrowserResizer.parseDimension(wxh);
+    return "%s,%s".formatted(size.width, size.height);
   }
 
   protected Map<String, Object> parsePreferencesFromString(String preferencesString) {
