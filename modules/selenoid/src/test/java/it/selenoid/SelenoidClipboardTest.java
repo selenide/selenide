@@ -1,10 +1,10 @@
 package it.selenoid;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.ex.ConditionNotMetError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +55,7 @@ public class SelenoidClipboardTest {
       clipboard().shouldHave(content(expectedText));
       assertThat(clipboard().getText()).isEqualTo(expectedText);
     }
-    catch (ConditionNotMetError clipboardWasEmpty) {
+    catch (AssertionFailedError clipboardWasEmpty) {
       log.info("Clipboard content was not expected {}", clipboardWasEmpty.toString());
 
       clipboard().shouldHave(content("")
