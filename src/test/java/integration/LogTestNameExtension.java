@@ -24,7 +24,7 @@ public final class LogTestNameExtension implements BeforeAllCallback, AfterAllCa
   public void beforeAll(ExtensionContext context) {
     getLogger(context.getDisplayName()).info("Starting tests @ {} ({})", browser, memory());
     context.getStore(namespace).put(CLASS_THREAD_NAME, currentThread().getName());
-    currentThread().setName("%s:%s".formatted(currentThread().getName(), context.getDisplayName()));
+    currentThread().setName("test:%s".formatted(context.getDisplayName()));
   }
 
   @Override
@@ -39,8 +39,7 @@ public final class LogTestNameExtension implements BeforeAllCallback, AfterAllCa
     getLogger(context.getRequiredTestClass().getName()).info("starting {} ({})...", context.getDisplayName(), memory());
     Store store = context.getStore(namespace);
     store.put(METHOD_THREAD_NAME, currentThread().getName());
-    currentThread().setName("%s:%s.%s".formatted(store.get(CLASS_THREAD_NAME),
-      context.getRequiredTestClass().getName(), context.getDisplayName()));
+    currentThread().setName("test:%s.%s".formatted(context.getRequiredTestClass().getName(), context.getDisplayName()));
   }
 
   @Override
