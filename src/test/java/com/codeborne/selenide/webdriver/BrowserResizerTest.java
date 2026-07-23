@@ -13,8 +13,10 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -33,12 +35,30 @@ final class BrowserResizerTest {
   }
 
   @Test
+  void canConfigureBrowserWindowSize_null() {
+    config.browserSize(null);
+
+    factory.adjustBrowserSize(config, webdriver);
+
+    verify(webdriver.manage().window(), never()).setSize(any());
+  }
+
+  @Test
   void canConfigureBrowserWindowPosition() {
     config.browserPosition("20x40");
 
     factory.adjustBrowserPosition(config, webdriver);
 
     verify(webdriver.manage().window()).setPosition(new Point(20, 40));
+  }
+
+  @Test
+  void canConfigureBrowserWindowPosition_null() {
+    config.browserPosition(null);
+
+    factory.adjustBrowserPosition(config, webdriver);
+
+    verify(webdriver.manage().window(), never()).setPosition(any());
   }
 
   @Test
@@ -59,13 +79,19 @@ final class BrowserResizerTest {
       .hasMessage("Browser position 1600,800 is incorrect");
   }
 
-  @ParameterizedTest
-  @MethodSource("provideSize")
-  void validateDimensionTest(String input, boolean expected) {
-    assertThat(BrowserResizer.isValidDimension(input)).isEqualTo(expected);
+  @Test
+  void parseDimension() {
+    assertThat(BrowserResizer.parseDimension("1920x1080")).isEqualTo(new Dimension(1920, 1080));
+    assertThat(BrowserResizer.parseDimension("-200x-100")).isEqualTo(new Dimension(-200, -100));
   }
 
-  private static Stream<Arguments> provideSize() {
+  @ParameterizedTest
+  @MethodSource("browserSize")
+  void validateDimensionTest(String input, boolean valid) {
+    assertThat(BrowserResizer.isValidDimension(input)).isEqualTo(valid);
+  }
+
+  private static Stream<Arguments> browserSize() {
     return Stream.of(
       Arguments.of("1920x1080", true),
       Arguments.of("-200x100", true),

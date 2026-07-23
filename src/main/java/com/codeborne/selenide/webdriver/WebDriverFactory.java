@@ -65,13 +65,17 @@ public class WebDriverFactory {
   }
 
   private boolean needBrowserResize(WebDriver webdriver) {
+    Browser browser = detectBrowser(webdriver);
+    return !browser.isChromium() && !"msedge".equals(browser.name) && !browser.isFirefox();
+  }
+
+  private static Browser detectBrowser(WebDriver webdriver) {
     String browserName = "";
     if (webdriver instanceof HasCapabilities hasCapabilities) {
       Capabilities capabilities = hasCapabilities.getCapabilities();
       browserName = capabilities.getBrowserName();
     }
-    Browser browser = new Browser(browserName, false);
-    return !browser.isChromium() && !"msedge".equals(browserName);
+    return new Browser(browserName, false);
   }
 
   private void setLoadTimeout(Config config, WebDriver webdriver) {
