@@ -36,13 +36,15 @@ final class ReadonlyElementsTest extends IntegrationTest {
   @Test
   void cannotSetValueToReadonlyField_slowSetValue() {
     Configuration.fastSetValue = false;
+    Configuration.timeout = 10;
 
     assertThatThrownBy(() -> {
       $(By.name("username")).val("another-username");
     })
       .as("should throw InvalidStateException where setting value to readonly/disabled element")
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be editable {By.name: username}");
+      .hasMessageStartingWith("Element should be editable {By.name: username}")
+      .hasMessageContaining("Timeout: 10ms");
     $(By.name("username")).shouldBe(empty);
     $(By.name("username")).shouldHave(exactValue(""));
   }
@@ -56,13 +58,18 @@ final class ReadonlyElementsTest extends IntegrationTest {
   @Test
   void cannotSetValueToDisabledField_slowSetValue() {
     Configuration.fastSetValue = false;
+    Configuration.timeout = 10;
 
     assertThatThrownBy(() -> {
       $(By.name("password")).setValue("another-pwd");
     })
       .as("should throw InvalidStateException where setting value to readonly/disabled element")
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be editable {By.name: password}");
+      .hasMessageStartingWith("Element should be editable {By.name: password}")
+      .hasMessageContaining("Actual value: disabled")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 10ms");
     $(By.name("password")).shouldBe(empty);
     $(By.name("password")).shouldHave(exactValue(""));
   }
@@ -70,13 +77,18 @@ final class ReadonlyElementsTest extends IntegrationTest {
   @Test
   void cannotSetValueToReadonlyField_fastSetValue() {
     Configuration.fastSetValue = true;
+    Configuration.timeout = 5;
 
     assertThatThrownBy(() -> {
       $(By.name("username")).val("another-username");
     })
       .as("should throw InvalidStateException where setting value to readonly/disabled element")
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be editable {By.name: username}");
+      .hasMessageStartingWith("Element should be editable {By.name: username}")
+      .hasMessageContaining("Actual value: readonly=\"true\"")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 5ms");
     $(By.name("username")).shouldBe(empty);
     $(By.name("username")).shouldHave(exactValue(""));
   }
@@ -84,47 +96,75 @@ final class ReadonlyElementsTest extends IntegrationTest {
   @Test
   void cannotSetValueToDisabledField_fastSetValue() {
     Configuration.fastSetValue = true;
+    Configuration.timeout = 10;
 
     assertThatThrownBy(() -> {
       $(By.name("password")).setValue("another-pwd");
     })
       .as("should throw InvalidStateException where setting value to readonly/disabled element")
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be editable {By.name: password}");
+      .hasMessageStartingWith("Element should be editable {By.name: password}")
+      .hasMessageContaining("Timeout: 10ms");
     $(By.name("password")).shouldBe(empty);
     $(By.name("password")).shouldHave(exactValue(""));
   }
 
   @Test
   void cannotSetValueToReadonlyTextArea() {
+    Configuration.timeout = 5;
+
     assertThatThrownBy(() -> $("#text-area").val("textArea value"))
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be editable {#text-area}");
+      .hasMessageStartingWith("Element should be editable {#text-area}")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 5ms");
   }
 
   @Test
   void cannotSetValueToDisabledTextArea() {
+    Configuration.timeout = 5;
+
     assertThatThrownBy(() -> $("#text-area-disabled").val("textArea value"))
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be editable {#text-area-disabled}");
+      .hasMessageStartingWith("Element should be editable {#text-area-disabled}")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 5ms");
   }
 
   @Test
   void cannotChangeValueOfDisabledCheckbox() {
+    Configuration.timeout = 5;
+
     assertThatThrownBy(() -> $(By.name("disabledCheckbox")).setSelected(false))
-      .isInstanceOf(InvalidStateError.class);
+      .isInstanceOf(InvalidStateError.class)
+      .hasMessageStartingWith("Invalid element state [By.name: disabledCheckbox]: Cannot change value of readonly/disabled element")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 5ms");
   }
 
   @Test
   void cannotSetValueToReadonlyCheckbox() {
+    Configuration.timeout = 5;
     assertThatThrownBy(() -> $(By.name("rememberMe")).setSelected(true))
-      .isInstanceOf(InvalidStateError.class);
+      .isInstanceOf(InvalidStateError.class)
+      .hasMessageStartingWith("Invalid element state [By.name: rememberMe]: Cannot change value of readonly/disabled element")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 5ms");
   }
 
   @Test
-  void cannotSetValueToReadonlyRadiobutton() {
+  void cannotSetValueToReadonlyRadioButton() {
+    Configuration.timeout = 10;
     assertThatThrownBy(() -> $(By.name("me")).selectRadio("margarita"))
-      .isInstanceOf(InvalidStateError.class);
+      .isInstanceOf(InvalidStateError.class)
+      .hasMessageStartingWith("Invalid element state [By.name: me]: Cannot select readonly radio button")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 10ms");
   }
 
   @Test
@@ -168,9 +208,15 @@ final class ReadonlyElementsTest extends IntegrationTest {
 
   @Test
   void readonlyAttributeIsShownInErrorMessage() {
+    Configuration.timeout = 5;
+
     assertThatThrownBy(() -> $(By.name("username")).shouldNotBe(readonly))
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageStartingWith("Element should not be readonly {By.name: username}")
-      .hasMessageMatching("(?s).*<input.*readonly.*");
+      .hasMessageMatching("(?s).*Element:.*<input.*readonly.*")
+      .hasMessageContaining("Actual value: readonly=\"true\"")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 5ms");
   }
 }
