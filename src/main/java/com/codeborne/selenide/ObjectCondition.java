@@ -30,4 +30,7 @@ public interface ObjectCondition<T> {
     return new ExplainedObjectCondition<>(this, message);
   }
 
+  default ObjectCondition<T> or(ObjectCondition<T> alternative) {
+    return new Or<>(this, alternative);
+  }
 }

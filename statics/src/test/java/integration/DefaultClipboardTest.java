@@ -9,6 +9,7 @@ import static com.codeborne.selenide.ClipboardConditions.content;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.clipboard;
 import static java.time.Duration.ofMillis;
@@ -54,17 +55,51 @@ public class DefaultClipboardTest extends IntegrationTest {
   public void errorMessage_negativeCase() {
     $("#button-copy-text").shouldBe(visible, enabled).click();
     assertThatThrownBy(() ->
-      clipboard().shouldNotHave(content("Hello World"), ofMillis(300))
+      clipboard().shouldNotHave(content("Hello World"), ofMillis(3))
     )
       .isInstanceOf(ConditionMetError.class)
       .hasMessageStartingWith("clipboard should not have content 'Hello World'")
       .hasMessageContaining("Actual value: Hello World")
-      .hasMessageContaining("Timeout: 300ms");
+      .hasMessageContaining("Timeout: 3ms");
   }
 
   @Test
   public void checkSetValue() {
     clipboard().setText("111");
     assertThat(clipboard().getText()).isEqualTo("111");
+  }
+
+  @Test
+  public void or() {
+    clipboard().setText("hello, world");
+    clipboard().shouldHave(content("aaa").or(content("hello, world")));
+    clipboard().shouldHave(content("hello, world").or(content("bbb")));
+    clipboard().shouldHave(content("aaa").or(content("bbb").or(content("hello, world"))));
+  }
+
+  @Test
+  void or_errorMessage() {
+    timeout = 2;
+    clipboard().setText("hello, world");
+    assertThatThrownBy(() -> clipboard().shouldHave(content("aaa").or(content("bbb"))))
+      .isInstanceOf(ConditionNotMetError.class)
+      .hasMessageStartingWith("clipboard should have content 'aaa' or content 'bbb'")
+      .hasMessageContaining("Actual value: hello, world")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 2ms");
+  }
+
+  @Test
+  void or_negative_errorMessage() {
+    timeout = 2;
+    clipboard().setText("hello, world");
+    assertThatThrownBy(() -> clipboard().shouldNotHave(content("good bye, world").or(content("hello, world"))))
+      .isInstanceOf(ConditionMetError.class)
+      .hasMessageStartingWith("clipboard should not have content 'good bye, world' or content 'hello, world'")
+      .hasMessageContaining("Actual value: hello, world")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 2ms");
   }
 }
