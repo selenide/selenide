@@ -163,6 +163,16 @@ subprojects {
     }
   }
 
+  // Unit tests (the built-in "test" task) run in parallel to speed up the build.
+  // Browser tasks (chrome, firefox, etc.) are excluded from this - they stay sequential,
+  // serialized by the browserTestLock service above.
+  tasks.named("test", Test).configure {
+    systemProperties['junit.jupiter.execution.parallel.enabled'] = 'true'
+    systemProperties['junit.jupiter.execution.parallel.mode.default'] = 'same_thread'
+    systemProperties['junit.jupiter.execution.parallel.mode.classes.default'] = 'concurrent'
+    systemProperties['junit.jupiter.execution.parallel.config.strategy'] = 'dynamic'
+  }
+
   tasks.register("allTests") {
     dependsOn tasks.named('clean'), tasks.named('check'), tasks.named('firefox_headless'), tasks.named('chrome_headless')
   }
