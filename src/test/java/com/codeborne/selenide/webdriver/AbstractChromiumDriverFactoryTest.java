@@ -13,12 +13,6 @@ class AbstractChromiumDriverFactoryTest {
   private final SelenideConfig config = new SelenideConfig().browser("firefox").downloadsFolder("not-used");
 
   @Test
-  void convertToChromiumFormat() {
-    assertThat(factory.convertToChromiumFormat("100x200")).isEqualTo("100,200");
-    assertThat(factory.convertToChromiumFormat("200x67")).isEqualTo("200,67");
-  }
-
-  @Test
   void enablesProxyForLocalhost() {
     List<String> args = factory.createChromiumArguments(config, "");
 

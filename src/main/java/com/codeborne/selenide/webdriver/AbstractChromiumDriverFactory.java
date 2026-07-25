@@ -4,6 +4,7 @@ import com.codeborne.selenide.Config;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.chromium.ChromiumOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,13 +42,15 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     arguments.addAll(createHeadlessArguments(config));
 
     String browserSize = config.browserSize();
-    if (browserSize != null && BrowserResizer.isValidDimension(browserSize)) {
-      arguments.add("--window-size=" + convertToChromiumFormat(browserSize));
+    if (browserSize != null) {
+      Dimension size = BrowserResizer.parseSize(browserSize);
+      arguments.add("--window-size=" + "%s,%s".formatted(size.width, size.height));
     }
 
     String browserPosition = config.browserPosition();
     if (browserPosition != null) {
-      arguments.add("--window-position=" + convertToChromiumFormat(browserPosition));
+      Point position = BrowserResizer.parsePosition(browserPosition);
+      arguments.add("--window-position=" + "%s,%s".formatted(position.x, position.y));
     }
 
     return arguments;
@@ -130,11 +133,6 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
       arguments.add("--mute-audio");
     }
     return arguments;
-  }
-
-  String convertToChromiumFormat(String wxh) {
-    Dimension size = BrowserResizer.parseDimension(wxh);
-    return "%s,%s".formatted(size.width, size.height);
   }
 
   protected Map<String, Object> parsePreferencesFromString(String preferencesString) {

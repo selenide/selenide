@@ -67,7 +67,7 @@ final class BrowserResizerTest {
 
     assertThatThrownBy(() -> factory.adjustBrowserSize(config, webdriver))
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("Browser size 1600,800 is incorrect");
+      .hasMessage("Invalid browser size: \"1600,800\". Expected format: \"300x200\".");
   }
 
   @Test
@@ -76,13 +76,13 @@ final class BrowserResizerTest {
 
     assertThatThrownBy(() -> factory.adjustBrowserPosition(config, webdriver))
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("Browser position 1600,800 is incorrect");
+      .hasMessage("Invalid browser position: \"1600,800\". Expected format: \"300x200\".");
   }
 
   @Test
   void parseDimension() {
-    assertThat(BrowserResizer.parseDimension("1920x1080")).isEqualTo(new Dimension(1920, 1080));
-    assertThat(BrowserResizer.parseDimension("-200x-100")).isEqualTo(new Dimension(-200, -100));
+    assertThat(BrowserResizer.parseSize("1920x1080")).isEqualTo(new Dimension(1920, 1080));
+    assertThat(BrowserResizer.parseSize("-200x-100")).isEqualTo(new Dimension(-200, -100));
   }
 
   @ParameterizedTest
