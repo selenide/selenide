@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -25,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.openqa.selenium.chrome.ChromeOptions.CAPABILITY;
 
+@Isolated("mutates JVM-global System properties")
 final class ChromeDriverFactoryTest {
   private static final String CHROME_OPTIONS_PREFS = "chromeoptions.prefs";
   private static final String CHROME_OPTIONS_ARGS = "chromeoptions.args";

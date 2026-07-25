@@ -4,6 +4,7 @@ import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 
@@ -14,6 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Isolated("mutates the static Configuration singleton")
 final class WebDriverThreadLocalContainerTest {
   private final BrowserHealthChecker browserHealthChecker = mock();
   private final WebDriverThreadLocalContainer container = new WebDriverThreadLocalContainer(browserHealthChecker);

@@ -3,9 +3,11 @@ package com.codeborne.selenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Isolated("mutates JVM-global System properties")
 final class SelenideConfigTest {
   @Test
   void getsReportsUrlFromSystemProperty() {

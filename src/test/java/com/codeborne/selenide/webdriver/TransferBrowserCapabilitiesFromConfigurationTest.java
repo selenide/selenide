@@ -6,12 +6,14 @@ import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+@Isolated("mutates JVM-global System properties")
 final class TransferBrowserCapabilitiesFromConfigurationTest {
   private static final String SOME_CAP = "some.cap";
   private final AbstractDriverFactory driverFactory = new ChromeDriverFactory();
