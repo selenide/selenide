@@ -16,7 +16,7 @@ class BrowserResizer {
   private static final Pattern DIMENSION_REGEX = Pattern.compile("(-?\\d+)x(-?\\d+)");
   private static final Logger log = LoggerFactory.getLogger(BrowserResizer.class);
 
-  void adjustBrowserPosition(Config config, WebDriver driver) {
+  static void adjustBrowserPosition(Config config, WebDriver driver) {
     String browserPosition = config.browserPosition();
     if (browserPosition != null) {
       log.info("Set browser position to {}", browserPosition);
@@ -28,7 +28,7 @@ class BrowserResizer {
     }
   }
 
-  void adjustBrowserSize(Config config, WebDriver driver) {
+  static void adjustBrowserSize(Config config, WebDriver driver) {
     String browserSize = config.browserSize();
     if (browserSize != null) {
       log.info("Set browser size to {}", browserSize);

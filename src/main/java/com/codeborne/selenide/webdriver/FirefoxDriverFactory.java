@@ -84,6 +84,11 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     }
   }
 
+  @Override
+  public void setBrowserSize(Config config, WebDriver webdriver) {
+    // not needed: we set Firefox size with "-width" and "-height" arguments
+  }
+
   protected void setupBrowserBinary(Config config, FirefoxOptions firefoxOptions) {
     if (isNotEmpty(config.browserBinary())) {
       log.info("Using browser binary: {}", config.browserBinary());
