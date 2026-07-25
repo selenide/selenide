@@ -57,7 +57,9 @@ public class WebDriverFactory {
     if (needBrowserResize(webdriver)) {
       browserResizer.adjustBrowserSize(config, webdriver);
     }
-    browserResizer.adjustBrowserPosition(config, webdriver);
+    if (needBrowserReposition(webdriver)) {
+      browserResizer.adjustBrowserPosition(config, webdriver);
+    }
     setLoadTimeout(config, webdriver);
 
     logVersions(webdriver);
@@ -67,6 +69,11 @@ public class WebDriverFactory {
   private boolean needBrowserResize(WebDriver webdriver) {
     Browser browser = detectBrowser(webdriver);
     return !browser.isChromium() && !"msedge".equals(browser.name) && !browser.isFirefox();
+  }
+
+  private boolean needBrowserReposition(WebDriver webdriver) {
+    Browser browser = detectBrowser(webdriver);
+    return !browser.isChromium();
   }
 
   private static Browser detectBrowser(WebDriver webdriver) {
