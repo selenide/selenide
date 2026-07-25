@@ -45,6 +45,11 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
       arguments.add("--window-size=" + convertToChromiumFormat(browserSize));
     }
 
+    String browserPosition = config.browserPosition();
+    if (browserPosition != null) {
+      arguments.add("--window-position=" + convertToChromiumFormat(browserPosition));
+    }
+
     return arguments;
   }
 
