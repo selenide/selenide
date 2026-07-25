@@ -17,11 +17,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 final class BrowserResizerTest {
-  private final BrowserResizer factory = spy(new BrowserResizer());
   private final WebDriver webdriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
   private final SelenideConfig config = new SelenideConfig();
 
@@ -29,7 +27,7 @@ final class BrowserResizerTest {
   void canConfigureBrowserWindowSize() {
     config.browserSize("1600x800");
 
-    factory.adjustBrowserSize(config, webdriver);
+    BrowserResizer.adjustBrowserSize(config, webdriver);
 
     verify(webdriver.manage().window()).setSize(new Dimension(1600, 800));
   }
@@ -38,7 +36,7 @@ final class BrowserResizerTest {
   void canConfigureBrowserWindowSize_null() {
     config.browserSize(null);
 
-    factory.adjustBrowserSize(config, webdriver);
+    BrowserResizer.adjustBrowserSize(config, webdriver);
 
     verify(webdriver.manage().window(), never()).setSize(any());
   }
@@ -47,7 +45,7 @@ final class BrowserResizerTest {
   void canConfigureBrowserWindowPosition() {
     config.browserPosition("20x40");
 
-    factory.adjustBrowserPosition(config, webdriver);
+    BrowserResizer.adjustBrowserPosition(config, webdriver);
 
     verify(webdriver.manage().window()).setPosition(new Point(20, 40));
   }
@@ -56,7 +54,7 @@ final class BrowserResizerTest {
   void canConfigureBrowserWindowPosition_null() {
     config.browserPosition(null);
 
-    factory.adjustBrowserPosition(config, webdriver);
+    BrowserResizer.adjustBrowserPosition(config, webdriver);
 
     verify(webdriver.manage().window(), never()).setPosition(any());
   }
@@ -65,7 +63,7 @@ final class BrowserResizerTest {
   void throwErrorIfBrowserWindowSizeIsIncorrect() {
     config.browserSize("1600,800");
 
-    assertThatThrownBy(() -> factory.adjustBrowserSize(config, webdriver))
+    assertThatThrownBy(() -> BrowserResizer.adjustBrowserSize(config, webdriver))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Invalid browser size: \"1600,800\". Expected format: \"300x200\".");
   }
@@ -74,7 +72,7 @@ final class BrowserResizerTest {
   void throwErrorIfBrowserPositionIsIncorrect() {
     config.browserPosition("1600,800");
 
-    assertThatThrownBy(() -> factory.adjustBrowserPosition(config, webdriver))
+    assertThatThrownBy(() -> BrowserResizer.adjustBrowserPosition(config, webdriver))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Invalid browser position: \"1600,800\". Expected format: \"300x200\".");
   }
