@@ -78,8 +78,8 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
 
   private void addFirefoxArguments(Config config, FirefoxOptions initialOptions) {
     String browserSize = config.browserSize();
-    if (browserSize != null && BrowserResizer.isValidDimension(browserSize)) {
-      Dimension size = BrowserResizer.parseDimension(browserSize);
+    if (browserSize != null) {
+      Dimension size = BrowserResizer.parseSize(browserSize);
       initialOptions.addArguments("-width", String.valueOf(size.width), "-height", String.valueOf(size.height));
     }
   }

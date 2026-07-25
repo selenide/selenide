@@ -20,6 +20,7 @@ import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBro
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
 import static java.lang.Boolean.TRUE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 @Isolated("mutates JVM-global System properties")
@@ -145,10 +146,9 @@ final class FirefoxDriverFactoryTest {
   void setsBrowserSizeWithFirefoxArgument_invalidDimension() {
     config.browserSize("600,500");
 
-    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
-
-    List<String> args = args(options);
-    assertThat(args).isNull();
+    assertThatThrownBy(() -> driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Invalid browser size: \"600,500\". Expected format: \"300x200\".");
   }
 
   @Test

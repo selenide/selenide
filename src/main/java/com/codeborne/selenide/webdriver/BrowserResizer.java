@@ -19,14 +19,8 @@ class BrowserResizer {
   void adjustBrowserPosition(Config config, WebDriver driver) {
     String browserPosition = config.browserPosition();
     if (browserPosition != null) {
-      if (!isValidDimension(browserPosition)) {
-        throw new IllegalArgumentException(String.format("Browser position %s is incorrect", browserPosition));
-      }
       log.info("Set browser position to {}", browserPosition);
-      String[] coordinates = browserPosition.split("x");
-      int x = parseInt(coordinates[0]);
-      int y = parseInt(coordinates[1]);
-      Point target = new Point(x, y);
+      Point target = parsePosition(browserPosition);
       Point current = driver.manage().window().getPosition();
       if (!current.equals(target)) {
         driver.manage().window().setPosition(target);
@@ -37,14 +31,9 @@ class BrowserResizer {
   void adjustBrowserSize(Config config, WebDriver driver) {
     String browserSize = config.browserSize();
     if (browserSize != null) {
-      if (!isValidDimension(browserSize)) {
-        throw new IllegalArgumentException(String.format("Browser size %s is incorrect", browserSize));
-      }
       log.info("Set browser size to {}", browserSize);
-      String[] dimension = browserSize.split("x");
-      int width = parseInt(dimension[0]);
-      int height = parseInt(dimension[1]);
-      driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height));
+      Dimension dimension = parseSize(browserSize);
+      driver.manage().window().setSize(dimension);
     }
   }
 
@@ -52,8 +41,21 @@ class BrowserResizer {
     return DIMENSION_REGEX.matcher(dimension).matches();
   }
 
-  static Dimension parseDimension(String dimension) {
+  static Dimension parseSize(String size) {
+    int[] wh = parse("browser size", size);
+    return new Dimension(wh[0], wh[1]);
+  }
+
+  static Point parsePosition(String position) {
+    int[] xy = parse("browser position", position);
+    return new Point(xy[0], xy[1]);
+  }
+
+  private static int[] parse(String name, String dimension) {
     Matcher matcher = DIMENSION_REGEX.matcher(dimension);
-    return new Dimension(parseInt(matcher.replaceFirst("$1")), parseInt(matcher.group(2)));
+    if (!matcher.matches()) {
+      throw new IllegalArgumentException(String.format("Invalid %s: \"%s\". Expected format: \"300x200\".", name, dimension));
+    }
+    return new int[] {parseInt(matcher.replaceFirst("$1")), parseInt(matcher.group(2))};
   }
 }
