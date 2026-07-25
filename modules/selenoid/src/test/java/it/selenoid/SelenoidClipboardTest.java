@@ -4,9 +4,10 @@ import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import static com.codeborne.selenide.ClipboardConditions.content;
 import static com.codeborne.selenide.Condition.attribute;
@@ -49,21 +50,11 @@ public class SelenoidClipboardTest {
     assertClipboardContains(multilineText);
   }
 
-  @SuppressWarnings("ErrorNotRethrown")
   private void assertClipboardContains(String expectedText) {
-    try {
-      clipboard().shouldHave(content(expectedText));
-      assertThat(clipboard().getText()).isEqualTo(expectedText);
-    }
-    catch (AssertionFailedError clipboardWasEmpty) {
-      log.info("Clipboard content was not expected {}", clipboardWasEmpty.toString());
+    // Selenide style
+    clipboard().shouldHave(content(expectedText).or(content("")));
 
-      clipboard().shouldHave(content("")
-        .because("Seems to be a bug in Selenoid. We cannot do anything, just ignore it."));
-
-      assertThat(clipboard().getText())
-        .as("Seems to be a bug in Selenoid. We cannot do anything, just ignore it.")
-        .isEqualTo("");
-    }
+    // AssertJ style
+    assertThat(List.of(expectedText, "")).contains(clipboard().getText());
   }
 }
