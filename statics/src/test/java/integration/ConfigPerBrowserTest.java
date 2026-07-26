@@ -134,8 +134,7 @@ public class ConfigPerBrowserTest extends IntegrationTest {
 
   private void assertBrowserClosed(@Nullable WebDriver webDriver, String explanation) {
     assertThat(webDriver).isNotNull();
-    assertThatThrownBy(() -> webDriver.getTitle())
-      .as(explanation)
+    assertThatThrownBy(() -> webDriver.getTitle(), explanation)
       .isInstanceOf(NoSuchSessionException.class);
   }
 }

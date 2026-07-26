@@ -40,8 +40,7 @@ final class ReadonlyElementsTest extends IntegrationTest {
 
     assertThatThrownBy(() -> {
       $(By.name("username")).val("another-username");
-    })
-      .as("should throw InvalidStateException where setting value to readonly/disabled element")
+    }, "should throw InvalidStateException where setting value to readonly/disabled element")
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("Element should be editable {By.name: username}")
       .hasMessageContaining("Timeout: 10ms");
@@ -62,8 +61,7 @@ final class ReadonlyElementsTest extends IntegrationTest {
 
     assertThatThrownBy(() -> {
       $(By.name("password")).setValue("another-pwd");
-    })
-      .as("should throw InvalidStateException where setting value to readonly/disabled element")
+    }, "should throw InvalidStateException where setting value to readonly/disabled element")
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("Element should be editable {By.name: password}")
       .hasMessageContaining("Actual value: disabled")
@@ -81,8 +79,7 @@ final class ReadonlyElementsTest extends IntegrationTest {
 
     assertThatThrownBy(() -> {
       $(By.name("username")).val("another-username");
-    })
-      .as("should throw InvalidStateException where setting value to readonly/disabled element")
+    }, "should throw InvalidStateException where setting value to readonly/disabled element")
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("Element should be editable {By.name: username}")
       .hasMessageContaining("Actual value: readonly=\"true\"")
@@ -100,8 +97,7 @@ final class ReadonlyElementsTest extends IntegrationTest {
 
     assertThatThrownBy(() -> {
       $(By.name("password")).setValue("another-pwd");
-    })
-      .as("should throw InvalidStateException where setting value to readonly/disabled element")
+    }, "should throw InvalidStateException where setting value to readonly/disabled element")
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("Element should be editable {By.name: password}")
       .hasMessageContaining("Timeout: 10ms");
