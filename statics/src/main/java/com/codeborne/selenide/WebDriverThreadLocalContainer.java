@@ -215,51 +215,41 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public void using(WebDriver driver, @Nullable SelenideProxyServer proxy, @Nullable DownloadsFolder downloadsFolder, Runnable lambda) {
     DownloadsFolder folder = downloadsFolder != null ? downloadsFolder : new SharedDownloadsFolder(config.downloadsFolder());
-    using(new WebDriverInstance(config, driver, proxy, folder), lambda);
+    using(new WebDriverInstance(config, driver, proxy, folder), lambda, false);
   }
 
-  private Optional<WebDriverInstance> using(WebDriverInstance webDriverInstance, Runnable lambda) {
+  private void using(WebDriverInstance webDriverInstance, Runnable lambda, boolean closeCurrentBrowserInLambda) {
     var previous = getCurrentThreadDriver();
     setWebDriver(webDriverInstance);
-    Optional<WebDriverInstance> latestOpenedBrowserInLambda;
+
     try {
       lambda.run();
     }
     finally {
-      latestOpenedBrowserInLambda = getCurrentThreadDriver();
+      if (closeCurrentBrowserInLambda) {
+        getCurrentThreadDriver().ifPresent(wd -> {
+          WebdriversRegistry.unregister(wd);
+          wd.dispose();
+        });
+      }
       resetWebDriver();
       previous.ifPresent(prev -> {
         setWebDriver(prev);
         config.set(prev.config());
       });
     }
-    return latestOpenedBrowserInLambda;
   }
 
   @Override
   public void inNewBrowser(Runnable lambda) {
     var newBrowser = createDriver();
-    try {
-      Optional<WebDriverInstance> latestOpenedBrowserInLambda = using(newBrowser, lambda);
-      latestOpenedBrowserInLambda.ifPresent(wd -> {
-        WebdriversRegistry.unregister(wd);
-        wd.dispose();
-      });
-    }
-    finally {
-      newBrowser.dispose();
-    }
+    using(newBrowser, lambda, true);
   }
 
   @Override
   public void inNewBrowser(Config config, Runnable lambda) {
     var newBrowser = createDriver(config);
-    try {
-      using(newBrowser, lambda);
-    }
-    finally {
-      newBrowser.dispose();
-    }
+    using(newBrowser, lambda, true);
   }
 
   @Override

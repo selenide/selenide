@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementShould;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,8 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
+
+import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Configuration.config;
@@ -25,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ConfigPerBrowserTest extends IntegrationTest {
   private static final SelenideElement h1 = $("h1");
-  private WebDriver webDriverOpenedDuringTest;
+  private @Nullable WebDriver webDriverOpenedDuringTest;
 
   @BeforeEach
   @AfterEach
@@ -87,6 +90,30 @@ public class ConfigPerBrowserTest extends IntegrationTest {
       h1.shouldHave(text("File uploads"));
       webDriverOpenedDuringTest = getWebDriver();
     });
+    assertBrowserClosed(webDriverOpenedDuringTest, "Webdriver should be closed in the end of `inNewBrowser`");
+
+    h1.shouldHave(text("Images"));
+    open("/page_with_images.html" + testName(), originalConfig);
+    h1.shouldHave(text("Images"));
+  }
+
+  @Test
+  public void inNewBrowser_withCustomConfigInside_shouldBeClosed_evenIfLambdaFailed() {
+    SelenideConfig originalConfig = new SelenideConfig().baseUrl(getBaseUrl());
+    open("/page_with_images.html" + testName(), originalConfig);
+    h1.shouldHave(text("Images"));
+
+    assertThatThrownBy(() -> {
+      inNewBrowser(() -> {
+        SelenideConfig anotherConfig = new SelenideConfig().baseUrl(getBaseUrl());
+        open("/page_with_uploads.html" + testName(), anotherConfig);
+        webDriverOpenedDuringTest = getWebDriver();
+        h1.shouldHave(text("Wrong header!"), Duration.ofMillis(1));
+      });
+    })
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have text \"Wrong header!\" {h1}");
+
     assertBrowserClosed(webDriverOpenedDuringTest, "Webdriver should be closed in the end of `inNewBrowser`");
 
     h1.shouldHave(text("Images"));
