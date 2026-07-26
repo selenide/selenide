@@ -19,7 +19,7 @@ public interface ObjectCondition<T> {
   String describe(T object);
 
   default String message(T object) {
-    return describe(object) + " " + description();
+    return describe(object) + " should have " + description();
   }
 
   default CheckResult result(T object, boolean met, @Nullable Object actualValue) {

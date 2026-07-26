@@ -17,12 +17,12 @@ public class ItemWithValue implements ObjectCondition<LocalStorage> {
 
   @Override
   public String description() {
-    return String.format("should have item '%s' with value '%s'", item, value);
+    return String.format("item '%s' with value '%s'", item, value);
   }
 
   @Override
   public String negativeDescription() {
-    return String.format("should not have item '%s' with value '%s'", item, value);
+    return String.format("item '%s' with value '%s'", item, value);
   }
 
   private String actualValue(LocalStorage localStorage) {

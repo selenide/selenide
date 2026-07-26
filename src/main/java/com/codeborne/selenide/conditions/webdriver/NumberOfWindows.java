@@ -13,12 +13,12 @@ public class NumberOfWindows implements ObjectCondition<WebDriver> {
 
   @Override
   public String description() {
-    return "should have " + expectedNumberOfWindows + " window(s)";
+    return expectedNumberOfWindows + " window(s)";
   }
 
   @Override
   public String negativeDescription() {
-    return "should not have " + expectedNumberOfWindows + " window(s)";
+    return expectedNumberOfWindows + " window(s)";
   }
 
   @Override

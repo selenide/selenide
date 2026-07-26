@@ -13,12 +13,12 @@ public class Content implements ObjectCondition<Clipboard> {
 
   @Override
   public String description() {
-    return String.format("should have content '%s'", expectedContent);
+    return String.format("content '%s'", expectedContent);
   }
 
   @Override
   public String negativeDescription() {
-    return String.format("should not have content '%s'", expectedContent);
+    return String.format("content '%s'", expectedContent);
   }
 
   @Override

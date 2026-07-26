@@ -4,7 +4,7 @@ import org.jspecify.annotations.Nullable;
 
 public class UrlStartingWith extends UrlCondition {
   public UrlStartingWith(String expectedUrl) {
-    super("starting with ", expectedUrl);
+    super("url starting with", expectedUrl);
   }
 
   @Override
