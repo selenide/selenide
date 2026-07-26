@@ -218,26 +218,33 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     using(new WebDriverInstance(config, driver, proxy, folder), lambda);
   }
 
-  private void using(WebDriverInstance webDriverInstance, Runnable lambda) {
+  private Optional<WebDriverInstance> using(WebDriverInstance webDriverInstance, Runnable lambda) {
     var previous = getCurrentThreadDriver();
     setWebDriver(webDriverInstance);
+    Optional<WebDriverInstance> latestOpenedBrowserInLambda;
     try {
       lambda.run();
     }
     finally {
+      latestOpenedBrowserInLambda = getCurrentThreadDriver();
       resetWebDriver();
       previous.ifPresent(prev -> {
         setWebDriver(prev);
         config.set(prev.config());
       });
     }
+    return latestOpenedBrowserInLambda;
   }
 
   @Override
   public void inNewBrowser(Runnable lambda) {
     var newBrowser = createDriver();
     try {
-      using(newBrowser, lambda);
+      Optional<WebDriverInstance> latestOpenedBrowserInLambda = using(newBrowser, lambda);
+      latestOpenedBrowserInLambda.ifPresent(wd -> {
+        WebdriversRegistry.unregister(wd);
+        wd.dispose();
+      });
     }
     finally {
       newBrowser.dispose();
