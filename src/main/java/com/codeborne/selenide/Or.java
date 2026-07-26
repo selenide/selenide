@@ -22,11 +22,6 @@ class Or<T> implements ObjectCondition<T> {
   }
 
   @Override
-  public String negativeDescription() {
-    return description();
-  }
-
-  @Override
   public CheckResult check(T object) {
     List<CheckResult> results = new ArrayList<>();
     for (ObjectCondition<T> c : List.of(first, second)) {

@@ -18,11 +18,6 @@ public class CookieWithNameAndValue implements ObjectCondition<CookieStore> {
   }
 
   @Override
-  public String negativeDescription() {
-    return delegate.negativeDescription();
-  }
-
-  @Override
   @Nullable
   public String expectedValue() {
     return delegate.expectedValue();

@@ -9,7 +9,13 @@ import static com.codeborne.selenide.CheckResult.rejected;
 public interface ObjectCondition<T> {
   String description();
 
-  String negativeDescription();
+  /**
+   * @deprecated not used anymore. Just remove it.
+   */
+  @Deprecated(forRemoval = true)
+  default String negativeDescription() {
+    return description();
+  }
 
   CheckResult check(T object);
 

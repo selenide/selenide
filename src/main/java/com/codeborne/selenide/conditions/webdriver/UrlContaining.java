@@ -13,11 +13,6 @@ public class UrlContaining extends UrlCondition {
   }
 
   @Override
-  public String negativeDescription() {
-    return description();
-  }
-
-  @Override
   public boolean test(@Nullable String url) {
     return url != null && url.contains(expectedUrl);
   }

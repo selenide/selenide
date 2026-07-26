@@ -22,11 +22,6 @@ public abstract class CurrentFrameCondition implements ObjectCondition<WebDriver
   }
 
   @Override
-  public String negativeDescription() {
-    return name + " " + expectedUrl;
-  }
-
-  @Override
   public String expectedValue() {
     return expectedUrl;
   }

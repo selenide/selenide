@@ -16,11 +16,6 @@ public class Item implements ObjectCondition<LocalStorage> {
     return String.format("item '%s'", item);
   }
 
-  @Override
-  public String negativeDescription() {
-    return String.format("item '%s'", item);
-  }
-
   private String actualValue(LocalStorage localStorage) {
     return localStorage.getItems().toString();
   }

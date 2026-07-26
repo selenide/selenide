@@ -21,11 +21,6 @@ public class ItemWithValue implements ObjectCondition<SessionStorage> {
     return String.format("item '%s' with value '%s'", item, value);
   }
 
-  @Override
-  public String negativeDescription() {
-    return String.format("item '%s' with value '%s'", item, value);
-  }
-
   private String actualValue(SessionStorage sessionStorage) {
     return sessionStorage.getItems().toString();
   }

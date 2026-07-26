@@ -19,11 +19,6 @@ public class CookieWithName implements ObjectCondition<WebDriver> {
   }
 
   @Override
-  public String negativeDescription() {
-    return String.format("cookie with name \"%s\"", expectedName);
-  }
-
-  @Override
   public CheckResult check(WebDriver webDriver) {
     Cookie cookie = webDriver.manage().getCookieNamed(expectedName);
     return result(webDriver, cookie != null, actualValue(webDriver));

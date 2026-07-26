@@ -175,11 +175,6 @@ final class LocalStorageTest extends IntegrationTest {
       }
 
       @Override
-      public String negativeDescription() {
-        return String.format("all items containing '%s'", expectedValue);
-      }
-
-      @Override
       public CheckResult check(LocalStorage localStorage) {
         return localStorage.getItems().values().stream()
           .allMatch(value -> value.contains(expectedValue)) ?
