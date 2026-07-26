@@ -267,11 +267,6 @@ final class WebDriverConditionsTest extends IntegrationTest {
       }
 
       @Override
-      public String negativeDescription() {
-        return "cookie with name '" + expectedCookieName + "'";
-      }
-
-      @Override
       public CheckResult check(WebDriver webdriver) {
         return webdriver.manage().getCookieNamed(expectedCookieName) != null ?
           accepted(actualValue(webdriver)) :

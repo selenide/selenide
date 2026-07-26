@@ -25,11 +25,6 @@ public abstract class UrlCondition implements ObjectCondition<WebDriver> {
   }
 
   @Override
-  public String negativeDescription() {
-    return name + " " + expectedUrl;
-  }
-
-  @Override
   public String describe(WebDriver webDriver) {
     return "webdriver";
   }

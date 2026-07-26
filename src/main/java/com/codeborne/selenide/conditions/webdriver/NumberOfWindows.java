@@ -17,11 +17,6 @@ public class NumberOfWindows implements ObjectCondition<WebDriver> {
   }
 
   @Override
-  public String negativeDescription() {
-    return expectedNumberOfWindows + " window(s)";
-  }
-
-  @Override
   public CheckResult check(WebDriver webDriver) {
     int count = webDriver.getWindowHandles().size();
     return result(webDriver, count == expectedNumberOfWindows, String.valueOf(count));

@@ -20,11 +20,6 @@ public class ItemWithValue implements ObjectCondition<LocalStorage> {
     return String.format("item '%s' with value '%s'", item, value);
   }
 
-  @Override
-  public String negativeDescription() {
-    return String.format("item '%s' with value '%s'", item, value);
-  }
-
   private String actualValue(LocalStorage localStorage) {
     return localStorage.getItems().toString();
   }

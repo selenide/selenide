@@ -17,11 +17,6 @@ public class Content implements ObjectCondition<Clipboard> {
   }
 
   @Override
-  public String negativeDescription() {
-    return String.format("content '%s'", expectedContent);
-  }
-
-  @Override
   public CheckResult check(Clipboard clipboard) {
     String clipboardText = clipboard.getText();
     return result(clipboard, clipboardText.equals(expectedContent), clipboardText);

@@ -25,11 +25,6 @@ public class Title implements ObjectCondition<WebDriver> {
   }
 
   @Override
-  public String negativeDescription() {
-    return "title " + expectedTitle;
-  }
-
-  @Override
   public String describe(WebDriver webDriver) {
     return "Page";
   }

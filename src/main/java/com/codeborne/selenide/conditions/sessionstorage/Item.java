@@ -17,11 +17,6 @@ public class Item implements ObjectCondition<SessionStorage> {
     return String.format("item '%s'", item);
   }
 
-  @Override
-  public String negativeDescription() {
-    return String.format("item '%s'", item);
-  }
-
   private String actualValue(SessionStorage sessionStorage) {
     return sessionStorage.getItems().toString();
   }
