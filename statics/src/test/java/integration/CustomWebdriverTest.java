@@ -53,6 +53,7 @@ final class CustomWebdriverTest extends IntegrationTest {
     });
 
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
+    assertThat(browser1.getCurrentUrl()).contains("page_with_selects_without_jquery.html");
 
     using(browser2, () -> {
       openFile("file_upload_form.html");
@@ -61,6 +62,7 @@ final class CustomWebdriverTest extends IntegrationTest {
     });
 
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
+    assertThat(browser2.getCurrentUrl()).contains("file_upload_form.html");
 
     using(browser1, () -> {
       $("h1").shouldBe(visible).shouldHave(text("Page with selects"));
@@ -68,6 +70,7 @@ final class CustomWebdriverTest extends IntegrationTest {
     });
 
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
+    assertThat(browser1.getCurrentUrl()).contains("page_with_selects_without_jquery.html");
 
     using(browser2, () -> {
       $("h1").shouldBe(visible).shouldHave(text("File upload form"));
@@ -75,6 +78,7 @@ final class CustomWebdriverTest extends IntegrationTest {
     });
 
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
+    assertThat(browser2.getCurrentUrl()).contains("file_upload_form.html");
   }
 
   @Test
