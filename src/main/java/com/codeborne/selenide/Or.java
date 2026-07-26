@@ -23,7 +23,7 @@ class Or<T> implements ObjectCondition<T> {
 
   @Override
   public String negativeDescription() {
-    return "not(%s)".formatted(description());
+    return description();
   }
 
   @Override

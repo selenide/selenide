@@ -39,7 +39,7 @@ public class Waiter {
   }
 
   private <T> void wait(Driver driver, T subject, ObjectCondition<T> condition, long timeout, long pollingInterval) {
-    SelenideLog log = SelenideLogger.beginStep(condition.describe(subject), condition.description());
+    SelenideLog log = SelenideLogger.beginStep(condition.describe(subject), "should have " + condition.description());
     CheckResult result = null;
     Exception error = null;
     for (long start = currentTimeMillis(); !isTimeoutExceeded(timeout, start); ) {
@@ -71,7 +71,7 @@ public class Waiter {
   }
 
   private <T> void waitWhile(Driver driver, T subject, ObjectCondition<T> condition, long timeout, long pollingInterval) {
-    SelenideLog log = SelenideLogger.beginStep(subject.toString(), condition.negativeDescription());
+    SelenideLog log = SelenideLogger.beginStep(subject.toString(), "should not have " + condition.negativeDescription());
     CheckResult result = null;
     Exception error = null;
     for (long start = currentTimeMillis(); !isTimeoutExceeded(timeout, start); ) {

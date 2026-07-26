@@ -8,7 +8,7 @@ public class ConditionNotMetError extends ObjectConditionError {
   public <T> ConditionNotMetError(ObjectCondition<T> condition, T subject,
                                   @Nullable CheckResult checkResult, @Nullable Exception cause) {
     super(
-      condition.describe(subject) + " " + condition.description(),
+      condition.describe(subject) + " should have " + condition.description(),
       condition.expectedValue(),
       checkResult == null ? null : checkResult.getActualValue(),
       cause

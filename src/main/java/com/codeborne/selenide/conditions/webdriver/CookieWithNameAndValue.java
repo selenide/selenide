@@ -19,12 +19,12 @@ public class CookieWithNameAndValue implements ObjectCondition<WebDriver> {
 
   @Override
   public String description() {
-    return String.format("should have a cookie with name \"%s\" and value \"%s\"", name, value);
+    return String.format("cookie with name \"%s\" and value \"%s\"", name, value);
   }
 
   @Override
   public String negativeDescription() {
-    return String.format("should not have cookie with name \"%s\" and value \"%s\"", name, value);
+    return String.format("cookie with name \"%s\" and value \"%s\"", name, value);
   }
 
   @Override

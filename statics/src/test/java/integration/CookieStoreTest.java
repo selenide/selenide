@@ -78,7 +78,7 @@ final class CookieStoreTest extends IntegrationTest {
       cookies().shouldHave(cookie("foo"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetError.class)
-      .hasMessageStartingWith("cookieStore should have a cookie with name \"foo\"")
+      .hasMessageStartingWith("cookieStore should have cookie with name \"foo\"")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 10ms");
@@ -93,7 +93,7 @@ final class CookieStoreTest extends IntegrationTest {
       cookies().shouldHave(cookie(NAME, "wrong value"))
     )
       .isInstanceOf(ConditionNotMetError.class)
-      .hasMessageStartingWith("cookieStore should have a cookie with name \"%s\" and value \"wrong value\"".formatted(NAME))
+      .hasMessageStartingWith("cookieStore should have cookie with name \"%s\" and value \"wrong value\"".formatted(NAME))
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 1ms");

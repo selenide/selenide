@@ -34,7 +34,7 @@ class OrTest extends ITest {
     setTimeout(2);
     assertThatThrownBy(() -> driver().webdriver().shouldHave(url("foo:foo").or(url("bar:bar"))))
       .isInstanceOf(UIAssertionError.class)
-      .hasMessageStartingWith("webdriver should have url foo:foo or should have url bar:bar") // TODO improve wording
+      .hasMessageStartingWith("webdriver should have url foo:foo or url bar:bar")
       .hasMessageContaining("Actual value: about:blank" + testName())
       .hasMessageContaining("Screenshot:")
       .hasMessageContaining("Page source:")
@@ -46,7 +46,7 @@ class OrTest extends ITest {
     setTimeout(3);
     assertThatThrownBy(() -> driver().webdriver().shouldNotHave(url("foo:foo").or(urlStartingWith("about:blank"))))
       .isInstanceOf(UIAssertionError.class)
-      .hasMessageStartingWith("webdriver not(should have url foo:foo or should have url starting with about:blank)") // TODO fix wording
+      .hasMessageStartingWith("webdriver should not have url foo:foo or url starting with about:blank")
       .hasMessageContaining("Actual value: about:blank" + testName())
       .hasMessageContaining("Screenshot:")
       .hasMessageContaining("Page source:")

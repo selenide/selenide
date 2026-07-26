@@ -171,12 +171,12 @@ final class LocalStorageTest extends IntegrationTest {
     return new ObjectCondition<>() {
       @Override
       public String description() {
-        return String.format("should have all items containing '%s'", expectedValue);
+        return String.format("all items containing '%s'", expectedValue);
       }
 
       @Override
       public String negativeDescription() {
-        return String.format("should not have all items containing '%s'", expectedValue);
+        return String.format("all items containing '%s'", expectedValue);
       }
 
       @Override

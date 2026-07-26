@@ -15,12 +15,12 @@ public class CookieWithName implements ObjectCondition<WebDriver> {
 
   @Override
   public String description() {
-    return String.format("should have a cookie with name \"%s\"", expectedName);
+    return String.format("cookie with name \"%s\"", expectedName);
   }
 
   @Override
   public String negativeDescription() {
-    return String.format("should not have cookie with name \"%s\"", expectedName);
+    return String.format("cookie with name \"%s\"", expectedName);
   }
 
   @Override

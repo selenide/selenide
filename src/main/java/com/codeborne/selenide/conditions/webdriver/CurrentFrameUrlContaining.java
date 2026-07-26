@@ -2,7 +2,7 @@ package com.codeborne.selenide.conditions.webdriver;
 
 public class CurrentFrameUrlContaining extends CurrentFrameCondition {
   public CurrentFrameUrlContaining(String expectedUrl) {
-    super("containing ", expectedUrl);
+    super("url containing", expectedUrl);
   }
 
   @Override
