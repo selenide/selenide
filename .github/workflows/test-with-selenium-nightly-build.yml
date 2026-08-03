@@ -25,7 +25,7 @@ jobs:
         uses: browser-actions/setup-chrome@latest
         with:
           chrome-version: stable
-      - uses: gradle/actions/setup-gradle@v6
+      - uses: gradle/actions/setup-gradle@v6.2.0
       - name: Build with Gradle
         run: ./gradlew ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.47.0-SNAPSHOT --no-daemon --console=plain
       - uses: actions/upload-artifact@v7
