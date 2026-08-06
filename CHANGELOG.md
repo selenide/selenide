@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.18.0 (unreleased)
+* add Selenide CLI (`selenide-cli`): a command-line tool over a background browser daemon that records actions and generates Selenide Java; also published to npm as `selenide-cli`
+
 ## 7.17.0 (12.07.2026)
 * #3359 Add "byRole" locator - find elements by ARIA role (#3336)
 * Add more MCP tools (browser_network_requests, browser_fill_form, browser_tab_list, browser_resize etc.) (#3335)

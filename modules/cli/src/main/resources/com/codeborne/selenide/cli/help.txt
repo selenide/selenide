@@ -1,0 +1,37 @@
+Commands (recorded):
+  open <url>                        navigate to a URL
+  click <sel>                       click an element
+  setValue <sel> <text>             type text into a field  (alias: type)
+  append <sel> <text>               append text to a field
+  clear <sel>                       clear a field
+  selectOption <sel> <text>         select a dropdown option
+  selectRadio <sel> <value>         select a radio button
+  check <sel> / uncheck <sel>       (un)check a checkbox
+  setSelected <sel> <true|false>    set checkbox/radio state
+  hover <sel>                       move the mouse over an element
+  doubleClick <sel>                 double-click an element
+  contextClick <sel>                right-click an element
+  pressEnter|pressTab|pressEscape <sel>
+  scrollTo <sel>                    scroll to an element
+  should <sel> <cond> [value]       assert a condition, e.g.
+                                      should #msg visible
+                                      should #msg text Welcome
+                                      should #inp value 42
+                                      should #a attribute href /home
+                                    conditions: visible, hidden, exist, disappear, enabled,
+                                    disabled, selected, checked, editable, readonly, empty,
+                                    focused, text, exactText, value, exactValue, cssClass,
+                                    matchText, attribute <name> [value]
+  back | forward | refresh          browser navigation
+  screenshot [name]                 save a screenshot
+
+Selectors: CSS by default; use prefixes  text=<text>  or  xpath=<expr>  (or //... for xpath).
+Values with spaces may be wrapped in double quotes: setValue #q "hello world"
+
+Meta commands (not recorded):
+  code            print the generated Selenide code so far
+  save <file>     write the generated code to a file
+  undo            remove the last recorded step
+  reset           clear the recording
+  help            show this help
+  exit | quit     close the browser and print the generated code

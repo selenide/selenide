@@ -18,6 +18,7 @@ dependencies {
     }
   }
 
+  testImplementation project(':modules:cli')
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
   testImplementation("org.mockito:mockito-core:$mockitoVersion")
