@@ -13,7 +13,7 @@ ext {
   littleProxyVersion = '2.9.0'
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.9'
-  archunitVersion = '1.4.2'
+  archunitVersion = '1.5.0'
   jacksonVersion = '2.22.1'
   systemStubsVersion = '2.1.8'
 }
