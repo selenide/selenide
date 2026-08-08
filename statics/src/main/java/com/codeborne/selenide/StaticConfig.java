@@ -54,6 +54,11 @@ final class StaticConfig implements Config {
   }
 
   @Override
+  public boolean savePageSourceWithResources() {
+    return Configuration.savePageSourceWithResources;
+  }
+
+  @Override
   public String reportsFolder() {
     return Configuration.reportsFolder;
   }
