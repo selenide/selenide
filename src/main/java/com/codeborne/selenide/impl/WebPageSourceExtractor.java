@@ -5,7 +5,6 @@ import com.codeborne.selenide.Config;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -35,12 +34,13 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
 
   @CanIgnoreReturnValue
   private File extract(Config config, WebDriver driver, String fileName, boolean retryIfAlert) {
+    File pageSource = createFile(config, driver, fileName);
     try {
-      return doExtract(config, driver, fileName);
+      return doExtract(config, driver, fileName, pageSource);
     }
     catch (UnhandledAlertException e) {
       if (retryIfAlert) {
-        return retryingExtractionOnAlert(config, driver, fileName, e);
+        return retryingExtractionOnAlert(config, driver, fileName, pageSource, e);
       }
       else {
         printOnce("savePageSourceToFile", e);
@@ -48,31 +48,28 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     }
     catch (WebDriverException e) {
       log.warn("Failed to save page source to {}", fileName, e);
-      File pageSource = createFile(config, driver, fileName);
       writeToFile(e.toString(), pageSource);
       return pageSource;
     }
     catch (RuntimeException e) {
       log.error("Failed to save page source to {}", fileName, e);
-      File pageSource = createFile(config, driver, fileName);
       writeToFile(e.toString(), pageSource);
       return pageSource;
     }
-    return createFile(config, driver, fileName);
+    return pageSource;
   }
 
-  private File doExtract(Config config, WebDriver driver, String fileName) {
+  private File doExtract(Config config, WebDriver driver, String fileName, File pageSource) {
     if (config.savePageSourceWithResources()) {
       @Nullable String mhtml = extractMhtml(driver);
       if (mhtml != null) {
-        File pageSource = createFileWithExtension(config, fileName, "mhtml");
-        writeToFile(mhtml, pageSource);
-        attachmentHandler.attach(pageSource);
-        return pageSource;
+        File mhtmlFile = createFileWithExtension(config, fileName, "mhtml");
+        writeToFile(mhtml, mhtmlFile);
+        attachmentHandler.attach(mhtmlFile);
+        return mhtmlFile;
       }
     }
 
-    File pageSource = createFile(config, driver, fileName);
     String source = driver.getPageSource();
     if (source == null) {
       log.error("Failed to save page source to {}: page source is <null>", fileName);
@@ -87,7 +84,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
 
   @Nullable
   private String extractMhtml(WebDriver driver) {
-    if (!(driver instanceof HasCdp hasCdp) || !isChromium(driver)) {
+    if (!(driver instanceof HasCdp hasCdp) || !Browser.isChromium(driver)) {
       return null;
     }
     try {
@@ -102,11 +99,6 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
       log.warn("Failed to save page as MHTML, will fallback to plain HTML: {}", e.toString());
     }
     return null;
-  }
-
-  private boolean isChromium(WebDriver driver) {
-    return driver instanceof HasCapabilities hasCapabilities &&
-      new Browser(hasCapabilities.getCapabilities().getBrowserName(), false).isChromium();
   }
 
   protected File createFile(Config config, WebDriver driver, String fileName) {
@@ -136,7 +128,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     }
   }
 
-  private File retryingExtractionOnAlert(Config config, WebDriver driver, String fileName, Exception e) {
+  private File retryingExtractionOnAlert(Config config, WebDriver driver, String fileName, File pageSource, Exception e) {
     try {
       Alert alert = driver.switchTo().alert();
       log.error("{}: {}", e, alert.getText());
@@ -145,7 +137,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     }
     catch (Exception unableToCloseAlert) {
       log.error("Failed to close alert", unableToCloseAlert);
-      return createFile(config, driver, fileName);
+      return pageSource;
     }
   }
 }
