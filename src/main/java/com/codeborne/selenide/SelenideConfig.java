@@ -45,6 +45,7 @@ public class SelenideConfig implements Config {
   private boolean screenshots = properties.getBoolean("selenide.screenshots", true);
 
   private boolean savePageSource = properties.getBoolean("selenide.savePageSource", true);
+  private boolean savePageSourceWithResources = properties.getBoolean("selenide.savePageSourceWithResources", false);
   private String reportsFolder = getProperty("selenide.reportsFolder", "build/reports/tests");
   private String downloadsFolder = getProperty("selenide.downloadsFolder", "build/downloads");
   @Nullable
@@ -148,6 +149,17 @@ public class SelenideConfig implements Config {
   @CanIgnoreReturnValue
   public SelenideConfig savePageSource(boolean savePageSource) {
     this.savePageSource = savePageSource;
+    return this;
+  }
+
+  @Override
+  public boolean savePageSourceWithResources() {
+    return savePageSourceWithResources;
+  }
+
+  @CanIgnoreReturnValue
+  public SelenideConfig savePageSourceWithResources(boolean savePageSourceWithResources) {
+    this.savePageSourceWithResources = savePageSourceWithResources;
     return this;
   }
 

@@ -85,6 +85,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.proxyHost = "";
     Configuration.fileDownload = HTTPGET;
     Configuration.reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "false"));
+    Configuration.savePageSourceWithResources = false;
     Configuration.textCheck = FULL_TEXT;
     Configuration.browserCapabilities = defaultBrowserCapabilities();
     Configuration.remoteConnectionTimeout = Duration.ofSeconds(10).toMillis();

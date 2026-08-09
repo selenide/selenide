@@ -122,6 +122,11 @@ final class ThreadLocalSelenideConfig implements Config {
   }
 
   @Override
+  public boolean savePageSourceWithResources() {
+    return config.get().savePageSourceWithResources();
+  }
+
+  @Override
   public String reportsFolder() {
     return config.get().reportsFolder();
   }
