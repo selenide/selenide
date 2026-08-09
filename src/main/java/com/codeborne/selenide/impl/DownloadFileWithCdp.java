@@ -11,7 +11,6 @@ import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import org.jspecify.annotations.Nullable;
-import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.devtools.DevTools;
@@ -149,7 +148,7 @@ public class DownloadFileWithCdp {
         "The browser you selected \"%s\" doesn't support Chrome Devtools protocol".formatted(driver.browser().name));
     }
 
-    if (!isChromium(webDriver)) {
+    if (!com.codeborne.selenide.Browser.isChromium(webDriver)) {
       throw new IllegalArgumentException(
         "The browser you selected \"%s\" is not Chromium browser".formatted(driver.browser().name));
     }
@@ -158,11 +157,6 @@ public class DownloadFileWithCdp {
     devTools.createSessionIfThereIsNotOne(webDriver.getWindowHandle());
     devTools.send(Page.enable(Optional.empty()));
     return devTools;
-  }
-
-  private boolean isChromium(WebDriver webDriver) {
-    return webDriver instanceof HasCapabilities hasCapabilities &&
-      new com.codeborne.selenide.Browser(hasCapabilities.getCapabilities().getBrowserName(), false).isChromium();
   }
 
   private void prepareDownloadWithCdp(Driver driver, DevTools devTools,
