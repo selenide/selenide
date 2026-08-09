@@ -48,7 +48,7 @@ final class BrowserTest {
 
   @Test
   void isNotChromium_whenDriverDoesNotExposeCapabilities() {
-    WebDriver driver = mock(WebDriver.class);
+    WebDriver driver = mock();
     assertThat(Browser.isChromium(driver)).isFalse();
   }
 
@@ -56,7 +56,7 @@ final class BrowserTest {
   }
 
   private static WebDriver driverWithBrowserName(String browserName) {
-    CapableWebDriver driver = mock(CapableWebDriver.class);
+    CapableWebDriver driver = mock();
     when(driver.getCapabilities()).thenReturn(new MutableCapabilities(Map.of("browserName", browserName)));
     return driver;
   }
