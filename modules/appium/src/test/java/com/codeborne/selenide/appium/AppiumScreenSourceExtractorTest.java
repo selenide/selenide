@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AppiumScreenSourceExtractorTest {
   private final Config config = new SelenideConfig().reportsFolder("foo");
@@ -24,6 +25,14 @@ class AppiumScreenSourceExtractorTest {
   void shouldUseXMLFileExtension_forMobileDriver(AppiumDriver driver) {
     File sourceFile = extractor.createFile(config, driver, "test123");
     assertThat(sourceFile.getName()).isEqualTo("test123.xml");
+  }
+
+  @ParameterizedTest
+  @MethodSource("mobileDrivers")
+  void rejectsPathTraversalInFileName_forMobileDriver(AppiumDriver driver) {
+    assertThatThrownBy(() -> extractor.createFile(config, driver, "../../outside"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Invalid file name: ../../outside");
   }
 
   @ParameterizedTest
