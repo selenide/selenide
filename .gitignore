@@ -18,7 +18,7 @@ classes
 
 # Ignore AI stuff
 /.mcp.json
-/.claude/settings.local.json
+/.claude/settings*.json
 /.claude/worktrees/
 
 # Ignore all binary files
