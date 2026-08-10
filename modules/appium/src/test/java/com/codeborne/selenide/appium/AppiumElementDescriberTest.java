@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 public class AppiumElementDescriberTest {
   private final AppiumElementDescriber describer = new AppiumElementDescriber();
-  private final WebElement element = mock(WebElement.class);
+  private final WebElement element = mock();
 
   @Test
   public void printsTagName_ifPresent() {

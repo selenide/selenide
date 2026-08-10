@@ -16,7 +16,7 @@ class DeepLinkLauncherTest {
 
   @Test
   void shouldSendAppIdForAndroid() {
-    AndroidDriver androidDriver = mock(AndroidDriver.class);
+    AndroidDriver androidDriver = mock();
     ArgumentCaptor<Map<String, String>> params = captor();
     ArgumentCaptor<String> script = ArgumentCaptor.forClass(String.class);
     when(androidDriver.executeScript(script.capture(), params.capture())).thenReturn("ok");

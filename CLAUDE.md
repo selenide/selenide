@@ -87,6 +87,8 @@ All plugin modules depend on `statics` (which transitively provides `core`).
 - Prefer immutable objects. Prefer private final non-nullable fields.
 - Write tests for new code. Prefer integration tests for any actions related to browser, and 
   unit-tests for algorithmic code (regular expressions, string manipulation etc.) 
+- Prefer Mockito's type-inferred `mock()` over `mock(Class)` when the target type can be inferred
+  from the variable declaration, e.g. `WebDriver driver = mock();` instead of `mock(WebDriver.class)`.
 
 ## Branching
 

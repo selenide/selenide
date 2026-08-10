@@ -22,8 +22,8 @@ final class WebdriverPhotographerTest {
 
   @Test
   void devToolsThrows_fallsBackToTakesScreenshot() {
-    DevToolsDriver driver = mock(DevToolsDriver.class);
-    DevTools devTools = mock(DevTools.class);
+    DevToolsDriver driver = mock();
+    DevTools devTools = mock();
     doReturn(devTools).when(driver).getDevTools();
     doThrow(new RuntimeException("no-op implementation")).when(devTools).send(any(), any());
     doReturn("window1").when(driver).getWindowHandle();
@@ -40,8 +40,8 @@ final class WebdriverPhotographerTest {
 
   @Test
   void transientError_doesNotDisableDevToolsOnNextCall() {
-    DevToolsDriver driver = mock(DevToolsDriver.class);
-    DevTools devTools = mock(DevTools.class);
+    DevToolsDriver driver = mock();
+    DevTools devTools = mock();
     doReturn(devTools).when(driver).getDevTools();
     doReturn("window1").when(driver).getWindowHandle();
 
@@ -62,7 +62,7 @@ final class WebdriverPhotographerTest {
 
   @Test
   void noSupportedInterfaces_returnsEmpty() {
-    WebDriver driver = mock(WebDriver.class);
+    WebDriver driver = mock();
 
     Optional<byte[]> result = photographer.takeScreenshot(driver, OutputType.BYTES);
 

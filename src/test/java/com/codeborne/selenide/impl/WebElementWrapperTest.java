@@ -7,7 +7,6 @@ import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -15,7 +14,7 @@ import static org.mockito.Mockito.when;
 
 final class WebElementWrapperTest {
   private final SelenideConfig config = new SelenideConfig();
-  private final WebDriver webDriver = mock(FirefoxDriver.class);
+  private final WebDriver webDriver = mock();
   private final Driver driver = new DriverStub(config, new Browser("firefox", false), webDriver, null);
   private final WebElement element = createWebElement();
 

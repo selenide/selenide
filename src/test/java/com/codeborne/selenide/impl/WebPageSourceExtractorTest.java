@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chromium.HasCdp;
-import org.openqa.selenium.MutableCapabilities;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -41,7 +41,7 @@ final class WebPageSourceExtractorTest {
   @Test
   void savesMhtmlForChromiumBrowserWhenResourcesEnabledAndCdpWorks() throws Exception {
     config.savePageSourceWithResources(true);
-    ChromiumDriver driver = mock(ChromiumDriver.class);
+    ChromiumDriver driver = mock();
     when(driver.getCapabilities()).thenReturn(chromeCapabilities());
     doReturn(Map.of("data", "From: <Saved by Blink>\r\nContent-Type: multipart/related\r\n\r\npage")).when(driver)
       .executeCdpCommand(eq("Page.captureSnapshot"), any());
@@ -55,7 +55,7 @@ final class WebPageSourceExtractorTest {
 
   @Test
   void savesHtmlForChromiumBrowserWhenResourcesNotEnabled() throws Exception {
-    ChromiumDriver driver = mock(ChromiumDriver.class);
+    ChromiumDriver driver = mock();
     when(driver.getCapabilities()).thenReturn(chromeCapabilities());
     when(driver.getPageSource()).thenReturn("<html>plain</html>");
 
@@ -69,7 +69,7 @@ final class WebPageSourceExtractorTest {
   @Test
   void fallsBackToHtmlWhenCdpFails() throws Exception {
     config.savePageSourceWithResources(true);
-    ChromiumDriver driver = mock(ChromiumDriver.class);
+    ChromiumDriver driver = mock();
     when(driver.getCapabilities()).thenReturn(chromeCapabilities());
     doThrow(new WebDriverException("CDP failed")).when(driver).executeCdpCommand(eq("Page.captureSnapshot"), any());
     when(driver.getPageSource()).thenReturn("<html>plain</html>");
@@ -83,7 +83,7 @@ final class WebPageSourceExtractorTest {
   @Test
   void fallsBackToHtmlWhenCdpReturnsEmptyData() throws Exception {
     config.savePageSourceWithResources(true);
-    ChromiumDriver driver = mock(ChromiumDriver.class);
+    ChromiumDriver driver = mock();
     when(driver.getCapabilities()).thenReturn(chromeCapabilities());
     doReturn(Map.of("data", "")).when(driver).executeCdpCommand(eq("Page.captureSnapshot"), any());
     when(driver.getPageSource()).thenReturn("<html>plain</html>");
@@ -96,7 +96,7 @@ final class WebPageSourceExtractorTest {
 
   @Test
   void savesHtmlForNonChromiumBrowser() throws Exception {
-    WebDriver driver = mock(WebDriver.class);
+    WebDriver driver = mock();
     when(driver.getPageSource()).thenReturn("<html>firefox</html>");
 
     File file = extractor.extract(config, driver, "page-3");
@@ -107,7 +107,7 @@ final class WebPageSourceExtractorTest {
 
   @Test
   void rejectsPathTraversalInFileName() {
-    ChromiumDriver driver = mock(ChromiumDriver.class);
+    ChromiumDriver driver = mock();
     when(driver.getCapabilities()).thenReturn(chromeCapabilities());
 
     assertThatThrownBy(() -> extractor.extract(config, driver, "../../outside"))
