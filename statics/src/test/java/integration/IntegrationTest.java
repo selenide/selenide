@@ -90,6 +90,9 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.browserCapabilities = defaultBrowserCapabilities();
     Configuration.remoteConnectionTimeout = Duration.ofSeconds(10).toMillis();
     Configuration.remoteReadTimeout = Duration.ofSeconds(90).toMillis();
+    Configuration.screenshots = true;
+    Configuration.savePageSource = true;
+    Configuration.savePageSourceWithResources = false;
   }
 
   protected void openFile(String fileName) {
