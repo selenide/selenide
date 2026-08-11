@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -134,6 +135,26 @@ final class WebDriverThreadLocalContainerTest {
     assertThat(container.allWebDriverThreads).hasSize(1);
     assertThat(container.threadWebDriver).hasSize(0);
     assertThat(container.isDeadThreadsWatchdogStarted()).isTrue();
+  }
+
+  @Test
+  void config_isNotCorrupted_afterUsing_whenPreviousDriverWasSet() {
+    WebDriver firstDriver = mockDriver();
+    container.setWebDriver(firstDriver);
+
+    WebDriver secondDriver = mockDriver();
+    container.using(secondDriver, null, null, () -> { /* nothing */ });
+
+    assertThatCode(() -> container.getAndCheckWebDriver())
+      .doesNotThrowAnyException();
+  }
+
+  private static WebDriver mockDriver() {
+    WebDriver driver = mock();
+    WebDriver.Options options = mock();
+    when(driver.manage()).thenReturn(options);
+    when(options.timeouts()).thenReturn(mock());
+    return driver;
   }
 
   private static class DummyProvider implements WebDriverProvider {
