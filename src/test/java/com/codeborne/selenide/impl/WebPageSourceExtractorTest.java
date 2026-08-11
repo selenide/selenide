@@ -12,7 +12,6 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chromium.HasCdp;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,7 +37,7 @@ final class WebPageSourceExtractorTest {
   }
 
   @Test
-  void savesMhtmlForChromiumBrowserWhenResourcesEnabledAndCdpWorks() throws Exception {
+  void savesMhtmlForChromiumBrowserWhenResourcesEnabledAndCdpWorks() {
     config.savePageSourceWithResources(true);
     ChromiumDriver driver = mock();
     when(driver.getCapabilities()).thenReturn(chromeCapabilities());
@@ -48,12 +47,12 @@ final class WebPageSourceExtractorTest {
     File file = extractor.extract(config, driver, "page-1");
 
     assertThat(file).hasName("page-1.mhtml");
-    assertThat(Files.readString(file.toPath())).contains("multipart/related");
+    assertThat(file).content().contains("multipart/related");
     verify(driver, never()).getPageSource();
   }
 
   @Test
-  void savesHtmlForChromiumBrowserWhenResourcesNotEnabled() throws Exception {
+  void savesHtmlForChromiumBrowserWhenResourcesNotEnabled() {
     ChromiumDriver driver = mock();
     when(driver.getCapabilities()).thenReturn(chromeCapabilities());
     when(driver.getPageSource()).thenReturn("<html>plain</html>");
@@ -61,12 +60,12 @@ final class WebPageSourceExtractorTest {
     File file = extractor.extract(config, driver, "page-1b");
 
     assertThat(file).hasName("page-1b.html");
-    assertThat(Files.readString(file.toPath())).isEqualTo("<html>plain</html>");
+    assertThat(file).content().isEqualToIgnoringNewLines("<html>plain</html>");
     verify(driver, never()).executeCdpCommand(eq("Page.captureSnapshot"), any());
   }
 
   @Test
-  void fallsBackToHtmlWhenCdpFails() throws Exception {
+  void fallsBackToHtmlWhenCdpFails() {
     config.savePageSourceWithResources(true);
     ChromiumDriver driver = mock();
     when(driver.getCapabilities()).thenReturn(chromeCapabilities());
@@ -76,11 +75,11 @@ final class WebPageSourceExtractorTest {
     File file = extractor.extract(config, driver, "page-2");
 
     assertThat(file).hasName("page-2.html");
-    assertThat(Files.readString(file.toPath())).isEqualTo("<html>plain</html>");
+    assertThat(file).content().isEqualToIgnoringNewLines("<html>plain</html>");
   }
 
   @Test
-  void fallsBackToHtmlWhenCdpReturnsEmptyData() throws Exception {
+  void fallsBackToHtmlWhenCdpReturnsEmptyData() {
     config.savePageSourceWithResources(true);
     ChromiumDriver driver = mock();
     when(driver.getCapabilities()).thenReturn(chromeCapabilities());
@@ -90,18 +89,18 @@ final class WebPageSourceExtractorTest {
     File file = extractor.extract(config, driver, "page-2b");
 
     assertThat(file).hasName("page-2b.html");
-    assertThat(Files.readString(file.toPath())).isEqualTo("<html>plain</html>");
+    assertThat(file).content().isEqualToIgnoringNewLines("<html>plain</html>");
   }
 
   @Test
-  void savesHtmlForNonChromiumBrowser() throws Exception {
+  void savesHtmlForNonChromiumBrowser() {
     WebDriver driver = mock();
     when(driver.getPageSource()).thenReturn("<html>firefox</html>");
 
     File file = extractor.extract(config, driver, "page-3");
 
     assertThat(file).hasName("page-3.html");
-    assertThat(Files.readString(file.toPath())).isEqualTo("<html>firefox</html>");
+    assertThat(file).content().isEqualToIgnoringNewLines("<html>firefox</html>");
   }
 
   @Test
