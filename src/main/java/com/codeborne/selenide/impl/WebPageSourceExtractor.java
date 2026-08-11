@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.UnhandledAlertException;
@@ -27,20 +26,20 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
   private final AttachmentHandler attachmentHandler = inject();
   private final Set<String> printedErrors = new ConcurrentSkipListSet<>();
 
+  @Nullable
   @Override
   public File extract(Config config, WebDriver driver, String fileName) {
     return extract(config, driver, fileName, true);
   }
 
-  @CanIgnoreReturnValue
+  @Nullable
   private File extract(Config config, WebDriver driver, String fileName, boolean retryIfAlert) {
-    File pageSource = createFile(config, driver, fileName);
     try {
-      return doExtract(config, driver, fileName, pageSource);
+      return doExtract(config, driver, fileName);
     }
     catch (UnhandledAlertException e) {
       if (retryIfAlert) {
-        return retryingExtractionOnAlert(config, driver, fileName, pageSource, e);
+        return retryingExtractionOnAlert(config, driver, fileName, e);
       }
       else {
         printOnce("savePageSourceToFile", e);
@@ -48,20 +47,19 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     }
     catch (WebDriverException e) {
       log.warn("Failed to save page source to {}", fileName, e);
-      writeToFile(e.toString(), pageSource);
-      return pageSource;
+      return null;
     }
     catch (RuntimeException e) {
       log.error("Failed to save page source to {}", fileName, e);
-      writeToFile(e.toString(), pageSource);
-      return pageSource;
+      return null;
     }
-    return pageSource;
+    return null;
   }
 
-  private File doExtract(Config config, WebDriver driver, String fileName, File pageSource) {
+  @Nullable
+  private File doExtract(Config config, WebDriver driver, String fileName) {
     if (config.savePageSourceWithResources()) {
-      @Nullable String mhtml = extractMhtml(driver);
+      String mhtml = extractMhtml(driver);
       if (mhtml != null) {
         File mhtmlFile = createFileWithExtension(config, fileName, "mhtml");
         writeToFile(mhtml, mhtmlFile);
@@ -73,13 +71,14 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     String source = driver.getPageSource();
     if (source == null) {
       log.error("Failed to save page source to {}: page source is <null>", fileName);
-      writeToFile("<null>", pageSource);
+      return null;
     }
     else {
+      File pageSource = createFile(config, driver, fileName);
       writeToFile(source, pageSource);
       attachmentHandler.attach(pageSource);
+      return pageSource;
     }
-    return pageSource;
   }
 
   @Nullable
@@ -93,7 +92,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
       if (data instanceof String mhtml && !mhtml.isBlank()) {
         return mhtml;
       }
-      log.warn("Page.captureSnapshot returned empty data, will fallback to plain HTML");
+      log.warn("Page.captureSnapshot returned empty data (will fallback to plain HTML): {}", result);
     }
     catch (RuntimeException e) {
       log.warn("Failed to save page as MHTML, will fallback to plain HTML: {}", e.toString());
@@ -128,7 +127,8 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     }
   }
 
-  private File retryingExtractionOnAlert(Config config, WebDriver driver, String fileName, File pageSource, Exception e) {
+  @Nullable
+  private File retryingExtractionOnAlert(Config config, WebDriver driver, String fileName, Exception e) {
     try {
       Alert alert = driver.switchTo().alert();
       log.error("{}: {}", e, alert.getText());
@@ -137,7 +137,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     }
     catch (Exception unableToCloseAlert) {
       log.error("Failed to close alert", unableToCloseAlert);
-      return pageSource;
+      return null;
     }
   }
 }

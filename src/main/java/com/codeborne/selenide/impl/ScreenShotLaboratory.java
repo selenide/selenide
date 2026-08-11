@@ -272,6 +272,7 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @Nullable
   protected File savePageSourceToFile(Config config, String fileName, Driver driver) {
     return extractor.extract(config, driver.getWebDriver(), fileName);
   }
