@@ -16,7 +16,6 @@ import java.nio.file.Files;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
@@ -108,11 +107,10 @@ final class WebPageSourceExtractorTest {
   @Test
   void rejectsPathTraversalInFileName() {
     ChromiumDriver driver = mock();
-    when(driver.getCapabilities()).thenReturn(chromeCapabilities());
+    when(driver.getPageSource()).thenReturn("<html></html>");
 
-    assertThatThrownBy(() -> extractor.extract(config, driver, "../../outside"))
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("Invalid file name: ../../outside");
+    assertThat(extractor.extract(config, driver, "../../outside"))
+      .isNull();
   }
 
   private static Capabilities chromeCapabilities() {
