@@ -140,13 +140,34 @@ final class WebDriverThreadLocalContainerTest {
   @Test
   void config_isNotCorrupted_afterUsing_whenPreviousDriverWasSet() {
     WebDriver firstDriver = mockDriver();
+    when(browserHealthChecker.isBrowserStillOpen(firstDriver)).thenReturn(true);
     container.setWebDriver(firstDriver);
 
     WebDriver secondDriver = mockDriver();
-    container.using(secondDriver, null, null, () -> { /* nothing */ });
+    when(browserHealthChecker.isBrowserStillOpen(secondDriver)).thenReturn(true);
+    container.using(secondDriver, null, null, () ->
+      assertThat(container.getAndCheckWebDriver()).isSameAs(secondDriver)
+    );
 
+    assertThat(container.getAndCheckWebDriver()).isSameAs(firstDriver);
     assertThatCode(() -> container.getAndCheckWebDriver())
       .doesNotThrowAnyException();
+  }
+
+  @Test
+  void nestedUsing_doesNotCauseStackOverflow() {
+    WebDriver outerDriver = mockDriver();
+    WebDriver innerDriver = mockDriver();
+
+    container.using(outerDriver, null, null, () ->
+      container.using(innerDriver, null, null, () ->
+        // reading config inside nested using() must not recurse
+        assertThat(Configuration.browser).isNotNull()
+      )
+    );
+
+    // config must be readable after both using() calls unwind — no StackOverflowError
+    assertThat(Configuration.browser).isNotNull();
   }
 
   private static WebDriver mockDriver() {

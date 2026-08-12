@@ -215,7 +215,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public void using(WebDriver driver, @Nullable SelenideProxyServer proxy, @Nullable DownloadsFolder downloadsFolder, Runnable lambda) {
     DownloadsFolder folder = downloadsFolder != null ? downloadsFolder : new SharedDownloadsFolder(config.downloadsFolder());
-    using(new WebDriverInstance(config, driver, proxy, folder), lambda, false);
+    using(new WebDriverInstance(config.unwrap(), driver, proxy, folder), lambda, false);
   }
 
   private void using(WebDriverInstance webDriverInstance, Runnable lambda, boolean closeCurrentBrowserInLambda) {
