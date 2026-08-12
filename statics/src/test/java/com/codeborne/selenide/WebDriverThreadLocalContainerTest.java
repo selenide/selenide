@@ -162,12 +162,12 @@ final class WebDriverThreadLocalContainerTest {
     container.using(outerDriver, null, null, () ->
       container.using(innerDriver, null, null, () ->
         // reading config inside nested using() must not recurse
-        assertThat(Configuration.browser).isNotNull()
+        assertThat(Configuration.browser).isEqualTo(DummyProvider.class.getName())
       )
     );
 
     // config must be readable after both using() calls unwind — no StackOverflowError
-    assertThat(Configuration.browser).isNotNull();
+    assertThat(Configuration.browser).isEqualTo(DummyProvider.class.getName());
   }
 
   private static WebDriver mockDriver() {
