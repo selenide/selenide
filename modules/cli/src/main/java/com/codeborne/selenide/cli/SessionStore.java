@@ -27,11 +27,25 @@ final class SessionStore {
   }
 
   static Path logFile(String session) {
-    return dir().resolve(session + ".log");
+    return sessionFile(session, ".log");
   }
 
   private static Path portFile(String session) {
-    return dir().resolve(session + PORT_SUFFIX);
+    return sessionFile(session, PORT_SUFFIX);
+  }
+
+  /**
+   * Resolves a session name to a file directly under {@link #dir()}, rejecting names containing
+   * path separators or {@code ..} segments (e.g. via {@code -s ../../etc/cron.d/x}) that would
+   * otherwise let a session name write outside {@code ~/.selenide-cli}.
+   */
+  private static Path sessionFile(String session, String suffix) {
+    Path dir = dir();
+    Path resolved = dir.resolve(session + suffix).normalize();
+    if (!dir.equals(resolved.getParent())) {
+      throw new IllegalArgumentException("invalid session name: '" + session + "'");
+    }
+    return resolved;
   }
 
   static void writePort(String session, int port) {
