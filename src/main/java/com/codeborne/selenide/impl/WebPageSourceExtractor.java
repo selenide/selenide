@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNullElse;
 
 public class WebPageSourceExtractor implements PageSourceExtractor {
   private static final Logger log = LoggerFactory.getLogger(WebPageSourceExtractor.class);
@@ -56,7 +57,6 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     return null;
   }
 
-  @Nullable
   private File doExtract(Config config, WebDriver driver, String fileName) {
     if (config.savePageSourceWithResources()) {
       String mhtml = extractMhtml(driver);
@@ -68,17 +68,11 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
       }
     }
 
-    String source = driver.getPageSource();
-    if (source == null) {
-      log.error("Failed to save page source to {}: page source is <null>", fileName);
-      return null;
-    }
-    else {
-      File pageSource = createFile(config, driver, fileName);
-      writeToFile(source, pageSource);
-      attachmentHandler.attach(pageSource);
-      return pageSource;
-    }
+    String source = requireNonNullElse(driver.getPageSource(), "");
+    File pageSource = createFile(config, driver, fileName);
+    writeToFile(source, pageSource);
+    attachmentHandler.attach(pageSource);
+    return pageSource;
   }
 
   @Nullable
