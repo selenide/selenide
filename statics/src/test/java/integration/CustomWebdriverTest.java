@@ -102,7 +102,7 @@ final class CustomWebdriverTest extends IntegrationTest {
     setWebDriver(browser1);
     openFile("page_with_selects_without_jquery.html");
     using(browser2, () -> openFile("file_upload_form.html"));
-    using(browser1, () -> openFile("page_with_big_divs.html"));
+    openFile("page_with_big_divs.html");
   }
 
   @Test
