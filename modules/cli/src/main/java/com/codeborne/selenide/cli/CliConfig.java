@@ -45,10 +45,10 @@ final class CliConfig {
       config.baseUrl(value(arg));
     }
     else if (arg.startsWith("--timeout=")) {
-      config.timeout(Long.parseLong(value(arg)));
+      config.timeout(longValue(arg));
     }
     else if (arg.startsWith("--polling-interval=")) {
-      config.pollingInterval(Long.parseLong(value(arg)));
+      config.pollingInterval(longValue(arg));
     }
     else if (arg.startsWith("--remote=")) {
       config.remote(value(arg));
@@ -60,7 +60,7 @@ final class CliConfig {
       config.pageLoadStrategy(value(arg));
     }
     else if (arg.startsWith("--page-load-timeout=")) {
-      config.pageLoadTimeout(Long.parseLong(value(arg)));
+      config.pageLoadTimeout(longValue(arg));
     }
     else if (arg.startsWith("--reports-folder=")) {
       config.reportsFolder(value(arg));
@@ -72,5 +72,15 @@ final class CliConfig {
 
   private static String value(String arg) {
     return arg.substring(arg.indexOf('=') + 1);
+  }
+
+  private static long longValue(String arg) {
+    String value = value(arg);
+    try {
+      return Long.parseLong(value);
+    }
+    catch (NumberFormatException e) {
+      throw new IllegalArgumentException("invalid value for '" + arg.substring(0, arg.indexOf('=')) + "': '" + value + "'");
+    }
   }
 }

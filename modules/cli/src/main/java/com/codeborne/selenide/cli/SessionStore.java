@@ -30,6 +30,11 @@ final class SessionStore {
     return sessionFile(session, ".log");
   }
 
+  /** Guards the check-then-spawn sequence in DaemonClient.open() against concurrent invocations. */
+  static Path lockFile(String session) {
+    return sessionFile(session, ".lock");
+  }
+
   private static Path portFile(String session) {
     return sessionFile(session, PORT_SUFFIX);
   }

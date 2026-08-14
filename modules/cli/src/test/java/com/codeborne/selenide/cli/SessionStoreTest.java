@@ -1,6 +1,9 @@
 package com.codeborne.selenide.cli;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
+import org.junit.jupiter.api.parallel.Resources;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -10,6 +13,13 @@ import java.util.OptionalInt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+/**
+ * SessionStore.dir() depends on the "user.home" system property, which DaemonRoundTripTest and
+ * DaemonClientTest temporarily redirect - since Gradle runs test classes concurrently (see
+ * gradle/tests.gradle), this class must declare a read lock on it so JUnit serializes it against
+ * those writers instead of racing on the JVM-wide property.
+ */
+@ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ)
 class SessionStoreTest {
   @Test
   void writesAndReadsPortForPlainSessionName() {

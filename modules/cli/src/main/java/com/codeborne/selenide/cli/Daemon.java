@@ -19,6 +19,14 @@ final class Daemon {
   }
 
   static void run(String session, CommandExecutor executor) {
+    // isAlive()/sendTo() only prove a TCP connect to the recorded port succeeds, not that the
+    // listener is still this session's daemon - if the process dies without deleting its port file
+    // (e.g. SIGTERM, Ctrl-C), a later process could in theory bind that same freed ephemeral port.
+    // A shutdown hook closes that window for every termination path except SIGKILL, which no process
+    // can ever intercept in any language; narrowing that residual gap further would need a
+    // handshake in the wire protocol itself, which isn't worth the added complexity for a same-user,
+    // localhost-only, single-daemon CLI tool.
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> SessionStore.delete(session), "selenide-cli-cleanup"));
     try (ServerSocket server = new ServerSocket()) {
       server.bind(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0));
       SessionStore.writePort(session, server.getLocalPort());
@@ -27,6 +35,8 @@ final class Daemon {
       }
       finally {
         SessionStore.delete(session);
+        // Safety net for abnormal exits (e.g. accept() failing) where serveOne() never got a chance
+        // to shut down the executor itself; harmless to call again after a graceful "close".
         executor.shutdown();
       }
     }
@@ -45,17 +55,33 @@ final class Daemon {
    * @return true when the served command asked the daemon to stop.
    */
   private static boolean serveOne(ServerSocket server, CommandExecutor executor) throws IOException {
-    // accept() failures propagate and stop the loop; per-connection IO errors are swallowed below.
+    // accept()/readRequest() failures propagate and stop the loop; a disconnect while reading a
+    // request means no command ran, so it's safe to just keep serving other clients.
     Socket accepted = server.accept();
     try (Socket socket = accepted) {
       List<String> args = Protocol.readRequest(socket.getInputStream());
       CommandExecutor.Result result = safeExecute(executor, args);
-      Protocol.writeResponse(socket.getOutputStream(), result.ok(), result.shutdown(), result.output());
+      if (result.shutdown()) {
+        // Shut down before acknowledging it, so a caller can never observe "closed" success before
+        // the browser has actually finished tearing down.
+        executor.shutdown();
+      }
+      writeResponseQuietly(socket, result);
       return result.shutdown();
     }
     catch (IOException e) {
-      // A client disconnected mid-command; keep serving other clients.
       return false;
+    }
+  }
+
+  private static void writeResponseQuietly(Socket socket, CommandExecutor.Result result) {
+    try {
+      Protocol.writeResponse(socket.getOutputStream(), result.ok(), result.shutdown(), result.output());
+    }
+    catch (IOException e) {
+      // The client disconnected while we were writing the response. The command already ran, so
+      // its shutdown intent (if any) - already applied above - must not be lost just because the
+      // client never received the acknowledgement.
     }
   }
 
