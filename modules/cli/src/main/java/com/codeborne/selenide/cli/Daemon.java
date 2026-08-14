@@ -26,7 +26,8 @@ final class Daemon {
     // can ever intercept in any language; narrowing that residual gap further would need a
     // handshake in the wire protocol itself, which isn't worth the added complexity for a same-user,
     // localhost-only, single-daemon CLI tool.
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> SessionStore.delete(session), "selenide-cli-cleanup"));
+    Thread cleanupHook = new Thread(() -> SessionStore.delete(session), "selenide-cli-cleanup");
+    Runtime.getRuntime().addShutdownHook(cleanupHook);
     try (ServerSocket server = new ServerSocket()) {
       server.bind(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0));
       SessionStore.writePort(session, server.getLocalPort());
@@ -42,6 +43,19 @@ final class Daemon {
     }
     catch (IOException e) {
       throw new UncheckedIOException(e);
+    }
+    finally {
+      removeShutdownHookIfNotAlreadyShuttingDown(cleanupHook);
+    }
+  }
+
+  private static void removeShutdownHookIfNotAlreadyShuttingDown(Thread cleanupHook) {
+    try {
+      Runtime.getRuntime().removeShutdownHook(cleanupHook);
+    }
+    catch (IllegalStateException e) {
+      // The JVM is already shutting down (the hook itself is what's about to run, or already ran);
+      // nothing to undo.
     }
   }
 

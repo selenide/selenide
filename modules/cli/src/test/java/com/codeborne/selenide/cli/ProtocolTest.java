@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -57,6 +58,25 @@ class ProtocolTest {
       data.flush();
       Protocol.readResponse(new ByteArrayInputStream(buffer.toByteArray()));
     }).isInstanceOf(IOException.class).hasMessageContaining("length");
+  }
+
+  @Test
+  void writeRequestRejectsImplausiblyLargeArgumentCount() {
+    List<String> tooManyArgs = new ArrayList<>();
+    for (int i = 0; i <= 10_000; i++) {
+      tooManyArgs.add("arg");
+    }
+    assertThatThrownBy(() -> Protocol.writeRequest(new ByteArrayOutputStream(), tooManyArgs))
+      .isInstanceOf(IOException.class)
+      .hasMessageContaining("argument count");
+  }
+
+  @Test
+  void writeResponseRejectsAnOversizedFrame() {
+    String tooLong = "x".repeat(16 * 1024 * 1024 + 1);
+    assertThatThrownBy(() -> Protocol.writeResponse(new ByteArrayOutputStream(), true, false, tooLong))
+      .isInstanceOf(IOException.class)
+      .hasMessageContaining("length");
   }
 
   @Test
