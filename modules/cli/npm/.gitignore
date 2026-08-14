@@ -1,0 +1,4 @@
+# The fat JAR is a build artifact — copied in at pack time, not committed.
+jar/*.jar
+# npm pack output
+*.tgz
