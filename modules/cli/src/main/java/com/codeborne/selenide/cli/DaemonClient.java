@@ -2,7 +2,6 @@ package com.codeborne.selenide.cli;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.UncheckedIOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -203,7 +202,7 @@ final class DaemonClient {
     return isAlive(session);
   }
 
-  private Process spawnDaemon(List<String> configFlags) {
+  private Process spawnDaemon(List<String> configFlags) throws IOException {
     List<String> command = new ArrayList<>();
     command.add(javaBinary());
     command.add("-cp");
@@ -212,15 +211,10 @@ final class DaemonClient {
     command.add("__daemon");
     command.add("--session=" + session);
     command.addAll(configFlags);
-    try {
-      ProcessBuilder builder = new ProcessBuilder(command);
-      builder.redirectErrorStream(true);
-      builder.redirectOutput(SessionStore.logFile(session).toFile());
-      return builder.start();
-    }
-    catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
+    ProcessBuilder builder = new ProcessBuilder(command);
+    builder.redirectErrorStream(true);
+    builder.redirectOutput(SessionStore.logFile(session).toFile());
+    return builder.start();
   }
 
   private static String javaBinary() {

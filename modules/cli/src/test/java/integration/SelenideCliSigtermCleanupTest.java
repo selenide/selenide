@@ -8,7 +8,6 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -37,9 +36,11 @@ class SelenideCliSigtermCleanupTest {
       assertThat(cli("-s", session, "open", "--headless", "--browser=chrome", url)).isZero();
       assertThat(portFile).exists();
 
-      ProcessHandle daemonProcess = ProcessHandle.allProcesses()
-        .filter(p -> p.info().arguments().map(args -> Arrays.asList(args).contains("--session=" + session)).orElse(false))
-        .findFirst()
+      // This test doesn't spawn any other child process, so the (only) live child of this JVM must
+      // be the daemon - checking parent/child structure (always visible to a process for its own
+      // children) rather than matching the child's command line, which some CI environments don't
+      // expose.
+      ProcessHandle daemonProcess = ProcessHandle.current().children().findFirst()
         .orElseThrow(() -> new AssertionError("daemon process for session '" + session + "' not found"));
 
       daemonProcess.destroy(); // SIGTERM - NOT `selenide close`

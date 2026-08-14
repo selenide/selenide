@@ -31,6 +31,9 @@ final class Protocol {
   }
 
   static void writeRequest(OutputStream out, List<String> args) throws IOException {
+    if (args.size() > MAX_ARGS) {
+      throw new IOException("invalid request: implausible argument count " + args.size());
+    }
     DataOutputStream data = new DataOutputStream(out);
     data.writeInt(args.size());
     for (String arg : args) {
@@ -69,6 +72,9 @@ final class Protocol {
 
   private static void writeFrame(DataOutputStream data, String text) throws IOException {
     byte[] bytes = text.getBytes(UTF_8);
+    if (bytes.length > MAX_FRAME_BYTES) {
+      throw new IOException("invalid frame: implausible length " + bytes.length);
+    }
     data.writeInt(bytes.length);
     data.write(bytes);
   }
