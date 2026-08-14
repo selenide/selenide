@@ -13,8 +13,12 @@ if (!jar) {
   process.exit(1);
 }
 
+// An explicit path (as opposed to a bare command) isn't resolved against PATHEXT by
+// spawnSync/CreateProcess on Windows, so a correctly-set JAVA_HOME would otherwise fail with
+// ENOENT - misreported below as "Java is required", which is backwards.
+const javaExecutable = process.platform === 'win32' ? 'java.exe' : 'java';
 const javaBin = process.env.JAVA_HOME
-  ? path.join(process.env.JAVA_HOME, 'bin', 'java')
+  ? path.join(process.env.JAVA_HOME, 'bin', javaExecutable)
   : 'java';
 
 const result = spawnSync(javaBin, ['-jar', path.join(jarDir, jar), ...process.argv.slice(2)], {

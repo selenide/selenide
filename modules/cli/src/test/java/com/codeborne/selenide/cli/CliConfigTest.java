@@ -4,6 +4,7 @@ import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CliConfigTest {
   @Test
@@ -37,5 +38,27 @@ class CliConfigTest {
   void ignoresPositionalUrlAndUnknownFlags() {
     SelenideConfig config = CliConfig.toConfig(new String[]{"https://example.com", "--browser=edge"});
     assertThat(config.browser()).isEqualTo("edge");
+  }
+
+  @Test
+  void reportsAClearErrorForAnInvalidTimeoutValue() {
+    assertThatThrownBy(() -> CliConfig.toConfig(new String[]{"--timeout=5ooo"}))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("--timeout")
+      .hasMessageContaining("5ooo");
+  }
+
+  @Test
+  void reportsAClearErrorForAnInvalidPollingIntervalValue() {
+    assertThatThrownBy(() -> CliConfig.toConfig(new String[]{"--polling-interval=abc"}))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("--polling-interval");
+  }
+
+  @Test
+  void reportsAClearErrorForAnInvalidPageLoadTimeoutValue() {
+    assertThatThrownBy(() -> CliConfig.toConfig(new String[]{"--page-load-timeout=abc"}))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("--page-load-timeout");
   }
 }

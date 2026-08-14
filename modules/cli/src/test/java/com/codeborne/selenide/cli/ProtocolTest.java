@@ -4,10 +4,14 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.List;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ProtocolTest {
   @Test
@@ -18,6 +22,55 @@ class ProtocolTest {
     List<String> got = Protocol.readRequest(new ByteArrayInputStream(buffer.toByteArray()));
 
     assertThat(got).containsExactly("setValue", "#q", "hello world");
+  }
+
+  @Test
+  void requestArgumentCanExceedTheOldWriteUtf64kCap() throws IOException {
+    String longValue = "x".repeat(100_000);
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    Protocol.writeRequest(buffer, List.of("setValue", "#q", longValue));
+
+    List<String> got = Protocol.readRequest(new ByteArrayInputStream(buffer.toByteArray()));
+
+    assertThat(got).containsExactly("setValue", "#q", longValue);
+  }
+
+  @Test
+  void rejectsImplausiblyLargeArgumentCount() {
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    DataOutputStream data = new DataOutputStream(buffer);
+    assertThatThrownBy(() -> {
+      data.writeInt(Integer.MAX_VALUE);
+      data.flush();
+      Protocol.readRequest(new ByteArrayInputStream(buffer.toByteArray()));
+    }).isInstanceOf(IOException.class).hasMessageContaining("argument count");
+  }
+
+  @Test
+  void rejectsImplausiblyLargeFrameLength() {
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    DataOutputStream data = new DataOutputStream(buffer);
+    assertThatThrownBy(() -> {
+      data.writeBoolean(true);
+      data.writeBoolean(false);
+      data.writeInt(Integer.MAX_VALUE);
+      data.flush();
+      Protocol.readResponse(new ByteArrayInputStream(buffer.toByteArray()));
+    }).isInstanceOf(IOException.class).hasMessageContaining("length");
+  }
+
+  @Test
+  void rejectsATruncatedFrame() {
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    DataOutputStream data = new DataOutputStream(buffer);
+    assertThatThrownBy(() -> {
+      data.writeBoolean(true);
+      data.writeBoolean(false);
+      data.writeInt(10);
+      data.write("short".getBytes(UTF_8));
+      data.flush();
+      Protocol.readResponse(new ByteArrayInputStream(buffer.toByteArray()));
+    }).isInstanceOf(EOFException.class).hasMessageContaining("truncated");
   }
 
   @Test
