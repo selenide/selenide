@@ -32,7 +32,7 @@ sudo chmod +x /usr/local/bin/selenide
 ```
 
 Without a launcher, replace `selenide` with `java -jar modules/cli/build/libs/selenide-cli-*.jar`
-(the shaded jar is versioned, e.g. `selenide-cli-7.17.0.jar`).
+(the shaded jar is versioned, e.g. `selenide-cli-7.18.0.jar`).
 
 ## Quick start
 
