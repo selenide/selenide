@@ -81,6 +81,17 @@ final class SessionStore {
     }
   }
 
+  /**
+   * Like {@link #delete(String)}, but only if the session's port file still records {@code
+   * ownPort} - i.e. only if it still refers to the daemon calling this, not to some other daemon
+   * that has since started for the same session (e.g. while this one was busy shutting down).
+   */
+  static void deleteIfOwnedBy(String session, int ownPort) {
+    if (readPort(session).equals(OptionalInt.of(ownPort))) {
+      delete(session);
+    }
+  }
+
   static List<String> sessions() {
     if (!Files.isDirectory(dir())) {
       return List.of();
