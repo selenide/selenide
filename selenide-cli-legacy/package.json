@@ -1,0 +1,30 @@
+{
+  "name": "selenide-cli",
+  "version": "7.18.0",
+  "description": "DEPRECATED — moved to @selenide/cli. This package forwards to the new scoped package.",
+  "bin": {
+    "selenide": "index.js"
+  },
+  "keywords": [
+    "selenide",
+    "selenium",
+    "webdriver",
+    "browser",
+    "automation",
+    "codegen",
+    "cli",
+    "deprecated"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/selenide/selenide.git"
+  },
+  "homepage": "https://selenide.org",
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {
+    "@selenide/cli": "^7.18.0"
+  }
+}

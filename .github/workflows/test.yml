@@ -120,6 +120,7 @@ jobs:
             ]
           - name: 'others'
             projects: [
+              ':modules:cli',
               ':modules:junit4',
               ':modules:clear-with-shortcut',
               ':modules:appium',
