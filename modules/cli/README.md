@@ -20,11 +20,11 @@ runs one command, prints the result, and exits. Every successful command is reco
 
 ## Install (npm)
 
-Published on npm: [selenide-cli](https://www.npmjs.com/package/selenide-cli).
+Published on npm: [@selenide/cli](https://www.npmjs.com/package/@selenide/cli).
 
 ```bash
-npm install -g selenide-cli
-selenide --version          # -> selenide-cli 7.17.0
+npm install -g @selenide/cli
+selenide --version          # -> selenide-cli 7.18.0
 ```
 
 Requirements: **JDK 17+** on your `PATH` (`java -version`) and a browser (Chrome/Firefox/Edge) —
@@ -50,7 +50,7 @@ sudo chmod +x /usr/local/bin/selenide
 ```
 
 Without a launcher, replace `selenide` with `java -jar modules/cli/build/libs/selenide-cli-*.jar`
-(the shaded jar is versioned, e.g. `selenide-cli-7.17.0.jar`).
+(the shaded jar is versioned, e.g. `selenide-cli-7.18.0.jar`).
 
 ## Quick start
 

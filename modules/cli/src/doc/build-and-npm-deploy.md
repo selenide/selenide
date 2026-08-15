@@ -3,7 +3,7 @@
 The Selenide CLI is a Java tool: it builds to a single self-contained ("fat") JAR
 (`selenide-cli-<version>.jar`) that acts as both the client and the background daemon. There is no
 Node.js code in the CLI itself — the npm package is a thin **launcher** that ships (or downloads)
-that JAR and spawns `java -jar …`. This keeps `npm install -g selenide-cli` giving users a `selenide`
+that JAR and spawns `java -jar …`. This keeps `npm install -g @selenide/cli` giving users a `selenide`
 command without them cloning the repo or dealing with Gradle.
 
 - [1. Build the CLI locally](#1-build-the-cli-locally)
@@ -31,7 +31,7 @@ command without them cloning the repo or dealing with Gradle.
 java -jar modules/cli/build/libs/selenide-cli-*.jar --version
 ```
 
-The JAR is versioned to match the Selenide release (e.g. `selenide-cli-7.17.0.jar`).
+The JAR is versioned to match the Selenide release (e.g. `selenide-cli-7.18.0.jar`).
 
 ### Run it locally
 
@@ -99,8 +99,8 @@ modules/cli/npm/
 
 ```json
 {
-  "name": "selenide-cli",
-  "version": "7.17.0",
+  "name": "@selenide/cli",
+  "version": "7.18.0",
   "description": "Command-line browser automation & Selenide Java codegen over a background daemon.",
   "bin": { "selenide": "bin/selenide.js" },
   "files": ["bin/", "jar/", "README.md"],
@@ -108,12 +108,16 @@ modules/cli/npm/
   "keywords": ["selenide", "selenium", "webdriver", "browser", "automation", "codegen", "cli"],
   "license": "MIT",
   "repository": { "type": "git", "url": "https://github.com/selenide/selenide.git" },
-  "homepage": "https://selenide.org"
+  "homepage": "https://selenide.org",
+  "publishConfig": { "access": "public" }
 }
 ```
 
-Keep `version` in lockstep with the Gradle `version` in `build.gradle` (currently `7.17.0`), so
-`selenide-cli@X` on npm always ships `selenide-cli-X.jar`.
+Keep `version` in lockstep with the Gradle `version` in `build.gradle` (set to `7.18.0` right before
+that release is cut), so
+`@selenide/cli@X` on npm always ships `selenide-cli-X.jar`. `publishConfig.access: "public"` is
+required for a scoped package (`@selenide/...`) to publish publicly instead of defaulting to
+private, which requires a paid npm org plan.
 
 ### `bin/selenide.js` — the launcher
 
@@ -184,31 +188,32 @@ and `package.json` — nothing else.
 
 ```bash
 cd modules/cli/npm
-npm pack                                  # -> selenide-cli-<version>.tgz
+npm pack                                  # -> selenide-cli-<version>.tgz (npm strips "@"/"/" from scoped names)
 npm install -g ./selenide-cli-*.tgz
 selenide --version                        # should print: selenide-cli <version>
 selenide open --headless https://selenide.org && selenide close
-npm uninstall -g selenide-cli
+npm uninstall -g @selenide/cli
 ```
 
 ---
 
 ## 3. Publish to npm
 
-Prerequisites: an npm account with publish rights to the package name, and `npm login` done.
+Prerequisites: membership in the `@selenide` npm org (or publish rights granted on the package),
+and `npm login` done.
 
 ```bash
 cd modules/cli/npm
 
 # 1. make sure version matches the Gradle build version
-node -e "console.log(require('./package.json').version)"   # e.g. 7.17.0
+node -e "console.log(require('./package.json').version)"   # e.g. 7.18.0
 
 # 2. rebuild + refresh the bundled JAR (see step 2)
 (cd ../../.. && ./gradlew :modules:cli:shadowJar)
 mkdir -p jar && rm -f jar/*.jar && cp ../build/libs/selenide-cli-*.jar jar/
 cp ../README.md README.md
 
-# 3. publish (public scope-less package)
+# 3. publish (scoped packages default to private, so --access public is required)
 npm publish --access public
 ```
 
@@ -238,19 +243,28 @@ Notes:
 - Publishing is an outward-facing action; only run `npm publish` when the maintainer has explicitly
   asked to release.
 
-> **Status:** `selenide-cli@7.17.0` is published — https://www.npmjs.com/package/selenide-cli
->
-> ⚠️ This was published **for testing purposes** under a personal npm account (`sbielievitniev`),
-> not by the Selenide org. If the Selenide maintainers want to own the `selenide-cli` name under the
-> Selenide org/team on npm, the current owner will remove (unpublish) this package so it can be
-> re-published from the official account.
+### The old unscoped `selenide-cli` package
+
+The CLI was originally published for testing purposes as `selenide-cli` (unscoped) under a personal
+npm account. It's now deprecated in favor of the official `@selenide/cli`, the same move already
+made for the MCP server (`selenide-mcp` → `@selenide/mcp`). The deprecated package's source is
+`selenide-cli-legacy/` at the repo root — a thin shim whose `index.js` prints a deprecation notice
+to stderr and then `require()`s `@selenide/cli/bin/selenide.js` directly (its only dependency is
+`@selenide/cli`, so a plain `npm publish` from that directory picks up whatever version range is
+declared there). Publish/update it the same way as any other npm package once `@selenide/cli` itself
+is live:
+
+```bash
+cd selenide-cli-legacy
+npm publish   # unscoped package, no --access flag needed
+```
 
 ---
 
 ## 4. Install & use (end users)
 
 ```bash
-npm install -g selenide-cli      # requires JDK 17+ on PATH
+npm install -g @selenide/cli      # requires JDK 17+ on PATH
 selenide --version
 ```
 
