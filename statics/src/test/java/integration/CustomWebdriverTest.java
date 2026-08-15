@@ -98,6 +98,14 @@ final class CustomWebdriverTest extends IntegrationTest {
   }
 
   @Test
+  void using_canBeCalledAgain_afterPreviousUsingWithExternalDriver() {
+    setWebDriver(browser1);
+    openFile("page_with_selects_without_jquery.html");
+    using(browser2, () -> openFile("file_upload_form.html"));
+    openFile("page_with_big_divs.html");
+  }
+
+  @Test
   void canDownloadFilesAfterUsingAnotherBrowser() {
     openFile("page_with_uploads.html");
     using(browser2, () -> {

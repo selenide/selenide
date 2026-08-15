@@ -1,7 +1,10 @@
 # Changelog
 
+=======
 ## 7.18.0 (unreleased)
 * add Selenide CLI (`selenide-cli`): a command-line tool over a background browser daemon that records actions and generates Selenide Java; also published to npm as `@selenide/cli`
+* bugfix: fix `StackOverflowError` after calling `WebDriverRunner.using(...)` when a previous WebDriver was bound to the thread (`ThreadLocalSelenideConfig` wrapper was stored instead of the leaf config in `WebDriverInstance`)
+
 
 ## 7.17.0 (12.07.2026)
 * #3359 Add "byRole" locator - find elements by ARIA role (#3336)
