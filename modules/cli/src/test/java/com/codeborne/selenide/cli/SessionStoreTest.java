@@ -56,6 +56,32 @@ class SessionStoreTest {
   }
 
   @Test
+  void deleteIfOwnedByRemovesTheRecordWhenThePortMatches() {
+    String session = "unit-test-" + System.nanoTime();
+    SessionStore.writePort(session, 12345);
+
+    SessionStore.deleteIfOwnedBy(session, 12345);
+
+    assertThat(SessionStore.readPort(session)).isEmpty();
+  }
+
+  @Test
+  void deleteIfOwnedByLeavesAReplacementRecordAlone() {
+    String session = "unit-test-" + System.nanoTime();
+    try {
+      SessionStore.writePort(session, 111); // the "old" daemon's port
+      SessionStore.writePort(session, 222); // a "replacement" daemon has since taken over
+
+      SessionStore.deleteIfOwnedBy(session, 111); // the old daemon's delayed cleanup
+
+      assertThat(SessionStore.readPort(session)).isEqualTo(OptionalInt.of(222));
+    }
+    finally {
+      SessionStore.delete(session);
+    }
+  }
+
+  @Test
   void readPortReturnsEmptyForUnknownSession() {
     assertThat(SessionStore.readPort("unknown-session-" + System.nanoTime())).isEqualTo(OptionalInt.empty());
   }

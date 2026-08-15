@@ -26,26 +26,28 @@ final class Daemon {
     // can ever intercept in any language; narrowing that residual gap further would need a
     // handshake in the wire protocol itself, which isn't worth the added complexity for a same-user,
     // localhost-only, single-daemon CLI tool.
-    Thread cleanupHook = new Thread(() -> SessionStore.delete(session), "selenide-cli-cleanup");
-    Runtime.getRuntime().addShutdownHook(cleanupHook);
     try (ServerSocket server = new ServerSocket()) {
       server.bind(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0));
-      SessionStore.writePort(session, server.getLocalPort());
+      int port = server.getLocalPort();
+      SessionStore.writePort(session, port);
+      // Deletes only if the session's port file still points at this daemon's own port, so a
+      // delayed hook (or the safety-net cleanup below) can never delete a *replacement* daemon's
+      // record - one that started for the same session while this one was busy shutting down.
+      Thread cleanupHook = new Thread(() -> SessionStore.deleteIfOwnedBy(session, port), "selenide-cli-cleanup");
+      Runtime.getRuntime().addShutdownHook(cleanupHook);
       try {
         acceptLoop(server, executor);
       }
       finally {
-        SessionStore.delete(session);
+        SessionStore.deleteIfOwnedBy(session, port);
         // Safety net for abnormal exits (e.g. accept() failing) where serveOne() never got a chance
         // to shut down the executor itself; harmless to call again after a graceful "close".
         executor.shutdown();
+        removeShutdownHookIfNotAlreadyShuttingDown(cleanupHook);
       }
     }
     catch (IOException e) {
       throw new UncheckedIOException(e);
-    }
-    finally {
-      removeShutdownHookIfNotAlreadyShuttingDown(cleanupHook);
     }
   }
 
