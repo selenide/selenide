@@ -41,6 +41,8 @@ reuse it. `open` options (`--browser=`, `--headless`, â€¦) apply at spawn time â
 | `should <sel> <cond> [value]` | `$(sel).should(cond)` | `$(...).shouldBe(...);` / `$(...).shouldHave(...);` |
 | `back` / `forward` / `refresh` | navigate | `back();` / `forward();` / `refresh();` |
 | `screenshot [name]` | save PNG (to `reports-folder`) | `screenshot("<name>");` (default `screenshot`) |
+| `frame <sel>` | `driver.switchTo().frame($(sel))` | `switchTo().frame($(...));` |
+| `defaultContent` | `driver.switchTo().defaultContent()` | `switchTo().defaultContent();` |
 
 Notes:
 - A failed command (bad selector, failed assertion) prints an error to stderr, exits non-zero, and
