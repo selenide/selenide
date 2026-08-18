@@ -20,6 +20,7 @@ classes
 /.mcp.json
 /.claude/settings*.json
 /.claude/worktrees/
+/.superpowers/
 
 # Ignore all binary files
 modules/*/bin
