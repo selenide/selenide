@@ -44,7 +44,9 @@ class McpCliParityTest {
     new SharedAction("back", "browser_back"),
     new SharedAction("forward", "browser_forward"),
     new SharedAction("refresh", "browser_refresh"),
-    new SharedAction("screenshot", "browser_screenshot"));
+    new SharedAction("screenshot", "browser_screenshot"),
+    new SharedAction("frame", "browser_frame_select"),
+    new SharedAction("defaultcontent", "browser_frame_reset"));
 
   @Test
   void everySharedActionIsSupportedByBothFrontEnds() {
