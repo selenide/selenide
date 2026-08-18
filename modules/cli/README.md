@@ -85,6 +85,7 @@ check <sel> | uncheck <sel>    setSelected <sel> <bool>
 hover <sel>                    doubleClick <sel>        contextClick <sel>
 scrollTo <sel>                pressEnter|pressTab|pressEscape <sel>
 should <sel> <cond> [value]   back | forward | refresh
+frame <sel>                   defaultContent
 screenshot [name]
 ```
 
