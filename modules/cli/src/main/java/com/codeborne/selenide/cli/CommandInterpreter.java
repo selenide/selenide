@@ -16,6 +16,7 @@ import static com.codeborne.selenide.cli.JavaCode.IMPORT_FORWARD;
 import static com.codeborne.selenide.cli.JavaCode.IMPORT_OPEN;
 import static com.codeborne.selenide.cli.JavaCode.IMPORT_REFRESH;
 import static com.codeborne.selenide.cli.JavaCode.IMPORT_SCREENSHOT;
+import static com.codeborne.selenide.cli.JavaCode.IMPORT_SWITCHTO;
 import static com.codeborne.selenide.cli.JavaCode.string;
 
 /**
@@ -54,7 +55,7 @@ class CommandInterpreter {
     "pressenter", "presstab", "pressescape",
     "setvalue", "type", "append", "selectoption", "selectradio",
     "setselected", "check", "uncheck",
-    "open", "back", "forward", "refresh", "should", "screenshot");
+    "open", "back", "forward", "refresh", "should", "screenshot", "frame");
 
   static Set<String> commandNames() {
     return COMMAND_NAMES;
@@ -104,11 +105,20 @@ class CommandInterpreter {
     handlers.put("back", a -> new PendingCommand(RecordedStatement.of("back();", IMPORT_BACK), driver::back));
     handlers.put("forward", a -> new PendingCommand(RecordedStatement.of("forward();", IMPORT_FORWARD), driver::forward));
     handlers.put("refresh", a -> new PendingCommand(RecordedStatement.of("refresh();", IMPORT_REFRESH), driver::refresh));
+    handlers.put("frame", this::frame);
   }
 
   private PendingCommand open(Args args) {
     String url = args.nth(1);
     return new PendingCommand(RecordedStatement.of("open(" + string(url) + ");", IMPORT_OPEN), () -> driver.open(url));
+  }
+
+  private PendingCommand frame(Args args) {
+    Locator locator = Locator.parse(args.selectorRest());
+    Set<String> imports = new LinkedHashSet<>(locator.imports());
+    imports.add(IMPORT_SWITCHTO);
+    RecordedStatement statement = new RecordedStatement("switchTo().frame(" + locator.code() + ");", imports);
+    return new PendingCommand(statement, () -> driver.switchTo().frame(driver.$(locator.by())));
   }
 
   private PendingCommand element(Args args, String suffix, Consumer<SelenideElement> action) {
