@@ -64,9 +64,9 @@ public class AppiumClick extends Click {
   }
 
   private void performDoubleTap(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
-    Point location = getCenter(webElement);
+    Point center = getCenter(webElement);
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
-    Sequence doubleTapSequence = getSequenceToPerformTap(finger, location, appiumClickOptions.offsetX(), appiumClickOptions.offsetY())
+    Sequence doubleTapSequence = getSequenceToPerformTap(finger, center, appiumClickOptions.offsetX(), appiumClickOptions.offsetY())
       .addAction(new Pause(finger, ofMillis(40)))
       .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
       .addAction(new Pause(finger, ofMillis(200)))
@@ -75,11 +75,11 @@ public class AppiumClick extends Click {
   }
 
   private void performLongPress(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
-    Point location = getCenter(webElement);
+    Point center = getCenter(webElement);
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
     Sequence doubleTapSequence = new Sequence(finger, 1)
       .addAction(finger.createPointerMove(ofMillis(0), PointerInput.Origin.viewport(),
-        location.getX() + appiumClickOptions.offsetX(), location.getY() + appiumClickOptions.offsetY()))
+        center.getX() + appiumClickOptions.offsetX(), center.getY() + appiumClickOptions.offsetY()))
       .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
       .addAction(new Pause(finger, appiumClickOptions.longPressHoldDuration()))
       .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
@@ -88,9 +88,9 @@ public class AppiumClick extends Click {
 
   private void performTapWithOffset(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
-    Point location = getCenter(webElement);
+    Point center = getCenter(webElement);
 
-    Sequence tapSequence = getSequenceToPerformTap(finger, location, appiumClickOptions.offsetX(), appiumClickOptions.offsetY());
+    Sequence tapSequence = getSequenceToPerformTap(finger, center, appiumClickOptions.offsetX(), appiumClickOptions.offsetY());
     perform(driver, tapSequence);
   }
 
@@ -100,10 +100,10 @@ public class AppiumClick extends Click {
     appiumDriver.perform(singletonList(sequence));
   }
 
-  private Sequence getSequenceToPerformTap(PointerInput finger, Point location, int offsetX, int offsetY) {
+  private Sequence getSequenceToPerformTap(PointerInput finger, Point center, int offsetX, int offsetY) {
     return new Sequence(finger, 1)
       .addAction(finger.createPointerMove(ofMillis(0),
-        PointerInput.Origin.viewport(), location.getX() + offsetX, location.getY() + offsetY))
+        PointerInput.Origin.viewport(), center.getX() + offsetX, center.getY() + offsetY))
       .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
       .addAction(new Pause(finger, ofMillis(200)))
       .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
