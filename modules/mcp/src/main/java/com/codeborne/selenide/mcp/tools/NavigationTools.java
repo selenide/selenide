@@ -22,6 +22,7 @@ public class NavigationTools {
       new TabNewTool(session).spec(),
       new TabCloseTool(session).spec(),
       new FrameSelectTool(session).spec(),
+      new FrameResetTool(session).spec(),
       new ResizeTool(session).spec()
     );
   }
