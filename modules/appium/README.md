@@ -72,9 +72,11 @@ SelenideAppium.openIOSDeepLink("mydemoapprn://product-details/1");
    $(AppiumBy.xpath(".//*[@text='Views']")).tap(); //perform native event tap
    $(AppiumBy.xpath(".//*[@text='Views']")).doubleTap(); //perform native event double tap
    $(AppiumBy.xpath(".//*[@text='Views']")).click(tapWithOffset(100, -60)) //perform tap with offset from center of the element
+   $(AppiumBy.xpath(".//*[@text='Views']")).click(doubleTapWithOffset(100, -60)) //perform double tap with offset from center of the element
    $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPress());
    $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPressFor(ofSeconds(5)));
    $(AppiumBy.xpath(".//*[@text='People Names']")).tap(longPressFor(ofSeconds(4)));
+   $(AppiumBy.xpath(".//*[@text='People Names']")).click(longPressWithOffsetFor(ofSeconds(5), 100, -60)); //perform long press with offset from center of the element
 ```
 
 4. Drag and drop
