@@ -13,6 +13,7 @@ final class JavaCode {
   static final String IMPORT_FORWARD = SELENIDE + "forward";
   static final String IMPORT_REFRESH = SELENIDE + "refresh";
   static final String IMPORT_SCREENSHOT = SELENIDE + "screenshot";
+  static final String IMPORT_SWITCHTO = SELENIDE + "switchTo";
 
   static final String IMPORT_BYTEXT = SELECTORS + "byText";
   static final String IMPORT_BYXPATH = SELECTORS + "byXpath";

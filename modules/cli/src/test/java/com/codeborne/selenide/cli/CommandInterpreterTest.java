@@ -95,6 +95,13 @@ class CommandInterpreterTest {
   }
 
   @Test
+  void frameSwitching() {
+    assertThat(code("frame #iframe")).isEqualTo("switchTo().frame($(\"#iframe\"));");
+    assertThat(interpreter.interpret("frame #iframe").statement().staticImports())
+      .containsExactlyInAnyOrder("com.codeborne.selenide.Selenide.$", "com.codeborne.selenide.Selenide.switchTo");
+  }
+
+  @Test
   void screenshot() {
     assertThat(code("screenshot")).isEqualTo("screenshot(\"screenshot\");");
     assertThat(code("screenshot home")).isEqualTo("screenshot(\"home\");");
