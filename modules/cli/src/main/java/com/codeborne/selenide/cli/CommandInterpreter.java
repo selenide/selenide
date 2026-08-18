@@ -55,7 +55,7 @@ class CommandInterpreter {
     "pressenter", "presstab", "pressescape",
     "setvalue", "type", "append", "selectoption", "selectradio",
     "setselected", "check", "uncheck",
-    "open", "back", "forward", "refresh", "should", "screenshot", "frame");
+    "open", "back", "forward", "refresh", "should", "screenshot", "frame", "defaultcontent");
 
   static Set<String> commandNames() {
     return COMMAND_NAMES;
@@ -106,6 +106,9 @@ class CommandInterpreter {
     handlers.put("forward", a -> new PendingCommand(RecordedStatement.of("forward();", IMPORT_FORWARD), driver::forward));
     handlers.put("refresh", a -> new PendingCommand(RecordedStatement.of("refresh();", IMPORT_REFRESH), driver::refresh));
     handlers.put("frame", this::frame);
+    handlers.put("defaultcontent", a -> new PendingCommand(
+      RecordedStatement.of("switchTo().defaultContent();", IMPORT_SWITCHTO),
+      () -> driver.switchTo().defaultContent()));
   }
 
   private PendingCommand open(Args args) {

@@ -99,6 +99,10 @@ class CommandInterpreterTest {
     assertThat(code("frame #iframe")).isEqualTo("switchTo().frame($(\"#iframe\"));");
     assertThat(interpreter.interpret("frame #iframe").statement().staticImports())
       .containsExactlyInAnyOrder("com.codeborne.selenide.Selenide.$", "com.codeborne.selenide.Selenide.switchTo");
+
+    assertThat(code("defaultContent")).isEqualTo("switchTo().defaultContent();");
+    assertThat(interpreter.interpret("defaultContent").statement().staticImports())
+      .containsExactly("com.codeborne.selenide.Selenide.switchTo");
   }
 
   @Test
