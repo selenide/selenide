@@ -10,7 +10,7 @@
 
 **Spec:** No separate spec document — this was brainstormed as a bounded task (existing extension points on both sides, no new subsystem). The design was agreed in chat with the user on 2026-08-18: see the "Design" summary below, which is authoritative for this plan.
 
-### Design summary (from brainstorming)
+## Design summary (from brainstorming)
 
 - MCP tool names: `browser_frame_select` (selector-only input) and `browser_frame_reset` (no input) — chosen over the issue's verb-first `browser_switch_frame`/`browser_switch_to_default_content` wording to match the existing noun-first "context switching" family (`browser_tab_select`, `browser_tab_list`, ...).
 - CLI command names: `frame <selector>` and `defaultcontent`.
@@ -508,7 +508,7 @@ git commit -m "#3371 add frame switching to MCP/CLI parity catalog"
 
 In the "Recorded actions" fenced block (currently ending with `screenshot [name]`), add a line for the new commands:
 
-```
+```text
 click <sel>                    setValue <sel> <text>   (alias: type)
 append <sel> <text>            clear <sel>
 selectOption <sel> <text>      selectRadio <sel> <value>
@@ -534,14 +534,14 @@ In the "Recorded actions" table, add two rows right after the `screenshot [name]
 
 Add a new section after "## JavaScript" (the last section in the file):
 
-```markdown
+````markdown
 
 ## Frames
 ```java
 switchTo().frame($("iframe"))     // switch into an iframe
 switchTo().defaultContent()       // return to the top-level document
 ```
-```
+````
 
 - [ ] **Step 4: Commit**
 
