@@ -56,18 +56,17 @@ public class AppiumClick extends Click {
 
   protected void click(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
     switch (appiumClickOptions.appiumClickMethod()) {
-      case TAP_WITH_OFFSET -> performTapWithOffset(driver, webElement, appiumClickOptions.offsetX(), appiumClickOptions.offsetY());
-      case TAP -> performTapWithOffset(driver, webElement, 0, 0);
-      case DOUBLE_TAP -> performDoubleTap(driver, webElement);
+      case TAP_WITH_OFFSET, TAP -> performTapWithOffset(driver, webElement, appiumClickOptions);
+      case DOUBLE_TAP -> performDoubleTap(driver, webElement, appiumClickOptions);
       case LONG_PRESS -> performLongPress(driver, webElement, appiumClickOptions);
       default -> throw new IllegalArgumentException("Unknown click option: " + appiumClickOptions.appiumClickMethod());
     }
   }
 
-  private void performDoubleTap(Driver driver, WebElement webElement) {
-    Point size = webElement.getLocation();
+  private void performDoubleTap(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
+    Point location = getCenter(webElement);
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
-    Sequence doubleTapSequence = getSequenceToPerformTap(finger, size, 0, 0)
+    Sequence doubleTapSequence = getSequenceToPerformTap(finger, location, appiumClickOptions.offsetX(), appiumClickOptions.offsetY())
       .addAction(new Pause(finger, ofMillis(40)))
       .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
       .addAction(new Pause(finger, ofMillis(200)))
@@ -76,22 +75,22 @@ public class AppiumClick extends Click {
   }
 
   private void performLongPress(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
-    Point size = webElement.getLocation();
+    Point location = getCenter(webElement);
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
     Sequence doubleTapSequence = new Sequence(finger, 1)
-      .addAction(finger.createPointerMove(ofMillis(0),
-        PointerInput.Origin.viewport(), size.getX(), size.getY()))
+      .addAction(finger.createPointerMove(ofMillis(0), PointerInput.Origin.viewport(),
+        location.getX() + appiumClickOptions.offsetX(), location.getY() + appiumClickOptions.offsetY()))
       .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
       .addAction(new Pause(finger, appiumClickOptions.longPressHoldDuration()))
       .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
     perform(driver, doubleTapSequence);
   }
 
-  private void performTapWithOffset(Driver driver, WebElement webElement, int offsetX, int offsetY) {
+  private void performTapWithOffset(Driver driver, WebElement webElement, AppiumClickOptions appiumClickOptions) {
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, FINGER_1);
-    Point size = getCenter(webElement);
+    Point location = getCenter(webElement);
 
-    Sequence tapSequence = getSequenceToPerformTap(finger, size, offsetX, offsetY);
+    Sequence tapSequence = getSequenceToPerformTap(finger, location, appiumClickOptions.offsetX(), appiumClickOptions.offsetY());
     perform(driver, tapSequence);
   }
 
@@ -101,10 +100,10 @@ public class AppiumClick extends Click {
     appiumDriver.perform(singletonList(sequence));
   }
 
-  private Sequence getSequenceToPerformTap(PointerInput finger, Point size, int offsetX, int offsetY) {
+  private Sequence getSequenceToPerformTap(PointerInput finger, Point location, int offsetX, int offsetY) {
     return new Sequence(finger, 1)
       .addAction(finger.createPointerMove(ofMillis(0),
-        PointerInput.Origin.viewport(), size.getX() + offsetX, size.getY() + offsetY))
+        PointerInput.Origin.viewport(), location.getX() + offsetX, location.getY() + offsetY))
       .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
       .addAction(new Pause(finger, ofMillis(200)))
       .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));

@@ -32,15 +32,23 @@ public class AppiumClickOptions extends ClickOptions {
   }
 
   public static AppiumClickOptions doubleTap() {
-    return new AppiumClickOptions(AppiumClickMethod.DOUBLE_TAP, 0, 0, ZERO);
+    return doubleTapWithOffset(0, 0);
+  }
+
+  public static AppiumClickOptions doubleTapWithOffset(int xOffset, int yOffset) {
+    return new AppiumClickOptions(AppiumClickMethod.DOUBLE_TAP, xOffset, yOffset, ZERO);
   }
 
   public static AppiumClickOptions longPress() {
-    return new AppiumClickOptions(AppiumClickMethod.LONG_PRESS, 0, 0, DEFAULT_LONG_PRESS_DURATION);
+    return longPressFor(DEFAULT_LONG_PRESS_DURATION);
   }
 
   public static AppiumClickOptions longPressFor(Duration longPressHoldDuration) {
-    return new AppiumClickOptions(AppiumClickMethod.LONG_PRESS, 0, 0, longPressHoldDuration);
+    return longPressWithOffsetFor(longPressHoldDuration, 0, 0);
+  }
+
+  public static AppiumClickOptions longPressWithOffsetFor(Duration longPressHoldDuration, int xOffset, int yOffset) {
+    return new AppiumClickOptions(AppiumClickMethod.LONG_PRESS, xOffset, yOffset, longPressHoldDuration);
   }
 
   public AppiumClickMethod appiumClickMethod() {
