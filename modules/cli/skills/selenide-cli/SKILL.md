@@ -58,6 +58,7 @@ selenide hover "#menu"
 selenide doubleClick "#cell"                        # contextClick, scrollTo
 selenide pressEnter "#search"                       # pressTab, pressEscape
 selenide back                                       # forward, refresh
+selenide frame "#iframe"                            # defaultContent (return to top document)
 selenide screenshot                                 # screenshot <name>
 ```
 

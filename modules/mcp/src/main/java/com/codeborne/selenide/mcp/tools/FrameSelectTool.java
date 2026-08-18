@@ -14,7 +14,8 @@ class FrameSelectTool extends McpTool {
   McpSchema.CallToolResult execute(Map<String, Object> args) {
     String selector = (String) args.get("selector");
     var by = resolve(selector);
-    session.getDriver().switchTo().frame(session.getDriver().$(by));
+    var driver = session.getDriver();
+    driver.switchTo().frame(driver.$(by));
     return success("Switched into frame: " + selector);
   }
 }
