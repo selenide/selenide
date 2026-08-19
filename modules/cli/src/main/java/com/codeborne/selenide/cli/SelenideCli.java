@@ -66,7 +66,7 @@ public final class SelenideCli {
     if (!normalizedCommand.equals("install") && !normalizedCommand.equals("__daemon")) {
       SkillInstaller.warnIfStale(err);
     }
-    if (args.isEmpty() || isHelp(command) || hasHelpFlag(args)) {
+    if (args.isEmpty() || isHelp(normalizedCommand) || hasHelpFlag(args)) {
       USAGE.forEach(out::println);
       return 0;
     }

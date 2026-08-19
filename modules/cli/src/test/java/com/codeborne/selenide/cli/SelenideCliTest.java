@@ -149,6 +149,15 @@ class SelenideCliTest {
   }
 
   @Test
+  void mixedCaseHelpAliasPrintsUsageInsteadOfUnknownCommand() {
+    int exitCode = SelenideCli.run(List.of("HELP"), out, err);
+
+    assertThat(exitCode).isEqualTo(0);
+    assertThat(outBuffer.toString(UTF_8)).contains("Selenide CLI");
+    assertThat(errBuffer.toString(UTF_8)).doesNotContain("Unknown command");
+  }
+
+  @Test
   void mixedCaseInstallIsDispatchedToSkillInstaller() {
     int exitCode = SelenideCli.run(List.of("INSTALL"), out, err);
 
