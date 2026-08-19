@@ -1,4 +1,6 @@
 # The fat JAR is a build artifact — copied in at pack time, not committed.
 jar/*.jar
+# Copied from ../skills at pack time — source of truth lives there, not committed here.
+skills/
 # npm pack output
 *.tgz

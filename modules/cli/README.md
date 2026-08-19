@@ -36,6 +36,39 @@ Troubleshooting:
 - `command not found: selenide` → add npm's global bin dir to `PATH`:
   `export PATH="$(npm prefix -g)/bin:$PATH"`.
 
+## Using with AI coding agents
+
+Any agent that can run shell commands can drive `selenide-cli` cold — `selenide --help` is
+self-documenting, and every command's grammar is discoverable from there. Two ways to give an agent
+richer, pre-loaded context on top of that:
+
+- **Claude Code** — the npm package bundles a [Skill](skills/selenide-cli/SKILL.md)
+  (`skills/selenide-cli/`) with the full command grammar, selectors and codegen conventions. Copy it
+  into your project so Claude Code picks it up automatically:
+  ```bash
+  mkdir -p .claude/skills
+  cp -r "$(npm root -g)/@selenide/cli/skills/selenide-cli" .claude/skills/
+  # (local install: use ./node_modules/@selenide/cli/skills/selenide-cli instead)
+  ```
+- **Other agents that read `AGENTS.md`** (Codex CLI, Amp, and others) — add a section pointing at the
+  CLI, e.g.:
+  ```markdown
+  ## Browser automation & Selenide codegen
+
+  Use `selenide-cli` (`npm install -g @selenide/cli`; requires JDK 17+ on PATH) to drive a real
+  browser and record a Selenide Java test as you go:
+
+      selenide open <url>
+      selenide click "<selector>"
+      selenide setValue "<selector>" "<text>"
+      selenide should "<selector>" visible
+      selenide code      # print the generated Selenide Java
+      selenide close
+
+  Selectors: CSS by default; `text=<text>` for byText; `xpath=<expr>` (or a leading `//`) for byXpath.
+  Run `selenide --help` or `selenide <command> --help` for the full reference.
+  ```
+
 ## Build & requirements
 
 - JDK 17+; a browser (Chrome/Firefox/Edge). Selenium Manager downloads the driver automatically.
@@ -91,7 +124,7 @@ screenshot [name]
 
 Codegen (not recorded): `code`, `save <file>`, `undo`, `reset`.
 
-Full grammar and generated-Java mapping: [../../.github/skills/selenide-cli/references/commands.md](skills/selenide-cli/references/commands.md).
+Full grammar and generated-Java mapping: [skills/selenide-cli/references/commands.md](skills/selenide-cli/references/commands.md).
 
 ## Selectors & conditions
 
