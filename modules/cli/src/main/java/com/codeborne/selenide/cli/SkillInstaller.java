@@ -65,9 +65,12 @@ final class SkillInstaller {
   }
 
   static void warnIfStale(PrintStream err, Path cwd, Path home) {
+    boolean cwdIsHome = cwd.equals(home);
     for (String agent : AGENT_DIRS) {
       warnIfStaleAt(err, cwd, agent, false);
-      warnIfStaleAt(err, home, agent, true);
+      if (!cwdIsHome) {
+        warnIfStaleAt(err, home, agent, true);
+      }
     }
   }
 

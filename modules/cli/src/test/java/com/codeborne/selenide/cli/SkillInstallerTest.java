@@ -101,7 +101,7 @@ class SkillInstallerTest {
     assertThat(errBuffer.toString(UTF_8))
       .contains("does not match the tool version")
       .contains("selenide install --skills")
-      .contains(".claude/skills/selenide-cli");
+      .contains(Path.of(".claude", "skills", "selenide-cli").toString());
   }
 
   @Test
@@ -113,6 +113,21 @@ class SkillInstallerTest {
     SkillInstaller.warnIfStale(err, cwd, home);
 
     assertThat(errBuffer.toString(UTF_8)).contains("does not match the tool version");
+  }
+
+  @Test
+  void doesNotDoubleWarnWhenCwdAndHomeAreTheSameDirectory() throws Exception {
+    // e.g. running the CLI with the home directory as cwd - cwd and home resolve to one real
+    // install, not two, so it must be reported (and re-installed) exactly once, as project-local.
+    SkillInstaller.install(List.of("--skills"), out, err, cwd, cwd);
+    Path skillMd = cwd.resolve(".claude/skills/selenide-cli/SKILL.md");
+    Files.writeString(skillMd, Files.readString(skillMd, UTF_8) + "\nstale edit");
+
+    SkillInstaller.warnIfStale(err, cwd, cwd);
+
+    String warnings = errBuffer.toString(UTF_8);
+    assertThat(warnings.split("does not match the tool version", -1)).hasSize(2);
+    assertThat(warnings).contains("selenide install --skills").doesNotContain("--global");
   }
 
   @Test

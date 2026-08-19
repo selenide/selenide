@@ -62,7 +62,8 @@ public final class SelenideCli {
   public static int run(List<String> args, PrintStream out, PrintStream err) {
     String session = extractSession(args);
     String command = args.isEmpty() ? "" : args.get(0);
-    if (!command.equals("install") && !command.equals("__daemon")) {
+    String normalizedCommand = command.toLowerCase(Locale.ROOT);
+    if (!normalizedCommand.equals("install") && !normalizedCommand.equals("__daemon")) {
       SkillInstaller.warnIfStale(err);
     }
     if (args.isEmpty() || isHelp(command) || hasHelpFlag(args)) {
