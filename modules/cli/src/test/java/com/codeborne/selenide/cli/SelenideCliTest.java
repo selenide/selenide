@@ -105,4 +105,53 @@ class SelenideCliTest {
     assertThat(exitCode).isEqualTo(1);
     assertThat(errBuffer.toString(UTF_8)).contains("No open session 'default'");
   }
+
+  @Test
+  void mixedCaseOpenReachesTheOpenHandlerInsteadOfTheDaemonCommandPath() {
+    // "open" is also a CommandInterpreter action name, so a case mismatch used to slip past the
+    // known-command check but miss the case-sensitive switch, silently landing in the generic
+    // DaemonClient.command() path instead of DaemonClient.open() (which alone knows how to spawn
+    // a daemon). No URL given, so this only exercises dispatch, not a real daemon spawn.
+    int exitCode = SelenideCli.run(List.of("OPEN"), out, err);
+
+    assertThat(exitCode).isEqualTo(1);
+    assertThat(errBuffer.toString(UTF_8))
+      .contains("Usage: selenide open <url> [options]")
+      .doesNotContain("No open session");
+  }
+
+  @Test
+  void mixedCaseListIsDispatchedToTheListHandler() {
+    int exitCode = SelenideCli.run(List.of("LIST"), out, err);
+
+    assertThat(exitCode).isEqualTo(0);
+    assertThat(outBuffer.toString(UTF_8)).contains("No sessions.");
+    assertThat(errBuffer.toString(UTF_8)).doesNotContain("Unknown command");
+  }
+
+  @Test
+  void mixedCaseCloseAllIsDispatchedToTheCloseAllHandler() {
+    int exitCode = SelenideCli.run(List.of("CLOSE-ALL"), out, err);
+
+    assertThat(exitCode).isEqualTo(0);
+    assertThat(outBuffer.toString(UTF_8)).contains("closed all sessions");
+    assertThat(errBuffer.toString(UTF_8)).doesNotContain("Unknown command");
+  }
+
+  @Test
+  void mixedCaseVersionIsDispatchedToTheVersionHandler() {
+    int exitCode = SelenideCli.run(List.of("VERSION"), out, err);
+
+    assertThat(exitCode).isEqualTo(0);
+    assertThat(outBuffer.toString(UTF_8)).contains("selenide-cli");
+    assertThat(errBuffer.toString(UTF_8)).doesNotContain("Unknown command");
+  }
+
+  @Test
+  void mixedCaseInstallIsDispatchedToSkillInstaller() {
+    int exitCode = SelenideCli.run(List.of("INSTALL"), out, err);
+
+    assertThat(exitCode).isEqualTo(1);
+    assertThat(errBuffer.toString(UTF_8)).contains("Usage: selenide install --skills[=agents]");
+  }
 }
