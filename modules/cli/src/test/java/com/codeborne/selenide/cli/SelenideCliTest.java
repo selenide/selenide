@@ -89,6 +89,16 @@ class SelenideCliTest {
   }
 
   @Test
+  void installCommandIsDispatchedToSkillInstallerNotTheDaemon() {
+    // No --skills flag, so this only exercises argument validation - no filesystem writes into
+    // this test's real working directory (see SkillInstallerTest for the actual install/copy logic).
+    int exitCode = SelenideCli.run(List.of("install"), out, err);
+
+    assertThat(exitCode).isEqualTo(1);
+    assertThat(errBuffer.toString(UTF_8)).contains("Usage: selenide install --skills[=agents]");
+  }
+
+  @Test
   void commandNameMatchingIsCaseInsensitive() {
     int exitCode = SelenideCli.run(List.of("SetValue", "#email", "a@b.com"), out, err);
 
