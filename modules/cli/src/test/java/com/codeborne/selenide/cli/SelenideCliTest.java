@@ -10,6 +10,7 @@ import org.junit.jupiter.api.parallel.Resources;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -153,5 +154,22 @@ class SelenideCliTest {
 
     assertThat(exitCode).isEqualTo(1);
     assertThat(errBuffer.toString(UTF_8)).contains("Usage: selenide install --skills[=agents]");
+  }
+
+  @Test
+  void mixedCaseInstallDoesNotNagAboutTheStaleSkillItIsAboutToReplace() throws Exception {
+    // The stale-skill guard used to compare the un-normalized command ("INSTALL" != "install"), so
+    // it fired even for the command about to fix that exact staleness. Planting the stale copy
+    // under the redirected home (--global target) - never the real ~/.claude - to reproduce it.
+    Path skillMd = home.resolve(".claude/skills/selenide-cli/SKILL.md");
+    Files.createDirectories(skillMd.getParent());
+    Files.writeString(skillMd, "stale content, deliberately does not match the bundled SKILL.md");
+
+    int exitCode = SelenideCli.run(List.of("INSTALL"), out, err);
+
+    assertThat(exitCode).isEqualTo(1); // still errors: no --skills flag given
+    assertThat(errBuffer.toString(UTF_8))
+      .contains("Usage: selenide install --skills[=agents]")
+      .doesNotContain("does not match the tool version");
   }
 }
