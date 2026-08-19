@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test::page of fixed size 2200x3300 with a tiny iframe</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <style>
+    #the_div {
+      text-align: center;
+      border: red 3px solid;
+      width: 2200px;
+      height: 3300px;
+      background: #0ff;
+    }
+    #tiny_iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+<iframe id="tiny_iframe" srcdoc="&lt;html&gt;&lt;body&gt;tiny frame&lt;/body&gt;&lt;/html&gt;" width="50" height="50"></iframe>
+<div id="the_div">
+  This should be a div of size 2200x3300
+</div>
+</body>
+</html>
