@@ -75,7 +75,7 @@ public final class SelenideCli {
 
   private static int dispatch(String command, List<String> rest, List<String> args, String session,
                                PrintStream out, PrintStream err) {
-    return switch (command) {
+    return switch (command.toLowerCase(Locale.ROOT)) {
       case "__daemon" -> {
         runDaemon(session, rest);
         yield 0;

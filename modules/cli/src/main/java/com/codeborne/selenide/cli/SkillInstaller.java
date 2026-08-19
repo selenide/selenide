@@ -19,9 +19,10 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 final class SkillInstaller {
   private static final String SKILL_NAME = "selenide-cli";
+  private static final String SKILL_MD = "SKILL.md";
   private static final List<String> AGENT_DIRS = List.of("claude", "agents");
   private static final List<String> SKILL_FILES = List.of(
-    "SKILL.md",
+    SKILL_MD,
     "references/build-and-run.md",
     "references/codegen.md",
     "references/commands.md",
@@ -60,27 +61,44 @@ final class SkillInstaller {
   }
 
   static void warnIfStale(PrintStream err) {
-    warnIfStale(err, cwd());
+    warnIfStale(err, cwd(), homeDir());
   }
 
-  static void warnIfStale(PrintStream err, Path cwd) {
-    String bundled = readBundledSkill();
-    if (bundled == null) {
+  static void warnIfStale(PrintStream err, Path cwd, Path home) {
+    for (String agent : AGENT_DIRS) {
+      warnIfStaleAt(err, cwd, agent, false);
+      warnIfStaleAt(err, home, agent, true);
+    }
+  }
+
+  private static void warnIfStaleAt(PrintStream err, Path base, String agent, boolean global) {
+    Path installedDir = base.resolve("." + agent).resolve("skills").resolve(SKILL_NAME);
+    if (!hasDrifted(installedDir)) {
       return;
     }
-    for (String agent : AGENT_DIRS) {
-      Path installedDir = cwd.resolve("." + agent).resolve("skills").resolve(SKILL_NAME);
-      String installed = readFile(installedDir.resolve("SKILL.md"));
-      if (installed != null && !installed.equals(bundled)) {
-        err.print(staleWarning(cwd, agent, installedDir));
-      }
-    }
+    Path shown = global ? installedDir : base.relativize(installedDir);
+    err.print(staleWarning(shown, agent, global));
   }
 
-  private static String staleWarning(Path cwd, String agent, Path installedDir) {
-    String installCommand = "selenide install --skills" + (agent.equals("agents") ? "=agents" : "");
+  /** True if {@code installedDir} holds a copy of the skill and any of its files differs from the bundled one. */
+  private static boolean hasDrifted(Path installedDir) {
+    if (!Files.isRegularFile(installedDir.resolve(SKILL_MD))) {
+      return false;
+    }
+    for (String relativePath : SKILL_FILES) {
+      String bundled = readBundledFile(relativePath);
+      String installed = readFile(installedDir.resolve(relativePath));
+      if (bundled == null || !bundled.equals(installed)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static String staleWarning(Path shown, String agent, boolean global) {
+    String installCommand = "selenide install --skills" + (agent.equals("agents") ? "=agents" : "") + (global ? " --global" : "");
     return frame(List.of(
-      "The " + SKILL_NAME + " skill at '" + cwd.relativize(installedDir) + "'",
+      "The " + SKILL_NAME + " skill at '" + shown + "'",
       "does not match the tool version.",
       "",
       "Run `" + installCommand + "`",
@@ -105,8 +123,8 @@ final class SkillInstaller {
     return in;
   }
 
-  private static String readBundledSkill() {
-    try (InputStream in = bundledResource("SKILL.md")) {
+  private static String readBundledFile(String relativePath) {
+    try (InputStream in = bundledResource(relativePath)) {
       return normalize(new String(in.readAllBytes(), UTF_8));
     }
     catch (IOException e) {

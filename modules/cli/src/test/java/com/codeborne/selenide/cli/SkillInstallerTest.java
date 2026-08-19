@@ -76,7 +76,7 @@ class SkillInstallerTest {
 
   @Test
   void doesNotWarnWhenNoSkillIsInstalled() {
-    SkillInstaller.warnIfStale(err, cwd);
+    SkillInstaller.warnIfStale(err, cwd, home);
 
     assertThat(errBuffer.toString(UTF_8)).isEmpty();
   }
@@ -85,7 +85,7 @@ class SkillInstallerTest {
   void doesNotWarnRightAfterInstalling() {
     SkillInstaller.install(List.of("--skills"), out, err, cwd, home);
 
-    SkillInstaller.warnIfStale(err, cwd);
+    SkillInstaller.warnIfStale(err, cwd, home);
 
     assertThat(errBuffer.toString(UTF_8)).isEmpty();
   }
@@ -96,11 +96,36 @@ class SkillInstallerTest {
     Path skillMd = cwd.resolve(".claude/skills/selenide-cli/SKILL.md");
     Files.writeString(skillMd, Files.readString(skillMd, UTF_8) + "\nstale edit");
 
-    SkillInstaller.warnIfStale(err, cwd);
+    SkillInstaller.warnIfStale(err, cwd, home);
 
     assertThat(errBuffer.toString(UTF_8))
       .contains("does not match the tool version")
       .contains("selenide install --skills")
       .contains(".claude/skills/selenide-cli");
+  }
+
+  @Test
+  void warnsWhenAReferenceFileDriftedEvenIfSkillMdDidNot() throws Exception {
+    SkillInstaller.install(List.of("--skills"), out, err, cwd, home);
+    Path commandsMd = cwd.resolve(".claude/skills/selenide-cli/references/commands.md");
+    Files.writeString(commandsMd, Files.readString(commandsMd, UTF_8) + "\nstale edit");
+
+    SkillInstaller.warnIfStale(err, cwd, home);
+
+    assertThat(errBuffer.toString(UTF_8)).contains("does not match the tool version");
+  }
+
+  @Test
+  void warnsAboutAStaleGlobalInstallWithAGlobalReinstallHint() throws Exception {
+    SkillInstaller.install(List.of("--skills=agents", "--global"), out, err, cwd, home);
+    Path skillMd = home.resolve(".agents/skills/selenide-cli/SKILL.md");
+    Files.writeString(skillMd, Files.readString(skillMd, UTF_8) + "\nstale edit");
+
+    SkillInstaller.warnIfStale(err, cwd, home);
+
+    assertThat(errBuffer.toString(UTF_8))
+      .contains("does not match the tool version")
+      .contains("selenide install --skills=agents --global")
+      .contains(home.resolve(".agents/skills/selenide-cli").toString());
   }
 }
