@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -45,6 +46,9 @@ public final class SelenideCli {
     "  -v, --version            print version",
     "  -h, --help               print this help");
 
+  /** Commands handled daemon-side (via {@link SelenideExecutor}) but outside {@link CommandInterpreter}. */
+  private static final Set<String> META_COMMANDS = Set.of("close", "code", "save", "undo", "reset");
+
   private SelenideCli() {
   }
 
@@ -60,6 +64,10 @@ public final class SelenideCli {
     }
     String command = args.get(0);
     List<String> rest = args.subList(1, args.size());
+    if (hasHelpFlag(rest)) {
+      USAGE.forEach(out::println);
+      return 0;
+    }
     return switch (command) {
       case "__daemon" -> {
         runDaemon(session, rest);
@@ -75,8 +83,23 @@ public final class SelenideCli {
         yield 0;
       }
       case "close-all" -> new DaemonClient(session, out, err).closeAll();
-      default -> new DaemonClient(session, out, err).command(args);
+      default -> {
+        if (!isKnownCommand(command)) {
+          err.println("Unknown command: '" + command + "'. Run 'selenide --help' to see commands.");
+          yield 1;
+        }
+        yield new DaemonClient(session, out, err).command(args);
+      }
     };
+  }
+
+  private static boolean hasHelpFlag(List<String> args) {
+    return args.contains("--help") || args.contains("-h");
+  }
+
+  private static boolean isKnownCommand(String command) {
+    String normalized = command.toLowerCase(Locale.ROOT);
+    return META_COMMANDS.contains(normalized) || CommandInterpreter.commandNames().contains(normalized);
   }
 
   private static void runDaemon(String session, List<String> configFlags) {
