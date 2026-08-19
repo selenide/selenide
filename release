@@ -32,13 +32,18 @@ fi
 
 echo "Releasing version: ${version}"
 
-./gradlew clean check javadocForSite
+# Build everything
+./gradlew clean check javadocForSite :modules:cli:shadowJar
+rm -f modules/cli/npm/jar/*.jar
+cp modules/cli/build/libs/selenide-cli-*.jar modules/cli/npm/jar/
+rm -rf modules/cli/npm/skills
+cp -r modules/cli/skills modules/cli/npm/skills
+
+# Publish JARs
 ./gradlew publishToMavenLocal
 ./gradlew publishToMavenCentral --no-parallel --info
 
-git tag -a "v${version}" -m "released selenide ${version}"
-git push origin --tags
-
+# Publish javadoc on site
 rm -fr "../selenide-web/static/javadoc/current/*"
 cp -r build/javadoc-for-site/. ../selenide-web/static/javadoc/current/
 cd ../selenide-web || exit 2
@@ -47,6 +52,7 @@ git commit -m "publish javadoc for Selenide ${version}"
 git push
 cd - || exit 3
 
+# Publish NPM modules
 npm login
 
 cd mcp-server
@@ -58,4 +64,13 @@ npm publish -i
 npm deprecate selenide-mcp@"*" "selenide-mcp has moved to @selenide/mcp. Please update your config to use @selenide/mcp instead."
 cd -
 
+cd modules/cli/npm
+npm version "$version" --no-git-tag-version
+npm publish --access public -i
+cd -
+
 npm logout
+
+# Add git tag
+git tag -a "v${version}" -m "released selenide ${version}"
+git push origin --tags
