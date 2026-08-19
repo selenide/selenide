@@ -42,14 +42,16 @@ Any agent that can run shell commands can drive `selenide-cli` cold — `selenid
 self-documenting, and every command's grammar is discoverable from there. Two ways to give an agent
 richer, pre-loaded context on top of that:
 
-- **Claude Code** — the npm package bundles a [Skill](skills/selenide-cli/SKILL.md)
-  (`skills/selenide-cli/`) with the full command grammar, selectors and codegen conventions. Copy it
-  into your project so Claude Code picks it up automatically:
+- **Claude Code, or any agent that reads a project-local `.agents/skills/`** — the CLI bundles a
+  [Skill](skills/selenide-cli/SKILL.md) (full command grammar, selectors, codegen conventions) inside
+  its own jar, so installing it is one command, no path-guessing into `node_modules` required:
   ```bash
-  mkdir -p .claude/skills
-  cp -r "$(npm root -g)/@selenide/cli/skills/selenide-cli" .claude/skills/
-  # (local install: use ./node_modules/@selenide/cli/skills/selenide-cli instead)
+  selenide install --skills           # -> .claude/skills/selenide-cli/
+  selenide install --skills=agents    # -> .agents/skills/selenide-cli/
+  selenide install --skills --global  # installs into $HOME instead of the current project
   ```
+  If an already-installed copy drifts from the version bundled in your current `selenide-cli`
+  (e.g. after upgrading), the CLI prints a warning on stderr telling you to re-run `install`.
 - **Other agents that read `AGENTS.md`** (Codex CLI, Amp, and others) — add a section pointing at the
   CLI, e.g.:
   ```markdown
@@ -107,6 +109,7 @@ Lifecycle:
 | `close` | close the browser and stop the daemon |
 | `list` | list sessions (`running` / `stale`) |
 | `close-all` | close every session |
+| `install --skills[=agents] [--global]` | install the bundled skill into `.claude/skills` (default) or `.agents/skills` |
 
 Recorded actions (each appends to the generated code):
 

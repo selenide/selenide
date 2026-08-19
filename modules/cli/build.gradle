@@ -6,6 +6,15 @@ ext {
   artifactId = 'selenide-cli'
 }
 
+// Bundles skills/selenide-cli/** (SKILL.md + references) onto the classpath as
+// /selenide-cli/**, so `selenide install --skills` can extract it at runtime regardless of
+// whether the jar was obtained via npm or Maven Central.
+sourceSets {
+  main {
+    resources.srcDir 'skills'
+  }
+}
+
 dependencies {
   implementation project(':modules:core')
   runtimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")

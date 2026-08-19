@@ -39,6 +39,9 @@ public final class SelenideCli {
     "",
     "Codegen:  code (print generated Java), save <file>, undo, reset",
     "",
+    "AI agents:  install --skills[=agents] [--global]   install the bundled skill into",
+    "  .claude/skills (default) or .agents/skills (--skills=agents); --global targets $HOME",
+    "",
     "open options:  --browser=<name> --headless --browser-size=<WxH> --base-url=<url>",
     "  --timeout=<ms> --remote=<url> --reports-folder=<dir>  (see references/configuration)",
     "",
@@ -58,16 +61,20 @@ public final class SelenideCli {
 
   public static int run(List<String> args, PrintStream out, PrintStream err) {
     String session = extractSession(args);
-    if (args.isEmpty() || isHelp(args.get(0))) {
+    String command = args.isEmpty() ? "" : args.get(0);
+    if (!command.equals("install") && !command.equals("__daemon")) {
+      SkillInstaller.warnIfStale(err);
+    }
+    if (args.isEmpty() || isHelp(command) || hasHelpFlag(args)) {
       USAGE.forEach(out::println);
       return 0;
     }
-    String command = args.get(0);
     List<String> rest = args.subList(1, args.size());
-    if (hasHelpFlag(rest)) {
-      USAGE.forEach(out::println);
-      return 0;
-    }
+    return dispatch(command, rest, args, session, out, err);
+  }
+
+  private static int dispatch(String command, List<String> rest, List<String> args, String session,
+                               PrintStream out, PrintStream err) {
     return switch (command) {
       case "__daemon" -> {
         runDaemon(session, rest);
@@ -77,20 +84,23 @@ public final class SelenideCli {
         out.println("selenide-cli " + version());
         yield 0;
       }
+      case "install" -> SkillInstaller.install(rest, out, err);
       case "open" -> new DaemonClient(session, out, err).open(rest);
       case "list" -> {
         new DaemonClient(session, out, err).list();
         yield 0;
       }
       case "close-all" -> new DaemonClient(session, out, err).closeAll();
-      default -> {
-        if (!isKnownCommand(command)) {
-          err.println("Unknown command: '" + command + "'. Run 'selenide --help' to see commands.");
-          yield 1;
-        }
-        yield new DaemonClient(session, out, err).command(args);
-      }
+      default -> runAction(command, args, session, out, err);
     };
+  }
+
+  private static int runAction(String command, List<String> args, String session, PrintStream out, PrintStream err) {
+    if (!isKnownCommand(command)) {
+      err.println("Unknown command: '" + command + "'. Run 'selenide --help' to see commands.");
+      return 1;
+    }
+    return new DaemonClient(session, out, err).command(args);
   }
 
   private static boolean hasHelpFlag(List<String> args) {
