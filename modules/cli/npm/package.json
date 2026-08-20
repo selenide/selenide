@@ -2,12 +2,34 @@
   "name": "@selenide/cli",
   "version": "7.18.0",
   "description": "Command-line browser automation & Selenide Java codegen over a background daemon.",
-  "bin": { "selenide": "bin/selenide.js" },
-  "files": ["bin/", "jar/", "skills/", "README.md"],
-  "engines": { "node": ">=16" },
-  "keywords": ["selenide", "selenium", "webdriver", "browser", "automation", "codegen", "cli"],
+  "bin": {
+    "selenide": "bin/selenide.js"
+  },
+  "files": [
+    "bin/",
+    "jar/",
+    "skills/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "keywords": [
+    "selenide",
+    "selenium",
+    "webdriver",
+    "browser",
+    "automation",
+    "codegen",
+    "cli"
+  ],
   "license": "MIT",
-  "repository": { "type": "git", "url": "git+https://github.com/selenide/selenide.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/selenide/selenide.git"
+  },
   "homepage": "https://selenide.org",
-  "publishConfig": { "access": "public" }
+  "publishConfig": {
+    "access": "public"
+  }
 }
