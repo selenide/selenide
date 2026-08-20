@@ -38,4 +38,10 @@ tasks.named('build') {
   dependsOn shadowJar
 }
 
+// :modules:cli's shadowJar overwrites the plain jar file that testImplementation project(':modules:cli')
+// resolves to (see modules/cli/build.gradle) - order explicitly so `test` doesn't race that overwrite.
+tasks.named('test') {
+  mustRunAfter ':modules:cli:shadowJar'
+}
+
 apply from: rootProject.file('gradle/publish-module.gradle')
