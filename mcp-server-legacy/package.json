@@ -1,6 +1,6 @@
 {
   "name": "selenide-mcp",
-  "version": "7.17.0",
+  "version": "7.18.0",
   "description": "DEPRECATED — moved to @selenide/mcp. This package forwards to the new scoped package.",
   "bin": {
     "selenide-mcp": "index.js"
@@ -23,6 +23,6 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@selenide/mcp": "^7.17.0"
+    "@selenide/mcp": "^7.18.0"
   }
 }
