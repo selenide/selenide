@@ -33,7 +33,7 @@ fi
 echo "Releasing version: ${version}"
 
 # Build everything
-./gradlew clean check javadocForSite :modules:cli:shadowJar
+./gradlew clean check :modules:cli:shadowJar javadocForSite
 rm -f modules/cli/npm/jar/*.jar
 cp modules/cli/build/libs/selenide-cli-*.jar modules/cli/npm/jar/
 rm -rf modules/cli/npm/skills

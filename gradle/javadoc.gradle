@@ -42,4 +42,11 @@ tasks.register('javadocForSite', Javadoc) {
   def javadocStylesheet = file('gradle/javadoc-style.css')
   inputs.file(javadocStylesheet).withPropertyName('javadocStylesheet')
   options.addStringOption('-add-stylesheet', javadocStylesheet.absolutePath)
+
+  // modules/cli and modules/mcp use the shadow plugin with an empty archiveClassifier, so their
+  // shadowJar output overwrites the same file as their jar output. Since jar and shadowJar aren't
+  // ordered relative to each other, order javadocForSite after both so it never races the
+  // overwrite (same race fixed for `:modules:mcp:test` in modules/mcp/build.gradle).
+  mustRunAfter ':modules:cli:jar', ':modules:cli:shadowJar'
+  mustRunAfter ':modules:mcp:jar', ':modules:mcp:shadowJar'
 }
