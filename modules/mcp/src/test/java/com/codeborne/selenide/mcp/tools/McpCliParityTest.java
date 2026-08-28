@@ -36,6 +36,7 @@ class McpCliParityTest {
     new SharedAction("click", "browser_click"),
     new SharedAction("setvalue", "browser_set_value"),
     new SharedAction("type", "browser_type"),
+    new SharedAction("append", "browser_append"),
     new SharedAction("clear", "browser_clear"),
     new SharedAction("hover", "browser_hover"),
     new SharedAction("selectoption", "browser_select_option"),
