@@ -1,9 +1,12 @@
 # Changelog
 
 =======
-## 7.18.1 (28.08.2026)
-* update Selenium from 4.47.0 to 4.48.0
+## 7.18.1 (29.08.2026)
+* update Selenium from 4.47.0 to 4.48.0 (#3427)
 * update LittleProxy from 2.9.0 to 2.9.1
+* #3422 add browser_append MCP tool for non-clearing text entry (#3428)
+
+See https://github.com/selenide/selenide/milestone/244?closed=1
 
 ## 7.18.0 (20.08.2026)
 * add Selenide CLI: a command-line tool for AI agents (#3380) (#3409) (#3419)  --  thanks to sbielievitniev-xm

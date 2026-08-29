@@ -31,7 +31,7 @@ command without them cloning the repo or dealing with Gradle.
 java -jar modules/cli/build/libs/selenide-cli-*.jar --version
 ```
 
-The JAR is versioned to match the Selenide release (e.g. `selenide-cli-7.18.0.jar`).
+The JAR is versioned to match the Selenide release (e.g. `selenide-cli-7.18.1.jar`).
 
 ### Run it locally
 
@@ -100,7 +100,7 @@ modules/cli/npm/
 ```json
 {
   "name": "@selenide/cli",
-  "version": "7.18.0",
+  "version": "7.18.1",
   "description": "Command-line browser automation & Selenide Java codegen over a background daemon.",
   "bin": { "selenide": "bin/selenide.js" },
   "files": ["bin/", "jar/", "README.md"],
@@ -113,7 +113,7 @@ modules/cli/npm/
 }
 ```
 
-Keep `version` in lockstep with the Gradle `version` in `build.gradle` (set to `7.18.0` right before
+Keep `version` in lockstep with the Gradle `version` in `build.gradle` (set to `7.18.1` right before
 that release is cut), so
 `@selenide/cli@X` on npm always ships `selenide-cli-X.jar`. `publishConfig.access: "public"` is
 required for a scoped package (`@selenide/...`) to publish publicly instead of defaulting to
@@ -206,7 +206,7 @@ and `npm login` done.
 cd modules/cli/npm
 
 # 1. make sure version matches the Gradle build version
-node -e "console.log(require('./package.json').version)"   # e.g. 7.18.0
+node -e "console.log(require('./package.json').version)"   # e.g. 7.18.1
 
 # 2. rebuild + refresh the bundled JAR (see step 2)
 (cd ../../.. && ./gradlew :modules:cli:shadowJar)

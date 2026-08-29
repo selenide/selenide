@@ -1,6 +1,6 @@
 {
   "name": "selenide-cli",
-  "version": "7.18.0",
+  "version": "7.18.1",
   "description": "DEPRECATED — moved to @selenide/cli. This package forwards to the new scoped package.",
   "bin": {
     "selenide": "index.js"
@@ -25,6 +25,6 @@
     "node": ">=16"
   },
   "dependencies": {
-    "@selenide/cli": "^7.18.0"
+    "@selenide/cli": "^7.18.1"
   }
 }
