@@ -137,6 +137,10 @@ public class Selenide {
     getSelenideDriver().resetEmulation();
   }
 
+  public static BrowserClock clock() {
+    return getSelenideDriver().clock();
+  }
+
   public static void using(WebDriver webDriver, Runnable lambda) {
     WebDriverRunner.using(webDriver, lambda);
   }
