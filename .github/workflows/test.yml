@@ -71,7 +71,7 @@ jobs:
 
   run-unit-tests-on-linux:
     name: linux:unit-tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04-arm
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -98,7 +98,7 @@ jobs:
 
   run-browser-tests-on-linux:
     name: linux:${{ matrix.browser }}:${{ matrix.module.name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04-arm
     strategy:
       fail-fast: false
       matrix:
@@ -168,7 +168,7 @@ jobs:
             **/build/test-results
 
   verify-browser-test-coverage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04-arm
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -192,7 +192,7 @@ jobs:
 
   run-android-tests:
     name: android:tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04-arm
     env:
       BS_KEY: ${{ secrets.BS_KEY }}
     steps:
@@ -220,7 +220,7 @@ jobs:
 
   run-ios-tests:
     name: ios:tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04-arm
     env:
       BS_KEY: ${{ secrets.BS_KEY }}
     steps:
@@ -247,7 +247,7 @@ jobs:
 
   run-selenoid-tests:
     name: selenoid:tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04-arm
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -273,7 +273,7 @@ jobs:
 
   run-moon-tests:
     name: moon:tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04-arm
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-java@v6
@@ -320,7 +320,7 @@ jobs:
     timeout-minutes: 10
     needs: [run-unit-tests-on-linux, run-browser-tests-on-linux, verify-browser-test-coverage, run-tests-on-windows, run-android-tests, run-ios-tests, run-selenoid-tests, run-moon-tests]
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04-arm
     permissions:
       pull-requests: write
       contents: write
