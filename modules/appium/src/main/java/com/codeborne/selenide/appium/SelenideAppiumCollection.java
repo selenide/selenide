@@ -2,7 +2,6 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.impl.BySelectorCollection;
@@ -43,7 +42,7 @@ public class SelenideAppiumCollection extends ElementsCollection {
    * @param collection the source of the elements of this collection
    * @param elementClass the class of the elements this collection produces
    */
-  protected SelenideAppiumCollection(CollectionSource collection, Class<? extends SelenideElement> elementClass) {
+  protected SelenideAppiumCollection(CollectionSource collection, Class<? extends SelenideAppiumElement> elementClass) {
     super(collection, elementClass);
   }
 

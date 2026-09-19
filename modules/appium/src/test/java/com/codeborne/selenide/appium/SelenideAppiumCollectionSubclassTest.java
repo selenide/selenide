@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.impl.BySelectorCollection;
@@ -44,6 +45,7 @@ class SelenideAppiumCollectionSubclassTest {
   void derived_collections_keep_the_subclass() {
     MyCollection collection = myCollection();
 
+    assertThat(collection.filter(Condition.visible)).isInstanceOf(MyCollection.class);
     assertThat(collection.first(2)).isInstanceOf(MyCollection.class);
     assertThat(collection.snapshot()).isInstanceOf(MyCollection.class);
   }
