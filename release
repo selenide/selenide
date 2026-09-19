@@ -13,7 +13,7 @@ set -e
 version=$1
 
 if [ -z "$version" ] ; then
-  echo "Usage: ./release 7.7.0"
+  echo "Usage: ./release 7.19.0"
   exit 0
 fi
 
@@ -53,6 +53,8 @@ git push
 cd - || exit 3
 
 # Publish NPM modules
+
+npm adduser
 
 cd mcp-server
 npm version "$version" --no-git-tag-version --allow-same-version
