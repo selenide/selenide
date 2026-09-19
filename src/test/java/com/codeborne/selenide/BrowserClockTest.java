@@ -18,6 +18,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 final class BrowserClockTest {
@@ -42,6 +43,15 @@ final class BrowserClockTest {
     assertThatThrownBy(() -> selenideDriver.clock().setTimezone("America/New_York"))
       .isInstanceOf(UnsupportedOperationException.class)
       .hasMessageContaining("Browser clock emulation is not supported");
+  }
+
+  @Test
+  void setTimezone_throwsNullPointerExceptionOnNullTimezoneId() {
+    assertThatThrownBy(() -> selenideDriver.clock().setTimezone(null))
+      .isInstanceOf(NullPointerException.class)
+      .hasMessageContaining("timezoneId");
+
+    verifyNoInteractions(driver);
   }
 
   @Test
@@ -105,6 +115,24 @@ final class BrowserClockTest {
     assertThatThrownBy(() -> selenideDriver.clock().setFixedTime(Instant.parse("2025-01-15T14:00:00Z")))
       .isInstanceOf(UnsupportedOperationException.class)
       .hasMessageContaining("Browser clock emulation is not supported");
+  }
+
+  @Test
+  void setFixedTime_throwsNullPointerExceptionOnNullInstant() {
+    assertThatThrownBy(() -> selenideDriver.clock().setFixedTime(null))
+      .isInstanceOf(NullPointerException.class)
+      .hasMessageContaining("instant");
+
+    verifyNoInteractions(driver);
+  }
+
+  @Test
+  void setFixedTime_throwsIllegalArgumentExceptionOnInstantOutOfRange() {
+    assertThatThrownBy(() -> selenideDriver.clock().setFixedTime(Instant.MAX))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("out of range");
+
+    verifyNoInteractions(driver);
   }
 
   @Test
@@ -172,6 +200,15 @@ final class BrowserClockTest {
     selenideDriver.clock().reset();
 
     verify(secondWebDriver, never()).executeCdpCommand(eq("Page.removeScriptToEvaluateOnNewDocument"), any());
+  }
+
+  @Test
+  void reset_doesNothingOnUnsupportedBrowser() {
+    WebDriver webDriver = mock();
+    when(driver.hasWebDriverStarted()).thenReturn(true);
+    when(driver.getAndCheckWebDriver()).thenReturn(webDriver);
+
+    selenideDriver.clock().reset();
   }
 
   @Test

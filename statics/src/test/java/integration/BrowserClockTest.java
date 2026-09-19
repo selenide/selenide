@@ -8,12 +8,7 @@ import java.time.Instant;
 import static com.codeborne.selenide.Selenide.clock;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isEdge;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class BrowserClockTest extends IntegrationTest {
   private static final Instant FIXED_INSTANT = Instant.parse("2025-01-15T14:00:00Z");
@@ -26,9 +21,7 @@ final class BrowserClockTest extends IntegrationTest {
 
   @Test
   void emulatesTimezoneAndFixedTimeForNewDocumentsAndResetsWithoutLeak() {
-    assumeThat(isChrome() || isEdge())
-      .as("Browser clock emulation uses CDP, so it works in Chromium browsers only")
-      .isTrue();
+    // Uses CDP in Chrome/Edge, and WebDriver BiDi in Firefox - this test runs against both.
     openFile("empty.html");
     String defaultTimeZone = currentTimeZone();
 
@@ -79,18 +72,6 @@ final class BrowserClockTest extends IntegrationTest {
         closeWebDriver();
       }
     }
-  }
-
-  @Test
-  void failsWithClearMessageInNonCdpBrowsers() {
-    assumeThat(isFirefox())
-      .as("Clock emulation is CDP-only; non-Chromium browsers must get a clear exception")
-      .isTrue();
-    openFile("empty.html");
-
-    assertThatThrownBy(() -> clock().setTimezone("America/New_York"))
-      .isInstanceOf(UnsupportedOperationException.class)
-      .hasMessageContaining("Browser clock emulation is not supported");
   }
 
   private String currentTimeZone() {
