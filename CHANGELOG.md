@@ -1,6 +1,10 @@
 # Changelog
 
 =======
+## 7.18.2 (19.09.2026)
+* update Selenium from 4.48.0 to 4.49.0  --  added support for Linux arm64! (#3434)
+
+=======
 ## 7.18.1 (29.08.2026)
 * update Selenium from 4.47.0 to 4.48.0 (#3427)
 * update LittleProxy from 2.9.0 to 2.9.1
