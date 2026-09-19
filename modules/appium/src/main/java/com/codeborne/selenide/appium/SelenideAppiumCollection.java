@@ -2,6 +2,7 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.WebElementsCondition;
 import com.codeborne.selenide.impl.BySelectorCollection;
@@ -30,6 +31,20 @@ public class SelenideAppiumCollection extends ElementsCollection {
 
   public SelenideAppiumCollection(WebElementSource parent, By selector) {
     this(new BySelectorCollection(parent.driver(), parent, selector));
+  }
+
+  /**
+   * Lets a subclass produce elements of a more specific class than {@link SelenideAppiumElement},
+   * e.g. a downstream framework's own element interface extending {@link SelenideAppiumElement}.
+   *
+   * <p>Mirrors {@link ElementsCollection#ElementsCollection(CollectionSource, Class)}, which serves
+   * the same purpose one level up in the hierarchy.
+   *
+   * @param collection the source of the elements of this collection
+   * @param elementClass the class of the elements this collection produces
+   */
+  protected SelenideAppiumCollection(CollectionSource collection, Class<? extends SelenideElement> elementClass) {
+    super(collection, elementClass);
   }
 
   @Override
