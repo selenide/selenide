@@ -6,7 +6,7 @@ on:
       - completed
 jobs:
   report:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04-arm
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
       - uses: dorny/test-reporter@v3

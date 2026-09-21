@@ -6,7 +6,7 @@ on:
 jobs:
   run-tests-on-linux:
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04-arm
     strategy:
       fail-fast: false
       matrix:
