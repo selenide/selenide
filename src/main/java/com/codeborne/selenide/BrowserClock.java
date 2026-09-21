@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.bidi.BiDi;
 import org.openqa.selenium.bidi.Command;
@@ -56,7 +57,7 @@ public class BrowserClock {
 
   public void setTimezone(String timezoneId) {
     requireNonNull(timezoneId, "timezoneId must not be null");
-    WebDriver webDriver = driver.getAndCheckWebDriver();
+    WebDriver webDriver = driver.getWebDriver();
     if (webDriver instanceof HasCdp cdpBrowser) {
       cdpBrowser.executeCdpCommand("Emulation.setTimezoneOverride", Map.of("timezoneId", timezoneId));
     }
@@ -71,7 +72,7 @@ public class BrowserClock {
   public void setFixedTime(Instant instant) {
     requireNonNull(instant, "instant must not be null");
     long epochMilli = toEpochMilli(instant);
-    WebDriver webDriver = driver.getAndCheckWebDriver();
+    WebDriver webDriver = driver.getWebDriver();
     removeFixedTimeScript(webDriver);
     if (webDriver instanceof HasCdp cdpBrowser) {
       Map<String, Object> result = cdpBrowser.executeCdpCommand("Page.addScriptToEvaluateOnNewDocument",
@@ -79,7 +80,7 @@ public class BrowserClock {
       installedScripts.put(webDriver, new InstalledScript(false, String.valueOf(result.get("identifier"))));
     }
     else if (isBiDiEnabled(webDriver)) {
-      String scriptId = new Script(webDriver).addPreloadScript(fixedTimeFunction(epochMilli));
+      String scriptId = new Script(webDriver.getWindowHandle(), webDriver).addPreloadScript(fixedTimeFunction(epochMilli));
       installedScripts.put(webDriver, new InstalledScript(true, scriptId));
     }
     else {
@@ -91,7 +92,7 @@ public class BrowserClock {
     if (!driver.hasWebDriverStarted()) {
       return;
     }
-    WebDriver webDriver = driver.getAndCheckWebDriver();
+    WebDriver webDriver = driver.getWebDriver();
     removeFixedTimeScript(webDriver);
     if (webDriver instanceof HasCdp cdpBrowser) {
       cdpBrowser.executeCdpCommand("Emulation.setTimezoneOverride", Map.of("timezoneId", ""));
@@ -103,9 +104,9 @@ public class BrowserClock {
   }
 
   @SuppressWarnings("removal")
-  private void setTimezoneOverride(WebDriver webDriver, String timezoneId) {
+  private void setTimezoneOverride(WebDriver webDriver, @Nullable String timezoneId) {
     BiDi biDi = ((HasBiDi) webDriver).getBiDi();
-    Map<String, Object> params = new HashMap<>();
+    Map<String, @Nullable Object> params = new HashMap<>();
     params.put("timezone", timezoneId);
     params.put("contexts", List.of(webDriver.getWindowHandle()));
     biDi.send(new Command<>("emulation.setTimezoneOverride", params));

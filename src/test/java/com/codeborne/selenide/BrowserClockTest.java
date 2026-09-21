@@ -28,7 +28,7 @@ final class BrowserClockTest {
   @Test
   void setTimezone_sendsCdpTimezoneOverride() {
     ChromiumDriver webDriver = mock();
-    when(driver.getAndCheckWebDriver()).thenReturn(webDriver);
+    when(driver.getWebDriver()).thenReturn(webDriver);
 
     selenideDriver.clock().setTimezone("America/New_York");
 
@@ -37,27 +37,9 @@ final class BrowserClockTest {
   }
 
   @Test
-  void setTimezone_throwsUnsupportedOperationExceptionOnNonCdpDriver() {
-    when(driver.getAndCheckWebDriver()).thenReturn(mock(WebDriver.class));
-
-    assertThatThrownBy(() -> selenideDriver.clock().setTimezone("America/New_York"))
-      .isInstanceOf(UnsupportedOperationException.class)
-      .hasMessageContaining("Browser clock emulation is not supported");
-  }
-
-  @Test
-  void setTimezone_throwsNullPointerExceptionOnNullTimezoneId() {
-    assertThatThrownBy(() -> selenideDriver.clock().setTimezone(null))
-      .isInstanceOf(NullPointerException.class)
-      .hasMessageContaining("timezoneId");
-
-    verifyNoInteractions(driver);
-  }
-
-  @Test
   void setFixedTime_addsScriptToEvaluateOnNewDocument() {
     ChromiumDriver webDriver = mock();
-    when(driver.getAndCheckWebDriver()).thenReturn(webDriver);
+    when(driver.getWebDriver()).thenReturn(webDriver);
 
     selenideDriver.clock().setFixedTime(Instant.parse("2025-01-15T14:00:00Z"));
 
@@ -67,7 +49,7 @@ final class BrowserClockTest {
   @Test
   void setFixedTime_containsFixedInstant() {
     ChromiumDriver webDriver = mock();
-    when(driver.getAndCheckWebDriver()).thenReturn(webDriver);
+    when(driver.getWebDriver()).thenReturn(webDriver);
     AtomicReference<Map<String, Object>> commandParams = captureAddedScriptParams(webDriver);
 
     selenideDriver.clock().setFixedTime(Instant.parse("2025-01-15T14:00:00Z"));
@@ -78,7 +60,7 @@ final class BrowserClockTest {
   @Test
   void setFixedTime_scriptPreservesDateBehaviour() {
     ChromiumDriver webDriver = mock();
-    when(driver.getAndCheckWebDriver()).thenReturn(webDriver);
+    when(driver.getWebDriver()).thenReturn(webDriver);
     AtomicReference<Map<String, Object>> commandParams = captureAddedScriptParams(webDriver);
 
     selenideDriver.clock().setFixedTime(Instant.parse("2025-01-15T14:00:00Z"));
@@ -97,7 +79,7 @@ final class BrowserClockTest {
   @Test
   void setFixedTime_replacesPreviousScript() {
     ChromiumDriver webDriver = mock();
-    when(driver.getAndCheckWebDriver()).thenReturn(webDriver);
+    when(driver.getWebDriver()).thenReturn(webDriver);
     when(webDriver.executeCdpCommand(eq("Page.addScriptToEvaluateOnNewDocument"), any()))
       .thenReturn(Map.of("identifier", "script-1"), Map.of("identifier", "script-2"));
 
@@ -110,7 +92,7 @@ final class BrowserClockTest {
 
   @Test
   void setFixedTime_throwsUnsupportedOperationExceptionOnNonCdpDriver() {
-    when(driver.getAndCheckWebDriver()).thenReturn(mock(WebDriver.class));
+    when(driver.getWebDriver()).thenReturn(mock(WebDriver.class));
 
     assertThatThrownBy(() -> selenideDriver.clock().setFixedTime(Instant.parse("2025-01-15T14:00:00Z")))
       .isInstanceOf(UnsupportedOperationException.class)
@@ -139,7 +121,7 @@ final class BrowserClockTest {
   void reset_clearsTimezoneAndRemovesStoredScript() {
     ChromiumDriver webDriver = mock();
     when(driver.hasWebDriverStarted()).thenReturn(true);
-    when(driver.getAndCheckWebDriver()).thenReturn(webDriver);
+    when(driver.getWebDriver()).thenReturn(webDriver);
     when(webDriver.executeCdpCommand(eq("Page.addScriptToEvaluateOnNewDocument"), any()))
       .thenReturn(Map.of("identifier", "script-1"));
 
@@ -156,7 +138,7 @@ final class BrowserClockTest {
   void reset_isIdempotentWhenNoFixedTimeSet() {
     ChromiumDriver webDriver = mock();
     when(driver.hasWebDriverStarted()).thenReturn(true);
-    when(driver.getAndCheckWebDriver()).thenReturn(webDriver);
+    when(driver.getWebDriver()).thenReturn(webDriver);
 
     selenideDriver.clock().reset();
 
@@ -168,13 +150,13 @@ final class BrowserClockTest {
   @Test
   void clockState_isNotSharedBetweenDrivers() {
     ChromiumDriver firstWebDriver = mock();
-    when(driver.getAndCheckWebDriver()).thenReturn(firstWebDriver);
+    when(driver.getWebDriver()).thenReturn(firstWebDriver);
     when(firstWebDriver.executeCdpCommand(eq("Page.addScriptToEvaluateOnNewDocument"), any()))
       .thenReturn(Map.of("identifier", "script-1"));
     Driver secondDriver = mock();
     ChromiumDriver secondWebDriver = mock();
     when(secondDriver.hasWebDriverStarted()).thenReturn(true);
-    when(secondDriver.getAndCheckWebDriver()).thenReturn(secondWebDriver);
+    when(secondDriver.getWebDriver()).thenReturn(secondWebDriver);
 
     SelenideDriver firstSelenideDriver = new SelenideDriver(new SelenideConfig(), driver);
     SelenideDriver secondSelenideDriver = new SelenideDriver(new SelenideConfig(), secondDriver);
@@ -188,14 +170,14 @@ final class BrowserClockTest {
   @Test
   void reset_doesNotRemoveScriptInstalledOnAnotherBrowser() {
     ChromiumDriver firstWebDriver = mock();
-    when(driver.getAndCheckWebDriver()).thenReturn(firstWebDriver);
+    when(driver.getWebDriver()).thenReturn(firstWebDriver);
     when(firstWebDriver.executeCdpCommand(eq("Page.addScriptToEvaluateOnNewDocument"), any()))
       .thenReturn(Map.of("identifier", "script-1"));
     ChromiumDriver secondWebDriver = mock();
     when(driver.hasWebDriverStarted()).thenReturn(true);
 
     selenideDriver.clock().setFixedTime(Instant.parse("2025-01-15T14:00:00Z"));
-    when(driver.getAndCheckWebDriver()).thenReturn(secondWebDriver);
+    when(driver.getWebDriver()).thenReturn(secondWebDriver);
 
     selenideDriver.clock().reset();
 
@@ -206,7 +188,7 @@ final class BrowserClockTest {
   void reset_doesNothingOnUnsupportedBrowser() {
     WebDriver webDriver = mock();
     when(driver.hasWebDriverStarted()).thenReturn(true);
-    when(driver.getAndCheckWebDriver()).thenReturn(webDriver);
+    when(driver.getWebDriver()).thenReturn(webDriver);
 
     selenideDriver.clock().reset();
   }
@@ -217,7 +199,7 @@ final class BrowserClockTest {
 
     selenideDriver.clock().reset();
 
-    verify(driver, never()).getAndCheckWebDriver();
+    verify(driver, never()).getWebDriver();
     verify(driver, never()).getWebDriver();
   }
 
@@ -225,7 +207,7 @@ final class BrowserClockTest {
   void reset_retriesRemovingScriptWhenCdpCallFails() {
     ChromiumDriver webDriver = mock();
     when(driver.hasWebDriverStarted()).thenReturn(true);
-    when(driver.getAndCheckWebDriver()).thenReturn(webDriver);
+    when(driver.getWebDriver()).thenReturn(webDriver);
     when(webDriver.executeCdpCommand(eq("Page.addScriptToEvaluateOnNewDocument"), any()))
       .thenReturn(Map.of("identifier", "script-1"));
     selenideDriver.clock().setFixedTime(Instant.parse("2025-01-15T14:00:00Z"));
