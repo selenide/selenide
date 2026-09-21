@@ -4,6 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.assertj.core.api.SoftAssertions;
+
 import java.time.Instant;
 
 import static com.codeborne.selenide.Selenide.clock;
@@ -43,6 +45,11 @@ final class BrowserClockTest extends IntegrationTest {
     clock().setFixedTime(FIXED_INSTANT);
     openFile("empty.html");
 
+    // DIAGNOSTIC (temporary): proves whether the preload script touched window.Date at all,
+    // independently of whether the mocked value is correct.
+    String dateToString = executeJavaScript("return window.Date.toString();");
+    String dateName = executeJavaScript("return window.Date.name;");
+
     Long now = executeJavaScript("return Date.now();");
     Long currentDate = executeJavaScript("return new Date().getTime();");
     Long explicitDate = executeJavaScript("return new Date(1600000000000).getTime();");
@@ -58,17 +65,21 @@ final class BrowserClockTest extends IntegrationTest {
     String timeZone = currentTimeZone();
     String dateWithoutNew = executeJavaScript("return Date();");
 
-    assertThat(now).isEqualTo(FIXED_MILLIS);
-    assertThat(currentDate).isEqualTo(FIXED_MILLIS);
-    assertThat(explicitDate).isEqualTo(1600000000000L);
-    assertThat(parsedDate).isEqualTo(FIXED_MILLIS);
-    assertThat(utcDate).isEqualTo(FIXED_MILLIS);
-    assertThat(isInstance).isTrue();
-    assertThat(hasMockedConstructor).isTrue();
-    assertThat(inheritsDatePrototype).isTrue();
-    assertThat(newYorkHour).isEqualTo("09");
-    assertThat(timeZone).isEqualTo("America/New_York");
-    assertThat(dateWithoutNew).contains("2025");
+    SoftAssertions.assertSoftly(softly -> {
+      softly.assertThat(dateName).as("window.Date.name (diagnostic)").isEqualTo("MockDate");
+      softly.assertThat(dateToString).as("window.Date.toString() (diagnostic)").contains("MockDate");
+      softly.assertThat(now).as("Date.now()").isEqualTo(FIXED_MILLIS);
+      softly.assertThat(currentDate).as("new Date().getTime()").isEqualTo(FIXED_MILLIS);
+      softly.assertThat(explicitDate).as("new Date(explicit).getTime()").isEqualTo(1600000000000L);
+      softly.assertThat(parsedDate).as("Date.parse(...)").isEqualTo(FIXED_MILLIS);
+      softly.assertThat(utcDate).as("Date.UTC(...)").isEqualTo(FIXED_MILLIS);
+      softly.assertThat(isInstance).as("new Date() instanceof Date").isTrue();
+      softly.assertThat(hasMockedConstructor).as("new Date().constructor === Date").isTrue();
+      softly.assertThat(inheritsDatePrototype).as("Object.getPrototypeOf(new Date()) === Date.prototype").isTrue();
+      softly.assertThat(newYorkHour).as("New York hour").isEqualTo("09");
+      softly.assertThat(timeZone).as("timezone override").isEqualTo("America/New_York");
+      softly.assertThat(dateWithoutNew).as("Date() without new").contains("2025");
+    });
 
     clock().reset();
     openFile("empty.html");
