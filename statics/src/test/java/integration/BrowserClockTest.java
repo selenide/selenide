@@ -50,9 +50,17 @@ final class BrowserClockTest extends IntegrationTest {
     String dateToString = executeJavaScript("return window.Date.toString();");
     String dateName = executeJavaScript("return window.Date.name;");
     // DIAGNOSTIC (temporary): is there a realm split between the bare `Date` identifier and
-    // `window.Date`, and does `window.wrappedJSObject` even exist in this execution context?
+    // `window.Date`, in the sandbox executeJavaScript() runs in?
     Boolean dateIdentical = executeJavaScript("return Date === window.Date;");
-    String wrappedJSObjectType = executeJavaScript("return typeof window.wrappedJSObject;");
+    // DIAGNOSTIC (temporary): what does a REAL <script> tag - running in the page's own realm,
+    // not executeJavaScript()'s sandbox - see when it calls the bare `Date` identifier itself?
+    executeJavaScript("""
+      var s = document.createElement('script');
+      s.textContent = "window.__pageDateNow = Date.now(); window.__pageDateName = Date.name;";
+      document.body.appendChild(s);
+      """);
+    Long pageDateNow = executeJavaScript("return window.__pageDateNow;");
+    String pageDateName = executeJavaScript("return window.__pageDateName;");
 
     Long now = executeJavaScript("return Date.now();");
     Long currentDate = executeJavaScript("return new Date().getTime();");
@@ -74,8 +82,9 @@ final class BrowserClockTest extends IntegrationTest {
       softly.assertThat(dateToString).as("window.Date.toString() (diagnostic)").contains("MockDate");
       if (isFirefox()) {
         softly.assertThat(dateIdentical).as("Date === window.Date (diagnostic)").isFalse();
-        softly.assertThat(wrappedJSObjectType).as("typeof window.wrappedJSObject (diagnostic)").isNotEqualTo("undefined");
       }
+      softly.assertThat(pageDateName).as("real <script> tag's Date.name (diagnostic)").isEqualTo("MockDate");
+      softly.assertThat(pageDateNow).as("real <script> tag's Date.now() (diagnostic)").isEqualTo(FIXED_MILLIS);
       softly.assertThat(now).as("Date.now()").isEqualTo(FIXED_MILLIS);
       softly.assertThat(currentDate).as("new Date().getTime()").isEqualTo(FIXED_MILLIS);
       softly.assertThat(explicitDate).as("new Date(explicit).getTime()").isEqualTo(1600000000000L);
