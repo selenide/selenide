@@ -4,10 +4,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.assertj.core.api.SoftAssertions;
-
 import java.time.Instant;
 
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.clock;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
@@ -35,74 +35,69 @@ final class BrowserClockTest extends IntegrationTest {
   }
 
   @Test
-  void emulatesTimezoneAndFixedTime() {
+  void emulatesFixedTimeAndTimezoneForRealPageScripts() {
     // Uses CDP in Chrome/Edge, and WebDriver BiDi in Firefox - this test runs against both.
+    // Verified via the page's own <script> tag (real page realm), not executeJavaScript():
+    // on Firefox, a script run via classic executeScript() sees `window.Date` correctly but
+    // not the bare `Date` identifier, which real page scripts (and this fixture) always use.
     assumeThat(isChrome() || isEdge() || isFirefox()).isTrue();
 
-    String defaultTimeZone = currentTimeZone();
+    clock().setTimezone("America/New_York");
+    clock().setFixedTime(FIXED_INSTANT);
+    openFile("page_with_clock.html");
+
+    $("#date-now").shouldHave(text(String.valueOf(FIXED_MILLIS)));
+    $("#timezone").shouldHave(text("America/New_York"));
+    $("#new-york-hour").shouldHave(text("09"));
+  }
+
+  @Test
+  void mocksDateApiSurface() {
+    assumeThat(isChrome() || isEdge() || isFirefox()).isTrue();
 
     clock().setTimezone("America/New_York");
     clock().setFixedTime(FIXED_INSTANT);
     openFile("empty.html");
 
-    // DIAGNOSTIC (temporary): proves whether the preload script touched window.Date at all,
-    // independently of whether the mocked value is correct.
-    String dateToString = executeJavaScript("return window.Date.toString();");
-    String dateName = executeJavaScript("return window.Date.name;");
-    // DIAGNOSTIC (temporary): is there a realm split between the bare `Date` identifier and
-    // `window.Date`, in the sandbox executeJavaScript() runs in?
-    Boolean dateIdentical = executeJavaScript("return Date === window.Date;");
-    // DIAGNOSTIC (temporary): what does a REAL <script> tag - running in the page's own realm,
-    // not executeJavaScript()'s sandbox - see when it calls the bare `Date` identifier itself?
-    executeJavaScript("""
-      var s = document.createElement('script');
-      s.textContent = "window.__pageDateNow = Date.now(); window.__pageDateName = Date.name;";
-      document.body.appendChild(s);
-      """);
-    Long pageDateNow = executeJavaScript("return window.__pageDateNow;");
-    String pageDateName = executeJavaScript("return window.__pageDateName;");
+    // Deliberately using `window.Date`, not a bare `Date` reference: executeJavaScript() runs in
+    // its own sandbox on Firefox, where a bare `Date` identifier doesn't resolve to the page's
+    // mocked one - see emulatesFixedTimeAndTimezoneForRealPageScripts() for real page scripts.
+    Long now = executeJavaScript("return window.Date.now();");
+    Long currentDate = executeJavaScript("return new window.Date().getTime();");
+    Long explicitDate = executeJavaScript("return new window.Date(1600000000000).getTime();");
+    Long parsedDate = executeJavaScript("return window.Date.parse('2025-01-15T14:00:00Z');");
+    Long utcDate = executeJavaScript("return window.Date.UTC(2025, 0, 15, 14, 0, 0);");
+    Boolean isInstance = executeJavaScript("return new window.Date() instanceof window.Date;");
+    Boolean hasMockedConstructor = executeJavaScript("return new window.Date().constructor === window.Date;");
+    Boolean inheritsDatePrototype = executeJavaScript(
+      "return Object.getPrototypeOf(new window.Date()) === window.Date.prototype;");
+    String dateWithoutNew = executeJavaScript("return window.Date();");
 
-    Long now = executeJavaScript("return Date.now();");
-    Long currentDate = executeJavaScript("return new Date().getTime();");
-    Long explicitDate = executeJavaScript("return new Date(1600000000000).getTime();");
-    Long parsedDate = executeJavaScript("return Date.parse('2025-01-15T14:00:00Z');");
-    Long utcDate = executeJavaScript("return Date.UTC(2025, 0, 15, 14, 0, 0);");
-    Boolean isInstance = executeJavaScript("return new Date() instanceof Date;");
-    Boolean hasMockedConstructor = executeJavaScript("return new Date().constructor === Date;");
-    Boolean inheritsDatePrototype = executeJavaScript("return Object.getPrototypeOf(new Date()) === Date.prototype;");
-    String newYorkHour = executeJavaScript(
-      "return new Intl.DateTimeFormat('en-US', {timeZone: 'America/New_York', hour: '2-digit', hour12: false})" +
-        ".format(Date.now());"
-    );
-    String timeZone = currentTimeZone();
-    String dateWithoutNew = executeJavaScript("return Date();");
+    assertThat(now).isEqualTo(FIXED_MILLIS);
+    assertThat(currentDate).isEqualTo(FIXED_MILLIS);
+    assertThat(explicitDate).isEqualTo(1600000000000L);
+    assertThat(parsedDate).isEqualTo(FIXED_MILLIS);
+    assertThat(utcDate).isEqualTo(FIXED_MILLIS);
+    assertThat(isInstance).isTrue();
+    assertThat(hasMockedConstructor).isTrue();
+    assertThat(inheritsDatePrototype).isTrue();
+    assertThat(dateWithoutNew).contains("2025");
+  }
 
-    SoftAssertions.assertSoftly(softly -> {
-      softly.assertThat(dateName).as("window.Date.name (diagnostic)").isEqualTo("MockDate");
-      softly.assertThat(dateToString).as("window.Date.toString() (diagnostic)").contains("MockDate");
-      if (isFirefox()) {
-        softly.assertThat(dateIdentical).as("Date === window.Date (diagnostic)").isFalse();
-      }
-      softly.assertThat(pageDateName).as("real <script> tag's Date.name (diagnostic)").isEqualTo("MockDate");
-      softly.assertThat(pageDateNow).as("real <script> tag's Date.now() (diagnostic)").isEqualTo(FIXED_MILLIS);
-      softly.assertThat(now).as("Date.now()").isEqualTo(FIXED_MILLIS);
-      softly.assertThat(currentDate).as("new Date().getTime()").isEqualTo(FIXED_MILLIS);
-      softly.assertThat(explicitDate).as("new Date(explicit).getTime()").isEqualTo(1600000000000L);
-      softly.assertThat(parsedDate).as("Date.parse(...)").isEqualTo(FIXED_MILLIS);
-      softly.assertThat(utcDate).as("Date.UTC(...)").isEqualTo(FIXED_MILLIS);
-      softly.assertThat(isInstance).as("new Date() instanceof Date").isTrue();
-      softly.assertThat(hasMockedConstructor).as("new Date().constructor === Date").isTrue();
-      softly.assertThat(inheritsDatePrototype).as("Object.getPrototypeOf(new Date()) === Date.prototype").isTrue();
-      softly.assertThat(newYorkHour).as("New York hour").isEqualTo("09");
-      softly.assertThat(timeZone).as("timezone override").isEqualTo("America/New_York");
-      softly.assertThat(dateWithoutNew).as("Date() without new").contains("2025");
-    });
+  @Test
+  void resetRemovesEmulationFromTheNextPage() {
+    assumeThat(isChrome() || isEdge() || isFirefox()).isTrue();
+
+    String defaultTimeZone = currentTimeZone();
+    clock().setTimezone("America/New_York");
+    clock().setFixedTime(FIXED_INSTANT);
+    openFile("page_with_clock.html");
+    $("#date-now").shouldHave(text(String.valueOf(FIXED_MILLIS)));
 
     clock().reset();
-    openFile("empty.html");
+    openFile("page_with_clock.html");
 
-    Long resetNow = executeJavaScript("return Date.now();");
-    assertThat(resetNow).isNotEqualTo(FIXED_MILLIS);
+    $("#date-now").shouldNotHave(text(String.valueOf(FIXED_MILLIS)));
     assertThat(currentTimeZone()).isEqualTo(defaultTimeZone);
   }
 

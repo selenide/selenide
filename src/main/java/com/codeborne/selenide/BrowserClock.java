@@ -45,9 +45,6 @@ public class BrowserClock {
       MockDate.parse = FixedDate.parse;
       MockDate.UTC = FixedDate.UTC;
       window.Date = MockDate;
-      if (window.wrappedJSObject) {
-        window.wrappedJSObject.Date = MockDate;
-      }
     }
     """;
 
