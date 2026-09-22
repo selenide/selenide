@@ -49,6 +49,10 @@ final class BrowserClockTest extends IntegrationTest {
     // independently of whether the mocked value is correct.
     String dateToString = executeJavaScript("return window.Date.toString();");
     String dateName = executeJavaScript("return window.Date.name;");
+    // DIAGNOSTIC (temporary): is there a realm split between the bare `Date` identifier and
+    // `window.Date`, and does `window.wrappedJSObject` even exist in this execution context?
+    Boolean dateIdentical = executeJavaScript("return Date === window.Date;");
+    String wrappedJSObjectType = executeJavaScript("return typeof window.wrappedJSObject;");
 
     Long now = executeJavaScript("return Date.now();");
     Long currentDate = executeJavaScript("return new Date().getTime();");
@@ -68,6 +72,10 @@ final class BrowserClockTest extends IntegrationTest {
     SoftAssertions.assertSoftly(softly -> {
       softly.assertThat(dateName).as("window.Date.name (diagnostic)").isEqualTo("MockDate");
       softly.assertThat(dateToString).as("window.Date.toString() (diagnostic)").contains("MockDate");
+      if (isFirefox()) {
+        softly.assertThat(dateIdentical).as("Date === window.Date (diagnostic)").isFalse();
+        softly.assertThat(wrappedJSObjectType).as("typeof window.wrappedJSObject (diagnostic)").isNotEqualTo("undefined");
+      }
       softly.assertThat(now).as("Date.now()").isEqualTo(FIXED_MILLIS);
       softly.assertThat(currentDate).as("new Date().getTime()").isEqualTo(FIXED_MILLIS);
       softly.assertThat(explicitDate).as("new Date(explicit).getTime()").isEqualTo(1600000000000L);
