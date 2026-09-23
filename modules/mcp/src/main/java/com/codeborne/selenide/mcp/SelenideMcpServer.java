@@ -39,7 +39,7 @@ public class SelenideMcpServer {
   /**
    * Starts the MCP server over stdio and blocks until the JVM shuts down.
    *
-   * @param args command-line arguments; {@code --caps=codegen} enables the codegen toolset
+   * @param args command-line arguments; {@code --tools=codegen} enables the codegen toolset
    */
   @SuppressWarnings("unchecked") // MCP SDK's tools() uses generic varargs
   public void start(String[] args) {
@@ -53,7 +53,7 @@ public class SelenideMcpServer {
       .tools(InspectTools.specs(session))
       .tools(NetworkTools.specs(session));
 
-    if (hasCapability(args, "codegen")) {
+    if (hasTool(args, "codegen")) {
       builder = builder.tools(CodegenTools.specs(session));
     }
 
@@ -80,11 +80,11 @@ public class SelenideMcpServer {
     server.start(args);
   }
 
-  static boolean hasCapability(String[] args, String capability) {
+  static boolean hasTool(String[] args, String tool) {
     for (String arg : args) {
-      if (arg.startsWith("--caps=")) {
-        String[] caps = arg.substring("--caps=".length()).split(",");
-        if (Arrays.asList(caps).contains(capability)) {
+      if (arg.startsWith("--tools=")) {
+        String[] tools = arg.substring("--tools=".length()).split(",");
+        if (Arrays.asList(tools).contains(tool)) {
           return true;
         }
       }
@@ -105,8 +105,19 @@ public class SelenideMcpServer {
       applyProxyArg(config, arg);
       applyBehaviorArg(config, arg);
       applyModeArg(config, arg);
+      applyCapability(config, arg);
     }
     return config;
+  }
+
+  private static void applyCapability(SelenideConfig config, String arg) {
+    if (arg.startsWith("--cap=")) {
+      String[] cap = arg.substring("--cap=".length()).split("=", 2);
+      if (cap.length < 2) {
+        throw new IllegalArgumentException("Capability must have name and value separated by `=`. Current capability: " + arg);
+      }
+      config.browserCapabilities().setCapability(cap[0], cap[1]);
+    }
   }
 
   private static void applyBrowserArg(SelenideConfig config, String arg) {
