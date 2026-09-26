@@ -60,8 +60,8 @@ final class MobileEmulationTest extends IntegrationTest {
       .isFalse();
 
     closeWebDriver();
-    System.setProperty("chromeoptions.mobileEmulation", "deviceName=Nexus 5");
-    System.setProperty("edgeoptions.mobileEmulation", "deviceName=iPhone X");
+    System.setProperty("chromeoptions.mobileEmulation", "deviceName=Pixel 10");
+    System.setProperty("edgeoptions.mobileEmulation", "deviceName=iPhone 16");
 
     try {
       openFile("page_with_responsive_ui.html");

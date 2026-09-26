@@ -182,7 +182,8 @@ final class ProxyServerUsageTest extends ProxyIntegrationTest {
 
   private boolean isIgnored(HttpMessageInfo messageInfo) {
     return IGNORED_METHODS.contains(messageInfo.getOriginalRequest().method()) ||
-           isBrowserOwnTechnicalRequest(messageInfo.getUrl());
+      isBrowserOwnTechnicalRequest(messageInfo.getUrl()) ||
+      messageInfo.getOriginalRequest().uri().startsWith("/selenide-test.css");
   }
 
   private boolean isBrowserOwnTechnicalRequest(String url) {

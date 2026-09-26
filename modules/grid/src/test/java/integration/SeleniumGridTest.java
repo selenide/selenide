@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 final class SeleniumGridTest extends AbstractGridTest {
   @BeforeEach
   void setUp() {
-    System.setProperty("chromeoptions.mobileEmulation", "deviceName=Nexus 5");
+    System.setProperty("chromeoptions.mobileEmulation", "deviceName=Pixel 10");
   }
 
   @AfterEach
