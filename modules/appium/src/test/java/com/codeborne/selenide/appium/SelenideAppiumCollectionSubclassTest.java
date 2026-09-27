@@ -1,21 +1,22 @@
 package com.codeborne.selenide.appium;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.CollectionSource;
 import io.appium.java_client.android.AndroidDriver;
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.bidi.BiDiException;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class SelenideAppiumCollectionSubclassTest {
 
@@ -54,9 +55,11 @@ class SelenideAppiumCollectionSubclassTest {
     return new MyCollection(new BySelectorCollection(WebDriverRunner.driver(), By.className("android.widget.TextView")));
   }
 
+  @NullMarked
   private interface MyElement extends SelenideAppiumElement {
   }
 
+  @NullMarked
   private static class MyCollection extends SelenideAppiumCollection {
     private MyCollection(CollectionSource collection) {
       super(collection, MyElement.class);
