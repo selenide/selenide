@@ -52,7 +52,7 @@ class SelenideAppiumElementReturnTypesTest {
     );
   }
 
-  @ParameterizedTest(name = "{0}")
+  @ParameterizedTest(name = "{0} {1}")
   @MethodSource("chainableMethods")
   @DisplayName("chainable method returns SelenideAppiumElement, so calls can be chained with tap/swipe")
   void chainableMethodsReturnAppiumElement(String name, Class<?>[] parameterTypes) throws NoSuchMethodException {
