@@ -32,6 +32,20 @@ public class SelenideAppiumCollection extends ElementsCollection {
     this(new BySelectorCollection(parent.driver(), parent, selector));
   }
 
+  /**
+   * Lets a subclass produce elements of a more specific class than {@link SelenideAppiumElement},
+   * e.g. a downstream framework's own element interface extending {@link SelenideAppiumElement}.
+   *
+   * <p>Mirrors {@link ElementsCollection#ElementsCollection(CollectionSource, Class)}, which serves
+   * the same purpose one level up in the hierarchy.
+   *
+   * @param collection the source of the elements of this collection
+   * @param elementClass the class of the elements this collection produces
+   */
+  protected SelenideAppiumCollection(CollectionSource collection, Class<? extends SelenideAppiumElement> elementClass) {
+    super(collection, elementClass);
+  }
+
   @Override
   protected SelenideAppiumCollection create(CollectionSource source) {
     return new SelenideAppiumCollection(source);
