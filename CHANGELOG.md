@@ -1,6 +1,10 @@
 # Changelog
 
 =======
+## 7.19.0 (xx.10.2026)
+* update Selenium from 4.49.0 to 4.50.0
+
+=======
 ## 7.18.2 (19.09.2026)
 * update Selenium from 4.48.0 to 4.49.0  --  added support for Linux arm64! (#3434)
 
