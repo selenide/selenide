@@ -59,7 +59,7 @@ mavenPublishing {
   }
 }
 
-if (project.hasProperty("signing.gnupg.keyName")) {
+if (project.hasProperty("signing.enabled")) {
   mavenPublishing {
     publishToMavenCentral(true)
     signAllPublications()
