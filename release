@@ -40,8 +40,8 @@ rm -rf modules/cli/npm/skills
 cp -r modules/cli/skills modules/cli/npm/skills
 
 # Publish JARs
-./gradlew publishToMavenLocal
-./gradlew publishToMavenCentral --no-parallel --info
+./gradlew publishToMavenLocal -P signing.enabled
+./gradlew publishToMavenCentral -P signing.enabled --no-parallel --info
 
 # Publish javadoc on site
 rm -fr "../selenide-web/static/javadoc/current/*"
