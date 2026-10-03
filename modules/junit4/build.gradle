@@ -19,4 +19,9 @@ tasks.withType(Test).configureEach {
   useJUnit()
 }
 
+// JUnit4 tests cannot have JUnit5 tag "smoke", and `useJUnit()` above overrides the tag filter of smoke tasks
+tasks.matching { it.name.endsWith('_smoke') }.configureEach {
+  enabled = false
+}
+
 apply from: rootProject.file('gradle/publish-module.gradle')
