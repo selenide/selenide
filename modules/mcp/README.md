@@ -107,14 +107,29 @@ Add to `.claude/settings.json` (project) or `~/.claude/settings.json` (global):
 | `--selector-mode=<mode>` | Selector mode: `CSS`, `Sizzle` | `CSS` |
 | `--assertion-mode=<mode>` | Assertion mode: `STRICT`, `SOFT` | `STRICT` |
 
-### Capabilities
+### Tools
 
 | Parameter | Description |
 |---|---|
-| `--caps=<list>` | Comma-separated list of capabilities to enable |
+| `--tools=<list>` | Comma-separated list of tools to enable |
 
-Available capabilities:
+Available tools:
 
 - `codegen` — enables test code generation tools
 
-Example: `--caps=codegen`
+Example: `--tools=codegen`
+
+### Browser Capabilities
+
+| Parameter | Description |
+|---|---|
+| `--cap=<name>=<value>` | Add a custom browser capability |
+
+You can pass multiple `--cap=` parameters to add several capabilities.
+
+Examples:
+```bash
+--cap=browserName=chrome
+--cap=selenoid:options={"enableVNC":true}
+--cap=custom:option=value
+```

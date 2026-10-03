@@ -239,38 +239,68 @@ class SelenideMcpServerTest {
   }
 
   @Test
-  void hasCapabilityFindsMatch() {
-    assertThat(SelenideMcpServer.hasCapability(
-      new String[]{"--caps=codegen,inspect"}, "codegen")).isTrue();
+  void hasToolFindsMatch() {
+    assertThat(SelenideMcpServer.hasTool(
+      new String[]{"--tools=codegen,inspect"}, "codegen")).isTrue();
   }
 
   @Test
-  void hasCapabilityNoMatch() {
-    assertThat(SelenideMcpServer.hasCapability(
-      new String[]{"--caps=inspect"}, "codegen")).isFalse();
+  void hasToolNoMatch() {
+    assertThat(SelenideMcpServer.hasTool(
+      new String[]{"--tools=inspect"}, "codegen")).isFalse();
   }
 
   @Test
-  void hasCapabilityDoesNotSubstringMatch() {
-    assertThat(SelenideMcpServer.hasCapability(
-      new String[]{"--caps=nocodegen"}, "codegen")).isFalse();
+  void hasToolDoesNotSubstringMatch() {
+    assertThat(SelenideMcpServer.hasTool(
+      new String[]{"--tools=nocodegen"}, "codegen")).isFalse();
   }
 
   @Test
-  void hasCapabilityMultipleCaps() {
-    assertThat(SelenideMcpServer.hasCapability(
-      new String[]{"--caps=inspect,codegen"}, "codegen")).isTrue();
+  void hasToolMultipleTools() {
+    assertThat(SelenideMcpServer.hasTool(
+      new String[]{"--tools=inspect,codegen"}, "codegen")).isTrue();
   }
 
   @Test
-  void hasCapabilityNoFlag() {
-    assertThat(SelenideMcpServer.hasCapability(
+  void hasToolNoFlag() {
+    assertThat(SelenideMcpServer.hasTool(
       new String[]{"--browser=chrome"}, "codegen")).isFalse();
   }
 
   @Test
-  void hasCapabilityEmptyArgs() {
-    assertThat(SelenideMcpServer.hasCapability(
+  void hasToolEmptyArgs() {
+    assertThat(SelenideMcpServer.hasTool(
       new String[]{}, "codegen")).isFalse();
+  }
+
+  @Test
+  void parseConfigCapability() {
+    SelenideConfig config = SelenideMcpServer.parseConfig(
+      new String[]{"--cap=browserName=chrome"});
+    assertThat(config.browserCapabilities().getCapability("browserName")).isEqualTo("chrome");
+  }
+
+  @Test
+  void parseConfigCapabilityWithValueContainingEquals() {
+    SelenideConfig config = SelenideMcpServer.parseConfig(
+      new String[]{"--cap=selenoid:options={\"enableVNC\":true}"});
+    assertThat(config.browserCapabilities().getCapability("selenoid:options")).isEqualTo("{\"enableVNC\":true}");
+  }
+
+  @Test
+  void parseConfigMultipleCapabilities() {
+    SelenideConfig config = SelenideMcpServer.parseConfig(
+      new String[]{"--cap=custom:option1=value1", "--cap=custom:option2=value2"});
+    assertThat(config.browserCapabilities().getCapability("custom:option1")).isEqualTo("value1");
+    assertThat(config.browserCapabilities().getCapability("custom:option2")).isEqualTo("value2");
+  }
+
+  @Test
+  void parseConfigCapabilityWithoutValueThrows() {
+    assertThatThrownBy(() ->
+      SelenideMcpServer.parseConfig(new String[]{"--cap=browserName"})
+    ).isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Capability must have name and value separated by `=`");
   }
 }
