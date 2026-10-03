@@ -13,6 +13,7 @@ import static com.codeborne.selenide.appium.AppiumSwipeDirection.RIGHT;
 import static com.codeborne.selenide.appium.ScrollDirection.DOWN;
 import static com.codeborne.selenide.appium.ScrollDirection.UP;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -48,8 +49,24 @@ final class GestureAreaTest {
 
   @Test
   void visiblePart_isEmpty_ifContainerIsFullyOutsideScreen() {
-    assertThat(GestureArea.visiblePart(rect(0, 2100, 1000, 500), SCREEN).rectangle())
-      .isEqualTo(rect(0, 2100, 1000, 0));
+    GestureArea belowScreen = GestureArea.visiblePart(rect(0, 2100, 1000, 500), SCREEN);
+    assertThat(belowScreen.rectangle()).isEqualTo(rect(0, 2000, 1000, 0));
+    assertThat(belowScreen.isEmpty()).isTrue();
+
+    GestureArea rightOfScreen = GestureArea.visiblePart(rect(1200, 100, 300, 500), SCREEN);
+    assertThat(rightOfScreen.rectangle()).isEqualTo(rect(1000, 100, 0, 500));
+    assertThat(rightOfScreen.isEmpty()).isTrue();
+  }
+
+  @Test
+  void failsWithClearMessage_ifContainerIsFullyOutsideScreen() {
+    when(driver.manage().window().getSize()).thenReturn(SCREEN);
+    WebElement container = mock("carousel");
+    when(container.getRect()).thenReturn(rect(0, 2100, 1000, 500));
+
+    assertThatThrownBy(() -> GestureArea.of(driver, container))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Cannot perform gesture inside carousel: it's outside of the screen");
   }
 
   @Test

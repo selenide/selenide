@@ -31,8 +31,16 @@ final class GestureArea {
   static GestureArea of(WebDriver appiumDriver, @Nullable WebElement container) {
     Dimension screen = appiumDriver.manage().window().getSize();
     return container != null ?
-      visiblePart(container.getRect(), screen) :
+      visiblePartOf(container, screen) :
       new GestureArea(new Rectangle(new Point(0, 0), screen));
+  }
+
+  private static GestureArea visiblePartOf(WebElement container, Dimension screen) {
+    GestureArea visiblePart = visiblePart(container.getRect(), screen);
+    if (visiblePart.isEmpty()) {
+      throw new IllegalArgumentException("Cannot perform gesture inside " + container + ": it's outside of the screen");
+    }
+    return visiblePart;
   }
 
   /**
@@ -40,8 +48,8 @@ final class GestureArea {
    * so that gesture points are never placed off-screen.
    */
   static GestureArea visiblePart(Rectangle container, Dimension screen) {
-    int left = max(container.getX(), 0);
-    int top = max(container.getY(), 0);
+    int left = min(max(container.getX(), 0), screen.getWidth());
+    int top = min(max(container.getY(), 0), screen.getHeight());
     int right = min(container.getX() + container.getWidth(), screen.getWidth());
     int bottom = min(container.getY() + container.getHeight(), screen.getHeight());
     Dimension size = new Dimension(max(right - left, 0), max(bottom - top, 0));
@@ -68,5 +76,9 @@ final class GestureArea {
 
   Rectangle rectangle() {
     return area;
+  }
+
+  boolean isEmpty() {
+    return area.getWidth() == 0 || area.getHeight() == 0;
   }
 }
