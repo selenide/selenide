@@ -4,13 +4,11 @@ import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.ScrollOptions;
 import com.codeborne.selenide.appium.AppiumScrollCoordinates;
 import com.codeborne.selenide.appium.AppiumScrollOptions;
-import com.codeborne.selenide.appium.ScrollDirection;
 import com.codeborne.selenide.commands.ScrollTo;
 import com.codeborne.selenide.impl.Arguments;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Interactive;
 import org.openqa.selenium.interactions.PointerInput;
@@ -84,22 +82,12 @@ public class AppiumScrollTo extends FluentCommand {
   }
 
   private void performScroll(WebDriver appiumDriver, AppiumScrollOptions scrollOptions) {
-    Rectangle gestureArea = GestureArea.of(appiumDriver, scrollOptions.getContainer());
-    AppiumScrollCoordinates scrollCoordinates = getScrollCoordinates(scrollOptions.getScrollDirection(), gestureArea,
-      scrollOptions.getTopPointHeightPercent(), scrollOptions.getBottomPointHeightPercent());
+    AppiumScrollCoordinates scrollCoordinates = GestureArea.of(appiumDriver, scrollOptions.getContainer())
+      .scrollCoordinates(scrollOptions.getScrollDirection(),
+        scrollOptions.getTopPointHeightPercent(), scrollOptions.getBottomPointHeightPercent());
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
     Sequence sequenceToPerformScroll = getSequenceToPerformScroll(finger, scrollCoordinates);
     ((Interactive) appiumDriver).perform(singletonList(sequenceToPerformScroll));
-  }
-
-  private AppiumScrollCoordinates getScrollCoordinates(ScrollDirection scrollDirection, Rectangle area,
-                                                       float topPointHeightPercent, float bottomPointHeightPercent) {
-    int x = area.getX() + area.getWidth() / 2;
-    int topY = area.getY() + (int) (area.getHeight() * topPointHeightPercent);
-    int bottomY = area.getY() + (int) (area.getHeight() * bottomPointHeightPercent);
-    return scrollDirection == ScrollDirection.UP ?
-      new AppiumScrollCoordinates(x, topY, x, bottomY) :
-      new AppiumScrollCoordinates(x, bottomY, x, topY);
   }
 
   private Sequence getSequenceToPerformScroll(PointerInput finger, AppiumScrollCoordinates scrollCoordinates) {
