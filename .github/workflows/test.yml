@@ -167,6 +167,43 @@ jobs:
             **/build/reports
             **/build/test-results
 
+  run-smoke-tests-on-linux-arm:
+    name: linux-arm:${{ matrix.browser }}_smoke
+    runs-on: ubuntu-26.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [ 'firefox_headless', 'chrome_headless' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up JDK
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          cache: 'gradle'
+          java-version: '17'
+      - name: Setup Firefox
+        if: ${{ matrix.browser == 'firefox_headless' }}
+        uses: browser-actions/setup-firefox@latest
+      - name: Setup Chrome
+        if: ${{ matrix.browser == 'chrome_headless' }}
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6.4.0
+      - name: Run the tests
+        run: ./gradlew ${{ matrix.browser }}_smoke --no-daemon --console=plain
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: test-report-linux-arm-${{matrix.browser}}
+          retention-days: 14
+          path: |
+            **/build/reports
+            **/build/test-results
+
   verify-browser-test-coverage:
     runs-on: ubuntu-latest
     steps:
@@ -318,7 +355,7 @@ jobs:
   auto-merge-dependabot:
     name: 🤖 Auto merge dependabot PR
     timeout-minutes: 10
-    needs: [run-unit-tests-on-linux, run-browser-tests-on-linux, verify-browser-test-coverage, run-tests-on-windows, run-android-tests, run-ios-tests, run-selenoid-tests, run-moon-tests]
+    needs: [run-unit-tests-on-linux, run-browser-tests-on-linux, run-smoke-tests-on-linux-arm, verify-browser-test-coverage, run-tests-on-windows, run-android-tests, run-ios-tests, run-selenoid-tests, run-moon-tests]
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     permissions:
