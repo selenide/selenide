@@ -118,6 +118,19 @@ subprojects {
     outputs.upToDateWhen {false}
   }
 
+  tasks.register("firefox_headless_smoke", Test) {
+    usesService(browserTestLock)
+    systemProperties['selenide.browser'] = 'firefox'
+    systemProperties['selenide.headless'] = 'true'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
+    useJUnitPlatform {
+      includeTags 'smoke'
+    }
+    outputs.upToDateWhen {false}
+  }
+
   tasks.register("safari", Test) {
     usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'safari'
