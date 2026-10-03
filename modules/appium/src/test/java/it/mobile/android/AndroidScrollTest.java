@@ -2,10 +2,12 @@ package it.mobile.android;
 
 
 import com.codeborne.selenide.appium.AppiumScrollOptions;
+import com.codeborne.selenide.appium.SelenideAppiumElement;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.appium.AppiumScrollOptions.down;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.up;
 import static com.codeborne.selenide.appium.AppiumScrollOptions.with;
 import static com.codeborne.selenide.appium.ScrollDirection.DOWN;
@@ -36,6 +38,26 @@ class AndroidScrollTest extends BaseApiDemosTest {
     $(By.xpath(".//*[@text='Views']")).click();
     $(By.xpath(".//*[@text='Tabs']"))
       .scroll(AppiumScrollOptions.down(0.15f, 0.60f))
+      .shouldBe(visible);
+  }
+
+  @Test
+  void testAndroidScrollInsideContainer() {
+    $(By.xpath(".//*[@text='Views']")).click();
+    SelenideAppiumElement list = $(By.id("android:id/list"));
+    $(By.xpath(".//*[@text='Tabs']"))
+      .scroll(down().inside(list))
+      .shouldBe(visible);
+  }
+
+  @Test
+  void testAndroidScrollUpInsideContainer() {
+    $(By.xpath(".//*[@text='Views']")).click();
+    SelenideAppiumElement list = $(By.id("android:id/list"));
+    $(By.xpath(".//*[@text='Tabs']"))
+      .scroll(down().inside(list));
+    $(By.xpath(".//*[@text='Animation']"))
+      .scroll(up(0.2f, 0.7f).inside(list))
       .shouldBe(visible);
   }
 }
