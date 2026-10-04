@@ -1,48 +1,119 @@
 (function (element) {
-  const fullText = element.innerText;
-  if (!fullText) {
-    return '';
+  // Measures the rendered glyphs in place (no DOM mutations), so all CSS rules, nested styles and text direction are respected.
+  const TOLERANCE = 0.5;
+  const clipsCache = new Map();
+  const range = document.createRange();
+
+  function isClipping(style) {
+    return style.overflowX !== 'visible' || style.overflowY !== 'visible';
   }
 
-  const clone = element.cloneNode(true);
-  clone.style.position = 'absolute';
-  clone.style.visibility = 'hidden';
-  clone.style.left = '-9999px';
-  clone.style.top = '0';
-  clone.style.overflow = 'visible';
-  clone.style.textOverflow = 'clip';
-  clone.style.maxWidth = 'none';
-  clone.style.width = 'auto';
-  clone.style.height = 'auto';
-  clone.style.whiteSpace = 'nowrap';
-  document.body.appendChild(clone);
-
-  const availableWidth = element.getBoundingClientRect().width;
-
-  function measureTextWidth(text) {
-    clone.textContent = text;
-    return clone.getBoundingClientRect().width;
+  function ellipsisWidth(style) {
+    const context = document.createElement('canvas').getContext('2d');
+    context.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    return context.measureText('…').width;
   }
 
-  if (measureTextWidth(fullText) <= availableWidth + 0.5) {
-    clone.remove();
-    return fullText;
+  function clipBox(el, style) {
+    const rect = el.getBoundingClientRect();
+    const left = rect.left + el.clientLeft;
+    const top = rect.top + el.clientTop;
+    const box = {left: left, right: left + el.clientWidth, top: top, bottom: top + el.clientHeight};
+    if (style.textOverflow === 'ellipsis' && style.overflowX !== 'visible' && el.scrollWidth > el.clientWidth) {
+      if (style.direction === 'rtl') {
+        box.left += ellipsisWidth(style);
+      } else {
+        box.right -= ellipsisWidth(style);
+      }
+    }
+    return box;
   }
 
-  let low = 0;
-  let high = fullText.length;
-  let visibleLength = 0;
+  function clipsOf(el) {
+    if (!el) return [];
+    if (clipsCache.has(el)) return clipsCache.get(el);
+    const style = getComputedStyle(el);
+    const parentClips = clipsOf(el.parentElement);
+    const clips = isClipping(style) ? parentClips.concat([clipBox(el, style)]) : parentClips;
+    clipsCache.set(el, clips);
+    return clips;
+  }
 
-  while (low <= high) {
-    const mid = Math.floor((low + high) / 2);
-    if (measureTextWidth(fullText.substring(0, mid)) <= availableWidth + 0.5) {
-      visibleLength = mid;
-      low = mid + 1;
-    } else {
-      high = mid - 1;
+  function fitsInto(rect, clip) {
+    const verticalCenter = (rect.top + rect.bottom) / 2;
+    return rect.left >= clip.left - TOLERANCE && rect.right <= clip.right + TOLERANCE &&
+      verticalCenter >= clip.top && verticalCenter <= clip.bottom;
+  }
+
+  function isRendered(rect, clips) {
+    return (rect.width > 0 || rect.height > 0) && clips.every(clip => fitsInto(rect, clip));
+  }
+
+  function blockContainer(el) {
+    let current = el;
+    while (current !== element && /^(inline|contents)/.test(getComputedStyle(current).display)) {
+      current = current.parentElement;
+    }
+    return current;
+  }
+
+  let result = '';
+  let pendingSpace = false;
+  let previousBlock = null;
+
+  function append(text) {
+    if (pendingSpace && result) result += ' ';
+    result += text;
+    pendingSpace = false;
+  }
+
+  function appendCharacters(textNode, text, clips) {
+    for (let i = 0; i < text.length;) {
+      const character = String.fromCodePoint(text.codePointAt(i));
+      if (/\s/.test(character)) {
+        pendingSpace = true;
+      } else {
+        range.setStart(textNode, i);
+        range.setEnd(textNode, i + character.length);
+        if (isRendered(range.getBoundingClientRect(), clips)) {
+          append(character);
+        } else {
+          pendingSpace = true;
+        }
+      }
+      i += character.length;
     }
   }
 
-  clone.remove();
-  return fullText.substring(0, visibleLength);
+  function textRects(textNode) {
+    range.selectNodeContents(textNode);
+    return Array.from(range.getClientRects());
+  }
+
+  function appendText(textNode) {
+    const parent = textNode.parentElement;
+    const text = textNode.data;
+    if (!parent || !text.trim() || getComputedStyle(parent).visibility !== 'visible') return;
+    const rects = textRects(textNode);
+    if (rects.length === 0) return;
+
+    const block = blockContainer(parent);
+    if (previousBlock !== null && block !== previousBlock) pendingSpace = true;
+    previousBlock = block;
+
+    const clips = clipsOf(parent);
+    if (rects.every(rect => isRendered(rect, clips))) {
+      if (/^\s/.test(text)) pendingSpace = true;
+      append(text.trim().replace(/\s+/g, ' '));
+      if (/\s$/.test(text)) pendingSpace = true;
+    } else {
+      appendCharacters(textNode, text, clips);
+    }
+  }
+
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    appendText(walker.currentNode);
+  }
+  return result;
 })(arguments[0]);

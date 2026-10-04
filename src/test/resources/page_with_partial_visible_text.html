@@ -4,16 +4,55 @@
   <title>Test page :: partial visible text</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="/selenide-test.css">
+  <style>
+    .box {
+      font: 20px monospace;
+      width: 20ch;
+      border: 1px solid blue;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .ellipsis {
+      text-overflow: ellipsis;
+    }
+    .card .title {
+      font: 30px monospace;
+      width: 10ch;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .multiline {
+      font: 20px/30px monospace;
+      width: 10ch;
+      height: 60px;
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
-<div class="selenide-test-banner">Selenide</div>
+<header class="selenide-test-banner">Selenide</header>
 <h1>Partial visible text</h1>
 
-<div id="partial" style="border: 1px solid blue; display: block; height: 19px; max-width: 152.5px; overflow: hidden; text-overflow: ellipsis;">
+<div id="partial" class="box ellipsis">
   <span id="field_value">987 654 321 100 100.876543321 AUTOOQODS</span>
 </div>
 
+<div id="clipped" class="box">0123456789abcdefghijklmnopqrstuvwxyz</div>
+
+<div id="nested-styles" class="box ellipsis">0123456789<b style="font-size: 40px">ABCDEFGHIJKLMNOP</b></div>
+
+<div class="card">
+  <div id="ancestor-scoped-css" class="title">0123456789abcdefghij</div>
+</div>
+
+<div id="rtl" class="box ellipsis" dir="rtl">0123456789abcdefghijklmnopqrstuvwxyz</div>
+
+<div id="multiline" class="multiline">aaaa bbbb cccc dddd eeee ffff</div>
+
 <div id="fully-visible">Hello World</div>
+
+<div id="with-hidden-parts">Hello <span style="display: none">secret</span><span style="visibility: hidden">invisible</span>World</div>
 
 </body>
 </html>

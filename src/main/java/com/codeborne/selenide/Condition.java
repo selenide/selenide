@@ -20,13 +20,12 @@ import com.codeborne.selenide.conditions.ExactOwnText;
 import com.codeborne.selenide.conditions.ExactOwnTextCaseSensitive;
 import com.codeborne.selenide.conditions.ExactText;
 import com.codeborne.selenide.conditions.ExactTextCaseSensitive;
+import com.codeborne.selenide.conditions.ExactVisibleText;
 import com.codeborne.selenide.conditions.Exist;
 import com.codeborne.selenide.conditions.Focused;
 import com.codeborne.selenide.conditions.Hidden;
 import com.codeborne.selenide.conditions.Href;
 import com.codeborne.selenide.conditions.InnerText;
-import com.codeborne.selenide.conditions.VisibleText;
-import com.codeborne.selenide.conditions.ExactVisibleText;
 import com.codeborne.selenide.conditions.Interactable;
 import com.codeborne.selenide.conditions.IsImageLoaded;
 import com.codeborne.selenide.conditions.MatchAttributeWithValue;
@@ -50,6 +49,7 @@ import com.codeborne.selenide.conditions.TagName;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
+import com.codeborne.selenide.conditions.VisibleText;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
@@ -455,7 +455,9 @@ public final class Condition {
    * <p>Sample: {@code $("h1").shouldHave(visibleText("Hello"))}</p>
    * <p>
    * Unlike {@link #text(String)}, takes into account CSS that hides overflowing text
-   * (e.g. {@code overflow: hidden} with {@code text-overflow: ellipsis}).
+   * (e.g. {@code overflow: hidden} with {@code text-overflow: ellipsis}) on the element or its ancestors.
+   * Characters that are clipped (or replaced by the ellipsis) are not included.
+   * Text that is just scrolled out of the browser viewport is still considered visible.
    *
    * <p>Case insensitive</p>
    * <p>NB! Ignores multiple whitespaces between words</p>
@@ -469,7 +471,9 @@ public final class Condition {
    * <p>Sample: {@code $("h1").shouldHave(exactVisibleText("Hello"))}</p>
    * <p>
    * Unlike {@link #exactText(String)}, takes into account CSS that hides overflowing text
-   * (e.g. {@code overflow: hidden} with {@code text-overflow: ellipsis}).
+   * (e.g. {@code overflow: hidden} with {@code text-overflow: ellipsis}) on the element or its ancestors.
+   * Characters that are clipped (or replaced by the ellipsis) are not included.
+   * Text that is just scrolled out of the browser viewport is still considered visible.
    *
    * <p>Case insensitive</p>
    * <p>NB! Ignores multiple whitespaces between words</p>

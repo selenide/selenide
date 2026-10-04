@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class VisibleTextTest extends ITest {
   private static final String FULL_TEXT = "987 654 321 100 100.876543321 AUTOOQODS";
-  private static final String VISIBLE_PREFIX = "987 654 321 100 100.87";
+  private static final String VISIBLE_PREFIX = "987 654 321 100 100";
 
   @BeforeEach
   void openPage() {
@@ -21,54 +21,84 @@ final class VisibleTextTest extends ITest {
 
   @Test
   void textConditionMatchesFullDomTextEvenWhenOverflowIsHidden() {
-    withLongTimeout(() -> $("#partial").shouldHave(text(FULL_TEXT)));
-  }
-
-  @Test
-  void exactTextConditionMatchesFullDomTextEvenWhenOverflowIsHidden() {
-    withLongTimeout(() -> $("#partial").shouldHave(exactText(FULL_TEXT)));
+    $("#partial").shouldHave(text(FULL_TEXT));
+    $("#partial").shouldHave(exactText(FULL_TEXT));
   }
 
   @Test
   void visibleTextFailsWhenExpectedTextIsNotFullyVisible() {
-    assertThatThrownBy(() -> withLongTimeout(() -> $("#partial").shouldHave(visibleText(FULL_TEXT))))
-      .isInstanceOf(ElementShould.class);
+    assertThatThrownBy(() -> $("#partial").shouldHave(visibleText(FULL_TEXT)))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have visible text \"%s\"", FULL_TEXT)
+      .hasMessageContaining("Actual value: text=\"%s\"", VISIBLE_PREFIX);
   }
 
   @Test
   void visibleTextMatchesTruncatedPortion() {
-    withLongTimeout(() -> $("#partial").shouldHave(visibleText(VISIBLE_PREFIX)));
+    $("#partial").shouldHave(visibleText(VISIBLE_PREFIX));
+    $("#partial").shouldHave(visibleText("654 321"));
   }
 
   @Test
   void visibleTextIsCaseInsensitive() {
-    withLongTimeout(() -> $("#partial").shouldHave(visibleText(VISIBLE_PREFIX.toLowerCase())));
+    $("#fully-visible").shouldHave(visibleText("hello world"));
+    $("#fully-visible").shouldHave(exactVisibleText("HELLO WORLD"));
   }
 
   @Test
-  void visibleTextMatchesFullyVisibleElement() {
-    withLongTimeout(() -> $("#fully-visible").shouldHave(visibleText("Hello World")));
+  void exactVisibleTextExcludesCharactersReplacedByEllipsis() {
+    $("#partial").shouldHave(exactVisibleText(VISIBLE_PREFIX));
+  }
+
+  @Test
+  void exactVisibleTextOfElementInsideClippedAncestor() {
+    $("#field_value").shouldHave(exactVisibleText(VISIBLE_PREFIX));
   }
 
   @Test
   void exactVisibleTextFailsWhenExpectedTextIsNotFullyVisible() {
-    assertThatThrownBy(() -> withLongTimeout(() -> $("#partial").shouldHave(exactVisibleText(FULL_TEXT))))
+    assertThatThrownBy(() -> $("#partial").shouldHave(exactVisibleText(FULL_TEXT)))
       .isInstanceOf(ElementShould.class);
   }
 
   @Test
-  void exactVisibleTextMatchesVisiblePortionExactly() {
-    withLongTimeout(() -> $("#partial").shouldHave(exactVisibleText(VISIBLE_PREFIX)));
+  void overflowHiddenWithoutEllipsis() {
+    $("#clipped").shouldHave(exactVisibleText("0123456789abcdefghij"));
+  }
+
+  @Test
+  void respectsStylesOfNestedElements() {
+    $("#nested-styles").shouldHave(exactVisibleText("0123456789ABCD"));
+  }
+
+  @Test
+  void respectsCssRulesWithAncestorSelectors() {
+    $("#ancestor-scoped-css").shouldHave(exactVisibleText("012345678"));
+  }
+
+  @Test
+  void rightToLeftTextIsTruncatedOnTheLeftSide() {
+    $("#rtl").shouldHave(exactVisibleText("hijklmnopqrstuvwxyz"));
+  }
+
+  @Test
+  void excludesLinesHiddenByVerticalOverflow() {
+    $("#multiline").shouldHave(exactVisibleText("aaaa bbbb cccc dddd"));
+  }
+
+  @Test
+  void excludesHiddenChildren() {
+    $("#with-hidden-parts").shouldHave(exactVisibleText("Hello World"));
   }
 
   @Test
   void exactVisibleTextRejectsPartialMatchOnFullyVisibleElement() {
-    assertThatThrownBy(() -> withLongTimeout(() -> $("#fully-visible").shouldHave(exactVisibleText("Hello"))))
+    assertThatThrownBy(() -> $("#fully-visible").shouldHave(exactVisibleText("Hello")))
       .isInstanceOf(ElementShould.class);
   }
 
   @Test
   void exactVisibleTextMatchesFullyVisibleElement() {
-    withLongTimeout(() -> $("#fully-visible").shouldHave(exactVisibleText("Hello World")));
+    $("#fully-visible").shouldHave(exactVisibleText("Hello World"));
   }
 }
