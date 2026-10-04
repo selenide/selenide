@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * See the module README for the full list of supported parameters.
  */
 public class SelenideMcpServer {
-  private static final Pattern REGEX_INTEGER = Pattern.compile("-?\\d{1,9}");
+  private static final Pattern REGEX_INTEGER = Pattern.compile("-?\\d{1,10}");
   private final BrowserSession session;
 
   /**
@@ -120,10 +120,13 @@ public class SelenideMcpServer {
    * a boolean, an integer or a plain string.
    */
   private static void applyCapabilityArg(SelenideConfig config, String arg) {
+    if (arg.equals("--capability")) {
+      throw invalidCapability(arg);
+    }
     if (arg.startsWith("--capability=")) {
       String[] nameAndValue = arg.substring("--capability=".length()).split("=", 2);
       if (nameAndValue.length < 2 || nameAndValue[0].isEmpty()) {
-        throw new IllegalArgumentException("Expected --capability=<name>=<value>, but received: " + arg);
+        throw invalidCapability(arg);
       }
       String name = nameAndValue[0];
       config.browserCapabilities().setCapability(name, parseCapabilityValue(name, nameAndValue[1]));
@@ -138,9 +141,22 @@ public class SelenideMcpServer {
       return Boolean.valueOf(value);
     }
     if (REGEX_INTEGER.matcher(value).matches()) {
-      return Integer.valueOf(value);
+      return parseInteger(value);
     }
     return value;
+  }
+
+  private static Object parseInteger(String value) {
+    try {
+      return Integer.valueOf(value);
+    }
+    catch (NumberFormatException outOfIntegerRange) {
+      return value;
+    }
+  }
+
+  private static IllegalArgumentException invalidCapability(String arg) {
+    return new IllegalArgumentException("Expected --capability=<name>=<value>, but received: " + arg);
   }
 
   private static Object parseJson(String name, String value) {

@@ -93,4 +93,25 @@ class CliConfigTest {
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageStartingWith("Invalid JSON in capability selenoid:options: {enableVNC");
   }
+
+  @Test
+  void capabilityIntegerBoundaries() {
+    SelenideConfig config = CliConfig.toConfig(new String[]{
+      "--capability=custom:min=-2147483648",
+      "--capability=custom:max=2147483647",
+      "--capability=custom:big=1000000000",
+      "--capability=custom:tooBig=2147483648",
+    });
+    assertThat(config.browserCapabilities().getCapability("custom:min")).isEqualTo(Integer.MIN_VALUE);
+    assertThat(config.browserCapabilities().getCapability("custom:max")).isEqualTo(Integer.MAX_VALUE);
+    assertThat(config.browserCapabilities().getCapability("custom:big")).isEqualTo(1_000_000_000);
+    assertThat(config.browserCapabilities().getCapability("custom:tooBig")).isEqualTo("2147483648");
+  }
+
+  @Test
+  void bareCapabilityFlagThrows() {
+    assertThatThrownBy(() -> CliConfig.toConfig(new String[]{"--capability", "custom:name=value"}))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Expected --capability=<name>=<value>, but received: --capability");
+  }
 }
