@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.io.TempDirDeletionStrategy.IgnoreFailures;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.api.parallel.Resources;
@@ -27,7 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @ResourceLock(value = Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ_WRITE)
 class DaemonClientTest {
-  @TempDir
+  // On Windows, the log file of the crashed daemon may still be locked when JUnit deletes the temp dir
+  @TempDir(deletionStrategy = IgnoreFailures.class)
   Path home;
 
   private String originalHome;
