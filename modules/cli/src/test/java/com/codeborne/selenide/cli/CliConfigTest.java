@@ -3,6 +3,9 @@ package com.codeborne.selenide.cli;
 import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -60,5 +63,34 @@ class CliConfigTest {
     assertThatThrownBy(() -> CliConfig.toConfig(new String[]{"--page-load-timeout=abc"}))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("--page-load-timeout");
+  }
+
+  @Test
+  void appliesCapabilities() {
+    SelenideConfig config = CliConfig.toConfig(new String[]{
+      "--capability=custom:name=a=b",
+      "--capability=acceptInsecureCerts=false",
+      "--capability=custom:retries=3",
+      "--capability=goog:chromeOptions={\"args\":[\"--no-sandbox\"]}",
+    });
+    assertThat(config.browserCapabilities().getCapability("custom:name")).isEqualTo("a=b");
+    assertThat(config.browserCapabilities().getCapability("acceptInsecureCerts")).isEqualTo(false);
+    assertThat(config.browserCapabilities().getCapability("custom:retries")).isEqualTo(3);
+    assertThat(config.browserCapabilities().getCapability("goog:chromeOptions"))
+      .isEqualTo(Map.of("args", List.of("--no-sandbox")));
+  }
+
+  @Test
+  void reportsAClearErrorForACapabilityWithoutValue() {
+    assertThatThrownBy(() -> CliConfig.toConfig(new String[]{"--capability=platformName"}))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Expected --capability=<name>=<value>, but received: --capability=platformName");
+  }
+
+  @Test
+  void reportsAClearErrorForACapabilityWithInvalidJson() {
+    assertThatThrownBy(() -> CliConfig.toConfig(new String[]{"--capability=selenoid:options={enableVNC"}))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageStartingWith("Invalid JSON in capability selenoid:options: {enableVNC");
   }
 }

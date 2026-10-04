@@ -162,7 +162,7 @@ Daemon state lives under `~/.selenide-cli/` (`<session>.port`, `<session>.log`).
 ## `open` options
 
 `--browser=<name>` `--headless` `--browser-size=<WxH>` `--base-url=<url>` `--timeout=<ms>`
-`--remote=<url>` `--reports-folder=<dir>` … (applied when the daemon is first spawned). Also
+`--remote=<url>` `--reports-folder=<dir>` `--capability=<name>=<value>` … (applied when the daemon is first spawned). Also
 `--version`/`-v`, `--help`/`-h`. See
 [configuration reference](skills/selenide-cli/references/configuration.md).
 
