@@ -107,13 +107,43 @@ Add to `.claude/settings.json` (project) or `~/.claude/settings.json` (global):
 | `--selector-mode=<mode>` | Selector mode: `CSS`, `Sizzle` | `CSS` |
 | `--assertion-mode=<mode>` | Assertion mode: `STRICT`, `SOFT` | `STRICT` |
 
-### Capabilities
+### Browser Capabilities
 
 | Parameter | Description |
 |---|---|
-| `--caps=<list>` | Comma-separated list of capabilities to enable |
+| `--capability=<name>=<value>` | Add a WebDriver capability. Can be repeated. |
 
-Available capabilities:
+The value is parsed as:
+- a JSON object or array, if it starts with `{` or `[`;
+- a boolean (`true`/`false`) or an integer;
+- otherwise, a plain string.
+
+JSON values let you set nested capabilities, e.g. Chrome arguments. They are added to the default arguments that Selenide sets:
+
+```json
+{
+  "mcpServers": {
+    "selenide-mcp": {
+      "command": "npx",
+      "args": [
+        "@selenide/mcp",
+        "--capability=goog:chromeOptions={\"args\":[\"--no-sandbox\"]}",
+        "--capability=selenoid:options={\"enableVNC\":true}"
+      ]
+    }
+  }
+}
+```
+
+If the same capability name is given more than once, the last value wins.
+
+### MCP Tool Groups
+
+| Parameter | Description |
+|---|---|
+| `--caps=<list>` | Comma-separated list of additional MCP tool groups to enable |
+
+Available tool groups:
 
 - `codegen` — enables test code generation tools
 

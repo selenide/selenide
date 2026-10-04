@@ -1,11 +1,17 @@
 package com.codeborne.selenide.mcp;
 
 import com.codeborne.selenide.AssertionMode;
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelectorMode;
 import com.codeborne.selenide.TextCheck;
+import com.codeborne.selenide.webdriver.ChromeDriverFactory;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -272,5 +278,69 @@ class SelenideMcpServerTest {
   void hasCapabilityEmptyArgs() {
     assertThat(SelenideMcpServer.hasCapability(
       new String[]{}, "codegen")).isFalse();
+  }
+
+  @Test
+  void parseConfigCapabilityString() {
+    SelenideConfig config = SelenideMcpServer.parseConfig(
+      new String[]{"--capability=custom:name=hello"});
+    assertThat(config.browserCapabilities().getCapability("custom:name")).isEqualTo("hello");
+  }
+
+  @Test
+  void parseConfigCapabilityValueContainingEquals() {
+    SelenideConfig config = SelenideMcpServer.parseConfig(
+      new String[]{"--capability=custom:token=a=b"});
+    assertThat(config.browserCapabilities().getCapability("custom:token")).isEqualTo("a=b");
+  }
+
+  @Test
+  void parseConfigCapabilityBooleanAndNumber() {
+    SelenideConfig config = SelenideMcpServer.parseConfig(
+      new String[]{"--capability=acceptInsecureCerts=false", "--capability=custom:retries=3"});
+    assertThat(config.browserCapabilities().getCapability("acceptInsecureCerts")).isEqualTo(false);
+    assertThat(config.browserCapabilities().getCapability("custom:retries")).isEqualTo(3);
+  }
+
+  @Test
+  void parseConfigCapabilityJsonObject() {
+    SelenideConfig config = SelenideMcpServer.parseConfig(
+      new String[]{"--capability=selenoid:options={\"enableVNC\":true,\"screenResolution\":\"1920x1080x24\"}"});
+    assertThat(config.browserCapabilities().getCapability("selenoid:options"))
+      .isEqualTo(Map.of("enableVNC", true, "screenResolution", "1920x1080x24"));
+  }
+
+  @Test
+  void parseConfigCapabilityJsonArray() {
+    SelenideConfig config = SelenideMcpServer.parseConfig(
+      new String[]{"--capability=custom:list=[\"a\",\"b\"]"});
+    assertThat(config.browserCapabilities().getCapability("custom:list")).isEqualTo(List.of("a", "b"));
+  }
+
+  @Test
+  void chromeArgumentsFromCapabilityAreAddedToDefaultArguments() {
+    SelenideConfig config = SelenideMcpServer.parseConfig(
+      new String[]{"--browser=chrome", "--capability=goog:chromeOptions={\"args\":[\"--no-sandbox\",\"--lang=en\"]}"});
+
+    ChromeOptions options = new ChromeDriverFactory().createCapabilities(config, new Browser("chrome", false), null, null);
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> chromeOptions = (Map<String, Object>) options.asMap().get(ChromeOptions.CAPABILITY);
+    assertThat((List<String>) chromeOptions.get("args"))
+      .contains("--no-sandbox", "--lang=en", "--disable-dev-shm-usage");
+  }
+
+  @Test
+  void parseConfigCapabilityWithoutValueThrows() {
+    assertThatThrownBy(() -> SelenideMcpServer.parseConfig(new String[]{"--capability=platformName"}))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Expected --capability=<name>=<value>, but received: --capability=platformName");
+  }
+
+  @Test
+  void parseConfigCapabilityWithInvalidJsonThrows() {
+    assertThatThrownBy(() -> SelenideMcpServer.parseConfig(new String[]{"--capability=selenoid:options={enableVNC"}))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageStartingWith("Invalid JSON in capability selenoid:options: {enableVNC");
   }
 }
