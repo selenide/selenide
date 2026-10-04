@@ -28,9 +28,12 @@ final class BrowserDownloadsFolderTest {
     touch(new File(folder, "file1"));
     File lockedFolder = new File(folder, "locked");
     touch(new File(lockedFolder, "file2.crdownload"));
-    assumeThat(lockedFolder.setExecutable(false) && lockedFolder.setReadable(false)).isTrue();
 
     try {
+      lockedFolder.setExecutable(false);
+      lockedFolder.setReadable(false);
+      assumeThat(lockedFolder.canRead()).as("Folder is still readable (e.g. on Windows or under root)").isFalse();
+
       new BrowserDownloadsFolder(folder).cleanupBeforeDownload();
 
       assertThat(new File(folder, "file1")).doesNotExist();
