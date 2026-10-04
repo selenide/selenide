@@ -100,3 +100,8 @@ Dependency versions are defined in `gradle/dependencies.gradle` and module `buil
 ## Branching
 
 All work on feature branches from `main`, merged back to `main`. Commit messages should start with issue ID: `#ID description`.
+
+**Avoid git worktrees by default** (`EnterWorktree`, `isolation: "worktree"` for agents, `git worktree add`), even if a skill
+suggests them. Make changes directly in the current working directory, one task at a time: create a feature branch here, finish
+and commit the work, then move on to the next task. Multiple worktrees/directories with parallel branches are hard to keep track of.
+Use a worktree only when there is a really good reason for it (and say why).
