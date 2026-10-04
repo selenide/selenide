@@ -3,6 +3,7 @@
   const TOLERANCE = 0.5;
   const clipsCache = new Map();
   const transparencyCache = new Map();
+  let canvasContext = null;
   const range = document.createRange();
 
   function isTransparent(el) {
@@ -18,9 +19,10 @@
   }
 
   function ellipsisWidth(style) {
-    const context = document.createElement('canvas').getContext('2d');
-    context.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
-    return context.measureText('…').width;
+    // The ellipsis glyph is painted by browser, but not present in DOM. So we measure its width on a detached canvas.
+    canvasContext = canvasContext || document.createElement('canvas').getContext('2d');
+    canvasContext.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    return canvasContext.measureText('\u2026').width;
   }
 
   function clipBox(el, style) {
@@ -125,7 +127,7 @@
     const node = walker.currentNode;
     if (node.nodeType === Node.TEXT_NODE) {
       appendText(node);
-    } else if (node.tagName === 'BR') {
+    } else if (node.localName === 'br') {
       pendingSpace = true;
     }
   }

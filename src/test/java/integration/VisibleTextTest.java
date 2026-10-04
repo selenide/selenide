@@ -29,7 +29,7 @@ final class VisibleTextTest extends ITest {
   void visibleTextFailsWhenExpectedTextIsNotFullyVisible() {
     assertThatThrownBy(() -> $("#partial").shouldHave(visibleText(FULL_TEXT)))
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should have visible text \"%s\"", FULL_TEXT)
+      .hasMessageStartingWith("Element should have visible text \"%s\" {#partial}", FULL_TEXT)
       .hasMessageContaining("Actual value: text=\"%s\"", VISIBLE_PREFIX);
   }
 
@@ -58,7 +58,9 @@ final class VisibleTextTest extends ITest {
   @Test
   void exactVisibleTextFailsWhenExpectedTextIsNotFullyVisible() {
     assertThatThrownBy(() -> $("#partial").shouldHave(exactVisibleText(FULL_TEXT)))
-      .isInstanceOf(ElementShould.class);
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have exact visible text \"%s\" {#partial}", FULL_TEXT)
+      .hasMessageContaining("Actual value: text=\"%s\"", VISIBLE_PREFIX);
   }
 
   @Test
@@ -99,7 +101,9 @@ final class VisibleTextTest extends ITest {
   @Test
   void exactVisibleTextRejectsPartialMatchOnFullyVisibleElement() {
     assertThatThrownBy(() -> $("#fully-visible").shouldHave(exactVisibleText("Hello")))
-      .isInstanceOf(ElementShould.class);
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have exact visible text \"Hello\" {#fully-visible}")
+      .hasMessageContaining("Actual value: text=\"Hello World\"");
   }
 
   @Test
