@@ -10,8 +10,10 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.api.parallel.Resources;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -67,5 +69,36 @@ class DaemonClientTest {
     assertThat(DaemonClient.javaBinary(javaHome, "Linux")).isEqualTo(Path.of(javaHome, "bin", "java").toString());
     assertThat(DaemonClient.javaBinary(javaHome, "Mac OS X")).isEqualTo(Path.of(javaHome, "bin", "java").toString());
     assertThat(DaemonClient.javaBinary(javaHome, "Windows 11")).isEqualTo(Path.of(javaHome, "bin", "java.exe").toString());
+  }
+
+  @Test
+  void escapesQuotesOnlyOnWindows() {
+    List<String> args = List.of("--capability=custom:json={\"a\":\"b\\\"c\"}", "--reports-folder=C:\\reports\\");
+    assertThat(DaemonClient.escapeQuotes(args, "Linux")).isSameAs(args);
+    assertThat(DaemonClient.escapeQuotes(args, "Windows 11")).containsExactly(
+      "--capability=custom:json={\\\"a\\\":\\\"b\\\\\\\"c\\\"}",
+      "--reports-folder=C:\\reports\\"
+    );
+  }
+
+  @Test
+  void passesConfigFlagsWithQuotesToSubprocessIntact() throws IOException, InterruptedException {
+    List<String> flags = List.of(
+      "--capability=goog:chromeOptions={\"args\":[\"--no-sandbox\",\"--lang=en\"]}",
+      "--capability=custom:json={\"key\":\"value with spaces\"}",
+      "--reports-folder=C:\\temp\\reports",
+      "--browser=chrome"
+    );
+    List<String> command = new ArrayList<>(List.of(
+      DaemonClient.javaBinary(System.getProperty("java.home"), System.getProperty("os.name")),
+      "-cp", System.getProperty("java.class.path"), EchoArgs.class.getName()
+    ));
+    command.addAll(DaemonClient.escapeQuotes(flags, System.getProperty("os.name")));
+
+    Process process = new ProcessBuilder(command).redirectErrorStream(true).start();
+    String output = new String(process.getInputStream().readAllBytes(), UTF_8);
+
+    assertThat(process.waitFor()).isZero();
+    assertThat(output.lines().toList()).isEqualTo(flags);
   }
 }

@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.OptionalInt;
 
 import static java.nio.file.StandardOpenOption.CREATE;
@@ -210,7 +211,7 @@ final class DaemonClient {
     command.add(SelenideCli.class.getName());
     command.add("__daemon");
     command.add("--session=" + session);
-    command.addAll(configFlags);
+    command.addAll(escapeQuotes(configFlags, System.getProperty("os.name", "")));
     ProcessBuilder builder = new ProcessBuilder(command);
     builder.redirectErrorStream(true);
     builder.redirectOutput(SessionStore.logFile(session).toFile());
@@ -226,8 +227,35 @@ final class DaemonClient {
   // (instead of reading system properties directly) so both branches are unit-testable regardless
   // of the OS actually running the tests.
   static String javaBinary(String javaHome, String osName) {
-    String executable = osName.toLowerCase().contains("win") ? "java.exe" : "java";
+    String executable = isWindows(osName) ? "java.exe" : "java";
     return Path.of(javaHome, "bin", executable).toString();
+  }
+
+  // On Windows, ProcessBuilder passes double quotes inside an argument as-is, and the child process
+  // treats them as quoting characters and drops them - e.g. JSON in `--capability=name={"a":1}` would
+  // arrive as `{a:1}`. Escape them per CommandLineToArgvW rules: a quote becomes \", and backslashes
+  // directly preceding it are doubled. Other backslashes (e.g. in Windows paths) are left as-is.
+  static List<String> escapeQuotes(List<String> args, String osName) {
+    return isWindows(osName) ? args.stream().map(DaemonClient::escapeQuotes).toList() : args;
+  }
+
+  private static String escapeQuotes(String arg) {
+    StringBuilder result = new StringBuilder(arg.length());
+    int backslashes = 0;
+    for (char c : arg.toCharArray()) {
+      if (c == '\\') {
+        backslashes++;
+        continue;
+      }
+      result.append("\\".repeat(c == '"' ? backslashes * 2 + 1 : backslashes));
+      result.append(c);
+      backslashes = 0;
+    }
+    return result.append("\\".repeat(backslashes)).toString();
+  }
+
+  private static boolean isWindows(String osName) {
+    return osName.toLowerCase(Locale.ROOT).contains("win");
   }
 
   private static String firstPositional(List<String> args) {

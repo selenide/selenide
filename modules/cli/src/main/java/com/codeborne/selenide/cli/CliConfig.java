@@ -1,11 +1,17 @@
 package com.codeborne.selenide.cli;
 
 import com.codeborne.selenide.SelenideConfig;
+import org.openqa.selenium.json.Json;
+import org.openqa.selenium.json.JsonException;
+
+import java.util.regex.Pattern;
 
 /**
  * Maps command-line flags to a {@link SelenideConfig}, mirroring the flag style of the Selenide MCP server.
  */
 final class CliConfig {
+  private static final Pattern REGEX_INTEGER = Pattern.compile("-?\\d{1,9}");
+
   private CliConfig() {
   }
 
@@ -15,6 +21,7 @@ final class CliConfig {
       applyBrowserArg(config, arg);
       applyConnectionArg(config, arg);
       applyPageLoadArg(config, arg);
+      applyCapabilityArg(config, arg);
     }
     return config;
   }
@@ -67,6 +74,44 @@ final class CliConfig {
     }
     else if (arg.startsWith("--downloads-folder=")) {
       config.downloadsFolder(value(arg));
+    }
+  }
+
+  /**
+   * Handles {@code --capability=<name>=<value>}.
+   * Value can be a JSON object or array (e.g. {@code goog:chromeOptions={"args":["--no-sandbox"]}}),
+   * a boolean, an integer or a plain string.
+   */
+  private static void applyCapabilityArg(SelenideConfig config, String arg) {
+    if (arg.startsWith("--capability=")) {
+      String[] nameAndValue = value(arg).split("=", 2);
+      if (nameAndValue.length < 2 || nameAndValue[0].isEmpty()) {
+        throw new IllegalArgumentException("Expected --capability=<name>=<value>, but received: " + arg);
+      }
+      String name = nameAndValue[0];
+      config.browserCapabilities().setCapability(name, parseCapabilityValue(name, nameAndValue[1]));
+    }
+  }
+
+  private static Object parseCapabilityValue(String name, String value) {
+    if (value.startsWith("{") || value.startsWith("[")) {
+      return parseJson(name, value);
+    }
+    if ("true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value)) {
+      return Boolean.valueOf(value);
+    }
+    if (REGEX_INTEGER.matcher(value).matches()) {
+      return Integer.valueOf(value);
+    }
+    return value;
+  }
+
+  private static Object parseJson(String name, String value) {
+    try {
+      return new Json().toType(value, Object.class);
+    }
+    catch (JsonException e) {
+      throw new IllegalArgumentException("Invalid JSON in capability " + name + ": " + value, e);
     }
   }
 

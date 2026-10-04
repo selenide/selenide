@@ -26,6 +26,7 @@ selenide open [flags] <url>
 | `--page-load-timeout=<ms>` | page load timeout |
 | `--reports-folder=<dir>` | where `screenshot` writes PNGs |
 | `--downloads-folder=<dir>` | download target folder |
+| `--capability=<name>=<value>` | WebDriver capability; repeatable (see below) |
 
 Top-level: `--version` / `-v`, `--help` / `-h`. Session: `-s <name>` / `--session <name>`.
 
@@ -36,7 +37,16 @@ selenide open --headless --browser=chrome --browser-size=1920x1080 https://selen
 selenide open --browser=firefox --base-url=https://example.com /login
 selenide open --remote=http://localhost:4444/wd/hub --browser=chrome https://example.com
 selenide open --browser-binary=/opt/chrome/chrome --timeout=10000 https://example.com
+selenide open --capability='goog:chromeOptions={"args":["--no-sandbox"]}' https://example.com
 ```
+
+## Capabilities
+
+`--capability=<name>=<value>` sets a WebDriver capability. The value is parsed as JSON if it starts
+with `{` or `[` (so nested capabilities work), as a boolean for `true`/`false`, as an integer for
+digits, and as a plain string otherwise. Chrome `args` given via `goog:chromeOptions` are added to
+Selenide's default arguments. Quote the whole flag in the shell so the JSON quotes survive. If the
+same capability name is given more than once, the last value wins.
 
 ## Notes
 
