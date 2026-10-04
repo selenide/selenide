@@ -9,7 +9,13 @@ import static com.codeborne.selenide.CheckResult.rejected;
 public interface ObjectCondition<T> {
   String description();
 
-  String negativeDescription();
+  /**
+   * @deprecated not used anymore. Just remove it.
+   */
+  @Deprecated(forRemoval = true)
+  default String negativeDescription() {
+    return description();
+  }
 
   CheckResult check(T object);
 
@@ -19,7 +25,7 @@ public interface ObjectCondition<T> {
   String describe(T object);
 
   default String message(T object) {
-    return describe(object) + " " + description();
+    return describe(object) + " should have " + description();
   }
 
   default CheckResult result(T object, boolean met, @Nullable Object actualValue) {
@@ -30,4 +36,7 @@ public interface ObjectCondition<T> {
     return new ExplainedObjectCondition<>(this, message);
   }
 
+  default ObjectCondition<T> or(ObjectCondition<T> alternative) {
+    return new Or<>(this, alternative);
+  }
 }

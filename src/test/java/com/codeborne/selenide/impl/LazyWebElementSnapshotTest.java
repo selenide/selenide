@@ -11,20 +11,22 @@ import static org.mockito.Mockito.when;
 
 public class LazyWebElementSnapshotTest {
 
+  private final WebElement element = mock();
   private final WebElementSource source = mock();
 
   @Test
   void elementShouldBeCached() {
     // Given
-    when(source.getWebElement()).thenAnswer(invocation -> mock(WebElement.class));
+    when(source.getWebElement()).thenReturn(element);
     LazyWebElementSnapshot cachedSource = new LazyWebElementSnapshot(source);
 
     // When
-    WebElement webElement1 = cachedSource.getWebElement();
-    WebElement webElement2 = cachedSource.getWebElement();
+    WebElement result1 = cachedSource.getWebElement();
+    WebElement result2 = cachedSource.getWebElement();
 
     // Then
-    assertThat(webElement1).isNotNull().isSameAs(webElement2);
+    assertThat(result1).isSameAs(result2);
+    assertThat(result1).isSameAs(element);
     verify(source, times(1)).getWebElement();
   }
 }

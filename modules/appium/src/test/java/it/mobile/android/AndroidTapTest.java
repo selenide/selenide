@@ -3,6 +3,7 @@ package it.mobile.android;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.appium.AppiumClickOptions.longPressFor;
@@ -34,7 +35,7 @@ class AndroidTapTest extends BaseApiDemosTest {
     $(By.xpath(".//*[@text='Views']")).click();
     $(By.xpath(".//*[@text='Expandable Lists']")).click();
     $(By.xpath(".//*[@text='1. Custom Adapter']")).click();
-    $(By.xpath(".//*[@text='People Names']")).tap(longPressFor(ofSeconds(4)));
+    $(By.xpath(".//*[@text='People Names']")).click(usingDefaultMethod()).tap(longPressFor(ofSeconds(4)));
     $(By.xpath(".//*[@text='Sample menu']")).shouldBe(visible);
   }
 

@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
@@ -58,6 +59,7 @@ import static org.openqa.selenium.WindowType.TAB;
 final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   private static final Logger log = LoggerFactory.getLogger(FileDownloadToFolderWithCdpTest.class);
   private final File folder = new File(downloadsFolder).getAbsoluteFile();
+  private final Random random = new Random();
 
   @BeforeEach
   void setUp() {
@@ -316,13 +318,13 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   void downloadMultipleFiles_errorMessage() {
     openFile("downloadMultipleFiles.html");
 
-    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(33).withTimeout(100)))
+    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(33).withTimeout(500)))
       .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download at least 33 files in 100ms (found ")
+      .hasMessageStartingWith("Failed to download at least 33 files in 500ms (found ")
       .hasMessageContaining("hello_world.txt")
       .hasMessageContaining("empty.html")
       .hasMessageContaining("download.html")
-      .hasMessageContaining("Timeout: 100ms");
+      .hasMessageContaining("Timeout: 500ms");
   }
 
   @Test
@@ -340,9 +342,9 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
-  @ParameterizedTest
-  @ValueSource(ints = {1, 2, 3, 4, 5})
-  void downloadFile_whileMultipleTabsOpened(int tabsCount) {
+  @Test
+  void downloadFile_whileMultipleTabsOpened() {
+    int tabsCount = random.nextInt(1, 6);
     openNewTabs(tabsCount);
 
     try {

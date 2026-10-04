@@ -169,12 +169,12 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   @Test
   void downloadsGetsTimeoutException() {
     assertThatThrownBy(() -> {
-      File downloadedFile = $(byText("Start download after delay (2000 ms)")).download(file().withTimeout(100));
+      File downloadedFile = $(byText("Start download after delay (2000 ms)")).download(file().withTimeout(200));
       assertThat(downloadedFile).hasContent("File downloading should fail with timeout");
     })
       .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageStartingWith("Failed to download ")
-      .hasMessageContaining("/files/hello_world.txt?pause=2000 in 100 ms.");
+      .hasMessageContaining("/files/hello_world.txt?pause=2000 in 200 ms.");
   }
 
   @Test

@@ -10,13 +10,17 @@ import com.codeborne.selenide.mcp.tools.CodegenTools;
 import com.codeborne.selenide.mcp.tools.ElementInteractionTools;
 import com.codeborne.selenide.mcp.tools.InspectTools;
 import com.codeborne.selenide.mcp.tools.NavigationTools;
+import com.codeborne.selenide.mcp.tools.NetworkTools;
 import io.modelcontextprotocol.json.McpJsonDefaults;
 import io.modelcontextprotocol.server.McpServer;
 import io.modelcontextprotocol.server.McpSyncServer;
 import io.modelcontextprotocol.server.transport.StdioServerTransportProvider;
+import org.openqa.selenium.json.Json;
+import org.openqa.selenium.json.JsonException;
 
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
+import java.util.regex.Pattern;
 
 /**
  * MCP (Model Context Protocol) server that exposes Selenide browser automation
@@ -26,6 +30,7 @@ import java.util.concurrent.CountDownLatch;
  * See the module README for the full list of supported parameters.
  */
 public class SelenideMcpServer {
+  private static final Pattern REGEX_INTEGER = Pattern.compile("-?\\d{1,10}");
   private final BrowserSession session;
 
   /**
@@ -49,7 +54,8 @@ public class SelenideMcpServer {
       .tools(NavigationTools.specs(session))
       .tools(ElementInteractionTools.specs(session))
       .tools(AdvancedInteractionTools.specs(session))
-      .tools(InspectTools.specs(session));
+      .tools(InspectTools.specs(session))
+      .tools(NetworkTools.specs(session));
 
     if (hasCapability(args, "codegen")) {
       builder = builder.tools(CodegenTools.specs(session));
@@ -103,8 +109,63 @@ public class SelenideMcpServer {
       applyProxyArg(config, arg);
       applyBehaviorArg(config, arg);
       applyModeArg(config, arg);
+      applyCapabilityArg(config, arg);
     }
     return config;
+  }
+
+  /**
+   * Handles {@code --capability=<name>=<value>}.
+   * Value can be a JSON object or array (e.g. {@code goog:chromeOptions={"args":["--no-sandbox"]}}),
+   * a boolean, an integer or a plain string.
+   */
+  private static void applyCapabilityArg(SelenideConfig config, String arg) {
+    if (arg.equals("--capability")) {
+      throw invalidCapability(arg);
+    }
+    if (arg.startsWith("--capability=")) {
+      String[] nameAndValue = arg.substring("--capability=".length()).split("=", 2);
+      if (nameAndValue.length < 2 || nameAndValue[0].isEmpty()) {
+        throw invalidCapability(arg);
+      }
+      String name = nameAndValue[0];
+      config.browserCapabilities().setCapability(name, parseCapabilityValue(name, nameAndValue[1]));
+    }
+  }
+
+  private static Object parseCapabilityValue(String name, String value) {
+    if (value.startsWith("{") || value.startsWith("[")) {
+      return parseJson(name, value);
+    }
+    if ("true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value)) {
+      return Boolean.valueOf(value);
+    }
+    if (REGEX_INTEGER.matcher(value).matches()) {
+      return parseInteger(value);
+    }
+    return value;
+  }
+
+  private static Object parseInteger(String value) {
+    try {
+      return Integer.valueOf(value);
+    }
+    catch (NumberFormatException outOfIntegerRange) {
+      return value;
+    }
+  }
+
+  private static IllegalArgumentException invalidCapability(String arg) {
+    return new IllegalArgumentException("Expected --capability=<name>=<value>, but received: " + arg);
+  }
+
+  private static Object parseJson(String name, String value) {
+    try {
+      return new Json().toType(value, Object.class);
+    }
+    catch (JsonException e) {
+      throw new IllegalArgumentException("Invalid JSON in capability " + name + ": " + value, e);
+    }
   }
 
   private static void applyBrowserArg(SelenideConfig config, String arg) {

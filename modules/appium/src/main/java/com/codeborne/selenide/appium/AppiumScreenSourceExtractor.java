@@ -12,7 +12,7 @@ public class AppiumScreenSourceExtractor extends WebPageSourceExtractor {
   @Override
   protected File createFile(Config config, WebDriver webDriver, String fileName) {
     return isMobile(webDriver) ?
-      new File(config.reportsFolder(), fileName + ".xml") :
+      createFileWithExtension(config, fileName, "xml") :
       super.createFile(config, webDriver, fileName);
   }
 }

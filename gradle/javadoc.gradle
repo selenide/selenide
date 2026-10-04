@@ -1,20 +1,52 @@
+apply plugin: 'java-base'
+
+subprojects {
+  configurations {
+    javadocClasspathElements {
+      canBeConsumed = true
+      canBeResolved = false
+      extendsFrom(configurations.compileClasspath)
+    }
+  }
+}
+
+repositories {
+  mavenCentral()
+  maven {
+    name = 'Central Portal Snapshots'
+    url = 'https://central.sonatype.com/repository/maven-snapshots/'
+    mavenContent {
+      snapshotsOnly()
+    }
+    content {
+      includeGroup("org.seleniumhq.selenium")
+    }
+  }
+}
+
+configurations {
+  javadocForSiteClasspath
+}
+
+dependencies {
+  subprojects.each { subproject ->
+    javadocForSiteClasspath project(path: subproject.path, configuration: 'javadocClasspathElements')
+  }
+}
+
 tasks.register('javadocForSite', Javadoc) {
   source = subprojects.sourceSets.main.allJava
   destinationDir = file(project.layout.buildDirectory.dir("javadoc-for-site"))
-  classpath = project(":modules:core").sourceSets.main.compileClasspath
-  classpath += project(":statics").sourceSets.main.compileClasspath
-  classpath += project(":modules:appium").sourceSets.main.compileClasspath
-  classpath += project(":modules:clear-with-shortcut").sourceSets.main.compileClasspath
-  classpath += project(":modules:full-screenshot").sourceSets.main.compileClasspath
-  classpath += project(":modules:grid").sourceSets.main.compileClasspath
-  classpath += project(":modules:junit4").sourceSets.main.compileClasspath
-  classpath += project(":modules:mcp").sourceSets.main.compileClasspath
-  classpath += project(":modules:proxy").sourceSets.main.compileClasspath
-  classpath += project(":modules:selenoid").sourceSets.main.compileClasspath
-  classpath += project(":modules:testng").sourceSets.main.compileClasspath
-  classpath += project(":modules:video-recorder").sourceSets.main.compileClasspath
+  classpath = configurations.javadocForSiteClasspath
 
   def javadocStylesheet = file('gradle/javadoc-style.css')
   inputs.file(javadocStylesheet).withPropertyName('javadocStylesheet')
   options.addStringOption('-add-stylesheet', javadocStylesheet.absolutePath)
+
+  // modules/cli and modules/mcp use the shadow plugin with an empty archiveClassifier, so their
+  // shadowJar output overwrites the same file as their jar output. Since jar and shadowJar aren't
+  // ordered relative to each other, order javadocForSite after both so it never races the
+  // overwrite (same race fixed for `:modules:mcp:test` in modules/mcp/build.gradle).
+  mustRunAfter ':modules:cli:jar', ':modules:cli:shadowJar'
+  mustRunAfter ':modules:mcp:jar', ':modules:mcp:shadowJar'
 }

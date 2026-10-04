@@ -1,6 +1,5 @@
 package com.codeborne.selenide.fullscreenshot;
 
-import com.codeborne.selenide.impl.JavaScript;
 import com.codeborne.selenide.impl.Photographer;
 import com.codeborne.selenide.impl.WebdriverPhotographer;
 import org.openqa.selenium.OutputType;
@@ -9,7 +8,9 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chromium.HasCdp;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.devtools.latest.dom.model.Rect;
 import org.openqa.selenium.devtools.latest.page.Page;
+import org.openqa.selenium.devtools.latest.page.model.VisualViewport;
 import org.openqa.selenium.devtools.latest.page.model.Viewport;
 import org.openqa.selenium.firefox.HasFullPageScreenshot;
 import org.slf4j.Logger;
@@ -18,14 +19,11 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * Implementation of {@link Photographer} which can take full-size screenshots.
  */
 public class FullSizePhotographer implements Photographer {
   private static final Logger log = LoggerFactory.getLogger(FullSizePhotographer.class);
-  private static final JavaScript js = new JavaScript("get-screen-size.js");
 
   private final WebdriverPhotographer defaultImplementation;
 
@@ -69,7 +67,7 @@ public class FullSizePhotographer implements Photographer {
     DevTools devTools = devtoolsDriver.getDevTools();
     devTools.createSessionIfThereIsNotOne(devtoolsDriver.getWindowHandle());
 
-    Options options = getOptions(devtoolsDriver);
+    Options options = getOptions(devTools);
     Viewport viewport = new Viewport(0, 0, options.fullWidth(), options.fullHeight(), 1);
 
     String base64 = devTools.send(Page.captureScreenshot(
@@ -107,9 +105,28 @@ public class FullSizePhotographer implements Photographer {
     return Optional.of(screenshot);
   }
 
-  private Options getOptions(WebDriver webDriver) {
-    Map<String, Object> size = requireNonNull(js.execute(webDriver));
-    return new Options((long) size.get("fullWidth"), (long) size.get("fullHeight"), (boolean) size.get("exceedViewport"));
+  private Options getOptions(DevTools devTools) {
+    Page.GetLayoutMetricsResponse metrics = devTools.send(Page.getLayoutMetrics());
+    Rect contentSize = metrics.getCssContentSize();
+    VisualViewport viewport = metrics.getCssVisualViewport();
+    return toOptions(contentSize.getWidth(), contentSize.getHeight(), viewport.getClientWidth(), viewport.getClientHeight());
+  }
+
+  private Options getOptions(HasCdp cdpDriver) {
+    Map<String, Object> metrics = cdpDriver.executeCdpCommand("Page.getLayoutMetrics", Map.of());
+    Map<?, ?> contentSize = (Map<?, ?>) metrics.get("cssContentSize");
+    Map<?, ?> viewport = (Map<?, ?>) metrics.get("cssVisualViewport");
+    return toOptions(
+      (Number) contentSize.get("width"), (Number) contentSize.get("height"),
+      (Number) viewport.get("clientWidth"), (Number) viewport.get("clientHeight")
+    );
+  }
+
+  private Options toOptions(Number fullWidth, Number fullHeight, Number viewWidth, Number viewHeight) {
+    long width = fullWidth.longValue();
+    long height = fullHeight.longValue();
+    boolean exceedViewport = width > viewWidth.longValue() || height > viewHeight.longValue();
+    return new Options(width, height, exceedViewport);
   }
 
   private record Options(long fullWidth, long fullHeight, boolean exceedViewport) {

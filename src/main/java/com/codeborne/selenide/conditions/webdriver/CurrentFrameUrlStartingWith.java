@@ -2,7 +2,7 @@ package com.codeborne.selenide.conditions.webdriver;
 
 public class CurrentFrameUrlStartingWith extends CurrentFrameCondition {
   public CurrentFrameUrlStartingWith(String expectedUrl) {
-    super("starting with ", expectedUrl);
+    super("url starting with", expectedUrl);
   }
 
   @Override

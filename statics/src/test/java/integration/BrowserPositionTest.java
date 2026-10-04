@@ -23,6 +23,7 @@ final class BrowserPositionTest extends IntegrationTest {
   @Test
   void ableToSetBrowserPosition() {
     Configuration.browserPosition = "30x60";
+    Configuration.browserSize = "100x100";
 
     openFile("start_page.html");
 

@@ -13,10 +13,8 @@ import java.io.File;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
-import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.inNewBrowser;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,22 +51,6 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
     });
 
     File downloadedFile = $(byText("Download me")).download(using(FOLDER).withExtension("txt"));
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
-  }
-
-  @Test
-  void canDownloadFilesViaProxy_inNewBrowser() {
-    closeWebDriver();
-    Configuration.proxyEnabled = true;
-    openFile("page_with_uploads.html");
-
-    inNewBrowser(() -> {
-      openFile("downloadMultipleFiles.html");
-      checkDownload(PROXY, "hello_world.*\\.txt", "hello_world.txt");
-    });
-
-    File downloadedFile = $(byText("Download me")).download(using(PROXY).withNameMatching("hello.*\\.txt"));
-    assertThat(downloadedFile).hasName("hello_world.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 

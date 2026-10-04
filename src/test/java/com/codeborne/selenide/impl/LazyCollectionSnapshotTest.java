@@ -14,14 +14,13 @@ import static org.mockito.Mockito.when;
 
 public class LazyCollectionSnapshotTest {
 
+  private final WebElement element1 = mock();
+  private final WebElement element2 = mock();
   private final CollectionSource collectionSource = mock();
 
   @BeforeEach
   void setUp() {
-    when(collectionSource.getElements()).thenAnswer(invocation -> Lists.list(
-      mock(WebElement.class),
-      mock(WebElement.class))
-    );
+    when(collectionSource.getElements()).thenReturn(List.of(element1, element2));
   }
 
   @Test
@@ -34,7 +33,8 @@ public class LazyCollectionSnapshotTest {
     List<WebElement> elements2 = lazyCollectionSnapshot.getElements();
 
     //Then
-    assertThat(elements1).isNotEmpty().isSameAs(elements2);
+    assertThat(elements1).isSameAs(elements2);
+    assertThat(elements1).containsExactly(element1, element2);
     verify(collectionSource, times(1)).getElements();
   }
 
@@ -44,11 +44,12 @@ public class LazyCollectionSnapshotTest {
     LazyCollectionSnapshot lazyCollectionSnapshot = new LazyCollectionSnapshot(collectionSource);
 
     // When
-    WebElement element1 = lazyCollectionSnapshot.getElement(0);
-    WebElement element2 = lazyCollectionSnapshot.getElement(0);
+    WebElement result1 = lazyCollectionSnapshot.getElement(0);
+    WebElement result2 = lazyCollectionSnapshot.getElement(0);
 
     // Then
-    assertThat(element1).isNotNull().isSameAs(element2);
+    assertThat(result1).isSameAs(result2);
+    assertThat(result1).isSameAs(element1);
     verify(collectionSource, times(1)).getElements();
   }
 
@@ -58,11 +59,13 @@ public class LazyCollectionSnapshotTest {
     LazyCollectionSnapshot lazyCollectionSnapshot = new LazyCollectionSnapshot(collectionSource);
 
     // When
-    WebElement element1 = lazyCollectionSnapshot.getElement(0);
-    WebElement element2 = lazyCollectionSnapshot.getElement(1);
+    WebElement result1 = lazyCollectionSnapshot.getElement(0);
+    WebElement result2 = lazyCollectionSnapshot.getElement(1);
 
     // Then
-    assertThat(element1).isNotNull().isNotSameAs(element2);
+    assertThat(result1).isNotSameAs(result2);
+    assertThat(result1).isSameAs(element1);
+    assertThat(result2).isSameAs(element2);
     verify(collectionSource, times(1)).getElements();
   }
 }

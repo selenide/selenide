@@ -137,6 +137,10 @@ public class Selenide {
     getSelenideDriver().resetEmulation();
   }
 
+  public static BrowserClock clock() {
+    return getSelenideDriver().clock();
+  }
+
   public static void using(WebDriver webDriver, Runnable lambda) {
     WebDriverRunner.using(webDriver, lambda);
   }
@@ -285,12 +289,14 @@ public class Selenide {
   }
 
   /**
-   * Take the screenshot of current page and save to file "fileName.png" (and optionally, "fileName.html")
+   * Take the screenshot of current page and save to file "fileName.png" (and optionally, "fileName.html" or "fileName.mhtml")
    * <ul>
    *   <li>File "fileName.png" is created always, even if {@code Configuration.screenshots == false}</li>
    *   <li>File "fileName.html" is created only if {@code Configuration.savePageSource == true}</li>
+   *   <li>File "fileName.mhtml" (Chromium only) is created instead of HTML when
+   *       {@code Configuration.savePageSourceWithResources == true}</li>
    * </ul>
-   * @param fileName Name of file (without extension) to save PNG (and HTML) to
+   * @param fileName Name of file (without extension) to save PNG (and page source) to
    * @return URL of screenshot file
    */
   @Nullable
@@ -1039,7 +1045,12 @@ public class Selenide {
    * Clear browser cookies.
    * <p>
    * It can be useful e.g. if you are trying to avoid restarting browser between tests
+   *
+   * @deprecated Use {@code cookies().clear()}
+   * @see #cookies()
+   * @see CookieStore#clear()
    */
+  @Deprecated(since = "7.17.0")
   public static void clearBrowserCookies() {
     getSelenideDriver().clearCookies();
   }
@@ -1048,7 +1059,12 @@ public class Selenide {
    * Clear browser local storage.
    * <p>
    * In case if you need to be sure that browser's localStorage is empty
+   *
+   * @deprecated Use {@code localStorage().clear()} instead
+   * @see #localStorage()
+   * @see LocalStorage#clear()
    */
+  @Deprecated(since = "7.17.0")
   public static void clearBrowserLocalStorage() {
     getSelenideDriver().clearBrowserLocalStorage();
   }
@@ -1119,7 +1135,7 @@ public class Selenide {
    * Access browser's local storage.
    * Allows setting, getting, removing items as well as getting the size and clear the storage.
    *
-   * @return LocalStorage
+   * @return instance of {@link LocalStorage} for current browser
    */
   public static LocalStorage localStorage() {
     return getSelenideDriver().getLocalStorage();
@@ -1129,10 +1145,20 @@ public class Selenide {
    * Access browser's session storage.
    * Allows setting, getting, removing items as well as getting the size, check for contains item and clear the storage.
    *
-   * @return sessionStorage
+   * @return instance of {@link SessionStorage} for current browser
    */
   public static SessionStorage sessionStorage() {
     return getSelenideDriver().getSessionStorage();
+  }
+
+  /**
+   * Access browser's cookies
+   * Allows setting, getting, removing cookies
+   *
+   * @return instance of {@link CookieStore} for current browser
+   */
+  public static CookieStore cookies() {
+    return getSelenideDriver().getCookieStore();
   }
 
   /**

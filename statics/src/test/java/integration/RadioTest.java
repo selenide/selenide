@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,20 +26,29 @@ final class RadioTest extends IntegrationTest {
   @Test
   void userCanSelectRadioButtonByValue() {
     $(By.name("me")).selectRadio("cat");
-    getSelectedRadio(By.name("me")).shouldHave(exactValue("cat"));
+    SelenideElement selectedRadio = getSelectedRadio(By.name("me"));
+
+    assertThat(selectedRadio).isNotNull();
+    selectedRadio.shouldHave(exactValue("cat"));
   }
 
   @Test
   void userCanSelectRadioButtonByValueOldWay() {
     $(By.name("me")).selectRadio("cat");
-    assertThat(getSelectedRadio(By.name("me")).getAttribute("value"))
+    SelenideElement selectedRadio = getSelectedRadio(By.name("me"));
+
+    assertThat(selectedRadio).isNotNull();
+    assertThat(selectedRadio.getAttribute("value"))
       .isEqualTo("cat");
   }
 
   @Test
   void selenideElement_selectRadio() {
     $(By.name("me")).selectRadio("margarita");
-    getSelectedRadio(By.name("me")).shouldHave(exactValue("margarita"));
+    SelenideElement selectedRadio = getSelectedRadio(By.name("me"));
+
+    assertThat(selectedRadio).isNotNull();
+    selectedRadio.shouldHave(exactValue("margarita"));
   }
 
   @Test

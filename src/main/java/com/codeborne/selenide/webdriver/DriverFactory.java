@@ -14,4 +14,12 @@ public interface DriverFactory {
                                          @Nullable Proxy proxy, @Nullable File browserDownloadsFolder);
 
   WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder);
+
+  default void setBrowserSize(Config config, WebDriver webdriver) {
+    BrowserResizer.adjustBrowserSize(config, webdriver);
+  }
+
+  default void setBrowserPosition(Config config, WebDriver webdriver) {
+    BrowserResizer.adjustBrowserPosition(config, webdriver);
+  }
 }

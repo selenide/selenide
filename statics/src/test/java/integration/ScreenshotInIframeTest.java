@@ -22,6 +22,7 @@ import static integration.ImageTestHelper.assertBody;
 import static integration.ImageTestHelper.assertBorder;
 import static integration.ImageTestHelper.assertBottomBody;
 import static integration.ImageTestHelper.assertBottomBorder;
+import static integration.ImageTestHelper.assertCenter;
 import static integration.ImageTestHelper.assertLeftBody;
 import static integration.ImageTestHelper.assertLeftBorder;
 import static integration.ImageTestHelper.assertTopBody;
@@ -108,8 +109,9 @@ final class ScreenshotInIframeTest extends IntegrationTest {
     if (browser().isFirefox()) {
       assertThat(image).isNotNull();
       describe(image);
-      assertBorder(image, RED);
-      assertBody(image, PINK);
+      // Firefox's element screenshot of an oversized element is just a viewport-sized slice of its body,
+      // not the full element - so we only check that it's showing the element's own background color.
+      assertCenter(image, PINK);
     }
     else {
       assertThat(image).isNull();
@@ -126,8 +128,7 @@ final class ScreenshotInIframeTest extends IntegrationTest {
     if (browser().isFirefox()) {
       assertThat(file).isNotNull();
       log.info("Element screenshot: {}", file);
-      assertBorder(ImageIO.read(file), RED);
-      assertBody(ImageIO.read(file), PINK);
+      assertCenter(ImageIO.read(file), PINK);
     }
     else {
       assertThat(file).isNull();

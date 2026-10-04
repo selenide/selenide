@@ -1,17 +1,27 @@
 {
-  "name": "selenide-mcp",
-  "version": "7.16.2",
+  "name": "@selenide/mcp",
+  "version": "7.18.2",
   "description": "Selenide MCP server — browser automation with smart waits for AI agents",
   "bin": {
     "selenide-mcp": "index.js"
   },
-  "keywords": ["mcp", "selenide", "browser", "testing", "automation", "selenium"],
+  "keywords": [
+    "mcp",
+    "selenide",
+    "browser",
+    "testing",
+    "automation",
+    "selenium"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/selenide/selenide.git"
+    "url": "git+https://github.com/selenide/selenide.git"
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

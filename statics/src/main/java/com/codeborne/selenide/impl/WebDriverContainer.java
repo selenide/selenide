@@ -17,6 +17,7 @@ public interface WebDriverContainer {
   void setWebDriver(WebDriver webDriver);
   void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy);
   void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder);
+  void resetWebDriver();
 
   WebDriver getWebDriver();
 

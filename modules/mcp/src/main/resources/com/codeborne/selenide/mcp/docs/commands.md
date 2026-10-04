@@ -76,3 +76,9 @@ boolean exists = $("div").exists()
 executeJavaScript("alert('hi')")
 String result = executeJavaScript("return document.title")
 ```
+
+## Frames
+```java
+switchTo().frame($("iframe"))     // switch into an iframe
+switchTo().defaultContent()       // return to the top-level document
+```

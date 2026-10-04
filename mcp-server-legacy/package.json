@@ -1,0 +1,28 @@
+{
+  "name": "selenide-mcp",
+  "version": "7.18.2",
+  "description": "DEPRECATED — moved to @selenide/mcp. This package forwards to the new scoped package.",
+  "bin": {
+    "selenide-mcp": "index.js"
+  },
+  "keywords": [
+    "mcp",
+    "selenide",
+    "browser",
+    "testing",
+    "automation",
+    "selenium",
+    "deprecated"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/selenide/selenide.git"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@selenide/mcp": "^7.18.2"
+  }
+}

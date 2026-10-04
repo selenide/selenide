@@ -14,8 +14,10 @@ public class ElementInteractionTools {
       new ClickTool(session).spec(),
       new TypeTool(session).spec(),
       new SetValueTool(session).spec(),
+      new AppendTool(session).spec(),
       new ClearTool(session).spec(),
-      new HoverTool(session).spec()
+      new HoverTool(session).spec(),
+      new FillFormTool(session).spec()
     );
   }
 }

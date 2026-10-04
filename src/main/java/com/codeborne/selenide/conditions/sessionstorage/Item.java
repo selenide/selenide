@@ -14,12 +14,7 @@ public class Item implements ObjectCondition<SessionStorage> {
 
   @Override
   public String description() {
-    return String.format("should have item '%s'", item);
-  }
-
-  @Override
-  public String negativeDescription() {
-    return String.format("should not have item '%s'", item);
+    return String.format("item '%s'", item);
   }
 
   private String actualValue(SessionStorage sessionStorage) {

@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.clearBrowserCookies;
+import static com.codeborne.selenide.Selenide.cookies;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.Selenide.webdriver;
 import static com.codeborne.selenide.WebDriverConditions.cookie;
@@ -70,11 +70,14 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
   @Test
   void errorMessageShouldNotHaveForWrongUrlWithBecause() {
+    String url = baseUrl + "/page_with_frames_with_delays.html" + testName();
+    webdriver().shouldHave(url(url), ofMillis(1000));
+
     assertThatThrownBy(() ->
-                         webdriver().shouldNotHave(url(baseUrl + "/page_with_frames_with_delays.html").because("wrong url"),
-                                                   ofMillis(10))
+      webdriver().shouldNotHave(url(url).because("wrong url"), ofMillis(10))
     )
-      .hasMessageStartingWith("webdriver should not have url " + baseUrl + "/page_with_frames_with_delays.html (because wrong url)")
+      .hasMessageStartingWith("webdriver should not have url " + url)
+      .hasMessageContaining("(because wrong url)")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 10ms");
@@ -104,6 +107,19 @@ final class WebDriverConditionsTest extends IntegrationTest {
   @Test
   void waitForUrlContaining() {
     webdriver().shouldHave(urlContaining("_with_"), ofMillis(2000));
+  }
+
+  @Test
+  void errorMessageForWrongUrlContaining() {
+    assertThatThrownBy(() ->
+      webdriver().shouldHave(urlContaining("oogle.ee/"), ofMillis(2))
+    )
+      .isInstanceOf(ConditionNotMetError.class)
+      .hasMessageStartingWith("webdriver should have url containing \"oogle.ee/\"")
+      .hasMessageContaining("Actual value: " + baseUrl + "/page_with_frames_with_delays.html")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source: ")
+      .hasMessageContaining("Timeout: 2ms");
   }
 
   @Test
@@ -161,6 +177,19 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
+  void errorMessageForWrongCurrentFrameUrlContaining() {
+    assertThatThrownBy(() ->
+                         webdriver().shouldHave(currentFrameUrlContaining("oogle.ee"), ofMillis(3))
+    )
+      .isInstanceOf(ConditionNotMetError.class)
+      .hasMessageStartingWith("current frame should have url containing oogle.ee")
+      .hasMessageContaining("Actual value: " + baseUrl + "/page_with_frames_with_delays.html")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source: ")
+      .hasMessageContaining("Timeout: 3ms");
+  }
+
+  @Test
   void checkNumberOfOpenWindows() {
     openFile("page_with_tabs.html");
 
@@ -200,20 +229,27 @@ final class WebDriverConditionsTest extends IntegrationTest {
   @Test
   void errorMessageForWrongTitle() {
     assertThatThrownBy(() ->
-                         webdriver().shouldHave(title("Selenide-test-page"), ofMillis(10))
+                         webdriver().shouldHave(title("Selenide-test-page"), ofMillis(3))
     )
       .isInstanceOf(ConditionNotMetError.class)
-      .hasMessageContaining("Actual value: Test::frames with delays");
+      .hasMessageStartingWith("Page should have title Selenide-test-page")
+      .hasMessageContaining("Actual value: Test::frames with delays")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 3ms");
   }
 
   @Test
   void errorMessageWhenWebdriverShouldNotHaveTitle() {
     assertThatThrownBy(() ->
-                         webdriver().shouldNotHave(title("Test::frames with delays"), ofMillis(10))
+                         webdriver().shouldNotHave(title("Test::frames with delays"), ofMillis(2))
     )
       .isInstanceOf(ConditionMetError.class)
       .hasMessageStartingWith("Page should not have title Test::frames with delays")
-      .hasMessageContaining("Actual value: Test::frames with delays");
+      .hasMessageContaining("Actual value: Test::frames with delays")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 2ms");
   }
 
   @Test
@@ -227,12 +263,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     return new ObjectCondition<>() {
       @Override
       public String description() {
-        return "should have a cookie with name '" + expectedCookieName + "'";
-      }
-
-      @Override
-      public String negativeDescription() {
-        return "should not have a cookie with name '" + expectedCookieName + "'";
+        return "cookie with name '" + expectedCookieName + "'";
       }
 
       @Override
@@ -274,7 +305,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     $("#button-put").click();
     assertThatThrownBy(() -> webdriver().shouldHave(cookie("WRONG_COOKIE")))
       .isInstanceOf(ConditionNotMetError.class)
-      .hasMessageStartingWith("webdriver should have a cookie with name \"WRONG_COOKIE\"")
+      .hasMessageStartingWith("webdriver should have cookie with name \"WRONG_COOKIE\"")
       .hasMessageContaining("Actual value: Available cookies: [TEST_COOKIE=AF33892F98ABC39A")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
@@ -296,7 +327,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     $("#button-put").click();
     assertThatThrownBy(() -> webdriver().shouldHave(cookie("WRONG_COOKIE", VALUE)))
       .isInstanceOf(ConditionNotMetError.class)
-      .hasMessageStartingWith("webdriver should have a cookie with name \"WRONG_COOKIE\" and value \"AF33892F98ABC39A\"")
+      .hasMessageStartingWith("webdriver should have cookie with name \"WRONG_COOKIE\" and value \"AF33892F98ABC39A\"")
       .hasMessageContaining("Actual value: Available cookies: [TEST_COOKIE=AF33892F98ABC39A");
   }
 
@@ -340,7 +371,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
   private void openPageWithCookies() {
     openFile("cookies.html");
-    clearBrowserCookies();
+    cookies().clear();
   }
 
   private void addCustomCookie() {

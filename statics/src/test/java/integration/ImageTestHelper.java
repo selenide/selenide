@@ -65,6 +65,10 @@ class ImageTestHelper {
     }
   }
 
+  static void assertCenter(BufferedImage img, Set<Color> color) {
+    assertColor(img, "center", img.getWidth() / 2, img.getHeight() / 2, color);
+  }
+
   static void assertBody(BufferedImage img, Set<Color> color) {
     assertBody(img, color, img.getWidth());
   }

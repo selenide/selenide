@@ -1,16 +1,24 @@
 plugins {
-  id 'com.gradleup.shadow' version '9.5.0'
+  id 'com.gradleup.shadow' version '9.6.1'
 }
 
 ext {
   artifactId = 'selenide-mcp'
-  mcpSdkVersion = '2.0.0'
+  mcpSdkVersion = '2.0.1'
 }
 
 dependencies {
   implementation project(':modules:core')
-  implementation "io.modelcontextprotocol.sdk:mcp:$mcpSdkVersion"
+  implementation project(':modules:proxy')
 
+  implementation "io.modelcontextprotocol.sdk:mcp:$mcpSdkVersion"
+  constraints {
+    implementation("tools.jackson.core:jackson-databind:[3.2.1,)") {
+      because("version 3.0.3 has vulnerability")
+    }
+  }
+
+  testImplementation project(':modules:cli')
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
   testImplementation("org.mockito:mockito-core:$mockitoVersion")
@@ -28,6 +36,12 @@ shadowJar {
 
 tasks.named('build') {
   dependsOn shadowJar
+}
+
+// :modules:cli's shadowJar overwrites the plain jar file that testImplementation project(':modules:cli')
+// resolves to (see modules/cli/build.gradle) - order explicitly so `test` doesn't race that overwrite.
+tasks.named('test') {
+  mustRunAfter ':modules:cli:shadowJar'
 }
 
 apply from: rootProject.file('gradle/publish-module.gradle')

@@ -21,12 +21,7 @@ public class Title implements ObjectCondition<WebDriver> {
 
   @Override
   public String description() {
-    return "should have title " + expectedTitle;
-  }
-
-  @Override
-  public String negativeDescription() {
-    return "should not have title " + expectedTitle;
+    return "title " + expectedTitle;
   }
 
   @Override

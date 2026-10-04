@@ -22,20 +22,23 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class Plugins {
   private static final Logger logger = LoggerFactory.getLogger(Plugins.class);
   private static final Map<Class<?>, Object> cache = new ConcurrentHashMap<>();
+  private static final Object lock = new Object();
 
   @SafeVarargs
-  public static synchronized <T> T inject(T... reified) {
+  public static <T> T inject(T... reified) {
     return inject(classOf(reified));
   }
 
   @SuppressWarnings("unchecked")
-  public static synchronized <T> T inject(Class<T> klass) {
-    T plugin = (T) cache.get(klass);
-    if (plugin == null) {
-      plugin = loadPlugin(klass);
-      cache.put(klass, plugin);
+  public static <T> T inject(Class<T> klass) {
+    synchronized (lock) {
+      T plugin = (T) cache.get(klass);
+      if (plugin == null) {
+        plugin = loadPlugin(klass);
+        cache.put(klass, plugin);
+      }
+      return plugin;
     }
-    return plugin;
   }
 
   private static <T> T loadPlugin(Class<T> klass) {

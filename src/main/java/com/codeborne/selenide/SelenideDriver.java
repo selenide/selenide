@@ -53,6 +53,7 @@ public class SelenideDriver {
   private final Config config;
   private final Driver driver;
   private final ScreenShotLaboratory screenshots;
+  private final BrowserClock clock;
 
   public SelenideDriver(Config config) {
     this(config, emptyList());
@@ -93,6 +94,7 @@ public class SelenideDriver {
     this.config = config;
     this.driver = driver;
     this.screenshots = screenshots;
+    this.clock = new BrowserClock(this.driver);
   }
 
   public Config config() {
@@ -395,6 +397,10 @@ public class SelenideDriver {
     return new WebDriverLogs(driver());
   }
 
+  /**
+   * @deprecated Use {@code getLocalStorage().clear()} instead
+   */
+  @Deprecated
   public void clearBrowserLocalStorage() {
     executeJavaScript("localStorage.clear();");
   }
@@ -473,6 +479,10 @@ public class SelenideDriver {
     return new SessionStorage(driver());
   }
 
+  public CookieStore getCookieStore() {
+    return new CookieStore(driver());
+  }
+
   public Clipboard getClipboard() {
     return inject(ClipboardService.class).getClipboard(driver());
   }
@@ -486,6 +496,10 @@ public class SelenideDriver {
 
   public Conditional<WebDriver> webdriver() {
     return new WebDriverConditional(driver);
+  }
+
+  public BrowserClock clock() {
+    return clock;
   }
 
   public void emulateDevice(Device device) {

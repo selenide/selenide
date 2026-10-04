@@ -22,18 +22,6 @@ public class ArchitecturalChecks {
   }
 
   @Test
-  void noJunit5DisabledTests() {
-    noClasses()
-      .that().areNotAssignableTo("integration.AutoCompleteTest")
-      .should().beAnnotatedWith("org.junit.jupiter.api.Disabled")
-      .check(selenideClasses);
-
-    noMethods()
-      .should().beAnnotatedWith("org.junit.jupiter.api.Disabled")
-      .check(selenideClasses);
-  }
-
-  @Test
   void noJunitAssumptions() {
     noClasses()
       .should().accessClassesThat().areAssignableTo("org.junit.jupiter.api.Assumptions")

@@ -12,13 +12,13 @@ An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that l
 ### Using `claude mcp add`
 
 ```bash
-claude mcp add selenide-mcp 
+claude mcp add selenide-mcp -- npx @selenide/mcp
 ```
 
 With options:
 
 ```bash
-claude mcp add selenide-mcp  \
+claude mcp add selenide-mcp -- npx @selenide/mcp \
   --browser=chrome --base-url=https://app.example.com --remote=http://selenium-hub:4444/wd/hub
 ```
 
@@ -32,11 +32,14 @@ Add to `.claude/settings.json` (project) or `~/.claude/settings.json` (global):
   "mcpServers": {
     "selenide-mcp": {
       "command": "npx",
-      "args": ["selenide-mcp", "--browser=chrome", "--remote=http://selenium-hub:4444/wd/hub"]
+      "args": ["@selenide/mcp", "--browser=chrome", "--remote=http://selenium-hub:4444/wd/hub"]
     }
   }
 }
 ```
+
+> Note: the package was previously published as `selenide-mcp` on npm. That name still works
+> as a deprecated shim, but new configs should use `@selenide/mcp`.
 
 ## Configuration Parameters
 
@@ -104,13 +107,43 @@ Add to `.claude/settings.json` (project) or `~/.claude/settings.json` (global):
 | `--selector-mode=<mode>` | Selector mode: `CSS`, `Sizzle` | `CSS` |
 | `--assertion-mode=<mode>` | Assertion mode: `STRICT`, `SOFT` | `STRICT` |
 
-### Capabilities
+### Browser Capabilities
 
 | Parameter | Description |
 |---|---|
-| `--caps=<list>` | Comma-separated list of capabilities to enable |
+| `--capability=<name>=<value>` | Add a WebDriver capability. Can be repeated. |
 
-Available capabilities:
+The value is parsed as:
+- a JSON object or array, if it starts with `{` or `[`;
+- a boolean (`true`/`false`) or an integer;
+- otherwise, a plain string.
+
+JSON values let you set nested capabilities, e.g. Chrome arguments. They are added to the default arguments that Selenide sets:
+
+```json
+{
+  "mcpServers": {
+    "selenide-mcp": {
+      "command": "npx",
+      "args": [
+        "@selenide/mcp",
+        "--capability=goog:chromeOptions={\"args\":[\"--no-sandbox\"]}",
+        "--capability=selenoid:options={\"enableVNC\":true}"
+      ]
+    }
+  }
+}
+```
+
+If the same capability name is given more than once, the last value wins.
+
+### MCP Tool Groups
+
+| Parameter | Description |
+|---|---|
+| `--caps=<list>` | Comma-separated list of additional MCP tool groups to enable |
+
+Available tool groups:
 
 - `codegen` — enables test code generation tools
 

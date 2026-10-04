@@ -2,7 +2,7 @@ package com.codeborne.selenide.conditions.webdriver;
 
 public class CurrentFrameUrl extends CurrentFrameCondition {
   public CurrentFrameUrl(String expectedUrl) {
-    super("", expectedUrl);
+    super("url", expectedUrl);
   }
 
   @Override

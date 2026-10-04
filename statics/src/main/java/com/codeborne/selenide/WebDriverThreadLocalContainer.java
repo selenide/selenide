@@ -88,7 +88,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder) {
     resetWebDriver();
-    WebDriverInstance webDriverInstance = new WebDriverInstance(config, webDriver, selenideProxy, browserDownloadsFolder);
+    WebDriverInstance webDriverInstance = new WebDriverInstance(config.unwrap(), webDriver, selenideProxy, browserDownloadsFolder);
     setWebDriver(webDriverInstance);
     WebdriversRegistry.register(webDriverInstance);
   }
@@ -100,10 +100,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     return threadId;
   }
 
-  /**
-   * Remove links to webdriver/proxy, but DON'T CLOSE the webdriver/proxy itself.
-   */
-  private void resetWebDriver() {
+  @Override
+  public void resetWebDriver() {
     threadWebDriver.remove(currentThread().getId());
   }
 
@@ -217,16 +215,23 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public void using(WebDriver driver, @Nullable SelenideProxyServer proxy, @Nullable DownloadsFolder downloadsFolder, Runnable lambda) {
     DownloadsFolder folder = downloadsFolder != null ? downloadsFolder : new SharedDownloadsFolder(config.downloadsFolder());
-    using(new WebDriverInstance(config, driver, proxy, folder), lambda);
+    using(new WebDriverInstance(config.unwrap(), driver, proxy, folder), lambda, false);
   }
 
-  private void using(WebDriverInstance webDriverInstance, Runnable lambda) {
+  private void using(WebDriverInstance webDriverInstance, Runnable lambda, boolean closeCurrentBrowserInLambda) {
     var previous = getCurrentThreadDriver();
     setWebDriver(webDriverInstance);
+
     try {
       lambda.run();
     }
     finally {
+      if (closeCurrentBrowserInLambda) {
+        getCurrentThreadDriver().ifPresent(wd -> {
+          WebdriversRegistry.unregister(wd);
+          wd.dispose();
+        });
+      }
       resetWebDriver();
       previous.ifPresent(prev -> {
         setWebDriver(prev);
@@ -238,23 +243,13 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public void inNewBrowser(Runnable lambda) {
     var newBrowser = createDriver();
-    try {
-      using(newBrowser, lambda);
-    }
-    finally {
-      newBrowser.dispose();
-    }
+    using(newBrowser, lambda, true);
   }
 
   @Override
   public void inNewBrowser(Config config, Runnable lambda) {
     var newBrowser = createDriver(config);
-    try {
-      using(newBrowser, lambda);
-    }
-    finally {
-      newBrowser.dispose();
-    }
+    using(newBrowser, lambda, true);
   }
 
   @Override

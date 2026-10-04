@@ -44,8 +44,8 @@ final class SelenideDriverITest extends ITest {
 
   @Test
   void canDownloadFilesInDifferentBrowsersViaDifferentProxies() {
-    browser1.open("/page_with_uploads.html?browser=" + browser1.config().browser());
-    browser2.open("/page_with_uploads.html?browser=" + browser2.config().browser());
+    browser1.open("/page_with_uploads.html" + testName() + "&browser=" + browser1.config().browser());
+    browser2.open("/page_with_uploads.html" + testName() + "&browser=" + browser2.config().browser());
 
     File file1 = browser1.$(byText("Download me")).download();
     File file2 = browser2.$(byText("Download file with cyrillic name")).download();

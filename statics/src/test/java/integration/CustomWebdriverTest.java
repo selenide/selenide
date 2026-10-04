@@ -1,10 +1,11 @@
 package integration;
 
 import com.codeborne.selenide.WebDriverRunner;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -22,24 +23,12 @@ import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
+@TestInstance(PER_CLASS)
 final class CustomWebdriverTest extends IntegrationTest {
   private WebDriver browser1;
   private WebDriver browser2;
-
-  @BeforeAll
-  static void setUpWebdrivers() {
-    assumeThat(isChrome() || isFirefox()).isTrue();
-    closeWebDriver();
-  }
-
-  @BeforeEach
-  void setUpTwoBrowsers() {
-    closeWebDriver();
-
-    browser1 = isFirefox() ? openFirefox() : openChrome();
-    browser2 = isFirefox() ? openFirefox() : openChrome();
-  }
 
   @Test
   void userCanSwitchBetweenWebdrivers_using_setWebDriver() {
@@ -64,6 +53,7 @@ final class CustomWebdriverTest extends IntegrationTest {
     });
 
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
+    assertThat(browser1.getCurrentUrl()).contains("page_with_selects_without_jquery.html");
 
     using(browser2, () -> {
       openFile("file_upload_form.html");
@@ -72,6 +62,7 @@ final class CustomWebdriverTest extends IntegrationTest {
     });
 
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
+    assertThat(browser2.getCurrentUrl()).contains("file_upload_form.html");
 
     using(browser1, () -> {
       $("h1").shouldBe(visible).shouldHave(text("Page with selects"));
@@ -79,6 +70,7 @@ final class CustomWebdriverTest extends IntegrationTest {
     });
 
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
+    assertThat(browser1.getCurrentUrl()).contains("page_with_selects_without_jquery.html");
 
     using(browser2, () -> {
       $("h1").shouldBe(visible).shouldHave(text("File upload form"));
@@ -86,6 +78,7 @@ final class CustomWebdriverTest extends IntegrationTest {
     });
 
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
+    assertThat(browser2.getCurrentUrl()).contains("file_upload_form.html");
   }
 
   @Test
@@ -105,6 +98,14 @@ final class CustomWebdriverTest extends IntegrationTest {
   }
 
   @Test
+  void using_canBeCalledAgain_afterPreviousUsingWithExternalDriver() {
+    setWebDriver(browser1);
+    openFile("page_with_selects_without_jquery.html");
+    using(browser2, () -> openFile("file_upload_form.html"));
+    openFile("page_with_big_divs.html");
+  }
+
+  @Test
   void canDownloadFilesAfterUsingAnotherBrowser() {
     openFile("page_with_uploads.html");
     using(browser2, () -> {
@@ -117,8 +118,23 @@ final class CustomWebdriverTest extends IntegrationTest {
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
-  @AfterEach
-  void tearDown() {
+  @BeforeAll
+  void setUpTwoBrowsers() {
+    assumeThat(isChrome() || isFirefox()).isTrue();
+    closeWebDriver();
+    browser1 = isFirefox() ? openFirefox() : openChrome();
+    browser2 = isFirefox() ? openFirefox() : openChrome();
+  }
+
+  @BeforeEach
+  void resetCurrentWebdriver() {
+    WebDriverRunner.resetWebDriver();
+    browser1.navigate().to("about:blank" + testName() + "&browser=first");
+    browser2.navigate().to("about:blank" + testName() + "&browser=second");
+  }
+
+  @AfterAll
+  void afterAll() {
     if (browser1 != null) browser1.quit();
     if (browser2 != null) browser2.quit();
     closeWebDriver();

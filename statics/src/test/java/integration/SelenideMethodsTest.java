@@ -75,7 +75,7 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canOpenBlankPage() {
-    open("about:blank");
+    open("about:blank" + testName());
   }
 
   @Test

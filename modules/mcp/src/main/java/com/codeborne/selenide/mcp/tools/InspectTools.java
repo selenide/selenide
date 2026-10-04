@@ -15,7 +15,8 @@ public class InspectTools {
       new FindTool(session).spec(),
       new FindAllTool(session).spec(),
       new GetTextTool(session).spec(),
-      new ConsoleLogsTool(session).spec()
+      new ConsoleLogsTool(session).spec(),
+      new WaitForTool(session).spec()
     );
   }
 }

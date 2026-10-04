@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.pdftest.PDF;
-import com.codeborne.selenide.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,6 @@ import static com.codeborne.pdftest.assertj.Assertions.assertThat;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.WebDriverRunner.isSafari;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class PrintPageTest extends ITest {
@@ -39,7 +37,7 @@ final class PrintPageTest extends ITest {
 
   @Test
   void onPrinter() throws IOException {
-    assumeThat(isSafari()).isFalse();
+    assumeThat(driver().browser().isSafari()).isFalse();
 
     PrintsPage driver = (PrintsPage) driver().getWebDriver();
     Pdf pdf = driver.print(new PrintOptions());
@@ -52,7 +50,7 @@ final class PrintPageTest extends ITest {
 
   private void saveToFile(Pdf pdf) throws IOException {
     byte[] bytes = Base64.getDecoder().decode(pdf.getContent());
-    File out = new File(Configuration.reportsFolder + "/printed-page.pdf");
+    File out = new File(config().reportsFolder() + "/printed-page.pdf");
     FileUtils.writeByteArrayToFile(out, bytes);
     log.info("[[ATTACHMENT|{}]]", out.getAbsolutePath());
   }

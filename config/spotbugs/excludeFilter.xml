@@ -2,6 +2,8 @@
 <FindBugsFilter>
   <Match>
     <Bug code="MS,RV,ST,DE,Nm,NP,It,UuF,DC,RCN,EI2"/>
+  </Match>
+  <Match>
     <Bug pattern="EI_EXPOSE_REP"/>
   </Match>
   <Match>

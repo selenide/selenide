@@ -2,11 +2,9 @@ package com.codeborne.selenide.appium.commands;
 
 import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.appium.AppiumScrollCoordinates;
-import com.codeborne.selenide.appium.AppiumSwipeDirection;
 import com.codeborne.selenide.appium.AppiumSwipeOptions;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.jspecify.annotations.Nullable;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Interactive;
@@ -16,7 +14,6 @@ import org.openqa.selenium.interactions.Sequence;
 import java.util.Arrays;
 
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
-import static com.codeborne.selenide.appium.AppiumSwipeDirection.RIGHT;
 import static com.codeborne.selenide.appium.AppiumSwipeOptions.right;
 import static com.codeborne.selenide.commands.Util.firstOf;
 import static java.time.Duration.ofMillis;
@@ -41,7 +38,7 @@ public class AppiumSwipeTo extends FluentCommand {
     int currentSwipeCount = 0;
     while (isElementNotDisplayed(locator)
       && isLessThanMaxSwipeCount(currentSwipeCount, appiumSwipeOptions.getMaxSwipeCounts())) {
-      performSwipe(appiumDriver, appiumSwipeOptions.getAppiumSwipeDirection());
+      performSwipe(appiumDriver, appiumSwipeOptions);
       currentSwipeCount++;
     }
   }
@@ -58,26 +55,12 @@ public class AppiumSwipeTo extends FluentCommand {
     }
   }
 
-  private Dimension getMobileDeviceSize(WebDriver appiumDriver) {
-    return appiumDriver.manage().window().getSize();
-  }
-
-  private void performSwipe(WebDriver appiumDriver, AppiumSwipeDirection swipeDirection) {
-    Dimension size = getMobileDeviceSize(appiumDriver);
-    AppiumScrollCoordinates scrollCoordinates = getScrollCoordinates(swipeDirection, size);
+  private void performSwipe(WebDriver appiumDriver, AppiumSwipeOptions swipeOptions) {
+    AppiumScrollCoordinates scrollCoordinates = GestureArea.of(appiumDriver, swipeOptions.getContainer())
+      .swipeCoordinates(swipeOptions.getAppiumSwipeDirection());
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
     Sequence sequenceToPerformScroll = getSequenceToPerformSwipe(finger, scrollCoordinates);
     ((Interactive) appiumDriver).perform(singletonList(sequenceToPerformScroll));
-  }
-
-  private AppiumScrollCoordinates getScrollCoordinates(AppiumSwipeDirection swipeDirection, Dimension size) {
-    if (swipeDirection == RIGHT) {
-      return new AppiumScrollCoordinates((int) (size.getWidth() * 0.75), size.getHeight() / 2,
-        (int) (size.getWidth() * 0.25), size.getHeight() / 2);
-    } else {
-      return new AppiumScrollCoordinates((int) (size.getWidth() * 0.25), size.getHeight() / 2,
-        (int) (size.getWidth() * 0.75), size.getHeight() / 2);
-    }
   }
 
   private Sequence getSequenceToPerformSwipe(PointerInput finger, AppiumScrollCoordinates scrollCoordinates) {

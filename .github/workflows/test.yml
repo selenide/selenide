@@ -4,8 +4,12 @@ on:
     branches:
       - main
     paths-ignore:
+      - '.claude/**'
       - '.idea/**'
       - '.run/**'
+      - 'docs/**'
+      - 'mcp-server/**'
+      - 'mcp-server-legacy/**'
       - '**/*.iml'
       - '**/*.md'
       - '**/.editorconfig'
@@ -15,8 +19,12 @@ on:
       - 'release'
   pull_request:
     paths-ignore:
+      - '.claude/**'
       - '.idea/**'
       - '.run/**'
+      - 'docs/**'
+      - 'mcp-server/**'
+      - 'mcp-server-legacy/**'
       - '**/*.iml'
       - '**/*.md'
       - '**/.editorconfig'
@@ -30,16 +38,17 @@ concurrency:
 
 jobs:
   run-tests-on-windows:
+    name: win:${{ matrix.gradle-task }}
     runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'check', 'edge_headless_smoke' ]
+        gradle-task: [ 'test', 'edge_headless_smoke' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Set up JDK
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           cache: 'gradle'
@@ -48,9 +57,9 @@ jobs:
         shell: pwsh
         run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
+        uses: gradle/actions/setup-gradle@v6.4.0
       - name: Run the tests
-        run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
+        run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -60,48 +69,166 @@ jobs:
             **/build/reports
             **/build/test-results
 
-  run-tests-on-linux:
+  run-unit-tests-on-linux:
+    name: linux:unit-tests
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        gradle-task: [ 'check', 'firefox_headless', 'chrome_headless', 'javadocForSite' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Setup FFmpeg
-        if: ${{ matrix.gradle-task == 'firefox_headless' || matrix.gradle-task == 'chrome_headless' }}
-        run: |
-          sudo apt-get install -y ffmpeg
-          ffmpeg -version
       - name: Set up JDK
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           cache: 'gradle'
           java-version: '17'
-      - name: Setup Firefox
-        if: ${{ matrix.gradle-task != 'check' && matrix.gradle-task != 'javadocForSite' }}
-        uses: browser-actions/setup-firefox@latest
-      - name: Setup Chrome
-        if: ${{ matrix.gradle-task == 'chrome_headless' }}
-        uses: browser-actions/setup-chrome@latest
-        with:
-          chrome-version: stable
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
-      - name: Run the tests
-        run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
+        uses: gradle/actions/setup-gradle@v6.4.0
+      - name: Run check
+        run: ./gradlew check --no-daemon --console=plain
+      - name: Run javadocForSite
+        run: ./gradlew javadocForSite --no-daemon --console=plain
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: test-report-linux-${{matrix.gradle-task}}
+          name: test-report-linux
           retention-days: 14
           path: |
             **/build/reports
             **/build/test-results
 
+  run-browser-tests-on-linux:
+    name: linux:${{ matrix.browser }}:${{ matrix.module.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - name: 'core'
+            projects: [ ':modules:core' ]
+          - name: 'statics'
+            projects: [ ':statics' ]
+          - name: 'video-recorder'
+            projects: [
+              ':modules:video-recorder',
+              ':modules:video-recorder-junit',
+              ':modules:video-recorder-testng'
+            ]
+          - name: 'grid-and-proxy'
+            projects: [
+              ':modules:grid',
+              ':modules:proxy'
+            ]
+          - name: 'others'
+            projects: [
+              ':modules:cli',
+              ':modules:junit4',
+              ':modules:clear-with-shortcut',
+              ':modules:appium',
+              ':modules:error-message-customizer',
+              ':modules:full-screenshot',
+              ':modules:testng'
+            ]
+        browser: [ 'firefox_headless', 'chrome_headless' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup FFmpeg
+        if: ${{ matrix.module.name == 'video-recorder' }}
+        run: |
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version
+      - name: Set up JDK
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          cache: 'gradle'
+          java-version: '17'
+      - name: Setup Firefox
+        if: ${{ matrix.browser == 'firefox_headless' }}
+        uses: browser-actions/setup-firefox@latest
+      - name: Setup Chrome
+        if: ${{ matrix.browser == 'chrome_headless' }}
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6.4.0
+      - name: Run the tests
+        run: |
+          PROJECTS="${{ join(matrix.module.projects, ' ') }}"
+          TASKS="${PROJECTS// /:${{ matrix.browser }} }:${{ matrix.browser }}"
+          ./gradlew $TASKS --no-daemon --console=plain
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: test-report-linux-${{matrix.browser}}-${{matrix.module.name}}
+          retention-days: 14
+          path: |
+            **/build/reports
+            **/build/test-results
+
+  run-smoke-tests-on-linux-arm:
+    name: linux-arm:${{ matrix.browser }}_smoke
+    runs-on: ubuntu-26.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [ 'firefox_headless', 'chrome_headless' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up JDK
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          cache: 'gradle'
+          java-version: '17'
+      - name: Setup Firefox
+        if: ${{ matrix.browser == 'firefox_headless' }}
+        uses: browser-actions/setup-firefox@latest
+      - name: Setup Chrome
+        if: ${{ matrix.browser == 'chrome_headless' }}
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6.4.0
+      - name: Run the tests
+        run: ./gradlew ${{ matrix.browser }}_smoke --no-daemon --console=plain
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: test-report-linux-arm-${{matrix.browser}}
+          retention-days: 14
+          path: |
+            **/build/reports
+            **/build/test-results
+
+  verify-browser-test-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Verify every module with integration tests is listed in test.yml
+        run: |
+          missing=0
+          for d in $(find . -type d -not -path '*/build/*' -path '*/src/test/java/integration' | sort); do
+            moduleDir=${d%/src/test/java/integration}
+            moduleDir=${moduleDir#./}
+            if [ -z "$moduleDir" ] || [ "$moduleDir" = "." ]; then
+              project=':modules:core'
+            else
+              project=":${moduleDir//\//:}"
+            fi
+            if ! grep -qF "'$project'" .github/workflows/test.yml; then
+              echo "::error::Module $project has integration tests but isn't referenced in test.yml"
+              missing=1
+            fi
+          done
+          exit $missing
+
   run-android-tests:
+    name: android:tests
     runs-on: ubuntu-latest
     env:
       BS_KEY: ${{ secrets.BS_KEY }}
@@ -109,13 +236,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Set up JDK
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           cache: 'gradle'
           java-version: '17'
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
+        uses: gradle/actions/setup-gradle@v6.4.0
       - name: Run the tests
         if: ${{ env.BS_KEY }}
         run: ./gradlew android --info -Dselenide.bs_key=${{ secrets.BS_KEY }}
@@ -129,19 +256,20 @@ jobs:
             **/build/test-results
 
   run-ios-tests:
+    name: ios:tests
     runs-on: ubuntu-latest
     env:
       BS_KEY: ${{ secrets.BS_KEY }}
     steps:
       - uses: actions/checkout@v7
       - name: Set up JDK
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           cache: 'gradle'
           java-version: '17'
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
+        uses: gradle/actions/setup-gradle@v6.4.0
       - name: Run the tests
         if: ${{ env.BS_KEY }}
         run: ./gradlew ios --info -Dselenide.bs_key=${{ secrets.BS_KEY }}
@@ -155,11 +283,12 @@ jobs:
             **/build/test-results
 
   run-selenoid-tests:
+    name: selenoid:tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           cache: 'gradle'
@@ -167,7 +296,7 @@ jobs:
       - name: Start selenoid
         uses: BorisOsipov/selenoid-github-action@1
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
+        uses: gradle/actions/setup-gradle@v6.4.0
       - name: Run the tests
         run: ./gradlew selenoidTests
       - uses: actions/upload-artifact@v7
@@ -180,10 +309,11 @@ jobs:
             **/build/test-results
 
   run-moon-tests:
+    name: moon:tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           cache: 'gradle'
@@ -211,7 +341,7 @@ jobs:
           nohup minikube tunnel &> modules/moon/build/reports/minikube-tunnel.log &
           nc -zv `minikube ip` 4444
           curl "http://moon.aerokube.local/wd/hub"
-      - uses: gradle/actions/setup-gradle@v6
+      - uses: gradle/actions/setup-gradle@v6.4.0
       - run: ./gradlew moonTests
       - uses: actions/upload-artifact@v7
         if: always()
@@ -225,7 +355,7 @@ jobs:
   auto-merge-dependabot:
     name: 🤖 Auto merge dependabot PR
     timeout-minutes: 10
-    needs: [run-tests-on-linux, run-tests-on-windows, run-android-tests, run-ios-tests, run-selenoid-tests, run-moon-tests]
+    needs: [run-unit-tests-on-linux, run-browser-tests-on-linux, run-smoke-tests-on-linux-arm, verify-browser-test-coverage, run-tests-on-windows, run-android-tests, run-ios-tests, run-selenoid-tests, run-moon-tests]
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     permissions:

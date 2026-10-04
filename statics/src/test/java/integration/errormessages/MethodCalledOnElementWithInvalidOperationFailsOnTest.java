@@ -6,6 +6,7 @@ import integration.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.HoverOptions.withOffset;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -23,12 +24,12 @@ final class MethodCalledOnElementWithInvalidOperationFailsOnTest extends Integra
   }
 
   @Test
-  void shouldNotReportElementNotFoundException() {
+  void shouldNotReportElementNotFound_inCaseOfOtherExceptions() {
     Configuration.timeout = 300;
     assertThatThrownBy(() ->
-      $("[name=username]").sendKeys("\uD83D\uDE06"))
+      $("[name=username]").hover(withOffset(1_000_000, 1_000_000)))
       .isInstanceOf(UIAssertionError.class)
-      .hasMessageContaining("WebDriverException: unknown error: ChromeDriver only supports characters in the BMP")
+      .hasMessageContaining("MoveTargetOutOfBoundsException: move target out of bounds")
       .hasMessageContaining("Timeout: 300ms");
   }
 }

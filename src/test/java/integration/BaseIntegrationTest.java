@@ -23,6 +23,7 @@ import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.SAFARI;
 import static integration.server.LocalHttpServer.startWithRetry;
 import static java.lang.Boolean.parseBoolean;
+import static java.lang.Thread.currentThread;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @ExtendWith({LogTestNameExtension.class, TextReportExtension.class})
@@ -99,5 +100,9 @@ public abstract class BaseIntegrationTest {
       case EDGE ->  new EdgeOptions().addArguments("--no-sandbox", "--disable-gpu");
       default -> new MutableCapabilities();
     };
+  }
+
+  protected String testName() {
+    return "?test=" + currentThread().getName();
   }
 }

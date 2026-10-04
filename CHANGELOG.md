@@ -1,8 +1,54 @@
 # Changelog
 
-## 7.17.0 (TBD)
-* #1741 added `visibleText()` and `exactVisibleText()` conditions for overflow-truncated elements
-* update Selenium from 4.44.0 to 4.45.0 (incl. CDP from 148 -> 149)
+=======
+## 7.19.0 (xx.10.2026)
+* update Selenium from 4.49.0 to 4.50.0
+* #1741 add `visibleText()` and `exactVisibleText()` conditions for overflow-truncated elements  --  thanks to svasenkov
+* restore fallback to legacy clipboard commands on old Appium servers (broken by Selenium 4.50 + Appium java-client 10.1.1)
+
+=======
+## 7.18.2 (19.09.2026)
+* update Selenium from 4.48.0 to 4.49.0  --  added support for Linux arm64! (#3434)
+
+=======
+## 7.18.1 (29.08.2026)
+* update Selenium from 4.47.0 to 4.48.0 (#3427)
+* update LittleProxy from 2.9.0 to 2.9.1
+* #3422 add browser_append MCP tool for non-clearing text entry (#3428)
+
+See https://github.com/selenide/selenide/milestone/244?closed=1
+
+## 7.18.0 (20.08.2026)
+* add Selenide CLI: a command-line tool for AI agents (#3380) (#3409) (#3419)  --  thanks to sbielievitniev-xm
+* rename "selenide-mcp" npm module to "@selenide/mcp" (#3383)
+* #3371 add MCP and CLI tools for switching between frames (#3417)
+* #2757 Save page source as MHTML in Chromium browsers (#3363) (#3399) (#3406) --  thanks to Stanislav Vasenkov
+* add "or" for object conditions (#3388)
+* set Firefox browser size using arguments "-width 1980 -height 1080" (#3387)
+* set Chromium browser position using argument "-window-position=100,200" (#3387)
+* #3364 speed up GitHub Actions build (#3385) --  thanks to Stanislav Vasenkov for the idea & analysis
+* #3414 Fix full-page screenshot when webdriver is switched into a frame (#3420)
+* bugfix: close webdriver that has been opened inside `inNewBrowser` with a custom config (#3389)
+* bugfix: fix `StackOverflowError` in `WebDriverRunner.using(...)` method (#3407)  --  thanks to Francisco Gonzalez
+* #3413 fix appium long press and double tap (#3415) (#3416)  --  thanks to qwez
+* update Selenium from 4.46.0 to 4.47.0 (#3404)
+
+See https://github.com/selenide/selenide/milestone/243?closed=1
+
+## 7.17.0 (12.07.2026)
+* #3359 Add "byRole" locator - find elements by ARIA role (#3336)
+* Add more MCP tools (browser_network_requests, browser_fill_form, browser_tab_list, browser_resize etc.) (#3335)
+* #3261 add method `$.downloadFiles()` for downloading multiple files at once (#3334)
+* #2761 Make `SelenideAppiumElement` methods `find`, `$`, `$x`, `findAll`, `$$`, `$$x` return `SelenideAppiumElement`s (#3373) --  thanks to Stanislav Vasenkov for PR #3362
+* add methods for adding/deleting/verifying cookies: `Selenide.cookies().clear()` (#3375)
+* #3357 deprecate methods `clearBrowserLocalStorage()` and `clearBrowserCookies()` in favor of new method `cookies()` --  thanks to Stanislav Vasenkov (#3361)
+* #3348 add `element()`/`elements()` aliases to `SelenideAppium` for Kotlin projects  --  thanks to Gabriel Baldez (#3350)
+* convert debug logs to trace ("Method {} execution failed" during re-try Selenide commands)
+* update Selenium from 4.44.0 to 4.45.0 (incl. CDP from 148 -> 149)   (#3347)
+* update Selenium from 4.45.0 to 4.46.0 (incl. CDP from 149 -> 150)   (#3374)
+
+See https://github.com/selenide/selenide/milestone/242?closed=1
+
 
 ## 7.16.2 (27.05.2026)
 * Selenide MCP: added more configuration parameters  --  thanks to Mike Sidelnikov (#3323)

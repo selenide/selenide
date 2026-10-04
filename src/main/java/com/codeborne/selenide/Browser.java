@@ -1,5 +1,8 @@
 package com.codeborne.selenide;
 
+import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.WebDriver;
+
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
@@ -26,6 +29,11 @@ public class Browser {
 
   public boolean isChromium() {
     return isChrome() || isEdge();
+  }
+
+  public static boolean isChromium(WebDriver driver) {
+    return driver instanceof HasCapabilities hasCapabilities &&
+      new Browser(hasCapabilities.getCapabilities().getBrowserName(), false).isChromium();
   }
 
   public boolean isFirefox() {

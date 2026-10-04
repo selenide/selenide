@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <title>page with clock</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<div id="date-now"></div>
+<div id="timezone"></div>
+<div id="new-york-hour"></div>
+<script>
+  document.getElementById('date-now').textContent = String(Date.now());
+  document.getElementById('timezone').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  document.getElementById('new-york-hour').textContent = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York', hour: '2-digit', hour12: false
+  }).format(Date.now());
+</script>
+</body>
+</html>

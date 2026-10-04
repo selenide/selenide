@@ -15,7 +15,7 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 public class Commands {
   private static final Lazy<Commands> instance = lazyEvaluated(() -> inject(Commands.class));
 
-  public static synchronized Commands getInstance() {
+  public static Commands getInstance() {
     return instance.get();
   }
 

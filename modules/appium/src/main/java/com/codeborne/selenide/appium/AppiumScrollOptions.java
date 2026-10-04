@@ -1,11 +1,15 @@
 package com.codeborne.selenide.appium;
 
+import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.WebElement;
+
 public class AppiumScrollOptions {
 
   private final ScrollDirection scrollDirection;
   private final int maxSwipeCount;
   private final float topPointHeightPercent;
   private final float bottomPointHeightPercent;
+  private final @Nullable WebElement container;
 
   private static final int DEFAULT_MAX_SWIPE_COUNTS = 30;
   private static final float DEFAULT_TOP_POINT_HEIGHT_PERCENT = 0.25f;
@@ -17,11 +21,17 @@ public class AppiumScrollOptions {
 
   private AppiumScrollOptions(ScrollDirection scrollDirection, int maxSwipeCount,
                               float topPointHeightPercent, float bottomPointHeightPercent) {
+    this(scrollDirection, maxSwipeCount, topPointHeightPercent, bottomPointHeightPercent, null);
+  }
+
+  private AppiumScrollOptions(ScrollDirection scrollDirection, int maxSwipeCount,
+                              float topPointHeightPercent, float bottomPointHeightPercent, @Nullable WebElement container) {
     checkCoordinateValues(topPointHeightPercent, bottomPointHeightPercent);
     this.scrollDirection = scrollDirection;
     this.maxSwipeCount = maxSwipeCount;
     this.topPointHeightPercent = validatePercentage("Top point height percentage", topPointHeightPercent);
     this.bottomPointHeightPercent = validatePercentage("Bottom point height percentage", bottomPointHeightPercent);
+    this.container = container;
   }
 
   private static float validatePercentage(String name, float value) {
@@ -70,6 +80,14 @@ public class AppiumScrollOptions {
   }
 
   /**
+   * Perform scroll gestures inside the given element (e.g. a scrollable list) instead of the whole screen.
+   * Top/bottom point percentages are then calculated relative to the element's height.
+   */
+  public AppiumScrollOptions inside(WebElement container) {
+    return new AppiumScrollOptions(scrollDirection, maxSwipeCount, topPointHeightPercent, bottomPointHeightPercent, container);
+  }
+
+  /**
    * @deprecated Use {@link #getMaxSwipeCount()} instead
    */
   @Deprecated
@@ -93,9 +111,14 @@ public class AppiumScrollOptions {
     return bottomPointHeightPercent;
   }
 
+  public @Nullable WebElement getContainer() {
+    return container;
+  }
+
   @Override
   public String toString() {
-    return String.format("%s, max swipes: %s, top height: %s, bottom height: %s",
-      scrollDirection, maxSwipeCount, topPointHeightPercent, bottomPointHeightPercent);
+    return String.format("%s, max swipes: %s, top height: %s, bottom height: %s%s",
+      scrollDirection, maxSwipeCount, topPointHeightPercent, bottomPointHeightPercent,
+      container == null ? "" : ", inside: " + container);
   }
 }

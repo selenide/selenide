@@ -10,12 +10,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'check', 'chrome_headless_smoke' ]
+        gradle-task: [ 'test', 'chrome_headless_smoke' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Set up JDK
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           cache: 'gradle'
@@ -25,9 +25,9 @@ jobs:
         uses: browser-actions/setup-chrome@latest
         with:
           chrome-version: stable
-      - uses: gradle/actions/setup-gradle@v6
+      - uses: gradle/actions/setup-gradle@v6.4.0
       - name: Build with Gradle
-        run: ./gradlew ${{ matrix.gradle-task }} -PseleniumVersionNightlyBuild=4.46.0-SNAPSHOT --no-parallel --no-daemon --console=plain
+        run: ./gradlew ${{ matrix.gradle-task }} -PseleniumVersion=4.51.0-SNAPSHOT --no-daemon --console=plain
       - uses: actions/upload-artifact@v7
         if: always()
         with:

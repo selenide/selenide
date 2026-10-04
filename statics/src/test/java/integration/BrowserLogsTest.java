@@ -40,9 +40,9 @@ final class BrowserLogsTest extends IntegrationTest {
     assertThat(webDriverLogs).hasSize(6);
 
     assertThat(webDriverLogs.get(0))
-      .matches("\\[.+] \\[SEVERE] http.+/page_with_js_errors\\.html 10:6 .*ReferenceError: \\$ is not defined");
+      .matches("\\[.+] \\[SEVERE] http.+/page_with_js_errors\\.html.+ 10:6 .*ReferenceError: \\$ is not defined");
     assertThat(webDriverLogs.get(1))
-      .matches("\\[.+] \\[SEVERE] http.+/page_with_js_errors\\.html \\d+:\\d+.*")
+      .matches("\\[.+] \\[SEVERE] http.+/page_with_js_errors\\.html.+ \\d+:\\d+.*")
       .satisfiesAnyOf(
         log -> assertThat(log).endsWith("Uncaught TypeError: Cannot set properties of undefined (setting 'value')"),
         log -> assertThat(log).endsWith("TypeError: can't access property \"value\", data.user1 is undefined")

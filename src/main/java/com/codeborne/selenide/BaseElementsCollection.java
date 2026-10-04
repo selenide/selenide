@@ -45,12 +45,24 @@ public abstract class BaseElementsCollection<T extends SelenideElement, SELF ext
   implements Iterable<T> {
   private static final ElementCommunicator communicator = inject(ElementCommunicator.class);
 
-  private final Class<T> clazz;
+  private final Class<? extends T> clazz;
   private final CollectionSource collection;
 
   @SafeVarargs
   protected BaseElementsCollection(CollectionSource collection, T... clazz) {
     this.clazz = classOf(clazz);
+    this.collection = collection;
+  }
+
+  /**
+   * Lets a subclass build elements of a more specific class than {@code T},
+   * without changing the declared generic parameter {@code T} (and therefore
+   * without changing the return type of any inherited method).
+   *
+   * @param elementClass the actual class of elements this collection should produce
+   */
+  protected BaseElementsCollection(CollectionSource collection, Class<? extends T> elementClass) {
+    this.clazz = elementClass;
     this.collection = collection;
   }
 

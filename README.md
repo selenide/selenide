@@ -33,11 +33,45 @@ Look for [detailed comparison of Selenide and Selenium WebDriver API](https://gi
 #### Selenide for mobile apps
 You can use Selenide for testing mobile applications. See plugin [selenide-appium](https://github.com/selenide/selenide/tree/main/modules/appium).
 
+#### Selenide with Moon
+You can use Selenide for running tests in Moon containers. See plugin [selenide-moon](https://github.com/selenide/selenide/tree/main/modules/moon).
+
 #### Selenide with Selenoid
 You can use Selenide for running tests in Selenoid containers. See plugin [selenide-selenoid](https://github.com/selenide/selenide/tree/main/modules/selenoid).
 
 #### Selenide with Selenium Grid
 You can use Selenide for running tests in Selenium Grid. See plugin [selenide-grid](https://github.com/selenide/selenide/tree/main/modules/grid).
+
+#### Selenide Video Recorder
+You can record videos when running Selenide tests. See plugin [selenide-video-recorder](https://github.com/selenide/selenide/tree/main/modules/video-recorder).
+
+
+## AI
+Selenide can be used by your AI agents.
+
+### Selenide CLI
+Just install it:
+```shell
+npm install -g @selenide/cli
+selenide install --skills
+```
+
+For more details, see [blog post](https://selenide.org/2026/08/20/selenide-7.18.0/#selenide-cli).
+
+### Selenide MCP
+Just create file `.mcp.json` in your project:
+```json
+{
+  "mcpServers": {
+    "selenide": {
+      "command": "npx",
+      "args": [
+        "selenide-mcp@7.18.2"
+      ]
+    }
+}
+```
+For more details, see [blog post](https://selenide.org/2026/04/10/selenide-7.16.0/#selenide-mcp-server).
 
 
 ## Changelog
@@ -56,7 +90,7 @@ Look for [Quick Start](https://github.com/selenide/selenide/wiki/Quick-Start) fo
 * For bustlers: [How to start writing UI tests in 10 minutes](http://selenide.org/2014/10/01/how-to-start-writing-ui-tests/)
 * For developers: [Selenide presentation on Devoxx 2015](http://selenide.org/2015/11/13/selenide-on-devoxx/)
 * For QA engineers: [Selenide presentation on SeleniumConf 2015](http://selenide.org/2015/09/23/selenide-on-seleniumconf/)
-* For russians: [Selenide presentation on SeleniumCamp 2015](http://seleniumcamp.com/materials/good-short-test/)
+* In Russian: [Selenide presentation on SeleniumCamp 2015](http://seleniumcamp.com/materials/good-short-test/)
 
 ## FAQ
 
@@ -78,7 +112,7 @@ Feel free to fork, clone, build, run tests and contribute pull requests for Sele
 
 ## Authors
 
-Selenide was originally designed and developed by [Andrei Solntsev](http://asolntsev.github.io/) in 2011-2025
+Selenide was originally designed and developed by [Andrei Solntsev](http://asolntsev.github.io/) in 2011-2026
  and is maintained by [a group of enthusiast](https://github.com/orgs/selenide/people).
 
 ## Thanks

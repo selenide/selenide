@@ -31,6 +31,7 @@ public interface Config {
   boolean clickViaJs();
   boolean screenshots();
   boolean savePageSource();
+  boolean savePageSourceWithResources();
 
   String reportsFolder();
   String downloadsFolder();

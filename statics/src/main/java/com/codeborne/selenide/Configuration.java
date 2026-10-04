@@ -193,6 +193,16 @@ public class Configuration {
   public static boolean savePageSource = defaults.savePageSource();
 
   /**
+   * If set to true, Selenide saves page source with embedded resources (CSS, images) as MHTML in Chromium browsers.
+   * Falls back to plain HTML if MHTML capture is not available.
+   * Can be configured either programmatically, via selenide.properties file
+   * or by system property "-Dselenide.savePageSourceWithResources=true".
+   * <br>
+   * Default value: false
+   */
+  public static boolean savePageSourceWithResources = defaults.savePageSourceWithResources();
+
+  /**
    * Folder to store screenshots to.
    * Can be configured either programmatically, via selenide.properties file
    * or by system property "-Dselenide.reportsFolder=test-result/reports".
@@ -389,6 +399,7 @@ public class Configuration {
       .clickViaJs(clickViaJs)
       .screenshots(screenshots)
       .savePageSource(savePageSource)
+      .savePageSourceWithResources(savePageSourceWithResources)
       .reportsFolder(reportsFolder)
       .downloadsFolder(downloadsFolder)
       .reportsUrl(reportsUrl)

@@ -4,6 +4,7 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import org.apache.commons.io.IOUtils;
 import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
@@ -54,6 +55,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     FirefoxOptions initialOptions = new FirefoxOptions();
     initialOptions.enableBiDi();
     setHeadless(config, initialOptions);
+    addFirefoxArguments(config, initialOptions);
     setupBrowserBinary(config, initialOptions);
     setupPreferences(initialOptions);
 
@@ -72,6 +74,19 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     if (config.headless()) {
       initialOptions.addArguments("-headless");
     }
+  }
+
+  private void addFirefoxArguments(Config config, FirefoxOptions initialOptions) {
+    String browserSize = config.browserSize();
+    if (browserSize != null) {
+      Dimension size = BrowserResizer.parseSize(browserSize);
+      initialOptions.addArguments("-width", String.valueOf(size.width), "-height", String.valueOf(size.height));
+    }
+  }
+
+  @Override
+  public void setBrowserSize(Config config, WebDriver webdriver) {
+    // not needed: we set Firefox size with "-width" and "-height" arguments
   }
 
   protected void setupBrowserBinary(Config config, FirefoxOptions firefoxOptions) {

@@ -2,6 +2,8 @@ package integration;
 
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementShould;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,8 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
+
+import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Configuration.config;
@@ -24,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ConfigPerBrowserTest extends IntegrationTest {
   private static final SelenideElement h1 = $("h1");
+  private @Nullable WebDriver webDriverOpenedDuringTest;
 
   @BeforeEach
   @AfterEach
@@ -33,24 +38,23 @@ public class ConfigPerBrowserTest extends IntegrationTest {
 
   @Test
   void canOpenBrowserWithSpecificSettings() {
-    open("/page_with_images.html");
+    open("/page_with_images.html" + testName());
     h1.shouldHave(text("Images"));
     assertSizeGreaterThan(500, 400);
-    WebDriver webDriver = getWebDriver();
+    webDriverOpenedDuringTest = getWebDriver();
 
-    open("/page_with_uploads.html", config().browserSize("500x400"));
+    open("/page_with_uploads.html" + testName(), config().browserSize("500x400"));
     h1.shouldHave(text("File uploads"));
     assertSize(500, 400);
 
-    assertThatThrownBy(webDriver::getTitle)
-      .as("The first webdriver should be already closed as a result of `open(url, config)`")
-      .isInstanceOf(NoSuchSessionException.class);
+    assertBrowserClosed(webDriverOpenedDuringTest,
+      "The first webdriver should be already closed as a result of `open(url, config)`");
   }
 
   @Test
   public void inNewBrowser_withCustomConfig() {
     SelenideConfig originalConfig = new SelenideConfig().baseUrl(getBaseUrl());
-    open("/page_with_images.html", originalConfig);
+    open("/page_with_images.html" + testName(), originalConfig);
     h1.shouldHave(text("Images"));
     assertSizeGreaterThan(500, 400);
 
@@ -59,14 +63,17 @@ public class ConfigPerBrowserTest extends IntegrationTest {
 
     SelenideConfig anotherConfig = new SelenideConfig().baseUrl(getBaseUrl()).browserSize("500x400");
     inNewBrowser(anotherConfig, () -> {
-      open("/page_with_uploads.html");
+      open("/page_with_uploads.html" + testName());
       h1.shouldHave(text("File uploads"));
       assertSize(500, 400);
       webdriver().shouldNotHave(cookie("bober", "kurwa"));
+      webDriverOpenedDuringTest = getWebDriver();
     });
 
+    assertBrowserClosed(webDriverOpenedDuringTest, "Webdriver should be closed in the end of `inNewBrowser`");
+
     h1.shouldHave(text("Images"));
-    open("/page_with_images.html", originalConfig);
+    open("/page_with_images.html" + testName(), originalConfig);
     webdriver().shouldHave(cookie("bober", "kurwa"));
     assertSizeGreaterThan(500, 400);
   }
@@ -74,17 +81,43 @@ public class ConfigPerBrowserTest extends IntegrationTest {
   @Test
   public void inNewBrowser_withCustomConfigInside() {
     SelenideConfig originalConfig = new SelenideConfig().baseUrl(getBaseUrl());
-    open("/page_with_images.html", originalConfig);
+    open("/page_with_images.html" + testName(), originalConfig);
     h1.shouldHave(text("Images"));
 
     inNewBrowser(() -> {
       SelenideConfig anotherConfig = new SelenideConfig().baseUrl(getBaseUrl());
-      open("/page_with_uploads.html", anotherConfig);
+      open("/page_with_uploads.html" + testName(), anotherConfig);
       h1.shouldHave(text("File uploads"));
+      webDriverOpenedDuringTest = getWebDriver();
     });
+    assertBrowserClosed(webDriverOpenedDuringTest, "Webdriver should be closed in the end of `inNewBrowser`");
 
     h1.shouldHave(text("Images"));
-    open("/page_with_images.html", originalConfig);
+    open("/page_with_images.html" + testName(), originalConfig);
+    h1.shouldHave(text("Images"));
+  }
+
+  @Test
+  public void inNewBrowser_withCustomConfigInside_shouldBeClosed_evenIfLambdaFailed() {
+    SelenideConfig originalConfig = new SelenideConfig().baseUrl(getBaseUrl());
+    open("/page_with_images.html" + testName(), originalConfig);
+    h1.shouldHave(text("Images"));
+
+    assertThatThrownBy(() -> {
+      inNewBrowser(() -> {
+        SelenideConfig anotherConfig = new SelenideConfig().baseUrl(getBaseUrl());
+        open("/page_with_uploads.html" + testName(), anotherConfig);
+        webDriverOpenedDuringTest = getWebDriver();
+        h1.shouldHave(text("Wrong header!"), Duration.ofMillis(1));
+      });
+    })
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have text \"Wrong header!\" {h1}");
+
+    assertBrowserClosed(webDriverOpenedDuringTest, "Webdriver should be closed in the end of `inNewBrowser`");
+
+    h1.shouldHave(text("Images"));
+    open("/page_with_images.html" + testName(), originalConfig);
     h1.shouldHave(text("Images"));
   }
 
@@ -97,5 +130,11 @@ public class ConfigPerBrowserTest extends IntegrationTest {
     Dimension size = getWebDriver().manage().window().getSize();
     assertThat(size.getWidth()).isGreaterThan(width);
     assertThat(size.getHeight()).isGreaterThan(height);
+  }
+
+  private void assertBrowserClosed(@Nullable WebDriver webDriver, String explanation) {
+    assertThat(webDriver).isNotNull();
+    assertThatThrownBy(() -> webDriver.getTitle(), explanation)
+      .isInstanceOf(NoSuchSessionException.class);
   }
 }

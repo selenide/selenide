@@ -79,6 +79,18 @@ public class WebDriverRunner {
   }
 
   /**
+   * Remove links to webdriver/proxy, but DON'T CLOSE the webdriver/proxy itself.
+   *
+   * Use with caution!
+   *
+   * Makes sense after using {@link #setWebDriver(WebDriver)}
+   * if you want Selenide to "forget" this webdriver, but don't wna to close it.
+   */
+  public static void resetWebDriver() {
+    webdriverContainer.resetWebDriver();
+  }
+
+  /**
    * Get the underlying instance of Selenium WebDriver.
    * This can be used for any operations directly with WebDriver.
    */

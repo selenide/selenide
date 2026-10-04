@@ -126,7 +126,7 @@ public abstract class ITest extends BaseIntegrationTest {
         );
       }
     }
-    driver().open("/" + fileName + "?browser=" + browser +
+    driver().open("/" + fileName + testName() + "&browser=" + browser +
       "&timeout=" + driver().config().timeout());
   }
 }

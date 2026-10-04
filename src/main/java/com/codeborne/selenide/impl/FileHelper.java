@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.List;
 
 import static java.nio.file.Files.createDirectories;
@@ -49,6 +50,15 @@ public final class FileHelper {
       }
     }
     return folder;
+  }
+
+  public static File fileInFolder(File folder, String nameWithoutExtension, String extension) {
+    Path root = folder.getAbsoluteFile().toPath().normalize();
+    Path file = root.resolve(nameWithoutExtension + "." + extension).normalize();
+    if (!file.startsWith(root)) {
+      throw new IllegalArgumentException("Invalid file name: " + nameWithoutExtension);
+    }
+    return file.toFile();
   }
 
   public static void moveFile(File srcFile, File destFile) {

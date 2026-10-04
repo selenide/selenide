@@ -34,7 +34,6 @@ public class WebDriverFactory {
 
   private final Map<String, Class<? extends AbstractDriverFactory>> factories = factories();
   private final RemoteDriverFactory remoteDriverFactory = new RemoteDriverFactory();
-  private final BrowserResizer browserResizer = new BrowserResizer();
 
   private Map<String, Class<? extends AbstractDriverFactory>> factories() {
     return Map.of(
@@ -53,25 +52,14 @@ public class WebDriverFactory {
       currentThread().getId(), config.browser(), config.browserVersion(), config.browserSize(), remote, browserDownloadsFolder);
 
     Browser browser = new Browser(config.browser(), config.headless());
-    WebDriver webdriver = createWebDriverInstance(config, browser, proxy, browserDownloadsFolder);
-    if (needBrowserResize(webdriver)) {
-      browserResizer.adjustBrowserSize(config, webdriver);
-    }
-    browserResizer.adjustBrowserPosition(config, webdriver);
+    DriverFactory factory = findFactory(browser);
+    WebDriver webdriver = createWebDriverInstance(factory, config, browser, proxy, browserDownloadsFolder);
+    factory.setBrowserSize(config, webdriver);
+    factory.setBrowserPosition(config, webdriver);
     setLoadTimeout(config, webdriver);
 
     logVersions(webdriver);
     return webdriver;
-  }
-
-  private boolean needBrowserResize(WebDriver webdriver) {
-    String browserName = "";
-    if (webdriver instanceof HasCapabilities hasCapabilities) {
-      Capabilities capabilities = hasCapabilities.getCapabilities();
-      browserName = capabilities.getBrowserName();
-    }
-    Browser browser = new Browser(browserName, false);
-    return !browser.isChromium() && !"msedge".equals(browserName);
   }
 
   private void setLoadTimeout(Config config, WebDriver webdriver) {
@@ -89,10 +77,10 @@ public class WebDriverFactory {
     }
   }
 
-  private WebDriver createWebDriverInstance(Config config, Browser browser,
+  private WebDriver createWebDriverInstance(DriverFactory webdriverFactory,
+                                            Config config, Browser browser,
                                             @Nullable Proxy proxy,
                                             @Nullable File browserDownloadsFolder) {
-    DriverFactory webdriverFactory = findFactory(browser);
 
     if (config.remote() != null) {
       MutableCapabilities capabilities = webdriverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);

@@ -4,12 +4,10 @@ import com.codeborne.selenide.FluentCommand;
 import com.codeborne.selenide.ScrollOptions;
 import com.codeborne.selenide.appium.AppiumScrollCoordinates;
 import com.codeborne.selenide.appium.AppiumScrollOptions;
-import com.codeborne.selenide.appium.ScrollDirection;
 import com.codeborne.selenide.commands.ScrollTo;
 import com.codeborne.selenide.impl.Arguments;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.jspecify.annotations.Nullable;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Interactive;
@@ -66,8 +64,7 @@ public class AppiumScrollTo extends FluentCommand {
 
     while (isElementNotDisplayed(locator)
            && isLessThanMaxSwipeCount(currentSwipeCount, scrollOptions.getMaxSwipeCount())) {
-      performScroll(appiumDriver, scrollOptions.getScrollDirection(), scrollOptions.getTopPointHeightPercent(),
-                    scrollOptions.getBottomPointHeightPercent());
+      performScroll(appiumDriver, scrollOptions);
       currentSwipeCount++;
     }
   }
@@ -84,26 +81,13 @@ public class AppiumScrollTo extends FluentCommand {
     }
   }
 
-  private Dimension getMobileDeviceSize(WebDriver appiumDriver) {
-    return appiumDriver.manage().window().getSize();
-  }
-
-  private void performScroll(WebDriver appiumDriver, ScrollDirection scrollDirection, float top, float bottom) {
-    Dimension size = getMobileDeviceSize(appiumDriver);
-    AppiumScrollCoordinates scrollCoordinates = getScrollCoordinates(scrollDirection, size, top, bottom);
+  private void performScroll(WebDriver appiumDriver, AppiumScrollOptions scrollOptions) {
+    AppiumScrollCoordinates scrollCoordinates = GestureArea.of(appiumDriver, scrollOptions.getContainer())
+      .scrollCoordinates(scrollOptions.getScrollDirection(),
+        scrollOptions.getTopPointHeightPercent(), scrollOptions.getBottomPointHeightPercent());
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
     Sequence sequenceToPerformScroll = getSequenceToPerformScroll(finger, scrollCoordinates);
     ((Interactive) appiumDriver).perform(singletonList(sequenceToPerformScroll));
-  }
-
-  private AppiumScrollCoordinates getScrollCoordinates(ScrollDirection scrollDirection, Dimension size, float top, float bottom) {
-    if (scrollDirection == ScrollDirection.UP) {
-      return new AppiumScrollCoordinates(size.getWidth() / 2, (int) (size.getHeight() * top),
-                                         size.getWidth() / 2, (int) (size.getHeight() * bottom));
-    } else {
-      return new AppiumScrollCoordinates(size.getWidth() / 2, (int) (size.getHeight() * bottom),
-                                         size.getWidth() / 2, (int) (size.getHeight() * top));
-    }
   }
 
   private Sequence getSequenceToPerformScroll(PointerInput finger, AppiumScrollCoordinates scrollCoordinates) {

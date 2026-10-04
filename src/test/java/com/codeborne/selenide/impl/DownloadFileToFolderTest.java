@@ -8,6 +8,8 @@ import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SharedDownloadsFolder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.stubbing.Answer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -58,6 +60,23 @@ final class DownloadFileToFolderTest {
     assertThat(downloadedFiles.get(0).getName()).isEqualTo(newFileName);
     assertThat(downloadedFiles.get(0).getParentFile()).isNotEqualTo(downloadsFolder.getFolder());
     assertThat(readFileToString(downloadedFiles.get(0), UTF_8)).isEqualTo("Hello Bingo-Bongo");
+  }
+
+  @ParameterizedTest
+  @CsvSource({"chrome, stale.crdownload", "chrome, stale.tmp", "edge, stale.crdownload", "firefox, stale.part"})
+  void ignoresTemporaryFilesLeftFromPreviousDownloads(String browser, String staleFileName) throws IOException {
+    writeStringToFile(downloadsFolder.file(staleFileName), "Partial old download", UTF_8);
+    doAnswer((Answer<Void>) i -> {
+      writeStringToFile(downloadsFolder.file("document.pdf"), "%PDF new file", UTF_8);
+      return null;
+    }).when(link).click();
+    DriverStub driver = new DriverStub(config, new Browser(browser, false), webdriver, null, downloadsFolder);
+
+    List<File> downloadedFiles = command.download(driver, link, 3000, 300, file().withMethod(FOLDER).withName("document.pdf"));
+
+    assertThat(downloadedFiles).hasSize(1);
+    assertThat(downloadedFiles.get(0).getName()).isEqualTo("document.pdf");
+    assertThat(readFileToString(downloadedFiles.get(0), UTF_8)).isEqualTo("%PDF new file");
   }
 
   @Test

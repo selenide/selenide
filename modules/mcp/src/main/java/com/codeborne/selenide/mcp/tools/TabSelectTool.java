@@ -1,0 +1,38 @@
+package com.codeborne.selenide.mcp.tools;
+
+import com.codeborne.selenide.mcp.BrowserSession;
+import io.modelcontextprotocol.spec.McpSchema;
+import org.openqa.selenium.WebDriver;
+
+import java.util.Map;
+
+class TabSelectTool extends McpTool {
+  TabSelectTool(BrowserSession session) {
+    super(session, "browser_tab_select",
+      "Switch to a tab by 0-based index or by window handle");
+  }
+
+  @Override
+  String inputSchema() {
+    return """
+      {
+        "type": "object",
+        "properties": {
+          "index":  {"type": "integer", "description": "0-based tab index"},
+          "handle": {"type": "string",  "description": "Window handle string"}
+        },
+        "minProperties": 1
+      }
+      """;
+  }
+
+  @Override
+  McpSchema.CallToolResult execute(Map<String, Object> args) {
+    Number indexRaw = (Number) args.get("index");
+    String handle = (String) args.get("handle");
+    WebDriver driver = session.getDriver().getWebDriver();
+    String target = resolveWindowHandle(driver, indexRaw, handle);
+    driver.switchTo().window(target);
+    return success("Switched to tab: " + target);
+  }
+}

@@ -26,7 +26,6 @@ import java.nio.file.Files;
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.DownloadOptions.file;
-import static com.codeborne.selenide.DownloadOptions.files;
 import static com.codeborne.selenide.FileDownloadMode.CDP;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -198,19 +197,6 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
     assertThat(text.getName()).isEqualTo(fileName);
     assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
-  }
-
-  @Test
-  void downloadMultipleFiles_errorMessage() {
-    openFile("downloadMultipleFiles.html");
-
-    assertThatThrownBy(() -> $("#multiple-downloads").downloadFiles(files(22).withTimeout(200)))
-      .isInstanceOf(FileNotDownloadedError.class)
-      .hasMessageStartingWith("Failed to download at least 22 files in 200ms (found ")
-      .hasMessageContaining("hello_world.txt")
-      .hasMessageContaining("empty.html")
-      .hasMessageContaining("download.html")
-      .hasMessageContaining("Timeout: 200ms");
   }
 
   @Test

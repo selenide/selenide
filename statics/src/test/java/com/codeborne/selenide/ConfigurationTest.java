@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -18,6 +19,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Isolated("mutates the static Configuration singleton")
 final class ConfigurationTest {
   private final Random random = new SecureRandom();
   private final Map<String, Value> previous = collectSettings();

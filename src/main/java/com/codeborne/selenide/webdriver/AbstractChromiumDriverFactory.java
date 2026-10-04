@@ -2,7 +2,10 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Config;
 import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chromium.ChromiumOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +43,28 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
     arguments.addAll(createHeadlessArguments(config));
 
     String browserSize = config.browserSize();
-    if (browserSize != null && BrowserResizer.isValidDimension(browserSize)) {
-      arguments.add(convertBrowserSizeToChromeFormat(browserSize));
+    if (browserSize != null) {
+      Dimension size = BrowserResizer.parseSize(browserSize);
+      arguments.add("--window-size=%s,%s".formatted(size.width, size.height));
     }
+
+    String browserPosition = config.browserPosition();
+    if (browserPosition != null) {
+      Point position = BrowserResizer.parsePosition(browserPosition);
+      arguments.add("--window-position=%s,%s".formatted(position.x, position.y));
+    }
+
     return arguments;
+  }
+
+  @Override
+  public void setBrowserSize(Config config, WebDriver webdriver) {
+    // not needed: we set Chrome size with "--window-size=" argument
+  }
+
+  @Override
+  public void setBrowserPosition(Config config, WebDriver webdriver) {
+    // not needed: we set Chrome position with "--window-position" argument
   }
 
   protected Map<String, Object> prefs(@Nullable File browserDownloadsFolder, String externalPreferences) {
@@ -123,10 +144,6 @@ public abstract class AbstractChromiumDriverFactory extends AbstractDriverFactor
       arguments.add("--mute-audio");
     }
     return arguments;
-  }
-
-  private String convertBrowserSizeToChromeFormat(String browserSize) {
-    return "--window-size=" + browserSize.replace("x", ",");
   }
 
   protected Map<String, Object> parsePreferencesFromString(String preferencesString) {

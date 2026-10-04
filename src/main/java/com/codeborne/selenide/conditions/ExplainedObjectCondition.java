@@ -19,11 +19,6 @@ public class ExplainedObjectCondition<T> implements ObjectCondition<T> {
   }
 
   @Override
-  public String negativeDescription() {
-    return delegate.negativeDescription() + " (because " + message + ")";
-  }
-
-  @Override
   public CheckResult check(T object) {
     return delegate.check(object);
   }

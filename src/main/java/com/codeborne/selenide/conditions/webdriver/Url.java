@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Url extends UrlCondition {
   public Url(String expectedUrl) {
-    super("", expectedUrl);
+    super("url", expectedUrl);
   }
 
   @Override
