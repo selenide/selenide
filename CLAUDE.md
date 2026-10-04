@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Selenide is a Java framework providing a concise fluent API for Selenium WebDriver. It simplifies writing browser-based automated tests. Current version: 7.18.2, requires Java 17+.
+Selenide is a Java framework providing a concise fluent API for Selenium WebDriver. It simplifies writing browser-based automated tests. Requires Java 17+.
 
 ## Build Commands
 
@@ -93,13 +93,10 @@ All plugin modules depend on `statics` (which transitively provides `core`).
 - Prefer Mockito's type-inferred `mock()` over `mock(Class)` when the target type can be inferred
   from the variable declaration, e.g. `WebDriver driver = mock();` instead of `mock(WebDriver.class)`.
 
+## Dependencies
+
+Dependency versions are defined in `gradle/dependencies.gradle` and module `build.gradle` files - check them there.
+
 ## Branching
 
 All work on feature branches from `main`, merged back to `main`. Commit messages should start with issue ID: `#ID description`.
-
-## Key Dependencies
-
-- Selenium WebDriver 4.44.0
-- JUnit 6.0.3 (Jupiter)
-- BrowserUp Proxy 3.3.0
-- Gradle 9.5.1
