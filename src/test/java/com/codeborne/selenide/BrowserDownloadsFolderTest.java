@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import static org.apache.commons.io.FileUtils.touch;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class BrowserDownloadsFolderTest {
   @Test
@@ -28,7 +28,7 @@ final class BrowserDownloadsFolderTest {
     touch(new File(folder, "file1"));
     File lockedFolder = new File(folder, "locked");
     touch(new File(lockedFolder, "file2.crdownload"));
-    assumeTrue(lockedFolder.setExecutable(false) && lockedFolder.setReadable(false));
+    assumeThat(lockedFolder.setExecutable(false) && lockedFolder.setReadable(false)).isTrue();
 
     try {
       new BrowserDownloadsFolder(folder).cleanupBeforeDownload();

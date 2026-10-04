@@ -87,6 +87,9 @@ All plugin modules depend on `statics` (which transitively provides `core`).
 - Prefer immutable objects. Prefer private final non-nullable fields.
 - Write tests for new code. Prefer integration tests for any actions related to browser, and 
   unit-tests for algorithmic code (regular expressions, string manipulation etc.) 
+- In tests, use AssertJ (`org.assertj.core.api.Assertions.assertThat`, `org.assertj.core.api.Assumptions.assumeThat`),
+  not JUnit's `Assertions`/`Assumptions` — enforced by ArchUnit rules in `statics/src/test/java/com/codeborne/selenide/ArchitecturalChecks.java`
+  (they run in `:statics:test`, so `./gradlew :modules:core:check` alone won't catch violations).
 - Prefer Mockito's type-inferred `mock()` over `mock(Class)` when the target type can be inferred
   from the variable declaration, e.g. `WebDriver driver = mock();` instead of `mock(WebDriver.class)`.
 
