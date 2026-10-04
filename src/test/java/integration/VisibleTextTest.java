@@ -92,6 +92,11 @@ final class VisibleTextTest extends ITest {
   }
 
   @Test
+  void lineBreakSeparatesWords() {
+    $("#with-line-break").shouldHave(exactVisibleText("Hello World"));
+  }
+
+  @Test
   void exactVisibleTextRejectsPartialMatchOnFullyVisibleElement() {
     assertThatThrownBy(() -> $("#fully-visible").shouldHave(exactVisibleText("Hello")))
       .isInstanceOf(ElementShould.class);

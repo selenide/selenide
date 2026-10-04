@@ -458,6 +458,7 @@ public final class Condition {
    * (e.g. {@code overflow: hidden} with {@code text-overflow: ellipsis}) on the element or its ancestors.
    * Characters that are clipped (or replaced by the ellipsis) are not included.
    * Text that is just scrolled out of the browser viewport is still considered visible.
+   * For {@code <select>}, the full text of selected option is used (even if the closed control clips it).
    *
    * <p>Case insensitive</p>
    * <p>NB! Ignores multiple whitespaces between words</p>
@@ -474,6 +475,7 @@ public final class Condition {
    * (e.g. {@code overflow: hidden} with {@code text-overflow: ellipsis}) on the element or its ancestors.
    * Characters that are clipped (or replaced by the ellipsis) are not included.
    * Text that is just scrolled out of the browser viewport is still considered visible.
+   * For {@code <select>}, the full text of selected option is used (even if the closed control clips it).
    *
    * <p>Case insensitive</p>
    * <p>NB! Ignores multiple whitespaces between words</p>

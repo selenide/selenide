@@ -2,7 +2,16 @@
   // Measures the rendered glyphs in place (no DOM mutations), so all CSS rules, nested styles and text direction are respected.
   const TOLERANCE = 0.5;
   const clipsCache = new Map();
+  const transparencyCache = new Map();
   const range = document.createRange();
+
+  function isTransparent(el) {
+    if (!el) return false;
+    if (!transparencyCache.has(el)) {
+      transparencyCache.set(el, getComputedStyle(el).opacity === '0' || isTransparent(el.parentElement));
+    }
+    return transparencyCache.get(el);
+  }
 
   function isClipping(style) {
     return style.overflowX !== 'visible' || style.overflowY !== 'visible';
@@ -93,7 +102,7 @@
   function appendText(textNode) {
     const parent = textNode.parentElement;
     const text = textNode.data;
-    if (!parent || !text.trim() || getComputedStyle(parent).visibility !== 'visible') return;
+    if (!parent || !text.trim() || getComputedStyle(parent).visibility !== 'visible' || isTransparent(parent)) return;
     const rects = textRects(textNode);
     if (rects.length === 0) return;
 
@@ -111,9 +120,14 @@
     }
   }
 
-  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
   while (walker.nextNode()) {
-    appendText(walker.currentNode);
+    const node = walker.currentNode;
+    if (node.nodeType === Node.TEXT_NODE) {
+      appendText(node);
+    } else if (node.tagName === 'BR') {
+      pendingSpace = true;
+    }
   }
   return result;
 })(arguments[0]);
