@@ -23,6 +23,7 @@ import static java.nio.file.StandardOpenOption.WRITE;
  * {@code open}), sends a single command over the loopback socket, prints the response, and exits.
  */
 final class DaemonClient {
+  private static final String ALLOW_AMBIGUOUS_COMMANDS = "jdk.lang.Process.allowAmbiguousCommands";
   private static final int CONNECT_TIMEOUT_MS = 500;
   private static final long SPAWN_TIMEOUT_MS = 20_000;
   private static final long POLL_INTERVAL_MS = 150;
@@ -211,7 +212,7 @@ final class DaemonClient {
     command.add(SelenideCli.class.getName());
     command.add("__daemon");
     command.add("--session=" + session);
-    command.addAll(escapeQuotes(configFlags, System.getProperty("os.name", "")));
+    command.addAll(escapeQuotes(configFlags, System.getProperty("os.name", ""), System.getProperty(ALLOW_AMBIGUOUS_COMMANDS, "true")));
     ProcessBuilder builder = new ProcessBuilder(command);
     builder.redirectErrorStream(true);
     builder.redirectOutput(SessionStore.logFile(session).toFile());
@@ -231,12 +232,15 @@ final class DaemonClient {
     return Path.of(javaHome, "bin", executable).toString();
   }
 
-  // On Windows, ProcessBuilder passes double quotes inside an argument as-is, and the child process
-  // treats them as quoting characters and drops them - e.g. JSON in `--capability=name={"a":1}` would
-  // arrive as `{a:1}`. Escape them per CommandLineToArgvW rules: a quote becomes \", and backslashes
-  // directly preceding it are doubled. Other backslashes (e.g. in Windows paths) are left as-is.
-  static List<String> escapeQuotes(List<String> args, String osName) {
-    return isWindows(osName) ? args.stream().map(DaemonClient::escapeQuotes).toList() : args;
+  // On Windows, ProcessBuilder (in its default "legacy" mode) passes double quotes inside an argument as-is,
+  // and the child process treats them as quoting characters and drops them - e.g. JSON in
+  // `--capability=name={"a":1}` would arrive as `{a:1}`. Escape them per CommandLineToArgvW rules: a quote
+  // becomes \", and backslashes directly preceding it are doubled. Other backslashes (e.g. in Windows paths)
+  // are left as-is.
+  // With -Djdk.lang.Process.allowAmbiguousCommands=false, ProcessBuilder escapes the quotes itself.
+  static List<String> escapeQuotes(List<String> args, String osName, String allowAmbiguousCommands) {
+    boolean jdkEscapesQuotes = "false".equalsIgnoreCase(allowAmbiguousCommands);
+    return isWindows(osName) && !jdkEscapesQuotes ? args.stream().map(DaemonClient::escapeQuotes).toList() : args;
   }
 
   private static String escapeQuotes(String arg) {

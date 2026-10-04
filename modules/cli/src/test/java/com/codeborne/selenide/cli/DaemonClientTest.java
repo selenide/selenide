@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.io.TempDirDeletionStrategy.IgnoreFailures;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.api.parallel.Resources;
@@ -74,15 +76,17 @@ class DaemonClientTest {
   @Test
   void escapesQuotesOnlyOnWindows() {
     List<String> args = List.of("--capability=custom:json={\"a\":\"b\\\"c\"}", "--reports-folder=C:\\reports\\");
-    assertThat(DaemonClient.escapeQuotes(args, "Linux")).isSameAs(args);
-    assertThat(DaemonClient.escapeQuotes(args, "Windows 11")).containsExactly(
+    assertThat(DaemonClient.escapeQuotes(args, "Linux", "true")).isSameAs(args);
+    assertThat(DaemonClient.escapeQuotes(args, "Windows 11", "false")).isSameAs(args);
+    assertThat(DaemonClient.escapeQuotes(args, "Windows 11", "true")).containsExactly(
       "--capability=custom:json={\\\"a\\\":\\\"b\\\\\\\"c\\\"}",
       "--reports-folder=C:\\reports\\"
     );
   }
 
-  @Test
-  void passesConfigFlagsWithQuotesToSubprocessIntact() throws IOException, InterruptedException {
+  @ParameterizedTest
+  @ValueSource(strings = {"true", "false"})
+  void passesConfigFlagsWithQuotesToSubprocessIntact(String allowAmbiguousCommands) throws IOException, InterruptedException {
     List<String> flags = List.of(
       "--capability=goog:chromeOptions={\"args\":[\"--no-sandbox\",\"--lang=en\"]}",
       "--capability=custom:json={\"key\":\"value with spaces\"}",
@@ -93,12 +97,28 @@ class DaemonClientTest {
       DaemonClient.javaBinary(System.getProperty("java.home"), System.getProperty("os.name")),
       "-cp", System.getProperty("java.class.path"), EchoArgs.class.getName()
     ));
-    command.addAll(DaemonClient.escapeQuotes(flags, System.getProperty("os.name")));
+    command.addAll(DaemonClient.escapeQuotes(flags, System.getProperty("os.name"), allowAmbiguousCommands));
 
-    Process process = new ProcessBuilder(command).redirectErrorStream(true).start();
+    Process process = startWithAllowAmbiguousCommands(command, allowAmbiguousCommands);
     String output = new String(process.getInputStream().readAllBytes(), UTF_8);
 
     assertThat(process.waitFor()).isZero();
     assertThat(output.lines().toList()).isEqualTo(flags);
+  }
+
+  private static Process startWithAllowAmbiguousCommands(List<String> command, String allowAmbiguousCommands) throws IOException {
+    String original = System.getProperty("jdk.lang.Process.allowAmbiguousCommands");
+    System.setProperty("jdk.lang.Process.allowAmbiguousCommands", allowAmbiguousCommands);
+    try {
+      return new ProcessBuilder(command).redirectErrorStream(true).start();
+    }
+    finally {
+      if (original == null) {
+        System.clearProperty("jdk.lang.Process.allowAmbiguousCommands");
+      }
+      else {
+        System.setProperty("jdk.lang.Process.allowAmbiguousCommands", original);
+      }
+    }
   }
 }
