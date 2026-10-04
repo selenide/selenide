@@ -60,7 +60,8 @@ public class BrowserDownloadsFolder implements DownloadsFolder {
       }
     }
     catch (IOException e) {
-      throw new IllegalStateException("Failed to cleanup folder " + folder.getAbsolutePath(), e);
+      // e.g. browser still holds a file from a previous (failed) download - such files will be ignored as "previous files"
+      log.warn("Failed to cleanup folder {} - remaining files: {}", folder, filesIn(folder), e);
     }
   }
 
