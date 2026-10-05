@@ -238,7 +238,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   @Test
   void downloadsFileWithCrdownloadExtension() {
     File downloadedFile = $(byText("Download file *crdownload"))
-      .download(900, withName("hello_world.crdownload"));
+      .download(timeout, withName("hello_world.crdownload"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.crdownload");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
