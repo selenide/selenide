@@ -3,6 +3,7 @@
 =======
 ## 7.19.0 (xx.10.2026)
 * update Selenium from 4.49.0 to 4.50.0
+* #1741 add `visibleText()` and `exactVisibleText()` conditions for overflow-truncated elements  --  thanks to svasenkov
 * restore fallback to legacy clipboard commands on old Appium servers (broken by Selenium 4.50 + Appium java-client 10.1.1)
 
 =======
