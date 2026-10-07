@@ -3,7 +3,6 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
-import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.impl.Screenshot;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.WebDriverException;
@@ -18,7 +17,6 @@ import static java.util.Objects.requireNonNullElseGet;
 public class UIAssertionError extends AssertionFailedError {
   private static final Logger log = LoggerFactory.getLogger(UIAssertionError.class);
   protected static final ErrorFormatter errorFormatter = inject();
-  private static final ScreenShotLaboratory screenshots = inject();
 
   private Screenshot screenshot = Screenshot.none();
   private long timeoutMs;
@@ -119,7 +117,7 @@ public class UIAssertionError extends AssertionFailedError {
     }
     else {
       Config config = driver.config();
-      uiError.screenshot = screenshots
+      uiError.screenshot = driver.screenshots()
         .takeScreenshot(driver, config.screenshots(), config.savePageSource());
       uiError.detailedErrorMessage = join(uiError.initialErrorMessage,
         errorFormatter.generateErrorDetails(uiError, driver, uiError.screenshot, uiError.timeoutMs));
