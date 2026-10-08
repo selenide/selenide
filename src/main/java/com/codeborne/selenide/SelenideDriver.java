@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.drivercommands.DriverWithScreenshots;
 import com.codeborne.selenide.drivercommands.LazyDriver;
 import com.codeborne.selenide.drivercommands.Navigator;
 import com.codeborne.selenide.drivercommands.WebDriverWrapper;
@@ -52,7 +53,6 @@ public class SelenideDriver {
 
   private final Config config;
   private final Driver driver;
-  private final ScreenShotLaboratory screenshots;
   private final BrowserClock clock;
 
   public SelenideDriver(Config config) {
@@ -64,7 +64,9 @@ public class SelenideDriver {
   }
 
   public SelenideDriver(Config config, Driver driver) {
-    this(config, driver, inject());
+    this.config = config;
+    this.driver = driver;
+    this.clock = new BrowserClock(this.driver);
   }
 
   public SelenideDriver(Config config, List<WebDriverListener> listeners, ScreenShotLaboratory screenshots) {
@@ -77,7 +79,7 @@ public class SelenideDriver {
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
                         DownloadsFolder browserDownloadsFolder) {
-    this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder), inject());
+    this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder));
   }
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
@@ -91,16 +93,17 @@ public class SelenideDriver {
   }
 
   public SelenideDriver(Config config, Driver driver, ScreenShotLaboratory screenshots) {
-    this.config = config;
-    this.driver = driver;
-    this.screenshots = screenshots;
-    this.clock = new BrowserClock(this.driver);
+    this(config, new DriverWithScreenshots(driver, screenshots));
   }
 
   public Config config() {
     return config;
   }
 
+  /**
+   * Driver context used by elements and collections.
+   * A custom screenshot laboratory decorates the supplied driver without changing its state.
+   */
   public Driver driver() {
     return driver;
   }
@@ -442,7 +445,7 @@ public class SelenideDriver {
    */
   @Nullable
   public String screenshot(String fileName) {
-    return screenshots.takeScreenshot(driver(), fileName, true, driver().config().savePageSource()).getImage();
+    return driver().screenshots().takeScreenshot(driver(), fileName, true, driver().config().savePageSource()).getImage();
   }
 
   /**
@@ -452,7 +455,7 @@ public class SelenideDriver {
    */
   @Nullable
   public <T> T screenshot(OutputType<T> outputType) {
-    return screenshots.takeScreenShot(driver(), outputType);
+    return driver().screenshots().takeScreenShot(driver(), outputType);
   }
 
   public File download(String url) throws URISyntaxException {
