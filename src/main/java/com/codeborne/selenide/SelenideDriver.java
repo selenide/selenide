@@ -52,6 +52,7 @@ public class SelenideDriver {
 
   private final Config config;
   private final Driver driver;
+  @Nullable
   private final ScreenShotLaboratory screenshots;
   private final BrowserClock clock;
 
@@ -64,11 +65,14 @@ public class SelenideDriver {
   }
 
   public SelenideDriver(Config config, Driver driver) {
-    this(config, driver, inject());
+    this.config = config;
+    this.driver = driver;
+    this.screenshots = null;
+    this.clock = new BrowserClock(this.driver);
   }
 
   public SelenideDriver(Config config, List<WebDriverListener> listeners, ScreenShotLaboratory screenshots) {
-    this(config, new LazyDriver(config, null, listeners), screenshots);
+    this(config, new LazyDriver(config, null, listeners, screenshots));
   }
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
@@ -77,7 +81,7 @@ public class SelenideDriver {
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
                         DownloadsFolder browserDownloadsFolder) {
-    this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder), inject());
+    this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder));
   }
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
@@ -87,9 +91,16 @@ public class SelenideDriver {
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
                         DownloadsFolder browserDownloadsFolder, ScreenShotLaboratory screenshots) {
-    this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder), screenshots);
+    this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder, screenshots));
   }
 
+  /**
+   * @deprecated The given laboratory is only used by {@link #screenshot(String)} and {@link #screenshot(OutputType)},
+   * while assertion failures and element screenshots use the driver's {@link Driver#screenshots()}.
+   * Use {@link #SelenideDriver(Config, Driver)} with a driver which returns your laboratory from
+   * {@link Driver#screenshots()}, or a constructor which creates the driver with your laboratory.
+   */
+  @Deprecated
   public SelenideDriver(Config config, Driver driver, ScreenShotLaboratory screenshots) {
     this.config = config;
     this.driver = driver;
@@ -442,7 +453,7 @@ public class SelenideDriver {
    */
   @Nullable
   public String screenshot(String fileName) {
-    return screenshots.takeScreenshot(driver(), fileName, true, driver().config().savePageSource()).getImage();
+    return screenshots().takeScreenshot(driver(), fileName, true, driver().config().savePageSource()).getImage();
   }
 
   /**
@@ -452,7 +463,11 @@ public class SelenideDriver {
    */
   @Nullable
   public <T> T screenshot(OutputType<T> outputType) {
-    return screenshots.takeScreenShot(driver(), outputType);
+    return screenshots().takeScreenShot(driver(), outputType);
+  }
+
+  private ScreenShotLaboratory screenshots() {
+    return screenshots != null ? screenshots : driver.screenshots();
   }
 
   public File download(String url) throws URISyntaxException {

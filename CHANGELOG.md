@@ -5,6 +5,7 @@
 * update Selenium from 4.49.0 to 4.50.0
 * #1741 add `visibleText()` and `exactVisibleText()` conditions for overflow-truncated elements  --  thanks to svasenkov
 * restore fallback to legacy clipboard commands on old Appium servers (broken by Selenium 4.50 + Appium java-client 10.1.1)
+* use the `ScreenShotLaboratory` passed to `SelenideDriver` also for assertion failures and element screenshots (except with the now deprecated constructor `SelenideDriver(Config, Driver, ScreenShotLaboratory)`, which still uses it only for explicit screenshots)
 
 =======
 ## 7.18.2 (19.09.2026)
