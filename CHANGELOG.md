@@ -5,7 +5,6 @@
 * update Selenium from 4.49.0 to 4.50.0
 * #1741 add `visibleText()` and `exactVisibleText()` conditions for overflow-truncated elements  --  thanks to svasenkov
 * restore fallback to legacy clipboard commands on old Appium servers (broken by Selenium 4.50 + Appium java-client 10.1.1)
-* #3430 add lightweight table helper: `Table`, `TableRow`, `TableLayout`, `HorizontalTable` (column by header, row lookup by column value)
 
 =======
 ## 7.18.2 (19.09.2026)

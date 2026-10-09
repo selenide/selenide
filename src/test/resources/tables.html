@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Tables</title>
+</head>
+<body>
+<table id="customers">
+  <thead>
+  <tr>
+    <th>Company</th>
+    <th>Contact</th>
+    <th>Country</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+    <td>Germany</td>
+  </tr>
+  </tbody>
+</table>
+
+<table id="offices">
+  <thead>
+  <tr>
+    <th>Country</th>
+    <th>Company</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>Austria</td>
+    <td>Alpine</td>
+  </tr>
+  <tr>
+    <td>Germany</td>
+    <td>Austria Tabak</td>
+  </tr>
+  <tr>
+    <td>Austria</td>
+    <td>Edelweiss</td>
+  </tr>
+  </tbody>
+</table>
+
+<table id="nested">
+  <thead>
+  <tr>
+    <th>Country</th>
+    <th>Company</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>Austria</td>
+    <td>
+      Outer
+      <table>
+        <thead>
+        <tr>
+          <th>Country</th>
+          <th>Company</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Nested</td>
+          <td>Leak</td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div id="aria-grid" role="grid">
+  <div role="row">
+    <span role="columnheader">Country</span>
+    <span role="columnheader">Company</span>
+  </div>
+  <div role="row">
+    <span role="gridcell">Austria</span>
+    <span role="gridcell">Alpine</span>
+  </div>
+  <div role="row">
+    <span role="gridcell">Germany</span>
+    <span role="gridcell">Berglunds</span>
+  </div>
+</div>
+
+<table id="specs">
+  <tr>
+    <th scope="row">Name</th>
+    <td>Bill Gates</td>
+  </tr>
+  <tr>
+    <th scope="row">Telephone</th>
+    <td>555 77 854</td>
+  </tr>
+</table>
+
+<script>
+  window.remountCustomers = function () {
+    const current = document.getElementById("customers");
+    const reloaded = current.cloneNode(true);
+    const row = Array.from(reloaded.querySelectorAll("tbody tr")).find((tr) => tr.cells[0].textContent === "Ernst Handel");
+    row.cells[2].textContent = "Austria reloaded";
+    const placeholder = document.createComment("customers reload");
+    current.replaceWith(placeholder);
+    setTimeout(() => placeholder.replaceWith(reloaded), 250);
+  };
+
+  setTimeout(function () {
+    document.querySelector("#customers tbody").insertAdjacentHTML("beforeend",
+      "<tr><td>Ernst Handel</td><td>Roland Mendel</td><td>Austria</td></tr>");
+  }, 1000);
+</script>
+</body>
+</html>
