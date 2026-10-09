@@ -147,9 +147,9 @@ reordered.
 ## 10. Errors
 
 ```
-cell("Region")             → TableColumnException: Column "Region" not found in {#query-classic}; displayed headers: [Country, Company, Employees]
-row("Company", "x")        → TableColumnException: Column "Company" ambiguous in {#repeated-table}; displayed headers: [Country, Company, Company]
-row("Company", "Missing")  → ElementNotFound: Element not found {#customers/By.xpath: ./tbody/tr[td].findBy(Company = "Missing Company")}
+cell("Region")                     → TableColumnException: Column "Region" not found in {#query-classic}; displayed headers: [Country, Company, Employees]
+row("Company", "x")                → TableColumnException: Column "Company" ambiguous in {#repeated-table}; displayed headers: [Country, Company, Company]
+row("Company", "Missing Company")  → ElementNotFound: Element not found {#customers/By.xpath: ./tbody/tr[td].findBy(Company = "Missing Company")}
 ```
 
 A column that never appears in a `row(column, value)` lookup fails with `ElementNotFound` after the timeout; a duplicate
