@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Selenide table fixture</title></head>
+<body>
+<table id="orders">
+  <thead><tr><th>Order</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td>1001</td><td>Ready</td></tr>
+    <tr><td>1002</td><td>Pending</td></tr>
+  </tbody>
+</table>
+<script>
+  window.replaceOrders = function () {
+    const oldTable = document.querySelector('#orders');
+    const replacement = oldTable.cloneNode(true);
+    oldTable.replaceWith(replacement);
+  };
+  window.delaySecondRow = function () {
+    const body = document.querySelector('#orders tbody');
+    const row = body.lastElementChild;
+    row.remove();
+    window.setTimeout(() => body.appendChild(row), 250);
+  };
+</script>
+</body>
+</html>
