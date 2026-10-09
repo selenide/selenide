@@ -13,6 +13,27 @@ The screenshots below are taken by real Selenide runs against the test fixtures
 (`src/test/resources/table_helper.html`). The highlighted elements are exactly what each call returned:
 **blue** — row, **red** — cell(s), **amber** — resolved header.
 
+## Installation
+
+The table helper is an optional module (since 7.19.0). Add a dependency next to Selenide, using the same `<version>` as Selenide:
+
+**Gradle**
+```groovy
+testImplementation("com.codeborne:selenide-table:<version>")
+```
+
+**Maven**
+```xml
+<dependency>
+  <groupId>com.codeborne</groupId>
+  <artifactId>selenide-table</artifactId>
+  <version>${selenide.version}</version>
+  <scope>test</scope>
+</dependency>
+```
+
+Classes are in package `com.codeborne.selenide.table` (`import com.codeborne.selenide.table.Table;`).
+
 ## API
 
 | Type | Methods |
@@ -32,13 +53,13 @@ customers.row("Company", "Ernst Handel").cell("Country").shouldHave(exactText("A
 
 The Ernst Handel row is added 1.5 s after page load — the lookup waits for it like any Selenide element.
 
-![row by column value](table-helper/01-row-by-column-value.png)
+![row by column value](docs/01-row-by-column-value.png)
 
 ## 2. Why not `findBy(text(...))`
 
 `row("Company", X)` compares only the Company column. `findBy(text(X))` takes the first row that contains X in any cell.
 
-![column scoped vs findBy](table-helper/04-column-scoped-vs-findBy.png)
+![column scoped vs findBy](docs/04-column-scoped-vs-findBy.png)
 
 ## 3. A whole column, all matching rows
 
@@ -47,18 +68,18 @@ customers.column("Company").shouldHave(exactTexts("Alfreds Futterkiste", "Ernst 
 Table.of($("#query-classic"), TableLayout.html()).rows("Country", "Austria").shouldHave(size(2));
 ```
 
-![column by header](table-helper/02-column-by-header.png)
+![column by header](docs/02-column-by-header.png)
 
-![rows filter](table-helper/03-rows-filter.png)
+![rows filter](docs/03-rows-filter.png)
 
 ## 4. Grouped headers and filter rows
 
 `html()` reads headers from the last `<thead>` row that contains a `<th>` (cells may be `th` or `td`). A group row with
 `colspan` above it and a filter-input row below it don't shift columns.
 
-![grouped thead](table-helper/05-grouped-thead.png)
+![grouped thead](docs/05-grouped-thead.png)
 
-![filter row](table-helper/06-filter-row.png)
+![filter row](docs/06-filter-row.png)
 
 ## 5. Nested tables are ignored
 
@@ -68,7 +89,7 @@ Table.of($("#query-classic"), TableLayout.html()).rows("Country", "Austria").sho
 Table.of($("#nested-classic"), TableLayout.html()).rows().shouldHave(size(1));
 ```
 
-![nested table ignored](table-helper/07-nested-table-ignored.png)
+![nested table ignored](docs/07-nested-table-ignored.png)
 
 ## 6. Not a `<table>`: div grids and ARIA grids
 
@@ -82,9 +103,9 @@ grid.row("Country", "Austria").cell("Company");
 Table.of($("#aria-grid"), TableLayout.aria()).row("Country", "Austria").cell("Company").shouldHave(exactText("Alfreds"));
 ```
 
-![div grid](table-helper/08-div-grid.png)
+![div grid](docs/08-div-grid.png)
 
-![aria grid](table-helper/09-aria-grid.png)
+![aria grid](docs/09-aria-grid.png)
 
 ## 7. Any custom match, then cells by header
 
@@ -95,7 +116,7 @@ customers.row(customers.column("Company").findBy(matchText("Ernst.*")).closest("
   .cell("Country").shouldHave(exactText("Austria"));
 ```
 
-![row from custom match](table-helper/10-row-from-custom-match.png)
+![row from custom match](docs/10-row-from-custom-match.png)
 
 ## 8. Key/value tables
 
@@ -106,7 +127,7 @@ read, so labels of a nested table are ignored.
 HorizontalTable.of($("#horizontal-customers")).value("Telephone 2").shouldHave(exactText("555 77 855"));
 ```
 
-![horizontal table](table-helper/11-horizontal-table.png)
+![horizontal table](docs/11-horizontal-table.png)
 
 ## 9. Headers that render late
 
@@ -118,7 +139,7 @@ the row and cell resolve.
 t.row("Employees", "20").cell("Company").shouldHave(exactText("Berglunds"), Duration.ofSeconds(4));
 ```
 
-<img src="table-helper/12a-late-column-waiting.png" alt="late column waiting" width="420"> <img src="table-helper/12b-late-column-resolved.png" alt="late column resolved" width="420">
+<img src="docs/12a-late-column-waiting.png" alt="late column waiting" width="420"> <img src="docs/12b-late-column-resolved.png" alt="late column resolved" width="420">
 
 `cell(header)` and `column(header)` resolve the column index once, when called — call them again after columns are
 reordered.
