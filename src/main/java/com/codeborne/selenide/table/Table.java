@@ -11,8 +11,10 @@ import static java.util.Objects.requireNonNull;
 import static org.openqa.selenium.By.xpath;
 
 /**
- * Thin header-aware view over a table-like element. All lookups are lazy Selenide collections and elements;
- * column indexes are resolved by displayed header text on every evaluation.
+ * Thin header-aware view over a table-like element. Returned elements and collections are lazy:
+ * {@code row(column, value)} and {@code rows(column, value)} re-resolve the column by displayed header text on every
+ * evaluation, while {@code cell(header)} and {@code column(header)} resolve the column index once, when called
+ * (call them again after columns are reordered).
  *
  * <pre>{@code
  * Table customers = Table.of($("#customers"), TableLayout.html());

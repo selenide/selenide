@@ -27,6 +27,11 @@ final class ColumnValueCondition extends WebElementCondition {
     if (headers.isEmpty()) {
       return rejected("no headers displayed yet", headers);
     }
+    List<String> displayed = ColumnResolver.normalize(headers);
+    if (!displayed.contains(ColumnResolver.normalize(column))) {
+      String missing = "column \"" + column + "\" not found";
+      return rejected(missing, missing + "; displayed headers: " + displayed);
+    }
     int index = ColumnResolver.indexOf(headers, column, table.root().toString());
     List<WebElement> cells = row.findElements(table.layout().cells());
     if (index >= cells.size()) {

@@ -104,6 +104,25 @@ final class TableTest extends ITest {
   }
 
   @Test
+  void rowLookupWaitsForLateColumn() {
+    Table t = queryClassic();
+
+    renameEmployeesHeaderTemporarily();
+    t.row("Employees", "20").cell("Company").shouldHave(exactText("Berglunds"), Duration.ofSeconds(2));
+    renameEmployeesHeaderTemporarily();
+    t.rows("Employees", "20").shouldHave(size(1), Duration.ofSeconds(2));
+  }
+
+  @Test
+  void missingColumnInRowLookupFailsWithElementNotFound() {
+    Table t = queryClassic();
+
+    assertThatThrownBy(() -> t.row("Region", "x").self().should(exist, Duration.ofMillis(500)))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("Region");
+  }
+
+  @Test
   void missingRowFailsWithElementNotFound() {
     assertThatThrownBy(() -> customers().row("Company", "Missing Company").self().should(exist, Duration.ofMillis(600)))
       .isInstanceOf(ElementNotFound.class)
@@ -171,6 +190,12 @@ final class TableTest extends ITest {
     Table flex = flexCustomers();
 
     assertThatThrownBy(() -> flex.column("Company")).isInstanceOf(UnsupportedOperationException.class);
+  }
+
+  private void renameEmployeesHeaderTemporarily() {
+    driver().executeJavaScript("const th = document.querySelector('#query-classic thead tr').children[2];"
+      + "th.textContent = 'Staff';"
+      + "setTimeout(() => { th.textContent = 'Employees'; }, 300);");
   }
 
   private Table customers() {
