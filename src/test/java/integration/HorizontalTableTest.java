@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
+import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
@@ -49,5 +50,16 @@ final class HorizontalTableTest extends ITest {
   @Test
   void doesNotMatchHeaderPrefix() {
     table.value("Telephone").should(not(exist));
+  }
+
+  @Test
+  void ignoresNestedTableLabels() {
+    driver().executeJavaScript("document.body.innerHTML = arguments[0]", "<table id='h'>"
+      + "<tr><th>Name</th><td>Bill<table><tr><th>Phone</th><td>nested</td></tr></table></td></tr>"
+      + "<tr><th>Phone</th><td>555</td></tr></table>");
+    HorizontalTable h = HorizontalTable.of($("#h"));
+
+    h.value("Phone").shouldHave(exactText("555"), TIMEOUT);
+    h.headers().shouldHave(exactTexts("Name", "Phone"));
   }
 }

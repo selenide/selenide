@@ -9,10 +9,14 @@ import static org.openqa.selenium.By.xpath;
 
 /**
  * Lazy view over a table where every row is a header {@code <th>} followed by a value {@code <td>}.
+ * Only the table's own rows ({@code ./tr}, {@code ./tbody/tr}, {@code ./thead/tr}, {@code ./tfoot/tr}) are read,
+ * so labels of a table nested in a value cell are ignored.
  *
  * @since 7.19.0
  */
 public final class HorizontalTable {
+  private static final String OWN_ROWS = "./tr | ./tbody/tr | ./thead/tr | ./tfoot/tr";
+
   private final SelenideElement root;
 
   private HorizontalTable(SelenideElement root) {
@@ -28,11 +32,11 @@ public final class HorizontalTable {
   }
 
   /**
-   * @return header cells of all rows
+   * @return header cells of the table's own rows (labels of nested tables are ignored)
    * @since 7.19.0
    */
   public ElementsCollection headers() {
-    return root.$$x(".//tr/th");
+    return root.$$x("(" + OWN_ROWS + ")/th");
   }
 
   /**
@@ -43,6 +47,6 @@ public final class HorizontalTable {
   public SelenideElement value(String header) {
     WebElementCondition hasHeader = match("header = \"" + header + "\"",
       tr -> tr.findElements(xpath("./th")).stream().anyMatch(th -> th.getText().trim().equals(header)));
-    return root.$$x(".//tr").findBy(hasHeader).$x("./td");
+    return root.$$x(OWN_ROWS).findBy(hasHeader).$x("./td");
   }
 }

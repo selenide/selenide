@@ -15,6 +15,11 @@ import static org.openqa.selenium.By.xpath;
  * {@code row(column, value)} and {@code rows(column, value)} re-resolve the column by displayed header text on every
  * evaluation, while {@code cell(header)} and {@code column(header)} resolve the column index once, when called
  * (call them again after columns are reordered).
+ * <p>
+ * Limitations: header text must match exactly, including icons or badges inside a header cell (use a custom headers
+ * locator that selects the label); values are compared by visible text, so a cell holding an {@code <input>} or
+ * {@code <select>} reads as empty (find such a row yourself and wrap it with {@link #row(SelenideElement)});
+ * {@code colspan} and {@code rowspan} in the table body are not supported.
  *
  * <pre>{@code
  * Table customers = Table.of($("#customers"), TableLayout.html());

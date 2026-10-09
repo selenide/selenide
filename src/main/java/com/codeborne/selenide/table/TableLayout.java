@@ -27,8 +27,11 @@ public record TableLayout(By rows, By cells, By headers) {
   }
 
   /**
-   * Layout of a classic HTML {@code <table>} with headers in {@code <thead>} and data rows in {@code <tbody>}.
-   * Rows of nested tables are ignored.
+   * Layout of a classic HTML {@code <table>} with data rows in {@code <tbody>} and headers ({@code th} or {@code td})
+   * from the last {@code <thead>} row that contains a {@code th}, or from the last {@code <thead>} row when none does,
+   * so a filter row without {@code th} below the header row is skipped. Grouped headers work only when that row lists
+   * every leaf column; leaf headers spanning several rows with {@code rowspan} are not supported, describe such a table
+   * with {@link #of(By, By, By)}. Rows of nested tables are ignored.
    *
    * @since 7.19.0
    */
@@ -36,7 +39,8 @@ public record TableLayout(By rows, By cells, By headers) {
     return new TableLayout(
       By.xpath("./tbody/tr[td]"),
       By.xpath("./*[self::td or self::th]"),
-      By.xpath("./thead/tr/th"));
+      By.xpath("./thead/tr[th][last()]/*[self::th or self::td]"
+        + " | ./thead[not(tr/th)]/tr[last()]/*[self::th or self::td]"));
   }
 
   /**

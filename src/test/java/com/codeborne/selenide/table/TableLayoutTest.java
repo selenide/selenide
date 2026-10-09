@@ -10,7 +10,9 @@ final class TableLayoutTest {
   @Test
   void htmlLayoutUsesDirectChildXpath() {
     assertThat(TableLayout.html()).isEqualTo(new TableLayout(
-      By.xpath("./tbody/tr[td]"), By.xpath("./*[self::td or self::th]"), By.xpath("./thead/tr/th")));
+      By.xpath("./tbody/tr[td]"), By.xpath("./*[self::td or self::th]"),
+      By.xpath("./thead/tr[th][last()]/*[self::th or self::td]"
+        + " | ./thead[not(tr/th)]/tr[last()]/*[self::th or self::td]")));
   }
 
   @Test

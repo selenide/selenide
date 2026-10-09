@@ -192,6 +192,83 @@ final class TableTest extends ITest {
     assertThatThrownBy(() -> flex.column("Company")).isInstanceOf(UnsupportedOperationException.class);
   }
 
+  @Test
+  void multiRowTheadKeepsColumnsAligned() {
+    Table t = tableFromMarkup("<table id='t'><thead>"
+      + "<tr><th colspan='2'>Customer</th><th>Location</th></tr>"
+      + "<tr><th>Company</th><th>Contact</th><th>Country</th></tr>"
+      + "</thead><tbody><tr><td>Ernst</td><td>Roland</td><td>Austria</td></tr></tbody></table>");
+
+    t.row(0).cell("Company").shouldHave(exactText("Ernst"), TIMEOUT);
+    t.row(0).cell("Country").shouldHave(exactText("Austria"), TIMEOUT);
+    t.column("Country").shouldHave(exactTexts("Austria"), TIMEOUT);
+  }
+
+  @Test
+  void headerRowWithFilterRowBelow() {
+    Table t = tableFromMarkup("<table id='t'><thead>"
+      + "<tr><th>Company</th><th>Country</th></tr>"
+      + "<tr><td><input></td><td><input></td></tr>"
+      + "</thead><tbody><tr><td>Ernst</td><td>Austria</td></tr></tbody></table>");
+
+    t.row("Company", "Ernst").cell("Country").shouldHave(exactText("Austria"), TIMEOUT);
+  }
+
+  @Test
+  void theadWithTdCells() {
+    Table t = tableFromMarkup("<table id='t'><thead>"
+      + "<tr><td>Company</td><td>Country</td></tr></thead>"
+      + "<tbody><tr><td>Ernst</td><td>Austria</td></tr></tbody></table>");
+
+    t.row("Company", "Ernst").cell("Country").shouldHave(exactText("Austria"), TIMEOUT);
+  }
+
+  @Test
+  void rowsLookupWithDuplicateHeaderIsAmbiguous() {
+    Table t = tableFromMarkup("<table id='t'><thead>"
+      + "<tr><th>Company</th><th>Company</th></tr></thead>"
+      + "<tbody><tr><td>A</td><td>B</td></tr></tbody></table>");
+
+    assertThatThrownBy(() -> t.rows("Company", "A").shouldHave(size(1), Duration.ofMillis(500)))
+      .isInstanceOf(TableColumnException.class)
+      .hasMessageContaining("ambiguous");
+  }
+
+  @Test
+  void valueWithQuotes() {
+    Table t = tableFromMarkup("<table id='t'><thead>"
+      + "<tr><th>Name</th><th>Status</th></tr></thead>"
+      + "<tbody><tr><td>O'Brien \"Jr\"</td><td>Ready</td></tr></tbody></table>");
+
+    t.row("Name", "O'Brien \"Jr\"").cell("Status").shouldHave(exactText("Ready"), TIMEOUT);
+  }
+
+  @Test
+  void headerWithSortIconIsNotMatchedByLabel() {
+    Table t = tableFromMarkup("<table id='t'><thead>"
+      + "<tr><th>Company <span class='sort'>▲</span></th><th>Country</th></tr></thead>"
+      + "<tbody><tr><td>Ernst</td><td>Austria</td></tr></tbody></table>");
+
+    assertThatThrownBy(() -> t.row(0).cell("Company"))
+      .isInstanceOf(TableColumnException.class)
+      .hasMessageContaining("Company ▲");
+  }
+
+  @Test
+  void inputCellValueViaCallerFoundRow() {
+    Table t = tableFromMarkup("<table id='t'><thead>"
+      + "<tr><th>Name</th><th>Status</th></tr></thead>"
+      + "<tbody><tr><td><input value='Alpha'></td><td>Ready</td></tr></tbody></table>");
+
+    t.rows("Name", "Alpha").shouldHave(size(0));
+    t.row($("#t input[value='Alpha']").closest("tr")).cell("Status").shouldHave(exactText("Ready"), TIMEOUT);
+  }
+
+  private Table tableFromMarkup(String html) {
+    driver().executeJavaScript("document.body.innerHTML = arguments[0]", html);
+    return Table.of($("#t"), TableLayout.html());
+  }
+
   private void renameEmployeesHeaderTemporarily() {
     driver().executeJavaScript("const th = document.querySelector('#query-classic thead tr').children[2];"
       + "th.textContent = 'Staff';"
