@@ -125,7 +125,7 @@ public class Selenide {
     getSelenideDriver().open(config);
   }
 
-  public static Conditional<WebDriver> webdriver() {
+  public static BrowserSession webdriver() {
     return getSelenideDriver().webdriver();
   }
 

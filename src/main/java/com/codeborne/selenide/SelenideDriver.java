@@ -494,8 +494,8 @@ public class SelenideDriver {
     return downloadFileWithHttpRequest.get();
   }
 
-  public Conditional<WebDriver> webdriver() {
-    return new WebDriverConditional(driver);
+  public BrowserSession webdriver() {
+    return new BrowserSession(driver);
   }
 
   public BrowserClock clock() {
