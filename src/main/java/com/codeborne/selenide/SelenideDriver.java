@@ -534,7 +534,7 @@ public class SelenideDriver {
       devTools.send(Emulation.setDeviceMetricsOverride(
         width, height, pixelRatio, true, empty(),
         Optional.of(width), Optional.of(height),
-        empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty()
+        empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty()
       ));
     }
     else if (isBiDiEnabled(webDriver)) { // Firefox
