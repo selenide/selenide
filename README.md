@@ -66,7 +66,7 @@ Just create file `.mcp.json` in your project:
     "selenide": {
       "command": "npx",
       "args": [
-        "selenide-mcp@7.18.2"
+        "selenide-mcp@7.19.0"
       ]
     }
 }

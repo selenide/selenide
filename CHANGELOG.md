@@ -1,10 +1,22 @@
 # Changelog
 
 =======
-## 7.19.0 (xx.10.2026)
-* update Selenium from 4.49.0 to 4.50.0
-* #1741 add `visibleText()` and `exactVisibleText()` conditions for overflow-truncated elements  --  thanks to svasenkov
-* restore fallback to legacy clipboard commands on old Appium servers (broken by Selenium 4.50 + Appium java-client 10.1.1)
+## 7.19.0 (10.10.2026)
+* #3378 save and restore browser state (#3461)
+* #3370 add built-in clock and timezone emulation (#3431) (#3442)  --  thanks to suhanrain
+* Selenide MCP & CLI: support browser capabilities, including nested ones (#3459)  --  thanks to Mikhail Sidelnikov for PR #3372
+* add support for HtmlUnit browser (#3470)
+* #1741 add `visibleText()` conditions for overflow-truncated elements (#3366)  --  thanks to Stanislav Vasenkov
+* #3445 allow Appium `scroll()` and `swipe()` to be performed inside a given element (#3446) (#3455)  --  thanks to Valentin Kudin
+* #3438 allow subclasses of `SelenideAppiumCollection` to specify their own element class (#3439)  --  thanks to Alexey Romanovsky
+* #3440 return `SelenideAppiumElement` from chainable methods like `setValue()` (#3441)  --  thanks to Alexey Romanovsky
+* #2675 ignore temporary files left from previous failed downloads (#3457)
+* make screenshot names unique (added counter to timestamp) (#3469)
+* update Selenium from 4.49.0 to 4.50.0 (#3454)
+* update Selenium from 4.50.0 to 4.51.0 (#3468)
+* update Appium from 10.1.1 to 11.0.0 (#3467)
+
+See https://github.com/selenide/selenide/milestone/246?closed=1
 * add support for HtmlUnit browser: `Configuration.browser = "htmlunit"` (requires dependency `org.seleniumhq.selenium:htmlunit3-driver`)
 
 =======
