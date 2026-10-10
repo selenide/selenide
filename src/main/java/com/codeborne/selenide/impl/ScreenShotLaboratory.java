@@ -83,7 +83,7 @@ public class ScreenShotLaboratory {
 
   protected String getScreenshotFileName(String className, String methodName) {
     return className.replace('.', separatorChar) + separatorChar +
-      methodName + '.' + clock.timestamp();
+      methodName + '.' + clock.timestamp() + '.' + screenshotCounter.getAndIncrement();
   }
 
   /**

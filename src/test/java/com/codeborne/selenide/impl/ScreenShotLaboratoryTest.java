@@ -50,12 +50,12 @@ final class ScreenShotLaboratoryTest {
 
   @Test
   void composesScreenshotNameFromTestClassAndMethod() {
-    String expected = String.format("/build/reports/tests/MyTest/helloWorldTest.%s.png", ts);
+    String expected = String.format("/build/reports/tests/MyTest/helloWorldTest.%s.0.png", ts);
     assertThat(screenshots.takeScreenShot(driver, "MyTest", "helloWorldTest").getImage())
       .isEqualTo(workingDirectory + expected);
 
     String expectedFileName = String.format("%s/build/reports/tests/org/selenide/SelenideMethodsTest/" +
-      "userCanListMatchingSubElements.%s.png", workingDirectory, ts);
+      "userCanListMatchingSubElements.%s.1.png", workingDirectory, ts);
     assertThat(screenshots.takeScreenShot(
       driver,
       "org.selenide.SelenideMethodsTest",
