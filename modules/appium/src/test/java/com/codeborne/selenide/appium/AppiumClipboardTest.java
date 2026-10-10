@@ -1,12 +1,17 @@
 package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
+import io.appium.java_client.clipboard.HasClipboard;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
 import io.appium.java_client.remote.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.UnsupportedCommandException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WrapsDriver;
 
 import java.util.Base64;
 import java.util.Map;
@@ -23,6 +28,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 final class AppiumClipboardTest {
   private static final String UNKNOWN_METHOD = """
@@ -49,6 +55,31 @@ final class AppiumClipboardTest {
   @Test
   void setText_fallsBackToLegacyCommand_ifServerDoesNotSupportMobileExtension() {
     doThrow(new WebDriverException(UNKNOWN_METHOD)).when(webDriver).setClipboardText(any());
+
+    clipboard.setText("Hello");
+
+    verify(webDriver).addCommand(POST, "/session/:sessionId/appium/device/set_clipboard", "setClipboard");
+    verify(webDriver).execute("setClipboard", Map.of("content", base64("Hello"), "contentType", "plaintext"));
+  }
+
+  @Test
+  void setText_fallsBackToLegacyCommand_ifAndroidServerDoesNotSupportMobileExtension() {
+    doThrow(new UnsupportedCommandException("Unknown mobile command \"setClipboard\"")).when(webDriver).setClipboardText(any());
+
+    clipboard.setText("Hello");
+
+    verify(webDriver).addCommand(POST, "/session/:sessionId/appium/device/set_clipboard", "setClipboard");
+    verify(webDriver).execute("setClipboard", Map.of("content", base64("Hello"), "contentType", "plaintext"));
+  }
+
+  @Test
+  void setText_fallsBackToLegacyCommand_onDecoratedDriver() {
+    WebDriver decoratedDriver = mock(WebDriver.class,
+      withSettings().extraInterfaces(HasClipboard.class, HasCapabilities.class, WrapsDriver.class));
+    when(driver.getWebDriver()).thenReturn(decoratedDriver);
+    when(((HasCapabilities) decoratedDriver).getCapabilities()).thenReturn(new XCUITestOptions());
+    when(((WrapsDriver) decoratedDriver).getWrappedDriver()).thenReturn(webDriver);
+    doThrow(new WebDriverException(UNKNOWN_METHOD)).when((HasClipboard) decoratedDriver).setClipboardText(any());
 
     clipboard.setText("Hello");
 
