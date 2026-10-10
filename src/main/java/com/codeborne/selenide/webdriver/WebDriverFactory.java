@@ -102,16 +102,6 @@ public class WebDriverFactory {
     catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       throw new RuntimeException("Failed to initialize " + factoryClass.getName(), e);
     }
-    catch (NoClassDefFoundError e) {
-      throw new IllegalStateException(missingDependencyMessage(browser, factoryClass, e), e);
-    }
-  }
-
-  private String missingDependencyMessage(Browser browser, Class<?> factoryClass, NoClassDefFoundError e) {
-    String hint = browser.isHtmlUnit() ?
-      "Add dependency \"org.seleniumhq.selenium:htmlunit3-driver\" to your project." :
-      "Probably some dependency is missing in your project.";
-    return "Failed to initialize %s: class not found %s. %s".formatted(factoryClass.getName(), e.getMessage(), hint);
   }
 
   private void logVersions(WebDriver webdriver) {
