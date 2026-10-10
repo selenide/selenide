@@ -6,6 +6,7 @@ import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.mockito.stubbing.Answer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.openqa.selenium.OutputType.BYTES;
 
+@Isolated // because of static screenshot counter
 final class ScreenShotLaboratoryTest {
   private final String dir = System.getProperty("user.dir");
   private final String workingDirectory = new File(dir).toURI().toString().replaceAll("/$", "");
@@ -43,6 +45,7 @@ final class ScreenShotLaboratoryTest {
 
   @BeforeEach
   void setUp() {
+    ScreenShotLaboratory.screenshotCounter.set(0);
     when(photographer.takeScreenshot(any(WebDriver.class), eq(BYTES))).thenAnswer((Answer<Optional<byte[]>>) invocation -> {
       return Optional.of("some png source".getBytes(UTF_8));
     });
@@ -61,6 +64,16 @@ final class ScreenShotLaboratoryTest {
       "org.selenide.SelenideMethodsTest",
       "userCanListMatchingSubElements").getImage())
       .isEqualTo(expectedFileName);
+  }
+
+  @Test
+  void differentLaboratoriesShareTheScreenshotCounter() {
+    ScreenShotLaboratory anotherLaboratory = new ScreenShotLaboratory(photographer, extractor, attachmentHandler, clock);
+
+    assertThat(screenshots.takeScreenShot(driver, "MyTest", "helloWorldTest").getImage())
+      .isEqualTo(String.format("%s/build/reports/tests/MyTest/helloWorldTest.%s.0.png", workingDirectory, ts));
+    assertThat(anotherLaboratory.takeScreenShot(driver, "MyTest", "helloWorldTest").getImage())
+      .isEqualTo(String.format("%s/build/reports/tests/MyTest/helloWorldTest.%s.1.png", workingDirectory, ts));
   }
 
   @Test

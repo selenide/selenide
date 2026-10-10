@@ -59,7 +59,7 @@ public class ScreenShotLaboratory {
   private final AttachmentHandler attachmentHandler;
   protected final Clock clock;
   protected final List<Screenshot> allScreenshots = new ArrayList<>();
-  protected AtomicLong screenshotCounter = new AtomicLong();
+  protected static final AtomicLong screenshotCounter = new AtomicLong();
 
   protected final ThreadLocal<String> currentContext = withInitial(() -> "");
   protected final ThreadLocal<@Nullable List<Screenshot>> currentContextScreenshots = new ThreadLocal<>();
