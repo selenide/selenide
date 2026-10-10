@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
@@ -27,6 +28,14 @@ import static java.util.Objects.requireNonNullElse;
 public class SelenideLogger {
   private static final Logger LOG = LoggerFactory.getLogger(SelenideLogger.class);
   private static final ThreadLocal<@Nullable Map<String, LogEventListener>> listeners = new ThreadLocal<>();
+
+  /**
+   * Number of threads which have listeners.
+   * As long as no thread has listeners, the {@link #listeners} ThreadLocal is not used at all,
+   * so Selenide commands don't create a ThreadLocal entry in every thread running them.
+   * Threads which ended without removing their listeners are still counted.
+   */
+  private static final AtomicInteger threadsWithListeners = new AtomicInteger();
   private static final Pattern REGEX_UPPER_CASE = Pattern.compile("([A-Z])");
   private static final Map<String, LogEventListener> NO_LISTENERS = emptyMap();
 
@@ -41,10 +50,11 @@ public class SelenideLogger {
     Map<String, LogEventListener> threadListeners = listeners.get();
     if (threadListeners == null) {
       threadListeners = new HashMap<>();
+      listeners.set(threadListeners);
+      threadsWithListeners.incrementAndGet();
     }
 
     threadListeners.put(name, listener);
-    listeners.set(threadListeners);
     LOG.debug("Added listener '{}' to thread '{}' (now it has {} listeners)", name, currentThread().getId(), threadListeners.size());
   }
 
@@ -136,7 +146,25 @@ public class SelenideLogger {
   }
 
   private static Collection<LogEventListener> getEventLoggerListeners() {
-    return requireNonNullElse(listeners.get(), NO_LISTENERS).values();
+    return requireNonNullElse(currentThreadListeners(), NO_LISTENERS).values();
+  }
+
+  /**
+   * Listeners of the current thread, or null if it has no listeners.
+   * Doesn't read the {@link #listeners} ThreadLocal if no thread has listeners.
+   */
+  @Nullable
+  private static Map<String, LogEventListener> currentThreadListeners() {
+    return threadsWithListeners.get() == 0 ? null : listeners.get();
+  }
+
+  private static void removeCurrentThreadListeners() {
+    listeners.remove();
+    threadsWithListeners.decrementAndGet();
+  }
+
+  static int numberOfThreadsWithListeners() {
+    return threadsWithListeners.get();
   }
 
   /**
@@ -150,12 +178,15 @@ public class SelenideLogger {
   @Nullable
   @CanIgnoreReturnValue
   public static <T extends LogEventListener> T removeListener(String name) {
-    Map<String, LogEventListener> threadListeners = SelenideLogger.listeners.get();
+    Map<String, LogEventListener> threadListeners = currentThreadListeners();
     if (threadListeners == null) {
       LOG.debug("Cannot remove listener '{}' for thread {} because no such listeners were registered", name, currentThread().getId());
       return null;
     }
     T listener = (T) threadListeners.remove(name);
+    if (threadListeners.isEmpty()) {
+      removeCurrentThreadListeners();
+    }
     LOG.debug("Removed listener '{}' for thread '{}' (now it has {} listeners)", name, currentThread().getId(), threadListeners.size());
     return listener;
   }
@@ -163,7 +194,7 @@ public class SelenideLogger {
   @Nullable
   @SuppressWarnings("unchecked")
   static <T extends LogEventListener> T getListener(String name) {
-    Map<String, LogEventListener> threadListeners = SelenideLogger.listeners.get();
+    Map<String, LogEventListener> threadListeners = currentThreadListeners();
     return threadListeners == null ? null : (T) threadListeners.get(name);
   }
 
@@ -171,9 +202,17 @@ public class SelenideLogger {
    * Remove all listeners FOR CURRENT THREAD
    */
   public static void removeAllListeners() {
-    Map<String, LogEventListener> threadListeners = requireNonNullElse(listeners.get(), NO_LISTENERS);
+    if (threadsWithListeners.get() == 0) {
+      return;
+    }
+    Map<String, LogEventListener> threadListeners = listeners.get();
+    if (threadListeners == null) {
+      // Reading the ThreadLocal has created an empty entry for this thread
+      listeners.remove();
+      return;
+    }
     LOG.debug("Removing {} listeners from thread '{}'", threadListeners.size(), currentThread().getId());
-    listeners.remove();
+    removeCurrentThreadListeners();
   }
 
   /**
@@ -184,7 +223,7 @@ public class SelenideLogger {
    * corresponding name has been called in current thread.
    */
   public static boolean hasListener(String name) {
-    Map<String, LogEventListener> threadListeners = SelenideLogger.listeners.get();
+    Map<String, LogEventListener> threadListeners = currentThreadListeners();
     return threadListeners != null && threadListeners.containsKey(name);
   }
 }

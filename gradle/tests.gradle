@@ -164,7 +164,8 @@ subprojects {
         systemProperties[it] = System.getProperty(it)
       }
 
-    jvmArgs = ['-ea', '-Xmx512m']
+    // SelenideLoggerThreadsTest inspects the ThreadLocals of a thread
+    jvmArgs = ['-ea', '-Xmx512m', '--add-opens=java.base/java.lang=ALL-UNNAMED']
     systemProperties['file.encoding'] = encoding
     systemProperties['user.country'] = 'TR'
     systemProperties['user.language'] = 'tr'
