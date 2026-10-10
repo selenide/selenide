@@ -97,6 +97,9 @@ All plugin modules depend on `statics` (which transitively provides `core`).
 
 Dependency versions are defined in `gradle/dependencies.gradle` and module `build.gradle` files - check them there.
 
+Every time Selenium version is updated, also update the Chrome version (`browsers.default.selenium.chrome.default`)
+in `modules/moon/moon-values.yaml`.
+
 ## Branching
 
 All work on feature branches from `main`, merged back to `main`. Commit messages should start with issue ID: `#ID description`.
