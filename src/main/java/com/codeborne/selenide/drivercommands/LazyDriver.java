@@ -4,6 +4,7 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.impl.WebDriverInstance;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.lang.Thread.currentThread;
 import static java.util.Collections.emptyList;
 
@@ -37,6 +39,7 @@ public class LazyDriver implements Driver {
   @Nullable
   private final Proxy userProvidedProxy;
   private final List<WebDriverListener> listeners;
+  private final ScreenShotLaboratory screenshots;
   private final Browser browser;
 
   private boolean closed;
@@ -45,17 +48,23 @@ public class LazyDriver implements Driver {
   private WebDriverInstance wd;
 
   public LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverListener> listeners) {
-    this(config, userProvidedProxy, listeners, new WebDriverFactory(), new BrowserHealthChecker(),
+    this(config, userProvidedProxy, listeners, inject());
+  }
+
+  public LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverListener> listeners,
+                    ScreenShotLaboratory screenshots) {
+    this(config, userProvidedProxy, listeners, screenshots, new WebDriverFactory(), new BrowserHealthChecker(),
       new CreateDriverCommand());
   }
 
   LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverListener> listeners,
-             WebDriverFactory factory, BrowserHealthChecker browserHealthChecker,
+             ScreenShotLaboratory screenshots, WebDriverFactory factory, BrowserHealthChecker browserHealthChecker,
              CreateDriverCommand createDriverCommand) {
     this.config = config;
     this.browser = new Browser(config.browser(), config.headless());
     this.userProvidedProxy = userProvidedProxy;
     this.listeners = new ArrayList<>(listeners);
+    this.screenshots = screenshots;
     this.factory = factory;
     this.browserHealthChecker = browserHealthChecker;
     this.createDriverCommand = createDriverCommand;
@@ -64,6 +73,11 @@ public class LazyDriver implements Driver {
   @Override
   public Config config() {
     return config;
+  }
+
+  @Override
+  public ScreenShotLaboratory screenshots() {
+    return screenshots;
   }
 
   @Override
