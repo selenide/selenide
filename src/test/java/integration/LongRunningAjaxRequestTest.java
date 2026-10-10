@@ -13,10 +13,12 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class LongRunningAjaxRequestTest extends ITest {
   @BeforeEach
   void openTestPage() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     setTimeout(4000);
     openFile("long_ajax_request.html");
     $("#loading").shouldNot(exist);

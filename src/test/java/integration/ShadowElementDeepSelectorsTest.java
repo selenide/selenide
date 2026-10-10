@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 final class ShadowElementDeepSelectorsTest extends ITest {
   @BeforeEach
   void openTestPage() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     openFile("page_with_shadow_dom.html");
     setTimeout(300);
   }

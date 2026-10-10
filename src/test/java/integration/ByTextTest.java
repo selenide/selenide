@@ -19,10 +19,12 @@ import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selectors.withTextCaseInsensitive;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ByTextTest extends ITest {
   @BeforeEach
   void openTestPage() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     openFile("page_with_selects_without_jquery.html");
   }
 

@@ -2,6 +2,7 @@ package integration;
 
 import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 import com.codeborne.selenide.ex.FrameNotFoundError;
 import java.time.Duration;
@@ -17,6 +18,7 @@ final class FramesCustomWaitTest extends ITest {
 
   @Test
   void waitsUntilFrameAppears_withCustomTimeout() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     setTimeout(1000);
     $("#btn").click();
     switchTo().frame("ifrm", Duration.ofSeconds(6));
@@ -25,6 +27,7 @@ final class FramesCustomWaitTest extends ITest {
 
   @Test
   void waitsUntilInnerFrameAppears_withCustomTimeout() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     setTimeout(6000);
     $("#btn").click();
     switchTo().innerFrame("ifrm");

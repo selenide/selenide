@@ -17,6 +17,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ReportForChainedElementsTest extends BaseIntegrationTest {
   private List<File> previousScreenshots;
@@ -25,6 +26,7 @@ final class ReportForChainedElementsTest extends BaseIntegrationTest {
 
   @BeforeEach
   void openTestPage() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     driver = new SelenideDriver(new SelenideConfig()
       .browser(browser).headless(headless)
       .baseUrl(getBaseUrl())

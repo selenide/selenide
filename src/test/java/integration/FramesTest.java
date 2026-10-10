@@ -20,6 +20,7 @@ final class FramesTest extends ITest {
 
   @Test
   void canSwitchIntoInnerFrame() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThat(driver().title()).isEqualTo("Test::frames");
 
     switchTo().innerFrame("parentFrame");
@@ -96,6 +97,7 @@ final class FramesTest extends ITest {
 
   @Test
   void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByTitle() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThat(driver().title()).isEqualTo("Test::frames");
     assertThatThrownBy(() -> switchTo().frame("absentFrame"))
       .isInstanceOf(FrameNotFoundError.class)
@@ -113,6 +115,7 @@ final class FramesTest extends ITest {
 
   @Test
   void attachesScreenshotWhenCannotFrameNotFound() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThatThrownBy(() -> switchTo().frame(33))
       .isInstanceOf(FrameNotFoundError.class)
       .hasMessageStartingWith("No frame found with index: 33")

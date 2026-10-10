@@ -15,6 +15,7 @@ import static com.codeborne.selenide.ScrollIntoViewOptions.Block.center;
 import static com.codeborne.selenide.ScrollIntoViewOptions.instant;
 import static com.codeborne.selenide.ScrollOptions.defaultScrollOptions;
 import static com.codeborne.selenide.ScrollOptions.direction;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ScrollTest extends ITest {
   private final SelenideElement scrollableDivDown = $("#scrollable-div");
@@ -36,6 +37,7 @@ final class ScrollTest extends ITest {
 
   @Test
   void userCanScrollDownSpecificElement() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     hiddenButtonDown.shouldBe(hidden);
     scrollableDivDown.scroll(defaultScrollOptions());
     hiddenButtonDown.shouldBe(visible);
@@ -43,6 +45,7 @@ final class ScrollTest extends ITest {
 
   @Test
   void userCanScrollSpecificElementToTheRight() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     hiddenButtonRight.shouldBe(hidden);
     scrollableDivRight.scroll(direction(RIGHT).distance(2000));
     hiddenButtonRight.shouldBe(visible);
@@ -58,6 +61,7 @@ final class ScrollTest extends ITest {
 
   @Test
   void userCanScrollUpSpecificElement() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     hiddenButtonUp.shouldBe(hidden);
     scrollableDivUp.scroll(direction(UP));
     hiddenButtonUp.shouldBe(visible);

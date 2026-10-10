@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Condition.text;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class FileUploadTest extends ITest {
   @BeforeEach
@@ -52,6 +53,7 @@ final class FileUploadTest extends ITest {
 
   @Test
   void userCanUploadMultipleFilesFromClasspath() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#multi-file-upload-form .file").uploadFromClasspath(
       "hello_world.txt",
       "jquery.min.js",
@@ -80,6 +82,7 @@ final class FileUploadTest extends ITest {
 
   @Test
   void userCanUploadFilesFromClasspathInsideJar() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#multi-file-upload-form .file").uploadFromClasspath(
       "org/slf4j/Logger.class",
       "org/slf4j/LoggerFactory.class"
@@ -95,6 +98,7 @@ final class FileUploadTest extends ITest {
 
   @Test
   void userCanUploadMultipleFiles() throws URISyntaxException {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     File file = $("#multi-file-upload-form .file").uploadFile(
       toLocalFile("/hello_world.txt"),
       toLocalFile("/jquery.min.js"));
@@ -116,6 +120,7 @@ final class FileUploadTest extends ITest {
 
   @Test
   void userCanUploadMultipleFiles_withoutForm() throws URISyntaxException {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     openFile("file_upload_without_form.html");
     $("#fileInput").uploadFile(
       toLocalFile("/файл-с-русским-названием.txt"),

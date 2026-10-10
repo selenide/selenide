@@ -10,6 +10,7 @@ import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selectors.byText;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class SelenideElementToStringTest extends ITest {
   @Test
@@ -23,6 +24,7 @@ final class SelenideElementToStringTest extends ITest {
 
   @Test
   void describe_showsElementDetails() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     openFile("page_with_selects_without_jquery.html");
 
     assertThat($("h1").describe())
@@ -86,6 +88,7 @@ final class SelenideElementToStringTest extends ITest {
 
   @Test
   void toString_wrappedWebElement_byName() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     openFile("page_with_selects_without_jquery.html");
     WebElement webElement = driver().getWebDriver().findElement(By.name("domain"));
     SelenideElement element = driver().$(webElement);
@@ -94,6 +97,7 @@ final class SelenideElementToStringTest extends ITest {
 
   @Test
   void toString_wrappedWebElement_byXpath() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     openFile("page_with_selects_without_jquery.html");
     WebElement webElement = driver().getWebDriver().findElement(By.xpath("//*[@name='domain']"));
     SelenideElement element = driver().$(webElement);

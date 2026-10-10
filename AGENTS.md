@@ -18,6 +18,7 @@ Selenide is a Java framework providing a concise fluent API for Selenium WebDriv
 ./gradlew firefox_headless             # Firefox headless integration tests
 ./gradlew chrome                       # Chrome integration tests (visible)
 ./gradlew firefox                      # Firefox integration tests (visible)
+./gradlew :modules:core:htmlunit       # HtmlUnit integration tests (no browser needed; only core module)
 
 # Run a single test class
 ./gradlew check --tests ClassName                    # Unit test
@@ -72,6 +73,7 @@ All plugin modules depend on `statics` (which transitively provides `core`).
 - **Unit tests** (`src/test/java/com/codeborne/selenide/`): Run with `./gradlew check`. No browser needed.
 - **Integration tests** (`src/test/java/integration/`): Require a browser. Run with browser-specific tasks (`chrome_headless`, `firefox`, etc.). 
 - **Base class**: Integration tests extend `ITest` which extends `BaseIntegrationTest`. `ITest` manages a `ThreadLocal<SelenideDriver>` and `ThreadLocal<SelenideConfig>` per test. `BaseIntegrationTest` starts a local HTTPS server.
+- Tests not supported by HtmlUnit (shadow DOM, layout, etc.) are skipped with `assumeThat(browser().isHtmlUnit()).isFalse()`.
 - Tests run with Turkish locale (`user.language=tr`, `user.country=TR`) to catch locale-sensitive bugs.
 
 ## Code Style

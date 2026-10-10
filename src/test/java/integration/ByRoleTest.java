@@ -10,10 +10,12 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byRole;
 import static com.codeborne.selenide.TextMatchOptions.fullText;
 import static com.codeborne.selenide.TextMatchOptions.partialText;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ByRoleTest extends ITest {
   @BeforeEach
   void openPage() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     openFile("page_with_aria_roles.html");
   }
 

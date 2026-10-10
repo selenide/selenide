@@ -10,6 +10,7 @@ import static com.codeborne.selenide.Condition.focused;
 import static com.codeborne.selenide.SetValueMethod.SEND_KEYS;
 import static com.codeborne.selenide.SetValueOptions.withText;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 @Tag("smoke")
 final class InputFieldTest extends ITest {
@@ -42,6 +43,7 @@ final class InputFieldTest extends ITest {
 
   @Test
   void clearMovesFocusToBody() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("[name=username]").val("john");
     $("[name=password]").val("secret");
     $("[name=username]").clear();
@@ -50,6 +52,7 @@ final class InputFieldTest extends ITest {
 
   @Test
   void clearTriggersChangeEvent() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("[name=username]").setValue(withText("john").usingMethod(SEND_KEYS)).pressTab();
     $("#username-mirror").shouldHave(exactTextCaseSensitive("john"));
 

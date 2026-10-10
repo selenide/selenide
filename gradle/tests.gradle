@@ -131,6 +131,15 @@ subprojects {
     outputs.upToDateWhen {false}
   }
 
+  tasks.register("htmlunit", Test) {
+    usesService(browserTestLock)
+    systemProperties['selenide.browser'] = 'htmlunit'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+    exclude 'org/selenide/**/*'
+    outputs.upToDateWhen {false}
+  }
+
   tasks.register("safari", Test) {
     usesService(browserTestLock)
     systemProperties['selenide.browser'] = 'safari'

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class TabsWaitTest extends ITest {
   @BeforeEach
@@ -21,6 +22,7 @@ final class TabsWaitTest extends ITest {
 
   @Test
   void waitsUntilTabAppears_byIndex() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#open-new-tab-with-delay").click();
     switchTo().window(1);
     $("h1").shouldHave(text("Page with alerts"));
