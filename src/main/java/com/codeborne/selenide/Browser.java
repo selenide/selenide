@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
+import static com.codeborne.selenide.Browsers.HTMLUNIT;
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static com.codeborne.selenide.Browsers.SAFARI;
@@ -50,6 +51,10 @@ public class Browser {
 
   public boolean isSafari() {
     return SAFARI.equalsIgnoreCase(name);
+  }
+
+  public boolean isHtmlUnit() {
+    return HTMLUNIT.equalsIgnoreCase(name);
   }
 
   public boolean supportsInsecureCerts() {

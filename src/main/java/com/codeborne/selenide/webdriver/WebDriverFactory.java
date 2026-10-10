@@ -23,6 +23,7 @@ import java.util.Map;
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
+import static com.codeborne.selenide.Browsers.HTMLUNIT;
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static com.codeborne.selenide.Browsers.SAFARI;
@@ -42,7 +43,8 @@ public class WebDriverFactory {
       EDGE, EdgeDriverFactory.class,
       INTERNET_EXPLORER, InternetExplorerDriverFactory.class,
       IE, InternetExplorerDriverFactory.class,
-      SAFARI, SafariDriverFactory.class
+      SAFARI, SafariDriverFactory.class,
+      HTMLUNIT, HtmlUnitDriverFactory.class
     );
   }
 
@@ -100,6 +102,16 @@ public class WebDriverFactory {
     catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       throw new RuntimeException("Failed to initialize " + factoryClass.getName(), e);
     }
+    catch (NoClassDefFoundError e) {
+      throw new IllegalStateException(missingDependencyMessage(browser, factoryClass, e), e);
+    }
+  }
+
+  private String missingDependencyMessage(Browser browser, Class<?> factoryClass, NoClassDefFoundError e) {
+    String hint = browser.isHtmlUnit() ?
+      "Add dependency \"org.seleniumhq.selenium:htmlunit3-driver\" to your project." :
+      "Probably some dependency is missing in your project.";
+    return "Failed to initialize %s: class not found %s. %s".formatted(factoryClass.getName(), e.getMessage(), hint);
   }
 
   private void logVersions(WebDriver webdriver) {

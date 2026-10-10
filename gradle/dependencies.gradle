@@ -15,6 +15,7 @@ ext {
   archunitVersion = '1.5.1'
   jacksonVersion = '2.22.3'
   systemStubsVersion = '2.1.8'
+  htmlunitDriverVersion = '4.48.0'
 }
 
 subprojects {
