@@ -3,6 +3,7 @@ package com.codeborne.selenide.appium;
 import com.codeborne.selenide.Clipboard;
 import com.codeborne.selenide.DefaultClipboard;
 import com.codeborne.selenide.Driver;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.clipboard.HasClipboard;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -12,13 +13,14 @@ import java.util.Map;
 
 import static com.codeborne.selenide.appium.AppiumDriverUnwrapper.isMobile;
 import static io.appium.java_client.CommandExecutionHelper.execute;
-import static io.appium.java_client.MobileCommand.GET_CLIPBOARD;
-import static io.appium.java_client.MobileCommand.SET_CLIPBOARD;
+import static io.appium.java_client.http.HttpMethod.POST;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNullElse;
 
 public class AppiumClipboard implements Clipboard {
   private static final String PLAINTEXT = "plaintext";
+  private static final String GET_CLIPBOARD = "getClipboard";
+  private static final String SET_CLIPBOARD = "setClipboard";
 
   private final Driver driver;
   private final Clipboard defaultClipboard;
@@ -66,6 +68,7 @@ public class AppiumClipboard implements Clipboard {
     }
     catch (WebDriverException e) {
       if (!isUnknownMethod(e)) throw e;
+      registerLegacyCommand(mobileDriver, GET_CLIPBOARD, "/session/:sessionId/appium/device/get_clipboard");
       String base64Content = execute(mobileDriver, Map.entry(GET_CLIPBOARD, Map.of("contentType", PLAINTEXT)));
       return new String(Base64.getMimeDecoder().decode(requireNonNullElse(base64Content, "")), UTF_8);
     }
@@ -77,17 +80,24 @@ public class AppiumClipboard implements Clipboard {
     }
     catch (WebDriverException e) {
       if (!isUnknownMethod(e)) throw e;
+      registerLegacyCommand(mobileDriver, SET_CLIPBOARD, "/session/:sessionId/appium/device/set_clipboard");
       String base64Content = Base64.getMimeEncoder().encodeToString(text.getBytes(UTF_8));
       execute(mobileDriver, Map.entry(SET_CLIPBOARD, Map.of("content", base64Content, "contentType", PLAINTEXT)));
     }
   }
 
   /**
+   * Appium java-client 11 removed legacy clipboard endpoints, so we need to register them manually.
+   */
+  private static void registerLegacyCommand(HasClipboard mobileDriver, String commandName, String url) {
+    if (mobileDriver instanceof AppiumDriver appiumDriver) {
+      appiumDriver.addCommand(POST, url, commandName);
+    }
+  }
+
+  /**
    * Old Appium servers (e.g. XCUITest driver 7.x on BrowserStack) don't support "mobile: setClipboard" extension.
-   * Appium java-client is supposed to fall back to the legacy clipboard endpoint in this case,
-   * but since Selenium 4.50 it gets a generic {@link WebDriverException} instead of
-   * {@link org.openqa.selenium.UnsupportedCommandException}, and the fallback doesn't happen.
-   * TODO Remove this workaround after upgrading to java-client which contains a fix in {@code ErrorCodesMobile}.
+   * Appium java-client 11 doesn't fall back to the legacy clipboard endpoint anymore, so we do it ourselves.
    */
   private static boolean isUnknownMethod(WebDriverException e) {
     String message = e.getMessage();
