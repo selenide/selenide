@@ -17,7 +17,6 @@
 * update Appium from 10.1.1 to 11.0.0 (#3467)
 
 See https://github.com/selenide/selenide/milestone/246?closed=1
-* add support for HtmlUnit browser: `Configuration.browser = "htmlunit"` (requires dependency `org.seleniumhq.selenium:htmlunit3-driver`)
 
 =======
 ## 7.18.2 (19.09.2026)
