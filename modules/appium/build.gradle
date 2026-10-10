@@ -28,7 +28,8 @@ tasks.register('android', Test) {
   outputs.upToDateWhen { false }
   // BrowserStack plan allows 5 parallel App Automate sessions, shared account-wide (not per CI run).
   // Leave headroom below that for the concurrent "ios" task and other CI runs that may overlap.
-  maxParallelForks = 3
+  // Locally, all tests share a single emulator, so they can't run in parallel.
+  maxParallelForks = System.getenv('CI') != null ? 3 : 1
 }
 
 tasks.register('ios', Test) {
