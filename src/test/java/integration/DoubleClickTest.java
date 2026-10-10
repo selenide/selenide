@@ -16,6 +16,7 @@ import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
 import static integration.Coordinates.coordinates;
+import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.openqa.selenium.Keys.ALT;
 import static org.openqa.selenium.Keys.LEFT_ALT;
 import static org.openqa.selenium.Keys.LEFT_CONTROL;
@@ -35,6 +36,7 @@ final class DoubleClickTest extends ITest {
 
   @Test
   void userCanDoubleClickOnElement() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     withLongTimeout(() -> {
       $("#double-clickable-button")
         .shouldHave(value("double click me"))
@@ -52,6 +54,7 @@ final class DoubleClickTest extends ITest {
 
   @Test
   void userCanDoubleClickOnElementWithJs() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     withLongTimeout(() -> {
       $("#double-clickable-button")
         .shouldHave(value("double click me"))
@@ -69,6 +72,7 @@ final class DoubleClickTest extends ITest {
 
   @Test
   void userCanDoubleClickOnElementWithDefaultClickOption() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     withLongTimeout(() -> {
       $("#double-clickable-button")
         .shouldHave(value("double click me"))
@@ -86,6 +90,7 @@ final class DoubleClickTest extends ITest {
 
   @Test
   void userCanDoubleClickElement() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#double-clickable-area").doubleClick(usingDefaultMethod());
     $("h2").shouldHave(text("Status: double-clicked the area"));
     $("#coords").shouldHave(coordinates(400, 200));
@@ -100,6 +105,7 @@ final class DoubleClickTest extends ITest {
 
   @Test
   void userCanDoubleClickElement_withOffset() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#double-clickable-area").doubleClick(usingDefaultMethod().offset(66, 33));
     $("h2").shouldHave(text("Status: double-clicked the area"));
     $("#coords").shouldHave(coordinates(466, 233));

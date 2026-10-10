@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ValueInAttributeTest extends ITest {
   @BeforeEach
@@ -24,6 +25,7 @@ final class ValueInAttributeTest extends ITest {
 
   @Test
   void errorMessage() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThatThrownBy(() -> $("#non-clickable-element a").shouldHave(valueInAttribute("href", "duckduckgo.")))
       .isInstanceOf(ElementShould.class)
       .hasMessageStartingWith("Element should have value 'duckduckgo.' in attribute 'href' {#non-clickable-element a}")

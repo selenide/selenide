@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.WebDriverConditions.url;
 import static com.codeborne.selenide.WebDriverConditions.urlStartingWith;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 class OrTest extends ITest {
   @BeforeEach
@@ -31,6 +32,7 @@ class OrTest extends ITest {
 
   @Test
   void errorMessage() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     setTimeout(2);
     assertThatThrownBy(() -> driver().webdriver().shouldHave(url("foo:foo").or(url("bar:bar"))))
       .isInstanceOf(UIAssertionError.class)
@@ -43,6 +45,7 @@ class OrTest extends ITest {
 
   @Test
   void errorMessage_negative() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     setTimeout(3);
     assertThatThrownBy(() -> driver().webdriver().shouldNotHave(url("foo:foo").or(urlStartingWith("about:blank"))))
       .isInstanceOf(UIAssertionError.class)

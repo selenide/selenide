@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class FrameWaitTest extends ITest {
   @BeforeEach
@@ -22,6 +23,7 @@ final class FrameWaitTest extends ITest {
 
   @Test
   void waitsUntilFrameAppears_byTitle() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     switchTo().frame("leftFrame");
     $("h1").shouldHave(text("Page with dynamic select"));
   }

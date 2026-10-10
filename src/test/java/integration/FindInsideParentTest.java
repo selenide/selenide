@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class FindInsideParentTest extends ITest {
   @BeforeEach
@@ -16,6 +17,7 @@ final class FindInsideParentTest extends ITest {
 
   @Test
   void findWaitsForParentAndChildElements() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $(byText("Result 1")).find("#result-1").shouldNotBe(visible);
     $("#results li", 1).find("#result-2").shouldNotBe(visible);
 

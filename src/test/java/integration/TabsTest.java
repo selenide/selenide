@@ -15,10 +15,12 @@ import static com.codeborne.selenide.Selectors.byText;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class TabsTest extends ITest {
   @BeforeEach
   void setUp() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     setTimeout(1000);
     openFile("page_with_tabs.html");
   }

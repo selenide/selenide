@@ -167,6 +167,31 @@ jobs:
             **/build/reports
             **/build/test-results
 
+  run-htmlunit-tests-on-linux:
+    name: linux:htmlunit:core
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up JDK
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          cache: 'gradle'
+          java-version: '17'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6.4.0
+      - name: Run the tests
+        run: ./gradlew :modules:core:htmlunit --no-daemon --console=plain
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: test-report-linux-htmlunit-core
+          retention-days: 14
+          path: |
+            **/build/reports
+            **/build/test-results
+
   run-smoke-tests-on-linux-arm:
     name: linux-arm:${{ matrix.browser }}_smoke
     runs-on: ubuntu-26.04-arm

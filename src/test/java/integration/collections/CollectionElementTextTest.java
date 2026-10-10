@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Condition.innerText;
 import static com.codeborne.selenide.Condition.ownText;
 import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class CollectionElementTextTest extends ITest {
   @BeforeEach
@@ -20,6 +21,7 @@ final class CollectionElementTextTest extends ITest {
 
   @Test
   void singleElementText_stripsInvisibleSpaces() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     SelenideElement lastName = $("#hero #last-name");
     assertThat(lastName.getText()).isEqualTo("Mc Clane");
     assertThat(lastName.toWebElement().getText()).isEqualTo("Mc Clane");

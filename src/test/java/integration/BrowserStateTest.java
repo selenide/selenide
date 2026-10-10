@@ -19,6 +19,7 @@ import static com.codeborne.selenide.WebDriverConditions.urlContaining;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class BrowserStateTest extends ITest {
   @TempDir
@@ -37,6 +38,7 @@ final class BrowserStateTest extends ITest {
 
   @Test
   void savesAndRestoresBrowserStateInAnotherBrowser() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     driver().getCookieStore().add("user", "bob");
     driver().getCookieStore().add(new Cookie.Builder("SID", "secret-session").path("/").isHttpOnly(true).build());
     driver().getLocalStorage().setItem("token", "jwt-123");
@@ -64,6 +66,7 @@ final class BrowserStateTest extends ITest {
 
   @Test
   void restoresBrowserStateFromMemory() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     driver().getLocalStorage().setItem("token", "jwt-456");
     BrowserState state = driver().webdriver().getBrowserState();
     driver().getLocalStorage().clear();
@@ -76,6 +79,7 @@ final class BrowserStateTest extends ITest {
 
   @Test
   void getBrowserState() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     driver().getCookieStore().add("user", "bob");
     driver().getLocalStorage().setItem("token", "jwt-123");
 
@@ -143,6 +147,7 @@ final class BrowserStateTest extends ITest {
 
   @Test
   void orLogin_reusesSavedState_withoutLogin() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     driver().open("/empty.html", authState());
     driver().getLocalStorage().clear();
     driver().open("/start_page.html");
@@ -156,6 +161,7 @@ final class BrowserStateTest extends ITest {
 
   @Test
   void orLogin_logsInAgain_ifSavedStateIsNotValidAnymore() throws Exception {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     driver().open("/empty.html", authState());
     Files.writeString(stateFile, Files.readString(stateFile, UTF_8).replace("valid-token", "expired-token"), UTF_8);
 
@@ -168,6 +174,7 @@ final class BrowserStateTest extends ITest {
 
   @Test
   void orLogin_clearsStaleStateOnItsOwnOrigin_evenIfPageRedirectedToAnotherOrigin() throws Exception {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     driver().open("/empty.html", authState());
     String expiredState = Files.readString(stateFile, UTF_8)
       .replace("valid-token", "expired-token")
@@ -193,6 +200,7 @@ final class BrowserStateTest extends ITest {
 
   @Test
   void orLogin_savesStateOfTargetOrigin_evenIfLoginFinishedOnAnotherOrigin() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     String anotherOrigin = getBaseUrl().replace("127.0.0.1", "localhost");
 
     driver().open("/empty.html", withBrowserState(stateFile)
