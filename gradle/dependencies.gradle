@@ -1,6 +1,6 @@
 ext {
   seleniumVersion = '4.51.0'
-  httpClientVersion = '5.6.4'
+  httpClientVersion = '5.6.5'
   junitVersion = '6.1.3'
   testngVersion = '7.11.0'
   jettyVersion = '11.0.25'
