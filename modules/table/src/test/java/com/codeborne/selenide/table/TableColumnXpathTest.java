@@ -28,6 +28,18 @@ final class TableColumnXpathTest {
   }
 
   @Test
+  void rejectsMultiStepCellsXpath() {
+    assertThatThrownBy(() -> Table.cellStep("./tbody/tr", "./td/span"))
+      .isInstanceOf(UnsupportedOperationException.class)
+      .hasMessageContaining("column()");
+  }
+
+  @Test
+  void allowsSlashesInsideCellPredicate() {
+    assertThat(Table.cellStep("./tbody/tr", "./td[./span or @data-x='a/b']")).isEqualTo("td[./span or @data-x='a/b']");
+  }
+
+  @Test
   void rejectsNonXpathAndUnionCells() {
     assertThatThrownBy(() -> Table.cellStep(null, "./td")).isInstanceOf(UnsupportedOperationException.class);
     assertThatThrownBy(() -> Table.cellStep("./tbody/tr", null)).isInstanceOf(UnsupportedOperationException.class);

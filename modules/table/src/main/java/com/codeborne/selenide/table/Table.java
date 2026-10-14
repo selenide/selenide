@@ -125,10 +125,25 @@ public final class Table {
 
   static String cellStep(@Nullable String rowsXpath, @Nullable String cellsXpath) {
     if (rowsXpath == null || cellsXpath == null || !cellsXpath.startsWith("./") || cellsXpath.startsWith(".//")
-      || cellsXpath.contains("|")) {
+      || cellsXpath.contains("|") || isMultiStep(cellsXpath.substring(2))) {
       throw new UnsupportedOperationException(UNSUPPORTED_COLUMN);
     }
     return cellsXpath.substring(2);
+  }
+
+  private static boolean isMultiStep(String step) {
+    int depth = 0;
+    char quote = 0;
+    for (char c : step.toCharArray()) {
+      if (quote != 0) {
+        if (c == quote) quote = 0;
+      }
+      else if (c == '\'' || c == '"') quote = c;
+      else if (c == '[' || c == '(') depth++;
+      else if (c == ']' || c == ')') depth--;
+      else if (c == '/' && depth == 0) return true;
+    }
+    return false;
   }
 
   static String columnXpath(String rowsXpath, String cellStep, int index) {
