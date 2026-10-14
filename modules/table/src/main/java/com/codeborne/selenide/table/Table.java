@@ -26,7 +26,6 @@ import static org.openqa.selenium.By.xpath;
  * customers.row("Company", "Ernst Handel").cell("Country").shouldHave(exactText("Austria"));
  * }</pre>
  *
- * @since 7.19.0
  */
 public final class Table {
   private static final String UNSUPPORTED_COLUMN =
@@ -43,7 +42,6 @@ public final class Table {
   /**
    * @param root the table element
    * @param layout locators of rows, cells and headers
-   * @since 7.19.0
    */
   public static Table of(SelenideElement root, TableLayout layout) {
     return new Table(root, layout);
@@ -51,7 +49,6 @@ public final class Table {
 
   /**
    * @return the table element
-   * @since 7.19.0
    */
   public SelenideElement root() {
     return root;
@@ -59,7 +56,6 @@ public final class Table {
 
   /**
    * @return header cells
-   * @since 7.19.0
    */
   public ElementsCollection headers() {
     return root.$$(layout.headers());
@@ -67,7 +63,6 @@ public final class Table {
 
   /**
    * @return data rows
-   * @since 7.19.0
    */
   public ElementsCollection rows() {
     return root.$$(layout.rows());
@@ -76,7 +71,6 @@ public final class Table {
   /**
    * @param index 0-based row index
    * @return the row at given index
-   * @since 7.19.0
    */
   public TableRow row(int index) {
     return new TableRow(rows().get(index), this);
@@ -88,7 +82,6 @@ public final class Table {
    * @param column displayed header text
    * @param value expected cell text
    * @return the first matching row
-   * @since 7.19.0
    */
   public TableRow row(String column, String value) {
     return new TableRow(rows().findBy(new ColumnValueCondition(this, column, value)), this);
@@ -100,7 +93,6 @@ public final class Table {
    *
    * @param row the row element
    * @return the wrapped row
-   * @since 7.19.0
    */
   public TableRow row(SelenideElement row) {
     return new TableRow(requireNonNull(row, "row"), this);
@@ -110,7 +102,6 @@ public final class Table {
    * @param column displayed header text
    * @param value expected cell text
    * @return all rows whose cell in the given column has exactly the given (whitespace-normalized) text
-   * @since 7.19.0
    */
   public ElementsCollection rows(String column, String value) {
     return rows().filterBy(new ColumnValueCondition(this, column, value));
@@ -125,7 +116,6 @@ public final class Table {
    *
    * @param header displayed header text
    * @return cells of the given column
-   * @since 7.19.0
    */
   public ElementsCollection column(String header) {
     String rowsXpath = TableLayout.xpath(layout.rows()).orElse(null);

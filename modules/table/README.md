@@ -15,7 +15,7 @@ The screenshots below are taken by real Selenide runs against the test fixtures
 
 ## Installation
 
-The table helper is an optional module (since 7.19.0). Add a dependency next to Selenide, using the same `<version>` as Selenide:
+The table helper is an optional module. Add a dependency next to Selenide, using the same `<version>` as Selenide:
 
 **Gradle**
 ```groovy

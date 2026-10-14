@@ -12,13 +12,11 @@ import static java.util.Objects.requireNonNull;
  * @param rows locator of data rows, relative to the table root
  * @param cells locator of cells, relative to a row
  * @param headers locator of header cells, relative to the table root
- * @since 7.19.0
  */
 public record TableLayout(By rows, By cells, By headers) {
   private static final String XPATH_PREFIX = "By.xpath: ";
 
   /**
-   * @since 7.19.0
    */
   public TableLayout {
     requireNonNull(rows, "rows");
@@ -33,7 +31,6 @@ public record TableLayout(By rows, By cells, By headers) {
    * every leaf column; leaf headers spanning several rows with {@code rowspan} are not supported, describe such a table
    * with {@link #of(By, By, By)}. Rows of nested tables are ignored.
    *
-   * @since 7.19.0
    */
   public static TableLayout html() {
     return new TableLayout(
@@ -47,7 +44,6 @@ public record TableLayout(By rows, By cells, By headers) {
    * Layout of an ARIA grid or table using roles {@code row}, {@code cell}/{@code gridcell}/{@code rowheader}
    * and {@code columnheader}.
    *
-   * @since 7.19.0
    */
   public static TableLayout aria() {
     return new TableLayout(
@@ -62,7 +58,6 @@ public record TableLayout(By rows, By cells, By headers) {
    * @param rows locator of data rows, relative to the table root
    * @param cells locator of cells, relative to a row
    * @param headers locator of header cells, relative to the table root
-   * @since 7.19.0
    */
   public static TableLayout of(By rows, By cells, By headers) {
     return new TableLayout(rows, cells, headers);
