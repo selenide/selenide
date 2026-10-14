@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.image;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ImageTest extends ITest {
   @BeforeEach
@@ -16,6 +17,7 @@ final class ImageTest extends ITest {
 
   @Test
   void userCanCheckIfImageIsLoadedCorrectlyUsingCondition() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#valid-image img").shouldBe(image);
     $("#valid-image").shouldNotBe(image);
     $("h1").shouldNotBe(image);
@@ -41,6 +43,7 @@ final class ImageTest extends ITest {
 
   @Test
   void userCanCheckIfImageIsLoadedCorrectly() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThat($("#valid-image img").isImage())
       .isTrue();
     assertThat($("#invalid-image img").isImage())

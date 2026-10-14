@@ -129,6 +129,27 @@ public class SelenideDriver {
     navigator.open(this, absoluteUrl, domain, login, password);
   }
 
+  /**
+   * Open the given page with given options, e.g. restore browser state (cookies, localStorage, sessionStorage) before.
+   * <p>
+   * If options contain {@link OpenOptions#loggedInIf} and {@link OpenOptions#orLogin},
+   * also checks that user is logged in. If not (or the state file doesn't exist yet), logs in,
+   * saves the fresh state to the file and opens the page again.
+   * </p>
+   *
+   * <pre>{@code
+   * open("/dashboard", withBrowserState("build/auth.json")
+   *   .loggedInIf(() -> $("#logout").is(visible, Duration.ofSeconds(2)))
+   *   .orLogin(() -> login("bob", "secret")));
+   * }</pre>
+   *
+   * @param relativeOrAbsoluteUrl page to open. Must belong to the same origin as the browser state.
+   * @since 7.19.0
+   */
+  public void open(String relativeOrAbsoluteUrl, OpenOptions options) {
+    new OpenWithBrowserState(this).open(relativeOrAbsoluteUrl, options);
+  }
+
   public <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                 Class<PageObjectClass> pageObjectClassClass) {
     open(relativeOrAbsoluteUrl);
@@ -494,8 +515,8 @@ public class SelenideDriver {
     return downloadFileWithHttpRequest.get();
   }
 
-  public Conditional<WebDriver> webdriver() {
-    return new WebDriverConditional(driver);
+  public BrowserSession webdriver() {
+    return new BrowserSession(driver);
   }
 
   public BrowserClock clock() {
@@ -513,7 +534,7 @@ public class SelenideDriver {
       devTools.send(Emulation.setDeviceMetricsOverride(
         width, height, pixelRatio, true, empty(),
         Optional.of(width), Optional.of(height),
-        empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty()
+        empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty(), empty()
       ));
     }
     else if (isBiDiEnabled(webDriver)) { // Firefox

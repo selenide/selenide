@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class DynamicSelectsTest extends ITest {
   @BeforeEach
@@ -18,6 +19,7 @@ final class DynamicSelectsTest extends ITest {
 
   @Test
   void waitsUntilOptionWithTextAppears() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#language").selectOption("l'a \"English\"");
 
     SelenideElement select = $("#language");
@@ -30,6 +32,7 @@ final class DynamicSelectsTest extends ITest {
 
   @Test
   void waitsUntilOptionWithValueAppears() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#language").selectOptionByValue("\"est\"");
 
     SelenideElement select = $("#language");
@@ -42,6 +45,7 @@ final class DynamicSelectsTest extends ITest {
 
   @Test
   void selectByXPath() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).selectOption("l'a \"English\"");
     assertThat($(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).getSelectedOptionText())
       .isEqualTo("l'a \"English\"");

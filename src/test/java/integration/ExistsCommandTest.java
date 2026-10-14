@@ -8,6 +8,7 @@ import org.openqa.selenium.InvalidSelectorException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ExistsCommandTest extends ITest {
   @BeforeEach
@@ -48,6 +49,7 @@ final class ExistsCommandTest extends ITest {
 
   @Test
   void invalidSelectorException_shouldBeThrownAsIs() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThatThrownBy(() -> $(By.xpath("&oops")).exists())
       .isInstanceOf(InvalidSelectorException.class)
       .hasMessageContaining("SyntaxError", "&oops");

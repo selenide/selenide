@@ -52,7 +52,7 @@ public class Navigator {
     return requireNonNull(driver.getProxy().requestFilter(SELENIDE_PROXY_FILTER_PREFIX + "authentication"));
   }
 
-  String absoluteUrl(Config config, String relativeOrAbsoluteUrl) {
+  public String absoluteUrl(Config config, String relativeOrAbsoluteUrl) {
     return isAbsoluteUrl(relativeOrAbsoluteUrl) ? relativeOrAbsoluteUrl : config.baseUrl() + relativeOrAbsoluteUrl;
   }
 

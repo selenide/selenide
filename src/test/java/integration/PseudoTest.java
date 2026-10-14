@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.pseudo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class PseudoTest extends ITest {
 
@@ -27,6 +28,7 @@ final class PseudoTest extends ITest {
 
   @Test
   void getPseudo() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThat($("h1").pseudo(":first-letter", "color")).isEqualTo("rgb(255, 0, 0)");
     assertThat($("abbr").pseudo(":before", "content")).isEqualTo("\"beforeContent\"");
     assertThat($("p").pseudo(":after", "content")).isEqualTo("none");

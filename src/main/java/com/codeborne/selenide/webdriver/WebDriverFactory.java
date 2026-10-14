@@ -23,6 +23,7 @@ import java.util.Map;
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
+import static com.codeborne.selenide.Browsers.HTMLUNIT;
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static com.codeborne.selenide.Browsers.SAFARI;
@@ -42,7 +43,8 @@ public class WebDriverFactory {
       EDGE, EdgeDriverFactory.class,
       INTERNET_EXPLORER, InternetExplorerDriverFactory.class,
       IE, InternetExplorerDriverFactory.class,
-      SAFARI, SafariDriverFactory.class
+      SAFARI, SafariDriverFactory.class,
+      HTMLUNIT, HtmlUnitDriverFactory.class
     );
   }
 

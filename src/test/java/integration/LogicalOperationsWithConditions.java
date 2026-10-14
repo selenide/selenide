@@ -19,6 +19,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class LogicalOperationsWithConditions extends ITest {
   @BeforeEach
@@ -86,6 +87,7 @@ final class LogicalOperationsWithConditions extends ITest {
 
   @Test
   void or_newerSyntax_errorMessage() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThatThrownBy(() -> $("#remove").shouldBe(text("Add me").or(text("Update me")), Duration.ofMillis(3)))
       .isInstanceOf(UIAssertionError.class)
       .hasMessageStartingWith("Element should be text \"Add me\" OR text \"Update me\" {#remove}")

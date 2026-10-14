@@ -25,6 +25,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void sendKeysInsideShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assumeThat(driver().browser().isFirefox())
       .as("Firefox doesn't support sendKeys() inside shadow dom, see https://bugzilla.mozilla.org/show_bug.cgi?id=1503860")
       .isFalse();
@@ -35,6 +36,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void setValueInsideShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     SelenideElement input = $(shadowCss("#inputInShadow", "#shadow-host"));
     withFastSetValue(() -> {
       input.setValue("I can type text inside of shadow dom");
@@ -44,6 +46,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void sendKeysInsideInnerShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assumeThat(driver().browser().isFirefox())
       .as("Firefox doesn't support sendKeys() inside shadow dom, see https://bugzilla.mozilla.org/show_bug.cgi?id=1503860")
       .isFalse();
@@ -55,6 +58,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void setValueInsideInnerShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     SelenideElement input = $(shadowCss("#inputInInnerShadow", "#shadow-host", "#inner-shadow-host"));
     withFastSetValue(() -> {
       input.setValue("I can type text inside of shadow dom");
@@ -64,6 +68,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void clickInsideShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     SelenideElement button = $(shadowCss("#buttonInShadow", "#shadow-host"));
     button.shouldHave(exactText("Button 1"));
     button.click();
@@ -72,6 +77,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void clickInsideInnerShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     SelenideElement button = $(shadowCss("#buttonInInnerShadow", "#shadow-host", "#inner-shadow-host"));
     button.shouldHave(exactText("Button 2"));
     button.click();
@@ -80,6 +86,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void clickInsideShadowHostInsideOfOtherShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#shadow-host")
       .find(shadowCss("p", "#inner-shadow-host"))
       .shouldHave(text("The Shadow-DOM inside another shadow tree"));
@@ -87,6 +94,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void clickInsideShadowHostInsideOfElement() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("body")
       .find(shadowCss("p", "#shadow-host", "#inner-shadow-host"))
       .shouldHave(text("The Shadow-DOM inside another shadow tree"));
@@ -94,18 +102,21 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void getTargetElementViaShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $(shadowCss("p", "#shadow-host"))
       .shouldHave(text("Inside Shadow-DOM"));
   }
 
   @Test
   void getElementInsideInnerShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $(shadowCss("p", "#shadow-host", "#inner-shadow-host"))
       .shouldHave(text("The Shadow-DOM inside another shadow tree"));
   }
 
   @Test
   void getTargetElementViaShadowHostWithShadowHostAsContext() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#shadow-host")
       .find(shadowCss("p"))
       .shouldHave(text("Inside Shadow-DOM"));
@@ -113,6 +124,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void getElementInsideInnerShadowHostWithShadowHostAsContext() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#shadow-host")
       .find(shadowCss("p", "#inner-shadow-host"))
       .shouldHave(text("The Shadow-DOM inside another shadow tree"));
@@ -120,6 +132,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void throwErrorWhenGetNonExistingTargetInsideShadowRoot() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThatThrownBy(() -> $(shadowCss("#nonexistent", "#shadow-host")).text())
       .isInstanceOf(ElementNotFound.class);
   }
@@ -132,6 +145,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void throwErrorWhenShadowHostDoesNotHaveShadowRoot() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThatThrownBy(() -> $(shadowCss("p", "h1")).text())
       .isInstanceOf(ElementNotFound.class)
       .hasCauseInstanceOf(NoSuchElementException.class)
@@ -140,6 +154,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void throwErrorWhenInnerShadowHostAbsent() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThatThrownBy(() -> $(shadowCss("p", "#shadow-host", "#nonexistent")).text())
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining("Element not found {#shadow-host -> #nonexistent -> p}")
@@ -149,24 +164,28 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void getTargetElementsViaShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $$(shadowCss("div.test-class", "#shadow-host"))
       .shouldHave(size(2));
   }
 
   @Test
   void getElementsInsideInnerShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $$(shadowCss("p", "#shadow-host", "#inner-shadow-host"))
       .shouldHave(size(1));
   }
 
   @Test
   void getNonExistingTargetElementsInsideShadowHost() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $$(shadowCss("#nonexistent", "#shadow-host"))
       .shouldHave(size(0));
   }
 
   @Test
   void getAllElementsInAllNestedShadowHosts() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     ElementsCollection elements = $$(shadowCss(".shadow-container-child-child-item",
       "#shadow-container", ".shadow-container-child", ".shadow-container-child-child"));
     elements.shouldHave(size(3));

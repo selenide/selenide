@@ -9,6 +9,7 @@ import java.time.Duration;
 
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class OrTest extends ITest {
   @BeforeEach
@@ -23,6 +24,7 @@ public class OrTest extends ITest {
 
   @Test
   void errorMessage() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThatThrownBy(() -> $$(".element").shouldHave(texts("A", "B", "C").or(texts("1", "2", "3")), Duration.ofMillis(2)))
       .isInstanceOf(UIAssertionError.class)
       .hasMessageContaining("Actual: [One, Two, Three]")

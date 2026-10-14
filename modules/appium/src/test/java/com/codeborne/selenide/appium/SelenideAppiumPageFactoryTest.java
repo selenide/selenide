@@ -12,7 +12,6 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.bidi.BiDiException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.FindBy;
 
@@ -39,7 +38,6 @@ class SelenideAppiumPageFactoryTest {
   void mobile_platform_element_successfully_init_with_created_webdriver() {
     AndroidDriver androidDriver = mock();
     when(androidDriver.getCapabilities()).thenReturn(new DesiredCapabilities());
-    when(androidDriver.getBiDi()).thenThrow(new BiDiException("Not working in Android"));
     WebDriverRunner.setWebDriver(androidDriver);
 
     var page = Selenide.page(PageWithPlatformSelectors.class);
@@ -51,7 +49,6 @@ class SelenideAppiumPageFactoryTest {
   void mobile_element_with_custom_type_successfully_init() {
     AndroidDriver androidDriver = mock();
     when(androidDriver.getCapabilities()).thenReturn(new DesiredCapabilities());
-    when(androidDriver.getBiDi()).thenThrow(new BiDiException("Not working in Android"));
     WebDriverRunner.setWebDriver(androidDriver);
 
     var page = Selenide.page(PageWithCustomElementType.class);

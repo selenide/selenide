@@ -13,6 +13,7 @@ import static com.codeborne.selenide.conditions.datetime.DateTimeConditions.date
 import static java.time.Month.AUGUST;
 import static java.time.Month.DECEMBER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class DateTimeConditionsTest extends ITest {
   private final LocalDateTime birthday = LocalDateTime.of(1983, DECEMBER, 26, 23, 49, 59);
@@ -50,6 +51,7 @@ public class DateTimeConditionsTest extends ITest {
 
   @Test
   void validateChangedDateTime() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     LocalDateTime anotherBirthday = LocalDateTime.of(1981, 6, 8, 19, 43, 56);
     $("#birthdate").setValue(withDateTime(anotherBirthday));
     $("#birthdate").shouldHave(dateTime(anotherBirthday, "yyyy-MM-dd'T'HH:mm:ss"));

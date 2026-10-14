@@ -10,4 +10,5 @@ public interface Browsers {
   String EDGE = "edge";
   String FIREFOX = "firefox";
   String SAFARI = "safari";
+  String HTMLUNIT = "htmlunit";
 }

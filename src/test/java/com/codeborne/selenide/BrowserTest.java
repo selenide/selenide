@@ -10,6 +10,7 @@ import java.util.Map;
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
+import static com.codeborne.selenide.Browsers.HTMLUNIT;
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +33,14 @@ final class BrowserTest {
     assertThat(new Browser(FIREFOX, false).isChromium()).isFalse();
     assertThat(new Browser(IE, false).isChromium()).isFalse();
     assertThat(new Browser(INTERNET_EXPLORER, false).isChromium()).isFalse();
+  }
+
+  @Test
+  void htmlUnitBrowserTest() {
+    assertThat(new Browser(HTMLUNIT, false).isHtmlUnit()).isTrue();
+    assertThat(new Browser("HtmlUnit", false).isHtmlUnit()).isTrue();
+    assertThat(new Browser(HTMLUNIT, false).isChromium()).isFalse();
+    assertThat(new Browser(CHROME, false).isHtmlUnit()).isFalse();
   }
 
   @Test
@@ -66,6 +75,7 @@ final class BrowserTest {
     assertThat(new Browser(CHROME, false).supportsInsecureCerts()).isTrue();
     assertThat(new Browser(FIREFOX, false).supportsInsecureCerts()).isTrue();
     assertThat(new Browser(EDGE, false).supportsInsecureCerts()).isTrue();
+    assertThat(new Browser(HTMLUNIT, false).supportsInsecureCerts()).isTrue();
   }
 
   @Test

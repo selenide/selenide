@@ -1,18 +1,22 @@
 package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
+import io.appium.java_client.clipboard.HasClipboard;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
+import io.appium.java_client.remote.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.UnsupportedCommandException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.remote.Response;
+import org.openqa.selenium.WrapsDriver;
 
 import java.util.Base64;
 import java.util.Map;
 
-import static io.appium.java_client.MobileCommand.GET_CLIPBOARD;
-import static io.appium.java_client.MobileCommand.SET_CLIPBOARD;
+import static io.appium.java_client.http.HttpMethod.POST;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,6 +28,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 final class AppiumClipboardTest {
   private static final String UNKNOWN_METHOD = """
@@ -53,7 +58,33 @@ final class AppiumClipboardTest {
 
     clipboard.setText("Hello");
 
-    verify(webDriver).execute(SET_CLIPBOARD, Map.of("content", base64("Hello"), "contentType", "plaintext"));
+    verify(webDriver).addCommand(POST, "/session/:sessionId/appium/device/set_clipboard", "setClipboard");
+    verify(webDriver).execute("setClipboard", Map.of("content", base64("Hello"), "contentType", "plaintext"));
+  }
+
+  @Test
+  void setText_fallsBackToLegacyCommand_ifAndroidServerDoesNotSupportMobileExtension() {
+    doThrow(new UnsupportedCommandException("Unknown mobile command \"setClipboard\"")).when(webDriver).setClipboardText(any());
+
+    clipboard.setText("Hello");
+
+    verify(webDriver).addCommand(POST, "/session/:sessionId/appium/device/set_clipboard", "setClipboard");
+    verify(webDriver).execute("setClipboard", Map.of("content", base64("Hello"), "contentType", "plaintext"));
+  }
+
+  @Test
+  void setText_fallsBackToLegacyCommand_onDecoratedDriver() {
+    WebDriver decoratedDriver = mock(WebDriver.class,
+      withSettings().extraInterfaces(HasClipboard.class, HasCapabilities.class, WrapsDriver.class));
+    when(driver.getWebDriver()).thenReturn(decoratedDriver);
+    when(((HasCapabilities) decoratedDriver).getCapabilities()).thenReturn(new XCUITestOptions());
+    when(((WrapsDriver) decoratedDriver).getWrappedDriver()).thenReturn(webDriver);
+    doThrow(new WebDriverException(UNKNOWN_METHOD)).when((HasClipboard) decoratedDriver).setClipboardText(any());
+
+    clipboard.setText("Hello");
+
+    verify(webDriver).addCommand(POST, "/session/:sessionId/appium/device/set_clipboard", "setClipboard");
+    verify(webDriver).execute("setClipboard", Map.of("content", base64("Hello"), "contentType", "plaintext"));
   }
 
   @Test
@@ -79,9 +110,10 @@ final class AppiumClipboardTest {
     when(webDriver.getClipboardText()).thenThrow(new WebDriverException(UNKNOWN_METHOD));
     Response response = new Response();
     response.setValue(base64("Привет"));
-    when(webDriver.execute(GET_CLIPBOARD, Map.of("contentType", "plaintext"))).thenReturn(response);
+    when(webDriver.execute("getClipboard", Map.of("contentType", "plaintext"))).thenReturn(response);
 
     assertThat(clipboard.getText()).isEqualTo("Привет");
+    verify(webDriver).addCommand(POST, "/session/:sessionId/appium/device/get_clipboard", "getClipboard");
   }
 
   @Test

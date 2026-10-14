@@ -59,7 +59,7 @@ public class ScreenShotLaboratory {
   private final AttachmentHandler attachmentHandler;
   protected final Clock clock;
   protected final List<Screenshot> allScreenshots = new ArrayList<>();
-  protected AtomicLong screenshotCounter = new AtomicLong();
+  protected static final AtomicLong screenshotCounter = new AtomicLong();
 
   protected final ThreadLocal<String> currentContext = withInitial(() -> "");
   protected final ThreadLocal<@Nullable List<Screenshot>> currentContextScreenshots = new ThreadLocal<>();
@@ -83,7 +83,7 @@ public class ScreenShotLaboratory {
 
   protected String getScreenshotFileName(String className, String methodName) {
     return className.replace('.', separatorChar) + separatorChar +
-      methodName + '.' + clock.timestamp();
+      methodName + '.' + clock.timestamp() + '.' + screenshotCounter.getAndIncrement();
   }
 
   /**

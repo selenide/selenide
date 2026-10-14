@@ -39,6 +39,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class CollectionMethodsTest extends ITest {
   @BeforeEach
@@ -84,6 +85,7 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void canCheckIfCollectionIsEmpty() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $$(By.name("#dynamic-content-container span")).shouldBe(empty);
     $$(By.name("non-existing-element")).shouldBe(empty);
     $$(byText("Loading...")).shouldBe(empty);
@@ -163,6 +165,7 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void errorMessageShouldShowFullAndConditionDescription() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     ElementsCollection filteredRows = $$("#multirowTable tr")
       .filterBy(and("condition name", partialText("Chack"), partialText("Baskerville")));
 

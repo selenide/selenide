@@ -12,12 +12,14 @@ import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.text;
 import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class MultipleSelectTest extends ITest {
   private final SelenideElement select = $("#character");
 
   @BeforeEach
   void openTestPage() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     openFile("page_with_multiple_select.html");
   }
 

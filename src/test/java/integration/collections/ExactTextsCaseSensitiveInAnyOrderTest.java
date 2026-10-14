@@ -15,6 +15,7 @@ import static com.codeborne.selenide.CollectionCondition.exactTextsCaseSensitive
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 class ExactTextsCaseSensitiveInAnyOrderTest extends ITest {
 
@@ -67,6 +68,7 @@ class ExactTextsCaseSensitiveInAnyOrderTest extends ITest {
 
   @Test
   void throwsElementNotFound() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     setTimeout(1);
     assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(exactTextsCaseSensitiveInAnyOrder("content1", "content2")))
       .isInstanceOf(ElementNotFound.class)

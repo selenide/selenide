@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Selectors.byLinkText;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selectors.byPartialLinkText;
 import static com.codeborne.selenide.Selectors.byXpath;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class SelectorsTest extends ITest {
   @BeforeEach
@@ -48,6 +49,7 @@ final class SelectorsTest extends ITest {
 
   @Test
   void byAttributeEscapesQuotes() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $(byAttribute("value", "john mc'lain")).shouldHave(attribute("value", "john mc'lain"));
     $(byAttribute("value", "arnold \"schwarzenegger\"")).shouldHave(attribute("value", "arnold \"schwarzenegger\""));
     $("#denzel-washington").shouldHave(attribute("value", "denzel \"equalizer\" washington"));

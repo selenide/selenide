@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ExecuteMethodTest extends ITest {
 
@@ -27,6 +28,7 @@ final class ExecuteMethodTest extends ITest {
 
   @Test
   void userCanExecuteCustomCommand() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#username").scrollTo()
       .setValue("value")
       .execute(new CustomSetValueCommand("custom value"))

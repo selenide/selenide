@@ -37,6 +37,7 @@ final class PrintPageTest extends ITest {
 
   @Test
   void onPrinter() throws IOException {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assumeThat(driver().browser().isSafari()).isFalse();
 
     PrintsPage driver = (PrintsPage) driver().getWebDriver();

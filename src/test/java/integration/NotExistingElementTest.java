@@ -16,6 +16,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class NotExistingElementTest extends ITest {
   @BeforeEach
@@ -78,6 +79,7 @@ final class NotExistingElementTest extends ITest {
 
   @Test
   void toWebElement_shouldNotWait() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     setTimeout(4000);
     long start = System.nanoTime();
     try {
@@ -94,6 +96,7 @@ final class NotExistingElementTest extends ITest {
 
   @Test
   void getWrappedElement_waits_untilElementAppears() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     setTimeout(1000);
     long start = System.nanoTime();
     try {

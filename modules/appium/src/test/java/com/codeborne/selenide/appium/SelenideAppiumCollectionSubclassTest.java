@@ -11,7 +11,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.bidi.BiDiException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +23,6 @@ class SelenideAppiumCollectionSubclassTest {
   void setUp() {
     AndroidDriver androidDriver = mock();
     when(androidDriver.getCapabilities()).thenReturn(new DesiredCapabilities());
-    when(androidDriver.getBiDi()).thenThrow(new BiDiException("Not working in Android"));
     WebDriverRunner.setWebDriver(androidDriver);
   }
 

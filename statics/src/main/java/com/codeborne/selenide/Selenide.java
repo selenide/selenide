@@ -110,6 +110,23 @@ public class Selenide {
   }
 
   /**
+   * Open the given page with given options, e.g. restore browser state (cookies, localStorage, sessionStorage) before.
+   * Useful to skip login in tests:
+   *
+   * <pre>{@code
+   * open("/dashboard", withBrowserState("build/auth.json")
+   *   .loggedInIf(() -> $("#logout").is(visible, Duration.ofSeconds(2)))
+   *   .orLogin(() -> login("bob", "secret")));
+   * }</pre>
+   *
+   * @see SelenideDriver#open(String, OpenOptions)
+   * @since 7.19.0
+   */
+  public static void open(String relativeOrAbsoluteUrl, OpenOptions options) {
+    getSelenideDriver().open(relativeOrAbsoluteUrl, options);
+  }
+
+  /**
    * Open an empty browser (without opening any pages).
    * E.g. useful for starting mobile applications in Appium.
    */
@@ -125,7 +142,7 @@ public class Selenide {
     getSelenideDriver().open(config);
   }
 
-  public static Conditional<WebDriver> webdriver() {
+  public static BrowserSession webdriver() {
     return getSelenideDriver().webdriver();
   }
 

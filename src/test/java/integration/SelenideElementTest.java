@@ -10,6 +10,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 @Tag("smoke")
 final class SelenideElementTest extends ITest {
@@ -35,6 +36,7 @@ final class SelenideElementTest extends ITest {
 
   @Test
   void selenideElementChainedWithByTextSelector() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     $("#status").$(withText("Smith")).shouldBe(visible);
     $("#status").$(byText("Bob Smith")).shouldBe(visible);
   }

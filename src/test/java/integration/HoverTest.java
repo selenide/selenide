@@ -9,6 +9,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.HoverOptions.withOffset;
 import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 /**
  * Hover with offset - calculates offset from the center of the element.
@@ -21,6 +22,7 @@ final class HoverTest extends ITest {
 
   @BeforeEach
   void openTestPageWithJQuery() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     openFile("hover.html");
   }
 

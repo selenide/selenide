@@ -88,7 +88,8 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   @Override
   protected FieldDecorator defaultFieldDecorator(Driver driver, @Nullable WebElementSource searchContext) {
     SearchContext context = getSearchContext(driver, searchContext);
-    return new AppiumFieldDecorator(context);
+    AppiumFieldDecorator appiumFieldDecorator = new AppiumFieldDecorator(context);
+    return appiumFieldDecorator::decorate;
   }
 
   @Nullable

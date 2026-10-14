@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.attributes;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class AttributesTest extends ITest {
   @BeforeEach
@@ -61,6 +62,7 @@ public class AttributesTest extends ITest {
 
   @Test
   void attributesCheckThrowsElementNotFound() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     setTimeout(1);
     assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(attributes("data-value", "1 uno", "2 duo", "3 trio")))
       .isInstanceOf(ElementNotFound.class)

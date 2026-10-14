@@ -9,10 +9,12 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.WebDriverConditions.numberOfWindows;
 import static java.lang.Thread.sleep;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class AnimationTest extends ITest {
   @BeforeEach
   void openAnimationTestPage() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     openFile("animations.html");
   }
 

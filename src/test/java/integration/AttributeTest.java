@@ -14,6 +14,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byValue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 public final class AttributeTest extends ITest {
   @BeforeEach
@@ -62,6 +63,7 @@ public final class AttributeTest extends ITest {
 
   @Test
   void userCanFindElementByAttribute() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThat($(byAttribute("name", "domain")).getTagName())
       .isEqualTo("select");
     assertThat($(byAttribute("value", "four.ee")).getText())
@@ -78,6 +80,7 @@ public final class AttributeTest extends ITest {
 
   @Test
   void userCanGetAttr() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     SelenideElement element = $(by("readonly", "readonly"));
     assertThat(element.attr("name")).isEqualTo("username");
     assertThat(element.attr("value")).isEqualTo("");
@@ -86,12 +89,14 @@ public final class AttributeTest extends ITest {
 
   @Test
   void userCanGetNameAttribute() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThat($(by("readonly", "readonly")).name()).isEqualTo("username");
     assertThat($("h2").name()).isNull();
   }
 
   @Test
   void userCanGetDataAttributes() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThat($(byValue("one.io")).getAttribute("data-mailServerId"))
       .isEqualTo("111");
     assertThat($(byValue("one.io")).data("mailServerId"))
@@ -107,6 +112,7 @@ public final class AttributeTest extends ITest {
 
   @Test
   void userCanSearchElementByDataAttribute() {
+    assumeThat(browser().isHtmlUnit()).isFalse();
     assertThat($(by("data-mailServerId", "111")).data("mailServerId"))
       .isEqualTo("111");
     assertThat($(by("data-mailServerId", "222A")).data("mailServerId"))
