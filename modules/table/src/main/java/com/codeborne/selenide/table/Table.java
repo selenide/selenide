@@ -139,8 +139,8 @@ public final class Table {
         if (c == quote) quote = 0;
       }
       else if (c == '\'' || c == '"') quote = c;
-      else if (c == '[' || c == '(') depth++;
-      else if (c == ']' || c == ')') depth--;
+      else if ("[(".indexOf(c) >= 0) depth++;
+      else if ("])".indexOf(c) >= 0) depth--;
       else if (c == '/' && depth == 0) return true;
     }
     return false;
