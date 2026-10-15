@@ -49,4 +49,14 @@ public interface Config {
 
   long remoteReadTimeout();
   long remoteConnectionTimeout();
+
+  /**
+   * Timezone for all browsers (all tabs and windows), e.g. "Europe/Tallinn".
+   * {@code null} means the system default timezone.
+   *
+   * @since 7.19.1
+   */
+  default @Nullable String timezone() {
+    return null;
+  }
 }
