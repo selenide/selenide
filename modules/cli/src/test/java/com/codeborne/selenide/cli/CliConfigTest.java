@@ -38,6 +38,11 @@ class CliConfigTest {
   }
 
   @Test
+  void appliesTimezone() {
+    assertThat(CliConfig.toConfig(new String[]{"--timezone=Asia/Tokyo"}).timezone()).isEqualTo("Asia/Tokyo");
+  }
+
+  @Test
   void ignoresPositionalUrlAndUnknownFlags() {
     SelenideConfig config = CliConfig.toConfig(new String[]{"https://example.com", "--browser=edge"});
     assertThat(config.browser()).isEqualTo("edge");

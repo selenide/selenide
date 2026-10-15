@@ -184,6 +184,9 @@ public class SelenideMcpServer {
     else if (arg.startsWith("--browser-position=")) {
       config.browserPosition(arg.substring("--browser-position=".length()));
     }
+    else if (arg.startsWith("--timezone=")) {
+      config.timezone(arg.substring("--timezone=".length()));
+    }
     else if (arg.equals("--headless")) {
       config.headless(true);
     }

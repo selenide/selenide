@@ -18,6 +18,7 @@ selenide open [flags] <url>
 | `--browser-version=<v>` | request a specific browser version |
 | `--browser-binary=<path>` | use a browser binary at a custom path |
 | `--browser-position=<XxY>` | window position |
+| `--timezone=<zone>` | timezone for all tabs and windows, e.g. `Europe/Tallinn` |
 | `--base-url=<url>` | base URL; a relative `open` target resolves against it |
 | `--timeout=<ms>` | element/assertion timeout (default 4000) |
 | `--polling-interval=<ms>` | polling interval for waits |

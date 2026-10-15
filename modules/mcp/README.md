@@ -52,6 +52,7 @@ Add to `.claude/settings.json` (project) or `~/.claude/settings.json` (global):
 | `--browser-size=<WxH>` | Browser window size, e.g. `1920x1080` | `1366x768` |
 | `--browser-binary=<path>` | Path to browser executable | from PATH |
 | `--browser-position=<XxY>` | Browser window position, e.g. `0x0` | none |
+| `--timezone=<zone>` | Timezone for all tabs and windows, e.g. `Europe/Tallinn` | system default |
 | `--headless` | Run browser in headless mode | `false` |
 
 ### Timeouts

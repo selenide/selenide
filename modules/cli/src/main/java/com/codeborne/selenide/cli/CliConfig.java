@@ -42,6 +42,9 @@ final class CliConfig {
     else if (arg.startsWith("--browser-position=")) {
       config.browserPosition(value(arg));
     }
+    else if (arg.startsWith("--timezone=")) {
+      config.timezone(value(arg));
+    }
     else if (arg.equals("--headless")) {
       config.headless(true);
     }
