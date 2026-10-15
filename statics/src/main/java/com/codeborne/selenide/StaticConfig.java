@@ -185,6 +185,12 @@ final class StaticConfig implements Config {
     return Configuration.browserCapabilities;
   }
 
+  @Nullable
+  @Override
+  public String timezone() {
+    return Configuration.timezone;
+  }
+
   @Override
   public String toString() {
     return getClass().getSimpleName();

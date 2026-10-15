@@ -92,6 +92,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.remoteReadTimeout = Duration.ofSeconds(90).toMillis();
     Configuration.screenshots = true;
     Configuration.savePageSource = true;
+    Configuration.timezone = null;
     Configuration.savePageSourceWithResources = false;
   }
 
