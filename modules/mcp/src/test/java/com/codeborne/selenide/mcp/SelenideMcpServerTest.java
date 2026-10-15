@@ -98,6 +98,13 @@ class SelenideMcpServerTest {
   }
 
   @Test
+  void parseConfigTimezone() {
+    SelenideConfig config = SelenideMcpServer.parseConfig(
+      new String[]{"--timezone=Asia/Tokyo"});
+    assertThat(config.timezone()).isEqualTo("Asia/Tokyo");
+  }
+
+  @Test
   void parseConfigRemote() {
     SelenideConfig config = SelenideMcpServer.parseConfig(
       new String[]{"--remote=http://selenium-hub:4444/wd/hub"});
