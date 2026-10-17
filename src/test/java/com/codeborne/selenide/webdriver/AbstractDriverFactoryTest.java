@@ -1,18 +1,38 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.service.DriverService;
 
 import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 final class AbstractDriverFactoryTest {
   private final AbstractDriverFactory factory = spy(AbstractDriverFactory.class);
+
+  @Test
+  void setsTimezoneForWebdriverProcess() {
+    DriverService.Builder<?, ?> builder = mock();
+    factory.setTimezone(new SelenideConfig().timezone("Europe/Tallinn"), builder);
+    verify(builder).withEnvironment(Map.of("TZ", "Europe/Tallinn"));
+  }
+
+  @Test
+  void doesNotSetTimezoneIfNotConfigured() {
+    DriverService.Builder<?, ?> builder = mock();
+    factory.setTimezone(new SelenideConfig().timezone(null), builder);
+    factory.setTimezone(new SelenideConfig().timezone(" "), builder);
+    verifyNoInteractions(builder);
+  }
 
   @Test
   void majorVersion() {

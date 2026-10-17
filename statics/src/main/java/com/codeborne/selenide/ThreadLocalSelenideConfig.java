@@ -55,6 +55,12 @@ final class ThreadLocalSelenideConfig implements Config {
     return config.get().browserPosition();
   }
 
+  @Nullable
+  @Override
+  public String timezone() {
+    return config.get().timezone();
+  }
+
   @Override
   public boolean webdriverLogsEnabled() {
     return config.get().webdriverLogsEnabled();

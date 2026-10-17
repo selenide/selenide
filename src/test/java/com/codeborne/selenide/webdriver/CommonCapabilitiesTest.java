@@ -68,6 +68,27 @@ final class CommonCapabilitiesTest {
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isTrue();
   }
 
+  @Test
+  void setsTimezoneForRemoteBrowser() {
+    SelenideConfig config = new SelenideConfig().remote("http://grid:4444/wd/hub").timezone("Asia/Tokyo");
+    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
+    assertThat(commonCapabilities.getCapability("se:timeZone")).isEqualTo("Asia/Tokyo");
+  }
+
+  @Test
+  void doesNotSetTimezoneForLocalBrowser() {
+    SelenideConfig config = new SelenideConfig().remote(null).timezone("Asia/Tokyo");
+    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
+    assertThat(commonCapabilities.getCapability("se:timeZone")).isNull();
+  }
+
+  @Test
+  void doesNotSetTimezoneIfNotConfigured() {
+    SelenideConfig config = new SelenideConfig().remote("http://grid:4444/wd/hub").timezone(null);
+    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
+    assertThat(commonCapabilities.getCapability("se:timeZone")).isNull();
+  }
+
   private boolean asBool(@Nullable Object raw) {
     if (raw != null) {
       if (raw instanceof String stringValue) {
