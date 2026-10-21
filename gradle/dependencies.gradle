@@ -13,7 +13,7 @@ ext {
   jabelVersion = '1.0.0'
   byteBuddyVersion = '1.14.9'
   archunitVersion = '1.5.1'
-  jacksonVersion = '2.22.3'
+  jacksonVersion = '2.22.4'
   systemStubsVersion = '2.1.8'
   htmlunitDriverVersion = '4.51.0'
 }
