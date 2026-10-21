@@ -40,7 +40,7 @@ reuse it. `open` options (`--browser=`, `--headless`, …) apply at spawn time �
 | `pressEnter\|pressTab\|pressEscape <sel>` | `$(sel).pressEnter()` … | `$(...).pressEnter();` |
 | `should <sel> <cond> [value]` | `$(sel).should(cond)` | `$(...).shouldBe(...);` / `$(...).shouldHave(...);` |
 | `back` / `forward` / `refresh` | navigate | `back();` / `forward();` / `refresh();` |
-| `screenshot [name]` | save PNG (to `reports-folder`) | `screenshot("<name>");` (default `screenshot`) |
+| `screenshot [name]` | save `<name>.png` **and** `<name>.html` (rendered DOM) to `reports-folder` | `screenshot("<name>");` (default `screenshot`) |
 | `frame <sel>` | `switchTo().frame($(sel))` | `switchTo().frame($(...));` |
 | `defaultContent` | `switchTo().defaultContent()` | `switchTo().defaultContent();` |
 
