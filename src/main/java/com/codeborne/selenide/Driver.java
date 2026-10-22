@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.jspecify.annotations.Nullable;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.impl.JavaScript.asJsExecutor;
 import static com.codeborne.selenide.impl.JavaScript.jsExecutor;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Objects.requireNonNull;
 
 public interface Driver {
@@ -39,6 +41,14 @@ public interface Driver {
   List<LogEntry> getBrowserLogs();
 
   void close();
+
+  /**
+   * Screenshot laboratory used for this driver's screenshots and assertion failures.
+   * Uses the default plugin unless a custom laboratory is supplied to {@link SelenideDriver}.
+   */
+  default ScreenShotLaboratory screenshots() {
+    return inject();
+  }
 
   default boolean supportsJavascript() {
     return hasWebDriverStarted() && asJsExecutor(getWebDriver()).isPresent();
