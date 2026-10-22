@@ -1,6 +1,10 @@
 # Changelog
 
 =======
+## 7.19.1 (xx.10.2026)
+* use the `ScreenShotLaboratory` passed to `SelenideDriver` also for assertion failures and element screenshots (except with the now deprecated constructor `SelenideDriver(Config, Driver, ScreenShotLaboratory)`, which still uses it only for explicit screenshots)
+
+=======
 ## 7.19.0 (10.10.2026)
 * #3378 save and restore browser state (#3461)
 * #3370 add built-in clock and timezone emulation (#3431) (#3442)  --  thanks to suhanrain
