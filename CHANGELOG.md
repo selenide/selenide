@@ -1,6 +1,10 @@
 # Changelog
 
 =======
+## 7.19.1 (xx.10.2026)
+* `SelenideLogger.removeListener()` removes the thread's ThreadLocal entry when it removes the thread's last listener
+
+=======
 ## 7.19.0 (10.10.2026)
 * #3378 save and restore browser state (#3461)
 * #3370 add built-in clock and timezone emulation (#3431) (#3442)  --  thanks to suhanrain

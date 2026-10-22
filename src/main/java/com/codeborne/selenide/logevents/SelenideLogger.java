@@ -156,6 +156,10 @@ public class SelenideLogger {
       return null;
     }
     T listener = (T) threadListeners.remove(name);
+    if (threadListeners.isEmpty()) {
+      // don't keep an empty map for this thread, like removeAllListeners()
+      listeners.remove();
+    }
     LOG.debug("Removed listener '{}' for thread '{}' (now it has {} listeners)", name, currentThread().getId(), threadListeners.size());
     return listener;
   }
