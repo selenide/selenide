@@ -109,7 +109,7 @@ class DisposablesRegistryTest {
   @Test
   void disposeAllItems_swallowsExceptions_andDisposesRemaining() {
     CovidTest before = new CovidTest();
-    CovidTest broken = new CovidTest().failOnDispose();
+    CovidTest broken = new NonDisposableCovidTest();
     CovidTest after = new CovidTest();
     registry.register(before.id, before);
     registry.register(broken.id, broken);
@@ -124,24 +124,22 @@ class DisposablesRegistryTest {
   private class CovidTest implements Disposable {
     private final int id;
     private boolean disposed;
-    private boolean failOnDispose;
 
-    CovidTest() {
+    private CovidTest() {
       id = created.incrementAndGet();
-    }
-
-    CovidTest failOnDispose() {
-      failOnDispose = true;
-      return this;
     }
 
     @Override
     public void dispose() {
-      if (failOnDispose) {
-        throw new IllegalStateException("boom");
-      }
       disposed = true;
       DisposablesRegistryTest.this.disposed.incrementAndGet();
+    }
+  }
+
+  private class NonDisposableCovidTest extends CovidTest {
+    @Override
+    public void dispose() {
+      throw new IllegalStateException("boom");
     }
   }
 }
