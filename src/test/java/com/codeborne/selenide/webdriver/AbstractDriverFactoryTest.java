@@ -11,6 +11,7 @@ import java.util.Map;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -21,6 +22,7 @@ final class AbstractDriverFactoryTest {
 
   @Test
   void setsTimezoneForWebdriverProcess() {
+    doReturn(false).when(factory).isWindows();
     DriverService.Builder<?, ?> builder = mock();
     factory.setTimezone(new SelenideConfig().timezone("Europe/Tallinn"), builder);
     verify(builder).withEnvironment(Map.of("TZ", "Europe/Tallinn"));
@@ -31,6 +33,14 @@ final class AbstractDriverFactoryTest {
     DriverService.Builder<?, ?> builder = mock();
     factory.setTimezone(new SelenideConfig().timezone(null), builder);
     factory.setTimezone(new SelenideConfig().timezone(" "), builder);
+    verifyNoInteractions(builder);
+  }
+
+  @Test
+  void doesNotSetTimezoneOnWindows() {
+    doReturn(true).when(factory).isWindows();
+    DriverService.Builder<?, ?> builder = mock();
+    factory.setTimezone(new SelenideConfig().timezone("Europe/Tallinn"), builder);
     verifyNoInteractions(builder);
   }
 
