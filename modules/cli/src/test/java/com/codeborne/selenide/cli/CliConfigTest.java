@@ -44,12 +44,17 @@ class CliConfigTest {
 
   @Test
   void alwaysSavesPageSourceAsPlainHtml() {
-    System.setProperty("selenide.savePageSourceWithResources", "true");
+    String previousValue = System.setProperty("selenide.savePageSourceWithResources", "true");
     try {
       assertThat(CliConfig.toConfig(new String[0]).savePageSourceWithResources()).isFalse();
     }
     finally {
-      System.clearProperty("selenide.savePageSourceWithResources");
+      if (previousValue == null) {
+        System.clearProperty("selenide.savePageSourceWithResources");
+      }
+      else {
+        System.setProperty("selenide.savePageSourceWithResources", previousValue);
+      }
     }
   }
 
