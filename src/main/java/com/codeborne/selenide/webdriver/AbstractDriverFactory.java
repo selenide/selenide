@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.time.DateTimeException;
 import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +37,7 @@ public abstract class AbstractDriverFactory implements DriverFactory {
   private static final Logger log = LoggerFactory.getLogger(AbstractDriverFactory.class);
   private static final Pattern REGEX_SIGNED_INTEGER = Pattern.compile("^-?\\d+$");
   private static final Pattern REGEX_VERSION = Pattern.compile("(\\d+)(\\..*)?");
+  private static final List<String> VENDOR_OPTIONS = List.of("selenoid:options", "moon:options");
   private final FileNamer fileNamer = new FileNamer();
   private final AttachmentHandler attachmentHandler = inject();
 
@@ -100,7 +103,9 @@ public abstract class AbstractDriverFactory implements DriverFactory {
 
     transferCapabilitiesFromSystemProperties(capabilities);
 
-    return merge(capabilities, config.browserCapabilities());
+    T result = merge(capabilities, config.browserCapabilities());
+    setVendorTimezone(config, result);
+    return result;
   }
 
   /**
@@ -110,6 +115,23 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     String timezone = timezone(config);
     if (config.remote() != null && timezone != null) {
       capabilities.setCapability("se:timeZone", timezone);
+    }
+  }
+
+  /**
+   * Selenoid and Moon read timezone from their own options, not from "se:timeZone".
+   * We only extend these options if they are already given, so that other grids don't receive unknown capabilities.
+   */
+  private void setVendorTimezone(Config config, MutableCapabilities capabilities) {
+    String timezone = timezone(config);
+    if (config.remote() == null || timezone == null) return;
+
+    for (String name : VENDOR_OPTIONS) {
+      if (capabilities.getCapability(name) instanceof Map<?, ?> options && !options.containsKey("timeZone")) {
+        Map<Object, Object> optionsWithTimezone = new HashMap<>(options);
+        optionsWithTimezone.put("timeZone", timezone);
+        capabilities.setCapability(name, optionsWithTimezone);
+      }
     }
   }
 
