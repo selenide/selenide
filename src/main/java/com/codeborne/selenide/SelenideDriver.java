@@ -67,6 +67,11 @@ public class SelenideDriver {
     this(config, driver, inject());
   }
 
+  /**
+   * @deprecated no need to pass ScreenShotLaboratory parameter - it will not be used by few other Selenide classes anyway.
+   * If you need to use a customer ScreenShotLaboratory implementation, register it with a ServiceLoader mechanism.
+   */
+  @Deprecated
   public SelenideDriver(Config config, List<WebDriverListener> listeners, ScreenShotLaboratory screenshots) {
     this(config, new LazyDriver(config, null, listeners), screenshots);
   }
@@ -80,16 +85,31 @@ public class SelenideDriver {
     this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder), inject());
   }
 
+  /**
+   * @deprecated no need to pass ScreenShotLaboratory parameter - it will not be used by few other Selenide classes anyway.
+   * If you need to use a customer ScreenShotLaboratory implementation, register it with a ServiceLoader mechanism.
+   */
+  @Deprecated
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
                         ScreenShotLaboratory screenshots) {
     this(config, webDriver, selenideProxy, new SharedDownloadsFolder(config.downloadsFolder()), screenshots);
   }
 
+  /**
+   * @deprecated no need to pass ScreenShotLaboratory parameter - it will not be used by few other Selenide classes anyway.
+   * If you need to use a customer ScreenShotLaboratory implementation, register it with a ServiceLoader mechanism.
+   */
+  @Deprecated
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
                         DownloadsFolder browserDownloadsFolder, ScreenShotLaboratory screenshots) {
     this(config, new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder), screenshots);
   }
 
+  /**
+   * @deprecated no need to pass ScreenShotLaboratory parameter - it will not be used by few other Selenide classes anyway.
+   * If you need to use a customer ScreenShotLaboratory implementation, register it with a ServiceLoader mechanism.
+   */
+  @Deprecated
   public SelenideDriver(Config config, Driver driver, ScreenShotLaboratory screenshots) {
     this.config = config;
     this.driver = driver;
