@@ -38,6 +38,13 @@ public abstract class ITest extends BaseIntegrationTest {
     config().textCheck(PARTIAL_TEXT);
   }
 
+  @BeforeEach
+  final void openBlankPage() {
+    if (driver().hasWebDriverStarted()) {
+      driver().open("about:blank");
+    }
+  }
+
   final void resetShortTimeout() {
     config.get().timeout(100);
   }
