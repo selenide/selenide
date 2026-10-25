@@ -14,6 +14,7 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 
 import java.io.File;
+import java.util.Map;
 
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.IE;
@@ -87,6 +88,40 @@ final class CommonCapabilitiesTest {
     SelenideConfig config = new SelenideConfig().remote("http://grid:4444/wd/hub").timezone(null);
     Capabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
     assertThat(commonCapabilities.getCapability("se:timeZone")).isNull();
+  }
+
+  @Test
+  void addsTimezoneToSelenoidAndMoonOptions() {
+    MutableCapabilities capabilities = new MutableCapabilities();
+    capabilities.setCapability("selenoid:options", Map.of("enableVNC", true));
+    capabilities.setCapability("moon:options", Map.of("enableVideo", true));
+    SelenideConfig config = new SelenideConfig().remote("http://grid:4444/wd/hub").timezone("Asia/Tokyo")
+      .browserCapabilities(capabilities);
+
+    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
+
+    assertThat(commonCapabilities.getCapability("selenoid:options")).isEqualTo(Map.of("enableVNC", true, "timeZone", "Asia/Tokyo"));
+    assertThat(commonCapabilities.getCapability("moon:options")).isEqualTo(Map.of("enableVideo", true, "timeZone", "Asia/Tokyo"));
+  }
+
+  @Test
+  void doesNotOverrideTimezoneInSelenoidOptions() {
+    MutableCapabilities capabilities = new MutableCapabilities();
+    capabilities.setCapability("selenoid:options", Map.of("timeZone", "Europe/Tallinn"));
+    SelenideConfig config = new SelenideConfig().remote("http://grid:4444/wd/hub").timezone("Asia/Tokyo")
+      .browserCapabilities(capabilities);
+
+    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
+
+    assertThat(commonCapabilities.getCapability("selenoid:options")).isEqualTo(Map.of("timeZone", "Europe/Tallinn"));
+  }
+
+  @Test
+  void doesNotAddSelenoidOptionsIfNotGiven() {
+    SelenideConfig config = new SelenideConfig().remote("http://grid:4444/wd/hub").timezone("Asia/Tokyo");
+    Capabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
+    assertThat(commonCapabilities.getCapability("selenoid:options")).isNull();
+    assertThat(commonCapabilities.getCapability("moon:options")).isNull();
   }
 
   private boolean asBool(@Nullable Object raw) {
