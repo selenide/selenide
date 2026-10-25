@@ -378,6 +378,7 @@ public class Configuration {
 
   /**
    * Timezone for all browsers (all tabs and windows), e.g. "Europe/Tallinn" or "America/New_York".
+   * Only tz database IDs are accepted; offset-style IDs like "GMT+02:00" are rejected (use "Etc/GMT-2" instead).
    * <p>
    * For a local Chrome, Edge or Firefox, the browser process is started with environment variable {@code TZ}
    * (note: browsers on Windows ignore it, so on Windows this setting is skipped with a warning).

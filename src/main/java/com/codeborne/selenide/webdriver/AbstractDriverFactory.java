@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.time.DateTimeException;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
@@ -137,17 +136,17 @@ public abstract class AbstractDriverFactory implements DriverFactory {
 
   /**
    * Browsers silently fall back to UTC for an unknown timezone, so we fail fast on a typo.
+   * <p>
+   * Only tz database IDs are accepted (e.g. "Europe/Tallinn", "UTC", "Etc/GMT-2").
+   * Offset-style IDs like "GMT+02:00" are rejected: Java reads it as UTC+2, but {@code TZ} reads it as UTC-2.
    */
   protected @Nullable String timezone(Config config) {
     String timezone = config.timezone();
     if (isBlank(timezone)) return null;
-    try {
-      ZoneId.of(timezone);
-      return timezone;
+    if (!ZoneId.getAvailableZoneIds().contains(timezone)) {
+      throw new IllegalArgumentException("Invalid timezone: \"" + timezone + "\". Use a tz database ID like \"Europe/Tallinn\"");
     }
-    catch (DateTimeException e) {
-      throw new IllegalArgumentException("Invalid timezone: \"" + timezone + "\"", e);
-    }
+    return timezone;
   }
 
   @SuppressWarnings("unchecked")

@@ -2,6 +2,8 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.service.DriverService;
@@ -44,13 +46,23 @@ final class AbstractDriverFactoryTest {
     verifyNoInteractions(builder);
   }
 
-  @Test
-  void failsOnInvalidTimezone() {
+  @ParameterizedTest
+  @ValueSource(strings = {"Europe/Talinn", "GMT+02:00", "+02:00"})
+  void failsOnInvalidTimezone(String timezone) {
     DriverService.Builder<?, ?> builder = mock();
-    assertThatThrownBy(() -> factory.setTimezone(new SelenideConfig().timezone("Europe/Talinn"), builder))
+    assertThatThrownBy(() -> factory.setTimezone(new SelenideConfig().timezone(timezone), builder))
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("Invalid timezone: \"Europe/Talinn\"");
+      .hasMessage("Invalid timezone: \"" + timezone + "\". Use a tz database ID like \"Europe/Tallinn\"");
     verifyNoInteractions(builder);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"Asia/Tokyo", "UTC", "Etc/GMT-2"})
+  void acceptsTzDatabaseIds(String timezone) {
+    doReturn(false).when(factory).isWindows();
+    DriverService.Builder<?, ?> builder = mock();
+    factory.setTimezone(new SelenideConfig().timezone(timezone), builder);
+    verify(builder).withEnvironment(Map.of("TZ", timezone));
   }
 
   @Test
