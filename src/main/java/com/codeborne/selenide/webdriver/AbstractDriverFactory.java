@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.time.DateTimeException;
+import java.time.ZoneId;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,7 +23,6 @@ import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.lang.Integer.parseInt;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.openqa.selenium.UnexpectedAlertBehaviour.IGNORE;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.BROWSER_VERSION;
@@ -58,8 +59,8 @@ public abstract class AbstractDriverFactory implements DriverFactory {
    * so the whole browser (all tabs, windows and workers) uses this timezone.
    */
   protected void setTimezone(Config config, DriverService.Builder<?, ?> dsBuilder) {
-    String timezone = config.timezone();
-    if (isNotBlank(timezone)) {
+    String timezone = timezone(config);
+    if (timezone != null) {
       log.info("Set browser timezone to {}", timezone);
       dsBuilder.withEnvironment(Map.of("TZ", timezone));
     }
@@ -97,9 +98,24 @@ public abstract class AbstractDriverFactory implements DriverFactory {
    * Selenium Grid (in Docker) starts the remote browser with given timezone.
    */
   private void setRemoteTimezone(Config config, MutableCapabilities capabilities) {
-    String timezone = config.timezone();
-    if (config.remote() != null && isNotBlank(timezone)) {
+    String timezone = timezone(config);
+    if (config.remote() != null && timezone != null) {
       capabilities.setCapability("se:timeZone", timezone);
+    }
+  }
+
+  /**
+   * Browsers silently fall back to UTC for an unknown timezone, so we fail fast on a typo.
+   */
+  protected @Nullable String timezone(Config config) {
+    String timezone = config.timezone();
+    if (isBlank(timezone)) return null;
+    try {
+      ZoneId.of(timezone);
+      return timezone;
+    }
+    catch (DateTimeException e) {
+      throw new IllegalArgumentException("Invalid timezone: \"" + timezone + "\"", e);
     }
   }
 

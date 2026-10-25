@@ -35,6 +35,15 @@ final class AbstractDriverFactoryTest {
   }
 
   @Test
+  void failsOnInvalidTimezone() {
+    DriverService.Builder<?, ?> builder = mock();
+    assertThatThrownBy(() -> factory.setTimezone(new SelenideConfig().timezone("Europe/Talinn"), builder))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Invalid timezone: \"Europe/Talinn\"");
+    verifyNoInteractions(builder);
+  }
+
+  @Test
   void majorVersion() {
     assertThat(factory.majorVersion(null)).isEqualTo(0);
     assertThat(factory.majorVersion("")).isEqualTo(0);
