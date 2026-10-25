@@ -1,12 +1,15 @@
 package com.codeborne.selenide.logevents;
 
 import com.codeborne.selenide.UseLocaleExtension;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.ArgumentCaptor;
 
+import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
@@ -69,6 +72,20 @@ final class SelenideLoggerTest {
     verifyEvent(listener3, "div", "click()", PASS);
 
     verifyNoMoreInteractions(listener1, listener2, listener3);
+  }
+
+  @Test
+  void removingTheLastListener_removesTheThreadsListeners() throws ReflectiveOperationException {
+    LogEventListener listener1 = mock();
+    LogEventListener listener2 = mock();
+    SelenideLogger.addListener("simpleReport", listener1);
+    SelenideLogger.addListener("softAsserts", listener2);
+
+    SelenideLogger.removeListener("simpleReport");
+    assertThat(currentThreadListeners()).containsOnlyKeys("softAsserts");
+
+    SelenideLogger.removeListener("softAsserts");
+    assertThat(currentThreadListeners()).isNull();
   }
 
   @Test
@@ -215,5 +232,13 @@ final class SelenideLoggerTest {
     assertThat(value.getElement()).isEqualTo(element);
     assertThat(value.getSubject()).isEqualTo(subject);
     assertThat(value.getStatus()).isEqualTo(status);
+  }
+
+  @Nullable
+  @SuppressWarnings("unchecked")
+  private static Map<String, LogEventListener> currentThreadListeners() throws ReflectiveOperationException {
+    Field field = SelenideLogger.class.getDeclaredField("listeners");
+    field.setAccessible(true);
+    return ((ThreadLocal<Map<String, LogEventListener>>) field.get(null)).get();
   }
 }

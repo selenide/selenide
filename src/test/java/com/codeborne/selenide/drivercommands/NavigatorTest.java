@@ -7,6 +7,7 @@ import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.AuthenticationFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -40,6 +41,11 @@ final class NavigatorTest {
     doReturn(navigation).when(driver).navigate();
     doReturn(true).when(selenideProxy).isStarted();
     doReturn(authenticationFilter).when(selenideProxy).requestFilter("selenide.proxy.filter.authentication");
+  }
+
+  @AfterEach
+  void tearDown() {
+    SelenideLogger.removeAllListeners();
   }
 
   @Test
