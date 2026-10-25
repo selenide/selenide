@@ -43,6 +43,17 @@ class CliConfigTest {
   }
 
   @Test
+  void alwaysSavesPageSourceAsPlainHtml() {
+    System.setProperty("selenide.savePageSourceWithResources", "true");
+    try {
+      assertThat(CliConfig.toConfig(new String[0]).savePageSourceWithResources()).isFalse();
+    }
+    finally {
+      System.clearProperty("selenide.savePageSourceWithResources");
+    }
+  }
+
+  @Test
   void ignoresPositionalUrlAndUnknownFlags() {
     SelenideConfig config = CliConfig.toConfig(new String[]{"https://example.com", "--browser=edge"});
     assertThat(config.browser()).isEqualTo("edge");
