@@ -59,8 +59,26 @@ selenide doubleClick "#cell"                        # contextClick, scrollTo
 selenide pressEnter "#search"                       # pressTab, pressEscape
 selenide back                                       # forward, refresh
 selenide frame "#iframe"                            # defaultContent (return to top document)
-selenide screenshot                                 # screenshot <name>
+selenide screenshot                                 # screenshot <name> -> <name>.png + <name>.html
 ```
+
+### Reading page content
+
+There is no separate "dump" command: every `screenshot <name>` also saves the **rendered DOM**
+(after JavaScript has run) as `<name>.html` next to `<name>.png` in the reports folder (default
+`build/reports/tests`), unless `selenide.savePageSource` is set to `false` (it is on by default).
+To read text, find link targets (`href`) or pick selectors, read the `.html` instead of the image —
+it is exact and much cheaper in tokens. Strip the markup first, e.g.:
+
+```bash
+selenide screenshot page
+python3 -I -c "import re,html,sys;t=open(sys.argv[1]).read();t=re.sub(r'(?s)<(script|style|svg).*?</\1>','',t);t=re.sub(r'<[^>]+>','\n',t);print(re.sub(r'\n\s*\n+','\n',html.unescape(t)))" build/reports/tests/page.html
+grep -o 'href="[^"]*"' build/reports/tests/page.html     # real link targets
+```
+
+Look at the `.png` only when layout or visual state matters. Also prefer the `.html` over `curl`:
+`curl` does not run JavaScript, so for client-rendered pages it may return only an empty app shell,
+while the screenshot `.html` contains the content actually rendered in the browser.
 
 ### Assertions
 
@@ -154,7 +172,8 @@ $(byText("You logged into a secure area!")).shouldBe(visible);
 ## Notes vs. playwright-cli
 
 Same architecture (per-invocation client + persistent daemon, named sessions, `list`/`close-all`).
-Selenide CLI intentionally does **not** (yet) provide: page snapshots with element refs, tabs,
+Selenide CLI intentionally does **not** (yet) provide: page snapshots with element refs (but see
+[Reading page content](#reading-page-content) for the HTML dump), tabs,
 network mocking/inspection, tracing, video, or storage-state commands. Element targeting is by
 selector (CSS / `text=` / `xpath=`), not by snapshot ref.
 

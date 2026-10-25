@@ -16,7 +16,8 @@ final class CliConfig {
   }
 
   static SelenideConfig toConfig(String[] args) {
-    SelenideConfig config = new SelenideConfig();
+    // AI agents read page dumps of `screenshot` command, and plain HTML is much easier to read than MHTML
+    SelenideConfig config = new SelenideConfig().savePageSourceWithResources(false);
     for (String arg : args) {
       applyBrowserArg(config, arg);
       applyConnectionArg(config, arg);
