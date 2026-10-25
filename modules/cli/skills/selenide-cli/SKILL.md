@@ -66,8 +66,9 @@ selenide screenshot                                 # screenshot <name> -> <name
 
 There is no separate "dump" command: every `screenshot <name>` also saves the **rendered DOM**
 (after JavaScript has run) as `<name>.html` next to `<name>.png` in the reports folder (default
-`build/reports/tests`). To read text, find link targets (`href`) or pick selectors, read the `.html`
-instead of the image — it is exact and much cheaper in tokens. Strip the markup first, e.g.:
+`build/reports/tests`), unless `selenide.savePageSource` is set to `false` (it is on by default).
+To read text, find link targets (`href`) or pick selectors, read the `.html` instead of the image —
+it is exact and much cheaper in tokens. Strip the markup first, e.g.:
 
 ```bash
 selenide screenshot page
@@ -76,8 +77,8 @@ grep -o 'href="[^"]*"' build/reports/tests/page.html     # real link targets
 ```
 
 Look at the `.png` only when layout or visual state matters. Also prefer the `.html` over `curl`:
-for single-page applications `curl` returns only an empty shell, while the screenshot `.html`
-contains the content actually rendered in the browser.
+`curl` does not run JavaScript, so for client-rendered pages it may return only an empty app shell,
+while the screenshot `.html` contains the content actually rendered in the browser.
 
 ### Assertions
 
