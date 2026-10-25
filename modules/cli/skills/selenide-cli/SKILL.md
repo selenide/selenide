@@ -80,6 +80,10 @@ Look at the `.png` only when layout or visual state matters. Also prefer the `.h
 `curl` does not run JavaScript, so for client-rendered pages it may return only an empty app shell,
 while the screenshot `.html` contains the content actually rendered in the browser.
 
+Keep `selenide.savePageSourceWithResources` off (the default). When it is enabled, Chromium browsers
+save `<name>.mhtml` **instead of** `<name>.html`: a MIME archive with encoded HTML and embedded CSS
+and images. It is much larger and cannot be read with the snippets above.
+
 ### Assertions
 
 ```bash
