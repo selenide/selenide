@@ -380,7 +380,7 @@ public class Configuration {
    * Timezone for all browsers (all tabs and windows), e.g. "Europe/Tallinn" or "America/New_York".
    * <p>
    * For a local Chrome, Edge or Firefox, the browser process is started with environment variable {@code TZ}
-   * (note: browsers on Windows ignore it).
+   * (note: browsers on Windows ignore it, so on Windows this setting is skipped with a warning).
    * For a remote browser, capability {@code se:timeZone} is set (supported by Selenium Grid in Docker).
    * <p>
    * To change the timezone of the current tab only, use {@link Selenide#clock()}.

@@ -23,6 +23,7 @@ import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.lang.Integer.parseInt;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
 import static org.openqa.selenium.UnexpectedAlertBehaviour.IGNORE;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.BROWSER_VERSION;
@@ -60,10 +61,18 @@ public abstract class AbstractDriverFactory implements DriverFactory {
    */
   protected void setTimezone(Config config, DriverService.Builder<?, ?> dsBuilder) {
     String timezone = timezone(config);
-    if (timezone != null) {
-      log.info("Set browser timezone to {}", timezone);
-      dsBuilder.withEnvironment(Map.of("TZ", timezone));
+    if (timezone == null) return;
+
+    if (isWindows()) {
+      log.warn("Browsers on Windows ignore environment variable TZ, so timezone {} is not applied", timezone);
+      return;
     }
+    log.info("Set browser timezone to {}", timezone);
+    dsBuilder.withEnvironment(Map.of("TZ", timezone));
+  }
+
+  protected boolean isWindows() {
+    return IS_OS_WINDOWS;
   }
 
   protected MutableCapabilities createCommonCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
