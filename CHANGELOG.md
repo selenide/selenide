@@ -1,8 +1,13 @@
 # Changelog
 
 =======
-## 7.19.1 (xx.10.2026)
-* `SelenideLogger.removeListener()` removes the thread's ThreadLocal entry when it removes the thread's last listener
+## 7.19.1 (25.10.2026)
+* #3475 add setting `Configuration.timezone` for all browser tabs and windows (#3476)
+* #3475 add option `--timezone` to Selenide CLI and MCP server (#3476)
+* Selenide CLI skill: document HTML page dumps (#3481)
+* remove thread's ThreadLocal entry when the last listener is removed  --  thanks to Matthias Kurz (#3463)
+
+See https://github.com/selenide/selenide/milestone/247?closed=1
 
 =======
 ## 7.19.0 (10.10.2026)
