@@ -126,6 +126,7 @@ jobs:
               ':modules:appium',
               ':modules:error-message-customizer',
               ':modules:full-screenshot',
+              ':modules:table',
               ':modules:testng'
             ]
         browser: [ 'firefox_headless', 'chrome_headless' ]
