@@ -2,5 +2,5 @@ browsers:
   default:
     selenium:
       chrome:
-        default: "155.0"
+        default: "156.0"
         repository: quay.io/browser/google-chrome-stable
