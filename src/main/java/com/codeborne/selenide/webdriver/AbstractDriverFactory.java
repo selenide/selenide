@@ -8,6 +8,7 @@ import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
+import org.openqa.selenium.remote.service.DriverFinder;
 import org.openqa.selenium.remote.service.DriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,6 +49,33 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     log.info("Write webdriver logs to: {}", logFile);
     attachmentHandler.attach(logFile);
     return logFile;
+  }
+
+  /**
+   * Selenium passes the browser's proxy to Selenium Manager, so Selenium Manager would go through Selenide's MITM proxy
+   * to download drivers/browsers. Selenium Manager doesn't trust the MITM certificate (since 4.52.0 it even breaks its json output).
+   * So we find the driver (and browser) without Selenide proxy, and Selenium will not run Selenium Manager anymore.
+   * <p>
+   * Any other proxy (e.g. a corporate proxy set by user in browser capabilities) is still passed to Selenium Manager.
+   * <p>
+   * See <a href="https://github.com/SeleniumHQ/selenium/issues/18263">Selenium issue 18263</a>
+   */
+  protected void findBinariesWithoutSelenideProxy(@Nullable Proxy selenideProxy, DriverService service,
+                                                  MutableCapabilities options, Consumer<String> setBrowserBinary) {
+    if (selenideProxy == null) return;
+
+    MutableCapabilities optionsWithoutProxy = new MutableCapabilities(options);
+    optionsWithoutProxy.setCapability(PROXY, (Object) null);
+    DriverFinder finder = driverFinder(service, optionsWithoutProxy);
+    service.setExecutable(finder.getDriverPath());
+    if (finder.hasBrowserPath()) {
+      setBrowserBinary.accept(finder.getBrowserPath());
+      options.setCapability(BROWSER_VERSION, (Object) null);
+    }
+  }
+
+  DriverFinder driverFinder(DriverService service, Capabilities options) {
+    return new DriverFinder(service, options);
   }
 
   protected <DS extends DriverService, B extends DriverService.Builder<DS, ?>> DS withLog(Config config, B dsBuilder) {

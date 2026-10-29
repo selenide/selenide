@@ -25,7 +25,9 @@ public class ChromeDriverFactory extends AbstractChromiumDriverFactory {
   public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     ChromeOptions chromeOptions = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     log.debug("Chrome options: {}", chromeOptions);
-    return new ChromeDriver(buildService(config), chromeOptions);
+    ChromeDriverService service = buildService(config);
+    findBinariesWithoutSelenideProxy(proxy, service, chromeOptions, chromeOptions::setBinary);
+    return new ChromeDriver(service, chromeOptions);
   }
 
   protected ChromeDriverService buildService(Config config) {
