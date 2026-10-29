@@ -1,6 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.proxy.SelenideSeleniumProxy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -40,32 +41,43 @@ final class AbstractDriverFactoryTest {
   }
 
   @Test
-  void findsBinariesWithoutSelenideProxy() {
+  void findsBinariesBypassingSelenideProxy() {
     DriverService service = mock();
-    DriverFinder finder = mock();
-    when(finder.getDriverPath()).thenReturn("/path/to/chromedriver");
-    when(finder.hasBrowserPath()).thenReturn(true);
-    when(finder.getBrowserPath()).thenReturn("/path/to/chrome");
-    doReturn(finder).when(factory).driverFinder(any(), any());
-    Proxy selenideProxy = new Proxy().setHttpProxy("127.0.0.1:8888").setSslProxy("127.0.0.1:8888");
+    mockDriverFinder();
+    Proxy selenideProxy = new SelenideSeleniumProxy(proxy("127.0.0.1:8888"), null);
     ChromeOptions options = new ChromeOptions();
     options.setProxy(selenideProxy);
     options.setBrowserVersion("140");
 
     factory.findBinariesWithoutSelenideProxy(selenideProxy, service, options, options::setBinary);
 
-    ArgumentCaptor<Capabilities> capabilities = ArgumentCaptor.forClass(Capabilities.class);
-    verify(factory).driverFinder(same(service), capabilities.capture());
-    assertThat(capabilities.getValue().getCapability(PROXY)).isNull();
-    assertThat(capabilities.getValue().getBrowserVersion()).isEqualTo("140");
+    Capabilities seleniumManagerOptions = capturedDriverFinderOptions(service);
+    assertThat(seleniumManagerOptions.getCapability(PROXY)).isNull();
+    assertThat(seleniumManagerOptions.getBrowserVersion()).isEqualTo("140");
     verify(service).setExecutable("/path/to/chromedriver");
-    assertThat(options.getCapability(PROXY)).isNotNull();
+    assertThat(options.getCapability(PROXY)).isSameAs(selenideProxy);
     assertThat(options.getBrowserVersion()).isEmpty();
     assertThat(options.asMap().get("goog:chromeOptions")).asString().contains("binary=/path/to/chrome");
   }
 
   @Test
-  void doesNotFindBinariesIfSelenideProxyIsNotUsed() {
+  void findsBinariesViaOutsideProxyThatSelenideProxyIsChainedTo() {
+    DriverService service = mock();
+    mockDriverFinder();
+    Proxy corporateProxy = proxy("corporate-proxy:3128");
+    Proxy selenideProxy = new SelenideSeleniumProxy(proxy("127.0.0.1:8888"), corporateProxy);
+    ChromeOptions options = new ChromeOptions();
+    options.setProxy(selenideProxy);
+
+    factory.findBinariesWithoutSelenideProxy(selenideProxy, service, options, options::setBinary);
+
+    assertThat(capturedDriverFinderOptions(service).getCapability(PROXY)).isSameAs(corporateProxy);
+    verify(service).setExecutable("/path/to/chromedriver");
+    assertThat(options.getCapability(PROXY)).isSameAs(selenideProxy);
+  }
+
+  @Test
+  void doesNotFindBinariesIfThereIsNoProxy() {
     DriverService service = mock();
     ChromeOptions options = new ChromeOptions();
 
@@ -76,17 +88,35 @@ final class AbstractDriverFactoryTest {
   }
 
   @Test
-  void keepsUserProxyForSeleniumManager() {
+  void doesNotFindBinariesIfUserProxyIsUsedWithoutSelenideProxy() {
     DriverService service = mock();
+    Proxy corporateProxy = proxy("corporate-proxy:3128");
     ChromeOptions options = new ChromeOptions();
-    Proxy corporateProxy = new Proxy().setHttpProxy("corporate-proxy:3128").setSslProxy("corporate-proxy:3128");
     options.setProxy(corporateProxy);
 
-    factory.findBinariesWithoutSelenideProxy(null, service, options, options::setBinary);
+    factory.findBinariesWithoutSelenideProxy(corporateProxy, service, options, options::setBinary);
 
     verify(factory, never()).driverFinder(any(), any());
     verifyNoInteractions(service);
     assertThat(options.getCapability(PROXY)).isSameAs(corporateProxy);
+  }
+
+  private void mockDriverFinder() {
+    DriverFinder finder = mock();
+    when(finder.getDriverPath()).thenReturn("/path/to/chromedriver");
+    when(finder.hasBrowserPath()).thenReturn(true);
+    when(finder.getBrowserPath()).thenReturn("/path/to/chrome");
+    doReturn(finder).when(factory).driverFinder(any(), any());
+  }
+
+  private Capabilities capturedDriverFinderOptions(DriverService service) {
+    ArgumentCaptor<Capabilities> capabilities = ArgumentCaptor.forClass(Capabilities.class);
+    verify(factory).driverFinder(same(service), capabilities.capture());
+    return capabilities.getValue();
+  }
+
+  private static Proxy proxy(String address) {
+    return new Proxy().setHttpProxy(address).setSslProxy(address);
   }
 
   @Test

@@ -32,11 +32,18 @@ final class ChainedProxyTest extends ProxyIntegrationTest {
   @Nullable
   private BrowserUpProxy chainedProxy;
   private final List<String> visitedUrls = new ArrayList<>();
+  @Nullable
+  private String originalSeInsecure;
 
   @AfterEach
   void tearDown() {
     closeWebDriver();
     WebDriverRunner.setProxy(null);
+    if (originalSeInsecure == null) {
+      System.clearProperty("SE_INSECURE");
+    } else {
+      System.setProperty("SE_INSECURE", originalSeInsecure);
+    }
     if (chainedProxy != null) {
       chainedProxy.stop();
     }
@@ -58,6 +65,9 @@ final class ChainedProxyTest extends ProxyIntegrationTest {
 
     Proxy seleniumProxy = ClientUtil.createSeleniumProxy(chainedProxy);
     WebDriverRunner.setProxy(seleniumProxy);
+
+    // Selenium Manager downloads drivers via the chained proxy, and doesn't trust its MITM certificate
+    originalSeInsecure = System.setProperty("SE_INSECURE", "true");
     visitedUrls.clear();
   }
 

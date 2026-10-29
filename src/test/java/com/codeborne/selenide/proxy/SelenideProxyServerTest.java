@@ -113,6 +113,19 @@ final class SelenideProxyServerTest {
   }
 
   @Test
+  void seleniumProxyRemembersOutsideProxy() {
+    Proxy outsideProxy = new Proxy().setHttpProxy("corporate-proxy:3128");
+    when(config.proxyHost()).thenReturn("my.megahost");
+    when(bmp.getPort()).thenReturn(9999);
+
+    Proxy seleniumProxy = new SelenideProxyServer(config, outsideProxy, bmp).getSeleniumProxy();
+
+    assertThat(seleniumProxy).isInstanceOf(SelenideSeleniumProxy.class);
+    assertThat(seleniumProxy.getHttpProxy()).isEqualTo("my.megahost:9999");
+    assertThat(((SelenideSeleniumProxy) seleniumProxy).outsideProxy()).isSameAs(outsideProxy);
+  }
+
+  @Test
   void extractsProxyAddress() {
     Proxy proxy = new Proxy();
     proxy.setHttpProxy("111.22.3.4444:8080");
