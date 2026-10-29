@@ -221,9 +221,10 @@ public class SelenideProxyServer {
    * Converts this proxy to a "selenium" proxy that can be used by webdriver
    */
   private Proxy createSeleniumProxy() {
-    return isEmpty(config.proxyHost())
+    Proxy seleniumProxy = isEmpty(config.proxyHost())
       ? ClientUtil.createSeleniumProxy(this.proxy, guessHostName())
       : ClientUtil.createSeleniumProxy(this.proxy, config.proxyHost());
+    return new SelenideSeleniumProxy(seleniumProxy, outsideProxy);
   }
 
   private String guessHostName() {
