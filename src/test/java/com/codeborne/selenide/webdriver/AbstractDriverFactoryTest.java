@@ -4,8 +4,12 @@ import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.service.DriverFinder;
 import org.openqa.selenium.remote.service.DriverService;
 
 import java.util.Map;
@@ -13,11 +17,16 @@ import java.util.Map;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static org.openqa.selenium.remote.CapabilityType.PROXY;
 
 final class AbstractDriverFactoryTest {
   private final AbstractDriverFactory factory = spy(AbstractDriverFactory.class);
@@ -28,6 +37,56 @@ final class AbstractDriverFactoryTest {
     DriverService.Builder<?, ?> builder = mock();
     factory.setTimezone(new SelenideConfig().timezone("Europe/Tallinn"), builder);
     verify(builder).withEnvironment(Map.of("TZ", "Europe/Tallinn"));
+  }
+
+  @Test
+  void findsBinariesWithoutSelenideProxy() {
+    DriverService service = mock();
+    DriverFinder finder = mock();
+    when(finder.getDriverPath()).thenReturn("/path/to/chromedriver");
+    when(finder.hasBrowserPath()).thenReturn(true);
+    when(finder.getBrowserPath()).thenReturn("/path/to/chrome");
+    doReturn(finder).when(factory).driverFinder(any(), any());
+    Proxy selenideProxy = new Proxy().setHttpProxy("127.0.0.1:8888").setSslProxy("127.0.0.1:8888");
+    ChromeOptions options = new ChromeOptions();
+    options.setProxy(selenideProxy);
+    options.setBrowserVersion("140");
+
+    factory.findBinariesWithoutSelenideProxy(selenideProxy, service, options, options::setBinary);
+
+    ArgumentCaptor<Capabilities> capabilities = ArgumentCaptor.forClass(Capabilities.class);
+    verify(factory).driverFinder(same(service), capabilities.capture());
+    assertThat(capabilities.getValue().getCapability(PROXY)).isNull();
+    assertThat(capabilities.getValue().getBrowserVersion()).isEqualTo("140");
+    verify(service).setExecutable("/path/to/chromedriver");
+    assertThat(options.getCapability(PROXY)).isNotNull();
+    assertThat(options.getBrowserVersion()).isEmpty();
+    assertThat(options.asMap().get("goog:chromeOptions")).asString().contains("binary=/path/to/chrome");
+  }
+
+  @Test
+  void doesNotFindBinariesIfSelenideProxyIsNotUsed() {
+    DriverService service = mock();
+    ChromeOptions options = new ChromeOptions();
+
+    factory.findBinariesWithoutSelenideProxy(null, service, options, options::setBinary);
+
+    verify(factory, never()).driverFinder(any(), any());
+    verifyNoInteractions(service);
+  }
+
+  @Test
+  void keepsUserProxyForSeleniumManager() {
+    DriverService service = mock();
+    ChromeOptions options = new ChromeOptions();
+    Proxy corporateProxy = new Proxy().setHttpProxy("corporate-proxy:3128").setSslProxy("corporate-proxy:3128");
+    options.setProxy(corporateProxy);
+
+    factory.findBinariesWithoutSelenideProxy(null, service, options, options::setBinary);
+
+    verify(factory, never()).driverFinder(any(), any());
+    verifyNoInteractions(service);
+    assertThat(options.getCapability(PROXY)).isSameAs(corporateProxy);
   }
 
   @Test
