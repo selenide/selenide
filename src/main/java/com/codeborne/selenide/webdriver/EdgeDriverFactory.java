@@ -25,6 +25,7 @@ public class EdgeDriverFactory extends AbstractChromiumDriverFactory {
   public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     EdgeOptions options = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     EdgeDriverService driverService = createDriverService(config);
+    findBinariesWithoutSelenideProxy(proxy, driverService, options, options::setBinary);
     return new EdgeDriver(driverService, options);
   }
 
