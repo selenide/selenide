@@ -25,7 +25,9 @@ public class SelenideSeleniumProxy extends Proxy {
 
   @Override
   public boolean equals(@Nullable Object o) {
-    return super.equals(o) && Objects.equals(outsideProxy, ((SelenideSeleniumProxy) o).outsideProxy);
+    return o instanceof SelenideSeleniumProxy other
+      && super.equals(other)
+      && Objects.equals(outsideProxy, other.outsideProxy);
   }
 
   @Override
