@@ -4,10 +4,12 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.impl.AttachmentHandler;
 import com.codeborne.selenide.impl.FileNamer;
+import com.codeborne.selenide.proxy.SelenideSeleniumProxy;
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
+import org.openqa.selenium.remote.service.DriverFinder;
 import org.openqa.selenium.remote.service.DriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,6 +50,34 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     log.info("Write webdriver logs to: {}", logFile);
     attachmentHandler.attach(logFile);
     return logFile;
+  }
+
+  /**
+   * Selenium passes the browser's proxy to Selenium Manager, so Selenium Manager would go through Selenide's MITM proxy
+   * to download drivers/browsers. Selenium Manager doesn't trust the MITM certificate (since 4.52.0 it even breaks its json output).
+   * So we find the driver (and browser) bypassing Selenide proxy, and Selenium will not run Selenium Manager anymore.
+   * <p>
+   * If Selenide proxy is chained to an outside proxy (e.g. a corporate proxy), Selenium Manager uses the outside proxy.
+   * If Selenide proxy is not used, Selenium passes the user's proxy (if any) to Selenium Manager as usual.
+   * <p>
+   * See <a href="https://github.com/SeleniumHQ/selenium/issues/18263">Selenium issue 18263</a>
+   */
+  protected void findBinariesWithoutSelenideProxy(@Nullable Proxy proxy, DriverService service,
+                                                  MutableCapabilities options, Consumer<String> setBrowserBinary) {
+    if (!(proxy instanceof SelenideSeleniumProxy selenideProxy)) return;
+
+    MutableCapabilities optionsWithOutsideProxy = new MutableCapabilities(options);
+    optionsWithOutsideProxy.setCapability(PROXY, selenideProxy.outsideProxy());
+    DriverFinder finder = driverFinder(service, optionsWithOutsideProxy);
+    service.setExecutable(finder.getDriverPath());
+    if (finder.hasBrowserPath()) {
+      setBrowserBinary.accept(finder.getBrowserPath());
+      options.setCapability(BROWSER_VERSION, (Object) null);
+    }
+  }
+
+  DriverFinder driverFinder(DriverService service, Capabilities options) {
+    return new DriverFinder(service, options);
   }
 
   protected <DS extends DriverService, B extends DriverService.Builder<DS, ?>> DS withLog(Config config, B dsBuilder) {
