@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.List;
 
-import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static com.codeborne.selenide.logevents.SelenideLogger.getReadableSubject;
 import static java.lang.Thread.currentThread;
 
@@ -60,7 +59,7 @@ public class CreateDriverCommand {
       }
 
       File browserDownloadsFolder = config.remote() != null ? null :
-        ensureFolderExists(new File(config.downloadsFolder(), fileNamer.generateFileName()).getAbsoluteFile());
+        new File(config.downloadsFolder(), fileNamer.generateFileName()).getAbsoluteFile();
       BrowserDownloadsFolder downloadsFolder = BrowserDownloadsFolder.from(browserDownloadsFolder);
 
       WebDriver webdriver = factory.createWebDriver(config, browserProxy, browserDownloadsFolder);
