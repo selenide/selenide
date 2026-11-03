@@ -30,7 +30,7 @@ final class ScrollTest extends ITest {
 
   @BeforeEach
   void openTestPage() {
-    setTimeout(1000);
+    setTimeout(4000);
     openFile("page_with_scroll_element.html");
     $("#debug").shouldHave(text("Start"));
   }

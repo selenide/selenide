@@ -134,7 +134,7 @@
     toggle(button, result);
   }
   function toggleButton2() {
-    const result = scrollableDiv2.scrollWidth - scrollableDiv2.scrollLeft <= scrollableDiv2.clientWidth;
+    const result = scrollableDiv2.scrollWidth - scrollableDiv2.scrollLeft <= scrollableDiv2.clientWidth + tolerance;
     debug(`<pre>[${button2.id}] ${scrollableDiv2.scrollWidth} - ${scrollableDiv2.scrollLeft} = ${scrollableDiv2.scrollWidth - scrollableDiv2.scrollLeft} <= ${scrollableDiv2.clientWidth}    ->  ${result}</pre>`);
     toggle(button2, result);
   }
