@@ -1,0 +1,14 @@
+ext {
+  artifactId = 'selenide-table'
+}
+
+dependencies {
+  api project(":statics")
+  testImplementation rootProject.project(':statics').sourceSets.test.output
+  testImplementation rootProject.project(':modules:core').sourceSets.test.output
+  testImplementation("org.junit.jupiter:junit-jupiter")
+  testImplementation("org.junit.platform:junit-platform-suite-engine")
+  testImplementation("org.assertj:assertj-core:$assertjVersion") {transitive = false}
+}
+
+apply from: rootProject.file('gradle/publish-module.gradle')
