@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Late mounting table</title>
+</head>
+<body>
+<div id="container-wrapper"></div>
+
+<script>
+  setTimeout(function () {
+    document.getElementById("container-wrapper").insertAdjacentHTML("beforeend",
+      '<table id="late-customers">' +
+      "<tr><th>Company</th><th>Contact</th><th>Country</th></tr>" +
+      "<tr><td>Ernst Handel</td><td>Roland Mendel</td><td>Austria</td></tr>" +
+      "</table>");
+  }, 1500);
+</script>
+</body>
+</html>
