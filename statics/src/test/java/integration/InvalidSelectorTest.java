@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 
+import static com.codeborne.selenide.Condition.id;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -35,14 +36,8 @@ public class InvalidSelectorTest extends IntegrationTest {
   }
 
   @Test
-  void checkFailsForInvalidSelector_name() {
-    assertThatThrownBy(() -> $(By.name("invalid ' \" name <>")).shouldBe(visible))
-      .isInstanceOf(InvalidSelectorException.class);
-  }
-
-  // @Test // Chrome/Firefox don't complain :)
-  void checkFailsForInvalidSelector_tagName() {
-    assertThatThrownBy(() -> $(By.tagName("invalid ' tag \" name <>")).shouldBe(visible))
-      .isInstanceOf(InvalidSelectorException.class);
+  void findsElementByNameContainingQuotesAndSpecialCharacters() {
+    openFile("page_with_special_names.html");
+    $(By.name("invalid ' \" name <>")).shouldBe(visible).shouldHave(id("special-name"));
   }
 }
