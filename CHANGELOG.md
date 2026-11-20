@@ -1,6 +1,14 @@
 # Changelog
 
 =======
+## 7.19.2 (20.11.2026)
+* bump Selenium from 4.51.0 to 4.52.0 (incl. Chrome 155.0 -> 156.0)           (#3486)
+* bump Selenium from 4.52.0 to 4.53.0 (incl. Chrome 156.0 -> 157.0)           (#3500)
+* deprecate SelenideDriver constructors with ScreenShotLaboratory parameter   (#3482)
+
+See https://github.com/selenide/selenide/milestone/248?closed=1
+
+=======
 ## 7.19.1 (25.10.2026)
 * #3475 add setting `Configuration.timezone` for all browser tabs and windows (#3476)
 * #3475 add option `--timezone` to Selenide CLI and MCP server (#3476)
