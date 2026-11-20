@@ -42,6 +42,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
       var language = document.getElementById('language');
+      if (!language) return; // HtmlUnit may fire this listener again on the next page (e.g. about:blank)
       language.addEventListener('change', function() {
         document.querySelector('h2').textContent = language.value;
         setTimeout(rebuildBooks, commandDuration*1.5); // a little bit longer than average Selenium command like "isDisplayed()".
