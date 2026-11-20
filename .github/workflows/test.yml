@@ -310,6 +310,8 @@ jobs:
   run-selenoid-tests:
     name: selenoid:tests
     runs-on: ubuntu-latest
+    # Selenoid is abandoned (no new cm releases or browser images since 2024); its startup fails since Nov 2026
+    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -380,7 +382,7 @@ jobs:
   auto-merge-dependabot:
     name: 🤖 Auto merge dependabot PR
     timeout-minutes: 10
-    needs: [run-unit-tests-on-linux, run-browser-tests-on-linux, run-smoke-tests-on-linux-arm, verify-browser-test-coverage, run-tests-on-windows, run-android-tests, run-ios-tests, run-selenoid-tests, run-moon-tests]
+    needs: [run-unit-tests-on-linux, run-browser-tests-on-linux, run-smoke-tests-on-linux-arm, verify-browser-test-coverage, run-tests-on-windows, run-android-tests, run-ios-tests, run-moon-tests]
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     permissions:
