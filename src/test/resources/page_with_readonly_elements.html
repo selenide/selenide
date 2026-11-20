@@ -20,6 +20,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
       var link = document.getElementById('enable-inputs');
+      if (!link) return; // HtmlUnit may fire this listener again on the next page (e.g. about:blank)
       link.addEventListener('click', scheduleEnableInputs);
       link.style.display = '';
     });
