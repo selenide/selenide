@@ -30,14 +30,27 @@ then
     exit 1
 fi
 
-# Extract the MCP Registry signing key up front, so that a broken setup fails before anything is published.
-# Requires OpenSSL 3+ in PATH (e.g. `brew install openssl@3`): macOS's built-in LibreSSL can't read Ed25519 keys.
+# Check MCP Registry prerequisites up front, so that a broken setup fails before anything is published.
+if ! command -v mcp-publisher >/dev/null 2>&1
+then
+    echo "mcp-publisher is not installed (e.g. 'brew install mcp-publisher')"
+    exit 1
+fi
+
+mcp_key_pem="$HOME/.ssh/mcp-registry-selenide-org.pem"
+if [ ! -f "$mcp_key_pem" ]
+then
+    echo "MCP Registry key file not found: $mcp_key_pem"
+    exit 1
+fi
+
+# Requires OpenSSL 3+ in PATH (e.g. `brew install openssl`): macOS's built-in LibreSSL can't read Ed25519 keys.
 mcp_key_file=$(mktemp)
 trap 'rm -f "$mcp_key_file"' EXIT
-openssl pkey -in ~/.ssh/mcp-registry-selenide-org.pem -outform DER | tail -c 32 | xxd -p -c 64 | tr -d '\n' > "$mcp_key_file"
+openssl pkey -in "$mcp_key_pem" -outform DER | tail -c 32 | xxd -p -c 64 | tr -d '\n' > "$mcp_key_file"
 if [ "$(wc -c < "$mcp_key_file")" -ne 64 ]
 then
-    echo "Failed to extract MCP Registry key from ~/.ssh/mcp-registry-selenide-org.pem (is OpenSSL 3+ in PATH?)"
+    echo "Failed to extract MCP Registry key from $mcp_key_pem (is OpenSSL 3+ in PATH? found: $(openssl version))"
     exit 1
 fi
 
@@ -79,6 +92,7 @@ node -e 'const fs = require("fs"); const j = JSON.parse(fs.readFileSync("server.
   fs.writeFileSync("server.json", JSON.stringify(j, null, 2) + "\n");' "$version"
 mcp-publisher login dns --domain selenide.org --private-key-file "$mcp_key_file"
 mcp-publisher publish
+mcp-publisher logout
 cd -
 
 cd mcp-server-legacy
