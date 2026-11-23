@@ -59,6 +59,16 @@ npm adduser
 cd mcp-server
 npm version "$version" --no-git-tag-version --allow-same-version
 npm publish --access public -i
+
+# Publish to MCP Registry (https://registry.modelcontextprotocol.io) as "org.selenide/mcp".
+# Prerequisites: `brew install mcp-publisher`, and the Ed25519 private key whose public part is in
+# the "v=MCPv1; ..." TXT record of selenide.org, stored in ~/.ssh/mcp-registry-selenide-org.pem
+node -e 'const fs = require("fs"); const j = JSON.parse(fs.readFileSync("server.json"));
+  j.version = j.packages[0].version = process.argv[1];
+  fs.writeFileSync("server.json", JSON.stringify(j, null, 2) + "\n");' "$version"
+mcp-publisher login dns --domain selenide.org \
+  --private-key "$(openssl pkey -in ~/.ssh/mcp-registry-selenide-org.pem -outform DER | tail -c 32 | xxd -p -c 64)"
+mcp-publisher publish
 cd -
 
 cd mcp-server-legacy

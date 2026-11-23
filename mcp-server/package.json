@@ -1,5 +1,6 @@
 {
   "name": "@selenide/mcp",
+  "mcpName": "org.selenide/mcp",
   "version": "7.19.2",
   "description": "Selenide MCP server — browser automation with smart waits for AI agents",
   "bin": {
