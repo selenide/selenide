@@ -46,8 +46,7 @@ class VideoRecorderJunit2Test {
   @AfterEach
   void afterEach() {
     Path path = VideoRecorderExtension.getRecordedVideo().orElseThrow();
-    assertThat(path.toFile().length()).isGreaterThan(0);
-    assertThat(path.toFile()).hasExtension("mp4");
+    assertThat(path).isNotEmptyFile().hasExtension("mp4");
 
     assertThat(assertionErrors()).hasSize(1);
     assertThat(assertionErrors().get(0)).isInstanceOf(ElementNotFound.class);

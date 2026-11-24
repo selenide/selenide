@@ -62,11 +62,11 @@ public class VideoRecorder2Test {
       .orElseThrow(() -> new AssertionError("video file not found in thread " + currentThread()));
 
     assertThat(result).contains(videoFile);
-    assertThat(videoFile).as(() -> "video file not found in thread " + currentThread()).exists();
-    assertThat(videoFile).hasExtension("mp4");
-    assertThat(videoFile.toFile().length())
-      .as(() -> "Video file: " + videoFile)
-      .isGreaterThan(0);
+    assertThat(videoFile)
+      .as(() -> "Video file in thread " + currentThread() + ": " + videoFile)
+      .exists()
+      .isNotEmptyFile()
+      .hasExtension("mp4");
   }
 
   @AfterEach
