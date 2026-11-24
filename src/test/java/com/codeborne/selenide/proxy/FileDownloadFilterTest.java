@@ -21,7 +21,6 @@ import static com.codeborne.selenide.DownloadOptions.ContentStrategy.FULL_CONTEN
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.apache.commons.io.FileUtils.readFileToByteArray;
-import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -51,7 +50,7 @@ final class FileDownloadFilterTest {
   @Test
   void requestFilter_doesNothingIfNotActivated() {
     filter.deactivate();
-    filter.filterRequest(request, contents, messageInfo);
+    assertThat(filter.filterRequest(request, contents, messageInfo)).isNull();
 
     verifyNoMoreInteractions(request);
     verifyNoMoreInteractions(contents);
@@ -60,10 +59,10 @@ final class FileDownloadFilterTest {
 
   @Test
   void requestFilter_addsRequestHeader_toDisableContentEncoding() {
-    mockHeaders(request).add("Accept-encoding", "br, gzip");;
+    mockHeaders(request).add("Accept-encoding", "br, gzip");
     filter.activate(FULL_CONTENT);
 
-    filter.filterRequest(request, contents, messageInfo);
+    assertThat(filter.filterRequest(request, contents, messageInfo)).isNull();
 
     assertThat(request.headers().get("accept-encoding")).isEqualTo("identity");
   }
@@ -124,7 +123,7 @@ final class FileDownloadFilterTest {
   }
 
   @Test
-  void usesNameFromURL_ifResponseHasNoContentDispositionHeader() throws IOException {
+  void usesNameFromURL_ifResponseHasNoContentDispositionHeader() {
     filter.activate(FULL_CONTENT);
     mockStatusCode(200, "200=success");
     mockHeaders(response);
@@ -139,7 +138,7 @@ final class FileDownloadFilterTest {
     File expectedFile = new File("build/downloads/random-text/cv.pdf");
     assertThat(file).hasName("cv.pdf");
     assertThat(file.getPath()).endsWith(expectedFile.getPath());
-    assertThat(readFileToString(file, UTF_8)).isEqualTo("HELLO");
+    assertThat(file).content().isEqualTo("HELLO");
   }
 
   private HttpHeaders mockHeaders(HttpMessage message) {
