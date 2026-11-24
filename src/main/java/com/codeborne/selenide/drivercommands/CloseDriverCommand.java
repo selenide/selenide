@@ -25,15 +25,16 @@ public class CloseDriverCommand {
       return;
     }
 
-    if (downloadsFolder != null) {
-      downloadsFolder.deleteIfEmpty();
-    }
-
     if (webDriver != null) {
       long start = currentTimeMillis();
       log.debug("Close webdriver: {} -> {}...", threadId, webDriver);
       quitSafely(webDriver);
       log.debug("Closed webdriver {} in {} ms", threadId, currentTimeMillis() - start);
+    }
+
+    if (downloadsFolder != null) {
+      // Only after closing the browser: it deletes unfinished downloads (*.crdownload, *.part) and releases file locks
+      downloadsFolder.deleteIfEmpty();
     }
 
     if (wd.config().proxyEnabled()) {
