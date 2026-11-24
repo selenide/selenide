@@ -51,7 +51,7 @@ class SkillInstallerTest {
     assertThat(exitCode).isEqualTo(0);
     Path skillMd = cwd.resolve(".claude/skills/selenide-cli/SKILL.md");
     assertThat(skillMd).exists();
-    assertThat(skillMd).content().contains("name: selenide-cli");
+    assertThat(skillMd).content(UTF_8).contains("name: selenide-cli");
     assertThat(cwd.resolve(".claude/skills/selenide-cli/references/commands.md")).exists();
     assertThat(outBuffer.toString(UTF_8)).contains("Installed selenide-cli skill to");
   }
