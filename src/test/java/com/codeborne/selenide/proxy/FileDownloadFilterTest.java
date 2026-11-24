@@ -118,7 +118,7 @@ final class FileDownloadFilterTest {
 
     File file = filter.downloads().files().get(0).getFile();
     File expectedFile = new File("build/downloads/random-text/report.pdf");
-    assertThat(file.getName()).isEqualTo("report.pdf");
+    assertThat(file).hasName("report.pdf");
     assertThat(file.getPath()).endsWith(expectedFile.getAbsolutePath());
     assertThat(readFileToByteArray(file)).isEqualTo(new byte[]{1, 2, 3, 4, 5});
   }
@@ -137,7 +137,7 @@ final class FileDownloadFilterTest {
       .isEqualTo("1 responses:\n  #1  /foo/bar/cv.pdf?42 -> 200 \"200=success\" {} app/json  (7 bytes)\n");
     File file = filter.downloads().files().get(0).getFile();
     File expectedFile = new File("build/downloads/random-text/cv.pdf");
-    assertThat(file.getName()).isEqualTo("cv.pdf");
+    assertThat(file).hasName("cv.pdf");
     assertThat(file.getPath()).endsWith(expectedFile.getPath());
     assertThat(readFileToString(file, UTF_8)).isEqualTo("HELLO");
   }

@@ -57,7 +57,7 @@ final class DownloadFileToFolderTest {
     List<File> downloadedFiles = command.download(driver, link, 3000, 300, file().withMethod(FOLDER));
 
     assertThat(downloadedFiles).hasSize(1);
-    assertThat(downloadedFiles.get(0).getName()).isEqualTo(newFileName);
+    assertThat(downloadedFiles.get(0)).hasName(newFileName);
     assertThat(downloadedFiles.get(0).getParentFile()).isNotEqualTo(downloadsFolder.getFolder());
     assertThat(readFileToString(downloadedFiles.get(0), UTF_8)).isEqualTo("Hello Bingo-Bongo");
   }
@@ -75,7 +75,7 @@ final class DownloadFileToFolderTest {
     List<File> downloadedFiles = command.download(driver, link, 3000, 300, file().withMethod(FOLDER).withName("document.pdf"));
 
     assertThat(downloadedFiles).hasSize(1);
-    assertThat(downloadedFiles.get(0).getName()).isEqualTo("document.pdf");
+    assertThat(downloadedFiles.get(0)).hasName("document.pdf");
     assertThat(readFileToString(downloadedFiles.get(0), UTF_8)).isEqualTo("%PDF new file");
   }
 

@@ -32,8 +32,8 @@ final class FileUploadTest extends ITest {
 
     assertThat(f1).exists();
     assertThat(f2).exists();
-    assertThat(f1.getName()).isEqualTo("hello_world.txt");
-    assertThat(f2.getName()).isEqualTo("firebug-1.11.4.xpi");
+    assertThat(f1).hasName("hello_world.txt");
+    assertThat(f2).hasName("firebug-1.11.4.xpi");
 
     assertThat(server.getUploadedFiles()).hasSize(2);
     assertThat(server.getUploadedFiles().get(0).name()).endsWith("hello_world.txt");

@@ -24,7 +24,7 @@ class AppiumScreenSourceExtractorTest {
   @MethodSource("mobileDrivers")
   void shouldUseXMLFileExtension_forMobileDriver(AppiumDriver driver) {
     File sourceFile = extractor.createFile(config, driver, "test123");
-    assertThat(sourceFile.getName()).isEqualTo("test123.xml");
+    assertThat(sourceFile).hasName("test123.xml");
   }
 
   @ParameterizedTest
@@ -41,7 +41,7 @@ class AppiumScreenSourceExtractorTest {
     WebDriver webDriver = new FakeWebDriver(new DesiredCapabilities(), browser);
 
     File sourceFile = extractor.createFile(config, webDriver, "test456");
-    assertThat(sourceFile.getName()).isEqualTo("test456.html");
+    assertThat(sourceFile).hasName("test456.html");
   }
 
   private static Stream<Arguments> mobileDrivers() {

@@ -26,21 +26,21 @@ final class DirectFileDownloadTest extends IntegrationTest {
   @Tag("smoke")
   void downloadFileByDirectLink() throws IOException, URISyntaxException {
     File file = download("/files/hello_world.txt");
-    assertThat(file.getName()).isEqualTo("hello_world.txt");
+    assertThat(file).hasName("hello_world.txt");
     assertThat(readFileToString(file, UTF_8)).isEqualTo("Hello, WinRar!");
   }
 
   @Test
   void downloadFileWithCyrillicName() throws IOException, URISyntaxException {
     File file = download(new URI("/files/файл-с-русским-названием.txt"));
-    assertThat(file.getName()).isEqualTo("файл-с-русским-названием.txt");
+    assertThat(file).hasName("файл-с-русским-названием.txt");
     assertThat(readFileToString(file, UTF_8)).isEqualTo("Превед медвед!");
   }
 
   @Test
   void downloadsFileWithSpaceInName() throws URISyntaxException {
     File file = download("/files/file%200%20%26%20_%20%27%20%60backticks%60.txt");
-    assertThat(file.getName()).isEqualTo("file 0 & _ ' `backticks`.txt");
+    assertThat(file).hasName("file 0 & _ ' `backticks`.txt");
     assertThat(file).content().isEqualToIgnoringNewLines("File with space in name\n");
   }
 
@@ -48,7 +48,7 @@ final class DirectFileDownloadTest extends IntegrationTest {
   void downloadFileWithCustomTimeout() throws IOException, URISyntaxException {
     Configuration.timeout = 10;
     File file = download("/files/hello_world.txt?pause=1000", 1500);
-    assertThat(file.getName()).isEqualTo("hello_world.txt");
+    assertThat(file).hasName("hello_world.txt");
     assertThat(readFileToString(file, UTF_8)).isEqualTo("Hello, WinRar!");
   }
 }
