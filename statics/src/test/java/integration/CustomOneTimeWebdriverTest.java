@@ -63,6 +63,6 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
   private void checkDownload(FileDownloadMode mode, String fileName, String referenceFile) {
     File text = $("#multiple-downloads").download(using(mode).withNameMatching(fileName));
     assertThat(text.getName()).matches(fileName);
-    assertThat(text.length()).isEqualTo(new FileContent(referenceFile).content().length());
+    assertThat(text).content().isEqualTo(new FileContent(referenceFile).content());
   }
 }
