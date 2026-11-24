@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
@@ -173,6 +172,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   void downloadsPdfFile() {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
@@ -181,7 +181,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsPotentiallyHarmfulWindowsFiles() throws IOException {
+  void downloadsPotentiallyHarmfulWindowsFiles() {
     assumeThat(isEdge())
       .as("Edge shows warning like '*.exe file is not downloaded'")
       .isFalse();
@@ -189,17 +189,17 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     File downloadedFile = $(byText("Download EXE file")).download(withNameMatching("\\w+\\.exe"));
 
     assertThat(downloadedFile.getName()).startsWith("tiny.exe");
-    assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
+    assertThat(downloadedFile).hasSize(43);
     assertThat(downloadedFile).content()
       .isEqualToIgnoringNewLines("Here might be potentially harmful exe file");
   }
 
   @Test
-  void downloadsPotentiallyHarmfulMacFiles() throws IOException {
+  void downloadsPotentiallyHarmfulMacFiles() {
     File downloadedFile = $(byText("Download DMG file")).download(withExtension("dmg"));
 
     assertThat(downloadedFile.getName()).isEqualTo("tiny.dmg");
-    assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
+    assertThat(downloadedFile).hasSize(43);
   }
 
   @Test
@@ -236,6 +236,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   void downloadsFileWithCrdownloadExtension() {
     File downloadedFile = $(byText("Download file *crdownload"))
       .download(timeout, withName("hello_world.crdownload"));
@@ -264,6 +265,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   public void download_slowly() {
     File downloadedFile = $(byText("Download me slowly"))
       .download(4000, withName("hello_world.txt"));
@@ -273,6 +275,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   public void download_super_slowly() {
     File downloadedFile = $(byText("Download me super slowly")).download(6000, withNameMatching("hello.*\\.txt"));
 
@@ -281,6 +284,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   void downloadLargeFile() {
     File downloadedFile = $(byText("Download large file")).download(8000, withNameMatching("large.*\\.txt"));
 

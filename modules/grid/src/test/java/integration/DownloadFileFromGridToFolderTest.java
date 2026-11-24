@@ -13,8 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
@@ -130,7 +128,7 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
   }
 
   @Test
-  void downloadsPotentiallyHarmfulWindowsFiles() throws IOException {
+  void downloadsPotentiallyHarmfulWindowsFiles() {
     assumeThat(isEdge())
       .as("Edge shows warning like '*.exe file is not downloaded'")
       .isFalse();
@@ -138,18 +136,18 @@ final class DownloadFileFromGridToFolderTest extends AbstractGridTest {
     File downloadedFile = $(byText("Download EXE file")).download(withNameMatching("\\w+\\.exe"));
 
     assertThat(downloadedFile.getName()).startsWith("tiny.exe");
-    assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
+    assertThat(downloadedFile).hasSize(43);
     assertThat(downloadedFile).content()
       .isEqualToIgnoringNewLines("Here might be potentially harmful exe file");
   }
 
   @Test
-  void downloadsPotentiallyHarmfulMacFiles() throws IOException {
+  void downloadsPotentiallyHarmfulMacFiles() {
     File downloadedFile = $(byText("Download DMG file")).download(
       file().withExtension("dmg").withTimeout(ofSeconds(8)));
 
     assertThat(downloadedFile.getName()).isEqualTo("tiny.dmg");
-    assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
+    assertThat(downloadedFile).hasSize(43);
   }
 
   @Test
