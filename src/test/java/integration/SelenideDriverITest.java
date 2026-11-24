@@ -52,8 +52,8 @@ final class SelenideDriverITest extends ITest {
     File file1 = browser1.$(byText("Download me")).download();
     File file2 = browser2.$(byText("Download file with cyrillic name")).download();
 
-    assertThat(file1.getName()).isEqualTo("hello_world.txt");
-    assertThat(file2.getName()).isEqualTo("файл-с-русским-названием.txt");
+    assertThat(file1).hasName("hello_world.txt");
+    assertThat(file2).hasName("файл-с-русским-названием.txt");
   }
 
   @Test

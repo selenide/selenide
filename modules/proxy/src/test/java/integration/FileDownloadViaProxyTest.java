@@ -70,7 +70,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
   void downloadsFileWithCyrillicName() {
     File downloadedFile = $(byText("Download file with cyrillic name")).download(file().withNameMatching("файл.*\\.txt"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("файл-с-русским-названием.txt");
+    assertThat(downloadedFile).hasName("файл-с-русским-названием.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед медвед!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
@@ -79,7 +79,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
   void downloadsFileWithNorwayCharactersInName() {
     File downloadedFile = $(byText("Download file with \"ø\" in name")).download(file().withNameMatching("ø.*\\.txt"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("ø-report.txt");
+    assertThat(downloadedFile).hasName("ø-report.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, Nørway!");
   }
 
@@ -175,7 +175,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
   void downloadsPotentiallyHarmfulMacFiles() {
     File downloadedFile = $(byText("Download DMG file")).download(withExtension("dmg"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("tiny.dmg");
+    assertThat(downloadedFile).hasName("tiny.dmg");
     assertThat(downloadedFile).binaryContent().hasSize(43);
   }
 

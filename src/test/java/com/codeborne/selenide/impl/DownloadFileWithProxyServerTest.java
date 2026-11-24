@@ -55,7 +55,7 @@ final class DownloadFileWithProxyServerTest {
 
     File file = command.download(driver, link, 3000, file()).get(0);
 
-    assertThat(file.getName()).isEqualTo("report.pdf");
+    assertThat(file).hasName("report.pdf");
     verify(filter).activate(FULL_CONTENT);
     verify(link).click();
     verify(filter).deactivate();
@@ -67,7 +67,7 @@ final class DownloadFileWithProxyServerTest {
 
     File file = command.download(driver, link, 3000, file()).get(0);
 
-    assertThat(file.getName()).isEqualTo("report.pdf");
+    assertThat(file).hasName("report.pdf");
   }
 
   @Test

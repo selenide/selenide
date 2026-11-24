@@ -92,8 +92,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   void downloadsFileWithCyrillicName() {
     File downloadedFile = $(byText("Download file with cyrillic name")).download();
 
-    assertThat(downloadedFile.getName())
-      .isEqualTo("файл-с-русским-названием.txt");
+    assertThat(downloadedFile).hasName("файл-с-русским-названием.txt");
     assertThat(downloadedFile).content()
       .isEqualToIgnoringNewLines("Превед медвед!");
     assertThat(downloadedFile.getAbsolutePath())
@@ -104,7 +103,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   void downloadsFileWithSpaceInName() {
     File downloadedFile = $(byText("Download file with space in name")).download(withExtension("txt"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("file 0 & _ ' `backticks`.txt");
+    assertThat(downloadedFile).hasName("file 0 & _ ' `backticks`.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("File with space in name");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
@@ -114,10 +113,9 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     File downloadedFile = $(byText("Download file with \"forbidden\" characters in name"))
       .download(withNameMatching("имя.*\\.txt"));
 
-    assertThat(downloadedFile.getName())
-      .isEqualTo("имя с _pound,_percent,&ampersand,_left,_right,_backslash," +
-        "_left,_right,_asterisk,_question,_dollar,_exclamation,'quote,_quotes," +
-        "_colon,_at,_plus,`backtick,_pipe,_equal.txt");
+    assertThat(downloadedFile).hasName("имя с _pound,_percent,&ampersand,_left,_right,_backslash," +
+      "_left,_right,_asterisk,_question,_dollar,_exclamation,'quote,_quotes," +
+      "_colon,_at,_plus,`backtick,_pipe,_equal.txt");
     assertThat(downloadedFile).content()
       .isEqualToIgnoringNewLines("Превед \"короед\"! Амперсанды &everywhere&&;$#`");
     assertThat(downloadedFile.getAbsolutePath())

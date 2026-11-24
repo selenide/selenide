@@ -35,6 +35,6 @@ public class RemoteWebDriverTest extends AbstractGridTest {
 
     File downloadedFile = $(byText("Download a PDF")).download(withExtension("pdf"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("minimal.pdf");
+    assertThat(downloadedFile).hasName("minimal.pdf");
   }
 }

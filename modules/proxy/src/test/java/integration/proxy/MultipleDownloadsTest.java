@@ -32,7 +32,7 @@ public class MultipleDownloadsTest extends ProxyIntegrationTest {
   void downloadMultipleFiles(String fileName) {
     File text = $("#multiple-downloads").download(using(PROXY).withTimeout(4000).withName(fileName));
 
-    assertThat(text.getName()).isEqualTo(fileName);
+    assertThat(text).hasName(fileName);
     assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
   }
 
@@ -41,7 +41,7 @@ public class MultipleDownloadsTest extends ProxyIntegrationTest {
   void downloadMultipleFilesWithoutContent(String fileName) {
     File text = $("#multiple-downloads").download(file().withMethod(PROXY).withTimeout(4000).withName(fileName).withoutContent());
 
-    assertThat(text.getName()).isEqualTo(fileName);
+    assertThat(text).hasName(fileName);
     assertThat(text).content().isEqualTo("Mocked file content");
   }
 

@@ -100,7 +100,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   void downloadsFileWithCyrillicName() {
     File downloadedFile = $(byText("Download file with cyrillic name")).download(withExtension("txt"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("файл-с-русским-названием.txt");
+    assertThat(downloadedFile).hasName("файл-с-русским-названием.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед медвед!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
@@ -109,7 +109,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   void downloadsFileWithSpaceInName() {
     File downloadedFile = $(byText("Download file with space in name")).download(withExtension("txt"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("file 0 & _ ' `backticks`.txt");
+    assertThat(downloadedFile).hasName("file 0 & _ ' `backticks`.txt");
     assertThat(downloadedFile).content().isEqualToIgnoringNewLines("File with space in name");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
@@ -205,7 +205,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   void downloadsPotentiallyHarmfulMacFiles() {
     File downloadedFile = $(byText("Download DMG file")).download(withExtension("dmg"));
 
-    assertThat(downloadedFile.getName()).isEqualTo("tiny.dmg");
+    assertThat(downloadedFile).hasName("tiny.dmg");
     assertThat(downloadedFile).hasSize(43);
   }
 
@@ -333,7 +333,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
     File text = $("#multiple-downloads").download(withName(fileName));
 
-    assertThat(text.getName()).isEqualTo(fileName);
+    assertThat(text).hasName(fileName);
     assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
   }
 
