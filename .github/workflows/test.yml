@@ -310,8 +310,9 @@ jobs:
   run-selenoid-tests:
     name: selenoid:tests
     runs-on: ubuntu-latest
-    # Selenoid is abandoned (no new cm releases or browser images since 2024); its startup fails since Nov 2026
-    continue-on-error: true
+    env:
+      # cm and selenoid (abandoned since 2024) fail to detect API version of Docker 29+ and fall back to 1.24, which is not supported anymore
+      DOCKER_API_VERSION: '1.45'
     steps:
       - name: Checkout
         uses: actions/checkout@v7
