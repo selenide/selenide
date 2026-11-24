@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.inNewBrowser;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class CustomOneTimeWebdriverTest extends IntegrationTest {
@@ -51,7 +52,7 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
     });
 
     File downloadedFile = $(byText("Download me")).download(using(FOLDER).withExtension("txt"));
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   private void checkDownload(FileDownloadMode mode) {
@@ -63,6 +64,6 @@ final class CustomOneTimeWebdriverTest extends IntegrationTest {
   private void checkDownload(FileDownloadMode mode, String fileName, String referenceFile) {
     File text = $("#multiple-downloads").download(using(mode).withNameMatching(fileName));
     assertThat(text.getName()).matches(fileName);
-    assertThat(text).content().isEqualTo(new FileContent(referenceFile).content());
+    assertThat(text).content(UTF_8).isEqualTo(new FileContent(referenceFile).content());
   }
 }

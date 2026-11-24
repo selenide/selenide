@@ -20,6 +20,7 @@ import static com.codeborne.selenide.Selenide.using;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
@@ -115,7 +116,7 @@ final class CustomWebdriverTest extends IntegrationTest {
     File downloadedFile = $(byText("Download me")).download(file().withTimeout(ofSeconds(2)).withNameMatching("hello.*\\.txt"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @BeforeAll

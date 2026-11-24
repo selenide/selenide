@@ -24,6 +24,7 @@ import java.util.Base64;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.impl.Plugins.inject;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,7 +103,7 @@ final class ScreenshotsTest extends IntegrationTest {
     assertThat(mhtmlPageSource).exists();
     assertThat(htmlPageSource).doesNotExist();
     assertThatFileExistsAndAttachmentIsLogged(mhtmlPageSourceFileName);
-    assertThat(mhtmlPageSource).content().contains("multipart/related");
+    assertThat(mhtmlPageSource).content(UTF_8).contains("multipart/related");
   }
 
   private void assertThatFileExistsAndAttachmentIsLogged(String url) throws URISyntaxException {

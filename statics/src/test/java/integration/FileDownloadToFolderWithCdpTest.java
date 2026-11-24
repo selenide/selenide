@@ -38,6 +38,7 @@ import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createTempDirectory;
 import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
@@ -78,7 +79,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   void downloadsFiles() {
     File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -92,7 +93,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     log.info("Downloaded file {}", downloadedFile.getAbsolutePath());
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -101,7 +102,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     File downloadedFile = $(byText("Download file with cyrillic name")).download(withNameMatching("файл.*\\.txt"));
 
     assertThat(downloadedFile).hasName("файл-с-русским-названием.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед медвед!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Превед медвед!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -110,7 +111,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     File downloadedFile = $(byText("Download file with space in name")).download(withExtension("txt"));
 
     assertThat(downloadedFile).hasName("file 0 & _ ' `backticks`.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("File with space in name");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("File with space in name");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -135,7 +136,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     File downloadedFile = $(byText("Download me")).download(withName("hello_world.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -143,7 +144,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     File downloadedFile = $(byText("Download me")).download(withNameMatching("hello_.+\\.txt"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -165,7 +166,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
       assertThat(downloadedFile.getAbsolutePath())
         .startsWith(new File(customDownloadsFolder).getAbsolutePath());
-      assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+      assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     } finally {
       closeWebDriver();
     }
@@ -177,7 +178,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).matches("minimal.*.pdf");
-    assertThat(downloadedFile).content().startsWith("%PDF-1.1");
+    assertThat(downloadedFile).content(UTF_8).startsWith("%PDF-1.1");
   }
 
   @Test
@@ -190,7 +191,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
 
     assertThat(downloadedFile.getName()).startsWith("tiny.exe");
     assertThat(downloadedFile).hasSize(43);
-    assertThat(downloadedFile).content()
+    assertThat(downloadedFile).content(UTF_8)
       .isEqualToIgnoringNewLines("Here might be potentially harmful exe file");
   }
 
@@ -213,7 +214,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     );
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -222,7 +223,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     File downloadedFile = $(byText("Download empty file")).download(withNameMatching("empty.*\\.txt"));
 
     assertThat(downloadedFile.getName()).matches("empty-file.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -231,7 +232,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     File downloadedFile = $(byText("Download file *part")).download(withExtension("part"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.part");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, part WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, part WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -242,7 +243,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
       .download(timeout, withName("hello_world.crdownload"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.crdownload");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -271,7 +272,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
       .download(4000, withName("hello_world.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -280,7 +281,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     File downloadedFile = $(byText("Download me super slowly")).download(6000, withNameMatching("hello.*\\.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -300,7 +301,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     File text = $("#multiple-downloads").download(withName(fileName));
 
     assertThat(text).hasName(fileName);
-    assertThat(text).content().isEqualTo(new FileContent(fileName).content());
+    assertThat(text).content(UTF_8).isEqualTo(new FileContent(fileName).content());
   }
 
   @Test
@@ -313,9 +314,9 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     assertThat(files).hasSizeGreaterThanOrEqualTo(3);
     assertThat(files.keySet()).containsExactlyInAnyOrder("empty.html", "hello_world.txt", "download.html");
 
-    assertThat(files.get("empty.html")).content().isEqualToIgnoringNewLines(new FileContent("empty.html").content());
-    assertThat(files.get("hello_world.txt")).content().isEqualToIgnoringNewLines(new FileContent("hello_world.txt").content());
-    assertThat(files.get("download.html")).content().isEqualToIgnoringNewLines(new FileContent("download.html").content());
+    assertThat(files.get("empty.html")).content(UTF_8).isEqualToIgnoringNewLines(new FileContent("empty.html").content());
+    assertThat(files.get("hello_world.txt")).content(UTF_8).isEqualToIgnoringNewLines(new FileContent("hello_world.txt").content());
+    assertThat(files.get("download.html")).content(UTF_8).isEqualToIgnoringNewLines(new FileContent("download.html").content());
   }
 
   @Test
@@ -335,14 +336,14 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
   void downloadWithRedirect() {
     File downloadedFile = $(byText("Download with redirect")).download();
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
   void downloadFileWithoutContent() {
     File downloadedFile = $(byText("Download me")).download(file().withNameMatching("hello.*\\.txt").withoutContent());
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Mocked file content");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Mocked file content");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -354,7 +355,7 @@ final class FileDownloadToFolderWithCdpTest extends IntegrationTest {
     try {
       File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
       assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-      assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+      assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     }
     finally {
       closeWebDriver();

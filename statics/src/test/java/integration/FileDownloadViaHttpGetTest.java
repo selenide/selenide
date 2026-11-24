@@ -27,6 +27,7 @@ import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createTempDirectory;
 import static java.util.regex.Pattern.DOTALL;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,7 +57,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     File downloadedFile = $(byText("Download me")).download();
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
 
     assertThat(collector.events()).hasSize(1);
@@ -85,7 +86,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     File downloadedFile = $(byText("Download me with alert")).download();
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -93,7 +94,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     File downloadedFile = $(byText("Download file with cyrillic name")).download();
 
     assertThat(downloadedFile).hasName("файл-с-русским-названием.txt");
-    assertThat(downloadedFile).content()
+    assertThat(downloadedFile).content(UTF_8)
       .isEqualToIgnoringNewLines("Превед медвед!");
     assertThat(downloadedFile.getAbsolutePath())
       .startsWith(folder.getAbsolutePath());
@@ -104,7 +105,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     File downloadedFile = $(byText("Download file with space in name")).download(withExtension("txt"));
 
     assertThat(downloadedFile).hasName("file 0 & _ ' `backticks`.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("File with space in name");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("File with space in name");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -116,7 +117,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     assertThat(downloadedFile).hasName("имя с _pound,_percent,&ampersand,_left,_right,_backslash," +
       "_left,_right,_asterisk,_question,_dollar,_exclamation,'quote,_quotes," +
       "_colon,_at,_plus,`backtick,_pipe,_equal.txt");
-    assertThat(downloadedFile).content()
+    assertThat(downloadedFile).content(UTF_8)
       .isEqualToIgnoringNewLines("Превед \"короед\"! Амперсанды &everywhere&&;$#`");
     assertThat(downloadedFile.getAbsolutePath())
       .startsWith(folder.getAbsolutePath());
@@ -126,7 +127,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   void downloadMissingFile() {
     assertThatThrownBy(() -> {
       File unexpected = $(byText("Download missing file")).download();
-      assertThat(unexpected).content().isEqualTo("This file should not be downloaded");
+      assertThat(unexpected).content(UTF_8).isEqualTo("This file should not be downloaded");
     })
       .isInstanceOf(FileNotDownloadedError.class)
       .hasMessageMatching("(?s)Failed to download file http.+/files/unexisting_file.png: .+");
@@ -161,7 +162,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     File downloadedFile = $(byText("Download me slowly")).download(file().withTimeout(3000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -180,7 +181,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     openFile("download.html");
     File downloadedFile = $("#link").download();
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -193,7 +194,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     assertThat(downloadedFile.getAbsolutePath())
       .startsWith(new File(downloadsFolder).getAbsolutePath());
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -201,7 +202,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     File downloadedFile = $(byText("Download a PDF")).download(withExtension("pdf"));
 
     assertThat(downloadedFile).hasName("minimal.pdf");
-    assertThat(downloadedFile).content().startsWith("%PDF-1.1");
+    assertThat(downloadedFile).content(UTF_8).startsWith("%PDF-1.1");
   }
 
   @Test
@@ -214,7 +215,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
       .withTimeout(4000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -225,7 +226,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     File downloadedFile = $(byText("Download me")).download(using(HTTPGET).withExtension("txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -234,7 +235,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
       .download(file().withTimeout(4000).withName("hello_world.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -242,7 +243,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
     File downloadedFile = $(byText("Download me super slowly")).download(file().withTimeout(4000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -257,7 +258,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   void canDownloadResourceProtectedByBasicAuth() throws URISyntaxException {
     String urlWithCredentials = getProtectedUrl("scott", scottPassword(), "/basic-auth/hello");
     File f = Selenide.download(urlWithCredentials, 2000);
-    assertThat(f).content()
+    assertThat(f).content(UTF_8)
       .startsWith("<html>")
       .contains("<div id=\"greeting\">hello, scott:tiger://&lt;script&gt;alert(1)&lt;/script&gt;&amp;\\</div>")
       .contains("<a id=\"bye\" href=\"/basic-auth/bye\">bye!</a>");
@@ -267,6 +268,6 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   void downloadWithRedirect() {
     File downloadedFile = $(byText("Download with redirect")).download();
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 }

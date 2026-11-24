@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static it.selenoid.SelenoidSetup.checkDownload;
 import static it.selenoid.SelenoidSetup.resetSelenoidSettings;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.rightPad;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
@@ -65,7 +66,7 @@ public class FileDownloadTest {
     File file = $("#slow-download").download(using(FOLDER).withNameMatching("hello.*\\.txt"));
 
     assertThat(file).hasName("hello.txt");
-    assertThat(file).content().isEqualToIgnoringWhitespace(fileContent);
+    assertThat(file).content(UTF_8).isEqualToIgnoringWhitespace(fileContent);
   }
 
   @Test
