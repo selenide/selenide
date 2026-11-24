@@ -69,7 +69,7 @@ cp -r modules/cli/skills modules/cli/npm/skills
 
 # Publish javadoc on site
 rm -fr "../selenide-web/static/javadoc/current/*"
-cp -r build/javadoc-for-site/. ../selenide-web/static/javadoc/current/
+cp -r modules/aggregate/build/javadoc/. ../selenide-web/static/javadoc/current/
 cd ../selenide-web || exit 2
 git add "static/javadoc/current"
 git commit -m "publish javadoc for Selenide ${version}"
