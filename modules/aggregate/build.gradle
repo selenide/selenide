@@ -42,3 +42,10 @@ tasks.register('javadocForSite', Javadoc) {
   mustRunAfter ':modules:cli:jar', ':modules:cli:shadowJar'
   mustRunAfter ':modules:mcp:jar', ':modules:mcp:shadowJar'
 }
+
+// The test runtime classpath contains the plain jars of modules/cli and modules/mcp, which their shadowJar overwrites
+// (see the comment in javadocForSite above) - order explicitly so `test` doesn't race that overwrite.
+tasks.named('test') {
+  mustRunAfter ':modules:cli:jar', ':modules:cli:shadowJar'
+  mustRunAfter ':modules:mcp:jar', ':modules:mcp:shadowJar'
+}
