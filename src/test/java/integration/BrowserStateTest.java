@@ -175,7 +175,7 @@ final class BrowserStateTest extends ITest {
 
     assertThat(loginCount).hasValue(2);
     assertThat(isLoggedIn().getAsBoolean()).isTrue();
-    assertThat(stateFile).content().contains("valid-token").doesNotContain("expired-token");
+    assertThat(stateFile).content(UTF_8).contains("valid-token").doesNotContain("expired-token");
   }
 
   @Test
