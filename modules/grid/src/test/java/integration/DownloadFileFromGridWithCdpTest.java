@@ -194,7 +194,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     File text = $("#multiple-downloads").download(withName(fileName));
 
     assertThat(text).hasName(fileName);
-    assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
+    assertThat(text).content().isEqualTo(new FileContent(fileName).content());
   }
 
   @Test

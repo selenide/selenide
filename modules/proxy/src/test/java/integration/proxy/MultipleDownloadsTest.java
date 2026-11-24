@@ -33,7 +33,7 @@ public class MultipleDownloadsTest extends ProxyIntegrationTest {
     File text = $("#multiple-downloads").download(using(PROXY).withTimeout(4000).withName(fileName));
 
     assertThat(text).hasName(fileName);
-    assertThat(text.length()).isEqualTo(new FileContent(fileName).content().length());
+    assertThat(text).content().isEqualTo(new FileContent(fileName).content());
   }
 
   @ParameterizedTest
