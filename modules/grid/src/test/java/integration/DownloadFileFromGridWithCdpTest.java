@@ -34,6 +34,7 @@ import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
@@ -59,7 +60,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -72,7 +73,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     log.info("Downloaded file {}", downloadedFile.getAbsolutePath());
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -81,7 +82,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     File downloadedFile = $(byText("Download file with cyrillic name")).download(withNameMatching("файл.*\\.txt"));
 
     assertThat(downloadedFile).hasName("файл-с-русским-названием.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед медвед!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Превед медвед!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -90,7 +91,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     File downloadedFile = $(byText("Download file with space in name")).download(withExtension("txt"));
 
     assertThat(downloadedFile).hasName("file 0 & _ ' `backticks`.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("File with space in name\n");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("File with space in name\n");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -107,7 +108,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     File downloadedFile = $(byText("Download a PDF")).download(file().withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).matches("minimal.*.pdf");
-    assertThat(downloadedFile).content().startsWith("%PDF-1.1");
+    assertThat(downloadedFile).content(UTF_8).startsWith("%PDF-1.1");
   }
 
   @Test
@@ -120,7 +121,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
 
     assertThat(downloadedFile.getName()).startsWith("tiny.exe");
     assertThat(downloadedFile).hasSize(43);
-    assertThat(downloadedFile).content()
+    assertThat(downloadedFile).content(UTF_8)
       .isEqualToIgnoringNewLines("Here might be potentially harmful exe file");
   }
 
@@ -137,7 +138,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     File downloadedFile = $(byText("Download empty file")).download(withNameMatching("empty.*\\.txt"));
 
     assertThat(downloadedFile.getName()).matches("empty-file.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -146,7 +147,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     File downloadedFile = $(byText("Download file *part")).download(file().withExtension("part"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.part");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, part WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, part WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -155,7 +156,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     File downloadedFile = $(byText("Download file *crdownload")).download(file().withName("hello_world.crdownload"));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.crdownload");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, crdownload WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -165,7 +166,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
       .download(file().withName("hello_world.txt").withTimeout(timeout * 2));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -175,7 +176,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     );
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -194,14 +195,14 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     File text = $("#multiple-downloads").download(withName(fileName));
 
     assertThat(text).hasName(fileName);
-    assertThat(text).content().isEqualTo(new FileContent(fileName).content());
+    assertThat(text).content(UTF_8).isEqualTo(new FileContent(fileName).content());
   }
 
   @Test
   void downloadWithRedirect() {
     File downloadedFile = $(byText("Download with redirect")).download();
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -213,7 +214,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
       File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
 
       assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-      assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+      assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
       assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
     }
     finally {
@@ -226,7 +227,7 @@ final class DownloadFileFromGridWithCdpTest extends AbstractGridTest {
     File downloadedFile = $(byText("Download me")).download(file().withExtension("txt").withoutContent());
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Mocked file content");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Mocked file content");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 

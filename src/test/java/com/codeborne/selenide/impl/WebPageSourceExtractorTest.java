@@ -14,6 +14,7 @@ import org.openqa.selenium.chromium.HasCdp;
 import java.io.File;
 import java.util.Map;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -47,7 +48,7 @@ final class WebPageSourceExtractorTest {
     File file = extractor.extract(config, driver, "page-1");
 
     assertThat(file).hasName("page-1.mhtml");
-    assertThat(file).content().contains("multipart/related");
+    assertThat(file).content(UTF_8).contains("multipart/related");
     verify(driver, never()).getPageSource();
   }
 
@@ -60,7 +61,7 @@ final class WebPageSourceExtractorTest {
     File file = extractor.extract(config, driver, "page-1b");
 
     assertThat(file).hasName("page-1b.html");
-    assertThat(file).content().isEqualToIgnoringNewLines("<html>plain</html>");
+    assertThat(file).content(UTF_8).isEqualToIgnoringNewLines("<html>plain</html>");
     verify(driver, never()).executeCdpCommand(eq("Page.captureSnapshot"), any());
   }
 
@@ -75,7 +76,7 @@ final class WebPageSourceExtractorTest {
     File file = extractor.extract(config, driver, "page-2");
 
     assertThat(file).hasName("page-2.html");
-    assertThat(file).content().isEqualToIgnoringNewLines("<html>plain</html>");
+    assertThat(file).content(UTF_8).isEqualToIgnoringNewLines("<html>plain</html>");
   }
 
   @Test
@@ -89,7 +90,7 @@ final class WebPageSourceExtractorTest {
     File file = extractor.extract(config, driver, "page-2b");
 
     assertThat(file).hasName("page-2b.html");
-    assertThat(file).content().isEqualToIgnoringNewLines("<html>plain</html>");
+    assertThat(file).content(UTF_8).isEqualToIgnoringNewLines("<html>plain</html>");
   }
 
   @Test
@@ -100,7 +101,7 @@ final class WebPageSourceExtractorTest {
     File file = extractor.extract(config, driver, "page-3");
 
     assertThat(file).hasName("page-3.html");
-    assertThat(file).content().isEqualToIgnoringNewLines("<html>firefox</html>");
+    assertThat(file).content(UTF_8).isEqualToIgnoringNewLines("<html>firefox</html>");
   }
 
   @Test

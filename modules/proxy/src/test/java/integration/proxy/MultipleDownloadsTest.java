@@ -17,6 +17,7 @@ import static com.codeborne.selenide.DownloadOptions.files;
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.$;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,7 +34,7 @@ public class MultipleDownloadsTest extends ProxyIntegrationTest {
     File text = $("#multiple-downloads").download(using(PROXY).withTimeout(4000).withName(fileName));
 
     assertThat(text).hasName(fileName);
-    assertThat(text).content().isEqualTo(new FileContent(fileName).content());
+    assertThat(text).content(UTF_8).isEqualTo(new FileContent(fileName).content());
   }
 
   @ParameterizedTest
@@ -42,7 +43,7 @@ public class MultipleDownloadsTest extends ProxyIntegrationTest {
     File text = $("#multiple-downloads").download(file().withMethod(PROXY).withTimeout(4000).withName(fileName).withoutContent());
 
     assertThat(text).hasName(fileName);
-    assertThat(text).content().isEqualTo("Mocked file content");
+    assertThat(text).content(UTF_8).isEqualTo("Mocked file content");
   }
 
   @Test
@@ -55,7 +56,7 @@ public class MultipleDownloadsTest extends ProxyIntegrationTest {
     assertThat(files).hasSizeGreaterThanOrEqualTo(2);
     assertThat(files.keySet()).containsExactlyInAnyOrder("empty.html", "download.html");
 
-    assertThat(files.get("empty.html")).content().isEqualToIgnoringNewLines(new FileContent("empty.html").content());
-    assertThat(files.get("download.html")).content().isEqualToIgnoringNewLines(new FileContent("download.html").content());
+    assertThat(files.get("empty.html")).content(UTF_8).isEqualToIgnoringNewLines(new FileContent("empty.html").content());
+    assertThat(files.get("download.html")).content(UTF_8).isEqualToIgnoringNewLines(new FileContent("download.html").content());
   }
 }

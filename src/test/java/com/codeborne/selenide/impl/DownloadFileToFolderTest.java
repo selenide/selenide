@@ -58,7 +58,7 @@ final class DownloadFileToFolderTest {
     assertThat(downloadedFiles).hasSize(1);
     assertThat(downloadedFiles.get(0)).hasName(newFileName);
     assertThat(downloadedFiles.get(0).getParentFile()).isNotEqualTo(downloadsFolder.getFolder());
-    assertThat(downloadedFiles.get(0)).content().isEqualTo("Hello Bingo-Bongo");
+    assertThat(downloadedFiles.get(0)).content(UTF_8).isEqualTo("Hello Bingo-Bongo");
   }
 
   @ParameterizedTest
@@ -76,7 +76,7 @@ final class DownloadFileToFolderTest {
     assertThat(downloadedFiles).hasSize(1);
     assertThat(downloadedFiles.get(0))
       .hasName("document.pdf")
-      .content().isEqualTo("%PDF new file");
+      .content(UTF_8).isEqualTo("%PDF new file");
   }
 
   @Test

@@ -138,7 +138,7 @@ final class FileDownloadFilterTest {
     File expectedFile = new File("build/downloads/random-text/cv.pdf");
     assertThat(file).hasName("cv.pdf");
     assertThat(file.getPath()).endsWith(expectedFile.getPath());
-    assertThat(file).content().isEqualTo("HELLO");
+    assertThat(file).content(UTF_8).isEqualTo("HELLO");
   }
 
   private HttpHeaders mockHeaders(HttpMessage message) {

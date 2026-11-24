@@ -27,6 +27,7 @@ import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createTempDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -47,7 +48,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     File downloadedFile = $(byText("Download me")).download(withNameMatching("hello.*\\.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -62,7 +63,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       }));
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -71,7 +72,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     File downloadedFile = $(byText("Download file with cyrillic name")).download(file().withNameMatching("файл.*\\.txt"));
 
     assertThat(downloadedFile).hasName("файл-с-русским-названием.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед медвед!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Превед медвед!");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -80,7 +81,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     File downloadedFile = $(byText("Download file with \"ø\" in name")).download(file().withNameMatching("ø.*\\.txt"));
 
     assertThat(downloadedFile).hasName("ø-report.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, Nørway!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, Nørway!");
   }
 
   @Test
@@ -92,7 +93,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       "_left,_right,_asterisk,_question,_dollar,_exclamation,'quote,_quotes," +
       "_colon,_at,_plus,`backtick,_pipe,_equal.txt");
 
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Превед \"короед\"! Амперсанды &everywhere&&;$#`");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Превед \"короед\"! Амперсанды &everywhere&&;$#`");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 
@@ -109,7 +110,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     File downloadedFile = $(byText("Download me slowly")).download(file().withNameMatching("hello.*\\.txt").withTimeout(2000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -117,7 +118,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     File downloadedFile = $(byText("Download me slowly")).download(file().withName("hello_world.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -125,7 +126,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     File downloadedFile = $(byText("Download me slowly")).download(file().withNameMatching("hello_.\\w+\\.txt"));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -148,7 +149,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
 
       assertThat(downloadedFile.getAbsolutePath()).startsWith(new File(downloadsFolder).getAbsolutePath());
       assertThat(downloadedFile).hasName("hello_world.txt");
-      assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+      assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
     }
     finally {
       closeWebDriver();
@@ -160,7 +161,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     File downloadedFile = $(byText("Download a PDF")).download(file().withExtension("pdf").withTimeout(timeout));
 
     assertThat(downloadedFile).hasName("minimal.pdf");
-    assertThat(downloadedFile).content().startsWith("%PDF-1.1");
+    assertThat(downloadedFile).content(UTF_8).startsWith("%PDF-1.1");
   }
 
   @Test
@@ -189,7 +190,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
       .withTimeout(4000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -198,7 +199,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     File downloadedFile = $(byText("Download me super slowly")).download(file().withNameMatching("hello.*\\.txt").withTimeout(6000));
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -221,14 +222,14 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     );
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
   void downloadWithRedirect() {
     File downloadedFile = $(byText("Download with redirect")).download(withNameMatching("hello.*\\.txt"));
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Hello, WinRar!");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Hello, WinRar!");
   }
 
   @Test
@@ -236,7 +237,7 @@ final class FileDownloadViaProxyTest extends ProxyIntegrationTest {
     File downloadedFile = $(byText("Download me")).download(file().withNameMatching("hello.*\\.txt").withoutContent());
 
     assertThat(downloadedFile).hasName("hello_world.txt");
-    assertThat(downloadedFile).content().isEqualToIgnoringNewLines("Mocked file content");
+    assertThat(downloadedFile).content(UTF_8).isEqualToIgnoringNewLines("Mocked file content");
     assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 

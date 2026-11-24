@@ -1,11 +1,13 @@
 package com.codeborne.selenide;
 
+import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.domain.JavaMethodCall;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import org.assertj.core.api.AbstractPathAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import static com.tngtech.archunit.base.DescribedPredicate.describe;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
@@ -53,10 +55,17 @@ public class ArchitecturalChecks {
   }
 
   @Test
-  void noPathAssertContentWithoutEncoding() {
+  void noAssertjContentWithoutEncoding() {
     noClasses()
-      .should().callMethod(AbstractPathAssert.class, "content")
-      .because("AbstractPathAssert#content() uses system default encoding; method content(UTF_8) should be used instead")
+      .should().callMethodWhere(assertjContent())
+      .because("AssertJ's content() uses system default encoding; method content(UTF_8) should be used instead")
       .check(selenideClasses);
+  }
+
+  private DescribedPredicate<JavaMethodCall> assertjContent() {
+    return describe("AssertJ method content() without parameters", call ->
+      "content".equals(call.getName())
+        && call.getTarget().getRawParameterTypes().isEmpty()
+        && call.getTargetOwner().getPackageName().startsWith("org.assertj"));
   }
 }

@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MoonSetup implements BeforeEachCallback, AfterEachCallback  {
@@ -62,6 +63,6 @@ public class MoonSetup implements BeforeEachCallback, AfterEachCallback  {
     open("/download.html");
     File file = $(byText("hello-world.txt")).download(withNameMatching("hello.*\\.txt"));
     assertThat(file).hasName("hello-world.txt");
-    assertThat(file).content().isEqualTo("Hello, world!");
+    assertThat(file).content(UTF_8).isEqualTo("Hello, world!");
   }
 }
