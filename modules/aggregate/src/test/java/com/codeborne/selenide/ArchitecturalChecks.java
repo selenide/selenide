@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import org.assertj.core.api.AbstractPathAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -12,7 +13,8 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @TestInstance(PER_CLASS)
 public class ArchitecturalChecks {
-  private final JavaClasses selenideClasses = new ClassFileImporter().importPackages("com.codeborne", "integration");
+  private final JavaClasses selenideClasses = new ClassFileImporter()
+    .importPackages("com.codeborne.selenide", "org.selenide", "integration", "it");
 
   @Test
   void noJunitAsserts() {
@@ -47,6 +49,14 @@ public class ArchitecturalChecks {
       .and().doNotHaveName("screenshot")
       .and().doNotHaveName("detailedErrorMessage")
       .should().beFinal()
+      .check(selenideClasses);
+  }
+
+  @Test
+  void noPathAssertContentWithoutEncoding() {
+    noClasses()
+      .should().callMethod(AbstractPathAssert.class, "content")
+      .because("AbstractPathAssert#content() uses system default encoding; method content(UTF_8) should be used instead")
       .check(selenideClasses);
   }
 }

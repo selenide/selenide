@@ -50,6 +50,7 @@ The project is a multi-module Gradle build. The key relationship:
 - **`modules/selenoid`, `modules/moon`, `modules/grid`** — Remote browser providers.
 - **`modules/junit4`, `modules/testng`** — Test framework integrations.
 - **`modules/video-recorder*`** — Video recording support.
+- **`modules/aggregate`** — Not published. Depends on all other modules; runs `ArchitecturalChecks` (ArchUnit rules over classes of all modules) and generates javadoc for the site (`javadocForSite`).
 - **`modules/clear-with-shortcut`, `modules/full-screenshot`, `modules/error-message-customizer`** — Small feature modules.
 
 All plugin modules depend on `statics` (which transitively provides `core`).
@@ -90,8 +91,8 @@ All plugin modules depend on `statics` (which transitively provides `core`).
 - Write tests for new code. Prefer integration tests for any actions related to browser, and 
   unit-tests for algorithmic code (regular expressions, string manipulation etc.) 
 - In tests, use AssertJ (`org.assertj.core.api.Assertions.assertThat`, `org.assertj.core.api.Assumptions.assumeThat`),
-  not JUnit's `Assertions`/`Assumptions` — enforced by ArchUnit rules in `statics/src/test/java/com/codeborne/selenide/ArchitecturalChecks.java`
-  (they run in `:statics:test`, so `./gradlew :modules:core:check` alone won't catch violations).
+  not JUnit's `Assertions`/`Assumptions` — enforced by ArchUnit rules in `modules/aggregate/src/test/java/com/codeborne/selenide/ArchitecturalChecks.java`
+  (they run in `:modules:aggregate:test`, so `./gradlew :modules:core:check` alone won't catch violations).
 - Prefer Mockito's type-inferred `mock()` over `mock(Class)` when the target type can be inferred
   from the variable declaration, e.g. `WebDriver driver = mock();` instead of `mock(WebDriver.class)`.
 

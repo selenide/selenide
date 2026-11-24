@@ -1,0 +1,44 @@
+// This module is not published.
+// It depends on all other modules, and is used to:
+// 1. check architectural rules (ArchUnit) on the classes of all modules (see ArchitecturalChecks),
+// 2. generate javadoc for selenide.org (task "javadocForSite").
+
+def otherModules = rootProject.subprojects.findAll { it != project }
+otherModules.each { evaluationDependsOn(it.path) }
+
+dependencies {
+  otherModules.each { module ->
+    implementation project(module.path)
+    testImplementation module.sourceSets.test.output
+  }
+
+  // Some modules have "org.junit.jupiter:junit-jupiter" without version in their runtime classpath
+  implementation platform("org.junit:junit-bom:$junitVersion")
+
+  // Other modules declare these dependencies as "compileOnly". Javadoc needs them to resolve all the types.
+  compileOnly("io.github.littleproxy:littleproxy:$littleProxyVersion")
+  compileOnly("org.seleniumhq.selenium:htmlunit3-driver:$htmlunitDriverVersion")
+  compileOnly("org.junit.jupiter:junit-jupiter-api")
+  compileOnly("org.testng:testng:$testngVersion") { transitive = false }
+
+  testImplementation("org.junit.jupiter:junit-jupiter")
+  testImplementation("org.assertj:assertj-core:$assertjVersion") { transitive = false }
+}
+
+tasks.register('javadocForSite', Javadoc) {
+  source = otherModules.collect { it.sourceSets.main.allJava }
+  destinationDir = layout.buildDirectory.dir('javadoc').get().asFile
+  title = "${rootProject.name} ${version} API"
+  classpath = sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
+
+  def javadocStylesheet = rootProject.file('gradle/javadoc-style.css')
+  inputs.file(javadocStylesheet).withPropertyName('javadocStylesheet')
+  options.addStringOption('-add-stylesheet', javadocStylesheet.absolutePath)
+
+  // modules/cli and modules/mcp use the shadow plugin with an empty archiveClassifier, so their
+  // shadowJar output overwrites the same file as their jar output. Since jar and shadowJar aren't
+  // ordered relative to each other, order javadocForSite after both so it never races the
+  // overwrite (same race fixed for `:modules:mcp:test` in modules/mcp/build.gradle).
+  mustRunAfter ':modules:cli:jar', ':modules:cli:shadowJar'
+  mustRunAfter ':modules:mcp:jar', ':modules:mcp:shadowJar'
+}
