@@ -52,8 +52,12 @@ final class BrowserStateTest extends ITest {
       anotherBrowser.open("/empty.html", withBrowserState(stateFile));
 
       anotherBrowser.webdriver().shouldHave(urlContaining("/empty.html"));
-      assertThat(anotherBrowser.getCookieStore().get("user").getValue()).isEqualTo("bob");
+      Cookie user = anotherBrowser.getCookieStore().get("user");
+      assertThat(user).isNotNull();
+      assertThat(user.getValue()).isEqualTo("bob");
+
       Cookie sessionCookie = anotherBrowser.getCookieStore().get("SID");
+      assertThat(sessionCookie).isNotNull();
       assertThat(sessionCookie.getValue()).isEqualTo("secret-session");
       assertThat(sessionCookie.isHttpOnly()).isTrue();
       assertThat(anotherBrowser.getLocalStorage().getItem("token")).isEqualTo("jwt-123");
@@ -99,7 +103,9 @@ final class BrowserStateTest extends ITest {
 
     driver().webdriver().restoreBrowserState(state);
 
-    assertThat(driver().getCookieStore().get("user").getValue()).isEqualTo("alice");
+    Cookie user = driver().getCookieStore().get("user");
+    assertThat(user).isNotNull();
+    assertThat(user.getValue()).isEqualTo("alice");
     assertThat(driver().getLocalStorage().getItem("token")).isEqualTo("t-1");
   }
 
@@ -169,7 +175,7 @@ final class BrowserStateTest extends ITest {
 
     assertThat(loginCount).hasValue(2);
     assertThat(isLoggedIn().getAsBoolean()).isTrue();
-    assertThat(Files.readString(stateFile, UTF_8)).contains("valid-token").doesNotContain("expired-token");
+    assertThat(stateFile).content().contains("valid-token").doesNotContain("expired-token");
   }
 
   @Test

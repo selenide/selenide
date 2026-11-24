@@ -22,7 +22,6 @@ import static com.codeborne.selenide.DownloadOptions.file;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.UUID.randomUUID;
-import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doAnswer;
@@ -47,7 +46,7 @@ final class DownloadFileToFolderTest {
   }
 
   @Test
-  void tracksForNewFilesInDownloadsFolder() throws IOException {
+  void tracksForNewFilesInDownloadsFolder() {
     String newFileName = "bingo-bongo.txt";
     doAnswer((Answer<Void>) i -> {
       writeStringToFile(downloadsFolder.file(newFileName), "Hello Bingo-Bongo", UTF_8);
@@ -59,7 +58,7 @@ final class DownloadFileToFolderTest {
     assertThat(downloadedFiles).hasSize(1);
     assertThat(downloadedFiles.get(0)).hasName(newFileName);
     assertThat(downloadedFiles.get(0).getParentFile()).isNotEqualTo(downloadsFolder.getFolder());
-    assertThat(readFileToString(downloadedFiles.get(0), UTF_8)).isEqualTo("Hello Bingo-Bongo");
+    assertThat(downloadedFiles.get(0)).content().isEqualTo("Hello Bingo-Bongo");
   }
 
   @ParameterizedTest
@@ -75,8 +74,9 @@ final class DownloadFileToFolderTest {
     List<File> downloadedFiles = command.download(driver, link, 3000, 300, file().withMethod(FOLDER).withName("document.pdf"));
 
     assertThat(downloadedFiles).hasSize(1);
-    assertThat(downloadedFiles.get(0)).hasName("document.pdf");
-    assertThat(readFileToString(downloadedFiles.get(0), UTF_8)).isEqualTo("%PDF new file");
+    assertThat(downloadedFiles.get(0))
+      .hasName("document.pdf")
+      .content().isEqualTo("%PDF new file");
   }
 
   @Test
