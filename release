@@ -83,16 +83,6 @@ npm adduser
 cd mcp-server
 npm version "$version" --no-git-tag-version --allow-same-version
 npm publish --access public -i
-
-# Publish to MCP Registry (https://registry.modelcontextprotocol.io) as "org.selenide/mcp".
-# Prerequisites: `brew install mcp-publisher`, and the Ed25519 private key whose public part is in
-# the "v=MCPv1; ..." TXT record of selenide.org, stored in ~/.ssh/mcp-registry-selenide-org.pem
-node -e 'const fs = require("fs"); const j = JSON.parse(fs.readFileSync("server.json"));
-  j.version = j.packages[0].version = process.argv[1];
-  fs.writeFileSync("server.json", JSON.stringify(j, null, 2) + "\n");' "$version"
-mcp-publisher login dns --domain selenide.org --private-key-file "$mcp_key_file"
-mcp-publisher publish
-mcp-publisher logout
 cd -
 
 cd mcp-server-legacy
@@ -111,3 +101,28 @@ npm logout
 # Add git tag
 git tag -a "v${version}" -m "released selenide ${version}"
 git push origin --tags
+
+# Publish to MCP Registry (https://registry.modelcontextprotocol.io) as "org.selenide/mcp".
+# Prerequisites: `brew install mcp-publisher`, and the Ed25519 private key whose public part is in
+# the "v=MCPv1; ..." TXT record of selenide.org, stored in ~/.ssh/mcp-registry-selenide-org.pem
+# It goes last because the registry verifies the npm package, which npm needs a few minutes to process after `npm publish`.
+cd mcp-server
+node -e 'const fs = require("fs"); const j = JSON.parse(fs.readFileSync("server.json"));
+  j.version = j.packages[0].version = process.argv[1];
+  fs.writeFileSync("server.json", JSON.stringify(j, null, 2) + "\n");' "$version"
+echo "Waiting for @selenide/mcp@${version} to become available on npm..."
+attempt=0
+until curl -sf -o /dev/null "https://registry.npmjs.org/@selenide/mcp/${version}"
+do
+    attempt=$((attempt + 1))
+    if [ "$attempt" -ge 60 ]
+    then
+        echo "@selenide/mcp@${version} is still not available on npm after 10 minutes. Publish to MCP Registry manually later."
+        exit 1
+    fi
+    sleep 10
+done
+mcp-publisher login dns --domain selenide.org --private-key-file "$mcp_key_file"
+mcp-publisher publish
+mcp-publisher logout
+cd -
