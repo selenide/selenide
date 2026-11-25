@@ -1,6 +1,10 @@
 # Changelog
 
 =======
+## 7.19.3 (xx.12.2026)
+* deprecate unused class `HttpClientTimeouts`                                 (#3508)
+
+=======
 ## 7.19.2 (20.11.2026)
 * bump Selenium from 4.51.0 to 4.52.0 (incl. Chrome 155.0 -> 156.0)           (#3486)
 * bump Selenium from 4.52.0 to 4.53.0 (incl. Chrome 156.0 -> 157.0)           (#3500)

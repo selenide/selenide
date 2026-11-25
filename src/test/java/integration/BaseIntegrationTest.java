@@ -2,7 +2,6 @@ package integration;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.junit5.TextReportExtension;
-import com.codeborne.selenide.webdriver.HttpClientTimeouts;
 import integration.server.LocalHttpServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URLEncoder;
-import java.time.Duration;
 import java.util.Locale;
 import java.util.Map;
 
@@ -46,12 +44,6 @@ public abstract class BaseIntegrationTest {
   @BeforeEach
   final void resetUploadedFiles() {
     server.reset();
-  }
-
-  @BeforeEach
-  final void resetTimeouts() {
-    HttpClientTimeouts.defaultLocalReadTimeout = Duration.ofSeconds(30);
-    HttpClientTimeouts.defaultLocalConnectTimeout = Duration.ofSeconds(10);
   }
 
   private static void runLocalHttpServer() throws Exception {
