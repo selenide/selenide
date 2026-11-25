@@ -10,12 +10,12 @@
     "id": "3376848",
     "subfolder": "mcp-server"
   },
-  "version": "7.19.2",
+  "version": "7.19.3",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@selenide/mcp",
-      "version": "7.19.2",
+      "version": "7.19.3",
       "runtimeHint": "npx",
       "transport": {
         "type": "stdio"

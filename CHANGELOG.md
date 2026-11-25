@@ -1,8 +1,14 @@
 # Changelog
 
 =======
-## 7.19.3 (xx.12.2026)
+## 7.19.3 (25.12.2026)
+* publish Selenide MCP server to MCP Registry as org.selenide/mcp             (#3504)
+* bump Selenium from 4.53.0 to 4.54.0                                         (#3503)
 * deprecate unused class `HttpClientTimeouts`                                 (#3508)
+* delete empty downloads folder after closing the browser                     (#3506)
+
+See https://github.com/selenide/selenide/milestone/249?closed=1
+
 
 =======
 ## 7.19.2 (20.11.2026)
