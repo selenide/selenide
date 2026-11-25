@@ -135,6 +135,7 @@ jobs:
       - name: Setup FFmpeg
         if: ${{ matrix.module.name == 'video-recorder' }}
         run: |
+          sudo apt-get update
           sudo apt-get install -y ffmpeg
           ffmpeg -version
       - name: Set up JDK
