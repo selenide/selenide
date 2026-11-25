@@ -4,7 +4,6 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.junit5.TextReportExtension;
-import com.codeborne.selenide.webdriver.HttpClientTimeouts;
 import io.appium.java_client.InteractsWithApps;
 import io.appium.java_client.appmanagement.ApplicationState;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -64,8 +63,6 @@ public abstract class ITTest {
     Configuration.pageLoadTimeout = -1;
     Configuration.remoteConnectionTimeout = Duration.ofSeconds(10).toMillis();
     Configuration.remoteReadTimeout = ofMinutes(5).toMillis();
-    HttpClientTimeouts.defaultLocalReadTimeout = ofMinutes(4);
-    HttpClientTimeouts.defaultLocalConnectTimeout = ofMinutes(3);
   }
 
   protected void prepareApp(InteractsWithApps mobileDriver, String bundleId) {
